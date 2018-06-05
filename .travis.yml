@@ -1,6 +1,7 @@
 sudo: enabled
 language: node_js
 node_js:
+  - "iojs"
   - "8.11.2"
 services:
   - mongodb
