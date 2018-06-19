@@ -7,7 +7,7 @@ class App extends Component {
     render() {
         return (
                 <div className="vid-container">
-                    <video id="Video1" className="bgvid back" autoplay="autoplay" muted="muted" preload="auto" loop="">
+                    <video id="Video1" className="bgvid back" autoPlay="true" muted="muted" preload="auto" loop>
                         <source src={video} type="video/mp4" alt="video" />
                     </video>
                     <div className="inner-container">
