@@ -1,15 +1,21 @@
+/** Schema para usuarios do sistema */
+
 var mongoose = require('mongoose')
-var config = require('../config/config')
+var bcrypt = require('bcrypt')
+var config = require('../config')
 var Schema = mongoose.Schema
 
-var UsuarioSchema = new Schema({
-	user: String,
-	password: String,
-	status: String,
-	observations: Array
+var UsuarioSchema = new Schema({ /** Criação do Schema que conterá 4 campos */
+	user: String, /** Um campo de usuário do tipo texto que servirá autenticação e consulta no banco */
+	password: String, /** Um campo de senha. Obs.: Ela é deve ser criptografada antes de ser salva */
+	status: String, /** Um campo de status onde deve inidcar se terá privilégios ou não */
+	observations: Array /** Um campo de observações */
 })
 
-// hashing a password before saving it to the database
+/**
+ * Antes de salvar um novo usuário no banco a senha deve ser criptografada.
+ * Para isso, utilizamos a biblioteca bcrypt
+ */
 UsuarioSchema.pre('save', function (next) {
   var user = this
   bcrypt.hash(user.password, 10, function (err, hash) {
