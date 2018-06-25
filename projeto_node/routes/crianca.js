@@ -10,6 +10,16 @@ var crianca = require('../models/usuarioCrianca')
 var config = require('../config')
 var router = express.Router()
 
+// Resgata todas as crianças
+router.get('/', function (req, res) {
+	crianca.find({}, function (err, result) {
+		if (err)
+			return res.status(500).json({'err': err})
+
+		res.status(200).json({'criancas': result})
+	})
+})
+
 // Cria uma nova criança
 router.post('/', function (req, res) {
 	if (!req.files) { // Checa se existe arquivos sendo enviados
@@ -60,6 +70,34 @@ router.post('/', function (req, res) {
 		return res.status(201).json({'err': '', 'msg': 'Criança cadastrada com sucesso'})
 	} else {
 		return res.status(400).json({'err': 'Dados faltando'})
+	}
+})
+
+// Rota preparada para fazer as alterações
+// Ainda a definir como deve funcionar de maneira robusta
+router.put('/', function(req, res) {
+	if (req.body.identifier && req.body.restrictions) {
+		crianca.findById(req.body.identifier, function (err, crianca_result) {
+			if (err)
+				return res.status(500).json({'err': err})
+
+			crianca_result.set({restrictions: req.body.restrictions})
+			return res.status(200).json({'err': '', 'crianca': crianca_result})
+		})
+	} else {
+		return res.status(400).json({'err': 'Falta o identificador'})
+	}
+})
+
+// Deleta crianças pelo seu identificador
+router.delete('/', function(req, res) {
+	if(req.body.identifier) {
+		crianca.deleteOne({_id: req.body.identifier}, function (err) {
+			if (err)
+				return res.status(500).json({'err': err})
+
+			return res.status(200).json({'err': '', 'msg': 'Criança removida com sucesso'})
+		})
 	}
 })
 
