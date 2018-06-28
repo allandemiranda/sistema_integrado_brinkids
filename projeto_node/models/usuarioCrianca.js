@@ -6,7 +6,7 @@ var Schema = mongoose.Schema
 
 var CriancaSchema = new Schema({
   number: {
-    type: Number,
+    type: String,
     required: true
   },
   name: {
@@ -28,10 +28,6 @@ var CriancaSchema = new Schema({
     type: String,
     required: true,
     unique: true
-  },
-  register: {
-    type: String,
-    required: true
   }
 })
 

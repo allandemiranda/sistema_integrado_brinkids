@@ -1,4 +1,4 @@
 module.exports = {
-	database_name: 'teste_allan',
+	database_name: 'sistema_brinkids',
 	dir_base: __dirname
 }

@@ -10,6 +10,17 @@ var crianca = require('../models/usuarioCrianca')
 var config = require('../config')
 var router = express.Router()
 
+var _MS_PER_DAY = 1000 * 60 * 60 * 24
+
+// a and b are javascript Date objects
+function dateDiffInYears (a, b) {
+  // Discard the time and time-zone information.
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())
+
+  return Math.floor(((utc2 - utc1) / _MS_PER_DAY)/365)
+}
+
 // Resgata todas as crianças
 router.get('/', function (req, res) {
 	crianca.find({}, function (err, result) {
@@ -26,48 +37,72 @@ router.post('/', function (req, res) {
 		return res.status(400).json({'msg': 'Não há arquivos'})
 	}
 
+	let date = req.body.date.split('/')
+	let newDate = date[1] + '/' + date[0] + '/' + date[2]
+	let date1 = new Date()
+	let date2 = new Date(newDate) //  Se passar no teste de data, será usado no construtos da criança
+
+	// Checar se a criança já existe
+	// Checar se ela tem menos de 14 anos
+	if (dateDiffInYears(date2, date1) >= 14 || date2 > date1) { // Tbm acusa erro se colocar uma data maior que a atual
+		return res.status(400).json({'msg': 'A criança possui 14 anos ou mais'})
+	}
+
 	// Checa se os dados foram enviados
 	if (req.body.number &&
 			req.body.firstName &&
 			req.body.surname &&
 			req.body.date &&
-			req.body.sexuality &&
-			req.body.register) {
+			req.body.sexuality) {
 
-		let photoFile = req.files.fileField
-		let fileName = config.dir_base + '/media/' + req.body.register + photoFile.name // Modifica o nome do arquivo na tentativa de deixar ele único. Há uma possibilidade de usar uma função de hash para alterar o nome e deixar ele único
-		let date = req.body.date.split('/')
-		let newDate = date[1] + '/' + date[0] + '/' + date[2] // Necessário converter para um formato que o mongo aceite inserir
-
-		let dados = {
-			number: parseFloat(req.body.number),
-			name: {
-				first: req.body.firstName,
-				surname: req.body.surname
-			},
-			birthday: new Date(newDate),
-			sexuality: req.body.sexuality,
-			restrictions: req.body.restrictions,
-			observations: req.body.observations,
-			photo: fileName,
-			register: req.body.register
-		}
-
-		// Salva a criança no banco de dados
-		crianca.create(dados, function (err, small) {
+		crianca.findOne({number: req.body.number}, function (err, crianca_result) { // Checa se já existem crianças com essas credenciais
 			if (err) {
 				return res.status(500).json({'err': err})
 			}
-		})
 
-		// Pega o arquivo e salva no banco
-		photoFile.mv(fileName, function (err) {
-			if (err) {
-				return res.status(500).json({'err': err})
+			if (crianca_result === null) {
+				let photoFile = req.files.fileField
+
+				let dados = {
+					number: req.body.number,
+					name: {
+						first: req.body.firstName,
+						surname: req.body.surname
+					},
+					birthday: date2,
+					sexuality: req.body.sexuality,
+					restrictions: req.body.restrictions,
+					observations: req.body.observations,
+					photo: '/blablabla/'
+				}
+
+				// Salva a criança no banco de dados
+				crianca.create(dados, function (err, crianca_result) {
+					if (err) {
+						return res.status(500).json({'err': err})
+					}
+
+					let fileName = config.dir_base + '/media/' + crianca_result._id + photoFile.name
+					crianca_result.photo = fileName
+					crianca_result.save(function (err) {
+						if (err) {
+							res.status(500).json({'err': err})
+						}
+					})
+
+					// Pega o arquivo e salva no banco
+					photoFile.mv(fileName, function (err) {
+						if (err) {
+							return res.status(500).json({'err': err})
+						}
+					})
+
+					return res.status(201).json({'err': '', 'msg': 'Criança cadastrada com sucesso'})
+				})
+			} else {
+				return res.status(400).json({'err': '', 'msg': 'A criança já foi adicionada ao sistema'})
 			}
 		})
-
-		return res.status(201).json({'err': '', 'msg': 'Criança cadastrada com sucesso'})
 	} else {
 		return res.status(400).json({'err': 'Dados faltando'})
 	}
