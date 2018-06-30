@@ -10,12 +10,12 @@ router.get('/', function(req, res, next) {
   res.json([
       {
           id: 1,
-          user: "admin",
+          username: "admin",
           password: "teste123"
       },
       {
           id: 2,
-          user: "root",
+          username: "root",
           password: "toor"
       }
   ]);
