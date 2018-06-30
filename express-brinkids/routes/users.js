@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
           user: "root",
           password: "toor"
       }
-  ])
+  ]);
 });
 
 module.exports = router;
