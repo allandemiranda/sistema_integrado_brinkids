@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import logo from './logo1.png';
 import video from './loginvideo.mp4';
 import './App.css';
@@ -13,7 +13,7 @@ class App extends Component {
                     <div className="inner-container">
                         <div className="box">
                             <img className="logo" src={logo} alt="logo" />
-                            <input placeholder="Usuário" type="text" />
+                            <input placeholder="Usu�rio" type="text" />
                             <input placeholder="Senha" type="password" />
                             <button type="button">Login</button>
                         </div>
