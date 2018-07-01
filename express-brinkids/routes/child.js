@@ -1,139 +1,155 @@
-/*
- * Aqui será desenvolvido um CRUD para as crianças
+/**
+ * Este arquivo será responsável por criar as rotas relacionadas as crianças
  */
-
-// Lembrete: Colocar o middleware que necessita do uso do token
-// Para acessar essas rotas
 
 var express = require('express')
 var child = require('../models/userChild')
 var config = require('../config')
 var router = express.Router()
 
-var _MS_PER_DAY = 1000 * 60 * 60 * 24
+/**
+ * Função para checar se a data da criança é válida
+ * @param actualDate Data de quando essa operação for feita no sistema
+ * @param childDate Idade da criança
+ * @return 'true' caso a idade da criaça seja sempre menor que 14 ou 'false' caso contrário
+ */
+function checkAge (actualDate, childDate) {
+  let compareDate = new Date(
+    actualDate.getFullYear() - 14,
+    actualDate.getMonth(),
+    actualDate.getDate(), 0, 0, 0, 0) /**< Date. Pegará a data atual e subtrairá 14 anos para fazer a checagem com a idade da criança */
 
-// a and b are javascript Date objects
-function dateDiffInYears (a, b) {
-  // Discard the time and time-zone information.
-  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())
-  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())
-
-  return Math.floor(((utc2 - utc1) / _MS_PER_DAY)/365)
+  return childDate > compareDate
 }
 
 // Resgata todas as crianças
 router.get('/', function (req, res) {
-	child.find({}, function (err, result) {
-		if (err)
-			return res.status(500).json({'err': err})
-
-		res.status(200).json({'criancas': result})
-	})
+  child.find({}, function (err, result) {
+    if (err) {
+      return res.sendStatus(500)
+    } else {
+      return res.status(200).json(result)
+    }
+  })
 })
 
-// Cria uma nova criança
+/**
+ * Rota para inserção de crianças no banco de dados
+ * @param rota Rota usada para requisição
+ * @param callback Função a ser executada
+ * @return código de status HTTP
+ */
 router.post('/', function (req, res) {
-	if (!req.files) { // Checa se existe arquivos sendo enviados
-		return res.status(400).json({'msg': 'Não há arquivos'})
-	}
+  if (!req.files) { // Checa se existe arquivos sendo enviados
+    return res.sendStatus(400)
+  }
 
-	let date = req.body.date.split('/')
-	let newDate = date[1] + '/' + date[0] + '/' + date[2]
-	let date1 = new Date()
-	let date2 = new Date(newDate) //  Se passar no teste de data, será usado no construtos da criança
+  let date = req.body.date.split('/')/**< Array. Recebe o ano, mês e dia da criança para manipulação de data */
+  let actualDate = new Date()/**< Data atual do sistema */
+  let childDate = new Date(parseInt(date[2]), parseInt(date[1]) - 1, parseInt(date[0])) /**< Data de nascimento da criança */
 
-	// Checar se a criança já existe
-	// Checar se ela tem menos de 14 anos
-	if (dateDiffInYears(date2, date1) >= 14 || date2 > date1) { // Tbm acusa erro se colocar uma data maior que a atual
-		return res.status(400).json({'msg': 'A criança possui 14 anos ou mais'})
-	}
+  /**
+   * Checa se a criança possui menos de 14 anos ou não
+   * Se possuir menos de 14 anos, ela é adicionada ao sistema
+   */
+  if (checkAge(actualDate, childDate)) {
+    /**
+     * Checa se todos os dados obrigatórios da criança foram enviados na requisição
+     */
+    if (req.body.number &&
+        req.body.firstName &&
+        req.body.surname &&
+        req.body.date &&
+        req.body.sexuality) {
+      /**
+       * Checa se já existe uma criança no sistema.
+       * Se não existe, então uma nova é cadastrada com as informações enviadas
+       */
+      child.findOne({number: req.body.number}, function (err, childResult) {
+        if (err) {
+          return res.sendStatus(500)
+        }
 
-	// Checa se os dados foram enviados
-	if (req.body.number &&
-			req.body.firstName &&
-			req.body.surname &&
-			req.body.date &&
-			req.body.sexuality) {
+        /** Checa se não existe uma criança no sistema */
+        if (childResult === null) {
+          let photoFile = req.files.fileField /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
 
-		child.findOne({number: req.body.number}, function (err, child_result) { // Checa se já existem crianças com essas credenciais
-			if (err) {
-				return res.status(500).json({'err': err})
-			}
+          let dados = {
+            number: req.body.number,
+            name: {
+              first: req.body.firstName,
+              surname: req.body.surname
+            },
+            birthday: childDate,
+            sexuality: req.body.sexuality,
+            restrictions: req.body.restrictions,
+            observations: req.body.observations,
+            photo: '/'
+          } /**< Objeto. Contém os dados da criança para inserção no banco */
 
-			if (child_result === null) {
-				let photoFile = req.files.fileField
+          /** Salva a criança no banco */
+          child.create(dados, function (err, childResult) {
+            if (err) {
+              return res.sendStatus(500)
+            }
 
-				let dados = {
-					number: req.body.number,
-					name: {
-						first: req.body.firstName,
-						surname: req.body.surname
-					},
-					birthday: date2,
-					sexuality: req.body.sexuality,
-					restrictions: req.body.restrictions,
-					observations: req.body.observations,
-					photo: '/blablabla/'
-				}
+            let fileName = config.dir_base + '/media/child/' + childResult._id + photoFile.name /**< url completa da localização do arquivo no computador */
+            childResult.photo = fileName /** Atualiza o nome do arquivo */
+            childResult.save(function (err) { /** Atualiza no banco a nova informação */
+              if (err) {
+                return res.sendStatus(500)
+              }
+            })
 
-				// Salva a criança no banco de dados
-				child.create(dados, function (err, child_result) {
-					if (err) {
-						return res.status(500).json({'err': err})
-					}
+            /** Pega o arquivo e salva no servidor */
+            photoFile.mv(fileName, function (err) {
+              if (err) {
+                return res.sendStatus(500)
+              }
+            })
 
-					let fileName = config.dir_base + '/media/child/' + child_result._id + photoFile.name
-					child_result.photo = fileName
-					child_result.save(function (err) {
-						if (err) {
-							return res.status(500).json({'err': err})
-						}
-					})
-
-					// Pega o arquivo e salva no banco
-					photoFile.mv(fileName, function (err) {
-						if (err) {
-							return res.status(500).json({'err': err})
-						}
-					})
-
-					return res.status(201).json({'err': '', 'msg': 'Criança cadastrada com sucesso'})
-				})
-			} else {
-				return res.status(400).json({'err': '', 'msg': 'A criança já foi adicionada ao sistema'})
-			}
-		})
-	} else {
-		return res.status(400).json({'err': 'Dados faltando'})
-	}
+            return res.sendStatus(201)
+          })
+        } else {
+          return res.sendStatus(409)
+        }
+      })
+    } else {
+      return res.sendStatus(400)
+    }
+  } else {
+    return res.sendStatus(400)
+  }
 })
 
 // Rota preparada para fazer as alterações
 // Ainda a definir como deve funcionar de maneira robusta
-router.put('/', function(req, res) {
-	if (req.body.identifier && req.body.restrictions) {
-		child.findById(req.body.identifier, function (err, child_result) {
-			if (err)
-				return res.status(500).json({'err': err})
+router.put('/', function (req, res) {
+  if (req.body.identifier && req.body.restrictions) {
+    child.findById(req.body.identifier, function (err, childResult) {
+      if (err) {
+        return res.sendStatus(500)
+      }
 
-			child_result.set({restrictions: req.body.restrictions})
-			return res.status(200).json({'err': '', 'crianca': child_result})
-		})
-	} else {
-		return res.status(400).json({'err': 'Falta o identificador'})
-	}
+      childResult.set({restrictions: req.body.restrictions})
+      return res.sendStatus(200)
+    })
+  } else {
+    return res.sendStatus(400)
+  }
 })
 
 // Deleta crianças pelo seu identificador
-router.delete('/', function(req, res) {
-	if(req.body.identifier) {
-		child.deleteOne({_id: req.body.identifier}, function (err) {
-			if (err)
-				return res.status(500).json({'err': err})
+router.delete('/', function (req, res) {
+  if (req.body.identifier) {
+    child.deleteOne({_id: req.body.identifier}, function (err) {
+      if (err) {
+        return res.sendStatus(500)
+      }
 
-			return res.status(200).json({'err': '', 'msg': 'Criança removida com sucesso'})
-		})
-	}
+      return res.sendStatus(200)
+    })
+  }
 })
 
 module.exports = router
