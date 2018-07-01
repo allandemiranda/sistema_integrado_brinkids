@@ -11,6 +11,14 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "bcrypt": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "express-fileupload": "^0.4.0",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.1.6",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "1.1.4"
   }
 }
