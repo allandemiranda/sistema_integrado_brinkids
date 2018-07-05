@@ -25,6 +25,7 @@ class App extends Component {
                                 <span>
                                 {
                                     this.state.status ? this.state.erroMsg : null
+					/* hoje */
                                 }
                                 </span> 
                             </p>
