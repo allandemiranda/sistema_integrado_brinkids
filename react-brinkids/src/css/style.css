@@ -1,9 +1,4 @@
-/*
-Author: W3layout
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
-*/
+
 
 html,
 body {
@@ -456,18 +451,7 @@ span#logo h1 {
     font-weight: 300;
 }
 
-.srch button {
-    cursor: pointer;
-    background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-    width: 80px;
-    height: 66px;
-    display: block;
-    border: none;
-    outline: none;
-    position: absolute;
-    top: 0px;
-    left: 21%;
-}
+
 
 .main-search {
     float: right;
@@ -521,15 +505,7 @@ span#logo h1 {
     color: #5d5d5d;
 }
 
-.main-search input[type="submit"] {
-    position: absolute;
-    top: 9px;
-    right: 9px;
-    background: url('../images/search2.png') no-repeat -0px -0px;
-    height: 25px;
-    width: 25px;
-    cursor: pointer;
-}
+
 
 .close {
     color: #333;
@@ -1794,14 +1770,7 @@ ul#clock li {
     border: none;
 }
 
-#clock {
-    position: relative;
-    width: 185px;
-    height: 185px;
-    margin: -95px auto 0;
-    background: url(../images/clockface.png) no-repeat;
-    list-style: none;
-}
+
 
 #sec,
 #min,
@@ -1813,21 +1782,9 @@ ul#clock li {
     left: 83px;
 }
 
-#sec {
-    background: url(../images/sechand.png);
-    z-index: 3;
-    overflow: hidden;
-}
 
-#min {
-    background: url(../images/minhand.png);
-    z-index: 2;
-}
 
-#hour {
-    background: url(../images/hourhand.png);
-    z-index: 1;
-}
+
 
 .area-charts {
     margin: 0.5em 0 1.5em 0;
@@ -3363,23 +3320,9 @@ a.read.fourth:hover {
 
 /*--/sign-in--*/
 
-.login input[type="text"],
-.login input[type="password"] {
-    width: 100%;
-    padding: 0.9em 1em 0.9em 4em;
-    color: #777;
-    font-size: 15px;
-    outline: none;
-    font-weight: 400;
-    border: 1px solid #ddd;
-    background: url("../images/icons.png") no-repeat 14px 17px;
-    margin: 0.3em 0;
-    font-family: 'Roboto', sans-serif;
-}
 
-.login input[type="password"] {
-    background: url("../images/icons.png") no-repeat 13px -33px;
-}
+
+
 
 .submit {
     margin: 1em 0;
@@ -3439,27 +3382,7 @@ a.read.fourth:hover {
 
 /* Sweep To Right */
 
-a.hvr-sweep-to-right {
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
-    position: relative;
-    -webkit-transition-property: color;
-    transition-property: color;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    background: url("../images/fb.png") no-repeat 20px 9px #3b5998;
-    width: 100%;
-    font-family: 'Roboto', sans-serif;
-    padding: 0.7em 1em;
-    font-size: 1em;
-    color: #fff;
-}
+
 
 a.hvr-sweep-to-right:before {
     content: "";
@@ -3498,27 +3421,7 @@ a.hvr-sweep-to-right:active:before {
 
 /* Sweep To Left */
 
-a.hvr-sweep-to-left {
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
-    position: relative;
-    -webkit-transition-property: color;
-    transition-property: color;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    width: 100%;
-    padding: 0.7em 1em;
-    font-size: 1em;
-    color: #fff;
-    font-family: 'Roboto', sans-serif;
-    background: url("../images/tw.png") no-repeat 20px 13px #1ab2e8;
-}
+
 
 a.hvr-sweep-to-left:before {
     content: "";
@@ -3645,16 +3548,7 @@ p.sign.up {
     border: 2px solid #ccc;
 }
 
-.checkbox11 input+i:after {
-    content: '';
-    background: url("../images/tick1.png") no-repeat 1px 2px;
-    top: -1px;
-    left: -1px;
-    width: 15px;
-    height: 15px;
-    font: normal 12px/16px FontAwesome;
-    text-align: center;
-}
+
 
 .checkbox11 input+i:after {
     position: absolute;
@@ -4376,16 +4270,6 @@ h4.title3 {
     top: 2px;
 }
 
-.single-bottom ul li input[type="checkbox"]:checked+label span:first-child:before {
-    content: "";
-    background: url(../images/tick1.png)no-repeat;
-    position: absolute;
-    left: 1px;
-    top: 2px;
-    font-size: 10px;
-    width: 26px;
-    height: 26px;
-}
 
 .chat-mdl-grid {
     background-color: #fff;
@@ -4992,27 +4876,7 @@ Third button
     box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #156785, 0px 5px 3px #999;
 }
 
-.a_demo_four::before {
-    background-color: #078792;
-    background-image: url(../images/right_arrow.png);
-    background-repeat: no-repeat;
-    background-position: center center;
-    content: "";
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    margin-top: -9px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -o-border-radius: 50%;
-    border-radius: 50%;
-    -webkit-box-shadow: inset 0px 1px 0px #052756, 0px 1px 0px #60c9f0;
-    -moz-box-shadow: inset 0px 1px 0px #052756, 0px 1px 0px #60c9f0;
-    -o-box-shadow: inset 0px 1px 0px #052756, 0px 1px 0px #60c9f0;
-    box-shadow: inset 0px 1px 0px #052756, 0px 1px 0px #60c9f0;
-}
+
 
 .a_demo_four:active::before {
     top: 50%;
@@ -6458,18 +6322,7 @@ footer p a:hover,
     .new p.sign {
         float: none;
     }
-    a.hvr-sweep-to-right {
-        background: url("../images/fb.png") no-repeat 15px 8px #3b5998;
-        width: 100%;
-        padding: 0.7em 1em;
-        font-size: 1em;
-    }
-    a.hvr-sweep-to-left {
-        width: 100%;
-        padding: 0.7em 1em;
-        font-size: 1em;
-        background: url("../images/tw.png") no-repeat 12px 13px #1ab2e8;
-    }
+  
     .map iframe {
         width: 100%;
         min-height: 286px!important;
@@ -6605,18 +6458,7 @@ footer p a:hover,
         float: right;
         width: 78%;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 30%;
-    }
+    
     .main-search {
         float: right;
         width: 31%;
@@ -6767,18 +6609,7 @@ footer p a:hover,
     span#logo h1 {
         font-size: 1.8em;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 23%;
-    }
+
     .main-search {
         float: right;
         width: 31%;
@@ -6899,18 +6730,7 @@ footer p a:hover,
         float: right;
         width: 76%;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 27%;
-    }
+
     .error-top {
         margin: 7em auto;
         width: 61%;
@@ -7000,30 +6820,8 @@ footer p a:hover,
         float: right;
         width: 71%;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 27%;
-    }
-    .page-container.sidebar-collapsed .left-content .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 23%;
-    }
+
+
     .candile-inner svg {
         height: 350px!important;
         width: 480px!important;
@@ -7117,30 +6915,8 @@ footer p a:hover,
         float: right;
         width: 76%;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 29%;
-    }
-    .page-container.sidebar-collapsed .left-content .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 26px 19px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 66px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 11%;
-    }
+
+
     .bottom-head p {
         font-size: 0.85em;
     }
@@ -7286,18 +7062,7 @@ footer p a:hover,
         padding: 1.3em 1.8em;
         display: block;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 19px 16px rgba(3, 182, 197, 0.68);
-        width: 70px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 12%;
-    }
+
     .ribbon1 {
         width: 259px;
         position: relative;
@@ -7504,32 +7269,8 @@ footer p a:hover,
         top: 75px;
         left: 75px;
     }
-    .page-container.sidebar-collapsed-back.srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 19px 16px rgba(3, 182, 197, 0.68);
-        width: 70px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 12%;
-    }
     .sidebar-menu {
         position: absolute;
-    }
-    .page-container.sidebar-collapsed .left-content .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 25px 15px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 32%;
     }
     .ribbon1 {
         width: 342px;
@@ -7642,21 +7383,6 @@ footer p a:hover,
         width: 30%;
         font-size: 16px;
     }
-    .login input[type="text"],
-    .login input[type="password"] {
-        width: 100%;
-        padding: 0.7em 1em 0.7em 4em;
-        color: #777;
-        font-size: 15px;
-        outline: none;
-        font-weight: 400;
-        border: 1px solid #ddd;
-        background: url("../images/icons.png") no-repeat 14px 13px;
-        margin: 0.3em 0;
-    }
-    .login input[type="password"] {
-        background: url("../images/icons.png") no-repeat 13px -36px;
-    }
     .tabs nav.second {
         display: flex;
         flex-wrap: wrap;
@@ -7718,34 +7444,12 @@ footer p a:hover,
         height: 100%;
         margin: 0px auto;
     }
-    .page-container.sidebar-collapsed .left-content .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 25px 15px rgba(3, 182, 197, 0.68);
-        width: 80px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 31%;
-    }
+
     .page-container.sidebar-collapsed-back .left-content {
         float: right;
         width: 90%;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 23px 12px rgba(3, 182, 197, 0.68);
-        width: 70px;
-        height: 60px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 15%;
-    }
+
     .page-container.sidebar-collapsed .left-content {
         float: right;
         width: 70%;
@@ -7768,18 +7472,7 @@ footer p a:hover,
         padding: 18px 0;
         height: 58px;
     }
-    .page-container.sidebar-collapsed .left-content .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 23px 12px rgba(3, 182, 197, 0.68);
-        width: 70px;
-        height: 60px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 35%;
-    }
+
     .profile_details_left {
         float: right;
         width: 78%;
@@ -7845,30 +7538,6 @@ footer p a:hover,
     }
     h4.media-heading {
         font-size: 1.6em!important;
-    }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 12px 15px rgba(3, 182, 197, 0.68);
-        width: 56px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 17%;
-    }
-    .page-container.sidebar-collapsed .left-content .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 12px 15px rgba(3, 182, 197, 0.68);
-        width: 56px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 39%;
     }
     .page-container.sidebar-collapsed .left-content {
         float: right;
@@ -8127,18 +7796,6 @@ footer p a:hover,
     .profile_details_left {
         float: right;
         width: 66%;
-    }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 12px 15px rgba(3, 182, 197, 0.68);
-        width: 56px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 30%;
     }
     .left-content {
         float: right;
@@ -8584,18 +8241,7 @@ footer p a:hover,
         height: 265px!important;
         width: 230px!important;
     }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 12px 15px rgba(3, 182, 197, 0.68);
-        width: 56px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 20%;
-    }
+
     .profile_details_left {
         float: right;
         width: 71%;
@@ -8759,19 +8405,6 @@ footer p a:hover,
         left: 19%;
         font-size: 2em;
     }
-    .hvr-sweep-to-right {
-        background: url("../images/fb.png") no-repeat 7px 6px #3b5998;
-        width: 100%;
-        padding: 0.7em 1em;
-        font-size: 0.9em;
-    }
-    a.hvr-sweep-to-left {
-        width: 100%;
-        padding: 0.7em 1em;
-        font-size: 0.9em;
-        background: url("../images/tw.png") no-repeat 10px 11px #1ab2e8;
-        text-align: right;
-    }
     .login input[type="submit"] {
         font-size: 17px;
         padding: 7px 15px;
@@ -8802,12 +8435,7 @@ footer p a:hover,
     h3.inner-tittle.t-inner {
         font-size: 1.4em;
     }
-    a.hvr-sweep-to-right {
-        background: url("../images/fb.png") no-repeat 3px 6px #3b5998;
-        width: 100%;
-        padding: 0.7em 1em;
-        font-size: 0.9em;
-    }
+
     .sign-up input[type="reset"] {
         font-size: 17px;
         padding: 4px 19px;
@@ -9004,18 +8632,6 @@ footer p a:hover,
     .profile_details_left {
         float: right;
         width: 76%;
-    }
-    .srch button {
-        cursor: pointer;
-        background: url('../images/search.png') no-repeat 10px 17px rgba(3, 182, 197, 0.68);
-        width: 48px;
-        height: 63px;
-        display: block;
-        border: none;
-        outline: none;
-        position: absolute;
-        top: 0px;
-        left: 23%;
     }
     .candile-inner svg {
         height: 265px!important;

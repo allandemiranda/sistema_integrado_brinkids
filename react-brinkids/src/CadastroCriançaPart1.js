@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 
 // CSS Layout
@@ -12,6 +13,109 @@ import './css/style.css';
 
 
 class CadastroCriançaPart1 extends React.Component {
+    /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO
+    COMO TAMBEM FAZ A REQUESIÇÃO POST*/
+    ValidaCriança(event){
+        event.preventDefault();
+        var form = document.querySelector("#form-criança");
+        var data = PegaCriancadoForm(form);
+        var crianca = 
+        {
+            "nome": String(data.nome),
+            "sobrenome": String(form.Sbnome.valu),
+            "data": String(data.Data),
+            "nacionalidade": String(data.Nacionalidade),
+            "sexo": String(data.sexo),
+            "RG": String(data.RG),
+            "CPF": String(data.CPF),
+            "passaporte": String(data.Passaporte),
+            "restricoes": String(data.Restricoes),
+            "observacoes": String(data.Observacoes)
+        }
+        var erros = ValidaErros(data);
+        
+        if(erros.length > 0){
+            alert("Houve erro(s) no preechimento do formulário");
+            exibeMensagensDeErro(erros);
+            return;
+        }
+        else {
+            $.ajax({
+                method:"POST",
+                //url:
+                data: JSON.stringify(crianca), //Função para transformar o objeto em JSON
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                success: function(data) {
+                    alert("Dados enviados!");
+                    form.reset();
+                    console.log(data);
+                    exibeMensagensDeErro(erros);
+                    //window.location.href = "gLogin.html";
+                },
+                error: function(data) {
+                    alert("Erro ao enviar os dados, tente novamente"+ " " + data.status + " " + data.statusText);
+                    console.log(data);
+                    exibeMensagensDeErro(erros);
+                }
+            })    
+        }
+    
+        function PegaCriancadoForm (form){
+            var Criança = {
+                Nome: form.nome.value,
+                Sobrenome: form.Sbnome.value,
+                Data: form.Data.value,
+                Nacionalidade: form.Nacionalidade.value,
+                Sexo: form.sexo.value,
+                RG: form.RG.value,
+                CPF: form.CPF.value,
+                Passaporte: form.Passaporte.value,
+                Restricoes: form.Restricoes.value,
+                Observacoes: form.Observacoes.value
+                }
+
+            return Criança;
+        }
+
+        function ValidaErros (crianca){
+	
+            var erros = [];
+        
+            if (crianca.Nome.length == 0) {
+                erros.push("O Nome não pode ser em branco");
+            }
+            if (crianca.Sobrenome.length == 0) {
+                erros.push("O Sobrenome não pode ser em branco");
+            }
+            if (crianca.Nacionalidade.length == 0) {
+                erros.push("A Nascinalidade não pode ser em branco");
+            }
+            if (crianca.RG.length != 9) {
+                erros.push("O RG precisa ter 9 digitos");
+            }
+            if (crianca.CPF.length != 11) {
+                erros.push("O CPF precisa ter 11 digitos");
+            }
+            if (crianca.Passaporte.length != 8) {
+                erros.push("O Numero do Passaporte precisa ter 8 numeros");
+            }
+        
+            return erros;
+        }
+
+        function exibeMensagensDeErro(erros){
+            var ul = document.querySelector("#mensagens-erro");
+            ul.innerHTML = "";
+        
+            erros.forEach(function(erro){
+                var li = document.createElement("li");
+                li.textContent = erro;
+                ul.appendChild(li);	
+            });
+        }
+    }
+    
     render() {
         return ( 
             <div className = "container-fluid" >
@@ -26,7 +130,7 @@ class CadastroCriançaPart1 extends React.Component {
                     <h3 className = "inner-tittle" > Novo </h3>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Perfil </h3>   
-                        <form id="form-criança" >
+                        <form id="form-criança" onSubmit={this.ValidaCriança}>
                             <div className = "form-group" >
                                 <div className = "row" >
                                     <div className = "col-md-6 col-sm-6 col-xs-12" >
@@ -35,25 +139,21 @@ class CadastroCriançaPart1 extends React.Component {
                                     </div>   
                                     <div className = "col-md-6 col-sm-6 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Sobrenome: </label>
-                                        <input type = "text" id = "Sbrenome" name = "Sbnome" className = "form-control" />
+                                        <input type = "text" id = "Sbnome" name = "Sbnome" className = "form-control" />
                                     </div>  
                                 </div> 
                             </div>
                             <div className = "form-group" >
                                 <div className = "row" >
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
-                                        <label className = "LetraFormulario" > RG: </label>
-                                        <input type = "text" id = "RG" name = "RG" className = "form-control" />
-                                    </div>
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
-                                        <label className = "LetraFormulario brlabel" > CPF: </label>   
-                                        <input type = "text" id = "CPF" name = "CPF" className = "form-control" />
-                                    </div>
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
+                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Data de Nascimento: </label>
-                                        <input type = "date" id = "data" name = "data" className = "form-control" placeholder = "dd / mm / aa" />
+                                        <input type = "date" id = "Data" name = "Data" className = "form-control" placeholder = "dd / mm / aa" />
                                     </div>
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
+                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
+                                        <label className = "LetraFormulario" > Nacionalidade: </label>
+                                        <input type = "text" id = "Nacionalidade" name = "Nacionalidade" className = "form-control" />
+                                    </div>
+                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Sexo: </label>
                                         <select id = "sexo" name = "sexo" className = "form-control optionFomulario" >
                                             <option value = "Masculino" > Masculino </option> 
@@ -63,73 +163,42 @@ class CadastroCriançaPart1 extends React.Component {
                                 </div>
                             </div >
                             <div className = "form-group" >
-                                <div className = "row" >
-                                    <div className = "col-md-12" >
-                                        <label className = "LetraFormulario" > Endereço: </label>
-                                        <input type = "text" id = "Endereço" name = "Endereço" className = "form-control" />
-                                    </div>
-                                </div > 
-                            </div >
-                            <div className = "form-group" >
                                 <div className = "row">
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
-                                        <label className = "LetraFormulario" > Bairro: </label>
-                                        <input type = "text" id = "Barro" name = "Barro" className = "form-control" />
+                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
+                                        <label className = "LetraFormulario" > RG: </label>
+                                        <input type = "text" id = "RG" name = "RG" className = "form-control" />
                                     </div>
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
-                                        <label className = "LetraFormulario brlabel" > Cidade: </label>
-                                        <input type = "text" id = "Cidade" name = "Cidade" className = "form-control" />
+                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
+                                        <label className = "LetraFormulario brlabel" > CPF: </label>
+                                        <input type = "text" id = "CPF" name = "CPF" className = "form-control" />
                                     </div>
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
-                                        <label className = "LetraFormulario brlabel" > Estado: </label>
-                                        <select id = "Estado" name = "Estado" className = "form-control optionFomulario" >
-                                            <option value = "AC" > AC </option>
-                                            <option value = "AL" > AL </option>
-                                            <option value = "AP" > AP </option>
-                                            <option value = "AM" > AM </option>
-                                            <option value = "BA" > BA </option>
-                                            <option value = "CE" > CE </option>
-                                            <option value = "DF" > DF </option>
-                                            <option value = "ES" > ES </option>
-                                            <option value = "GO" > GO </option>
-                                            <option value = "MA" > MA </option>
-                                            <option value = "MT" > MT </option>
-                                            <option value = "MS" > MS </option>
-                                            <option value = "MG" > MG </option>
-                                            <option value = "PA" > PA </option>
-                                            <option value = "PB" > PB </option>
-                                            <option value = "PR" > PR </option>
-                                            <option value = "PE" > PE </option>
-                                            <option value = "PI" > PI </option> 
-                                            <option value = "RJ" > RJ </option>
-                                            <option value = "RN" > RN </option>
-                                            <option value = "RS" > RS </option>
-                                            <option value = "SC" > SC </option>
-                                            <option value = "SP" > SP </option>
-                                            <option value = "SE" > SE </option>
-                                            <option value = "TO" > TO </option> 
-                                        </select >
-                                    </div >
-                                    <div className = "col-md-3 col-sm-3 col-xs-12" >
-                                        <label className = "LetraFormulario brlabel" > CEP: </label>
-                                        <input type = "text" id = "CEP" name = "CEP" className = "form-control" />
+                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
+                                        <label className = "LetraFormulario brlabel" > Passaporte: </label>
+                                        <input type = "text" id = "Passaporte" name = "Passaporte" className = "form-control" />
                                     </div>
                                 </div>
                             </div >
                             <div className = "graph" >
-                                <h3 className = "inner-tittle" > Restrições </h3>
-                                <br></br>
-                                <div className = "form-group" >
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <textarea className = "form-control" rows = "4" cols = "50" ></textarea>
-                                            <input type="checkbox" id="Anexar" name="Anexar" value="Anexar"/> Anexar
-                                        </div>
+                                <div className="row">
+                                    <div className="col-md-6 col-sm-6 col-xs-12">
+                                        <h3 className = "inner-tittle" > Restrições </h3>
+                                        <br></br>
+                                        <textarea className = "form-control" rows = "4" cols = "50" id="Restricoes" name="Restricoes"></textarea>
+                                    </div>
+                                    <div className="col-md-6 col-sm-6 col-xs-12">
+                                        <h3 className = "inner-tittle" > Observações </h3>
+                                        <br></br>
+                                        <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes"></textarea>
                                     </div>
                                 </div>
                             </div >
-                            <a className="btn btn-md botãoVoltar" href="www.google.com.br">Cencelar</a>
-                            <button className="btn btn-md botãoAvançar" id="CriaCriança">Foto</button>
+                            <div className="text-center">
+                                <a className="btn btn-md botãoVoltar" id="CancCrianca" href="/">Cencelar</a>
+                                <button className="btn btn-md botãoAvançar" id="CriaCrianca">Foto</button>
+                            </div>
+                            <div>
+                                <ul id="mensagens-erro" style={{color: "red"}}></ul>
+                            </div>
                         </form >
                     </div >
                 </div>

@@ -15,8 +15,14 @@
     background: #052963;
     color: #fff;
 }
+.botãoVoltar:hover {
+    color: #2aabb6 !important;
+}
+.botãoAvançar:hover {
+    color: #052963 !important;
+}
 .botãoAvançar{
-    margin-left: 40px !important;
+    margin-left: 20px !important;
     background: #00C6D7;
     color: #fff;
 }
