@@ -1,0 +1,22 @@
+@media screen and (max-width: 767px) {
+    .brlabel {
+        margin-top: 7px;
+    }
+}
+
+.LetraFormulario {
+    color: black;
+}
+
+.optionFomulario {
+    padding: 1px 1px !important;
+}
+.botãoVoltar {
+    background: #052963;
+    color: #fff;
+}
+.botãoAvançar{
+    margin-left: 40px !important;
+    background: #00C6D7;
+    color: #fff;
+}
