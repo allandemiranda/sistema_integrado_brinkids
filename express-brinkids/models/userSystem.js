@@ -1,7 +1,7 @@
 /** Schema para usuarios do sistema */
 
 var mongoose = require('mongoose')
-var bcrypt = require('bcrypt')
+// var bcrypt = require('bcrypt')
 var config = require('../config')
 var Schema = mongoose.Schema
 
@@ -28,6 +28,14 @@ UserSchema.pre('save', function (next) {
   })
 }) */
 
+/**
+ * Função responsável pela autenticação de usuários
+ * Obs.: Caso não encontre usuários no banco de dados, 'user' possuirá valor 'null'
+ * @param userName Nome do usuário
+ * @param password Senha do Usuário
+ * @param callback função que manipulará a resposta
+ * @return callback com dois parâmetros: erro e o usuário do sistema
+ */
 UserSchema.statics.authenticate = function (userName, password, callback) {
   UserSystem.findOne({ user: userName })
     .exec(function (err, user) {

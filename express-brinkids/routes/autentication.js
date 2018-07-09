@@ -56,12 +56,18 @@ router.get('/logout', function (req, res, next) {
     // delete session object
     req.session.destroy(function (err) {
       if (err) {
-        return next(err)
+        return res.sendStatus(500)
       } else {
-        return res.redirect('/')
+        return res.sendStatus(200)
       }
     })
   }
+})
+
+router.get('/', function (req, res) {
+  userSystem.find({}, function (err, result) {
+    err ? res.sendStatus(500) : res.status(200).json(result)
+  })
 })
 
 module.exports = router

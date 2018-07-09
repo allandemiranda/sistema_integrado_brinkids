@@ -76,6 +76,7 @@ router.post('/', function (req, res) {
 
           let dados = {
             number: req.body.number,
+            nacionality: req.body.nacionality,
             name: {
               first: req.body.firstName,
               surname: req.body.surname
@@ -93,7 +94,12 @@ router.post('/', function (req, res) {
               return res.sendStatus(500)
             }
 
-            let fileName = config.dir_base + '/media/child/' + childResult._id + photoFile.name /**< url completa da localização do arquivo no computador */
+            let photoNameComponents = photoFile.name.split('.')
+
+            let fileName = config.pathChild +
+              childResult._id + '.' +
+              photoNameComponents[photoNameComponents.length - 1] /**< url completa da localização do arquivo no computador */
+
             childResult.photo = fileName /** Atualiza o nome do arquivo */
             childResult.save(function (err) { /** Atualiza no banco a nova informação */
               if (err) {
@@ -102,8 +108,9 @@ router.post('/', function (req, res) {
             })
 
             /** Pega o arquivo e salva no servidor */
-            photoFile.mv(fileName, function (err) {
+            photoFile.mv(config.pathPublic() + fileName, function (err) {
               if (err) {
+                console.log(err)
                 return res.sendStatus(500)
               }
             })

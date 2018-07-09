@@ -11,6 +11,7 @@ var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
 var autentication = require('./routes/autentication')
 var child = require('./routes/child')
+var adult = require('./routes/adult')
 
 var app = express()
 
@@ -34,6 +35,7 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 app.use('/crianca', child)
 app.use('/usuarios', autentication)
+app.use('/adulto', adult)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

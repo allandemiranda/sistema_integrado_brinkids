@@ -1,5 +1,3 @@
-/** Schema para usuarios do sistema */
-
 var mongoose = require('mongoose')
 var config = require('../config')
 var Schema = mongoose.Schema
@@ -9,6 +7,7 @@ var ChildSchema = new Schema({
     type: String,
     required: true
   },
+  nacionality: String,
   name: {
     type: Map,
     of: String,
