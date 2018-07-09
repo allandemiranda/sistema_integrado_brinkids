@@ -21,16 +21,14 @@ class CadastroCriançaPart1 extends React.Component {
         var data = PegaCriancadoForm(form);
         var crianca = 
         {
-            "nome": String(data.nome),
-            "sobrenome": String(form.Sbnome.valu),
-            "data": String(data.Data),
+            "fisrtName": String(data.nome),
+            "surName": String(data.Sbnome),
+            "number": String(data.Number),
+            "birthday": String(data.Data),
             "nacionalidade": String(data.Nacionalidade),
-            "sexo": String(data.sexo),
-            "RG": String(data.RG),
-            "CPF": String(data.CPF),
-            "passaporte": String(data.Passaporte),
-            "restricoes": String(data.Restricoes),
-            "observacoes": String(data.Observacoes)
+            "sexuality": String(data.Sexo),           
+            "restrictions": String(data.Restricoes),
+            "observations": String(data.Observacoes)
         }
         var erros = ValidaErros(data);
         
@@ -42,7 +40,7 @@ class CadastroCriançaPart1 extends React.Component {
         else {
             $.ajax({
                 method:"POST",
-                //url:
+                url:"/crianca",
                 data: JSON.stringify(crianca), //Função para transformar o objeto em JSON
                 contentType: 'application/json; charset=utf-8',
                 dataType: "json",
@@ -64,13 +62,11 @@ class CadastroCriançaPart1 extends React.Component {
         function PegaCriancadoForm (form){
             var Criança = {
                 Nome: form.nome.value,
-                Sobrenome: form.Sbnome.value,
+                Sbnome: form.Sbnome.value,
                 Data: form.Data.value,
                 Nacionalidade: form.Nacionalidade.value,
                 Sexo: form.sexo.value,
-                RG: form.RG.value,
-                CPF: form.CPF.value,
-                Passaporte: form.Passaporte.value,
+                Number: form.number.value,
                 Restricoes: form.Restricoes.value,
                 Observacoes: form.Observacoes.value
                 }
@@ -85,22 +81,21 @@ class CadastroCriançaPart1 extends React.Component {
             if (crianca.Nome.length == 0) {
                 erros.push("O Nome não pode ser em branco");
             }
-            if (crianca.Sobrenome.length == 0) {
+            if (crianca.Sbnome.length == 0) {
                 erros.push("O Sobrenome não pode ser em branco");
             }
             if (crianca.Nacionalidade.length == 0) {
                 erros.push("A Nascinalidade não pode ser em branco");
             }
-            if (crianca.RG.length != 9) {
-                erros.push("O RG precisa ter 9 digitos");
+            if (crianca.Number.length > 11) {
+                erros.push("O campo não pode ter mais de 11 digitos");
             }
-            if (crianca.CPF.length != 11) {
-                erros.push("O CPF precisa ter 11 digitos");
+            if (crianca.Number.length < 8) {
+                erros.push("O campo não pode ter menor que 8 digitos");
             }
-            if (crianca.Passaporte.length != 8) {
-                erros.push("O Numero do Passaporte precisa ter 8 numeros");
+            if (crianca.Number.length == 0) {
+                erros.push("O campo não pode ser em branco");
             }
-        
             return erros;
         }
 
@@ -145,15 +140,11 @@ class CadastroCriançaPart1 extends React.Component {
                             </div>
                             <div className = "form-group" >
                                 <div className = "row" >
-                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
+                                    <div className = "col-md-6 col-sm-6 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Data de Nascimento: </label>
                                         <input type = "date" id = "Data" name = "Data" className = "form-control" placeholder = "dd / mm / aa" />
                                     </div>
-                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
-                                        <label className = "LetraFormulario" > Nacionalidade: </label>
-                                        <input type = "text" id = "Nacionalidade" name = "Nacionalidade" className = "form-control" />
-                                    </div>
-                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
+                                    <div className = "col-md-6 col-sm-6 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Sexo: </label>
                                         <select id = "sexo" name = "sexo" className = "form-control optionFomulario" >
                                             <option value = "Masculino" > Masculino </option> 
@@ -164,17 +155,13 @@ class CadastroCriançaPart1 extends React.Component {
                             </div >
                             <div className = "form-group" >
                                 <div className = "row">
-                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
-                                        <label className = "LetraFormulario" > RG: </label>
-                                        <input type = "text" id = "RG" name = "RG" className = "form-control" />
+                                    <div className = "col-md-6 col-sm-6 col-xs-12" >
+                                        <label className = "LetraFormulario" > RG/CPF/Passaporte: </label>
+                                        <input type = "text" id = "number" name = "number" className = "form-control" />
                                     </div>
-                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
-                                        <label className = "LetraFormulario brlabel" > CPF: </label>
-                                        <input type = "text" id = "CPF" name = "CPF" className = "form-control" />
-                                    </div>
-                                    <div className = "col-md-4 col-sm-4 col-xs-12" >
-                                        <label className = "LetraFormulario brlabel" > Passaporte: </label>
-                                        <input type = "text" id = "Passaporte" name = "Passaporte" className = "form-control" />
+                                    <div className = "col-md-6 col-sm-6 col-xs-12" >
+                                        <label className = "LetraFormulario" > Nacionalidade: </label>
+                                        <input type = "text" id = "Nacionalidade" name = "Nacionalidade" className = "form-control" />
                                     </div>
                                 </div>
                             </div >

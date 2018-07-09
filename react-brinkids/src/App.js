@@ -31,11 +31,14 @@ class App extends Component {
         $.ajax({
           url: "http://localhost:3000/api/getWeather",
           dataType:'json',
-          type: 'POST',
+          type: 'GET',
           data: {user: this.state.user, password: this.state.password},
           success: function(response){
             console.log(response);
-          }       
+          },  
+          error: function(response){
+            alert("dados nao enviados");
+          }     
         });
       }
       else{
