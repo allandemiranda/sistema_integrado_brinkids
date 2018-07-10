@@ -2,6 +2,7 @@
  * Este arquivo será responsável por criar as rotas relacionadas as crianças
  */
 
+var fs = require('fs')
 var express = require('express')
 var child = require('../models/userChild')
 var config = require('../config')
@@ -41,12 +42,12 @@ router.get('/', function (req, res) {
  */
 router.post('/', function (req, res) {
   if (!req.files) { // Checa se existe arquivos sendo enviados
-    return res.sendStatus(400)
+   return res.sendStatus(400)
   }
 
-  let date = req.body.date.split('/')/**< Array. Recebe o ano, mês e dia da criança para manipulação de data */
   let actualDate = new Date()/**< Data atual do sistema */
-  let childDate = new Date(parseInt(date[2]), parseInt(date[1]) - 1, parseInt(date[0])) /**< Data de nascimento da criança */
+  let childDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
+  console.log(req.body.birthday)
 
   /**
    * Checa se a criança possui menos de 14 anos ou não
@@ -56,10 +57,11 @@ router.post('/', function (req, res) {
     /**
      * Checa se todos os dados obrigatórios da criança foram enviados na requisição
      */
+
     if (req.body.number &&
         req.body.firstName &&
-        req.body.surname &&
-        req.body.date &&
+        req.body.surName &&
+        req.body.birthday &&
         req.body.sexuality) {
       /**
        * Checa se já existe uma criança no sistema.
@@ -79,7 +81,7 @@ router.post('/', function (req, res) {
             nacionality: req.body.nacionality,
             name: {
               first: req.body.firstName,
-              surname: req.body.surname
+              surname: req.body.surName
             },
             birthday: childDate,
             sexuality: req.body.sexuality,
@@ -95,24 +97,21 @@ router.post('/', function (req, res) {
             }
 
             let photoNameComponents = photoFile.name.split('.')
-
             let fileName = config.pathChild +
               childResult._id + '.' +
               photoNameComponents[photoNameComponents.length - 1] /**< url completa da localização do arquivo no computador */
-
             childResult.photo = fileName /** Atualiza o nome do arquivo */
             childResult.save(function (err) { /** Atualiza no banco a nova informação */
-              if (err) {
-                return res.sendStatus(500)
-              }
+             if (err) {
+               return res.sendStatus(500)
+             }
             })
-
-            /** Pega o arquivo e salva no servidor */
+                        /** Pega o arquivo e salva no servidor */
             photoFile.mv(config.pathPublic() + fileName, function (err) {
-              if (err) {
-                console.log(err)
-                return res.sendStatus(500)
-              }
+             if (err) {
+               console.log(err)
+               return res.sendStatus(500)
+             }
             })
 
             return res.sendStatus(201)
@@ -154,7 +153,9 @@ router.delete('/', function (req, res) {
         return res.sendStatus(500)
       }
 
-      return res.sendStatus(200)
+      fs.unlink(config.pathPublic() + config.pathChild + req.body.identifier + '.jpeg', function (err) {
+        return err ? res.sendStatus(500) : res.sendStatus(200)
+      })
     })
   }
 })

@@ -23,11 +23,14 @@ router.post('/', function (req, res) {
   }
 })
 
-router.post('/autentica', function (req, res) {
+router.get('/autentica', function (req, res) {
+  console.log(req.body)
   if (req.body.user && req.body.password) {
     userSystem.authenticate(req.body.user, req.body.password, function (err, user) {
-      if (err || !user) {
-        return res.sendStatus(500)
+      if (err) {
+        return res.sendStatus(err.status)
+      } else if (!user){
+        return res.sendStatus(404)
       } else {
         req.session.userId = user._id
         return res.sendStatus(200)
@@ -55,12 +58,10 @@ router.get('/logout', function (req, res, next) {
   if (req.session) {
     // delete session object
     req.session.destroy(function (err) {
-      if (err) {
-        return res.sendStatus(500)
-      } else {
-        return res.sendStatus(200)
-      }
+      return err ? res.sendStatus(500) : res.sendStatus(200)
     })
+  } else {
+    return res.sendStatus(400)
   }
 })
 

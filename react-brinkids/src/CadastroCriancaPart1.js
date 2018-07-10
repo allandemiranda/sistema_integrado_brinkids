@@ -19,19 +19,19 @@ class CadastroCriançaPart1 extends React.Component {
         event.preventDefault();
         var form = document.querySelector("#form-criança");
         var data = PegaCriancadoForm(form);
-        var crianca = 
+        var crianca =
         {
-            "fisrtName": String(data.nome),
+            "firstName": String(data.Nome),
             "surName": String(data.Sbnome),
             "number": String(data.Number),
             "birthday": String(data.Data),
-            "nacionalidade": String(data.Nacionalidade),
-            "sexuality": String(data.Sexo),           
+            "nacionality": String(data.Nacionalidade),
+            "sexuality": String(data.Sexo),
             "restrictions": String(data.Restricoes),
             "observations": String(data.Observacoes)
         }
         var erros = ValidaErros(data);
-        
+
         if(erros.length > 0){
             alert("Houve erro(s) no preechimento do formulário");
             exibeMensagensDeErro(erros);
@@ -56,11 +56,11 @@ class CadastroCriançaPart1 extends React.Component {
                     console.log(data);
                     exibeMensagensDeErro(erros);
                 }
-            })    
+            })
         }
-    
+
         function PegaCriancadoForm (form){
-            var Criança = {
+            var Crianca = {
                 Nome: form.nome.value,
                 Sbnome: form.Sbnome.value,
                 Data: form.Data.value,
@@ -71,13 +71,13 @@ class CadastroCriançaPart1 extends React.Component {
                 Observacoes: form.Observacoes.value
                 }
 
-            return Criança;
+            return Crianca;
         }
 
         function ValidaErros (crianca){
-	
+
             var erros = [];
-        
+
             if (crianca.Nome.length == 0) {
                 erros.push("O Nome não pode ser em branco");
             }
@@ -102,41 +102,41 @@ class CadastroCriançaPart1 extends React.Component {
         function exibeMensagensDeErro(erros){
             var ul = document.querySelector("#mensagens-erro");
             ul.innerHTML = "";
-        
+
             erros.forEach(function(erro){
                 var li = document.createElement("li");
                 li.textContent = erro;
-                ul.appendChild(li);	
+                ul.appendChild(li);
             });
         }
     }
-    
+
     render() {
-        return ( 
+        return (
             <div className = "container-fluid" >
                 <div className = "sub-heard-part" >
                     <ol className = "breadcrumb m-b-0" >
                         <li > < a href = "/" > Home </a></li >
-                        <li > Usuario </li>    
-                        <li > Crianças </li>  
-                    </ol > 
-                </div>  
+                        <li > Usuario </li>
+                        <li > Crianças </li>
+                    </ol >
+                </div>
                 <div className = "graph-visual" >
                     <h3 className = "inner-tittle" > Novo </h3>
                     <div className = "graph" >
-                        <h3 className = "inner-tittle" > Perfil </h3>   
+                        <h3 className = "inner-tittle" > Perfil </h3>
                         <form id="form-criança" onSubmit={this.ValidaCriança}>
                             <div className = "form-group" >
                                 <div className = "row" >
                                     <div className = "col-md-6 col-sm-6 col-xs-12" >
                                         <label className = "LetraFormulario" > Nome: </label>
                                         <input type = "text" id = "nome" name = "nome" className = "form-control" />
-                                    </div>   
+                                    </div>
                                     <div className = "col-md-6 col-sm-6 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Sobrenome: </label>
                                         <input type = "text" id = "Sbnome" name = "Sbnome" className = "form-control" />
-                                    </div>  
-                                </div> 
+                                    </div>
+                                </div>
                             </div>
                             <div className = "form-group" >
                                 <div className = "row" >
@@ -147,9 +147,9 @@ class CadastroCriançaPart1 extends React.Component {
                                     <div className = "col-md-6 col-sm-6 col-xs-12" >
                                         <label className = "LetraFormulario brlabel" > Sexo: </label>
                                         <select id = "sexo" name = "sexo" className = "form-control optionFomulario" >
-                                            <option value = "Masculino" > Masculino </option> 
+                                            <option value = "Masculino" > Masculino </option>
                                             <option value = "Feminino" > Feminino </option>
-                                        </select > 
+                                        </select >
                                     </div>
                                 </div>
                             </div >
