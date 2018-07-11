@@ -23,7 +23,7 @@ router.post('/', function (req, res) {
   }
 })
 
-router.get('/autentica', function (req, res) {
+router.get('/autenticacao', function (req, res) {
   console.log(req.body)
   if (req.body.user && req.body.password) {
     userSystem.authenticate(req.body.user, req.body.password, function (err, user) {

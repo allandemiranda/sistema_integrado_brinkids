@@ -4,6 +4,37 @@ var mongoose = require('mongoose')
 var config = require('../config')
 var Schema = mongoose.Schema
 
+var addressSchema = new Schema({
+  street: {
+    type: String,
+    require: true
+  },
+  number: {
+    type: Number,
+    require: true
+  },
+  district: {
+    type: String,
+    require: true
+  },
+  city: {
+    type: String,
+    require: true
+  },
+  state: {
+    type: String,
+    require: true
+  },
+  country: {
+    type: String,
+    require: true,
+  },
+  cep: {
+    type: Number,
+    require: true
+  }
+})
+
 var userAdultSchema = new Schema({
   status: String,
   name: {
@@ -18,14 +49,12 @@ var userAdultSchema = new Schema({
     type: Array,
     required: true
   },
-  address: {
-    type: Map,
-    required: true
-  },
+  address: [addressSchema],
   gr: Number,
   cpf: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   maritalStatus: String,
   children: {
@@ -35,7 +64,8 @@ var userAdultSchema = new Schema({
   observations: String,
   photo: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
 })
 

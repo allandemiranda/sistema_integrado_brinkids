@@ -47,7 +47,6 @@ router.post('/', function (req, res) {
 
   let actualDate = new Date()/**< Data atual do sistema */
   let childDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
-  console.log(req.body.birthday)
 
   /**
    * Checa se a criança possui menos de 14 anos ou não

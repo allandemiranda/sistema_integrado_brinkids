@@ -43,7 +43,7 @@ UserSchema.statics.authenticate = function (userName, password, callback) {
         return callback(err)
       } else if (!user) {
         let err = new Error('User not found.')
-        err.status = 401
+        err.status = 404
         return callback(err)
       }
       if (password === user.password) {
