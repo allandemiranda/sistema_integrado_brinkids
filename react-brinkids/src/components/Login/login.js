@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../../assets/logo1.png';
-import video from '../../assets/loginvideo.mp4';
+import video from './loginvideo.mp4';
 import './login.css';
 import $ from "jquery";
 
@@ -58,7 +58,7 @@ constructor () {
 
         <form className="inner-container">
             <div className="box">
-              <img className="logo" src={logo} alt="logo" />
+              <img className="logo_1" src={logo} alt="logo" />
               <input placeholder="Usuário" type="text" value={this.state.user} onChange={this.textoUsuario} />
               <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword}/>
               <button type="button" onClick={this.loginSubmit} >Login</button>

@@ -1,6 +1,6 @@
 .vid-container{
-    position:relative;
-    height:100vh;
+    
+    
     overflow:hidden;
 }
 .bgvid.back {
@@ -76,7 +76,7 @@
     cursor:pointer;
     color:red;
 }
-.logo {
+.logo_1 {
     width: 90%; 
     margin-left: 5%;
 }
