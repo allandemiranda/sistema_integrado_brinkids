@@ -1371,6 +1371,10 @@ ul.dropdown {
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
 
+.styleButaoMenu:hover {
+    background-Color: #498f94; 
+}
+
 .states-mdl .stats-left {
     background-color: #00C6D7;
 }

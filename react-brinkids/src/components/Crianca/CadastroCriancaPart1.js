@@ -1,11 +1,12 @@
 import React from 'react';
 import $ from 'jquery';
+import Webcam from 'react-webcam';
 
 
 // CSS Layout
-import './css/bootstrap.min.css';
-import './css/font-awesome.css';
-import './css/formulario_Criança.css';
+import '../../assets/style/bootstrap.min.css';
+import '../../assets/style/font-awesome.css';
+import './css/formulario_Crianca.css';
 import './css/style.css';
 
 
@@ -15,7 +16,7 @@ import './css/style.css';
 class CadastroCriançaPart1 extends React.Component {
     /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO
     COMO TAMBEM FAZ A REQUESIÇÃO POST*/
-    ValidaCriança(event){
+    ValidaCriança = (event) => {
         event.preventDefault();
         var form = document.querySelector("#form-criança");
         var data = PegaCriancadoForm(form);
@@ -31,14 +32,15 @@ class CadastroCriançaPart1 extends React.Component {
             "observations": String(data.Observacoes)
         }
         var erros = ValidaErros(data);
-
+        
         if(erros.length > 0){
             alert("Houve erro(s) no preechimento do formulário");
             exibeMensagensDeErro(erros);
             return;
         }
         else {
-            $.ajax({
+            console.log(data);
+            /*$.ajax({
                 method:"POST",
                 url:"/crianca",
                 data: JSON.stringify(crianca), //Função para transformar o objeto em JSON
@@ -56,7 +58,7 @@ class CadastroCriançaPart1 extends React.Component {
                     console.log(data);
                     exibeMensagensDeErro(erros);
                 }
-            })
+            })*/
         }
 
         function PegaCriancadoForm (form){
@@ -68,7 +70,8 @@ class CadastroCriançaPart1 extends React.Component {
                 Sexo: form.sexo.value,
                 Number: form.number.value,
                 Restricoes: form.Restricoes.value,
-                Observacoes: form.Observacoes.value
+                Observacoes: form.Observacoes.value,
+                Imagem: form.imagem.src,
                 }
 
             return Crianca;
@@ -96,6 +99,9 @@ class CadastroCriançaPart1 extends React.Component {
             if (crianca.Number.length == 0) {
                 erros.push("O campo não pode ser em branco");
             }
+            if (crianca.Imagem.src == {}) {
+                erros.push("Precisamos da sua foto");
+            }
             return erros;
         }
 
@@ -110,6 +116,18 @@ class CadastroCriançaPart1 extends React.Component {
             });
         }
     }
+    /*BLOCO QUE TIRA FOTO DA WEBCAN*/
+    setRef = (webcam) => {
+        this.webcam = webcam;
+    }
+    capture = (event) => {
+        event.preventDefault();
+        var imagem = document.querySelector("#imagem"); 
+        const imageSrc = this.webcam.getScreenshot();
+        imagem.src = imageSrc;
+  
+    };
+    
 
     render() {
         return (
@@ -125,7 +143,7 @@ class CadastroCriançaPart1 extends React.Component {
                     <h3 className = "inner-tittle" > Novo </h3>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Perfil </h3>
-                        <form id="form-criança" onSubmit={this.ValidaCriança}>
+                        <form id="form-criança">
                             <div className = "form-group" >
                                 <div className = "row" >
                                     <div className = "col-md-6 col-sm-6 col-xs-12" >
@@ -179,9 +197,31 @@ class CadastroCriançaPart1 extends React.Component {
                                     </div>
                                 </div>
                             </div >
+                            <br></br>
+                        
+                            <div className = "graph" >
+                                <div className="row text-center">
+                                    <h4 className = "inner-tittle"> Tirando uma foto </h4>
+                                    <div className="col-md-6 col-sm-12 col-xs-12">
+                                        <Webcam
+                                            className = "webcan"
+                                            audio={false}
+                                            height={240}
+                                            ref={this.setRef}
+                                            screenshotFormat="image/png"
+                                            width={320}
+                                        />
+                                        <button className="btn btn-md botao" onClick={this.capture}>Take a Photo</button>
+                                        <br></br>
+                                    </div>
+                                    <div className="col-md-6 col-sm-12 col-xs-12">
+                                        <img id="imagem" className="webcan"/>
+                                    </div>
+                                </div>
+                            </div >
                             <div className="text-center">
-                                <a className="btn btn-md botãoVoltar" id="CancCrianca" href="/">Cencelar</a>
-                                <button className="btn btn-md botãoAvançar" id="CriaCrianca">Foto</button>
+                                <a className="btn btn-md botao" id="CancCrianca" href="/">Cencelar</a>
+                                <button className="btn btn-md botao botaoAvançar" id="CriaCrianca" onClick={this.ValidaCriança}>Avançar</button>
                             </div>
                             <div>
                                 <ul id="mensagens-erro" style={{color: "red"}}></ul>

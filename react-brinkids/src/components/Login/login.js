@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from '../assets/logo1.png';
-import video from '../assets/loginvideo.mp4';
+import logo from '../../assets/logo1.png';
+import video from '../../assets/loginvideo.mp4';
 import './login.css';
 import $ from "jquery";
 
