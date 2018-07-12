@@ -34,15 +34,17 @@ constructor () {
         type: 'GET',
         data: {user: this.state.user, password: this.state.password},
         success: function(response){
-          console.log(response);
+          if(response == 200 ){alert("Dados Enviados");}
         },
         error: function(response){
-          alert("dados nao enviados");
+          if( response == 500 ){this.setState({erro: "* Erro no Servidor.Tente novamente em alguns minutos."})}
+          else if( response == 404 ){this.setState({erro: "* Usuário ou Senha incoreto"})}
+          //alert("dados nao enviados");
         }
       });
     }
     else{
-      this.setState({erro: "Dados informados não reconhecido"})
+      this.setState({erro: "* Por favor, preencha os campos acima"})
     }
   }
 
@@ -54,17 +56,16 @@ constructor () {
             <source src={video} type="video/mp4" alt="video" />
         </video>
 
-        <div className="inner-container">
+        <form className="inner-container">
             <div className="box">
               <img className="logo" src={logo} alt="logo" />
-              {/*<!--p style="color: red;">Usuário ou Senha incoreto!</p!-->*/}
               <input placeholder="Usuário" type="text" value={this.state.user} onChange={this.textoUsuario} />
               <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword}/>
               <button type="button" onClick={this.loginSubmit} >Login</button>
               {/*<!--p>Recuperar <span>Usuário</span> ou <span>Senha</span></p!-->*/}
               <span id="menErro"> {this.state.erro} </span>
             </div>
-        </div>
+        </form>
       </div>
     );
   }
