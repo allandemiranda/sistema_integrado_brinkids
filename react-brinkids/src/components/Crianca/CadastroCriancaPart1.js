@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import Webcam from 'react-webcam';
+import axios from 'axios';
 
 
 // CSS Layout
@@ -14,51 +15,92 @@ import './css/style.css';
 
 
 class CadastroCriançaPart1 extends React.Component {
+    _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
+      // convert base64/URLEncoded data component to raw binary data held in a string
+      var byteString;
+      if (dataURI.split(',')[0].indexOf('base64') >= 0)
+          byteString = atob(dataURI.split(',')[1]);
+      else
+          byteString = unescape(dataURI.split(',')[1]);
+
+      // separate out the mime component
+      var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      // write the bytes of the string to a typed array
+      var ia = new Uint8Array(byteString.length);
+      for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+      }
+
+      return new Blob([ia], {type:mimeString});
+    }
+
+
     /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO
     COMO TAMBEM FAZ A REQUESIÇÃO POST*/
     ValidaCriança = (event) => {
         event.preventDefault();
         var form = document.querySelector("#form-criança");
         var data = PegaCriancadoForm(form);
-        var crianca =
-        {
-            "firstName": String(data.Nome),
-            "surName": String(data.Sbnome),
-            "number": String(data.Number),
-            "birthday": String(data.Data),
-            "nacionality": String(data.Nacionalidade),
-            "sexuality": String(data.Sexo),
-            "restrictions": String(data.Restricoes),
-            "observations": String(data.Observacoes)
-        }
+        // var crianca =
+        // {
+        //     "firstName": String(data.Nome),
+        //     "surName": String(data.Sbnome),
+        //     "number": String(data.Number),
+        //     "birthday": String(data.Data),
+        //     "nacionality": String(data.Nacionalidade),
+        //     "sexuality": String(data.Sexo),
+        //     "restrictions": String(data.Restricoes),
+        //     "observations": String(data.Observacoes),
+        //     "file": this.webcam
+        // }
         var erros = ValidaErros(data);
-        
+
         if(erros.length > 0){
             alert("Houve erro(s) no preechimento do formulário");
             exibeMensagensDeErro(erros);
             return;
         }
         else {
-            console.log(data);
-            /*$.ajax({
-                method:"POST",
-                url:"/crianca",
-                data: JSON.stringify(crianca), //Função para transformar o objeto em JSON
-                contentType: 'application/json; charset=utf-8',
-                dataType: "json",
-                success: function(data) {
-                    alert("Dados enviados!");
-                    form.reset();
-                    console.log(data);
-                    exibeMensagensDeErro(erros);
-                    //window.location.href = "gLogin.html";
-                },
-                error: function(data) {
-                    alert("Erro ao enviar os dados, tente novamente"+ " " + data.status + " " + data.statusText);
-                    console.log(data);
-                    exibeMensagensDeErro(erros);
-                }
-            })*/
+            var formData = new FormData();
+
+            formData.append('file', this._dataURItoBlob(this.imageBase64))
+            formData.append('firstName', String(data.Nome))
+            formData.append('surName', String(data.Sbnome))
+            formData.append('number', String(data.Number))
+            formData.append('birthday', String(data.Data))
+            formData.append('nacionality', String(data.Nacionalidade))
+            formData.append('sexuality', String(data.Sexo))
+            formData.append('restrictions', String(data.Restricoes))
+
+            formData.append('observations', String(data.Observacoes))
+            axios.post('/crianca', formData)
+              .then(function (response) {
+                console.log(response)
+              }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+              })
+            // $.ajax({
+            //     method:"POST",
+            //     url:"/crianca",
+            //     data: JSON.stringify(crianca), //Função para transformar o objeto em JSON
+            //     contentType: 'application/json; charset=utf-8',
+            //     dataType: "json",
+            //     success: function(data) {
+            //         alert("Dados enviados!");
+            //         form.reset();
+            //         console.log(data);
+            //         exibeMensagensDeErro(erros);
+            //         //window.location.href = "gLogin.html";
+            //     },
+            //     error: function(data) {
+            //         alert("Erro ao enviar os dados, tente novamente"+ " " + data.status + " " + data.statusText);
+            //         console.log(data);
+            //         exibeMensagensDeErro(erros);
+            //     }
+            // })
         }
 
         function PegaCriancadoForm (form){
@@ -99,7 +141,7 @@ class CadastroCriançaPart1 extends React.Component {
             if (crianca.Number.length == 0) {
                 erros.push("O campo não pode ser em branco");
             }
-            if (crianca.Imagem.src == {}) {
+            if (document.querySelector("#imagem").src.length === 0) {
                 erros.push("Precisamos da sua foto");
             }
             return erros;
@@ -122,12 +164,12 @@ class CadastroCriançaPart1 extends React.Component {
     }
     capture = (event) => {
         event.preventDefault();
-        var imagem = document.querySelector("#imagem"); 
+        var imagem = document.querySelector("#imagem");
         const imageSrc = this.webcam.getScreenshot();
         imagem.src = imageSrc;
-  
+        this.imageBase64 = imageSrc
     };
-    
+
 
     render() {
         return (
@@ -198,7 +240,7 @@ class CadastroCriançaPart1 extends React.Component {
                                 </div>
                             </div >
                             <br></br>
-                        
+
                             <div className = "graph" >
                                 <div className="row text-center">
                                     <h4 className = "inner-tittle"> Tirando uma foto </h4>

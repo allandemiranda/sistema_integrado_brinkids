@@ -24,11 +24,10 @@ router.post('/', function (req, res) {
 })
 
 router.get('/autenticacao', function (req, res) {
-  console.log(req.body)
-  if (req.body.user && req.body.password) {
-    userSystem.authenticate(req.body.user, req.body.password, function (err, user) {
+  if (req.query.user && req.query.password) {
+    userSystem.authenticate(req.query.user, req.query.password, function (err, user) {
       if (err) {
-        return res.sendStatus(err.status)
+        return res.sendStatus(500)
       } else if (!user){
         return res.sendStatus(404)
       } else {
@@ -36,6 +35,8 @@ router.get('/autenticacao', function (req, res) {
         return res.sendStatus(200)
       }
     })
+  } else {
+    return res.sendStatus(400)
   }
 })
 

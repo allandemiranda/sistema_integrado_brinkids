@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 var fileUpload = require('express-fileupload')
 var session = require('express-session')
+var cors = require('cors')
 var config = require('./config')
 
 var indexRouter = require('./routes/index')
@@ -30,6 +31,7 @@ app.use(session({
   resave: true,
   saveUninitialized: false
 }))
+app.use(cors())
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)

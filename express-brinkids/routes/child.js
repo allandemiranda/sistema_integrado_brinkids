@@ -73,7 +73,7 @@ router.post('/', function (req, res) {
 
         /** Checa se não existe uma criança no sistema */
         if (childResult === null) {
-          let photoFile = req.files.fileField /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
+          let photoFile = req.files.file /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
 
           let dados = {
             number: req.body.number,
@@ -92,28 +92,22 @@ router.post('/', function (req, res) {
           /** Salva a criança no banco */
           child.create(dados, function (err, childResult) {
             if (err) {
+              console.log(err)
               return res.sendStatus(500)
             }
 
-            let photoNameComponents = photoFile.name.split('.')
-            let fileName = config.pathChild +
-              childResult._id + '.' +
-              photoNameComponents[photoNameComponents.length - 1] /**< url completa da localização do arquivo no computador */
+            let fileName = config.pathChild + childResult._id + '.png' /**< url completa da localização do arquivo no computador */
             childResult.photo = fileName /** Atualiza o nome do arquivo */
             childResult.save(function (err) { /** Atualiza no banco a nova informação */
              if (err) {
                return res.sendStatus(500)
              }
             })
-                        /** Pega o arquivo e salva no servidor */
-            photoFile.mv(config.pathPublic() + fileName, function (err) {
-             if (err) {
-               console.log(err)
-               return res.sendStatus(500)
-             }
-            })
 
-            return res.sendStatus(201)
+            /** Pega o arquivo e salva no servidor */
+            photoFile.mv(config.pathPublic() + fileName, function (err) {
+             return err ? res.sendStatus(500) : res.sendStatus(201)
+            })
           })
         } else {
           return res.sendStatus(409)
@@ -152,7 +146,7 @@ router.delete('/', function (req, res) {
         return res.sendStatus(500)
       }
 
-      fs.unlink(config.pathPublic() + config.pathChild + req.body.identifier + '.jpeg', function (err) {
+      fs.unlink(config.pathPublic() + config.pathChild + req.body.identifier + '.png', function (err) {
         return err ? res.sendStatus(500) : res.sendStatus(200)
       })
     })

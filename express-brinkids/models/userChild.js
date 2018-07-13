@@ -25,8 +25,7 @@ var ChildSchema = new Schema({
   observations: String,
   photo: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   }
 })
 

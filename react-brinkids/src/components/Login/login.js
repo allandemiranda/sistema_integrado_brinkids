@@ -18,28 +18,30 @@ constructor () {
     this.loginSubmit = this.loginSubmit.bind(this)
   }
 
-  textoUsuario (event) {
+  textoUsuario(event){
     this.setState({user: event.target.value})
   }
 
-  textoPassword (event) {
+  textoPassword(event){
     this.setState({password: event.target.value})
   }
 
   loginSubmit(event){
     if (this.state.user.length > 0 && this.state.password.length > 0){
       $.ajax({
-        url: "http://localhost:3001/usuarios/autentica",
-        dataType:'json',
-        type: 'GET',
+        url: "http://localhost:3001/usuarios/autenticacao",
+        type: 'get',
         data: {user: this.state.user, password: this.state.password},
-        success: function(response){
-          if(response == 200 ){alert("Dados Enviados");}
-        },
-        error: function(response){
-          if( response == 500 ){this.setState({erro: "* Erro no Servidor.Tente novamente em alguns minutos."})}
-          else if( response == 404 ){this.setState({erro: "* Usuário ou Senha incoreto"})}
-          //alert("dados nao enviados");
+        statusCode: { //A partir do status da resposta, ele executa uma função
+          200: function() {
+            alert('Estou logado')
+          },
+          404: function() {
+            this.setState({erro: "* Usuário ou senha incorretos"})
+          }.bind(this),
+          500: function() {
+            this.setState({erro: "* Erro no Servidor.Tente novamente em alguns minutos."})
+          }.bind(this)
         }
       });
     }
@@ -59,7 +61,7 @@ constructor () {
         <form className="inner-container">
             <div className="box">
               <img className="logo_1" src={logo} alt="logo" />
-              <input placeholder="Usuário" type="text" value={this.state.user} onChange={this.textoUsuario} />
+              <input placeholder="Usuário" autoFocus type="text" value={this.state.user} onChange={this.textoUsuario} />
               <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword}/>
               <button type="button" onClick={this.loginSubmit} >Login</button>
               {/*<!--p>Recuperar <span>Usuário</span> ou <span>Senha</span></p!-->*/}
