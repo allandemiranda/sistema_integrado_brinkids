@@ -14,7 +14,6 @@ body a {
     -moz-transition: 0.5s all;
     -o-transition: 0.5s all;
     -ms-transition: 0.5s all;
-    background: #011D4A !mportant;
 }
 
 a:focus,
@@ -674,7 +673,6 @@ ul.nofitications-dropdown {
     margin: 0;
 }
 
-li.dropdown.head-dpdn:nth-child(2) {}
 
 li.dropdown.head-dpdn:nth-child(3) {
     border: none;
@@ -1373,6 +1371,10 @@ ul.dropdown {
 
 .styleButaoMenu:hover {
     background-Color: #498f94; 
+}
+
+.bordaDaDiv {
+    border: 1px solid rgba(69, 74, 84, 0.7);
 }
 
 .states-mdl .stats-left {
@@ -5512,8 +5514,6 @@ form.text-sub {
     backface-visibility: hidden;
 }
 
-.grid figure figcaption::before,
-.grid figure figcaption::after {}
 
 .grid figure figcaption,
 .grid figure figcaption>a {

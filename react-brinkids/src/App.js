@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import LayoutRoute from './components/Layout/LayoutRoute.js';
 import MainLayout from './components/Layout/MainLayout.js';
-import CadastroCrianca from './components/Crianca/CadastroCriancaPart1.js';
+import CadastroCrianca from './components/Crianca/CadastroCrianca.js';
 import GAListener from './components/GAListener.js';
 import Login from './components/Login/login.js';
 

@@ -77,7 +77,7 @@ class MainLayout extends React.Component {
                             < span id = "logo" > < h1 > BrinKids </h1></span>
                         </a>
                     </header>
-                    <div style = {{ borderTop: 1 + "px" + "solid" + "rgba(69, 74, 84, 0.7)" }}> </div>
+                    <div className = "bordaDaDiv"> </div>
                     <div className = "menu" >
                         <ul id = "menu" >
                             <li >
