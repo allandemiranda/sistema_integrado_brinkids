@@ -2,6 +2,7 @@ import React from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import ConfirmaCrianca from './ConfirmaCrianca.js';
+import TypesInput from '../TypesInput.js';
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -152,6 +153,32 @@ class CadastroCrianca extends React.Component {
             page: "FormularioCad"
         })
     }
+    /*FUNCAO NOVO CADASTRO*/
+    NovoCadastro = (event) => {
+        var formData = new FormData();
+
+        formData.append('file', this._dataURItoBlob(this.imageBase64))
+        formData.append('firstName', String(this.state.firstName))
+        formData.append('surName', String(this.state.surName))
+        formData.append('number', String(this.state.number))
+        formData.append('birthday', String(this.state.birthday))
+        formData.append('nacionality', String(this.state.nacionality))
+        formData.append('sexuality', String(this.state.sexuality))
+        formData.append('restrictions', String(this.state.restrictions))
+        formData.append('observations', String(this.state.observations))
+        
+        axios.post('/crianca', formData)
+        .then(function (response) {
+            console.log(response)
+            alert("Cadastro Finalizado, Redirecionando para um novo Cadastro")
+            window.location.href = '/crianca';
+        }).catch(function (error) {
+            console.log(error)//LOG DE ERRO
+            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+        }) 
+    }
 
     /*FUNCAO CADASTRA CRIANÇA*/
     CadastrarCrianca = (event) => {
@@ -170,6 +197,8 @@ class CadastroCrianca extends React.Component {
         axios.post('/crianca', formData)
         .then(function (response) {
             console.log(response)
+            alert("Cadastro Finalizado")
+            window.location.href = '/';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -214,13 +243,21 @@ class CadastroCrianca extends React.Component {
                             <form id="form-criança">
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                            <label className = "LetraFormulario" > Nome: </label>
-                                            <input type = "text" id = "nome" name = "nome" className = "form-control" onChange={this.ChangeName} />
-                                        </div>
+                                            <TypesInput
+                                                cod = {1}
+                                                ClassDiv = {"col-md-6 col-sm-6 col-xs-12"}
+                                                ClassLabel = {"LetraFormulario"}
+                                                NameLabel = {"Nome: "}
+                                                type = {"text"}
+                                                id = {"nome"}
+                                                name= {"nome"}
+                                                Class = {"form-control"}
+                                                value = {this.state.firstName}
+                                                onChange = {this.ChangeName}
+                                            />
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario brlabel" > Sobrenome: </label>
-                                            <input type = "text" id = "Sbnome" name = "Sbnome" className = "form-control" onChange={this.ChangeSurname} />
+                                            <input type = "text" id = "Sbnome" name = "Sbnome" className = "form-control" value={this.state.surName} onChange={this.ChangeSurname} />
                                         </div>
                                     </div>
                                 </div>
@@ -228,11 +265,11 @@ class CadastroCrianca extends React.Component {
                                     <div className = "row" >
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario brlabel" > Data de Nascimento: </label>
-                                            <input type = "date" id = "Data" name = "Data" className = "form-control" placeholder = "dd / mm / aa" onChange={this.ChangeDate} />
+                                            <input type = "date" id = "Data" name = "Data" className = "form-control" placeholder = "dd / mm / aa" value={this.state.birthday}  onChange={this.ChangeDate} />
                                         </div>
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario brlabel" > Sexo: </label>
-                                            <select id = "sexo" name = "sexo" className = "form-control optionFomulario" onChange={this.ChangeSexo} >
+                                            <select id = "sexo" name = "sexo" className = "form-control optionFomulario" value={this.state.sexuality} onChange={this.ChangeSexo} >
                                                 <option value = "Masculino" > Masculino </option>
                                                 <option value = "Feminino" > Feminino </option>
                                             </select >
@@ -243,11 +280,11 @@ class CadastroCrianca extends React.Component {
                                     <div className = "row">
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario" > RG/CPF/Passaporte: </label>
-                                            <input type = "text" id = "number" name = "number" className = "form-control" onChange={this.ChangeNumber} />
+                                            <input type = "text" id = "number" name = "number" className = "form-control" value = {this.state.number}onChange={this.ChangeNumber} />
                                         </div>
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario" > Nacionalidade: </label>
-                                            <input type = "text" id = "Nacionalidade" name = "Nacionalidade" className = "form-control" onChange={this.ChangeNacio} />
+                                            <input type = "text" id = "Nacionalidade" name = "Nacionalidade" className = "form-control" value={this.state.nacionality} onChange={this.ChangeNacio} />
                                         </div>
                                     </div>
                                 </div >
@@ -256,12 +293,12 @@ class CadastroCrianca extends React.Component {
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <h3 className = "inner-tittle" > Restrições </h3>
                                             <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Restricoes" name="Restricoes" onChange={this.ChangeRet}></textarea>
+                                            <textarea className = "form-control" rows = "4" cols = "50" id="Restricoes" name="Restricoes" value={this.state.restrictions} onChange={this.ChangeRet}></textarea>
                                         </div>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <h3 className = "inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" onChange={this.ChangeObs}></textarea>
+                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.observations} onChange={this.ChangeObs}></textarea>
                                         </div>
                                     </div>
                                 </div >
@@ -283,12 +320,12 @@ class CadastroCrianca extends React.Component {
                                             <br></br>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <img id="imagem" className="webcan" />
+                                            <img id="imagem" className="webcan" src={this.state.file}/>
                                         </div>
                                     </div>
                                 </div >
                                 <div className="text-center">
-                                    <a className="btn btn-md botao" href="/">Cencelar</a>
+                                    <a className="btn btn-md botao" href="/crianca">Cencelar</a>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaCriança}>Avançar</button>
                                 </div>
                                 <div>
@@ -317,7 +354,8 @@ class CadastroCrianca extends React.Component {
                     <br></br>
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarCrianca}>Cadastrar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarCrianca}>Finalizar</button>
                     </div>
                 </div>
             )

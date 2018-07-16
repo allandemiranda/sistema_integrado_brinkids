@@ -1,0 +1,266 @@
+.vid-container {
+	overflow: hidden;
+}
+
+.bgvid.back {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+	z-index: -100;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+	background: red;
+}
+
+.calendar {
+	background: #f4f4f4;
+	width: 60%;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.calendar .calendar__view-selector {
+	float: right;
+	margin-right: -272px;
+	margin-top: 152px;
+	border-radius: 25px;
+}
+
+.calendar .calendar__view-selector .calendar__view-selector__item {
+	width: px-to-rem(100);
+	display: inline-block;
+	background: #f4f4f4;
+	text-align: center;
+	cursor: pointer;
+	font-size: px-to-rem(14);
+	padding: px-to-rem(2) 0;
+	margin-bottom: px-to-rem(18);
+}
+
+.calendar .calendar__view-selector .calendar__view-selector__item:first-child {
+	border-top-left-radius: px-to-rem(4);
+	border-bottom-left-radius: px-to-rem(4);
+}
+
+.calendar .calendar__view-selector .calendar__view-selector__item:nth-child(2) {
+	border-left: 1px solid #FFFFFF;
+	border-right: 1px solid #FFFFFF;
+}
+
+.calendar .calendar__view-selector .calendar__view-selector__item:last-child {
+	border-top-right-radius: px-to-rem(4);
+	border-bottom-right-radius: px-to-rem(4);
+}
+
+.calendar .calendar__view-selector .calendar__view-selector__item:hover, .calendar .calendar__view-selector .calendar__view-selector__item.calendar__view-selector__item--selected {
+	color: #FFFFFF;
+	background: #91bde5;
+}
+
+.calendar .calendar__date-selector {
+	float: left;
+	margin-top: -50px;
+}
+
+.calendar .calendar__date-selector .calendar__date-selector__controller {
+	width: px-to-rem(50);
+	display: inline-block;
+	text-align: center;
+	background: #f4f4f4;
+	cursor: pointer;
+}
+
+.calendar .calendar__date-selector .calendar__date-selector__controller.calendar__date-selector__controller__arrow-left {
+	border-top-left-radius: px-to-rem(4);
+	border-bottom-left-radius: px-to-rem(4);
+}
+
+.calendar .calendar__date-selector .calendar__date-selector__controller.calendar__date-selector__controller__arrow-right {
+	border-top-right-radius: px-to-rem(4);
+	border-bottom-right-radius: px-to-rem(4);
+}
+
+.calendar .calendar__date-selector .calendar__date-selector__date-name {
+	width: px-to-rem(150);
+	display: inline-block;
+	text-align: center;
+	font-size: px-to-rem(14);
+}
+
+.calendar .calendar__header {
+	width: 90%;
+	display: inline-block;
+	margin-bottom: px-to-rem(9);
+}
+
+.calendar .calendar__header h1 {
+	font-size: px-to-rem(26);
+	text-transform: uppercase;
+	color: #FF69B4;
+	margin: 0;
+}
+
+.calendar .calendar__header .calendar__header__day-name {
+	display: inline-flex;
+	width: calc(70% / 7.45);
+	padding-left: px-to-rem(15);
+	font-size: px-to-rem(17);
+	color: #333333;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item {
+	display: inline-block;
+	width: calc(100% / 7);
+	height: px-to-rem(50);
+	padding: px-to-rem(10) 0 0 px-to-rem(10);
+	border: 1px solid #d7d7d7;
+	border-left: 0;
+	border-top: 0;
+	color: #333333;
+	cursor: pointer;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:first-child, .calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:nth-child(8), .calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:nth-child(15), .calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:nth-child(22), .calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:nth-child(29), .calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:nth-child(36) {
+	border-left: 1px solid #d7d7d7;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:nth-child(-n+7) {
+	border-top: 1px solid #d7d7d7;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item:hover {
+	background: #f4f4f4;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item.calendar__month-view__days__item--previous-month {
+	color: #d7d7d7;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item.calendar__month-view__days__item--previous-month:hover {
+	background: transparent;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item.calendar__month-view__days__item--event {
+	background: #91bde5;
+	color: #FFFFFF;
+}
+
+.calendar .calendar__month-view .calendar__month-view__days .calendar__month-view__days__item.calendar__month-view__days__item--selected {
+	background: #FF69B4;
+	color: #FFFFFF;
+}
+
+.calendar .calendar__week-view {
+	position: absolute;
+	width: 710px;
+	margin-left: -350px;
+	margin-right: -50px;
+	margin-top: 200px;
+	left: 50%;
+	border-radius: 10px;
+	background: #FFFFFF;
+	border: 10px ridge #6666cc;
+}
+
+.calendar .calendar__week-view .calendar__header {
+	margin-left: 15.5%;
+}
+
+.calendar .calendar__week-view .calendar__hours {
+	height: px-to-rem(300);
+	overflow: auto;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour {
+	cursor: pointer;
+	margin-left: 70.5px;
+	margin-right: 7.5px;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__title {
+	width: 10%;
+	display: inline-block;
+	font-size: px-to-rem(14);
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__days {
+	width: 85%;
+	display: inline-block;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__days .calendar__hours__hour__days__item {
+	width: calc((100% / 7));
+	display: inline-block;
+	cursor: pointer;
+	line-height: 50px;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__days .calendar__hours__hour__days__item:hover {
+	background: #f4f4f4;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__days .calendar__hours__hour__days__item.calendar__hours__hour__days__item--event {
+	background: #91bde5;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__days .calendar__hours__hour__days__item.calendar__hours__hour__days__item--selected {
+	background: #FF69B4;
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__days .calendar__hours__hour__days__item::before {
+	content: "\200B";
+}
+
+.calendar .calendar__week-view .calendar__hours .calendar__hours__hour:nth-child(even) .calendar__hours__hour__days {
+	border-bottom: px-to-rem(1) solid #d7d7d7;
+}
+
+.calendar .calendar__day-view .calendar__hours {
+	height: px-to-rem(300);
+	overflow: auto;
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour {
+	cursor: pointer;
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__title {
+	width: 6%;
+	display: inline-block;
+	font-size: px-to-rem(14);
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__item {
+	width: 94%;
+	display: inline-block;
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__item:hover {
+	background: #f4f4f4;
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__item.calendar__hours__hour__item--event {
+	background: #91bde5;
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__item.calendar__hours__hour__item--selected {
+	background: #FF69B4;
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour .calendar__hours__hour__item::before {
+	content: "\200B";
+}
+
+.calendar .calendar__day-view .calendar__hours .calendar__hours__hour:nth-child(even) .calendar__hours__hour__item {
+	border-bottom: px-to-rem(1) solid #d7d7d7;
+}
