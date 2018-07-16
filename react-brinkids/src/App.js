@@ -5,7 +5,7 @@ import MainLayout from './components/Layout/MainLayout.js';
 import CadastroCrianca from './components/Crianca/CadastroCrianca.js';
 import GAListener from './components/GAListener.js';
 import Login from './components/Login/login.js';
-
+import Calendar from './components/Calendario/calednario.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -26,6 +26,12 @@ class App extends React.Component {
                   path="/Crianca"
                   layout={MainLayout}
                   component={CadastroCrianca}
+                />
+                <LayoutRoute
+                  exact
+                  path="/Calendario"
+                  layout={MainLayout}
+                  component={Calendar}
                 />
               <Redirect to="/" /> 
             </Switch>

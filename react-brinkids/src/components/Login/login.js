@@ -4,13 +4,18 @@ import video from './loginvideo.mp4';
 import './login.css';
 import $ from "jquery";
 
+import {Route} from 'react-router-dom';
+import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import Inicio from '../Inicio/inicio';
+
 class App extends Component {
 constructor () {
     super();
     this.state = {
       user:'',
       password:'',
-      erro:''
+      erro:'',
+      loading: false,
     };
 
     this.textoUsuario = this.textoUsuario.bind(this)
@@ -33,8 +38,15 @@ constructor () {
         type: 'get',
         data: {user: this.state.user, password: this.state.password},
         statusCode: { //A partir do status da resposta, ele executa uma função
-          200: function() {
+          200: function(data) {
             alert('Estou logado')
+            this.setState({ loading: true });
+            this.props.submit(this.state.data);
+            <BrowserRouter>
+                <Switch>
+                    <Route path="/inicio" component={Inicio} />
+                </Switch>
+            </BrowserRouter>
           },
           404: function() {
             this.setState({erro: "* Usuário ou senha incorretos"})
