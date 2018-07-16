@@ -50,7 +50,7 @@ var userAdultSchema = new Schema({
     required: true
   },
   address: [addressSchema],
-  gr: Number,
+  rg: Number,
   cpf: {
     type: String,
     required: true,

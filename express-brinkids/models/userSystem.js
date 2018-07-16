@@ -8,7 +8,6 @@ var Schema = mongoose.Schema
 var UserSchema = new Schema({ /**< Criação do Schema que conterá 4 campos */
   user: String, /**< Um campo de usuário do tipo texto que servirá autenticação e consulta no banco */
   password: String, /**< Um campo de senha. Obs.: Ela é deve ser criptografada antes de ser salva */
-  status: String, /**< Um campo de status onde deve inidcar se terá privilégios ou não */
   employees: Boolean /**< Checa se é um funcionário ou não */
 })
 

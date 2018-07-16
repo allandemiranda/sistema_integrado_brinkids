@@ -41,13 +41,13 @@ constructor () {
           200: function(data) {
             alert('Estou logado')
             this.setState({ loading: true });
-            this.props.submit(this.state.data);
+            //this.props.submit(this.state.data);
             <BrowserRouter>
                 <Switch>
                     <Route path="/inicio" component={Inicio} />
                 </Switch>
             </BrowserRouter>
-          },
+          }.bind(this),
           404: function() {
             this.setState({erro: "* Usuário ou senha incorretos"})
           }.bind(this),
