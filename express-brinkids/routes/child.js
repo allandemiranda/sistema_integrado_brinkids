@@ -42,6 +42,7 @@ router.get('/', function (req, res) {
  */
 router.post('/', function (req, res) {
   if (!req.files) { // Checa se existe arquivos sendo enviados
+    console.log('Não tem arquivos')
    return res.sendStatus(400)
   }
 
@@ -92,21 +93,28 @@ router.post('/', function (req, res) {
           /** Salva a criança no banco */
           child.create(dados, function (err, childResult) {
             if (err) {
-              console.log(err)
               return res.sendStatus(500)
             }
 
             let fileName = config.pathChild + childResult._id + '.png' /**< url completa da localização do arquivo no computador */
             childResult.photo = fileName /** Atualiza o nome do arquivo */
             childResult.save(function (err) { /** Atualiza no banco a nova informação */
-             if (err) {
-               return res.sendStatus(500)
-             }
-            })
-
-            /** Pega o arquivo e salva no servidor */
-            photoFile.mv(config.pathPublic() + fileName, function (err) {
-             return err ? res.sendStatus(500) : res.sendStatus(201)
+               if (err) {
+                 child.findOneAndRemove({number: req.body.number}, function (err) {
+                   return res.sendStatus(500)
+                 })
+               } else {
+                 /** Pega o arquivo e salva no servidor */
+                 photoFile.mv(config.pathPublic() + fileName, function (err) {
+                   if (err) {
+                     child.findOneAndRemove({number: req.body.number}, function (err) {
+                       return res.sendStatus(500)
+                     })
+                   } else {
+                     return res.sendStatus(201)
+                   }
+                 })
+               }
             })
           })
         } else {
@@ -114,6 +122,7 @@ router.post('/', function (req, res) {
         }
       })
     } else {
+      console.log('Alguma informação obrigatória está faltando')
       return res.sendStatus(400)
     }
   } else {

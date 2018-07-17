@@ -63,7 +63,7 @@ class CadastroCrianca extends React.Component {
     ChangeRet(event){
         this.setState({restrictions: event.target.value});
     }
-    
+
 
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
       // convert base64/URLEncoded data component to raw binary data held in a string
@@ -166,7 +166,7 @@ class CadastroCrianca extends React.Component {
         formData.append('sexuality', String(this.state.sexuality))
         formData.append('restrictions', String(this.state.restrictions))
         formData.append('observations', String(this.state.observations))
-        
+
         axios.post('/crianca', formData)
         .then(function (response) {
             console.log(response)
@@ -177,7 +177,7 @@ class CadastroCrianca extends React.Component {
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
             alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-        }) 
+        })
     }
 
     /*FUNCAO CADASTRA CRIANÇA*/
@@ -193,7 +193,7 @@ class CadastroCrianca extends React.Component {
         formData.append('sexuality', String(this.state.sexuality))
         formData.append('restrictions', String(this.state.restrictions))
         formData.append('observations', String(this.state.observations))
-        
+
         axios.post('/crianca', formData)
         .then(function (response) {
             console.log(response)
@@ -204,7 +204,7 @@ class CadastroCrianca extends React.Component {
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
             alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-        })        
+        })
     }
 
 
@@ -341,7 +341,7 @@ class CadastroCrianca extends React.Component {
             var Nome = this.state.firstName + " " + this.state.surName;
             return(
                 <div className = "container-fluid">
-                    <ConfirmaCrianca 
+                    <ConfirmaCrianca
                         Name= {Nome}
                         Date = {this.state.birthday}
                         Sexo = {this.state.sexuality}
@@ -359,7 +359,7 @@ class CadastroCrianca extends React.Component {
                     </div>
                 </div>
             )
-        }        
+        }
     }
 }
 

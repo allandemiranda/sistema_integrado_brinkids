@@ -27,7 +27,7 @@ router.get('/autenticacao', function (req, res) {
   if (req.query.user && req.query.password) {
     userSystem.authenticate(req.query.user, req.query.password, function (err, user) {
       if (err) {
-        return res.sendStatus(500)
+        return res.sendStatus(err.status)
       } else if (!user){
         return res.sendStatus(404)
       } else {
