@@ -97,7 +97,6 @@ class CadastroCrianca extends React.Component {
             return;
         }
         else {
-            alert("Nenhem Erro Encontrado, Indo para pagina de Confirmação");
             exibeMensagensDeErro(erros);
             this.setState({
                 page: "ConfirmaCad"
@@ -148,7 +147,6 @@ class CadastroCrianca extends React.Component {
 
     /*FUNCAO FAZ VOLTAR PARA FORMULARIO*/
     VoltaparaFormulario = (event) => {
-        alert("Voltando para pagina do Formulario");
         this.setState({
             page: "FormularioCad"
         })
@@ -170,7 +168,6 @@ class CadastroCrianca extends React.Component {
         axios.post('/crianca', formData)
         .then(function (response) {
             console.log(response)
-            alert("Cadastro Finalizado, Redirecionando para um novo Cadastro")
             window.location.href = '/crianca';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
@@ -197,7 +194,6 @@ class CadastroCrianca extends React.Component {
         axios.post('/crianca', formData)
         .then(function (response) {
             console.log(response)
-            alert("Cadastro Finalizado")
             window.location.href = '/';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
@@ -243,30 +239,24 @@ class CadastroCrianca extends React.Component {
                             <form id="form-criança">
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                            <TypesInput
-                                                cod = {1}
-                                                ClassDiv = {"col-md-6 col-sm-6 col-xs-12"}
-                                                ClassLabel = {"LetraFormulario"}
-                                                NameLabel = {"Nome: "}
-                                                type = {"text"}
-                                                id = {"nome"}
-                                                name= {"nome"}
-                                                Class = {"form-control"}
-                                                value = {this.state.firstName}
-                                                onChange = {this.ChangeName}
-                                            />
-                                        <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                            <label className = "LetraFormulario brlabel" > Sobrenome: </label>
-                                            <input type = "text" id = "Sbnome" name = "Sbnome" className = "form-control" value={this.state.surName} onChange={this.ChangeSurname} />
-                                        </div>
+                                        <TypesInput
+                                            cod = {1} // Type Input
+                                            ClassDiv = {"col-md-6 col-sm-6 col-xs-12"}
+                                            ClassLabel = {"LetraFormulario"}
+                                            NameLabel = {"Nome: "}
+                                            type = {"text"}
+                                            id = {"nome"}
+                                            name= {"nome"}
+                                            Class = {"form-control"}
+                                            value = {this.state.firstName}
+                                            onChange = {this.ChangeName}
+                                        />
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Sobrenome: "} type = {"text"} id = {"Sbnome"} name= {"Sbnome"} Class = {"form-control"} value = {this.state.surName} onChange={this.ChangeSurname}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                            <label className = "LetraFormulario brlabel" > Data de Nascimento: </label>
-                                            <input type = "date" id = "Data" name = "Data" className = "form-control" placeholder = "dd / mm / aa" value={this.state.birthday}  onChange={this.ChangeDate} />
-                                        </div>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Nascimento: "} type = {"date"} id = {"Data"} name= {"Data"} placeholder = {"dd / mm / aa"} Class = {"form-control"} value={this.state.birthday}  onChange={this.ChangeDate}/>
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario brlabel" > Sexo: </label>
                                             <select id = "sexo" name = "sexo" className = "form-control optionFomulario" value={this.state.sexuality} onChange={this.ChangeSexo} >
@@ -278,14 +268,8 @@ class CadastroCrianca extends React.Component {
                                 </div >
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                            <label className = "LetraFormulario" > RG/CPF/Passaporte: </label>
-                                            <input type = "text" id = "number" name = "number" className = "form-control" value = {this.state.number}onChange={this.ChangeNumber} />
-                                        </div>
-                                        <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                            <label className = "LetraFormulario" > Nacionalidade: </label>
-                                            <input type = "text" id = "Nacionalidade" name = "Nacionalidade" className = "form-control" value={this.state.nacionality} onChange={this.ChangeNacio} />
-                                        </div>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"RG/CPF/Passaporte: "} type = {"text"} id = {"number"} name= {"number"} Class = {"form-control"} value = {this.state.number}onChange={this.ChangeNumber}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Nacionalidade: "} type = {"text"} id = {"Nacionalidade"} name= {"Nacionalidade"} Class = {"form-control"} value={this.state.nacionality} onChange={this.ChangeNacio}/>
                                     </div>
                                 </div >
                                 <div className = "graph" >
@@ -293,12 +277,22 @@ class CadastroCrianca extends React.Component {
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <h3 className = "inner-tittle" > Restrições </h3>
                                             <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Restricoes" name="Restricoes" value={this.state.restrictions} onChange={this.ChangeRet}></textarea>
+                                            <TypesInput
+                                                cod = {2} // Type TextArea
+                                                Label = {0} //Se vai possuir um label
+                                                cols = {"50"}
+                                                rows = {"4"}
+                                                id = {"Restricoes"} 
+                                                name= {"Restricoes"} 
+                                                Class = {"form-control"} 
+                                                value={this.state.restrictions}
+                                                onChange={this.ChangeRet}
+                                            />
                                         </div>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <h3 className = "inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.observations} onChange={this.ChangeObs}></textarea>
+                                            <TypesInput cod = {2} Label = {false} cols = {"50"} rows = {"4"} id = {"Observacoes"} name= {"Observacoes"} Class = {"form-control"} value={this.state.observations} onChange={this.ChangeObs}/>
                                         </div>
                                     </div>
                                 </div >
