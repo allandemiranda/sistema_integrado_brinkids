@@ -8,11 +8,10 @@ var session = require('express-session')
 var cors = require('cors')
 var config = require('./config')
 
-var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
-var autentication = require('./routes/autentication')
-var child = require('./routes/child')
-var adult = require('./routes/adult')
+var autentication = require('./routes/autentication-router')
+var child = require('./routes/child-router')
+var adult = require('./routes/adult-router')
+var calendar = require('./routes/calendar-router')
 
 var app = express()
 
@@ -33,11 +32,10 @@ app.use(session({
 }))
 app.use(cors())
 
-app.use('/', indexRouter)
-app.use('/users', usersRouter)
 app.use('/crianca', child)
 app.use('/usuarios', autentication)
 app.use('/adulto', adult)
+app.use('/calendar', calendar)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
