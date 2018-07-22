@@ -1,7 +1,6 @@
 module.exports = {
-  database: 'mongodb://localhost/sistema_brinkids',
-  configName: 'node-auth',
-  secret_session: 'brinkids',
+  database: 'sistema_brinkids',
+  secret_auth: 'node-auth-brinkids',
   dir_base: __dirname,
   pathChild: 'img_users/child/',
   pathAdult: 'img_users/adult/',

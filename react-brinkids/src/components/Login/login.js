@@ -34,12 +34,21 @@ constructor () {
   loginSubmit(event){
     if (this.state.user.length > 0 && this.state.password.length > 0){
       $.ajax({
-        url: "http://localhost:3001/usuarios/autenticacao",
+        url: `http://127.0.0.1:3001/authentication?user=${this.state.user}&password=${this.state.password}`,
         type: 'get',
-        data: {user: this.state.user, password: this.state.password},
         statusCode: { //A partir do status da resposta, ele executa uma função
           200: function(data) {
-            alert('Estou logado')
+            /** Gabriel: Agora a autenticação fica por token. Se tudo der certo
+             * e entrar no status 200, será enviado um JSON no seguinte formato:
+             * {
+             *  "token": "<Aqui estará o token>"
+             * }
+             * Para acessar o valor, use o seguinte exemplo para acessar o valor: data['token']
+             * Coloquei logo abaixo para visualizar o valor apenas por motivos de ver funcionando
+             * Vai vir um texto estranho pra caramba mas não se preocupe, esse é o token mesmo
+             */
+            alert(data['token'])
+            console.log(data['token'])
             this.setState({ loading: true });
             //this.props.submit(this.state.data);
             <BrowserRouter>
@@ -48,8 +57,11 @@ constructor () {
                 </Switch>
             </BrowserRouter>
           }.bind(this),
+          401: function()  {
+            this.setState({erro: "* Senha incorreta"})
+          }.bind(this),
           404: function() {
-            this.setState({erro: "* Usuário ou senha incorretos"})
+            this.setState({erro: "* Usuário não existe"})
           }.bind(this),
           500: function() {
             this.setState({erro: "* Erro no Servidor.Tente novamente em alguns minutos."})
