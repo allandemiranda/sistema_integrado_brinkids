@@ -8,8 +8,6 @@ var session = require('express-session')
 var cors = require('cors')
 var config = require('./config')
 
-var indexRouter = require('./routes/index')
-var usersRouter = require('./routes/users')
 var autentication = require('./routes/autentication')
 var child = require('./routes/child')
 var adult = require('./routes/adult')
@@ -33,8 +31,6 @@ app.use(session({
 }))
 app.use(cors())
 
-app.use('/', indexRouter)
-app.use('/users', usersRouter)
 app.use('/crianca', child)
 app.use('/usuarios', autentication)
 app.use('/adulto', adult)

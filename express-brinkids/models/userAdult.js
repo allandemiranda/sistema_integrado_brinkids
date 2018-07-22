@@ -69,7 +69,7 @@ var userAdultSchema = new Schema({
   }
 })
 
-mongoose.connect('mongodb://localhost/' + config.database_name)
+mongoose.connect(config.database)
 var userAdult = mongoose.model('UserAdult', userAdultSchema)
 
 module.exports = userAdult

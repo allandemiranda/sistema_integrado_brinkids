@@ -28,7 +28,7 @@ router.get('/autenticacao', function (req, res) {
     userSystem.authenticate(req.query.user, req.query.password, function (err, user) {
       if (err) {
         return res.sendStatus(err.status)
-      } else if (!user){
+      } else if (!user) {
         return res.sendStatus(404)
       } else {
         req.session.userId = user._id
@@ -41,16 +41,8 @@ router.get('/autenticacao', function (req, res) {
 })
 
 router.get('/teste', function (req, res) {
-  userSystem.findById(req.session.userId, function (err, user) { // Transformar isso em um midllware
-    if (err) {
-      return res.sendStatus(500)
-    } else {
-      if (user === null) {
-        return res.sendStatus(400)
-      } else {
-        return res.sendStatus(200)
-      }
-    }
+  userSystem.find({}, function (err, response) {
+    return err ? res.sendStatus(500) : res.status(200).json(response)
   })
 })
 

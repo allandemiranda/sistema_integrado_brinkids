@@ -63,7 +63,7 @@ UserSchema.statics.authenticate = function (userName, password, callback) {
     })
 }
 
-mongoose.connect('mongodb://localhost/' + config.database_name)
+mongoose.connect(config.database)
 var UserSystem = mongoose.model('User', UserSchema)
 
 module.exports = UserSystem
