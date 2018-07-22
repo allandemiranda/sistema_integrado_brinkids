@@ -6,6 +6,7 @@ import CadastroCrianca from './components/Crianca/CadastroCrianca.js';
 import GAListener from './components/GAListener.js';
 import Login from './components/Login/login.js';
 import Calendar from './components/Calendario/calednario.js';
+import DashBoard from './components/Dashboard/Dashboard.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -20,6 +21,12 @@ class App extends React.Component {
                   exact
                   path="/Login"
                   layout={Login}
+                />
+                <LayoutRoute
+                  exact
+                  path="/"
+                  layout={MainLayout}
+                  component={DashBoard}
                 />
                 <LayoutRoute
                   exact

@@ -6,7 +6,7 @@ import $ from "jquery";
 
 import {Route} from 'react-router-dom';
 import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
-import Inicio from '../Inicio/inicio';
+import Inicio from '../Dashboard/inicio';
 
 class App extends Component {
 constructor () {
@@ -51,11 +51,7 @@ constructor () {
             console.log(data['token'])
             this.setState({ loading: true });
             //this.props.submit(this.state.data);
-            <BrowserRouter>
-                <Switch>
-                    <Route path="/inicio" component={Inicio} />
-                </Switch>
-            </BrowserRouter>
+            window.location.href = "/"
           }.bind(this),
           401: function()  {
             this.setState({erro: "* Senha incorreta"})

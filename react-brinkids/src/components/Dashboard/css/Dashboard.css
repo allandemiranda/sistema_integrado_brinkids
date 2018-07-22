@@ -1,0 +1,10 @@
+@media screen and (max-width: 767px) {
+    .brdiv {
+        margin-top: 20px;
+    }
+}
+
+.divBotao {
+    padding: 9px;
+    height: 100px;
+}
