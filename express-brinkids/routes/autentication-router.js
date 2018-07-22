@@ -1,5 +1,5 @@
 var express = require('express')
-var userSystem = require('../models/userSystem')
+var userSystem = require('../models/userSystem-models')
 var router = express.Router()
 
 // Cria usuario

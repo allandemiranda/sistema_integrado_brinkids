@@ -4,7 +4,7 @@
 
 var fs = require('fs')
 var express = require('express')
-var child = require('../models/userChild')
+var child = require('../models/child-models')
 var config = require('../config')
 var router = express.Router()
 

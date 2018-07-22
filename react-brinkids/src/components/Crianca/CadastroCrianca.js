@@ -12,8 +12,6 @@ import './css/style.css';
 
 
 
-
-
 class CadastroCrianca extends React.Component {
     constructor(props){
         super(props)
@@ -89,7 +87,6 @@ class CadastroCrianca extends React.Component {
     /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO*/
     ValidaCriança = (event) => {
         event.preventDefault();
-        console.log(this.state);
         var erros = ValidaErros(this.state);
         if(erros.length > 0){
             alert("Houve erro(s) no preechimento do formulário");
@@ -130,6 +127,7 @@ class CadastroCrianca extends React.Component {
             if (crianca.file.length === 0) {
                 erros.push("Precisamos da sua foto");
             }
+            console.log(erros);
             return erros;
         }
 
@@ -220,6 +218,8 @@ class CadastroCrianca extends React.Component {
         })
     };
 
+    
+
 
     render() {
         if(this.state.page === "FormularioCad") {
@@ -257,13 +257,22 @@ class CadastroCrianca extends React.Component {
                                 <div className = "form-group" >
                                     <div className = "row" >
                                         <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Nascimento: "} type = {"date"} id = {"Data"} name= {"Data"} placeholder = {"dd / mm / aa"} Class = {"form-control"} value={this.state.birthday}  onChange={this.ChangeDate}/>
-                                        <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                            <label className = "LetraFormulario brlabel" > Sexo: </label>
-                                            <select id = "sexo" name = "sexo" className = "form-control optionFomulario" value={this.state.sexuality} onChange={this.ChangeSexo} >
-                                                <option value = "Masculino" > Masculino </option>
-                                                <option value = "Feminino" > Feminino </option>
-                                            </select >
-                                        </div>
+                                        <TypesInput 
+                                            cod = {3} //TYPE SELECT
+                                            ClassDiv = {"col-md-6 col-sm-6 col-xs-12"}
+                                            ClassLabel = {"LetraFormulario brlabel"}
+                                            NameLabel = {"Sexo:"}
+                                            id = {"sexo"}
+                                            name = {"sexo"}
+                                            Class = {"form-control optionFomulario"}
+                                            value={this.state.sexuality} 
+                                            onChange={this.ChangeSexo}
+                                            //VALORES QUE AS OPTIONS IRAM RECEBER, VAO DENTRO DO "valueOP" EM FORMA DE VETOR DE OBJETOS.
+                                            valueOP = {[
+                                                "Masculino",
+                                                "Feminino"
+                                            ]}
+                                        />
                                     </div>
                                 </div >
                                 <div className = "form-group" >

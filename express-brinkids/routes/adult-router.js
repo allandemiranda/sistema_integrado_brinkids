@@ -3,7 +3,7 @@
  */
 
 var express = require('express')
-var userAdult = require('../models/userAdult')
+var userAdult = require('../models/adult-models')
 var config = require('../config')
 var router = express.Router()
 
