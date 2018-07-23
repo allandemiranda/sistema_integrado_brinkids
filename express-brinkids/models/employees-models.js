@@ -6,7 +6,7 @@ var Schema = mongoose.Schema
 
 var passportSchema = new Schema({
   number: String,
-  type: String,
+  typeFormat: String,
   issuingCountry: String,
   dateIssue: Date,
   expirationDate: Date
@@ -46,7 +46,13 @@ var employeesSchema = new Schema({
     section: String,
     state: String
   },
-  passport: [passportSchema],
+  passport: {
+    number: String,
+    typeFormat: String,
+    issuingCountry: String,
+    dateIssue: Date,
+    expirationDate: Date
+  },
   cnh: {
     record: String,
     category: String,

@@ -44,7 +44,7 @@ router.post('/', function (req, res) {
     },
     passport: {
       number: req.body.PPNumber,
-      type: req.body.PPType,
+      typeFormat: req.body.PPType,
       issuingCountry: req.body.PPIssuingCountry,
       dateIssue: new Date(req.body.PPDateIssue),
       expirationDate: new Date(req.body.PPExpirationDate)
