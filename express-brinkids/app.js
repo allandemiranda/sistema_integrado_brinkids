@@ -1,24 +1,31 @@
+/** Arquivo responsável por carregar as configurações do que foi desenvolvido na aplicação */
+
+// Módulos
+var cookieParser = require('cookie-parser')
+var cors = require('cors')
 var createError = require('http-errors')
 var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
 var fileUpload = require('express-fileupload')
-var cors = require('cors')
+var logger = require('morgan')
+var path = require('path')
 // var jwt = require('jsonwebtoken')
 // var config = require('./config')
 
-var autentication = require('./routes/autentication-router')
-var child = require('./routes/child-router')
+// Rotas
 var adult = require('./routes/adult-router')
+var autentication = require('./routes/autentication-router')
 var calendar = require('./routes/calendar-router')
+var child = require('./routes/child-router')
+var employees = require('./routes/employees-router')
 
+// Instanciando o objeto do express
 var app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
+// Usando middlewares
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -34,7 +41,7 @@ app.use(cors())
 //   if (token) {
 //     jwt.verify(token, config.secret_auth, function (err, decoded) {
 //       if (err) {
-//         return res.json({ success: false, message: 'Falha ao tentar autenticar o token!' });    
+//         return res.json({ success: false, message: 'Falha ao tentar autenticar o token!' })
 //       } else {
 //         // se tudo correr bem, salver a requisição para o uso em outras rotas
 //         req.decoded = decoded
@@ -47,10 +54,12 @@ app.use(cors())
 //   }
 // })
 
-app.use('/crianca', child)
+// Usando as rotas
+app.use('/adult', adult)
 app.use('/authentication', autentication)
-app.use('/adulto', adult)
 app.use('/calendar', calendar)
+app.use('/child', child)
+app.use('/employees', employees)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

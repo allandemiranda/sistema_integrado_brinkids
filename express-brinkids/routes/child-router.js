@@ -99,22 +99,22 @@ router.post('/', function (req, res) {
             let fileName = config.pathChild + childResult._id + '.png' /**< url completa da localização do arquivo no computador */
             childResult.photo = fileName /** Atualiza o nome do arquivo */
             childResult.save(function (err) { /** Atualiza no banco a nova informação */
-               if (err) {
-                 child.findOneAndRemove({number: req.body.number}, function (err) {
-                   return res.sendStatus(500)
-                 })
-               } else {
-                 /** Pega o arquivo e salva no servidor */
-                 photoFile.mv(config.pathPublic() + fileName, function (err) {
-                   if (err) {
-                     child.findOneAndRemove({number: req.body.number}, function (err) {
-                       return res.sendStatus(500)
-                     })
-                   } else {
-                     return res.sendStatus(201)
-                   }
-                 })
-               }
+              if (err) {
+                child.findOneAndRemove({number: req.body.number}, function (err) {
+                  return res.sendStatus(500)
+                })
+              } else {
+                /** Pega o arquivo e salva no servidor */
+                photoFile.mv(config.pathPublic() + fileName, function (err) {
+                  if (err) {
+                    child.findOneAndRemove({number: req.body.number}, function (err) {
+                      return res.sendStatus(500)
+                    })
+                  } else {
+                    return res.sendStatus(201)
+                  }
+                })
+              }
             })
           })
         } else {
