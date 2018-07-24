@@ -1,103 +1,196 @@
 /*
 
-	ARQUIVO COM O CALENDARIO AGENDA DO SISTEMA BRINKIDS
+  ARQUIVO COM O CALENDARIO AGENDA DO SISTEMA BRINKIDS
 
 
-*/
+  */
 
 
-import React, { Component } from 'react';
-import BigCalendar from 'react-big-calendar';
-import moment from 'moment';
-import 'moment/locale/pt-br';
-import '../../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
-import events from './events';
-import '../../assets/style/bootstrap.min.css';
+  import React from 'react';
+  import BigCalendar from 'react-big-calendar';
+  import moment from 'moment';
+  import 'moment/locale/pt-br';
+  import './styles/react-big-calendar.css';
+  import events from './events';
+  import '../../assets/style/bootstrap.min.css';
+  import DatePicker from 'react-date-picker';
+  import Modal from 'react-modal';
+  import './styles/DatePicker.css';
+  import Select from 'react-select';
+  import opcao from './opções.js';
+  import { timeFromInt } from 'time-number';
+  import TimePicker from 'react-bootstrap-time-picker';
 
 
-/*   */
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 
-class Calendar extends React.Component {
- constructor(props) {
-	super(props);
-	
-	this.state = {showModal: false};
-	this.mudarModal = this.mudarModal.bind(this);
 
-}
+  const customStyles = {
+    content : {
+      top                   : '30%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-30%, -30%)',
+      overflow: 'visible',
+      position: 'absolute',
 
-mudarModal(event){
-	this.setState({showModal: true});
-}
+    }
+  };
+  /*   */
+  
+  BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
+
+  Modal.setAppElement(Calendar);
+  class Calendar extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        showModal: false,
+        modalIsOpen: false,
+        CalendarioF:new Date(),
+        CalendarioI: new Date(),
+        Hora: '0',
+        Hora2:'0',
+        Titulo:'',
 
 
-render() {
+      };
+      
+      this.openModal = this.openModal.bind(this);
+      this.afterOpenModal = this.afterOpenModal.bind(this);
+      this.closeModal = this.closeModal.bind(this);
+      this.mod = this.mod.bind(this);
+      this.mudarTitulo = this.mudarTitulo.bind(this);
+
+    }
+    
+    onChange = CalendarioI => this.setState({ CalendarioI });
+    onChange2 = CalendarioF => this.setState({CalendarioF});
+    mudarHora = Hora => this.setState({Hora});
+    mudarHora2 = Hora2 => this.setState({Hora2});
+    mudarTitulo(event){
+
+      this.setState({Titulo: event.target.value});
+    }
+  
+    openModal() {
+      this.setState({modalIsOpen: true});
+    }
+
+    afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    this.subtitle.style.color = '#f00';
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
+  }
+  mod(){
+        const titulo = this.state.Titulo;
+        const Final = this.state.CalendarioF;
+        const Inicial = this.state.CalendarioI;
+        const Anoinicial = Inicial.getFullYear(), MesInicial= Inicial.getMonth(), Diainicial = Inicial.getDate();
+        const Anofinal = Final.getFullYear(), Mesfinal= Final.getMonth(), Diaifinal = Final.getDate();
+        
+        const HoraI =timeFromInt(this.state.Hora);
+        const HoraF =timeFromInt(this.state.Hora2);
+        const match = HoraI.match(/([\w\*]+)/g);
+        const match2 = HoraF.match(/([\w\*]+)/g);
+
+        events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
+        this.closeModal();
+        this.setState({Titulo:''});
+  }
+
+  render() {
+
 
 
 /*  FUNÇÃO PARA O TRATAMENTO DA DATA DE INICIO E FINAL DO EVENTOE TBM PARA ADICIONAR O TITULO DO EVENTO
-		
-		OBS:  VAI SER MAIS TRABALHADA, NÃO CONSEGUI APLICAR UM MODAL, POR ENQUANTO ESTA ATUANDO COM PROMPT 
+    
+    OBS:  VAI SER MAIS TRABALHADA, NÃO CONSEGUI APLICAR UM MODAL, POR ENQUANTO ESTA ATUANDO COM PROMPT 
 
-	 */
-	const teste =(slotInfo) =>{
-		
-		const titulo=prompt('digite o titulo');
-		/* ARMAZENANDO A DATA DE INICIO E FINAL QUE FOI SELECIONADA  */
-		const dataI = slotInfo.start.toLocaleString();
-		const dataF = slotInfo.end.toLocaleString();
-		/*  SEPARANDO AS DATAS PARA PODER PASSAR OS VALORES ESPECIFICO NA FUNÇÃO  */
-		const match = dataI.match(/([\w\*]+)/g);
-		const match2 = dataF.match(/([\w\*]+)/g);
-		/*    VARIAVEIS DA DATA DE INICIO DO EVENTO     */
-		const dia=match[0];
-		const mes=match[1]; 
-		const ano=match[2];
-		const hora= match[3]; 
-		const minuto=match[4];
-		const segundo=match[5];
-		/*VARIAVEIS DA DATA DO FINAL DO EVENTO*/
-		const dia2=match2[0];
-		const mes2=match2[1];
-		const ano2=match2[2];
-		const hora2= match2[3]; 
-		const minuto2=match2[4];
-		const segundo2=match2[5];
+    */
+    
+    const teste =(slotInfo) =>{
+              
 
+    }
+    
+    return (
+      /*  COMPONENTE CALENDARIO DO REACT */
+      
+      <div>
+      
+      <button className="modal1" type="button" onClick={this.openModal}>adicionar evento</button>
 
-		events.push({title:titulo,start:new Date(ano,mes-1, dia, hora, minuto, segundo),end:new Date(ano2,mes2-1, dia2, hora2, minuto2, segundo2),desc:'blabla bla'});
-		/*events.push({title:titulo,start:new Date(2018,mes-1, dia, 12, 30, 0),end:new Date(2018,mes-1, dia, 14, 30, 0),desc:'blabla bla'});*/
-		this.setState({showModal: true});
-		
+      <Modal
+      isOpen={this.state.modalIsOpen}
+      onAfterOpen={this.afterOpenModal}
+      onRequestClose={this.closeModal}
+      style={customStyles}
+      contentLabel="Example Modal"
+      >
+       <input type="text" placeholder ="digite o titulo" value={this.state.Titulo} onChange={this.mudarTitulo}/><br/>
+      <h ref={subtitle => this.subtitle = subtitle}></h><br/>
 
-	}
-	
-	return (
-/*  COMPONENTE CALENDARIO DO REACT */
-		<BigCalendar
-		selectable
-		events={events}
-		defaultView={BigCalendar.Views.WEEK}
-		scrollToTime={new Date(1970, 1, 1, 6)}
-		defaultDate={new Date(2015, 1, 12)}
-		onSelectEvent={event => alert(event.title)}
-		onSelectSlot={slotInfo => teste(slotInfo)
+      
+        
+      <DatePicker
+      dateFormat="YYYY/MM/DD"
+      onChange={this.onChange}
+      value={this.state.CalendarioI}
+      />
+      
+      <TimePicker start="08:00" end="21:00" value={this.state.Hora} onChange={this.mudarHora} step={30} format={24}/>
 
-				/*alert(
-					`selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-						`\nend: ${slotInfo.end.toLocaleString()}` +
-						`\naction: ${slotInfo.action}`
-						)*/
-					}
-					/>
-
-
-
-					);
-				}
-			}
+      <DatePicker
+      selected={this.state.startDate}
+      onChange={this.onChange2}
+      value={this.state.CalendarioF}
+      showTimeSelect
+      showTimeSelectOnly
+      timeIntervals={15}
+      dateFormat="LT"
+      timeCaption="Time"
+      />
+       <TimePicker start="08:00" end="21:00" step={30} format={24} value={this.state.Hora2} onChange={this.mudarHora2}/>
+      
+      <br></br>
+      <br></br>
+      
+      <input type="button" className='botao1' value="salvar" onClick={this.mod}/>
+      
+      </Modal>
 
 
 
-			export default Calendar;
+
+      <BigCalendar
+      selectable
+      events={events}
+      defaultView={BigCalendar.Views.WEEK}
+      scrollToTime={new Date(1970, 1, 1, 6)}
+      defaultDate={new Date()}
+      onSelectEvent={event => alert(event.title)}
+      onSelectSlot={slotInfo => {console.log('fd')}
+      /*alert(
+        `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
+        `\nend: ${slotInfo.end.toLocaleString()}` +
+        `\naction: ${slotInfo.action}`
+        )*/
+    }
+    />
+    </div>
+
+
+    );
+  }
+}
+
+
+
+export default Calendar;

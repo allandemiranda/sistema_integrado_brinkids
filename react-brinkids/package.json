@@ -7,14 +7,22 @@
     "bootstrap": "^3.3.7",
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
+    "rc-time-picker": "^3.3.1",
     "react": "^16.4.1",
+    "react-autosuggest": "^9.3.4",
     "react-big-calendar": "^0.19.2",
+    "react-bootstrap": "^0.32.1",
+    "react-bootstrap-time-picker": "^1.0.3",
+    "react-date-picker": "^6.11.2",
     "react-dom": "^16.4.1",
     "react-ga": "^2.5.3",
+    "react-modal": "^3.5.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
-    "react-webcam": "^1.0.1"
+    "react-select": "^2.0.0",
+    "react-webcam": "^1.0.1",
+    "time-number": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
