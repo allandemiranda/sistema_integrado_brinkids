@@ -14,7 +14,7 @@ import $ from "jquery";
 
 
 
-class BuscaCrianca extends React.Component {
+class childSearch extends React.Component {
     constructor(){
         super();
         this.state = {
@@ -32,6 +32,7 @@ class BuscaCrianca extends React.Component {
 
     Search(event){
         $.ajax({
+            alert="ta abetoooo",
             url: "http://localhost:3001/",
             dataType:'json',
             type: 'GET',
@@ -70,5 +71,5 @@ class BuscaCrianca extends React.Component {
     }
 }
 
-export default BuscaCrianca;
+export default childSearch;
 

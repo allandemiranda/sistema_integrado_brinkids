@@ -51,7 +51,7 @@ class App extends React.Component {
                 />
                <LayoutRoute
                   exact
-                  path="/BuscaCrianca"
+                  path="/childSearch"
                   layout={MainLayout}
                   component={BuscaCrianca}
                 />                
