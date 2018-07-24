@@ -50,8 +50,7 @@ constructor () {
             alert(data['token'])
             console.log(data['token'])
             this.setState({ loading: true });
-            //this.props.submit(this.state.data);
-            window.location.href = "/"
+            window.location.href = '/inicio';
           }.bind(this),
           401: function()  {
             this.setState({erro: "* Senha incorreta"})
