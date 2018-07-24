@@ -4,6 +4,8 @@ import video from './loginvideo.mp4';
 import './login.css';
 import $ from "jquery";
 
+import Cookies from 'universal-cookie';
+
 import {Route} from 'react-router-dom';
 import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import Inicio from '../Dashboard/inicio';
@@ -50,6 +52,8 @@ constructor () {
             alert(data['token'])
             console.log(data['token'])
             this.setState({ loading: true });
+            const cookies = new cookies();
+            cookies.set('tokken', (data['token']), {path:'/'});
             window.location.href = '/inicio';
           }.bind(this),
           401: function()  {

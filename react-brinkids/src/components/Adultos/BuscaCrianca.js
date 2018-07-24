@@ -30,13 +30,13 @@ class childSearch extends React.Component {
         this.setState({childSearch: event.target.value});
     }  
 
+    // Faz a busca das crianças
     Search(event){
         $.ajax({
-            alert="ta abetoooo",
             url: "http://localhost:3001/",
             dataType:'json',
             type: 'GET',
-            data: {childSearch: this.state.childSearch},
+            data: {childSearch},
             error: function(response){
               if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
             },
