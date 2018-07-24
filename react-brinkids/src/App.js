@@ -7,7 +7,7 @@ import GAListener from './components/GAListener.js';
 import Login from './components/Login/login.js';
 import Calendar from './components/Calendario/calednario.js';
 import DashBoard from './components/Dashboard/Dashboard.js';
-import Adulto from './components/Adultos/CadastroAdulto.js';
+import Adult from './components/Adultos/CadastroAdulto.js';
 import BuscaCrianca from './components/Adultos/BuscaCrianca.js';
 
 const getBasename = () => {
@@ -45,9 +45,9 @@ class App extends React.Component {
                 />
                <LayoutRoute
                   exact
-                  path="/Adulto"
+                  path="/Adult"
                   layout={MainLayout}
-                  component={Adulto}
+                  component={Adult}
                 />
                <LayoutRoute
                   exact

@@ -10,7 +10,7 @@ import '../../assets/style/font-awesome.css';
 import './css/CadastroAdulto.css';
 import './css/style.css';
 
-
+import $ from "jquery";
 
 
 
@@ -19,6 +19,7 @@ class BuscaCrianca extends React.Component {
         super();
         this.state = {
             childSearch: '',
+            errr:'',
         };  
 
        this.ChangechildSearch = this.ChangechildSearch.bind(this);
@@ -28,6 +29,22 @@ class BuscaCrianca extends React.Component {
     ChangechildSearch(event){
         this.setState({childSearch: event.target.value});
     }  
+
+    Search(event){
+        $.ajax({
+            url: "http://localhost:3001/",
+            dataType:'json',
+            type: 'GET',
+            data: {childSearch: this.state.childSearch},
+            error: function(response){
+              if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
+            },
+            success: function(response){
+                
+            }
+          });
+    }
+
     render() {
 
          return (
@@ -44,7 +61,7 @@ class BuscaCrianca extends React.Component {
                         <h3 className = "inner-tittle" > Buscar Criança</h3>       
                         <div className=" text-center">       
                             <input type = "search" id = "childSearch" name = "childSearch"  className="form-control" value={this.state.childSearch} onChange={this.ChangechildSearch} />  
-                            <button type="button" className="btn btn-md botao botaoAvançar"> Pesquisar </button>
+                            <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
                         </div>
                    </div>
                </div>

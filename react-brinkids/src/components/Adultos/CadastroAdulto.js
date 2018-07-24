@@ -225,11 +225,11 @@ class CadastroAdulto extends React.Component {
         formData.append('cep', String(this.state.cep))
         formData.append('observations', String(this.state.observations))
 
-        axios.post('/adulto', formData)
+        axios.post('/adult', formData)
         .then(function (response) {
             console.log(response)
             //alert("Cadastro Finalizado, Redirecionando para um novo Cadastro")
-            window.location.href = '/adulto';
+            window.location.href = '/adult';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -259,7 +259,7 @@ class CadastroAdulto extends React.Component {
         formData.append('cep', String(this.state.cep))
         formData.append('observations', String(this.state.observations))
 
-        axios.post('/adulto', formData)
+        axios.post('/adult', formData)
         .then(function (response) {
             console.log(response)
             //alert("Cadastro Finalizado")
@@ -448,7 +448,7 @@ class CadastroAdulto extends React.Component {
                                     </div>
                                 </div >
                                 <div className="text-center">
-                                    <a className="btn btn-md botao" href="/adulto">Cencelar</a>
+                                    <a className="btn btn-md botao" href="/">Cencelar</a>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaAdulto}>Avançar</button>
                                 </div>
                                 <div>
