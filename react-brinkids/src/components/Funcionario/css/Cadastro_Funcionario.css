@@ -22,9 +22,6 @@
     background: #052963 !important;
     color: #fff;
 }
-.botaoAvançar{
-    margin-left: 20px !important;
-}
 .webcan {
     background-color: dimgrey;
     border: 3px solid black;
@@ -32,9 +29,6 @@
     height: 240px;
 }
 
-
-/* TELA CONFIRMA CRIANCA */
-
-.ltTitulo {
-    font-size: 20px;
+.check {
+    margin-right: 1000px;
 }

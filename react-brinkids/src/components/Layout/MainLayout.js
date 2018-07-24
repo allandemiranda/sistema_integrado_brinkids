@@ -101,7 +101,7 @@ class MainLayout extends React.Component {
                                     </li>
                                 </ul>
                              </li>*/}
-                            <li id="menu-comunicacao" ><a href="/"><i className="fa fa-smile-o"></i> <span>Usuarios</span><span className="fa fa-angle-double-right" style={{float: "right"}}></span></a>
+                            <li id="menu-comunicacao" ><a href="/"><i className="fa fa-edit"></i> <span>Cadastramento</span><span className="fa fa-angle-double-right" style={{float: "right"}}></span></a>
 								<ul id="menu-comunicacao-sub" >
 								    <li id="menu-mensagens" style={{width: 120 + "px"}} ><a href="/">Criança <i className="fa fa-angle-right" style={{float: "right", marginRight: -8 + "px", marginTop: 2 + "px"}}></i></a>
 										<ul id="menu-mensagens-sub" >
@@ -111,7 +111,13 @@ class MainLayout extends React.Component {
 									</li>
                                     <li id="menu-mensagens" style={{width: 120 + "px"}} ><a href="/">Adulto <i className="fa fa-angle-right" style={{float: "right", marginRight: -8 + "px", marginTop: 2 + "px"}}></i></a>
 										<ul id="menu-mensagens-sub" >
-										    <li id="menu-mensagens-enviadas" style={{width:130 + "px"}} ><a href="/Crianca">Novo</a></li>
+										    <li id="menu-mensagens-enviadas" style={{width:130 + "px"}} ><a href="/Adult">Novo</a></li>
+											<li id="menu-mensagens-recebidas"  style={{width:130 + "px"}}><a href="/">Visualizar</a></li>
+										</ul>
+									</li>
+                                    <li id="menu-mensagens" style={{width: 120 + "px"}} ><a href="/">Funcionário <i className="fa fa-angle-right" style={{float: "right", marginRight: -8 + "px", marginTop: 2 + "px"}}></i></a>
+										<ul id="menu-mensagens-sub" >
+										    <li id="menu-mensagens-enviadas" style={{width:130 + "px"}} ><a href="/Funcionario">Novo</a></li>
 											<li id="menu-mensagens-recebidas"  style={{width:130 + "px"}}><a href="/">Visualizar</a></li>
 										</ul>
 									</li>
