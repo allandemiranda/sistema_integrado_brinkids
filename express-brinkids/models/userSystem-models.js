@@ -36,34 +36,35 @@ UserSchema.pre('save', function (next) {
  * @return callback com dois parâmetros: erro e o usuário do sistema
  */
 UserSchema.statics.authenticate = function (userName, password, callback) {
-  UserSystem.findOne({ user: userName })
-    .exec(function (err, user) {
+  userSystem.findOne({ user: userName }, function (err, user) {
+    if (err) {
+      return callback(err)
+    } else if (!user) {
+      let err = new Error()
+      err.status = 404
+      return callback(err)
+    }
+    if (password === user.password) {
+      return callback(null, user)
+    } else {
+      let err = new Error()
+      err.status = 401
+      return callback(err)
+    }
+    /* bcrypt.compare(password, user.password, function (err, result) {
       if (err) {
-        return callback(err)
-      } else if (!user) {
-        let err = new Error('User not found.')
-        err.status = 404
-        return callback(err)
+        callback(err)
       }
-      if (password === user.password) {
+      if (result === true) {
         return callback(null, user)
       } else {
         return callback()
       }
-      /* bcrypt.compare(password, user.password, function (err, result) {
-        if (err) {
-          callback(err)
-        }
-        if (result === true) {
-          return callback(null, user)
-        } else {
-          return callback()
-        }
-      }) */
-    })
+    }) */
+  })
 }
 
-mongoose.connect('mongodb://localhost/' + config.database_name)
-var UserSystem = mongoose.model('User', UserSchema)
+mongoose.connect('mongodb://localhost/' + config.database)
+var userSystem = mongoose.model('User', UserSchema)
 
-module.exports = UserSystem
+module.exports = userSystem

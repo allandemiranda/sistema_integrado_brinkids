@@ -1,0 +1,40 @@
+
+/* TELA CADASTRO CRIANCA */
+
+@media screen and (max-width: 767px) {
+    .brlabel {
+        margin-top: 7px;
+    }
+}
+
+.LetraFormulario {
+    color: black;
+}
+
+.optionFomulario {
+    padding: 1px 1px !important;
+}
+.botao {
+    background: #00C6D7;
+    color: #fff;
+}
+.botao:hover {
+    background: #052963 !important;
+    color: #fff;
+}
+.botaoAvançar{
+    margin-left: 20px !important;
+}
+.webcan {
+    background-color: dimgrey;
+    border: 3px solid black;
+    width: 320px;
+    height: 240px;
+}
+
+
+/* TELA CONFIRMA CRIANCA */
+
+.ltTitulo {
+    font-size: 20px;
+}

@@ -29,7 +29,7 @@ var ChildSchema = new Schema({
   }
 })
 
-mongoose.connect('mongodb://localhost/' + config.database_name)
+mongoose.connect('mongodb://localhost/' + config.database)
 var Child = mongoose.model('Child', ChildSchema)
 
 module.exports = Child

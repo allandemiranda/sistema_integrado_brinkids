@@ -27,7 +27,7 @@ var addressSchema = new Schema({
   },
   country: {
     type: String,
-    require: true,
+    require: true
   },
   cep: {
     type: Number,
@@ -69,7 +69,7 @@ var userAdultSchema = new Schema({
   }
 })
 
-mongoose.connect('mongodb://localhost/' + config.database_name)
+mongoose.connect('mongodb://localhost/' + config.database)
 var userAdult = mongoose.model('UserAdult', userAdultSchema)
 
 module.exports = userAdult

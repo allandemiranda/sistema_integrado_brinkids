@@ -28,7 +28,7 @@ var calendarSchema = new Schema({
   associated: String
 })
 
-mongoose.connect('mongodb://localhost/' + config.database_name)
+mongoose.connect('mongodb://localhost/' + config.database)
 var calendar = mongoose.model('Calendar', calendarSchema)
 
 module.exports = calendar

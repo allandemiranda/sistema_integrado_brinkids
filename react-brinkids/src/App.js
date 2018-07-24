@@ -6,6 +6,9 @@ import CadastroCrianca from './components/Crianca/CadastroCrianca.js';
 import GAListener from './components/GAListener.js';
 import Login from './components/Login/login.js';
 import Calendar from './components/Calendario/calednario.js';
+import DashBoard from './components/Dashboard/Dashboard.js';
+import Adulto from './components/Adultos/CadastroAdulto.js';
+import BuscaCrianca from './components/Adultos/BuscaCrianca.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -23,6 +26,12 @@ class App extends React.Component {
                 />
                 <LayoutRoute
                   exact
+                  path="/"
+                  layout={MainLayout}
+                  component={DashBoard}
+                />
+                <LayoutRoute
+                  exact
                   path="/Crianca"
                   layout={MainLayout}
                   component={CadastroCrianca}
@@ -33,6 +42,19 @@ class App extends React.Component {
                   layout={MainLayout}
                   component={Calendar}
                 />
+                />
+               <LayoutRoute
+                  exact
+                  path="/Adulto"
+                  layout={MainLayout}
+                  component={Adulto}
+                />
+               <LayoutRoute
+                  exact
+                  path="/BuscaCrianca"
+                  layout={MainLayout}
+                  component={BuscaCrianca}
+                />                
               <Redirect to="/" /> 
             </Switch>
           </GAListener>
