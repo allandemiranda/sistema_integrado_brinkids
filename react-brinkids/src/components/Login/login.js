@@ -52,7 +52,7 @@ constructor () {
             alert(data['token'])
             console.log(data['token'])
             this.setState({ loading: true });
-            const cookies = new cookies();
+            const cookies = new Cookies();
             cookies.set('tokken', (data['token']), {path:'/'});
             window.location.href = '/inicio';
           }.bind(this),

@@ -35,11 +35,22 @@ var addressSchema = new Schema({
   }
 })
 
+var childSchema = new Schema({
+  identifier: String,
+  kinship: String
+})
+
 var userAdultSchema = new Schema({
   status: String,
   name: {
-    type: Map,
-    require: true
+    firstName: {
+      type: String,
+      require: true
+    },
+    surName: {
+      type: String,
+      require: true
+    }
   },
   birthday: {
     type: Date,
@@ -57,15 +68,11 @@ var userAdultSchema = new Schema({
     unique: true
   },
   maritalStatus: String,
-  children: {
-    type: Array,
-    of: String
-  },
+  children: [childSchema],
   observations: String,
   photo: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   }
 })
 

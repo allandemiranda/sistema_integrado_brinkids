@@ -21,6 +21,7 @@ class CadastroFuncionario extends React.Component {
         }
         this.ChangeSearch = this.ChangeSearch.bind(this)
     }
+
     ChangeSearch(event){
         this.setState({Search: event.target.value});
     }
@@ -38,14 +39,13 @@ class CadastroFuncionario extends React.Component {
             return;
         }
         else {
-            axios.get("/adulto/filter?search="+this.state.Search)
+            axios.get("/adult/filter/"+this.state.Search)
             .then(function (response) {
-                console.log(response)
-                if(response.lenght === 0){
+                console.log(response.data)
+                if (isEmpty(response.data)) {
                     alert("Nenhum adulto foi encontrado com essa busca")
-                }
-                else if(response.lenght > 0){
-                    for(var i = 0; i < response.lenght; i++){
+                } else {
+                    for(var i = 0; i < response.data.length; i++){
                         var Tbody = document.querySelector("#CriaTabela");
                         var tr = document.createElement("tr");
                         var th = document.createElement("th");
@@ -56,12 +56,12 @@ class CadastroFuncionario extends React.Component {
                         var input = document.createElement("input");
                         th.setAttribute("scope","row")
                         th.innerHTML = [i];
-                        tdFirst.innerHTML = response.first[i];
-                        tdSur.innerHTML = response.surname[i];
-                        tdCPF.innerHTML = response.cpf[i];
+                        tdFirst.innerHTML = response.data[i].name.firstName;
+                        tdSur.innerHTML = response.data[i].name.surName;
+                        tdCPF.innerHTML = response.data[i].cpf;
                         input.type = "checkbox";
                         input.id = "checkAdulto";
-                        input.value = response.first[i] +" "+ response.surname[i];
+                        input.value = response.data[i].name.firstName +" "+ response.data[i].name.surName;
                         tr.appendChild(th);
                         tr.appendChild(tdFirst);
                         tr.appendChild(tdSur);
@@ -74,12 +74,15 @@ class CadastroFuncionario extends React.Component {
                 }
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
-                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
         }
         
+        function isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
 
         function ValidaErros (busca){
 

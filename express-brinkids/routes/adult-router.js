@@ -7,9 +7,12 @@ var userAdult = require('../models/adult-models')
 var config = require('../config')
 var router = express.Router()
 
-router.get('/', function (req, res) {
-  userAdult.find({}, function (err, result) {
-    return res.json(result)
+router.get('/filter/:search', function (req, res) {
+  let search = req.params.search.split(' ')
+  let firstName = search[0]
+  let surName = search[1]
+  userAdult.find({'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName)}, function (err, result) {
+    return err ? res.sendStatus(500) : res.status(200).json(result)
   })
 })
 
@@ -57,10 +60,10 @@ router.post('/', function (req, res) {
             country: req.body.country,
             cep: req.body.cep
           }],
-          gr: req.body.gr,
+          rg: req.body.rg,
           cpf: req.body.cpf,
           maritalStatus: req.body.maritalStatus,
-          children: [{crianca: '3', kinship: 'parentesco'}],
+          children: [{identifier: '3', kinship: 'parentesco'}],
           observations: 'Observações',
           photo: '/caminho'
         }

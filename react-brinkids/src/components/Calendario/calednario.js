@@ -39,7 +39,7 @@
     }
   };
   /*   */
-  
+
   BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
   Modal.setAppElement(Calendar);
@@ -58,7 +58,7 @@
 
 
       };
-      
+
       this.openModal = this.openModal.bind(this);
       this.afterOpenModal = this.afterOpenModal.bind(this);
       this.closeModal = this.closeModal.bind(this);
@@ -66,7 +66,7 @@
       this.mudarTitulo = this.mudarTitulo.bind(this);
 
     }
-    
+
     onChange = CalendarioI => this.setState({ CalendarioI });
     onChange2 = CalendarioF => this.setState({CalendarioF});
     mudarHora = Hora => this.setState({Hora});
@@ -75,7 +75,7 @@
 
       this.setState({Titulo: event.target.value});
     }
-  
+
     openModal() {
       this.setState({modalIsOpen: true});
     }
@@ -94,7 +94,7 @@
         const Inicial = this.state.CalendarioI;
         const Anoinicial = Inicial.getFullYear(), MesInicial= Inicial.getMonth(), Diainicial = Inicial.getDate();
         const Anofinal = Final.getFullYear(), Mesfinal= Final.getMonth(), Diaifinal = Final.getDate();
-        
+
         const HoraI =timeFromInt(this.state.Hora);
         const HoraF =timeFromInt(this.state.Hora2);
         const match = HoraI.match(/([\w\*]+)/g);
@@ -110,21 +110,21 @@
 
 
 /*  FUNÇÃO PARA O TRATAMENTO DA DATA DE INICIO E FINAL DO EVENTOE TBM PARA ADICIONAR O TITULO DO EVENTO
-    
-    OBS:  VAI SER MAIS TRABALHADA, NÃO CONSEGUI APLICAR UM MODAL, POR ENQUANTO ESTA ATUANDO COM PROMPT 
+
+    OBS:  VAI SER MAIS TRABALHADA, NÃO CONSEGUI APLICAR UM MODAL, POR ENQUANTO ESTA ATUANDO COM PROMPT
 
     */
-    
+
     const teste =(slotInfo) =>{
-              
+
 
     }
-    
+
     return (
       /*  COMPONENTE CALENDARIO DO REACT */
-      
+
       <div>
-      
+
       <button className="modal1" type="button" onClick={this.openModal}>adicionar evento</button>
 
       <Modal
@@ -137,14 +137,14 @@
        <input type="text" placeholder ="digite o titulo" value={this.state.Titulo} onChange={this.mudarTitulo}/><br/>
       <h ref={subtitle => this.subtitle = subtitle}></h><br/>
 
-      
-        
+
+
       <DatePicker
       dateFormat="YYYY/MM/DD"
       onChange={this.onChange}
       value={this.state.CalendarioI}
       />
-      
+
       <TimePicker start="08:00" end="21:00" value={this.state.Hora} onChange={this.mudarHora} step={30} format={24}/>
 
       <DatePicker
@@ -158,12 +158,12 @@
       timeCaption="Time"
       />
        <TimePicker start="08:00" end="21:00" step={30} format={24} value={this.state.Hora2} onChange={this.mudarHora2}/>
-      
+
       <br></br>
       <br></br>
-      
+
       <input type="button" className='botao1' value="salvar" onClick={this.mod}/>
-      
+
       </Modal>
 
 
