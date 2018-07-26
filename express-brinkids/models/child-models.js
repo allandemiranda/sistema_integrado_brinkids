@@ -9,9 +9,14 @@ var ChildSchema = new Schema({
   },
   nacionality: String,
   name: {
-    type: Map,
-    of: String,
-    required: true
+    firstName: {
+      type: String,
+      require: true
+    },
+    surName: {
+      type: String,
+      require: true
+    }
   },
   birthday: {
     type: Date,

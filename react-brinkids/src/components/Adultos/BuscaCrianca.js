@@ -23,6 +23,7 @@ class childSearch extends React.Component {
         };  
 
        this.ChangechildSearch = this.ChangechildSearch.bind(this);
+       this.Search = this.Search.bind(this)
     }
 
     //Bloco que muda o status para o atual do formulario.
@@ -33,15 +34,14 @@ class childSearch extends React.Component {
     // Faz a busca das crianças
     Search(event){
         $.ajax({
-            url: "http://localhost:3001/",
+            url: "http://localhost:3001/child/filter/" + this.state.childSearch,
             dataType:'json',
             type: 'GET',
-            data: {childSearch},
             error: function(response){
               if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
             },
             success: function(response){
-                
+                console.log(response)
             }
           });
     }

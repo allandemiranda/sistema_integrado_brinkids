@@ -24,13 +24,12 @@ function checkAge (actualDate, childDate) {
 }
 
 // Resgata todas as crianças
-router.get('/', function (req, res) {
-  child.find({}, function (err, result) {
-    if (err) {
-      return res.sendStatus(500)
-    } else {
-      return res.status(200).json(result)
-    }
+router.get('/filter/:search', function (req, res) {
+  let search = req.params.search.split(' ')
+  let firstName = search[0]
+  let surName = search[1]
+  child.find({'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName)}, function (err, result) {
+    return err ? res.sendStatus(500) : res.status(200).json(result)
   })
 })
 
@@ -42,8 +41,7 @@ router.get('/', function (req, res) {
  */
 router.post('/', function (req, res) {
   if (!req.files) { // Checa se existe arquivos sendo enviados
-    console.log('Não tem arquivos')
-   return res.sendStatus(400)
+    return res.sendStatus(400)
   }
 
   let actualDate = new Date()/**< Data atual do sistema */
@@ -80,8 +78,8 @@ router.post('/', function (req, res) {
             number: req.body.number,
             nacionality: req.body.nacionality,
             name: {
-              first: req.body.firstName,
-              surname: req.body.surName
+              firstName: req.body.firstName,
+              surName: req.body.surName
             },
             birthday: childDate,
             sexuality: req.body.sexuality,
@@ -126,6 +124,7 @@ router.post('/', function (req, res) {
       return res.sendStatus(400)
     }
   } else {
+    console.log('Data está errada')
     return res.sendStatus(400)
   }
 })

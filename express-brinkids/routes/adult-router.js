@@ -8,10 +8,7 @@ var config = require('../config')
 var router = express.Router()
 
 router.get('/filter/:search', function (req, res) {
-  let search = req.params.search.split(' ')
-  let firstName = search[0]
-  let surName = search[1]
-  userAdult.find({'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName)}, function (err, result) {
+  userAdult.find({'name.firstName': req.params.search}, function (err, result) {
     return err ? res.sendStatus(500) : res.status(200).json(result)
   })
 })
