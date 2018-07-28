@@ -5,7 +5,19 @@ button.modal1{
   -webkit-appearance: button;
   cursor: pointer;
   position: absolute;
-  margin-left: 21%;
+  margin-left: 18.4%;
+color: #373a3c;
+    display: inline-block;
+    
+    text-align: center;
+    vertical-align: middle;
+    background: none;
+    background-image: none;
+    border: 1px solid #ccc;
+    padding: .375rem 1rem;
+    border-radius: 4px;
+    line-height: normal;
+    white-space: nowrap;
 
   }
 .modal2{
@@ -22,8 +34,9 @@ line-height: 20px;
 
   }
 .form-control{
-display: inline-block;
-    width: 50%;
+  float: right;
+    display: inline-block ;
+    width: 45% ;
     height: 45px;
     padding: 14px 12px;
     font-size: 14px;
@@ -53,10 +66,10 @@ width: 50px;
     border-radius: 6px;
     background-color: #FCC302;
     font-size: 18px;
-    margin-left: 35%;
+    margin-left: 28%;
     vertical-align: center;
-    padding-right: 20%;
-
+    
+padding-right: 98px;
 }
 .rbc-btn {
   color: inherit;

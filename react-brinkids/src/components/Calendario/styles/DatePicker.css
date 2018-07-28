@@ -1,3 +1,16 @@
+.titulo{
+
+margin-left: 94px;
+border: thin solid #023f4e;
+
+}
+.titulo2{
+margin-left: 5px;
+border: thin solid #023f4e;
+}
+
+
+
 .react-date-picker {
   display: inline-flex;
   position: relative;
@@ -19,6 +32,9 @@
 .react-date-picker__button {
   display: flex;
   border: thin solid gray;
+  margin-bottom: 20px;
+    margin-top: 5px;
+    margin-right: -49px;
 }
 .react-date-picker__button__input {
   min-width: calc(4px + (4px * 3) +  0.54em * 8  +  0.217em * 2);
