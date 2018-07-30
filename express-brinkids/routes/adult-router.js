@@ -8,7 +8,10 @@ const config = require('../config');
 
 const router = express.Router();
 
+// Rota responsável por realizar a pesquisa dos adultos no sistema
 router.get('/filter/:search/:type', (req, res) => {
+  // 'search': Contém a pesquisa da página. Pode ser o CPF ou o nome
+  // 'type': Indica se é desejado pesquisar por CPF ou por nome
   // Inicia a variável que vai receber a consulta
   // Para saber mais sobre consultas: http://mongoosejs.com/docs/queries.html
   let query;
@@ -16,6 +19,7 @@ router.get('/filter/:search/:type', (req, res) => {
   // Checa se a requisição é por CPF ou por nome
   // e cria a consulta específica para cada caso
   if (req.params.type === 'CPF') {
+    // Como a pesquisa virá apenas com o CPF, posso passar ele direto na pesquisa
     query = userAdult.find({ cpf: req.params.search });
   } else {
     // Inicia as variáveis que vão conter os valores existentes na URL
