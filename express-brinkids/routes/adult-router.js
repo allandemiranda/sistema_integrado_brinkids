@@ -19,7 +19,7 @@ router.get('/filter/:search/:type', (req, res) => {
   // Checa se a requisição é por CPF ou por nome
   // e cria a consulta específica para cada caso
   if (req.params.type === 'CPF') {
-    // Como a pesquisa virá apenas com o CPF, posso passar ele direto na pesquisa
+    // Como a pesquisa virá apenas com o CPF, posso passar 'search' direto na pesquisa
     query = userAdult.find({ cpf: req.params.search });
   } else {
     // Inicia as variáveis que vão conter os valores existentes na URL

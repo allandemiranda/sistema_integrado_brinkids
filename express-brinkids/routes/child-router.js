@@ -33,12 +33,18 @@ function checkAge(actualDate, childDate) {
 // Resgata todas as crianças
 router.get('/filter/:search', (req, res) => {
   const search = req.params.search.split(' ');
-  const firstName = search[0];
-  const surName = search[1];
-  child.find(
-    { 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) },
-    (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)),
-  );
+  let query;
+
+  if (search.length === 1) {
+    const firstName = search[0];
+    query = child.find({ 'name.firstName': new RegExp(firstName) });
+  } else {
+    const firstName = search[0];
+    const surName = search[1];
+    query = child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+  }
+
+  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
 /**
