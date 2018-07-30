@@ -2,98 +2,129 @@
  * Este arquivo será responsável por criar as rotas relacionadas aos Adultos
  */
 
-var express = require('express')
-var userAdult = require('../models/adult-models')
-var config = require('../config')
-var router = express.Router()
+const express = require('express');
+const userAdult = require('../models/adult-models');
+const config = require('../config');
 
-router.get('/filter/:search', function (req, res) {
-  userAdult.find({'name.firstName': req.params.search}, function (err, result) {
-    return err ? res.sendStatus(500) : res.status(200).json(result)
-  })
-})
+const router = express.Router();
 
-router.post('/', function (req, res) {
-  if (!req.files) {
-    return res.sendStatus(400)
+router.get('/filter/:search/:type', (req, res) => {
+  // Inicia a variável que vai receber a consulta
+  // Para saber mais sobre consultas: http://mongoosejs.com/docs/queries.html
+  let query;
+
+  // Checa se a requisição é por CPF ou por nome
+  // e cria a consulta específica para cada caso
+  if (req.params.type === 'CPF') {
+    query = userAdult.find({ cpf: req.params.search });
+  } else {
+    // Inicia as variáveis que vão conter os valores existentes na URL
+    const listSearch = req.params.search.split(' ');
+    let firstName;
+    let surName;
+
+    if (listSearch.length === 1) {
+      [firstName] = listSearch;
+      query = userAdult.find({ 'name.firstName': new RegExp(firstName) });
+    } else {
+      // Forma de atribuir valores da lista a variáveis
+      // É equivalente a:
+      // firstName = listSearch[0]
+      // surName = listSearch[1]
+      [firstName, surName] = listSearch;
+      query = userAdult.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+    }
   }
 
-  if (req.body.firstName &&
-      req.body.surName &&
-      req.body.birthday &&
-      req.body.phone &&
-      req.body.street &&
-      req.body.number &&
-      req.body.district &&
-      req.body.city &&
-      req.body.state &&
-      req.body.country &&
-      req.body.cep &&
-      req.body.nacionality &&
-      req.body.cpf) {
-    userAdult.findOne({cpf: req.body.cpf}, function (err, adultFound) {
+  // Executa a consulta e devolve o status HTTP da requisição
+  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+});
+
+router.get('/', (req, res) => {
+  userAdult.find({}, (err, result) => res.status(200).json(result));
+});
+
+router.post('/', (req, res) => {
+  if (req.files
+      && req.body.firstName
+      && req.body.surName
+      && req.body.birthday
+      && req.body.phone
+      && req.body.street
+      && req.body.number
+      && req.body.district
+      && req.body.city
+      && req.body.state
+      && req.body.country
+      && req.body.cep
+      && req.body.nacionality
+      && req.body.cpf
+      && req.body.email
+      && req.body.nacionality) {
+    userAdult.findOne({ cpf: req.body.cpf }, (err, adultFound) => {
       if (err) {
-        return res.sendStatus(500)
+        return res.sendStatus(500);
       }
 
       if (adultFound === null) {
-        let photoFile = req.files.fileField
-        let date = req.body.birthday.split('/')
-        let adultDate = new Date(date[2], date[1], date[0])
+        const photoFile = req.files.fileField;
+        const date = req.body.birthday.split('/');
+        const adultDate = new Date(date[2], date[1], date[0]);
 
-        let data = {
+        const data = {
           name: {
             firstName: req.body.firstName,
-            surName: req.body.surName
+            surName: req.body.surName,
           },
           birthday: adultDate,
           phone: [req.body.phone],
           address: [{
             street: req.body.street,
-            number: parseInt(req.body.number),
+            number: parseInt(req.body.number, 10),
             district: req.body.district,
             city: req.body.city,
             state: req.body.state,
             country: req.body.country,
-            cep: req.body.cep
+            cep: req.body.cep,
           }],
           rg: req.body.rg,
           cpf: req.body.cpf,
+          email: req.body.email,
+          nacionality: req.body.nacionality,
           maritalStatus: req.body.maritalStatus,
-          children: [{identifier: '3', kinship: 'parentesco'}],
+          children: [{ identifier: '3', kinship: 'parentesco' }],
           observations: 'Observações',
-          photo: '/caminho'
-        }
+          photo: '/caminho',
+        };
 
-        userAdult.create(data, function (err, adultResult) {
-          if (err) {
-            return res.sendStatus(500)
-          } else {
-            let photoNameComponents = photoFile.name.split('.')
-            let fileName = config.pathAdult +
-              adultResult._id + '.' +
-              photoNameComponents[photoNameComponents.length - 1] /**< url completa da localização do arquivo no computador */
-
-            adultResult.photo = fileName /** Atualiza o nome do arquivo */
-            adultResult.save(function (err) { /** Atualiza no banco a nova informação */
-              if (err) {
-                return res.sendStatus(500)
-              }
-            })
-
-            /** Pega o arquivo e salva no servidor */
-            photoFile.mv(config.pathPublic() + fileName, function (err) {
-              return err ? res.sendStatus(500) : res.sendStatus(201)
-            })
+        userAdult.create(data, (errAdult, adultResult) => {
+          if (errAdult) {
+            console.log(errAdult);
+            return res.sendStatus(500);
           }
-        })
-      } else {
-        return res.sendStatus(409)
-      }
-    })
-  } else {
-    return res.sendStatus(400)
-  }
-})
+          const photoNameComponents = photoFile.name.split('.');
+          const fileName = `${config.pathAdult}${adultResult._id}.${photoNameComponents[photoNameComponents.length - 1]}`; /**< url completa da localização do arquivo no computador */
 
-module.exports = router
+          adultResult.photo = fileName; /** Atualiza o nome do arquivo */
+          adultResult.save((errAdultSave) => { /** Atualiza no banco a nova informação */
+            if (errAdultSave) {
+              return res.sendStatus(500);
+            }
+          });
+
+          /** Pega o arquivo e salva no servidor */
+          photoFile.mv(
+            config.pathPublic() + fileName, // Nome do arquivo
+            errFile => (errFile ? res.sendStatus(500) : res.sendStatus(201)),
+          );
+        });
+      } else {
+        return res.sendStatus(409);
+      }
+    });
+  } else {
+    return res.sendStatus(400);
+  }
+});
+
+module.exports = router;

@@ -1,40 +1,39 @@
-var mongoose = require('mongoose')
-var config = require('../config')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const config = require('../config');
 
-var ChildSchema = new Schema({
+const ChildSchema = new mongoose.Schema({
   number: {
     type: String,
-    required: true
+    required: true,
   },
   nacionality: String,
   name: {
     firstName: {
       type: String,
-      require: true
+      require: true,
     },
     surName: {
       type: String,
-      require: true
-    }
+      require: true,
+    },
   },
   birthday: {
     type: Date,
-    required: true
+    required: true,
   },
   sexuality: {
     type: String,
-    required: true
+    required: true,
   },
   restrictions: String,
   observations: String,
   photo: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-mongoose.connect('mongodb://localhost/' + config.database)
-var Child = mongoose.model('Child', ChildSchema)
+mongoose.connect(`mongodb://localhost/${config.database}`);
+const Child = mongoose.model('Child', ChildSchema);
 
-module.exports = Child
+module.exports = Child;
