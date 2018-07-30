@@ -19,7 +19,9 @@ class childSearch extends React.Component {
         super();
         this.state = {
             childSearch: '',
+            list:[],
             errr:'',
+            achado: false,
         };  
 
        this.ChangechildSearch = this.ChangechildSearch.bind(this);
@@ -40,16 +42,57 @@ class childSearch extends React.Component {
             error: function(response){
               if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
             },
-            success: function(response){
-                console.log(response)
-            }
+            success: function(response){    //Imprime os resutados encontrados na forma de tabela
+                console.log(response);
+                this.setState({achado: true});
+                this.setState({list: response});
+            }.bind(this)
           });
     }
 
-    render() {
+    componentDidMount(){
+        if (this.state.achado === true){
+        return(
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th >Nome</th>
+                        <th >Idade</th>
+                        <th >RG</th>
+                        <th className="text-center"> Selecionar </th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    { 
+                        this.state.list.map(function(findChild){
+                            return(
+                                <tr>
+                                    <th scope="row">{findChild.id}</th>
+                                    <td > {findChild.name} </td>
+                                    <td >{findChild.age} </td>
+                                    <td >{findChild.rg} </td>
+                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" /> </td>
+                                </tr>
 
-         return (
-             <div className = "container-fluid" >
+                            );
+                        })
+                    
+                    }
+                </tbody>
+        </table>
+        )
+        }
+        <div className="text-center">
+            <a className="btn btn-md botao" href="/">Cencelar</a>
+            <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaBusca}>Avançar</button>
+        </div>
+    }
+
+    render() {
+        return (
+            <div className = "container-fluid" >
                 <div className = "sub-heard-part" >
                     <ol className = "breadcrumb m-b-0" >
                         <li > < a href = "/" > Home </a></li >
