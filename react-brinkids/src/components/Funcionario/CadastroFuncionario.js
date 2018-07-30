@@ -1,7 +1,7 @@
 import React from 'react';
-import Webcam from 'react-webcam';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
+import FormularioCad from './FormularioCadFunc.js';
 
 
 
@@ -18,7 +18,7 @@ class CadastroFuncionario extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            page: "BuscaAdulto",
+            page: "FormularioCadastro",
             Name: "",
             CPF: "",
             Adulto: "",
@@ -79,6 +79,7 @@ class CadastroFuncionario extends React.Component {
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
+                                    page: "FormularioCadastro",
                                 })
                             }
                             tr.appendChild(th);
@@ -125,6 +126,7 @@ class CadastroFuncionario extends React.Component {
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
+                                    page: "FormularioCadastro",
                                 })
                             }
                             tr.appendChild(th);
@@ -226,6 +228,11 @@ class CadastroFuncionario extends React.Component {
                         </div>
                     </div>
                 </div> 
+            )
+        }
+        else if(this.state.page === "FormularioCadastro"){
+            return(
+                <FormularioCad/>
             )
         }
     }
