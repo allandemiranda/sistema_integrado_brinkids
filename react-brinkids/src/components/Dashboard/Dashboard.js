@@ -104,7 +104,7 @@ class DashBoard extends React.Component {
 					<tr key={events.toString()}>
 					<td>{events.Titulo}</td>
 					<td>{(events.Start.getHours()+':'+events.Start.getMinutes())}</td>
-					<td>{((events.End.getHours()+2)+':'+(events.End.getMinutes()+10))}</td>
+					<td>{((events.End.getHours()+2)+':'+(events.End.getMinutes()+11))}</td>
 					</tr>
 					)
 			}
