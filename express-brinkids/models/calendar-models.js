@@ -1,34 +1,33 @@
 /** Este documento será responsável por criar o Schema do calendário */
 
-var mongoose = require('mongoose')
-var config = require('../config')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const config = require('../config');
 
-var calendarSchema = new Schema({
+const calendarSchema = new mongoose.Schema({
   color: {
     type: String,
-    require: true
+    require: true,
   },
   type: {
     type: String,
-    require: true
+    require: true,
   },
   title: {
     type: String,
-    require: true
+    require: true,
   },
   opening: {
     type: Date,
-    require: true
+    require: true,
   },
   closing: {
     type: Date,
-    require: true
+    require: true,
   },
-  associated: String
-})
+  associated: String,
+});
 
-mongoose.connect('mongodb://localhost/' + config.database)
-var calendar = mongoose.model('Calendar', calendarSchema)
+mongoose.connect(`mongodb://localhost/'${config.database}`);
+const calendar = mongoose.model('Calendar', calendarSchema);
 
-module.exports = calendar
+module.exports = calendar;

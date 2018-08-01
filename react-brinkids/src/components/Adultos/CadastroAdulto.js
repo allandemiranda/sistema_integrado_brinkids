@@ -485,7 +485,7 @@ class CadastroAdulto extends React.Component {
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarAdulto}>Finalizar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarAdulto}>Adicinar Criança</button>
                     </div>
                 </div>
             )

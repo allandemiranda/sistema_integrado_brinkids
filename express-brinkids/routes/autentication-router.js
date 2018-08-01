@@ -1,56 +1,60 @@
-var express = require('express')
-var userSystem = require('../models/userSystem-models')
-var jwt = require('jsonwebtoken')
-var config = require('../config')
-var router = express.Router()
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const userSystem = require('../models/userSystem-models');
+const config = require('../config');
+
+const router = express.Router();
 
 // Cria usuario
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
   if (req.body.user && req.body.password) {
-    let dados = {
+    const dados = {
       user: req.body.user,
       password: req.body.password,
-      employees: true
-    }
-    userSystem.create(dados, function (err, small) {
+      employees: true,
+    };
+
+    userSystem.create(dados, (err, small) => {
       if (err) {
-        return res.sendStatus(500)
-      } else {
-        return res.sendStatus(201)
+        return res.sendStatus(500);
       }
-    })
+
+      return res.sendStatus(201);
+    });
   } else {
-    return res.sendStatus(400)
+    return res.sendStatus(400);
   }
-})
+});
 
 // Rota responsável por realizar a autenticação
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   // Primeiro checa se existe um usuário no sistema
-  userSystem.findOne({user: req.query.user}, function (err, user) {
+  userSystem.findOne({ user: req.query.user }, (err, user) => {
     if (err) {
-      return res.sendStatus(500)
-    } else if (user) { // Se ele existir, prosseguimos
+      return res.sendStatus(500);
+    }
+
+    if (user) { // Se ele existir, prosseguimos
       if (req.query.password === user.password) { // Agora checamos se a senha é válida
         // Caso a senha do usuário seja válida iremos criar um token
         // Para criar o token, deve ser passado 3 parâmetros:
         // 1) O usuário no formato de Json
         // 2) Uma chave para usar na criação do token
         // 3) Um objeto com parâmetros opcionais (Nesse caso, eu adiciono o tempo de expiração)
-        var token = jwt.sign(user.toJSON(), config.secret_auth, {
-          expiresIn: 60 * 60 * 24 // o token irá expirar em 24 horas
-        })
+        const token = jwt.sign(user.toJSON(), config.secret_auth, {
+          expiresIn: 60 * 60 * 24, // o token irá expirar em 24 horas
+        });
 
         // Se tudo der certo, enviamos o token
-        res.json({token: token})
+        res.json({ token });
       } else {
-        return res.sendStatus(401)
+        return res.sendStatus(401);
       }
     } else {
-      return res.sendStatus(404)
+      return res.sendStatus(404);
     }
-  })
-})
+  });
+});
 
 // GET /logout (Obs.: Necessário refatorar o logout)
 // router.get('/logout', function (req, res, next) {
@@ -64,10 +68,10 @@ router.get('/', function (req, res) {
 //   }
 // })
 
-router.get('/mostra_usuarios', function (req, res) {
-  userSystem.find({}, function (err, result) {
-    return err ? res.sendStatus(500) : res.status(200).json(result)
-  })
-})
+router.get('/mostra_usuarios', (req, res) => {
+  userSystem.find({}, (err, result) => {
+    return err ? res.sendStatus(500) : res.status(200).json(result);
+  });
+});
 
-module.exports = router
+module.exports = router;

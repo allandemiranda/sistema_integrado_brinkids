@@ -1,12 +1,14 @@
+
 /**
  * Este arquivo será responsável por criar as rotas relacionadas as crianças
  */
 
-var fs = require('fs')
-var express = require('express')
-var child = require('../models/child-models')
-var config = require('../config')
-var router = express.Router()
+const fs = require('fs');
+const express = require('express');
+const child = require('../models/child-models');
+const config = require('../config');
+
+const router = express.Router();
 
 /**
  * Função para checar se a data da criança é válida
@@ -14,24 +16,36 @@ var router = express.Router()
  * @param childDate Idade da criança
  * @return 'true' caso a idade da criaça seja sempre menor que 14 ou 'false' caso contrário
  */
-function checkAge (actualDate, childDate) {
-  let compareDate = new Date(
+function checkAge(actualDate, childDate) {
+  const compareDate = new Date(
     actualDate.getFullYear() - 14,
     actualDate.getMonth(),
-    actualDate.getDate(), 0, 0, 0, 0) /**< Date. Pegará a data atual e subtrairá 14 anos para fazer a checagem com a idade da criança */
+    actualDate.getDate(), 0, 0, 0, 0,
+  );
 
-  return childDate > compareDate
+    /** < Date. Pegará a data atual e subtrairá 14 anos
+     * para fazer a checagem com a idade da criança
+    */
+
+  return childDate > compareDate;
 }
 
 // Resgata todas as crianças
-router.get('/filter/:search', function (req, res) {
-  let search = req.params.search.split(' ')
-  let firstName = search[0]
-  let surName = search[1]
-  child.find({'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName)}, function (err, result) {
-    return err ? res.sendStatus(500) : res.status(200).json(result)
-  })
-})
+router.get('/filter/:search', (req, res) => {
+  const search = req.params.search.split(' ');
+  let query;
+
+  if (search.length === 1) {
+    const firstName = search[0];
+    query = child.find({ 'name.firstName': new RegExp(firstName) });
+  } else {
+    const firstName = search[0];
+    const surName = search[1];
+    query = child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+  }
+
+  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+});
 
 /**
  * Rota para inserção de crianças no banco de dados
@@ -39,13 +53,9 @@ router.get('/filter/:search', function (req, res) {
  * @param callback Função a ser executada
  * @return código de status HTTP
  */
-router.post('/', function (req, res) {
-  if (!req.files) { // Checa se existe arquivos sendo enviados
-    return res.sendStatus(400)
-  }
-
-  let actualDate = new Date()/**< Data atual do sistema */
-  let childDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
+router.post('/', (req, res) => {
+  const actualDate = new Date()/**< Data atual do sistema */
+  const childDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
 
   /**
    * Checa se a criança possui menos de 14 anos ou não
@@ -56,78 +66,77 @@ router.post('/', function (req, res) {
      * Checa se todos os dados obrigatórios da criança foram enviados na requisição
      */
 
-    if (req.body.number &&
-        req.body.firstName &&
-        req.body.surName &&
-        req.body.birthday &&
-        req.body.sexuality) {
+    if (req.files
+        && req.body.number
+        && req.body.firstName
+        && req.body.surName
+        && req.body.birthday
+        && req.body.sexuality) {
       /**
        * Checa se já existe uma criança no sistema.
        * Se não existe, então uma nova é cadastrada com as informações enviadas
        */
-      child.findOne({number: req.body.number}, function (err, childResult) {
+      child.findOne({ number: req.body.number }, (err, childResult) => {
         if (err) {
-          return res.sendStatus(500)
+          return res.sendStatus(500);
         }
 
         /** Checa se não existe uma criança no sistema */
         if (childResult === null) {
-          let photoFile = req.files.file /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
+          const photoFile = req.files.fileField; /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
 
-          let dados = {
+          const dados = {
             number: req.body.number,
             nacionality: req.body.nacionality,
             name: {
               firstName: req.body.firstName,
-              surName: req.body.surName
+              surName: req.body.surName,
             },
             birthday: childDate,
             sexuality: req.body.sexuality,
             restrictions: req.body.restrictions,
             observations: req.body.observations,
-            photo: '/'
-          } /**< Objeto. Contém os dados da criança para inserção no banco */
+            photo: '/',
+          }; /**< Objeto. Contém os dados da criança para inserção no banco */
 
           /** Salva a criança no banco */
-          child.create(dados, function (err, childResult) {
-            if (err) {
-              return res.sendStatus(500)
+          child.create(dados, (errChild, childCreateResult) => {
+            if (errChild) {
+              return res.sendStatus(500);
             }
 
-            let fileName = config.pathChild + childResult._id + '.png' /**< url completa da localização do arquivo no computador */
-            childResult.photo = fileName /** Atualiza o nome do arquivo */
-            childResult.save(function (err) { /** Atualiza no banco a nova informação */
-              if (err) {
-                child.findOneAndRemove({number: req.body.number}, function (err) {
-                  return res.sendStatus(500)
+            const fileName = `${config.pathChild}${childCreateResult._id}.png`; /**< url completa da localização do arquivo no computador */
+            childCreateResult.photo = fileName /** Atualiza o nome do arquivo */
+            childCreateResult.save((errSaveChildResult) => { /** Atualiza no banco a nova informação */
+              if (errSaveChildResult) {
+                child.findOneAndRemove({ number: req.body.number }, (err) => {
+                  return res.sendStatus(500);
                 })
               } else {
                 /** Pega o arquivo e salva no servidor */
-                photoFile.mv(config.pathPublic() + fileName, function (err) {
-                  if (err) {
-                    child.findOneAndRemove({number: req.body.number}, function (err) {
-                      return res.sendStatus(500)
-                    })
+                photoFile.mv(config.pathPublic() + fileName, (errMvFile) => {
+                  if (errMvFile) {
+                    child.findOneAndRemove({ number: req.body.number }, (err) => {
+                      return res.sendStatus(500);
+                    });
                   } else {
-                    return res.sendStatus(201)
+                    return res.sendStatus(201);
                   }
-                })
+                });
               }
-            })
-          })
+            });
+          });
         } else {
-          return res.sendStatus(409)
+          return res.sendStatus(409);
         }
-      })
+      });
     } else {
-      console.log('Alguma informação obrigatória está faltando')
-      return res.sendStatus(400)
+      return res.sendStatus(400);
     }
   } else {
-    console.log('Data está errada')
-    return res.sendStatus(400)
+    return res.sendStatus(400);
   }
-})
+});
 
 // Rota preparada para fazer as alterações
 // Ainda a definir como deve funcionar de maneira robusta
@@ -161,4 +170,4 @@ router.delete('/', function (req, res) {
   }
 })
 
-module.exports = router
+module.exports = router;

@@ -4,7 +4,7 @@ module.exports = {
   dir_base: __dirname,
   pathChild: 'img_users/child/',
   pathAdult: 'img_users/adult/',
-  pathPublic: function () {
-    return this.dir_base + '/public/'
-  }
-}
+  pathPublic() {
+    return `${this.dir_base}/public/`;
+  },
+};

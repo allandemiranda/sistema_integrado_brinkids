@@ -1,82 +1,89 @@
 /** Schema para usuarios do sistema */
 
-var mongoose = require('mongoose')
-var config = require('../config')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const config = require('../config');
 
-var addressSchema = new Schema({
+const addressSchema = new mongoose.Schema({
   street: {
     type: String,
-    require: true
+    require: true,
   },
   number: {
     type: Number,
-    require: true
+    require: true,
   },
   district: {
     type: String,
-    require: true
+    require: true,
   },
   city: {
     type: String,
-    require: true
+    require: true,
   },
   state: {
     type: String,
-    require: true
+    require: true,
   },
   country: {
     type: String,
-    require: true
+    require: true,
   },
   cep: {
     type: Number,
-    require: true
-  }
-})
+    require: true,
+  },
+});
 
-var childSchema = new Schema({
+const childSchema = new mongoose.Schema({
   identifier: String,
-  kinship: String
-})
+  kinship: String,
+});
 
-var userAdultSchema = new Schema({
+const userAdultSchema = new mongoose.Schema({
   status: String,
   name: {
     firstName: {
       type: String,
-      require: true
+      require: true,
     },
     surName: {
       type: String,
-      require: true
-    }
+      require: true,
+    },
   },
   birthday: {
     type: Date,
-    required: true
+    required: true,
   },
   phone: {
     type: Array,
-    required: true
+    required: true,
   },
   address: [addressSchema],
   rg: Number,
   cpf: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
+  nacionality: {
+    type: String,
+    require: true,
   },
   maritalStatus: String,
   children: [childSchema],
   observations: String,
   photo: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-mongoose.connect('mongodb://localhost/' + config.database)
-var userAdult = mongoose.model('UserAdult', userAdultSchema)
+mongoose.connect(`mongodb://localhost/${config.database}`);
+const userAdult = mongoose.model('UserAdult', userAdultSchema);
 
-module.exports = userAdult
+module.exports = userAdult;

@@ -1,42 +1,42 @@
 /** Arquivo responsável por carregar as configurações do que foi desenvolvido na aplicação */
 
 // Módulos
-var cookieParser = require('cookie-parser')
-var cors = require('cors')
-var createError = require('http-errors')
-var express = require('express')
-var fileUpload = require('express-fileupload')
-var logger = require('morgan')
-var path = require('path')
-// var jwt = require('jsonwebtoken')
-// var config = require('./config')
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const createError = require('http-errors');
+const express = require('express');
+const fileUpload = require('express-fileupload');
+const logger = require('morgan');
+const path = require('path');
+// const jwt = require('jsonwebtoken')
+// const config = require('./config')
 
 // Rotas
-var adult = require('./routes/adult-router')
-var autentication = require('./routes/autentication-router')
-var calendar = require('./routes/calendar-router')
-var child = require('./routes/child-router')
-var employees = require('./routes/employees-router')
+const adult = require('./routes/adult-router');
+const autentication = require('./routes/autentication-router');
+const calendar = require('./routes/calendar-router');
+const child = require('./routes/child-router');
+const employees = require('./routes/employees-router');
 
 // Instanciando o objeto do express
-var app = express()
+const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 // Usando middlewares
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(fileUpload())
-app.use(cors())
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload());
+app.use(cors());
 
 // Middleware para checar se o token foi enviado
 // app.use(function (req, res, next) {
-//   var token = req.body.token || req.query.token || req.headers['x-access-token']
+//   const token = req.body.token || req.query.token || req.headers['x-access-token']
 
 //   if (token) {
 //     jwt.verify(token, config.secret_auth, function (err, decoded) {
@@ -55,26 +55,26 @@ app.use(cors())
 // })
 
 // Usando as rotas
-app.use('/adult', adult)
-app.use('/authentication', autentication)
-app.use('/calendar', calendar)
-app.use('/child', child)
-app.use('/employees', employees)
+app.use('/adult', adult);
+app.use('/authentication', autentication);
+app.use('/calendar', calendar);
+app.use('/child', child);
+app.use('/employees', employees);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404))
-})
+app.use((req, res, next) => {
+  next(createError(404));
+});
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500)
-  res.render('error')
-})
+  res.status(err.status || 500);
+  res.render('error');
+});
 
-module.exports = app
+module.exports = app;

@@ -1,7 +1,7 @@
 import React from 'react';
-import Webcam from 'react-webcam';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
+import FormularioCad from './FormularioCadFunc.js';
 
 
 
@@ -18,7 +18,7 @@ class CadastroFuncionario extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            page: "BuscaAdulto",
+            page: "FormularioCadastro",
             Name: "",
             CPF: "",
             Adulto: "",
@@ -75,10 +75,11 @@ class CadastroFuncionario extends React.Component {
                             tdSur.innerHTML = response.data[i].name.surName;
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
-                            input.value("Click Aqui");
+                            //input.value("Click Aqui");
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
+                                    page: "FormularioCadastro",
                                 })
                             }
                             tr.appendChild(th);
@@ -92,9 +93,9 @@ class CadastroFuncionario extends React.Component {
                     }
                 }).catch(function (error) {
                     console.log(error)//LOG DE ERRO
-                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
@@ -121,10 +122,11 @@ class CadastroFuncionario extends React.Component {
                             tdSur.innerHTML = response.data[i].name.surName;
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
-                            input.value("Click Aqui");
+                            //input.value("Click Aqui");
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
+                                    page: "FormularioCadastro",
                                 })
                             }
                             tr.appendChild(th);
@@ -138,9 +140,9 @@ class CadastroFuncionario extends React.Component {
                     }
                 }).catch(function (error) {
                     console.log(error)//LOG DE ERRO
-                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
@@ -226,6 +228,11 @@ class CadastroFuncionario extends React.Component {
                         </div>
                     </div>
                 </div> 
+            )
+        }
+        else if(this.state.page === "FormularioCadastro"){
+            return(
+                <FormularioCad/>
             )
         }
     }

@@ -1,31 +1,22 @@
 /** Este arquivo fica responsável por criar o Schema dos Funcionários */
 
-var mongoose = require('mongoose')
-var config = require('../config')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose');
+const config = require('../config');
 
-var passportSchema = new Schema({
-  number: String,
-  typeFormat: String,
-  issuingCountry: String,
-  dateIssue: Date,
-  expirationDate: Date
-})
-
-var employeesSchema = new Schema({
+const employeesSchema = new mongoose.Schema({
   functions: {
     type: Array,
-    of: 'String'
+    of: 'String',
   },
   gender: String,
   education: String,
   kinship: {
     fatherName: String,
-    motherName: String
+    motherName: String,
   },
   birthplace: {
     city: String,
-    state: String
+    state: String,
   },
   workPortifolio: {
     number: String,
@@ -33,25 +24,25 @@ var employeesSchema = new Schema({
     state: String,
     PIS_PASEP: String,
     dateIssue: Date,
-    placeIssue: String
+    placeIssue: String,
   },
   rg: {
     issuingBody: String,
     state: String,
-    dateIssue: String
+    dateIssue: String,
   },
   electionTitle: {
     number: String,
     zone: String,
     section: String,
-    state: String
+    state: String,
   },
   passport: {
     number: String,
     typeFormat: String,
     issuingCountry: String,
     dateIssue: Date,
-    expirationDate: Date
+    expirationDate: Date,
   },
   cnh: {
     record: String,
@@ -59,7 +50,7 @@ var employeesSchema = new Schema({
     expirationDate: Date,
     comments: String,
     placeIssue: String,
-    dateIssue: Date
+    dateIssue: Date,
   },
   employeeData: {
     officialPosition: String,
@@ -67,12 +58,12 @@ var employeesSchema = new Schema({
     resignationDate: Date,
     reasonResignation: String,
     record: String,
-    state: String
+    state: String,
   },
-  observations: String
-})
+  observations: String,
+});
 
-mongoose.connect('mongodb://localhost/' + config.database)
-var employees = mongoose.model('Employee', employeesSchema)
+mongoose.connect(`mongodb://localhost/${config.database}`);
+const employees = mongoose.model('Employee', employeesSchema);
 
-module.exports = employees
+module.exports = employees;
