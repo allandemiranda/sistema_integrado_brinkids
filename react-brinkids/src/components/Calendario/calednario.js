@@ -291,6 +291,13 @@
         `\naction: ${slotInfo.action}`
         )*/
     }
+    eventPropGetter={event => ({
+        style: {
+            backgroundColor: event.start.getDay() < 5
+                ? "#ad4ca4"
+                : "#3174ad",
+        }
+    })}
     />
     </div>
 
