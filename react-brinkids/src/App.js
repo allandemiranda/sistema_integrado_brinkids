@@ -8,7 +8,6 @@ import Login from './components/Login/login.js';
 import Calendar from './components/Calendario/calednario.js';
 import DashBoard from './components/Dashboard/Dashboard.js';
 import Adult from './components/Adultos/CadastroAdulto.js';
-import BuscaCrianca from './components/Adultos/BuscaCrianca.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
 
 const getBasename = () => {
@@ -49,12 +48,6 @@ class App extends React.Component {
                   path="/Adult"
                   layout={MainLayout}
                   component={Adult}
-                />
-               <LayoutRoute
-                  exact
-                  path="/childSearch"
-                  layout={MainLayout}
-                  component={BuscaCrianca}
                 />
                 <LayoutRoute
                   exact

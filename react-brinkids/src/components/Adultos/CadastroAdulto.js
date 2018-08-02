@@ -10,8 +10,7 @@ import '../../assets/style/font-awesome.css';
 import './css/CadastroAdulto.css';
 import './css/style.css';
 
-
-
+import $ from "jquery";
 
 
 class CadastroAdulto extends React.Component {
@@ -34,8 +33,14 @@ class CadastroAdulto extends React.Component {
             city:"",
             cep:"",           
             observations: "",
-            file: ""
-        }
+            file: "",
+            
+            // Estados Relacionado a busac de crianças
+            childSearch: '',
+            list:[],
+            erro:'',
+            achado: false,
+        } 
      
         this.ChangeName = this.ChangeName.bind(this);
         this.ChangeSurname = this.ChangeSurname.bind(this);
@@ -52,7 +57,116 @@ class CadastroAdulto extends React.Component {
         this.ChangeCity = this.ChangeCity.bind(this);
         this.ChangeCep = this.ChangeCep.bind(this);
         this.ChangeObs = this.ChangeObs.bind(this);
+        
+        //Relacionado a busca de crianças
+        this.ChangechildSearch = this.ChangechildSearch.bind(this);
+        this.Search = this.Search.bind(this)
 
+    }
+
+     // FUNCOES RELACIONADAS A BUSCA DE CRIANÇAS - Inicio 
+
+        //Bloco que muda o status para o atual do formulario.
+        ChangechildSearch(event){
+        this.setState({childSearch: event.target.value});
+        }  
+
+        // Faz a busca das crianças
+        Search(event){
+            $.ajax({
+                url: "http://localhost:3001/child/filter/" + this.state.childSearch,
+                dataType:'json',
+                type: 'GET',
+                error: function(response){
+                if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
+                },
+                success: function(response){    //Imprime os resutados encontrados na forma de tabela
+                    console.log(response);
+                    this.setState({achado: true});
+                    this.setState({list: response});
+                }.bind(this)
+            });
+        }
+
+     /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO*/
+     ChildSearch = (event) => {
+        event.preventDefault();
+        console.log(this.state);
+        var erros = ValidaErros(this.state);
+        if(erros.length > 0){
+            alert("Houve erro(s) no preechimento do formulário");
+            exibeMensagensDeErro(erros);
+            return;
+        }
+        else {
+            //alert("Nenhem Erro Encontrado, Indo para pagina de Confirmação");
+            exibeMensagensDeErro(erros);
+            this.setState({
+                page: "childSearchPage"
+            })
+        }
+
+        function ValidaErros (adulto){
+
+            var erros = [];
+
+            if (adulto.firstName.length === 0) {
+                erros.push("O Nome não pode estar em branco");
+            }
+            if (adulto.surName.length === 0) {
+                erros.push("O Sobrenome não pode estar em branco");
+            }
+            if (adulto.cpf.length === 0){
+                erros.push("O CPF não pode estar em branco");
+            }
+            if (adulto.birthday.length === 0) {
+                erros.push("A Data não pode estar em branco");
+            }
+            if (adulto.nacionality.length === 0) {
+                erros.push("A Nascinalidade não pode estar em branco");
+            }
+            if (adulto.file.length === 0) {
+                erros.push("Precisamos da sua foto");
+            }
+            if (adulto.phoneNumber.length === 0){
+                erros.push("O Telefone não pode estar em branco");
+            }
+            if (adulto.email.length === 0){
+                erros.push("O Email não pode estar em branco");
+            }
+            if (adulto.address.length === 0){
+                erros.push("O Endereço não pode estar em branco");
+            }
+            if (adulto.cep.length === 0){
+                erros.push("O CEP não pode estar em branco");
+            }
+            if (adulto.phoneNumber.length === 0){
+                erros.push("O Telefone não pode estar em branco");
+            }
+            return erros;
+
+        }
+
+        function exibeMensagensDeErro(erros){
+            var ul = document.querySelector("#mensagens-erro");
+            ul.innerHTML = "";
+
+            erros.forEach(function(erro){
+                var li = document.createElement("li");
+                li.textContent = erro;
+                ul.appendChild(li);
+            });
+        }
+    }
+
+    // FUNCOES RELACIONADAS A BUSCA DE CRIANÇAS - Fim
+
+    // Encaminha para a pagina confirma adulto 
+    ValidaAdulto = (event) => {
+
+        this.setState({
+            page: "ConfirmaCad"
+        })
     }
 
     //Bloco que muda o status para o atual do formulario.
@@ -125,77 +239,6 @@ class CadastroAdulto extends React.Component {
     }
 
 
-    /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO*/
-    ValidaAdulto = (event) => {
-        event.preventDefault();
-        console.log(this.state);
-        var erros = ValidaErros(this.state);
-        if(erros.length > 0){
-            alert("Houve erro(s) no preechimento do formulário");
-            exibeMensagensDeErro(erros);
-            return;
-        }
-        else {
-            //alert("Nenhem Erro Encontrado, Indo para pagina de Confirmação");
-            exibeMensagensDeErro(erros);
-            this.setState({
-                page: "ConfirmaCad"
-            })
-        }
-
-        function ValidaErros (adulto){
-
-            var erros = [];
-
-            if (adulto.firstName.length === 0) {
-                erros.push("O Nome não pode estar em branco");
-            }
-            if (adulto.surName.length === 0) {
-                erros.push("O Sobrenome não pode estar em branco");
-            }
-            if (adulto.cpf.length === 0){
-                erros.push("O CPF não pode estar em branco");
-            }
-            if (adulto.birthday.length === 0) {
-                erros.push("A Data não pode estar em branco");
-            }
-            if (adulto.nacionality.length === 0) {
-                erros.push("A Nascinalidade não pode estar em branco");
-            }
-            if (adulto.file.length === 0) {
-                erros.push("Precisamos da sua foto");
-            }
-            if (adulto.phoneNumber.length === 0){
-                erros.push("O Telefone não pode estar em branco");
-            }
-            if (adulto.email.length === 0){
-                erros.push("O Email não pode estar em branco");
-            }
-            if (adulto.address.length === 0){
-                erros.push("O Endereço não pode estar em branco");
-            }
-            if (adulto.cep.length === 0){
-                erros.push("O CEP não pode estar em branco");
-            }
-            if (adulto.phoneNumber.length === 0){
-                erros.push("O Telefone não pode estar em branco");
-            }
-            return erros;
-
-        }
-
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
-        }
-    }
-
     /*FUNCAO FAZ VOLTAR PARA FORMULARIO*/
     VoltaparaFormulario = (event) => {
         //alert("Voltando para pagina do Formulario");
@@ -238,7 +281,7 @@ class CadastroAdulto extends React.Component {
         })
     }
 
-    /*FUNCAO CADASTRA CRIANÇA*/
+    /*FUNCAO CADASTRA ADULTO*/
     CadastrarAdulto= (event) => {
         var formData = new FormData();
 
@@ -449,7 +492,7 @@ class CadastroAdulto extends React.Component {
                                 </div >
                                 <div className="text-center">
                                     <a className="btn btn-md botao" href="/">Cencelar</a>
-                                    <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaAdulto}>Avançar</button>
+                                    <button className="btn btn-md botao botaoAvançar" onClick={this.ChildSearch}>Avançar</button>
                                 </div>
                                 <div>
                                     <ul id="mensagens-erro" style={{color: "red"}}></ul>
@@ -460,6 +503,7 @@ class CadastroAdulto extends React.Component {
                 </div>
             )
         }
+
         else if (this.state.page === "ConfirmaCad"){
             var Nome = this.state.firstName + " " + this.state.surName;
             return(
@@ -485,7 +529,66 @@ class CadastroAdulto extends React.Component {
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarAdulto}>Adicinar Criança</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarAdulto}>Finalizar</button>
+                    </div>
+                </div>
+            )
+        }
+
+        else if (this.state.page === "childSearchPage") {
+            {/* Imprime a tabela com a busca das crianças*/ }
+            return (
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Cadastro </li>
+                            <li >Adulto </li>
+                        </ol >
+                    </div>
+                    <div className="graph-visual" >
+                        <div className="graph" >
+                            <h3 className="inner-tittle" > Buscar Criança</h3>
+                            <div className=" text-center">
+                                <input type="search" id="childSearch" name="childSearch" className="form-control" value={this.state.childSearch} onChange={this.ChangechildSearch} />
+                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
+                            </div>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div className="graph" >
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th >Nome</th>
+                                        <th >Idade</th>
+                                        <th >RG</th>
+                                        <th className="text-center"> Selecionar </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {this.state.list.map((findChild) => {
+                                        return (
+                                            <tr key={findChild._id}>
+                                                <th scope="row">{findChild._id}</th>
+                                                <td > {findChild.name.firstName} </td>
+                                                <td >{findChild.birthday} </td>
+                                                <td >{findChild.number} </td>
+                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" /> </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+
+                            <div className="text-center">
+                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                                <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
+                                <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaAdulto}> Adicinar Criança </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )
