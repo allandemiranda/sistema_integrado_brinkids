@@ -35,7 +35,7 @@ class CadastroAdulto extends React.Component {
             observations: "",
             file: "",
             
-            // Estados Relacionado a busac de crianças
+            // Estados Relacionado a busca de crianças
             childSearch: '',
             list:[],
             erro:'',
@@ -287,7 +287,7 @@ class CadastroAdulto extends React.Component {
     }
 
     /*FUNCAO CADASTRA ADULTO*/
-    CadastrarAdulto= (event) => {
+    TheEnd= (event) => {
         var formData = new FormData();
 
         formData.append('file', this._dataURItoBlob(this.imageBase64))
@@ -307,10 +307,16 @@ class CadastroAdulto extends React.Component {
         formData.append('cep', String(this.state.cep))
         formData.append('observations', String(this.state.observations))
 
+        formData.append('id',String(this.findChild._id))
+        formData.append('nome_findchild',String(this.findChild.name.firstName))
+        formData.append('birthday_findchild',String(this.findChild.birthday))
+        formData.append('number_findchild',String(this.findChild.number))
+        formData.append('kinship_findchild',String(this.findChild.kinship))
+
         axios.post('/adult', formData)
         .then(function (response) {
             console.log(response)
-            //alert("Cadastro Finalizado")
+            alert("Cadastro Finalizado")
             window.location.href = '/';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
@@ -336,11 +342,6 @@ class CadastroAdulto extends React.Component {
             file: imageSrc
         })
     };
-
-    /* Função responsável por pegar os dados e enviar para o BACK (requisição) */
-    TheEnd(event){
-
-    }
 
     
     render() {
@@ -560,7 +561,7 @@ class CadastroAdulto extends React.Component {
                                                     <td >{findChild.birthday} </td>
                                                     <td >{findChild.number} </td>
                                                     <td className="text-center">
-                                                        <select id="sexo" name="sexo" className="form-control optionFomulario" value={this.state.kinship} onChange={this.Changekinship} >
+                                                        <select id="sexo" name="sexo" className="form-control optionFomulario" value={this.state.findChild.kinship} onChange={this.Changekinship} >
                                                             <option value="others" > Outros </option>
                                                             <option value="father" > Pai </option>
                                                             <option value="mother" > Mãe </option>

@@ -40,15 +40,6 @@ constructor () {
         type: 'get',
         statusCode: { //A partir do status da resposta, ele executa uma função
           200: function(data) {
-            /** Gabriel: Agora a autenticação fica por token. Se tudo der certo
-             * e entrar no status 200, será enviado um JSON no seguinte formato:
-             * {
-             *  "token": "<Aqui estará o token>"
-             * }
-             * Para acessar o valor, use o seguinte exemplo para acessar o valor: data['token']
-             * Coloquei logo abaixo para visualizar o valor apenas por motivos de ver funcionando
-             * Vai vir um texto estranho pra caramba mas não se preocupe, esse é o token mesmo
-             */
             alert(data['token'])
             console.log(data['token'])
             this.setState({ loading: true });
