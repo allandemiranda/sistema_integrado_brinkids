@@ -40,6 +40,7 @@ class CadastroAdulto extends React.Component {
             list:[],
             erro:'',
             achado: false,
+            kinship:'',
         } 
      
         this.ChangeName = this.ChangeName.bind(this);
@@ -57,6 +58,7 @@ class CadastroAdulto extends React.Component {
         this.ChangeCity = this.ChangeCity.bind(this);
         this.ChangeCep = this.ChangeCep.bind(this);
         this.ChangeObs = this.ChangeObs.bind(this);
+        this.Changekinship = this.Changekinship.bind(this);
         
         //Relacionado a busca de crianças
         this.ChangechildSearch = this.ChangechildSearch.bind(this);
@@ -215,6 +217,9 @@ class CadastroAdulto extends React.Component {
     ChangeObs(event){
         this.setState({observations: event.target.value});
     }
+    Changekinship(event){
+        this.setState({kinship: event.target.value})
+    }
 
 
 
@@ -332,7 +337,12 @@ class CadastroAdulto extends React.Component {
         })
     };
 
+    /* Função responsável por pegar os dados e enviar para o BACK (requisição) */
+    TheEnd(event){
 
+    }
+
+    
     render() {
         if(this.state.page === "FormularioCad") {
             return (
@@ -525,11 +535,52 @@ class CadastroAdulto extends React.Component {
                         Observation = {this.state.observations}
                         File = {this.state.file}
                     />
+
+                     <div className="graph-visual" >
+                    <br></br>
+                    <br></br>
+                    <div className="graph" >
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th >Nome</th>
+                                    <th >Idade</th>
+                                    <th >RG</th>
+                                    <th className="text-center"> Parentesco </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.list.map((findChild) => {
+                                        if (this.state.value === true) {
+                                            return (
+                                                <tr key={findChild._id}>
+                                                    <th scope="row">{findChild._id}</th>
+                                                    <td > {findChild.name.firstName} </td>
+                                                    <td >{findChild.birthday} </td>
+                                                    <td >{findChild.number} </td>
+                                                    <td className="text-center">
+                                                        <select id="sexo" name="sexo" className="form-control optionFomulario" value={this.state.kinship} onChange={this.Changekinship} >
+                                                            <option value="others" > Outros </option>
+                                                            <option value="father" > Pai </option>
+                                                            <option value="mother" > Mãe </option>
+                                                            <option value="grand"  > Avô/Avó </option>
+                                                            <option value="uncle"  > Tio/Tia </option>
+                                                        </select >
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <br></br>
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarAdulto}>Finalizar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.TheEnd}>Finalizar</button>
                     </div>
                 </div>
             )

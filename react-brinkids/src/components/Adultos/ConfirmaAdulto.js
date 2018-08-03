@@ -149,7 +149,7 @@ class ConfirmaAdulto extends React.Component {
                         </div>
                         <br></br>
                     </div >
-                </div>
+                </div>            
             </div>
         )
     }
