@@ -366,7 +366,7 @@ class FormularioCadFunc extends React.Component {
                                 <div className = "form-group" >
                                     <div className = "row">
                                         <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"E-Mail: "} type = {"text"} id = {"email"} name= {"email"} Class = {"form-control"} value={this.state.email}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"EstadoCivil: "} type = {"text"} id = {"EstadoCivil"} name= {"EstadoCivil"} Class = {"form-control"} value={this.state.scholl} onChange={this.Changescholl}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Escolaridade: "} type = {"text"} id = {"scholl"} name= {"scholl"} Class = {"form-control"} value={this.state.scholl} onChange={this.Changescholl}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
