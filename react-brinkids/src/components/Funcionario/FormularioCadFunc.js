@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
+import ConfirmaFunc from './ConfirmaFunc.js'
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -14,7 +15,7 @@ class FormularioCadFunc extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            page: "FormularioCad",
+            page: "ConfirmaCad",
             //PARTE PESSOAL
             firstName: "",
             surName: "",
@@ -323,9 +324,63 @@ class FormularioCadFunc extends React.Component {
             });
         }
     }
-
-
-
+        /*FUNCAO FAZ VOLTAR PARA FORMULARIO*/
+        VoltaparaFormulario = (event) => {
+            this.setState({
+                page: "FormularioCad"
+            })
+        }
+        /*FUNCAO NOVO CADASTRO*/
+        NovoCadastro = (event) => {
+            // var formData = new FormData();
+    
+            // formData.append('file', this._dataURItoBlob(this.imageBase64))
+            // formData.append('firstName', String(this.state.firstName))
+            // formData.append('surName', String(this.state.surName))
+            // formData.append('number', String(this.state.number))
+            // formData.append('birthday', String(this.state.birthday))
+            // formData.append('nacionality', String(this.state.nacionality))
+            // formData.append('sexuality', String(this.state.sexuality))
+            // formData.append('restrictions', String(this.state.restrictions))
+            // formData.append('observations', String(this.state.observations))
+    
+            // axios.post('/crianca', formData)
+            // .then(function (response) {
+            //     console.log(response)
+            //     window.location.href = '/crianca';
+            // }).catch(function (error) {
+            //     console.log(error)//LOG DE ERRO
+            //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            //     console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            //     alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            // })
+        }
+    
+        /*FUNCAO CADASTRA CRIANÇA*/
+        CadastrarCrianca = (event) => {
+            // var formData = new FormData();
+    
+            // formData.append('file', this._dataURItoBlob(this.imageBase64))
+            // formData.append('firstName', String(this.state.firstName))
+            // formData.append('surName', String(this.state.surName))
+            // formData.append('number', String(this.state.number))
+            // formData.append('birthday', String(this.state.birthday))
+            // formData.append('nacionality', String(this.state.nacionality))
+            // formData.append('sexuality', String(this.state.sexuality))
+            // formData.append('restrictions', String(this.state.restrictions))
+            // formData.append('observations', String(this.state.observations))
+    
+            // axios.post('/crianca', formData)
+            // .then(function (response) {
+            //     console.log(response)
+            //     window.location.href = '/';
+            // }).catch(function (error) {
+            //     console.log(error)//LOG DE ERRO
+            //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            //     console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            //     alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            // })
+        }
 
     render() {
         if(this.state.page === "FormularioCad") {
@@ -417,9 +472,9 @@ class FormularioCadFunc extends React.Component {
                                 </div>
                                 <br></br>
                                 <div className = "row">
-                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Local de Emissão: "} type = {"text"} id = {"TLLE"} name= {"TLLE"} Class = {"form-control"} value={this.state.TZona} onChange={this.ChangeTZona}/>
-                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"UF: "} type = {"text"} id = {"TLUF"} name= {"TLUF"} Class = {"form-control"} value={this.state.TSecao} onChange={this.ChangeTSecao}/>
-                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data da Emissão: "} type = {"text"} id = {"TLDE"} name= {"TLDE"} Class = {"form-control"} value={this.state.TUF} onChange={this.ChangeTUF}/>
+                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Zona Eleitoral: "} type = {"text"} id = {"TLLE"} name= {"TLLE"} Class = {"form-control"} value={this.state.TZona} onChange={this.ChangeTZona}/>
+                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Seção Eleitorial: "} type = {"text"} id = {"TLUF"} name= {"TLUF"} Class = {"form-control"} value={this.state.TSecao} onChange={this.ChangeTSecao}/>
+                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"UF: "} type = {"text"} id = {"TLDE"} name= {"TLDE"} Class = {"form-control"} value={this.state.TUF} onChange={this.ChangeTUF}/>
                                 </div>
                             </div >
                             <br></br>
@@ -501,7 +556,75 @@ class FormularioCadFunc extends React.Component {
                 </div>
             )
         }
+        else if (this.state.page === "ConfirmaCad"){
+            var Nome = this.state.firstName + " " + this.state.surName;
+            return(
+                <div className = "container-fluid">
+                    <ConfirmaFunc
+                        Name= {Nome}
+                        Email = {this.state.email}
+                        DateAni = {this.state.birthday}
+                        Sexo = {this.state.sexuality}
+                        Nacionalidade = {this.state.nacionality}
+                        cpf = {this.state.cpf}
+                        EstadoC = {this.state.maritalStatus}
+                        Numero = {this.state.phoneNumber}
+                        Escola = {this.state.scholl}
+                        CidNasc = {this.state.cidadeNasc}
+                        UFNasc = {this.state.UFLNasc}
+                        Pai = {this.state.dad}
+                        Mae = {this.state.mom}
+                        Observacao = {this.state.observations}
+                        //Carteira de Trabalho
+                        CTNumber = {this.state.numberCT}
+                        CTSerie = {this.state.serieCT}
+                        CTPIS = {this.state.PIS}
+                        CTUF = {this.state.UFCT}
+                        CTData = {this.state.DataEmissao}
+                        CDLocal = {this.state.LocalEmissao}
+                        //Rg
+                        RGUF = {this.state.RGUF}
+                        RGData = {this.state.RGDateEmissao}
+                        RGLocal = {this.state.RGLEmissao}
+                        //Titulo de Eleitor
+                        TENumero = {this.state.TNumero}
+                        TEUF = {this.state.TUF}
+                        TEZona = {this.state.TZona}
+                        TESecao = {this.state.TSecao}
+                        //Certidao de rezervista
+                        CRNumero = {this.state.CRNumero}
+                        CRSerie = {this.state.CRSerie}
+                        CRCat = {this.state.CRCat}
+                        //Passaporte
+                        PNumero = {this.state.PNumero}
+                        PTipo = {this.state.PTipo}
+                        PPE = {this.state.PPemissor}
+                        PDataE = {this.state.PDEmissao}
+                        PDataV = {this.state.PDvalidade}
+                        //CNH
+                        CNReg = {this.state.CNHReg}
+                        CNCat = {this.state.CNHCat}
+                        CNLocal = {this.state.CNHLocal}
+                        CNDateE = {this.state.CNHDemissao}
+                        CNDataV = {this.state.CNHDval}
+                        CNObs = {this.state.CNHObs}
+                        //Funci
+                        FCA = {this.state.CargAtual}
+                        FDA = {this.state.DataAdmisao}
+                        
+                        Observacao = {this.state.observations}    
+                    />
+                    <br></br>
+                    <div className="text-center">
+                        <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarCrianca}>Finalizar</button>
+                    </div>
+                </div>
+            )
+        }
     }
+
 }
 
 export default FormularioCadFunc;
