@@ -22,8 +22,9 @@
   import TimePicker from 'react-bootstrap-time-picker';
   import '../../assets/style/font-awesome.css';
   import estilo from './styles/react-big-calendar.css';
+  import axios from 'axios';
 
-
+  console.log(events)
 
   const estilos = {
         
@@ -77,7 +78,7 @@
         Hora2:'0',
         Titulo:'',
         modalC:false,
-
+        datasRequisicao: [] // (Gabriel): criei essa variável para armazenar os dados que virão do servidor
 
       };
 
@@ -102,14 +103,27 @@
     componentWillMount() {
       Modal.setAppElement('body');
     }
-    
+
+    componentDidMount() { // (Gabriel): criei essa função para pegar os dados do servidor
+      axios.get('/calendar')
+        .then((response) => {
+          // (Gabriel): response é um objeto com todos os dados da requisição.
+          // Vem desde os dados das datas até status HTTP e por aí vai.
+          // O que deve ser renderizado é 'response.data'
+          this.setState({datasRequisicao: response.data.map((currentValue) => {
+            currentValue.start = new Date(currentValue.start)
+            currentValue.end = new Date(currentValue.end)
+          })
+          });
+        })
+        .catch((err) => console.log(err));
+    }
 
     onChange = CalendarioI => this.setState({ CalendarioI });
     onChange2 = CalendarioF => this.setState({CalendarioF});
     
     mudarHora = Hora => this.setState({Hora});
     mudarHora2 = Hora2 => this.setState({Hora2});
-    
 
     mudarTitulo(event){
 
@@ -152,6 +166,23 @@
     const HoraF =timeFromInt(this.state.Hora2);
     const match = HoraI.match(/([\w\*]+)/g);
     const match2 = HoraF.match(/([\w\*]+)/g);
+
+    // (Gabriel): Requisição para salvar as datas no servidor.
+    // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
+    // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
+    // const data = {
+    //   title: titulo,
+    //   start: new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),
+    //   end: new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),
+    //   type: "qualque",
+    //   color: "blue2",
+    //   associated: "Usuario"
+    // }
+
+    // Aqui está um exemplo da requisição e da resposta
+    // axios.post('/calendar', data)
+    //   .then((response) => console.log(response))
+    //   .catch((err) => console.log(err))
 
     events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
     this.setState({Titulo:''});

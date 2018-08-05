@@ -16,11 +16,11 @@ const calendarSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  opening: {
+  start: {
     type: Date,
     require: true,
   },
-  closing: {
+  end: {
     type: Date,
     require: true,
   },
