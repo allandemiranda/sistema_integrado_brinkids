@@ -57,6 +57,7 @@ const userAdultSchema = new mongoose.Schema({
   },
   phone: {
     type: Array,
+    of: String,
     required: true,
   },
   address: [addressSchema],

@@ -71,7 +71,7 @@ router.post('/', (req, res) => {
       }
 
       if (adultFound === null) {
-        const photoFile = req.files.fileField;
+        const photoFile = req.files.file;
         const date = req.body.birthday.split('/');
         const adultDate = new Date(date[2], date[1], date[0]);
 
