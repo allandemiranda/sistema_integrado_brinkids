@@ -103,7 +103,6 @@ router.post('/', (req, res) => {
 
         userAdult.create(data, (errAdult, adultResult) => {
           if (errAdult) {
-            console.log(errAdult);
             return res.sendStatus(500);
           }
           const photoNameComponents = photoFile.name.split('.');

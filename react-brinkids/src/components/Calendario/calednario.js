@@ -10,13 +10,13 @@
  import BigCalendar from 'react-big-calendar';
  import moment from 'moment';
  import 'moment/locale/pt-br';
- 
+
  import events from './events';
- 
+
  import DatePicker from 'react-date-picker';
  import Modal from 'react-modal';
  import './styles/DatePicker.css';
- 
+
 
  import { timeFromInt } from 'time-number';
  import TimePicker from 'react-bootstrap-time-picker';
@@ -24,10 +24,8 @@
  import estilo from './styles/react-big-calendar.css';
  import axios from 'axios';
 
- console.log(events)
-
  const estilos = {
-       
+
            float: "right",
    display: "inline-block" ,
    width: "45% ",
@@ -38,7 +36,7 @@
 
 
 
-       
+
  };
  const customStyles = {
    content : {
@@ -64,7 +62,7 @@
 
  BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
  var excluirInicial,excluirFinal;
- 
+
  class Calendar extends React.Component {
    constructor(props) {
      super(props);
@@ -90,11 +88,11 @@
      this.openModalC = this.openModalC.bind(this);
      this.afterOpenModalC = this.afterOpenModalC.bind(this);
      this.closeModalC = this.closeModalC.bind(this);
-     
-     
+
+
      this.mod = this.mod.bind(this);
      this.mod2 = this.mod2.bind(this);
-     
+
      this.mudarTitulo = this.mudarTitulo.bind(this);
      this.mudarModal = this.mudarModal.bind(this);
 
@@ -102,28 +100,26 @@
 
    }
 
-   componentWillMount() {
-     Modal.setAppElement('body');
-   }
-
-   componentDidMount() { // (Gabriel): criei essa função para pegar os dados do servidor
-     axios.get('/calendar')
-       .then((response) => {
-         // (Gabriel): response é um objeto com todos os dados da requisição.
-         // Vem desde os dados das datas até status HTTP e por aí vai.
-         // O que deve ser renderizado é 'response.data'
-         this.setState({datasRequisicao: response.data.map((currentValue) => {
-           currentValue.start = new Date(currentValue.start)
-           currentValue.end = new Date(currentValue.end)
-         })
-         });
-       })
-       .catch((err) => console.log(err));
+  componentWillMount() {
+    Modal.setAppElement('body');
+    axios.get('/calendar')
+      .then((response) => {
+        // (Gabriel): response é um objeto com todos os dados da requisição.
+        // Vem desde os dados das datas até status HTTP e por aí vai.
+        // O que deve ser renderizado é 'response.data'
+        response.data.map((currentValue) => {
+          currentValue.start = new Date(currentValue.start);
+          currentValue.end = new Date(currentValue.end);
+        })
+        console.log(response.data)
+        this.setState({datasRequisicao: response.data});
+      })
+      .catch((err) => console.log(err));
    }
 
    onChange = CalendarioI => this.setState({ CalendarioI });
    onChange2 = CalendarioF => this.setState({CalendarioF});
-   
+
    mudarHora = Hora => this.setState({Hora});
    mudarHora2 = Hora2 => this.setState({Hora2});
 
@@ -171,25 +167,35 @@
    const match = HoraI.match(/([\w\*]+)/g);
    const match2 = HoraF.match(/([\w\*]+)/g);
 
+
+
    // (Gabriel): Requisição para salvar as datas no servidor.
    // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
    // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
-   // const data = {
-   //   title: titulo,
-   //   start: new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),
-   //   end: new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),
-   //   type: "qualque",
-   //   color: "blue2",
-   //   associated: "Usuario"
-   // }
+   const data = {
+     title: titulo,
+     start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),
+     end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),
+     type: "qualque",
+     color: "blue2",
+     associated: "Usuario"
+   }
 
    // Aqui está um exemplo da requisição e da resposta
-   // axios.post('/calendar', data)
-   //   .then((response) => console.log(response))
-   //   .catch((err) => console.log(err))
+   axios.post('/calendar', data)
+    .then((response) => {
+      console.log(response.data)
+      response.data.start = new Date(response.data.start);
+      response.data.end = new Date(response.data.end);
+      this.state.datasRequisicao.push(response.data)
+      this.setState({datasRequisicao: this.state.datasRequisicao})
+    })
+    .catch((err) => console.log(err))
 
-   events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
-   
+   // console.log({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),desc:'blabla bla'})
+
+   // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
+
    this.closeModal();
 
  }
@@ -204,19 +210,19 @@
 
      if (events[data].start === excluirInicial && events[data].end === excluirFinal) {
        events.splice(data, 1);
-       
-       
+
+
      }
    }
    const HoraI = this.state.Hora;
    const HoraF = this.state.Hora2;
-   
+
    const match = HoraI.match(/([\w\*]+)/g);
    const match2 = HoraF.match(/([\w\*]+)/g);
 
    events.push({ title: titulo, start: new Date(Anoinicial, MesInicial, Diainicial, match[0], match[1], 0), end: new Date(Anofinal, Mesfinal, Diaifinal, match2[0], match2[1], 0), desc: 'blabla bla' });
-   
-   
+
+
    this.closeModalC();
 
 
@@ -266,25 +272,25 @@
      <div>
 
      <button className="modal1" type="button" onClick={this.openModal}>adicionar evento</button>
-     
+
      <Modal
      isOpen={this.state.modalC}
      onAfterOpen={this.afterOpenModalC}
      onRequestClose={this.closeModalC}
      style={customStyles}
      contentLabel="Example Modal2"
-     > 
+     >
      <h ref={subtitle => this.subtitle = subtitle}></h>
      <div className="glyphicon" style={iconelixeira} onClick={this.ExcluirEvento}>&#xe020;</div>
      <div className="fa"  style={{cursor: "pointer", float:"right"}} onClick={this.closeModalC}>&#xf00d;</div><br/><br/>
 
 
      <div>Titulo: <input type="text" className="titulo2" placeholder ="digite o titulo" value={this.state.Titulo} onChange={this.mudarTitulo}/><br/>
-     </div>  <br/> 
+     </div>  <br/>
      <div> De: <span>{this.state.Hora} ate {this.state.Hora2}</span></div><br/>
      <input type="button" className='botao1' value="salvar" onClick={this.mod2}/>
      </Modal>
-     
+
 
 
      <Modal
@@ -300,11 +306,11 @@
 
 
 
-     
-     
 
 
-     
+
+
+
      <DatePicker
      dateFormat="YYYY/MM/DD"
      onChange={this.onChange}
@@ -312,7 +318,7 @@
      />
 
      <TimePicker style={estilos} start="00:00" end="23:30" value={this.state.Hora} onChange={this.mudarHora} step={30} format={24}/>
-    
+
 
      <DatePicker
      selected={this.state.startDate}
@@ -326,7 +332,7 @@
      />
 
 
-     
+
 
      <TimePicker style={estilos} start="00:00" end="23:30" step={30} format={24} value={this.state.Hora2} onChange={this.mudarHora2}/>
 
@@ -343,7 +349,7 @@
 
      <BigCalendar
      selectable
-     events={events}
+     events={this.state.datasRequisicao}
      defaultView={BigCalendar.Views.WEEK}
      scrollToTime={new Date(1970, 1, 1, 6)}
      defaultDate={new Date()}

@@ -30,11 +30,14 @@ function checkAge(actualDate, childDate) {
   return childDate > compareDate;
 }
 
-// Resgata todas as crianças
+// Resgata crianças de acordo com o parâmetro 'search' passado na URL
 router.get('/filter/:search', (req, res) => {
   const search = req.params.search.split(' ');
   let query;
 
+  // Se vc digitar apenas um nome grande, então a pesquisa vai ser apenas no
+  // primeiro nome(Exemplo: Jeremias. Tem 8 letras ao menos)
+  // Caso contrário, faz uma pesquisa no nome e no sobrenome
   if (search.length === 1) {
     const firstName = search[0];
     query = child.find({ 'name.firstName': new RegExp(firstName) });

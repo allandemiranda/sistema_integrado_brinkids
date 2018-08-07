@@ -5,9 +5,9 @@ const calendar = require('../models/calendar-models');
 
 const router = express.Router();
 
-function teste(err, res) {
-  console.log(err)
-  return res.sendStatus(500)
+function showErr(err, res) {
+  console.log(err);
+  return res.sendStatus(500);
 }
 
 /** Esta rota envia todos os documentos referentes a calendario */
@@ -31,13 +31,16 @@ router.post('/', (req, res) => {
       associated: req.body.associated,
     };
 
-    calendar.create(
+    // Parâmetro 'calendarResult' da arrow function foi omitido por nunca ser usado
+    // deixando apenas 'err'
+    // Era assim: (err, childResult) => ...
+    return calendar.create(
       data,
-      (err, calendarResult) => (err ? teste(err, res) : res.sendStatus(201)),
+      (err, childResult) => (err ? showErr(err, res) : res.status(201).json(childResult)),
     );
-  } else {
-    return res.sendStatus(400);
   }
+
+  return res.sendStatus(400);
 });
 
 module.exports = router;
