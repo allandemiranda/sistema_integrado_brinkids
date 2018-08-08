@@ -114,6 +114,7 @@ class ConfirmaFuncionario extends React.Component {
                             </div>
                         </div>
                     </div >
+                    <br></br>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Carteira de Trabalho </h3>
                         <div className="row">
@@ -159,6 +160,7 @@ class ConfirmaFuncionario extends React.Component {
                             </div>
                         </div>
                     </div >
+                    <br></br>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > RG </h3>
                         <div className="row">
@@ -183,6 +185,7 @@ class ConfirmaFuncionario extends React.Component {
                             </div>
                         </div>
                     </div >
+                    <br></br>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Titulo de Eleitor </h3>
                         <div className="row">
@@ -193,6 +196,7 @@ class ConfirmaFuncionario extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <br></br>
                         <div className="row">
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
@@ -214,6 +218,7 @@ class ConfirmaFuncionario extends React.Component {
                             </div>
                         </div>
                     </div >
+                    <br></br>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Certidão de Rezervista </h3>
                         <div className="row">
@@ -237,6 +242,7 @@ class ConfirmaFuncionario extends React.Component {
                             </div>
                         </div>
                     </div >
+                    <br></br>
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Passaporte </h3>
                         <div className="row">
@@ -253,6 +259,7 @@ class ConfirmaFuncionario extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <br></br>
                         <div className="row">
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
@@ -292,6 +299,7 @@ class ConfirmaFuncionario extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <br></br>
                         <div className="row">
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
@@ -314,6 +322,7 @@ class ConfirmaFuncionario extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <br></br>
                         <div className="row">
                             <div className="col-md-12 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>

@@ -10,7 +10,6 @@ import './css/Cadastro_Funcionario.css';
 import './css/style.css';
 
 
-
 class FormularioCadFunc extends React.Component {
     constructor(props){
         super(props)
@@ -37,8 +36,8 @@ class FormularioCadFunc extends React.Component {
             serieCT: "",
             UFCT: "",
             PIS: "",
-            DataEmissao: "",
-            LocalEmissao: "",
+            DataEmissaoCT: "",
+            LocalEmissaoCT: "",
             //RG
             RGLEmissao: "",
             RGUF: "",
@@ -138,9 +137,9 @@ class FormularioCadFunc extends React.Component {
 
     ChangePIS(event){this.setState({PIS: event.target.value});}    
 
-    ChangeDataEmissao(event){this.setState({DataEmissao: event.target.value});}
+    ChangeDataEmissao(event){this.setState({DataEmissaoCT: event.target.value});}
 
-    ChangeLocalEmissao(event){this.setState({LocalEmissao: event.target.value});}
+    ChangeLocalEmissao(event){this.setState({LocalEmissaoCT: event.target.value});}
 
     ChangeRGLEmissao(event){this.setState({RGLmissao: event.target.value});}
 
@@ -190,44 +189,44 @@ class FormularioCadFunc extends React.Component {
 
     ChangeObs(event){this.setState({observations: event.target.value});}
 
-
-    
-
     componentWillMount(){
         //PARA TESTES
-        this.setState({firstName: "JOAO"});
-        this.setState({surName: "FIRMINO"});
-        this.setState({cpf: "000.000.000-00"});
-        this.setState({birthday: "2005-12-09"});
-        this.setState({nacionality: "Brasileira"});
-        this.setState({maritalStatus: "Solteiro"});
-        this.setState({phoneNumber: "00000.0000" });
-        this.setState({email: "teste@gmail.com.br"});
-        this.setState({sexuality: "Masculino"});
-        
-        // axios.get("/adult/filter/"+this.props.Name)
-        // .then(function (response) {
-        //     console.log(response.data)
-        //     if (isEmpty(response.data)) {
-        //         alert("Nenhum adulto foi encontrado com essa busca")
-        //     } 
-        //     else {
-        //         this.setState({firstName: response.data.name.firstName});
-        //         this.setState({surName: response.data.name.surName});
-        //         this.setState({cpf: response.data.cpf});
-        //         this.setState({birthday: response.data.birthday});
-        //         this.setState({nacionality: response.data.nacionality});
-        //         this.setState({maritalStatus: response.data.maritalStatus});
-        //         this.setState({phoneNumber: response.data.phoneNumber});
-        //         this.setState({email: response.data.email});
-        //         this.setState({sexuality: response.data.sexuality});
-        //     }
-        // }).catch(function (error) {
-        //     console.log(error)//LOG DE ERRO
-        //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-        //     console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-        //     alert("Erro ao pegar o adulto escolhido: " + error.response.status + " --> " + error.response.data);
-        // })
+        // this.setState({firstName: "JOAO"});
+        // this.setState({surName: "FIRMINO"});
+        // this.setState({cpf: "000.000.000-00"});
+        // this.setState({birthday: "2005-12-09"});
+        // this.setState({nacionality: "Brasileira"});
+        // this.setState({maritalStatus: "Solteiro"});
+        // this.setState({phoneNumber: "00000.0000" });
+        // this.setState({email: "teste@gmail.com.br"});
+        // this.setState({sexuality: "Masculino"});
+        axios.get("/adult/filter/"+this.props.Name)
+        .then(function (response) {
+            console.log(response.data)
+            if (isEmpty(response.data)) {
+                alert("Nenhum adulto foi encontrado com essa busca")
+            } 
+            else {
+                this.setState({firstName: response.data.name.firstName});
+                this.setState({surName: response.data.name.surName});
+                this.setState({cpf: response.data.cpf});
+                this.setState({birthday: response.data.birthday});
+                this.setState({nacionality: response.data.nacionality});
+                this.setState({maritalStatus: response.data.maritalStatus});
+                this.setState({phoneNumber: response.data.phoneNumber});
+                this.setState({email: response.data.email});
+                this.setState({sexuality: response.data.sexuality});
+            }
+        }).catch(function (error) {
+            console.log(error)//LOG DE ERRO
+            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            alert("Erro ao pegar o adulto escolhido: " + error.response.status + " --> " + error.response.data);
+        })
+
+        function isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
     }
 
     //Função que Valida o Funcionario
@@ -324,63 +323,159 @@ class FormularioCadFunc extends React.Component {
             });
         }
     }
-        /*FUNCAO FAZ VOLTAR PARA FORMULARIO*/
-        VoltaparaFormulario = (event) => {
-            this.setState({
-                page: "FormularioCad"
-            })
-        }
-        /*FUNCAO NOVO CADASTRO*/
-        NovoCadastro = (event) => {
-            // var formData = new FormData();
     
-            // formData.append('file', this._dataURItoBlob(this.imageBase64))
-            // formData.append('firstName', String(this.state.firstName))
-            // formData.append('surName', String(this.state.surName))
-            // formData.append('number', String(this.state.number))
-            // formData.append('birthday', String(this.state.birthday))
-            // formData.append('nacionality', String(this.state.nacionality))
-            // formData.append('sexuality', String(this.state.sexuality))
-            // formData.append('restrictions', String(this.state.restrictions))
-            // formData.append('observations', String(this.state.observations))
+    /*FUNCAO FAZ VOLTAR PARA FORMULARIO*/
+    VoltaparaFormulario = (event) => {
+        this.setState({
+            page: "FormularioCad"
+        })
+    }
     
-            // axios.post('/crianca', formData)
-            // .then(function (response) {
-            //     console.log(response)
-            //     window.location.href = '/crianca';
-            // }).catch(function (error) {
-            //     console.log(error)//LOG DE ERRO
-            //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            //     console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            //     alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            // })
-        }
+    /*FUNCAO NOVO CADASTRO*/
+    NovoCadastro = (event) => {
+        var formData = new FormData();
+
+        formData.append('gender', String(this.state.sexuality))
+        formData.append('education', String(this.state.scholl))
+        formData.append('fatherName', String(this.state.dad))
+        formData.append('motherName', String(this.state.mom))
+        formData.append('city', String(this.state.cidadeNasc))
+        formData.append('state', String(this.state.UFLNasc))
+            
+        //Carteira de TRabalho
+        formData.append('number', String(this.state.numberCT))
+        formData.append('series', String(this.state.serieCT))
+        formData.append('state', String(this.state.UFCT))
+        formData.append('PIS_PASEP', String(this.state.PIS))
+        formData.append('dateIssue', String(this.state.DataEmissaoCT))
+        formData.append('placeIssue', String(this.state.LocalEmissaoCT))
+            
+        //RG
+        formData.append('issuingBody', String(this.state.RGLEmissao))
+        formData.append('state', String(this.state.RGUF))
+        formData.append('dateIssue', String(this.state.RGDateEmissao))
+            
+        //Titulo de Eleitor
+        formData.append('number', String(this.state.TNumero))
+        formData.append('zone', String(this.state.TZona))
+        formData.append('section', String(this.state.TSecao))
+        formData.append('state', String(this.state.TUF))
+            
+        //Titulo de Rezervista
+        formData.append('number', String(this.state.CRNumero))
+        formData.append('series', String(this.state.CRSerie))
+        formData.append('category', String(this.state.CRCat))
+
+        //Passaporte
+        formData.append('number', String(this.state.PNumero))
+        formData.append('type', String(this.state.PTipo))
+        formData.append('issuingCountry', String(this.state.PPemissor))
+        formData.append('dateIssue', String(this.state.PDemissao))
+        formData.append('expirationDate', String(this.state.PDvalidade))
+
+        //CNH
+        formData.append('record', String(this.state.CNHReg))
+        formData.append('category', String(this.state.CNHCat))
+        formData.append('expirationDate', String(this.state.CNHDval))
+        formData.append('comments', String(this.state.CNHObs))
+        formData.append('placeIssue', String(this.state.CNHLocal))
+        formData.append('dateIssue', String(this.state.CNHDemissao))
+            
+        //Funcionario
+        formData.append('officialPosition', String(this.state.CargAtual))
+        formData.append('admissionDate', String(this.state.DataAdmisao))
+        formData.append('resignationDate', String(this.state.DataAdmisao))
+        formData.append('reasonResignation', String(this.state.DataAdmisao))
+        formData.append('record', String(this.state.DataAdmisao))
+        formData.append('state', String(this.state.DataAdmisao))
+
+        //OBS
+        formData.append('observations', String(this.state.observations))
     
-        /*FUNCAO CADASTRA CRIANÇA*/
-        CadastrarCrianca = (event) => {
-            // var formData = new FormData();
+        axios.post('/employees', formData)
+        .then(function (response) {
+            console.log(response)
+            window.location.href = '/funcionario';
+        }).catch(function (error) {
+            console.log(error)//LOG DE ERRO
+            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+        })
+    }
     
-            // formData.append('file', this._dataURItoBlob(this.imageBase64))
-            // formData.append('firstName', String(this.state.firstName))
-            // formData.append('surName', String(this.state.surName))
-            // formData.append('number', String(this.state.number))
-            // formData.append('birthday', String(this.state.birthday))
-            // formData.append('nacionality', String(this.state.nacionality))
-            // formData.append('sexuality', String(this.state.sexuality))
-            // formData.append('restrictions', String(this.state.restrictions))
-            // formData.append('observations', String(this.state.observations))
-    
-            // axios.post('/crianca', formData)
-            // .then(function (response) {
-            //     console.log(response)
-            //     window.location.href = '/';
-            // }).catch(function (error) {
-            //     console.log(error)//LOG DE ERRO
-            //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            //     console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            //     alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            // })
-        }
+    /*FUNCAO CADASTRA CRIANÇA*/
+    CadastrarFunc = (event) => {
+        var formData = new FormData();
+
+        formData.append('gender', String(this.state.sexuality))
+        formData.append('education', String(this.state.scholl))
+        formData.append('fatherName', String(this.state.dad))
+        formData.append('motherName', String(this.state.mom))
+        formData.append('city', String(this.state.cidadeNasc))
+        formData.append('state', String(this.state.UFLNasc))
+            
+        //Carteira de TRabalho
+        formData.append('number', String(this.state.numberCT))
+        formData.append('series', String(this.state.serieCT))
+        formData.append('state', String(this.state.UFCT))
+        formData.append('PIS_PASEP', String(this.state.PIS))
+        formData.append('dateIssue', String(this.state.DataEmissaoCT))
+        formData.append('placeIssue', String(this.state.LocalEmissaoCT))
+            
+        //RG
+        formData.append('issuingBody', String(this.state.RGLEmissao))
+        formData.append('state', String(this.state.RGUF))
+        formData.append('dateIssue', String(this.state.RGDateEmissao))
+            
+        //Titulo de Eleitor
+        formData.append('number', String(this.state.TNumero))
+        formData.append('zone', String(this.state.TZona))
+        formData.append('section', String(this.state.TSecao))
+        formData.append('state', String(this.state.TUF))
+            
+        //Titulo de Rezervista
+        formData.append('number', String(this.state.CRNumero))
+        formData.append('series', String(this.state.CRSerie))
+        formData.append('category', String(this.state.CRCat))
+
+        //Passaporte
+        formData.append('number', String(this.state.PNumero))
+        formData.append('type', String(this.state.PTipo))
+        formData.append('issuingCountry', String(this.state.PPemissor))
+        formData.append('dateIssue', String(this.state.PDemissao))
+        formData.append('expirationDate', String(this.state.PDvalidade))
+
+        //CNH
+        formData.append('record', String(this.state.CNHReg))
+        formData.append('category', String(this.state.CNHCat))
+        formData.append('expirationDate', String(this.state.CNHDval))
+        formData.append('comments', String(this.state.CNHObs))
+        formData.append('placeIssue', String(this.state.CNHLocal))
+        formData.append('dateIssue', String(this.state.CNHDemissao))
+            
+        //Funcionario
+        formData.append('officialPosition', String(this.state.CargAtual))
+        formData.append('admissionDate', String(this.state.DataAdmisao))
+        formData.append('resignationDate', String(this.state.DataAdmisao))
+        formData.append('reasonResignation', String(this.state.DataAdmisao))
+        formData.append('record', String(this.state.DataAdmisao))
+        formData.append('state', String(this.state.DataAdmisao))
+
+        //OBS
+        formData.append('observations', String(this.state.observations))
+
+        axios.post('/employees', formData)
+        .then(function (response) {
+            console.log(response)            
+            window.location.href = '/';
+        }).catch(function (error) {
+            console.log(error)//LOG DE ERRO
+            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+        })
+    }
 
     render() {
         if(this.state.page === "FormularioCad") {
@@ -441,7 +536,7 @@ class FormularioCadFunc extends React.Component {
                             <div className = "graph" >
                                 <h3 className = "inner-tittle" > Carteira de Trabalho </h3>
                                 <div className = "row">
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Número: "} type = {"text"} id = {"NumberCT"} name= {"NumberCT"} Class = {"form-control"} value={this.state.numberCTserieCT} onChange={this.ChangeNumberCT}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Número: "} type = {"text"} id = {"NumberCT"} name= {"NumberCT"} Class = {"form-control"} value={this.state.numberCT} onChange={this.ChangeNumberCT}/>
                                     <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Série: "} type = {"text"} id = {"SerieCT"} name= {"SerieCT"} Class = {"form-control"} value={this.state.serieCT} onChange={this.ChangeSerieCT}/>
                                 </div>
                                 <br></br>
@@ -451,8 +546,8 @@ class FormularioCadFunc extends React.Component {
                                 </div>
                                 <br></br>
                                 <div className = "row">
-                                    <TypesInput cod = {1}  ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data da Emissão: "} type = {"date"} id = {"CTDE"} name= {"CTDE"} Class = {"form-control"} value={this.state.DataEmissao} onChange={this.ChangeDataEmissao}/>
-                                    <TypesInput cod = {1}  ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Local da Emissão: "} type = {"text"} id = {"CTLE"} name= {"CTLE"} Class = {"form-control"} value={this.state.LocalEmissao} onChange={this.ChangeLocalEmissao}/>
+                                    <TypesInput cod = {1}  ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data da Emissão: "} type = {"date"} id = {"CTDE"} name= {"CTDE"} Class = {"form-control"} value={this.state.DataEmissaoCT} onChange={this.ChangeDataEmissao}/>
+                                    <TypesInput cod = {1}  ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Local da Emissão: "} type = {"text"} id = {"CTLE"} name= {"CTLE"} Class = {"form-control"} value={this.state.LocalEmissaoCT} onChange={this.ChangeLocalEmissao}/>
                                 </div>
                             </div >
                             <br></br>
@@ -580,8 +675,8 @@ class FormularioCadFunc extends React.Component {
                         CTSerie = {this.state.serieCT}
                         CTPIS = {this.state.PIS}
                         CTUF = {this.state.UFCT}
-                        CTData = {this.state.DataEmissao}
-                        CDLocal = {this.state.LocalEmissao}
+                        CTData = {this.state.DataEmissaoCT}
+                        CDLocal = {this.state.LocalEmissaoCT}
                         //Rg
                         RGUF = {this.state.RGUF}
                         RGData = {this.state.RGDateEmissao}
@@ -618,7 +713,7 @@ class FormularioCadFunc extends React.Component {
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarCrianca}>Finalizar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarFunc}>Finalizar</button>
                     </div>
                 </div>
             )
