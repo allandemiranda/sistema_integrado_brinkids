@@ -3,7 +3,6 @@
  * Este arquivo será responsável por criar as rotas relacionadas as crianças
  */
 
-const fs = require('fs');
 const express = require('express');
 const child = require('../models/child-models');
 const config = require('../config');
@@ -140,37 +139,5 @@ router.post('/', (req, res) => {
     return res.sendStatus(400);
   }
 });
-
-// Rota preparada para fazer as alterações
-// Ainda a definir como deve funcionar de maneira robusta
-router.put('/', function (req, res) {
-  if (req.body.identifier && req.body.restrictions) {
-    child.findById(req.body.identifier, function (err, childResult) {
-      if (err) {
-        return res.sendStatus(500)
-      }
-
-      childResult.set({restrictions: req.body.restrictions})
-      return res.sendStatus(200)
-    })
-  } else {
-    return res.sendStatus(400)
-  }
-})
-
-// Deleta crianças pelo seu identificador
-router.delete('/', function (req, res) {
-  if (req.body.identifier) {
-    child.deleteOne({_id: req.body.identifier}, function (err) {
-      if (err) {
-        return res.sendStatus(500)
-      }
-
-      fs.unlink(config.pathPublic() + config.pathChild + req.body.identifier + '.png', function (err) {
-        return err ? res.sendStatus(500) : res.sendStatus(200)
-      })
-    })
-  }
-})
 
 module.exports = router;

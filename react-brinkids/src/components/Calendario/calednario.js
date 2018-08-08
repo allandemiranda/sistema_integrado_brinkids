@@ -75,6 +75,7 @@
        Hora: '0',
        Hora2:'0',
        Titulo:'',
+       identifier: "", // (Gabriel): Criei essa variável para ajudar na requisição de alteração de datas
        modalC:false,
        datasRequisicao: [] // (Gabriel): criei essa variável para armazenar os dados que virão do servidor
 
@@ -111,7 +112,6 @@
           currentValue.start = new Date(currentValue.start);
           currentValue.end = new Date(currentValue.end);
         })
-        console.log(response.data)
         this.setState({datasRequisicao: response.data});
       })
       .catch((err) => console.log(err));
@@ -174,7 +174,7 @@
    // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
    const data = {
      title: titulo,
-     start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),
+     start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(), // (Gabriel): Necessário enviar as data no formato de texto
      end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),
      type: "qualque",
      color: "blue2",
@@ -184,8 +184,7 @@
    // Aqui está um exemplo da requisição e da resposta
    axios.post('/calendar', data)
     .then((response) => {
-      console.log(response.data)
-      response.data.start = new Date(response.data.start);
+      response.data.start = new Date(response.data.start); // (Gabriel): Necessário modificar as datas para criar um objeto 'Date' já que vem do servidor como string
       response.data.end = new Date(response.data.end);
       this.state.datasRequisicao.push(response.data)
       this.setState({datasRequisicao: this.state.datasRequisicao})
@@ -199,13 +198,16 @@
    this.closeModal();
 
  }
- mod2() {
+ mod2(event) {
 
    const titulo = this.state.Titulo;
    const Final = this.state.CalendarioF;
    const Inicial = this.state.CalendarioI;
+   const identifier = this.state.identifier; // (Gabriel): Aqui está o identificador
    const Anoinicial = Inicial.getFullYear(), MesInicial = Inicial.getMonth(), Diainicial = Inicial.getDate();
    const Anofinal = Final.getFullYear(), Mesfinal = Final.getMonth(), Diaifinal = Final.getDate();
+
+   // Não precisa mais desse for mas n irei deletar pra n causar algum problema
    for (var data in events) {
 
      if (events[data].start === excluirInicial && events[data].end === excluirFinal) {
@@ -220,10 +222,27 @@
    const match = HoraI.match(/([\w\*]+)/g);
    const match2 = HoraF.match(/([\w\*]+)/g);
 
+   const modifiedDate = { // (Gabriel): Aqui conterá todos os dados que se deseja alterar da data
+     title: titulo,
+     start: new Date(Anoinicial, MesInicial, Diainicial, match[0], match[1], 0).toString(), // (Gabriel): Necessário enviar as data no formato de texto
+     end: new Date(Anofinal, Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),
+   }
+
+   // (Gabriel): Requisição para alterar a data na url '/calendar/<identifier>' utilizando o método HTTP 'PUT'
+   axios.put(`calendar/${identifier}`, modifiedDate)
+    .then((response) => {
+      this.state.datasRequisicao.forEach((currentValue) => { // (Gabriel): Vai varrer atrás da data com o identificador para alterar seus valores
+        if (currentValue._id === identifier) { // (Gabriel): Se encontrar, altere o título, por exemplo
+          currentValue.title = titulo;
+        }
+      })
+      this.setState({datasRequisicao: this.state.datasRequisicao}) // (Gabriel): Renderize a alteração e só se tudo der certo feche o modal
+      this.closeModalC();
+    })
+    .catch((err) => console.log(err)); // (Gabriel): Caso tenha dado errado, exiba uma mensagem de erro
+
+   // Não precisa mais desse 'push' mas n irei deletar pra n causar algum problema
    events.push({ title: titulo, start: new Date(Anoinicial, MesInicial, Diainicial, match[0], match[1], 0), end: new Date(Anofinal, Mesfinal, Diaifinal, match2[0], match2[1], 0), desc: 'blabla bla' });
-
-
-   this.closeModalC();
 
 
 
@@ -234,10 +253,13 @@
    excluirFinal = event.end;
    const inicial = event.start.getHours() +':'+event.start.getMinutes();
    const final =event.end.getHours() +':'+event.end.getMinutes();
+   const identifier = event._id; // (Gabriel): Criei mais uma variável para colocar no estado e ajudar na requisição de modificar datas
+   // (Gabriel): A variável 'identifier' será usada para realizar a consulta no banco de dados pela data específica que estamos modificando
 
    this.setState({Titulo: event.title});
    this.setState({Hora2:final});
    this.setState({Hora:inicial});
+   this.setState({identifier: identifier}); // (Gabriel): Agora coloco ela no 'state'
    this.openModalC();
 
  }
@@ -245,6 +267,20 @@
 
  ExcluirEvento(event){
 
+  axios.delete(`/calendar/${this.state.identifier}`) // (Gabriel): Requisição para deletar a data na url '/calendar/<identifier>' utilizando o método HTTP 'DELETE'
+    .then(response => {
+      // (Gabriel): Se tudo der certo para deletar a data no banco de dados, então vamos deletar a data daqui do front
+      this.state.datasRequisicao.forEach((currentValue, index, array) => { // (Gabriel): Vai varrer a lista de datas atrás da data que é para deletar
+        if (currentValue._id === this.state.identifier) {// (Gabriel): Se encontrar a data que é para ser removida
+          delete array[index]; // (Gabriel): Então delete via notação 'lista[indice]'
+        }
+      })
+      this.setState({datasRequisicao: this.state.datasRequisicao});
+      this.closeModalC();
+    })
+    .catch(err => console.log(err));
+
+   // Não precisa mais desse for mas n irei deletar pra n causar algum problema
    for(var data in events ){
 
      if(events[data].start === excluirInicial && events[data].end === excluirFinal){
