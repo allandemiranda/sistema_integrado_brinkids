@@ -335,17 +335,23 @@ class ConfirmaFuncionario extends React.Component {
                     <div className = "graph" >
                         <h3 className = "inner-tittle" > Funcionario </h3>
                         <div className="row">
-                            <div className="col-md-6 col-sm-12">
+                            <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Cargo Atual: </b></h5>
                                     <p>{this.props.FCA}</p>
                                 </div>
                             </div>
-                            <div className="col-md-6 col-sm-12">
+                            <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Admissão: </b></h5>
                                     <p>{this.props.FDA}</p>
                                     <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                </div>
+                            </div>
+                            <div className="col-md-4 col-sm-12">
+                                <div className="graph" style = {{ padding:10 + "px"}}>
+                                    <h5 className = "ltTitulo"><b> Registro Interno: </b></h5>
+                                    <p>{this.props.FRI}</p>
                                 </div>
                             </div>
                         </div>

@@ -18,7 +18,7 @@ class CadastroFuncionario extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            page: "FormularioCadastro",
+            page: "BuscaAdulto",
             Name: "",
             CPF: "",
             Adulto: "",

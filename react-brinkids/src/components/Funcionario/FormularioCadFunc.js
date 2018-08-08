@@ -14,7 +14,7 @@ class FormularioCadFunc extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            page: "ConfirmaCad",
+            page: "FormularioCad",
             //PARTE PESSOAL
             firstName: "",
             surName: "",
@@ -67,6 +67,7 @@ class FormularioCadFunc extends React.Component {
             //Funcionario
             CargAtual: "",
             DataAdmisao: "",
+            RegInterno: "",
             //OBS
             observations: "",
         }
@@ -113,6 +114,7 @@ class FormularioCadFunc extends React.Component {
         //Funcionario
         this.ChangeCargAtual = this.ChangeCargAtual.bind(this);
         this.ChangeDataAdmisao = this.ChangeDataAdmisao.bind(this);
+        this.ChangeRegInterno = this.ChangeRegInterno.bind(this);
 
         this.ChangeObs = this.ChangeObs.bind(this);
         
@@ -187,7 +189,10 @@ class FormularioCadFunc extends React.Component {
 
     ChangeDataAdmisao(event){this.setState({DataAdmisao: event.target.value});}
 
+    ChangeRegInterno(event){this.setState({RegInterno: event.target.value});}
+
     ChangeObs(event){this.setState({observations: event.target.value});}
+    
 
     componentWillMount(){
         //PARA TESTES
@@ -200,6 +205,7 @@ class FormularioCadFunc extends React.Component {
         // this.setState({phoneNumber: "00000.0000" });
         // this.setState({email: "teste@gmail.com.br"});
         // this.setState({sexuality: "Masculino"});
+       
         axios.get("/adult/filter/"+this.props.Name)
         .then(function (response) {
             console.log(response.data)
@@ -276,10 +282,10 @@ class FormularioCadFunc extends React.Component {
             if (funcio.PIS.length === 0) {
                 erros.push("O PIS/PASEP da Carteira de Trabalho não pode ser em branco");
             }
-            if (funcio.DataEmissao.length === 0) {
+            if (funcio.DataEmissaoCT.length === 0) {
                 erros.push("A Data de Emissão da Carteira de Trabalho não pode ser em branco");
             }
-            if (funcio.LocalEmissao.length === 0) {
+            if (funcio.LocalEmissaoCT.length === 0) {
                 erros.push("O Local de Emissão da Carteira de Trabalho não pode ser em branco");
             }
             //RG
@@ -384,10 +390,7 @@ class FormularioCadFunc extends React.Component {
         //Funcionario
         formData.append('officialPosition', String(this.state.CargAtual))
         formData.append('admissionDate', String(this.state.DataAdmisao))
-        formData.append('resignationDate', String(this.state.DataAdmisao))
-        formData.append('reasonResignation', String(this.state.DataAdmisao))
-        formData.append('record', String(this.state.DataAdmisao))
-        formData.append('state', String(this.state.DataAdmisao))
+        formData.append('record', String(this.state.RegInterno))
 
         //OBS
         formData.append('observations', String(this.state.observations))
@@ -457,10 +460,7 @@ class FormularioCadFunc extends React.Component {
         //Funcionario
         formData.append('officialPosition', String(this.state.CargAtual))
         formData.append('admissionDate', String(this.state.DataAdmisao))
-        formData.append('resignationDate', String(this.state.DataAdmisao))
-        formData.append('reasonResignation', String(this.state.DataAdmisao))
-        formData.append('record', String(this.state.DataAdmisao))
-        formData.append('state', String(this.state.DataAdmisao))
+        formData.append('record', String(this.state.RegInterno))
 
         //OBS
         formData.append('observations', String(this.state.observations))
@@ -521,14 +521,14 @@ class FormularioCadFunc extends React.Component {
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Nome do Pai: "} type = {"text"} id = {"dad"} name= {"dad"} Class = {"form-control"} value={this.state.dad}  placeholder = {"*"} onChange={this.ChangeDad}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Nome da Mae: "} type = {"text"} id = {"mom"} name= {"mom"} Class = {"form-control"} value={this.state.mom} placeholder = {"*"} onChange={this.ChangeMom}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Nome do Pai: "} type = {"text"} id = {"dad"} name= {"dad"} Class = {"form-control"} value={this.state.dad}  onChange={this.ChangeDad}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Nome da Mae: "} type = {"text"} id = {"mom"} name= {"mom"} Class = {"form-control"} value={this.state.mom}  onChange={this.ChangeMom}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Cidade de Nascimento: "} type = {"text"} id = {"LN"} name= {"LN"} Class = {"form-control"} value={this.state.cidadeNasc} placeholder = {"*"} onChange={this.ChangeCDN}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"UF de Nascimento: "} type = {"text"} id = {"UFN"} name= {"UFN"} Class = {"form-control"} value={this.state.UFLNasc} placeholder = {"*"} onChange={this.ChangeUFN}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Cidade de Nascimento: "} type = {"text"} id = {"LN"} name= {"LN"} Class = {"form-control"} value={this.state.cidadeNasc} onChange={this.ChangeCDN}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"UF de Nascimento: "} type = {"text"} id = {"UFN"} name= {"UFN"} Class = {"form-control"} value={this.state.UFLNasc} onChange={this.ChangeUFN}/>
                                     </div>
                                 </div>
                             </div >
@@ -617,7 +617,7 @@ class FormularioCadFunc extends React.Component {
                             <div className = "graph" >
                                 <h3 className = "inner-tittle" > Funcionario </h3>
                                 <div className = "row">
-                                    <TypesInput cod = {3} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Cargo Atual:"} id = {"CargAtual"} name = {"CargAtual"} Class = {"form-control optionFomulario"} value={this.state.CargAtual} onChange={this.ChangeCargAtual}
+                                    <TypesInput cod = {3} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Cargo Atual:"} id = {"CargAtual"} name = {"CargAtual"} Class = {"form-control optionFomulario"} value={this.state.CargAtual} onChange={this.ChangeCargAtual}
                                         //VALORES QUE AS OPTIONS IRAM RECEBER, VAO DENTRO DO "valueOP" EM FORMA DE VETOR DE OBJETOS.
                                         valueOP = {[
                                             "Cuidador de Criança",
@@ -625,7 +625,8 @@ class FormularioCadFunc extends React.Component {
                                             "Limpador"
                                         ]}
                                     />
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Admissão:"} type = {"text"} id = {"DataAdmisao"} name= {"DataAdmisao"} Class = {"form-control"} value={this.state.DataAdmisao} onChange={this.ChangeDataAdmisao}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Admissão:"} type = {"text"} id = {"DataAdmisao"} name= {"DataAdmisao"} Class = {"form-control"} value={this.state.DataAdmisao} onChange={this.ChangeDataAdmisao}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Registro Interno:"} type = {"text"} id = {"RegInt"} name= {"RegInt"} Class = {"form-control"} value={this.state.RegInterno} onChange={this.ChangeRegInterno}/>
                                 </div>
                             </div >
                             <br></br>
@@ -706,6 +707,7 @@ class FormularioCadFunc extends React.Component {
                         //Funci
                         FCA = {this.state.CargAtual}
                         FDA = {this.state.DataAdmisao}
+                        FRI = {this.state.RegInterno}
                         
                         Observacao = {this.state.observations}    
                     />
