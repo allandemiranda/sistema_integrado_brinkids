@@ -49,6 +49,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  console.log(req.body);
   if (req.files
       && req.body.firstName
       && req.body.surName

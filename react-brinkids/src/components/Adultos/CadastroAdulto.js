@@ -38,6 +38,7 @@ class CadastroAdulto extends React.Component {
             // Estados Relacionado a busca de crianças
             childSearch: '',
             list:[],
+            confirmaCrianca: [],
             erro:'',
             achado: false,
             kinship:'',
@@ -294,24 +295,20 @@ class CadastroAdulto extends React.Component {
         formData.append('firstName', String(this.state.firstName))
         formData.append('surName', String(this.state.surName))
         formData.append('cpf', String(this.state.cpf))
-        formData.append('rg', String(this.state.rg))
+        formData.append('number', String(this.state.rg))
         formData.append('birthday', String(this.state.birthday))
         formData.append('nacionality', String(this.state.nacionality))
         formData.append('sexuality', String(this.state.sexuality))
-        formData.append('phoneNumber', String(this.state.phoneNumber))
+        formData.append('phone', String(this.state.phoneNumber))
         formData.append('maritalStatus', String(this.state.maritalStatus))
         formData.append('email', String(this.state.email))
-        formData.append('address', String(this.state.address))
-        formData.append('neighborhood', String(this.state.neighborhood))
+        formData.append('street', String(this.state.address))
+        formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
         formData.append('cep', String(this.state.cep))
         formData.append('observations', String(this.state.observations))
 
-        formData.append('id',String(this.findChild._id))
-        formData.append('nome_findchild',String(this.findChild.name.firstName))
-        formData.append('birthday_findchild',String(this.findChild.birthday))
-        formData.append('number_findchild',String(this.findChild.number))
-        formData.append('kinship_findchild',String(this.findChild.kinship))
+        formData.append('criancas', JSON.stringify(this.state.confirmaCrianca))
 
         axios.post('/adult', formData)
         .then(function (response) {
@@ -342,6 +339,27 @@ class CadastroAdulto extends React.Component {
             file: imageSrc
         })
     };
+
+    selecionaCrianca(identifier) {
+        let achou = false;
+
+        this.state.confirmaCrianca.forEach((crianca, indice, array) => {
+            if (crianca._id === identifier) {
+                delete array[indice];
+                achou = true;
+            }
+        });
+
+        if (!(achou)) {
+            this.state.list.forEach((crianca) => {
+                if (crianca._id === identifier) {
+                    this.state.confirmaCrianca.push(crianca);
+                }
+            });
+        }
+
+        this.setState({confirmaCrianca: this.state.confirmaCrianca});
+    }
 
     
     render() {
@@ -552,26 +570,24 @@ class CadastroAdulto extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.list.map((findChild) => {
-                                        if (this.state.value === true) {
-                                            return (
-                                                <tr key={findChild._id}>
-                                                    <th scope="row">{findChild._id}</th>
-                                                    <td > {findChild.name.firstName} </td>
-                                                    <td >{findChild.birthday} </td>
-                                                    <td >{findChild.number} </td>
-                                                    <td className="text-center">
-                                                        <select id="sexo" name="sexo" className="form-control optionFomulario" value={this.state.findChild.kinship} onChange={this.Changekinship} >
-                                                            <option value="others" > Outros </option>
-                                                            <option value="father" > Pai </option>
-                                                            <option value="mother" > Mãe </option>
-                                                            <option value="grand"  > Avô/Avó </option>
-                                                            <option value="uncle"  > Tio/Tia </option>
-                                                        </select >
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
+                                    {this.state.confirmaCrianca.map((findChild) => {
+                                        return (
+                                            <tr key={findChild._id}>
+                                                <th scope="row">{findChild._id}</th>
+                                                <td > {findChild.name.firstName} </td>
+                                                <td >{findChild.birthday} </td>
+                                                <td >{findChild.number} </td>
+                                                <td className="text-center">
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={this.Changekinship} >
+                                                        <option value="others" > Outros </option>
+                                                        <option value="father" > Pai </option>
+                                                        <option value="mother" > Mãe </option>
+                                                        <option value="grand"  > Avô/Avó </option>
+                                                        <option value="uncle"  > Tio/Tia </option>
+                                                    </select >
+                                                </td>
+                                            </tr>
+                                        );
                                     })}
                                 </tbody>
                             </table>
@@ -628,7 +644,7 @@ class CadastroAdulto extends React.Component {
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
-                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" /> </td>
+                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(findChild._id)} /> </td>
                                             </tr>
                                         );
                                     })}
