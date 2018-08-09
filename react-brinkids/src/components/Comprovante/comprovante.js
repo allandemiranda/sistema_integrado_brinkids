@@ -13,11 +13,11 @@ render(){
         <div className="titulo">
             <a className="espacoTitulo">BRINKIDS</a>
             <a className="espacoTitulo">-</a>
-            <a id="data">01/01/2001</a>
+            <a id="data">{this.props.Today}</a>
         </div>
         <div className="titulo">
             <a className="espacoTitulo">SAÍDA</a>
-            <a id="hora">01:01</a>
+            <a id="hora">{this.props.horaAtual}</a>
             <a className="espacoTitulo">h</a>
             <a className="espacoTitulo">-</a>
             <a className="espacoTitulo">PARCIAL</a>
@@ -25,19 +25,19 @@ render(){
         <div id="responsavel" className="textos">
             <div>
                 <a>Responsável:</a>
-                <a id="nome">12345678911234567892123456</a>
+                <a id="nome">{this.props.responsavel}</a>
             </div>
             <div>
                 <a>Telefone:</a>
-                <a id="telefone">(84)991151610</a>
+                <a id="telefone">{this.props.telefone}</a>
                 <div className="direita">
                     <a>ID:</a>
-                    <a id="id">A01</a>
+                    <a id="id">{this.props.id}</a>
                 </div>
             </div>
             <div id="obs">
                 <a>Observações:</a>
-                <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                <a id="obsTexto">{this.props.obs}</a>
             </div>
             <a>-</a>
         </div>
@@ -45,18 +45,18 @@ render(){
             <div id="crianca">
                 <div id="dados">
                     <a>Criança:</a>
-                    <a id="nome">1234567891123456789212</a>
+                    <a id="nome">{this.props.nomeCrianca}</a>
                     <div className="direita">
                         <a>ID:</a>
-                        <a id="id">C01</a>
+                        <a id="id">{this.props.idCrianca}</a>
                     </div>
                 </div>
                 <div id="info">
                     <a>Parentesco:</a>
-                    <a id="parentesco">12345678911234567</a>
+                    <a id="parentesco">{this.props.parentesco}</a>
                     <div className="direita">
                         <a>Idade:</a>
-                        <a id="idade">12</a>
+                        <a id="idade">{this.props.idade}</a>
                     </div>
                 </div>
                 <div>
@@ -64,17 +64,17 @@ render(){
                     <a id="pacote">PASSAPORTE</a>
                     <div className="direita">
                         <a>Entrada:</a>
-                        <a id="hora">10:10</a>
+                        <a id="hora">{this.props.horaEntrada}</a>
                         <a>h</a>
                     </div>
                 </div>
                 <div id="obs">
                     <a>Observações:</a>
-                    <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                    <a id="obsTexto">{this.props.obs2}</a>
                 </div>
                 <div id="restrioes">
                     <a>Restrições:</a>
-                    <a id="restricoesTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                    <a id="restricoesTexto">{this.props.restricao}</a>
                 </div>
                 <a>-</a>
             </div>
