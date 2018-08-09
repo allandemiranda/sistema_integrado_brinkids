@@ -43,4 +43,25 @@ router.post('/', (req, res) => {
   return res.sendStatus(400);
 });
 
+router.put('/:id', (req, res) => {
+  const data = {
+    title: req.body.title,
+    start: new Date(req.body.start),
+    end: new Date(req.body.end),
+  };
+
+  calendar.findByIdAndUpdate(
+    req.params.id,
+    data,
+    err => (err ? res.sendStatus(500) : res.sendStatus(204)),
+  );
+});
+
+router.delete('/:id', (req, res) => {
+  calendar.findByIdAndRemove(
+    req.params.id,
+    err => (err ? res.sendStatus(500) : res.sendStatus(204)),
+  );
+});
+
 module.exports = router;
