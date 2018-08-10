@@ -571,9 +571,10 @@ class CadastroAdulto extends React.Component {
                                 </thead>
                                 <tbody>
                                     {this.state.confirmaCrianca.map((findChild) => {
-                                        return (
+                                       let indexTable = 1;
+                                       return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{findChild._id}</th>
+                                                <th scope="row">{indexTable}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
@@ -639,9 +640,10 @@ class CadastroAdulto extends React.Component {
 
                                 <tbody>
                                     {this.state.list.map((findChild) => {
+                                        let indexTable = 1;
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{findChild._id}</th>
+                                                <th scope="row">{indexTable}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
