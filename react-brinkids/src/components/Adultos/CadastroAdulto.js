@@ -41,7 +41,7 @@ class CadastroAdulto extends React.Component {
             confirmaCrianca: [],
             erro:'',
             achado: false,
-            kinship:'',
+            kinship:'Outros',
         } 
      
         this.ChangeName = this.ChangeName.bind(this);
@@ -580,10 +580,11 @@ class CadastroAdulto extends React.Component {
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={this.Changekinship} >
                                                         <option value="others" > Outros </option>
-                                                        <option value="father" > Pai </option>
-                                                        <option value="mother" > Mãe </option>
-                                                        <option value="grand"  > Avô/Avó </option>
-                                                        <option value="uncle"  > Tio/Tia </option>
+                                                        <option value="children" > filho(a) </option>
+                                                        <option value="Stepson" > Enteado(a) </option>
+                                                        <option value="grandchildren"  > Neto(a) </option>
+                                                        <option value="nephews"  > Sobrinho(a) </option>
+                                                        <option value="Brother" > Irmão/Irmã </option>
                                                     </select >
                                                 </td>
                                             </tr>
