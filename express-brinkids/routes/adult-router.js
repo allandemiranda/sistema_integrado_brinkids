@@ -65,7 +65,7 @@ router.post('/', (req, res) => {
       && req.body.nacionality
       && req.body.cpf
       && req.body.email
-      && req.body.nacionality) {
+      && req.body.maritalStatus) {
     userAdult.findOne({ cpf: req.body.cpf }, (err, adultFound) => {
       if (err) {
         return res.sendStatus(500);
