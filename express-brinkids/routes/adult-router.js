@@ -8,6 +8,11 @@ const config = require('../config');
 
 const router = express.Router();
 
+function teste(json, res) {
+  console.log(json);
+  return res.status(200).json(json);
+}
+
 // Rota responsável por realizar a pesquisa dos adultos no sistema
 router.get('/filter/:search/:type', (req, res) => {
   // 'search': Contém a pesquisa da página. Pode ser o CPF ou o nome
@@ -41,15 +46,14 @@ router.get('/filter/:search/:type', (req, res) => {
   }
 
   // Executa a consulta e devolve o status HTTP da requisição
-  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+  query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
 });
 
 router.get('/', (req, res) => {
-  userAdult.find({}, (err, result) => res.status(200).json(result));
+  userAdult.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
 router.post('/', (req, res) => {
-  console.log(req.body);
   if (req.files
       && req.body.firstName
       && req.body.surName
@@ -73,15 +77,13 @@ router.post('/', (req, res) => {
 
       if (adultFound === null) {
         const photoFile = req.files.file;
-        const date = req.body.birthday.split('/');
-        const adultDate = new Date(date[2], date[1], date[0]);
 
         const data = {
           name: {
             firstName: req.body.firstName,
             surName: req.body.surName,
           },
-          birthday: adultDate,
+          birthday: new Date(req.body.birthday),
           phone: [req.body.phone],
           address: [{
             street: req.body.street,
@@ -97,17 +99,18 @@ router.post('/', (req, res) => {
           email: req.body.email,
           nacionality: req.body.nacionality,
           maritalStatus: req.body.maritalStatus,
-          children: [{ identifier: '3', kinship: 'parentesco' }],
+          children: JSON.parse(req.body.criancas),
           observations: 'Observações',
           photo: '/caminho',
         };
 
         userAdult.create(data, (errAdult, adultResult) => {
           if (errAdult) {
+            console.log(errAdult);
             return res.sendStatus(500);
           }
           const photoNameComponents = photoFile.name.split('.');
-          const fileName = `${config.pathAdult}${adultResult._id}.${photoNameComponents[photoNameComponents.length - 1]}`; /**< url completa da localização do arquivo no computador */
+          const fileName = `${config.pathAdult}${adultResult._id}.png`; /**< url completa da localização do arquivo no computador */
 
           adultResult.photo = fileName; /** Atualiza o nome do arquivo */
           adultResult.save((errAdultSave) => { /** Atualiza no banco a nova informação */

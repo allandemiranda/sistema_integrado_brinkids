@@ -218,8 +218,18 @@ class CadastroAdulto extends React.Component {
     ChangeObs(event){
         this.setState({observations: event.target.value});
     }
-    Changekinship(event){
-        this.setState({kinship: event.target.value})
+    Changekinship(evento, identifier){
+        this.setState({kinship: evento.target.value})
+
+        console.log(`O estado foi atualizado: ${this.state.kinship}`)
+
+        this.state.confirmaCrianca.forEach((crianca) => {
+            if (crianca._id === identifier) {
+                crianca.kinship = evento.target.value
+            }
+        });
+
+        this.setState({confirmaCrianca: this.state.confirmaCrianca});
     }
 
 
@@ -297,21 +307,26 @@ class CadastroAdulto extends React.Component {
         formData.append('file', this._dataURItoBlob(this.imageBase64))
         formData.append('firstName', String(this.state.firstName))
         formData.append('surName', String(this.state.surName))
-        formData.append('cpf', String(this.state.cpf))
-        formData.append('number', String(this.state.rg))
         formData.append('birthday', String(this.state.birthday))
-        formData.append('nacionality', String(this.state.nacionality))
-        formData.append('sexuality', String(this.state.sexuality))
         formData.append('phone', String(this.state.phoneNumber))
-        formData.append('maritalStatus', String(this.state.maritalStatus))
-        formData.append('email', String(this.state.email))
         formData.append('street', String(this.state.address))
+        formData.append('number', '123') // Não possui esse campo no form
         formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
+        formData.append('state', 'RN') // Não possui esse campo no form
+        formData.append('country', 'Brasil') // Não possui esse campo no form
         formData.append('cep', String(this.state.cep))
+        formData.append('nacionality', String(this.state.nacionality))
+        formData.append('cpf', String(this.state.cpf))
+        formData.append('email', String(this.state.email))
+        formData.append('maritalStatus', String(this.state.maritalStatus))
+        formData.append('rg', String(this.state.rg))
+        formData.append('sexuality', String(this.state.sexuality))
         formData.append('observations', String(this.state.observations))
 
-        formData.append('criancas', JSON.stringify(this.state.confirmaCrianca))
+        formData.append('criancas', JSON.stringify(this.state.confirmaCrianca.map((child) => {
+            return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
+        })))
 
         axios.post('/adult', formData)
         .then(function (response) {
@@ -582,7 +597,7 @@ class CadastroAdulto extends React.Component {
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
-                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={this.Changekinship} >
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
                                                         <option value="others" > Outros </option>
                                                         <option value="children" > filho(a) </option>
                                                         <option value="Stepson" > Enteado(a) </option>
