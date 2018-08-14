@@ -74,7 +74,7 @@ class CadastroFuncionario extends React.Component {
                             tdSur.innerHTML = response.data[i].name.surName;
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
-                            input.value("Click Aqui");
+                            input.setAttribute("value","Click Aqui");
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
@@ -122,7 +122,7 @@ class CadastroFuncionario extends React.Component {
                             tdSur.innerHTML = response.data[i].name.surName;
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
-                            input.value("Click Aqui");
+                            input.setAttribute("value","Click Aqui");
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
