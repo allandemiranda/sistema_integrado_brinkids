@@ -34,6 +34,11 @@ class CadastroAdulto extends React.Component {
             cep:"",           
             observations: "",
             file: "",
+            number:"",
+            state:"",
+            country:"",
+
+
             
             // Estados Relacionado a busca de crianças
             childSearch: '',
@@ -60,6 +65,9 @@ class CadastroAdulto extends React.Component {
         this.ChangeCep = this.ChangeCep.bind(this);
         this.ChangeObs = this.ChangeObs.bind(this);
         this.Changekinship = this.Changekinship.bind(this);
+        this.ChangeNumber = this.ChangeNumber.bind(this);
+        this.ChangeCountry = this.ChangeCountry.bind(this);
+        this.ChangeState = this.ChangeState.bind(this);
         
         //Relacionado a busca de crianças
         this.ChangechildSearch = this.ChangechildSearch.bind(this);
@@ -143,9 +151,6 @@ class CadastroAdulto extends React.Component {
             if (adulto.cep.length === 0){
                 erros.push("O CEP não pode estar em branco");
             }
-            if (adulto.phoneNumber.length === 0){
-                erros.push("O Telefone não pode estar em branco");
-            }
             return erros;
 
         }
@@ -218,6 +223,17 @@ class CadastroAdulto extends React.Component {
     ChangeObs(event){
         this.setState({observations: event.target.value});
     }
+    ChangeState(event){
+        this.setState({state: event.target.value});
+    }
+    ChangeCountry(event){
+        this.setState({country: event.target.value});
+    }
+    ChangeNumber(event){
+        this.setState({number: event.target.value});
+    }
+
+
     Changekinship(evento, identifier){
         this.setState({kinship: evento.target.value})
 
@@ -479,27 +495,39 @@ class CadastroAdulto extends React.Component {
                                 
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <div className = "col-md-8 col-sm-8 col-xs-8" >
+                                        <div className = "col-md-7 col-sm-6 col-xs-7" >
                                             <label className = "LetraFormulario" > Endereço: </label>
                                             <input type = "text" id = "endeco" name = "endeco" className = "form-control" value = {this.state.address} onChange={this.ChangeAddress} />
                                         </div>
-                                        <div className = "col-md-4 col-sm-4 col-xs-4" >
+                                        <div className = "col-md-3 col-sm-3 col-xs-3" >
                                             <label className = "LetraFormulario" > Bairro: </label>
                                             <input type = "text" id = "bairro" name = "bairro" className = "form-control" value={this.state.neighborhood} onChange={this.ChangeNeighborhood} />
                                         </div>
+                                        <div className = "col-md-2 col-sm-3 col-xs-2" >
+                                            <label className = "LetraFormulario" > Número: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.number} onChange={this.ChangeNumber} />
+                                        </div> 
                                     </div>
                                 </div >
 
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <div className = "col-md-6 col-sm-6 col-xs-6" >
+                                        <div className = "col-md-2 col-sm-6 col-xs-2" >
+                                            <label className = "LetraFormulario" > CEP: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.cep} onChange={this.ChangeCep} />
+                                        </div>
+                                        <div className = "col-md-4 col-sm-6 col-xs-4" >
                                             <label className = "LetraFormulario" > Cidade: </label>
                                             <input type = "text" id = "cidade" name = "cidade" className = "form-control" value = {this.state.city} onChange={this.ChangeCity} />
                                         </div> 
-                                        <div className = "col-md-6 col-sm-6 col-xs-6" >
-                                            <label className = "LetraFormulario" > CEP: </label>
-                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.cep} onChange={this.ChangeCep} />
+                                        <div className = "col-md-3 col-sm-6 col-xs-3" >
+                                            <label className = "LetraFormulario" > Estado: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.state} onChange={this.ChangeState} />
                                         </div>                                      
+                                        <div className = "col-md-3 col-sm-6 col-xs-3" >
+                                            <label className = "LetraFormulario" > País: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.country} onChange={this.ChangeCountry} />
+                                        </div> 
                                     </div>
                                 </div >                         
 
@@ -571,6 +599,9 @@ class CadastroAdulto extends React.Component {
                         Cep = {this.state.cep}
                         Observation = {this.state.observations}
                         File = {this.state.file}
+                        Number = {this.state.number}
+                        Country = {this.state.country}
+                        State = {this.state.state}
                     />
 
                      <div className="graph-visual" >
