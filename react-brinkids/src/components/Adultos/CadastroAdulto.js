@@ -151,6 +151,15 @@ class CadastroAdulto extends React.Component {
             if (adulto.cep.length === 0){
                 erros.push("O CEP não pode estar em branco");
             }
+            if (adulto.number.length === 0){
+                erros.push("O Número não pode estar em branco");
+            }
+            if (adulto.country.length === 0){
+                erros.push("O País não pode estar em branco");
+            }
+            if (adulto.state.length === 0){
+                erros.push("O Estado não pode estar em branco");
+            }
             return erros;
 
         }
