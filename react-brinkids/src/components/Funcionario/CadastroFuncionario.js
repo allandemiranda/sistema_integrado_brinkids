@@ -35,7 +35,7 @@ class CadastroFuncionario extends React.Component {
     }
 
     //FUNÇÂO QUE BUSCA OS USUARIOS ADULTOS E CRIA A TABELA.
-    BuscaAdulto = (event) => {        
+    BuscaAdulto = (event) => {
         event.preventDefault();
 
         //CRIA E PEGA AS PARTES DA TABELA
@@ -50,7 +50,7 @@ class CadastroFuncionario extends React.Component {
         
         //APAGA A TEBELA ANTIGA, SEMPRE QUE FIZER UMA NOVA BUSCA
         Tbody.innerHTML = "";
-        
+
         //DIFERENÇA ENTRE BUSCA POR NOME E BUSCA POR CPF, AJUDAR O BACK.
         if(this.state.Name !== ""){
             var erros = ValidaErros(this.state.Name);
@@ -60,10 +60,9 @@ class CadastroFuncionario extends React.Component {
                 return;
             }
             else {
-                axios.get("/adult/filter/"+this.state.Name + "/name")
-                .then(function (response) {
-                    console.log(response.data)
-                    if (isEmpty(response.data)) {
+                axios.get(`/adult/filter/${this.state.Name}/name`).then(function (response) {
+                    console.log("Isto não está entrando")
+                    if (isEmpty(response.data) || response.data.length === 0) {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
                     else {
@@ -75,7 +74,7 @@ class CadastroFuncionario extends React.Component {
                             tdSur.innerHTML = response.data[i].name.surName;
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
-                            input.value("Click Aqui");
+                            input.setAttribute("value","Click Aqui");
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
@@ -92,6 +91,7 @@ class CadastroFuncionario extends React.Component {
                         }
                     }
                 }).catch(function (error) {
+                    console.log("Mas isto está")
                     console.log(error)//LOG DE ERRO
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -122,7 +122,7 @@ class CadastroFuncionario extends React.Component {
                             tdSur.innerHTML = response.data[i].name.surName;
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
-                            input.value("Click Aqui");
+                            input.setAttribute("value","Click Aqui");
                             input.onclick = () => { 
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,

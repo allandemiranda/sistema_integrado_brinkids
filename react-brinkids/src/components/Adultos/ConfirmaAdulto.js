@@ -100,16 +100,22 @@ class ConfirmaAdulto extends React.Component {
                         <br></br>
 
                         <div className="row">
-                            <div className="col-md-8 col-sm-12">
+                            <div className="col-md-6 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Endereço: </b></h5>
                                     <p>{this.props.Address}</p>
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-md-4 col-sm-10">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Bairro: </b></h5>
                                     <p>{this.props.Neighborhood}</p>
+                                </div>
+                            </div>
+                            <div className="col-md-2 col-sm-2">
+                                <div className="graph" style = {{ padding:10 + "px"}}>
+                                    <h5 className = "ltTitulo"><b> Número: </b></h5>
+                                    <p>{this.props.Number}</p>
                                 </div>
                             </div>
                         </div>
@@ -117,18 +123,30 @@ class ConfirmaAdulto extends React.Component {
                         <br></br>
 
                         <div className="row">
-                            <div className="col-md-6 col-sm-12">
-                                <div className="graph" style = {{ padding:10 + "px"}}>
-                                    <h5 className = "ltTitulo"><b> Cidade: </b></h5>
-                                    <p>{this.props.City}</p>
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-sm-12">
+                            <div className="col-md-3 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> CEP: </b></h5>
                                     <p>{this.props.Cep}</p>
                                 </div>
                             </div>                      
+                            <div className="col-md-3 col-sm-12">
+                                <div className="graph" style = {{ padding:10 + "px"}}>
+                                    <h5 className = "ltTitulo"><b> Cidade: </b></h5>
+                                    <p>{this.props.City}</p>
+                                </div>
+                            </div>
+                            <div className="col-md-3 col-sm-12">
+                                <div className="graph" style = {{ padding:10 + "px"}}>
+                                    <h5 className = "ltTitulo"><b> Estado: </b></h5>
+                                    <p>{this.props.State}</p>
+                                </div>
+                            </div>
+                            <div className="col-md-3 col-sm-12">
+                                <div className="graph" style = {{ padding:10 + "px"}}>
+                                    <h5 className = "ltTitulo"><b> País: </b></h5>
+                                    <p>{this.props.Country}</p>
+                                </div>
+                            </div>
                         </div>
 
                         <br></br>

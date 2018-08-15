@@ -189,7 +189,7 @@ class CadastroCrianca extends React.Component {
         formData.append('restrictions', String(this.state.restrictions))
         formData.append('observations', String(this.state.observations))
 
-        axios.post('/crianca', formData)
+        axios.post('/child', formData)
         .then(function (response) {
             console.log(response)
             window.location.href = '/';

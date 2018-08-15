@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
   calendar.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
-/** Esta rota cria um novo calendário */
+/** Esta rota cria uma nova data */
 router.post('/', (req, res) => {
   if (req.body.color
       && req.body.type
@@ -31,9 +31,6 @@ router.post('/', (req, res) => {
       associated: req.body.associated,
     };
 
-    // Parâmetro 'calendarResult' da arrow function foi omitido por nunca ser usado
-    // deixando apenas 'err'
-    // Era assim: (err, childResult) => ...
     return calendar.create(
       data,
       (err, childResult) => (err ? showErr(err, res) : res.status(201).json(childResult)),
@@ -50,18 +47,18 @@ router.put('/:id', (req, res) => {
     end: new Date(req.body.end),
   };
 
-  calendar.findByIdAndUpdate(
+  return calendar.findByIdAndUpdate(
     req.params.id,
     data,
     err => (err ? res.sendStatus(500) : res.sendStatus(204)),
   );
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res) => (
   calendar.findByIdAndRemove(
     req.params.id,
     err => (err ? res.sendStatus(500) : res.sendStatus(204)),
-  );
-});
+  )
+));
 
 module.exports = router;

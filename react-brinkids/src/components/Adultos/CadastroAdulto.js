@@ -34,13 +34,19 @@ class CadastroAdulto extends React.Component {
             cep:"",           
             observations: "",
             file: "",
+            number:"",
+            state:"",
+            country:"",
+
+
             
             // Estados Relacionado a busca de crianças
             childSearch: '',
             list:[],
+            confirmaCrianca: [],
             erro:'',
             achado: false,
-            kinship:'',
+            kinship:'Outros',
         } 
      
         this.ChangeName = this.ChangeName.bind(this);
@@ -59,6 +65,9 @@ class CadastroAdulto extends React.Component {
         this.ChangeCep = this.ChangeCep.bind(this);
         this.ChangeObs = this.ChangeObs.bind(this);
         this.Changekinship = this.Changekinship.bind(this);
+        this.ChangeNumber = this.ChangeNumber.bind(this);
+        this.ChangeCountry = this.ChangeCountry.bind(this);
+        this.ChangeState = this.ChangeState.bind(this);
         
         //Relacionado a busca de crianças
         this.ChangechildSearch = this.ChangechildSearch.bind(this);
@@ -142,8 +151,14 @@ class CadastroAdulto extends React.Component {
             if (adulto.cep.length === 0){
                 erros.push("O CEP não pode estar em branco");
             }
-            if (adulto.phoneNumber.length === 0){
-                erros.push("O Telefone não pode estar em branco");
+            if (adulto.number.length === 0){
+                erros.push("O Número não pode estar em branco");
+            }
+            if (adulto.country.length === 0){
+                erros.push("O País não pode estar em branco");
+            }
+            if (adulto.state.length === 0){
+                erros.push("O Estado não pode estar em branco");
             }
             return erros;
 
@@ -217,8 +232,29 @@ class CadastroAdulto extends React.Component {
     ChangeObs(event){
         this.setState({observations: event.target.value});
     }
-    Changekinship(event){
-        this.setState({kinship: event.target.value})
+    ChangeState(event){
+        this.setState({state: event.target.value});
+    }
+    ChangeCountry(event){
+        this.setState({country: event.target.value});
+    }
+    ChangeNumber(event){
+        this.setState({number: event.target.value});
+    }
+
+
+    Changekinship(evento, identifier){
+        this.setState({kinship: evento.target.value})
+
+        console.log(`O estado foi atualizado: ${this.state.kinship}`)
+
+        this.state.confirmaCrianca.forEach((crianca) => {
+            if (crianca._id === identifier) {
+                crianca.kinship = evento.target.value
+            }
+        });
+
+        this.setState({confirmaCrianca: this.state.confirmaCrianca});
     }
 
 
@@ -259,18 +295,21 @@ class CadastroAdulto extends React.Component {
         formData.append('file', this._dataURItoBlob(this.imageBase64))
         formData.append('firstName', String(this.state.firstName))
         formData.append('surName', String(this.state.surName))
-        formData.append('cpf', String(this.state.cpf))
-        formData.append('rg', String(this.state.rg))
         formData.append('birthday', String(this.state.birthday))
-        formData.append('nacionality', String(this.state.nacionality))
-        formData.append('sexuality', String(this.state.sexuality))
-        formData.append('phoneNumber', String(this.state.phoneNumber))
-        formData.append('maritalStatus', String(this.state.maritalStatus))
-        formData.append('email', String(this.state.email))
-        formData.append('address', String(this.state.address))
-        formData.append('neighborhood', String(this.state.neighborhood))
+        formData.append('phone', String(this.state.phoneNumber))
+        formData.append('street', String(this.state.address))
+        formData.append('number', '') // Não possui esse campo no form
+        formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
+        formData.append('state', 'RN') // Não possui esse campo no form
+        formData.append('country', 'Brasil') // Não possui esse campo no form
         formData.append('cep', String(this.state.cep))
+        formData.append('nacionality', String(this.state.nacionality))
+        formData.append('cpf', String(this.state.cpf))
+        formData.append('email', String(this.state.email))
+        formData.append('maritalStatus', String(this.state.maritalStatus))
+        formData.append('rg', String(this.state.rg))
+        formData.append('sexuality', String(this.state.sexuality))
         formData.append('observations', String(this.state.observations))
 
         axios.post('/adult', formData)
@@ -293,25 +332,26 @@ class CadastroAdulto extends React.Component {
         formData.append('file', this._dataURItoBlob(this.imageBase64))
         formData.append('firstName', String(this.state.firstName))
         formData.append('surName', String(this.state.surName))
-        formData.append('cpf', String(this.state.cpf))
-        formData.append('rg', String(this.state.rg))
         formData.append('birthday', String(this.state.birthday))
-        formData.append('nacionality', String(this.state.nacionality))
-        formData.append('sexuality', String(this.state.sexuality))
-        formData.append('phoneNumber', String(this.state.phoneNumber))
-        formData.append('maritalStatus', String(this.state.maritalStatus))
-        formData.append('email', String(this.state.email))
-        formData.append('address', String(this.state.address))
-        formData.append('neighborhood', String(this.state.neighborhood))
+        formData.append('phone', String(this.state.phoneNumber))
+        formData.append('street', String(this.state.address))
+        formData.append('number', '123') // Não possui esse campo no form
+        formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
+        formData.append('state', 'RN') // Não possui esse campo no form
+        formData.append('country', 'Brasil') // Não possui esse campo no form
         formData.append('cep', String(this.state.cep))
+        formData.append('nacionality', String(this.state.nacionality))
+        formData.append('cpf', String(this.state.cpf))
+        formData.append('email', String(this.state.email))
+        formData.append('maritalStatus', String(this.state.maritalStatus))
+        formData.append('rg', String(this.state.rg))
+        formData.append('sexuality', String(this.state.sexuality))
         formData.append('observations', String(this.state.observations))
 
-        formData.append('id',String(this.findChild._id))
-        formData.append('nome_findchild',String(this.findChild.name.firstName))
-        formData.append('birthday_findchild',String(this.findChild.birthday))
-        formData.append('number_findchild',String(this.findChild.number))
-        formData.append('kinship_findchild',String(this.findChild.kinship))
+        formData.append('criancas', JSON.stringify(this.state.confirmaCrianca.map((child) => {
+            return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
+        })))
 
         axios.post('/adult', formData)
         .then(function (response) {
@@ -342,6 +382,27 @@ class CadastroAdulto extends React.Component {
             file: imageSrc
         })
     };
+
+    selecionaCrianca(identifier) {
+        let achou = false;
+
+        this.state.confirmaCrianca.forEach((crianca, indice, array) => {
+            if (crianca._id === identifier) {
+                delete array[indice];
+                achou = true;
+            }
+        });
+
+        if (!(achou)) {
+            this.state.list.forEach((crianca) => {
+                if (crianca._id === identifier) {
+                    this.state.confirmaCrianca.push(crianca);
+                }
+            });
+        }
+
+        this.setState({confirmaCrianca: this.state.confirmaCrianca});
+    }
 
     
     render() {
@@ -443,27 +504,39 @@ class CadastroAdulto extends React.Component {
                                 
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <div className = "col-md-8 col-sm-8 col-xs-8" >
+                                        <div className = "col-md-7 col-sm-6 col-xs-7" >
                                             <label className = "LetraFormulario" > Endereço: </label>
                                             <input type = "text" id = "endeco" name = "endeco" className = "form-control" value = {this.state.address} onChange={this.ChangeAddress} />
                                         </div>
-                                        <div className = "col-md-4 col-sm-4 col-xs-4" >
+                                        <div className = "col-md-3 col-sm-3 col-xs-3" >
                                             <label className = "LetraFormulario" > Bairro: </label>
                                             <input type = "text" id = "bairro" name = "bairro" className = "form-control" value={this.state.neighborhood} onChange={this.ChangeNeighborhood} />
                                         </div>
+                                        <div className = "col-md-2 col-sm-3 col-xs-2" >
+                                            <label className = "LetraFormulario" > Número: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.number} onChange={this.ChangeNumber} />
+                                        </div> 
                                     </div>
                                 </div >
 
                                 <div className = "form-group" >
                                     <div className = "row">
-                                        <div className = "col-md-6 col-sm-6 col-xs-6" >
+                                        <div className = "col-md-2 col-sm-6 col-xs-2" >
+                                            <label className = "LetraFormulario" > CEP: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.cep} onChange={this.ChangeCep} />
+                                        </div>
+                                        <div className = "col-md-4 col-sm-6 col-xs-4" >
                                             <label className = "LetraFormulario" > Cidade: </label>
                                             <input type = "text" id = "cidade" name = "cidade" className = "form-control" value = {this.state.city} onChange={this.ChangeCity} />
                                         </div> 
-                                        <div className = "col-md-6 col-sm-6 col-xs-6" >
-                                            <label className = "LetraFormulario" > CEP: </label>
-                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.cep} onChange={this.ChangeCep} />
+                                        <div className = "col-md-3 col-sm-6 col-xs-3" >
+                                            <label className = "LetraFormulario" > Estado: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.state} onChange={this.ChangeState} />
                                         </div>                                      
+                                        <div className = "col-md-3 col-sm-6 col-xs-3" >
+                                            <label className = "LetraFormulario" > País: </label>
+                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.country} onChange={this.ChangeCountry} />
+                                        </div> 
                                     </div>
                                 </div >                         
 
@@ -535,6 +608,9 @@ class CadastroAdulto extends React.Component {
                         Cep = {this.state.cep}
                         Observation = {this.state.observations}
                         File = {this.state.file}
+                        Number = {this.state.number}
+                        Country = {this.state.country}
+                        State = {this.state.state}
                     />
 
                      <div className="graph-visual" >
@@ -552,26 +628,26 @@ class CadastroAdulto extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.list.map((findChild) => {
-                                        if (this.state.value === true) {
-                                            return (
-                                                <tr key={findChild._id}>
-                                                    <th scope="row">{findChild._id}</th>
-                                                    <td > {findChild.name.firstName} </td>
-                                                    <td >{findChild.birthday} </td>
-                                                    <td >{findChild.number} </td>
-                                                    <td className="text-center">
-                                                        <select id="sexo" name="sexo" className="form-control optionFomulario" value={this.state.findChild.kinship} onChange={this.Changekinship} >
-                                                            <option value="others" > Outros </option>
-                                                            <option value="father" > Pai </option>
-                                                            <option value="mother" > Mãe </option>
-                                                            <option value="grand"  > Avô/Avó </option>
-                                                            <option value="uncle"  > Tio/Tia </option>
-                                                        </select >
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
+                                    {this.state.confirmaCrianca.map((findChild) => {
+                                       let indexTable = 1;
+                                       return (
+                                            <tr key={findChild._id}>
+                                                <th scope="row">{indexTable}</th>
+                                                <td > {findChild.name.firstName} </td>
+                                                <td >{findChild.birthday} </td>
+                                                <td >{findChild.number} </td>
+                                                <td className="text-center">
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                        <option value="others" > Outros </option>
+                                                        <option value="children" > filho(a) </option>
+                                                        <option value="Stepson" > Enteado(a) </option>
+                                                        <option value="grandchildren"  > Neto(a) </option>
+                                                        <option value="nephews"  > Sobrinho(a) </option>
+                                                        <option value="Brother" > Irmão/Irmã </option>
+                                                    </select >
+                                                </td>
+                                            </tr>
+                                        );
                                     })}
                                 </tbody>
                             </table>
@@ -622,13 +698,14 @@ class CadastroAdulto extends React.Component {
 
                                 <tbody>
                                     {this.state.list.map((findChild) => {
+                                        let indexTable = 1;
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{findChild._id}</th>
+                                                <th scope="row">{indexTable}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
-                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" /> </td>
+                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(findChild._id)} /> </td>
                                             </tr>
                                         );
                                     })}

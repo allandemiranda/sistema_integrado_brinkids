@@ -85,7 +85,7 @@ router.post('/', (req, res) => {
 
         /** Checa se não existe uma criança no sistema */
         if (childResult === null) {
-          const photoFile = req.files.fileField; /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
+          const photoFile = req.files.file; /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
 
           const dados = {
             number: req.body.number,
