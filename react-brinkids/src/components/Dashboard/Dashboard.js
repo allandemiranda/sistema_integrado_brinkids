@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-
+import Comprovante from '../Comprovante/comprovante.js';
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/style.css';
@@ -10,14 +10,14 @@ import crianca from './tabelas/crianças';
 import adultos from './tabelas/adultos';
 import eventos from './tabelas/eventos';
 import noticias from './tabelas/noticias';
-
+import '../Comprovante/comprovante.css';
 
 class DashBoard extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-
+			comprovant: false,
 			colaps: true,
 			teste: true,
 
@@ -38,8 +38,10 @@ class DashBoard extends React.Component {
 		this.mudar4 = this.mudar4.bind(this);
 	}
 	mudar() {
-		!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
-		
+		//!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
+		const y = document.getElementById('rep').innerHTML;
+		const x = window.open('comprovante.js',"Janela pop-up");
+		x.document.write(y);
 	}
 	mudar2() {
 		!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
@@ -70,6 +72,7 @@ class DashBoard extends React.Component {
 					<td>{events.Responsavel}</td>
 					<td>{events.Telefone}</td>
 					<td>{events.Servico}</td>
+					
 				</tr>
 			)
 		}
@@ -99,10 +102,11 @@ class DashBoard extends React.Component {
 				</tr>
 			)
 		}
+		
 		return (
 
 			<div className="container-fluid" >
-
+				
 				{this.state.popup &&
 
 					(<div className="alert alert-success" role="alert">
@@ -125,6 +129,7 @@ class DashBoard extends React.Component {
 						<li > DashBoard </li >
 					</ol >
 				</div>
+				
 				<div className="graph">
 					<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar}>
 						< span className="fa fa-bars" > </span>
@@ -254,12 +259,17 @@ class DashBoard extends React.Component {
 					</div>
 
 				}
-
-
+				<div id='rep' >
+				<Comprovante
+				id='testt'
+				
+				/>
+				</div>
 			</div>
-
+			
 
 		);
+	
 
 	}
 }

@@ -1,19 +1,5 @@
-html {
-    background:transparent !important;
-    color:#000 !important;
-    text-shadow:none !important;
-    filter:none !important;
-    -ms-filter:none !important;
-    width: 77mm;
-    font-family: Consolas, monaco, monospace;
-    font-style: normal;
-    font-variant: normal;
-    justify-content: center;
-    align-items: center;
-}
-html body {
-    width: 74mm;
-}
+
+  
 
 .trilha {
     width: 100%;
