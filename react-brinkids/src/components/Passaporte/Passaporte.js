@@ -1,7 +1,7 @@
 import React from 'react';
 import Webcam from 'react-webcam';
 import axios from 'axios';
-//import ConfirmaAdulto from './ConfirmaAdulto.js';
+import ConfirmaAdulto from '../Adultos/ConfirmaAdulto.js';
 import TypesInput from '../TypesInput.js';
 
 // CSS Layout
@@ -22,11 +22,12 @@ class Passport extends React.Component {
             //Tela I:
             selectAdult:'',
             list:[],
+            listConfirm: [],
             erro:'',
             achado: false,    
             confirmAdult:'', // Dados do Responsável
-        } 
-        
+        }
+
         //Relacionado a busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.Search = this.Search.bind(this)
@@ -42,7 +43,7 @@ class Passport extends React.Component {
         // Faz a busca do responsável:
         Search(event) {
             $.ajax({
-                url: "http://localhost:3001/child/filter/" + this.state.selectAdult,
+                url: "http://localhost:3001/adult/filter/" + this.state.selectAdult + "/name",
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -62,7 +63,7 @@ class Passport extends React.Component {
         let achou = false;
 
         //Desmarca A checkBox
-        this.state.confirmAdult.forEach((adult, indice, array) => {
+        this.state.listConfirm.forEach((adult, indice, array) => {
             if (adult._id === identifier) {
                 delete array[indice];
                 achou = true;
@@ -72,12 +73,13 @@ class Passport extends React.Component {
         if (!(achou)) {
             this.state.list.forEach((adult) => {
                 if (adult._id === identifier) {
-                    this.state.confirmAdult.push(adult);
+                    this.state.listConfirm.push(adult);
                 }
             });
         }
 
-        this.setState({confirmAdult: this.state.confirmAdult});
+        this.setState({listConfirm: this.state.listConfirm});
+        console.log(this.state.listConfirm)
     }
 
     // FUNÇOES DO BOTÃO AVANÇAR - INICIO 
@@ -156,8 +158,8 @@ class Passport extends React.Component {
                                         return (
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indexTable}</th>
-                                                <td > {findAdult.name.firstName} </td>
-                                                <td >{findAdult. phoneNumber} </td>
+                                                <td > {findAdult.name.firstName + " "+ findAdult.name.surName} </td>
+                                                <td >{findAdult.phone} </td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult._id)} /> </td>
                                             </tr>
                                         );
@@ -174,15 +176,39 @@ class Passport extends React.Component {
                 </div>
             )
         }
-        //TELA II
+        //TELA II - Confirma Dados Adultos:
         else if (this.state.page === "ConfirmAdult") {
+            let Nome = this.state.listConfirm[0].name.firstName + " " + this.state.listConfirm[0].name.surName;
+            console.log(`Console.log: ${typeof(this.state.listConfirm)}`);
+            console.log(this.state.listComfirm)
             return (
-                
-                <div className="text-center">
-                <h3 className="inner-tittle" > Pesquisar Responsável</h3> 
-                    <a className="btn btn-md botao" href="/">Cancelar</a>
-                    <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
-                </div>
+                <div className="container-fluid">
+                    <ConfirmaAdulto
+                    Name= {Nome}
+                    Cpf = {this.state.listConfirm[0].cpf}
+                    Rg = {this.state.listConfirm[0].rg}                
+                    Date = {this.state.listConfirm[0].birthday}
+                    Sexo = {this.state.listConfirm[0].sexuality}
+                    Nacionalidade = {this.state.listConfirm[0].nacionality}                
+                    PhoneNumber = {this.state.listConfirm[0].phone}
+                    MaritalStatus ={this.state.listConfirm[0].maritalStatus}
+                    Email = {this.state.listConfirm[0].email}
+                    Address = {this.state.listConfirm[0].address[0].street}
+                    Neighborhood = {this.state.listConfirm[0].address[0].district}
+                    City = {this.state.listConfirm[0].address[0].city}
+                    Cep = {this.state.listConfirm[0].address[0].cep}
+                    Observation = {this.state.listConfirm[0].observations}
+                    File = {this.state.listConfirm[0].photo}
+                    Number = {this.state.listConfirm[0].address[0].number}
+                    Country = {this.state.listConfirm[0].address[0].country}
+                    State = {this.state.listConfirm[0].address[0].state}
+                    />                   
+                    <div className="text-center">
+                        <h3 className="inner-tittle" > Pesquisar Responsável</h3> 
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
+                    </div>
+                </div>                
             )
         }
         
