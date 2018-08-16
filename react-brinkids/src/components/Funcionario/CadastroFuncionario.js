@@ -75,7 +75,7 @@ class CadastroFuncionario extends React.Component {
                             tdCPF.innerHTML = response.data[i].cpf;
                             input.setAttribute("type","button");
                             input.setAttribute("value","Click Aqui");
-                            input.onclick = () => { 
+                            input.onclick = () => {
                                 this.setState({
                                     Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
                                     page: "FormularioCadastro",

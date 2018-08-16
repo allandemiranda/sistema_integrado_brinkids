@@ -17,6 +17,7 @@ const autentication = require('./routes/autentication-router');
 const calendar = require('./routes/calendar-router');
 const child = require('./routes/child-router');
 const employees = require('./routes/employees-router');
+const product = require('./routes/product-router');
 
 // Instanciando o objeto do express
 const app = express();
@@ -60,6 +61,7 @@ app.use('/authentication', autentication);
 app.use('/calendar', calendar);
 app.use('/child', child);
 app.use('/employees', employees);
+app.use('/product', product);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
