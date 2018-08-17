@@ -20,12 +20,12 @@ class Passport extends React.Component {
             page: "SelectAdult",
 
             //Tela I:
-            selectAdult:'',
-            list:[],
-            listConfirm: [],
+            selectAdult:'', // Salva o nome que é colocado na barra de busca
+            list:[], //recebe do banco os dados da pessoa que foi buscada
+            listConfirmAdult: [], // Dados do Responsável Selecionado na checkBox
             erro:'',
             achado: false,    
-            confirmAdult:'', // Dados do Responsável
+            confirmAdult:'',
         }
 
         //Relacionado a busca
@@ -56,10 +56,36 @@ class Passport extends React.Component {
                 }.bind(this)
             });
         }
-    // FUNCOES RELACIONADAS A BUSCADo RESPOSÁVEL- Fim
+
+        // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
+        selectedAdult(identifier) {
+            let achou = false;
+
+        //Desmarca A checkBox
+        this.state.listConfirm.forEach((adult, indice, array) => {
+            if (adult._id === identifier) {
+                delete array[indice];
+                achou = true;
+            }
+        });
+
+        if (!(achou)) {
+            this.state.list.forEach((adult) => {
+                if (adult._id === identifier) {
+                    this.state.listConfirm.push(adult);
+                }
+            });
+        }
+
+        this.setState({ listConfirm: this.state.listConfirm });
+        console.log(this.state.listConfirm)
+    }
+    // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL- Fim
    
-    // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
-    selectedAdult(identifier) {
+
+
+    // Salva AS informações das CRIANÇAS que apareceu na busca e foi selecionado.
+    selectedKids(identifier) {
         let achou = false;
 
         //Desmarca A checkBox
@@ -78,7 +104,7 @@ class Passport extends React.Component {
             });
         }
 
-        this.setState({listConfirm: this.state.listConfirm});
+        this.setState({ listConfirm: this.state.listConfirm });
         console.log(this.state.listConfirm)
     }
 
@@ -116,6 +142,36 @@ class Passport extends React.Component {
             alert("Encaminhar para o comprovante");
         }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM   
+
+    // FUNÇOES DO BOTÃO VOLTART TELA - INICIO 
+        // Voltar par Tela I
+        VoltarTelaI = (event) => {
+            this.setState({
+                page: "SelectAdult"
+            })
+        }
+        // Voltar par Tela II
+        VoltarTelaII = (event) => {
+            this.setState({
+                page: "ConfirmAdult"
+            })
+        }
+
+        // Voltar par Tela III
+        VoltarTelaIII = (event) => {
+            this.setState({
+                page: "SelectKids"
+            })
+        }
+
+        // Voltar par Tela IV
+        VoltarTelaII = (event) => {
+            this.setState({
+                page: "ConfirmKids"
+            })
+        }
+
+    // FUNÇOES DO BOTÃO VOLTART TELA - FIM
 
     render() {  
         //TELA I   
@@ -206,6 +262,7 @@ class Passport extends React.Component {
                     <div className="text-center">
                         <h3 className="inner-tittle" > Pesquisar Responsável</h3> 
                         <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao" onClick = {this.VoltarTelaI}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
                 </div>                
@@ -215,9 +272,64 @@ class Passport extends React.Component {
         //TELA III
         else if (this.state.page === "SelectKids") {
             return (
-                <div className="text-center">
-                    <a className="btn btn-md botao" href="/">Cancelar</a>
-                    <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
+                <div className="container-fluid">
+                    <div className="container-fluid" >
+                        <div className="sub-heard-part" >
+                            <ol className="breadcrumb m-b-0" >
+                                <li > < a href="/" > Home </a></li >
+                                <li > Passport </li>
+                            </ol >
+                        </div>
+                        <div className="graph-visual" >
+                            <div className="graph" >
+                                <div>
+                                    <h3 className="inner-tittle " >Selecionar Responsável</h3>
+                                </div>
+                                <div className=" text-center">
+                                    <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectAdult} onChange={this.ChangeSearch} placeholder="Pesquisar" />
+                                    <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
+                                </div>
+                            </div>
+                            <br></br>
+                            <br></br>
+                            <div className="graph" >
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th >Nome</th>
+                                            <th >Telefone</th>
+                                            <th className="text-center"> Selecionar </th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {this.state.list.map((findKids) => {
+                                            let indexTable = 1;
+                                            return (
+                                                <tr key={findKids._id}>
+                                                    <th scope="row">{indexTable}</th>
+                                                    <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
+                                                    <td >{findKids.phone} </td>
+                                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+
+                                <div className="text-center">
+                                    <a className="btn btn-md botao" href="/">Cancelar</a>
+                                    <button className="btn btn-md botao botaoAvançar" onClick={this.TelaII}> Avançar </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="text-center">
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
+                    </div>
                 </div>
             )
         }
@@ -227,6 +339,7 @@ class Passport extends React.Component {
             return (
                 <div className="text-center">
                     <a className="btn btn-md botao" href="/">Cancelar</a>
+                    <button className="btn btn-md botao" onClick = {this.VoltarTelaIII}>Voltar</button>                        
                     <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                 </div>
             )
@@ -237,6 +350,7 @@ class Passport extends React.Component {
             return (
                 <div className="text-center">
                     <a className="btn btn-md botao" href="/">Cancelar</a>
+                    <button className="btn btn-md botao" onClick = {this.VoltarTelaIV}>Voltar</button>                        
                     <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
                 </div>
             )

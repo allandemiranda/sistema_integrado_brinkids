@@ -484,8 +484,8 @@ class CadastroAdulto extends React.Component {
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario" > Estado Civil: </label>
                                             <select id = "estadoCivil" name = "estadoCivil" className = "form-control optionFomulario" value={this.state.maritalStatus} onChange={this.ChangeMarital} >
-                                                <option value = "Casado(a)" > Casado </option>
-                                                <option value = "Solterio(a)" > Solterio </option>                                                
+                                                <option value = "Casado(a)" > Casado(a) </option>
+                                                <option value = "Solteiro(a)" > Solterio(a) </option>                                                
                                                 <option value = "Viúvo(a)" > Viúvo(a)</option>
                                                 <option value = "Divorciado(a)" > Divorciado(a) </option>
                                             </select >

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import './comprovante.css';
-import NewWindow from 'react-new-window';
+//import NewWindow from 'react-new-window';
 const stylse = {
     width: '74 mm',
 
