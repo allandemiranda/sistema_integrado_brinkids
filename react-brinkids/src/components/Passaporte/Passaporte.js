@@ -96,7 +96,7 @@ class Passport extends React.Component {
         // Faz a busca das Crianças:
         Search(event) {
             $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",
+                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -286,7 +286,6 @@ class Passport extends React.Component {
                     State = {this.state.listConfirmAdult[0].address[0].state}
                     />                   
                     <div className="text-center">
-                        <h3 className="inner-tittle" > Pesquisar Responsável</h3> 
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao" onClick = {this.VoltarTelaI}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
@@ -309,7 +308,7 @@ class Passport extends React.Component {
                         <div className="graph-visual" >
                             <div className="graph" >
                                 <div>
-                                    <h3 className="inner-tittle " >Selecionar Responsável</h3>
+                                    <h3 className="inner-tittle " >Selecionar Crianças</h3>
                                 </div>
                                 <div className=" text-center">
                                     <input type="search" id="selectKids" name="selectKids" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar" />
@@ -342,11 +341,6 @@ class Passport extends React.Component {
                                         })}
                                     </tbody>
                                 </table>
-
-                                <div className="text-center">
-                                    <a className="btn btn-md botao" href="/">Cancelar</a>
-                                    <button className="btn btn-md botao botaoAvançar" onClick={this.TelaII}> Avançar </button>
-                                </div>
                             </div>
                         </div>
                     </div>
