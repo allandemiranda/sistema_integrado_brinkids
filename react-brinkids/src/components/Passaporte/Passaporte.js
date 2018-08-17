@@ -3,6 +3,7 @@ import Webcam from 'react-webcam';
 import axios from 'axios';
 import ConfirmaAdulto from '../Adultos/ConfirmaAdulto.js';
 import TypesInput from '../TypesInput.js';
+import Pessoas from "./temgenteaq";
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -10,6 +11,7 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 
 import $ from "jquery";
+import temgenteaq from './temgenteaq.js';
 
 
 class Passport extends React.Component {
@@ -326,7 +328,7 @@ class Passport extends React.Component {
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
                                     </thead>
-
+                                    
                                     <tbody>
                                         {this.state.list.map((findKids,indice) => {
                                             return (
