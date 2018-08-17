@@ -35,7 +35,8 @@ class Passport extends React.Component {
 
         //Relacionado a busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
-        this.Search = this.Search.bind(this)
+        this.SearchAdult = this.SearchAdult.bind(this);
+        this.SearchChild = this.SearchChild.bind(this);
 
     }
 
@@ -46,18 +47,23 @@ class Passport extends React.Component {
         }
 
         // Faz a busca do responsável:
-        Search(event) {
+        SearchAdult(event) {
             $.ajax({
                 url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
-                    if (response.length === 0) { this.setState({ erro: "* Nenhum Responásel Encontrado." }) }
+                    if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
                 },
                 success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response);
-                    //this.setState({ achado: true });
-                    this.setState({ list: response });
+                    console.log(response.length)
+                    if (response.length === 0) {
+                        alert("Erro esc")
+                        this.setState({ erro: "* Nenhum Responásel Encontrado." })
+                    } else {
+                        console.log("Olar")
+                        this.setState({ list: response });
+                    }
                 }.bind(this)
             });
         }
@@ -94,7 +100,7 @@ class Passport extends React.Component {
         }
 
         // Faz a busca das Crianças:
-        Search(event) {
+        SearchChild(event) {
             $.ajax({
                 url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,
                 dataType: 'json',
@@ -219,7 +225,7 @@ class Passport extends React.Component {
                         </div>
                             <div className=" text-center">
                                 <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar"/>
-                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
+                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult}> Pesquisar </button>
                             </div>
                         </div>
                         <br></br>
@@ -260,13 +266,13 @@ class Passport extends React.Component {
         }
         //TELA II - Confirma Dados Adultos:
         else if (this.state.page === "ConfirmAdult") {
-            let Nome = this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName;
+            //let Nome = this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName;
             console.log(`Console.log: ${typeof(this.state.listConfirmAdult)}`);
             console.log(this.state.listComfirm)
             return (
                 <div className="container-fluid">
                     <ConfirmaAdulto
-                    Name= {Nome}
+                    Name= {this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}
                     Cpf = {this.state.listConfirmAdult[0].cpf}
                     Rg = {this.state.listConfirmAdult[0].rg}                
                     Date = {this.state.listConfirmAdult[0].birthday}
@@ -312,7 +318,7 @@ class Passport extends React.Component {
                                 </div>
                                 <div className=" text-center">
                                     <input type="search" id="selectKids" name="selectKids" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar" />
-                                    <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
+                                    <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchChild}> Pesquisar </button>
                                 </div>
                             </div>
                             <br></br>

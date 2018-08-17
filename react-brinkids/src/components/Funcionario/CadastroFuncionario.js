@@ -28,6 +28,7 @@ class CadastroFuncionario extends React.Component {
         }
         this.ChangeName = this.ChangeName.bind(this)
         this.ChangeCPF = this.ChangeCPF.bind(this)
+        this.BuscaAdulto = this.BuscaAdulto.bind(this)
     }
 
     ChangeName(event){
@@ -38,9 +39,10 @@ class CadastroFuncionario extends React.Component {
     }
 
     //FUNÇÂO QUE BUSCA OS USUARIOS ADULTOS E CRIA A TABELA.
-    BuscaAdulto = (event) => {
+    BuscaAdulto(event){
         event.preventDefault();
 
+        console.log("Entrou na função: " + this)
 
         //DIFERENÇA ENTRE BUSCA POR NOME E BUSCA POR CPF, AJUDAR O BACK.
         if(this.state.Name !== ""){
@@ -51,19 +53,21 @@ class CadastroFuncionario extends React.Component {
                 return;
             }
             else {
+                console.log(`/adult/filter/${this.state.Name}/name`)
                 axios.get(`/adult/filter/${this.state.Name}/name`)
-                .then(function (response) {                   
+                .then((response) => {
+                    console.log("Dentro do axios: " + this)                   
                     if (isEmpty(response.data) || response.data.length === 0) {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
                     else {
-                        this.setState({list: response});
+                        this.setState({list: response.data});
                     }
-                }).catch(function (error) {
+                }).catch((error) => {
                     console.log(error)//LOG DE ERRO
-                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
@@ -76,18 +80,19 @@ class CadastroFuncionario extends React.Component {
             }
             else {
                 axios.get(`/adult/filter/${this.state.CPF}/cpf`)
-                .then(function (response) {                   
+                .then((response) => {                   
                     if (isEmpty(response.data) || response.data.length === 0) {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
                     else {
-                        this.setState({list: response});
+                        console.log(this)
+                        this.setState({list: response.data});
                     }
-                }).catch(function (error) {
+                }).catch((error) => {
                     console.log(error)//LOG DE ERRO
-                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
@@ -182,7 +187,7 @@ class CadastroFuncionario extends React.Component {
                                                         <td >{findAdult.name.surName} </td>
                                                         <td >{findAdult.cpf} </td>
                                                         <td className="text-center">    
-                                                            <input type="checkbox" name="selectAdult" value="true" onClick={this.selecionaAdulto(findAdult.name.fistName + " " + findAdult.name.surName)} /> 
+                                                            <input type="submit" name="selectAdult" value="Click Aqui" onClick={() => this.selecionaAdulto(findAdult.name.firstName + " " + findAdult.name.surName)} /> 
                                                         </td>
                                                     </tr>
                                                 );
