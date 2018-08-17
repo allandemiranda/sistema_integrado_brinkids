@@ -18,14 +18,17 @@ class Passport extends React.Component {
         this.state = {
             //Responsável por saber qual página vai renderizar:
             page: "SelectAdult",
+            selectedSearch:'', // Salva o nome que é colocado na barra de busca
+            list:[], //recebe do banco os dados da pessoa que foi buscada
 
             //Tela I:
-            selectAdult:'', // Salva o nome que é colocado na barra de busca
-            list:[], //recebe do banco os dados da pessoa que foi buscada
             listConfirmAdult: [], // Dados do Responsável Selecionado na checkBox
             erro:'',
-            achado: false,    
+           //achado: false,    
             confirmAdult:'',
+            //Tela II:
+            listConfirmKids: [], // Dados das crianças Selecionadas na checkBox
+
         }
 
         //Relacionado a busca
@@ -37,13 +40,13 @@ class Passport extends React.Component {
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
         //Bloco que muda o status para o atual do formulario.
         ChangeSearch(event) {
-            this.setState({ selectAdult: event.target.value });
+            this.setState({ selectedSearch: event.target.value });
         }
 
         // Faz a busca do responsável:
         Search(event) {
             $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectAdult + "/name",
+                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -51,7 +54,7 @@ class Passport extends React.Component {
                 },
                 success: function (response) {    //Salva os dados do responsável na variácel LIST
                     console.log(response);
-                    this.setState({ achado: true });
+                    //this.setState({ achado: true });
                     this.setState({ list: response });
                 }.bind(this)
             });
@@ -62,7 +65,7 @@ class Passport extends React.Component {
             let achou = false;
 
         //Desmarca A checkBox
-        this.state.listConfirm.forEach((adult, indice, array) => {
+        this.state.listConfirmAdult.forEach((adult, indice, array) => {
             if (adult._id === identifier) {
                 delete array[indice];
                 achou = true;
@@ -72,41 +75,63 @@ class Passport extends React.Component {
         if (!(achou)) {
             this.state.list.forEach((adult) => {
                 if (adult._id === identifier) {
-                    this.state.listConfirm.push(adult);
+                    this.state.listConfirmAdult.push(adult);
                 }
             });
         }
 
-        this.setState({ listConfirm: this.state.listConfirm });
-        console.log(this.state.listConfirm)
+        this.setState({ listConfirmAdult: this.state.listConfirmAdult });
+        console.log(this.state.listConfirmAdult)
     }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL- Fim
-   
 
+    // FUNCOES RELACIONADAS A BUSCA DAS CRIANÇAS - Inicio 
+        //Bloco que muda o status para o atual do formulario.
+        ChangeSearch(event) {
+            this.setState({ selectedSearch: event.target.value });
+        }
 
-    // Salva AS informações das CRIANÇAS que apareceu na busca e foi selecionado.
-    selectedKids(identifier) {
-        let achou = false;
-
-        //Desmarca A checkBox
-        this.state.listConfirm.forEach((adult, indice, array) => {
-            if (adult._id === identifier) {
-                delete array[indice];
-                achou = true;
-            }
-        });
-
-        if (!(achou)) {
-            this.state.list.forEach((adult) => {
-                if (adult._id === identifier) {
-                    this.state.listConfirm.push(adult);
-                }
+        // Faz a busca das Crianças:
+        Search(event) {
+            $.ajax({
+                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",
+                dataType: 'json',
+                type: 'GET',
+                error: function (response) {
+                    if (response.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) }
+                },
+                success: function (response) {    //Salva os dados do responsável na variácel LIST
+                    console.log(response);
+                    //this.setState({ achado: true });
+                    this.setState({ list: response });
+                }.bind(this)
             });
         }
 
-        this.setState({ listConfirm: this.state.listConfirm });
-        console.log(this.state.listConfirm)
-    }
+        // Salva AS informações das CRIANÇAS que apareceu na busca e foi selecionado.
+        selectedKids(identifier) {
+            let achou = false;
+            //Desmarca A checkBox
+            this.state.listConfirmKids.forEach((kids, indice, array) => {
+                if (kids._id === identifier) {
+                    delete array[indice];
+                    achou = true;
+                }
+            });
+
+            if (!(achou)) {
+                this.state.list.forEach((kids) => {
+                    if (kids._id === identifier) {
+                        this.state.listConfirmKids.push(kids);
+                    }
+                });
+            }
+
+            this.setState({ listConfirmKids: this.state.listConfirmKids});
+            console.log(this.state.listConfirmKids)
+        }
+    // FUNCOES RELACIONADAS A BUSCA DAS CRIANÇAS - Fim
+   
 
     // FUNÇOES DO BOTÃO AVANÇAR - INICIO 
         // Encaminha para a tela II
@@ -191,7 +216,7 @@ class Passport extends React.Component {
                             <h3 className="inner-tittle " >Selecionar Responsável</h3>
                         </div>
                             <div className=" text-center">
-                                <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectAdult} onChange={this.ChangeSearch} placeholder="Pesquisar"/>
+                                <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar"/>
                                 <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
                             </div>
                         </div>
@@ -209,11 +234,10 @@ class Passport extends React.Component {
                                 </thead>
 
                                 <tbody>
-                                    {this.state.list.map((findAdult) => {
-                                        let indexTable = 1;
+                                    {this.state.list.map((findAdult, indice) => {        
                                         return (
                                             <tr key={findAdult._id}>
-                                                <th scope="row">{indexTable}</th>
+                                                <th scope="row">{indice+1}</th>
                                                 <td > {findAdult.name.firstName + " "+ findAdult.name.surName} </td>
                                                 <td >{findAdult.phone} </td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult._id)} /> </td>
@@ -234,30 +258,30 @@ class Passport extends React.Component {
         }
         //TELA II - Confirma Dados Adultos:
         else if (this.state.page === "ConfirmAdult") {
-            let Nome = this.state.listConfirm[0].name.firstName + " " + this.state.listConfirm[0].name.surName;
-            console.log(`Console.log: ${typeof(this.state.listConfirm)}`);
+            let Nome = this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName;
+            console.log(`Console.log: ${typeof(this.state.listConfirmAdult)}`);
             console.log(this.state.listComfirm)
             return (
                 <div className="container-fluid">
                     <ConfirmaAdulto
                     Name= {Nome}
-                    Cpf = {this.state.listConfirm[0].cpf}
-                    Rg = {this.state.listConfirm[0].rg}                
-                    Date = {this.state.listConfirm[0].birthday}
-                    Sexo = {this.state.listConfirm[0].sexuality}
-                    Nacionalidade = {this.state.listConfirm[0].nacionality}                
-                    PhoneNumber = {this.state.listConfirm[0].phone}
-                    MaritalStatus ={this.state.listConfirm[0].maritalStatus}
-                    Email = {this.state.listConfirm[0].email}
-                    Address = {this.state.listConfirm[0].address[0].street}
-                    Neighborhood = {this.state.listConfirm[0].address[0].district}
-                    City = {this.state.listConfirm[0].address[0].city}
-                    Cep = {this.state.listConfirm[0].address[0].cep}
-                    Observation = {this.state.listConfirm[0].observations}
-                    File = {this.state.listConfirm[0].photo}
-                    Number = {this.state.listConfirm[0].address[0].number}
-                    Country = {this.state.listConfirm[0].address[0].country}
-                    State = {this.state.listConfirm[0].address[0].state}
+                    Cpf = {this.state.listConfirmAdult[0].cpf}
+                    Rg = {this.state.listConfirmAdult[0].rg}                
+                    Date = {this.state.listConfirmAdult[0].birthday}
+                    Sexo = {this.state.listConfirmAdult[0].sexuality}
+                    Nacionalidade = {this.state.listConfirmAdult[0].nacionality}                
+                    PhoneNumber = {this.state.listConfirmAdult[0].phone}
+                    MaritalStatus ={this.state.listConfirmAdult[0].maritalStatus}
+                    Email = {this.state.listConfirmAdult[0].email}
+                    Address = {this.state.listConfirmAdult[0].address[0].street}
+                    Neighborhood = {this.state.listConfirmAdult[0].address[0].district}
+                    City = {this.state.listConfirmAdult[0].address[0].city}
+                    Cep = {this.state.listConfirmAdult[0].address[0].cep}
+                    Observation = {this.state.listConfirmAdult[0].observations}
+                    File = {this.state.listConfirmAdult[0].photo}
+                    Number = {this.state.listConfirmAdult[0].address[0].number}
+                    Country = {this.state.listConfirmAdult[0].address[0].country}
+                    State = {this.state.listConfirmAdult[0].address[0].state}
                     />                   
                     <div className="text-center">
                         <h3 className="inner-tittle" > Pesquisar Responsável</h3> 
@@ -286,7 +310,7 @@ class Passport extends React.Component {
                                     <h3 className="inner-tittle " >Selecionar Responsável</h3>
                                 </div>
                                 <div className=" text-center">
-                                    <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectAdult} onChange={this.ChangeSearch} placeholder="Pesquisar" />
+                                    <input type="search" id="selectKids" name="selectKids" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar" />
                                     <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
                                 </div>
                             </div>
@@ -304,11 +328,10 @@ class Passport extends React.Component {
                                     </thead>
 
                                     <tbody>
-                                        {this.state.list.map((findKids) => {
-                                            let indexTable = 1;
+                                        {this.state.list.map((findKids,indice) => {
                                             return (
                                                 <tr key={findKids._id}>
-                                                    <th scope="row">{indexTable}</th>
+                                                    <th scope="row">{indice+1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{findKids.phone} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
