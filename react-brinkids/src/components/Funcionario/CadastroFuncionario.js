@@ -21,7 +21,10 @@ class CadastroFuncionario extends React.Component {
             page: "BuscaAdulto",
             Name: "",
             CPF: "",
+            
+            //States para a busca de adulto
             Adulto: "",
+            list:[],
         }
         this.ChangeName = this.ChangeName.bind(this)
         this.ChangeCPF = this.ChangeCPF.bind(this)
@@ -38,18 +41,6 @@ class CadastroFuncionario extends React.Component {
     BuscaAdulto = (event) => {
         event.preventDefault();
 
-        //CRIA E PEGA AS PARTES DA TABELA
-        var Tbody = document.querySelector("#CriaTabela");
-        var tr = document.createElement("tr");
-        var th = document.createElement("th");
-        var tdFirst = document.createElement("td");
-        var tdSur = document.createElement("td");
-        var tdCPF = document.createElement("td");
-        var tdinput = document.createElement("td");
-        var input = document.createElement("input");
-        
-        //APAGA A TEBELA ANTIGA, SEMPRE QUE FIZER UMA NOVA BUSCA
-        Tbody.innerHTML = "";
 
         //DIFERENÇA ENTRE BUSCA POR NOME E BUSCA POR CPF, AJUDAR O BACK.
         if(this.state.Name !== ""){
@@ -60,46 +51,23 @@ class CadastroFuncionario extends React.Component {
                 return;
             }
             else {
-                axios.get(`/adult/filter/${this.state.Name}/name`).then(function (response) {
-                    console.log("Isto não está entrando")
+                axios.get(`/adult/filter/${this.state.Name}/name`)
+                .then(function (response) {                   
                     if (isEmpty(response.data) || response.data.length === 0) {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
                     else {
-                        for(var i = 0; i < response.data.length; i++){
-                            //CRIAÇÃO DAS TABELAS COM OS NOMES ENCONTRADOS
-                            th.setAttribute("scope","row")
-                            th.innerHTML = [i];
-                            tdFirst.innerHTML = response.data[i].name.firstName;
-                            tdSur.innerHTML = response.data[i].name.surName;
-                            tdCPF.innerHTML = response.data[i].cpf;
-                            input.setAttribute("type","button");
-                            input.setAttribute("value","Click Aqui");
-                            input.onclick = () => {
-                                this.setState({
-                                    Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
-                                    page: "FormularioCadastro",
-                                })
-                            }
-                            tr.appendChild(th);
-                            tr.appendChild(tdFirst);
-                            tr.appendChild(tdSur);
-                            tr.appendChild(tdCPF);
-                            tdinput.appendChild(input);
-                            tr.appendChild(tdinput);
-                            Tbody.appendChild(tr);
-                        }
+                        this.setState({list: response});
                     }
                 }).catch(function (error) {
-                    console.log("Mas isto está")
                     console.log(error)//LOG DE ERRO
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
-        else {
+        else{
             var erros = ValidaErros(this.state.CPF);
             if(erros.length > 0){
                 alert("Houve erro(s) no preechimento do formulário");
@@ -107,42 +75,19 @@ class CadastroFuncionario extends React.Component {
                 return;
             }
             else {
-                axios.get("/adult/filter/"+this.state.CPF + "/CPF")
-                .then(function (response) {
-                    console.log(response.data)
-                    if (isEmpty(response.data)) {
+                axios.get(`/adult/filter/${this.state.CPF}/cpf`)
+                .then(function (response) {                   
+                    if (isEmpty(response.data) || response.data.length === 0) {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
                     else {
-                        for(var i = 0; i < response.data.length; i++){
-                            //CRIAÇÃO DAS TABELAS COM OS NOMES ENCONTRADOS
-                            th.setAttribute("scope","row")
-                            th.innerHTML = [i];
-                            tdFirst.innerHTML = response.data[i].name.firstName;
-                            tdSur.innerHTML = response.data[i].name.surName;
-                            tdCPF.innerHTML = response.data[i].cpf;
-                            input.setAttribute("type","button");
-                            input.setAttribute("value","Click Aqui");
-                            input.onclick = () => { 
-                                this.setState({
-                                    Adulto: response.data[i].name.firstName + " " + response.data[i].name.surName,
-                                    page: "FormularioCadastro",
-                                })
-                            }
-                            tr.appendChild(th);
-                            tr.appendChild(tdFirst);
-                            tr.appendChild(tdSur);
-                            tr.appendChild(tdCPF);
-                            tdinput.appendChild(input);
-                            tr.appendChild(tdinput);
-                            Tbody.appendChild(tr);
-                        }
+                        this.setState({list: response});
                     }
                 }).catch(function (error) {
                     console.log(error)//LOG DE ERRO
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
@@ -171,6 +116,13 @@ class CadastroFuncionario extends React.Component {
                 ul.appendChild(li);
             });
         }
+    }
+
+    selecionaAdulto = (Name) => {
+        this.setState({
+            Adulto: Name,
+            page: "FormularioCadastro"
+        })
     }
     
     render() {
@@ -221,7 +173,21 @@ class CadastroFuncionario extends React.Component {
                                                 <th>Selecionar</th> 
                                             </tr>
                                         </thead> 
-                                        <tbody id="CriaTabela"></tbody>
+                                        <tbody>
+                                            {this.state.list.map((findAdult, indice) => {
+                                                return (
+                                                    <tr key={findAdult._id}>
+                                                        <th scope="row">{(indice + 1)}</th>
+                                                        <td > {findAdult.name.firstName} </td>
+                                                        <td >{findAdult.name.surName} </td>
+                                                        <td >{findAdult.cpf} </td>
+                                                        <td className="text-center">    
+                                                            <input type="checkbox" name="selectAdult" value="true" onClick={this.selecionaAdulto(findAdult.name.fistName + " " + findAdult.name.surName)} /> 
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -232,7 +198,7 @@ class CadastroFuncionario extends React.Component {
         }
         else if(this.state.page === "FormularioCadastro"){
             return(
-                <FormularioCad/>
+                <FormularioCad Name = {this.state.Adulto}/>
             )
         }
     }
