@@ -11,7 +11,7 @@ import adultos from './tabelas/adultos';
 import eventos from './tabelas/eventos';
 import noticias from './tabelas/noticias';
 import '../Comprovante/comprovante.css';
-
+import tabelinha from '../Comprovante/tabelinha';
 class DashBoard extends React.Component {
 	constructor(props) {
 		super(props);
@@ -19,8 +19,12 @@ class DashBoard extends React.Component {
 		this.state = {
 			comprovant: false,
 			colaps: true,
+			
 			teste: true,
-
+			aba:false,
+			
+			nome:[{},{}],
+			
 			popup: true,
 
 			adultospopup: false,
@@ -37,14 +41,14 @@ class DashBoard extends React.Component {
 		this.mudar3 = this.mudar3.bind(this);
 		this.mudar4 = this.mudar4.bind(this);
 	}
+	
 	mudar() {
 		//!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
-		const y = document.getElementById('rep').innerHTML;
-		const x = window.open('comprovante.js',"Janela pop-up");
-		x.document.write(y);
+		this.setState({nome:tabelinha});
+		this.setState({aba:true});
 	}
 	mudar2() {
-		!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
+		//!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
 		
 
 	}
@@ -259,12 +263,10 @@ class DashBoard extends React.Component {
 					</div>
 
 				}
-				<div id='rep' >
 				<Comprovante
-				id='testt'
-				
+				teste={this.state.aba}
+				tabela={this.state.nome}
 				/>
-				</div>
 			</div>
 			
 

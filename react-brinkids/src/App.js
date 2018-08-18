@@ -9,7 +9,6 @@ import Calendar from './components/Calendario/calednario.js';
 import DashBoard from './components/Dashboard/Dashboard.js';
 import Adult from './components/Adultos/CadastroAdulto.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
-import Comprovante from './components/Comprovante/comprovante.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -55,7 +54,7 @@ class App extends React.Component {
                   path="/Funcionario"
                   layout={MainLayout}
                   component={CadastroFuncionario}
-                />                  
+                />              
               <Redirect to="/" /> 
             </Switch>
           </GAListener>
