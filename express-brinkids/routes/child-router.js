@@ -9,6 +9,11 @@ const config = require('../config');
 
 const router = express.Router();
 
+function teste(json, res) {
+  console.log(json);
+  return res.status(200).json(json);
+}
+
 /**
  * Função para checar se a data da criança é válida
  * @param actualDate Data de quando essa operação for feita no sistema
@@ -46,7 +51,7 @@ router.get('/filter/:search', (req, res) => {
     query = child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
   }
 
-  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+  query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
 });
 
 /**

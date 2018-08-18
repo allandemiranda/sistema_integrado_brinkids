@@ -143,7 +143,7 @@ class FormularioCadFunc extends React.Component {
 
     ChangeLocalEmissao(event){this.setState({LocalEmissaoCT: event.target.value});}
 
-    ChangeRGLEmissao(event){this.setState({RGLmissao: event.target.value});}
+    ChangeRGLEmissao(event){this.setState({RGLEmissao: event.target.value});}
 
     ChangeRGUF(event){this.setState({RGUF: event.target.value});}
 
@@ -205,29 +205,31 @@ class FormularioCadFunc extends React.Component {
         // this.setState({phoneNumber: "00000.0000" });
         // this.setState({email: "teste@gmail.com.br"});
         // this.setState({sexuality: "Masculino"});
-       
-        axios.get("/adult/filter/"+this.props.Name)
-        .then(function (response) {
+       console.log("/adult/filter/"+this.props.Name+"/name")
+        axios.get("/adult/filter/"+this.props.Name+"/name")
+        .then((response) => {
             console.log(response.data)
             if (isEmpty(response.data)) {
                 alert("Nenhum adulto foi encontrado com essa busca")
             } 
             else {
-                this.setState({firstName: response.data.name.firstName});
-                this.setState({surName: response.data.name.surName});
-                this.setState({cpf: response.data.cpf});
-                this.setState({birthday: response.data.birthday});
-                this.setState({nacionality: response.data.nacionality});
-                this.setState({maritalStatus: response.data.maritalStatus});
-                this.setState({phoneNumber: response.data.phoneNumber});
-                this.setState({email: response.data.email});
-                this.setState({sexuality: response.data.sexuality});
+                const data = new Date(response.data[0].birthday).toISOString();
+                console.log("Data: " + data.slice(0, 10))
+                this.setState({firstName: response.data[0].name.firstName});
+                this.setState({surName: response.data[0].name.surName});
+                this.setState({cpf: response.data[0].cpf});
+                this.setState({birthday: data.slice(0, 10)});
+                this.setState({nacionality: response.data[0].nacionality});
+                this.setState({maritalStatus: response.data[0].maritalStatus});
+                this.setState({phoneNumber: response.data[0].phone});
+                this.setState({email: response.data[0].email});
+                this.setState({sexuality: response.data[0].sexuality});
             }
-        }).catch(function (error) {
+        }).catch((error) => {
             console.log(error)//LOG DE ERRO
-            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            alert("Erro ao pegar o adulto escolhido: " + error.response.status + " --> " + error.response.data);
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            // alert("Erro ao pegar o adulto escolhido: " + error.response.status + " --> " + error.response.data);
         })
 
         function isEmpty(obj) {

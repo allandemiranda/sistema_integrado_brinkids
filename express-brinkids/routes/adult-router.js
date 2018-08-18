@@ -67,6 +67,7 @@ router.post('/', (req, res) => {
       && req.body.country
       && req.body.cep
       && req.body.nacionality
+      && req.body.sexuality
       && req.body.cpf
       && req.body.email
       && req.body.maritalStatus) {
@@ -98,6 +99,7 @@ router.post('/', (req, res) => {
           cpf: req.body.cpf,
           email: req.body.email,
           nacionality: req.body.nacionality,
+          sexuality: req.body.sexuality,
           maritalStatus: req.body.maritalStatus,
           children: JSON.parse(req.body.criancas),
           observations: 'Observações',

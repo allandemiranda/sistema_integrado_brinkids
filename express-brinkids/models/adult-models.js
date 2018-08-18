@@ -75,6 +75,10 @@ const userAdultSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  sexuality: {
+    type: String,
+    require: true,
+  },
   maritalStatus: String,
   children: [childSchema],
   observations: String,

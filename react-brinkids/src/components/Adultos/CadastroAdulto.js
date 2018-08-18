@@ -484,8 +484,8 @@ class CadastroAdulto extends React.Component {
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario" > Estado Civil: </label>
                                             <select id = "estadoCivil" name = "estadoCivil" className = "form-control optionFomulario" value={this.state.maritalStatus} onChange={this.ChangeMarital} >
-                                                <option value = "Casado(a)" > Casado </option>
-                                                <option value = "Solterio(a)" > Solterio </option>                                                
+                                                <option value = "Casado(a)" > Casado(a) </option>
+                                                <option value = "Solteiro(a)" > Solterio(a) </option>                                                
                                                 <option value = "Viúvo(a)" > Viúvo(a)</option>
                                                 <option value = "Divorciado(a)" > Divorciado(a) </option>
                                             </select >
@@ -628,11 +628,10 @@ class CadastroAdulto extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.confirmaCrianca.map((findChild) => {
-                                       let indexTable = 1;
+                                    {this.state.confirmaCrianca.map((findChild,indice) => {
                                        return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indexTable}</th>
+                                                <th scope="row">{indice+1}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
@@ -697,11 +696,10 @@ class CadastroAdulto extends React.Component {
                                 </thead>
 
                                 <tbody>
-                                    {this.state.list.map((findChild) => {
-                                        let indexTable = 1;
+                                    {this.state.list.map((findChild,indice) => {
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indexTable}</th>
+                                                <th scope="row">{indice}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
