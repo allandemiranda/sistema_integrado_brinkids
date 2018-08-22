@@ -10,6 +10,7 @@ import DashBoard from './components/Dashboard/Dashboard.js';
 import Adult from './components/Adultos/CadastroAdulto.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
 import Passport from './components/Passaporte/Passaporte.js';
+import Aniversario from './components/Aniversario/CadastroAniversario.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -61,7 +62,13 @@ class App extends React.Component {
                   path="/Passport"
                   layout={MainLayout}
                   component={Passport}
-                />                               
+                />
+              <LayoutRoute
+                  exact
+                  path="/Aniversario"
+                  layout={MainLayout}
+                  component={Aniversario}
+                />                                
               <Redirect to="/" /> 
             </Switch>
           </GAListener>

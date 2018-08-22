@@ -129,6 +129,12 @@ class MainLayout extends React.Component {
                                     <span>Calendário</span >
                                 </a>
                             </li>
+                            <li >
+                                < a href = "/Aniversario" >
+                                    < i className = "fa fa-gift" > </i>
+                                    <span>Aniversário</span >
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
