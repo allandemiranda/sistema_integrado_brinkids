@@ -135,6 +135,12 @@ class MainLayout extends React.Component {
                                     <span>Aniversário</span >
                                 </a>
                             </li>
+                            <li>
+                                <a href = "/Passport">
+                                    <i className = "fa fa-globe"></i>
+                                    <span>Passaporte</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

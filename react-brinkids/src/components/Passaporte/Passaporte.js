@@ -19,7 +19,7 @@ class Passport extends React.Component {
         super(props)
         this.state = {
             //Responsável por saber qual página vai renderizar:
-            page: "SelectAdult",
+            page: "SelectAdult",//ConfirmAdult
             selectedSearch:'', // Salva o nome que é colocado na barra de busca
             list:[], //recebe do banco os dados da pessoa que foi buscada
 
@@ -207,7 +207,7 @@ class Passport extends React.Component {
     // FUNÇOES DO BOTÃO VOLTART TELA - FIM
 
     render() {  
-        //TELA I   
+        //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
             {/* Imprime a tabela com a busca dos Adultos*/ }
             return (
@@ -269,6 +269,7 @@ class Passport extends React.Component {
             //let Nome = this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName;
             console.log(`Console.log: ${typeof(this.state.listConfirmAdult)}`);
             console.log(this.state.listComfirm)
+{/*
             return (
                 <div className="container-fluid">
                     <ConfirmaAdulto
@@ -298,9 +299,191 @@ class Passport extends React.Component {
                     </div>
                 </div>                
             )
+*/}
+            return (
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Cadastro </li>
+                            <li > Adulto </li>
+                        </ol >
+                    </div>
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle" > Confirmando Cadastro </h3>
+                        <div className="graph" >
+                            <h3 className="inner-tittle" > Perfil </h3>
+                            <div className="row">
+                                <div className="col-md-12 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row">
+                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b>  CPF: </b> </h5>
+                                        <p> {this.state.listConfirmAdult[0].cpf} </p>
+                                    </div>
+                                </div>
+                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b>  RG: </b> </h5>
+                                        <p> {this.state.listConfirmAdult[0].rg} </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row" >
+                                <div className="col-md-4 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].birthday}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-4 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nacionalidade: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].nacionality}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-4 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Sexo: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].sexuality}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row">
+                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Telefone: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].phone}</p>
+                                    </div>
+                                </div>
+                                {/* 
+                                 <div className = "col-md-6 col-sm-6 col-xs-12" >
+                                    <label className = "LetraFormulario" > Telefone: </label>
+                                   <input type = "text" id = "phoneNumber" name = "phoneNumber" className = "form-control"  placeholder = "(00) 99999-9999"value = {this.state.listConfirmAdult[0].phone} onChange={this.ChangePhone} />
+                                </div>                            
+                                */}
+                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].maritalStatus}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className='row'>
+                                <div className="col-md-12 col-sm-12 col-xs-12">
+                                    <div className="graph ">
+                                        <h5 className="ltTitulo"> <b> Email:</b> </h5>
+                                        <p> {this.state.listConfirmAdult[0].email}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row">
+                                <div className="col-md-6 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Endereço: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].street}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-10">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Bairro: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].district}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-2 col-sm-2">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Número: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].number}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row">
+                                <div className="col-md-3 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> CEP: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].cep}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Cidade: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].city}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Estado: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].state}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> País: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].address[0].country}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+                            <div className="row">
+                            {/*                           
+                                <div className="col-md-6 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Observações: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].observations}</p>
+                                    </div>
+                                </div>
+                            */}
+ 
+                                <div className = "graph" >
+                                    <div className="row">
+                                        <div className="col-md-12 col-sm-12 col-xs-12">
+                                            <h3 className = "inner-tittle" > Observações </h3>
+                                            <br></br>
+                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.listConfirmAdult[0].observations} onChange={this.ChangeObs}></textarea>
+                                        </div>
+                                    </div>
+                                </div >                                                         
+                                    
+                                <div className="col-md-6 col-sm-12 text-center">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                        <img src={"http://localhost:3000/img-users/" +this.state.listConfirmAdult[0].photo} />
+                                    </div>
+                                </div>
+                            </div>
+                            <br></br>
+                        </div >
+                    </div>
+                </div>
+            )
         }
-        
-        //TELA III
+
+        //TELA III - Busca pelas crianças 
         else if (this.state.page === "SelectKids") {
             return (
                 <div className="container-fluid">
