@@ -26,16 +26,21 @@ const employeesSchema = new mongoose.Schema({
     dateIssue: Date,
     placeIssue: String,
   },
-  rg: {
-    issuingBody: String,
-    state: String,
-    dateIssue: String,
-  },
   electionTitle: {
     number: String,
     zone: String,
     section: String,
     state: String,
+  },
+  rg: {
+    issuingBody: String,
+    state: String,
+    dateIssue: String,
+  },
+  militaryReservist: {
+    number: String,
+    state: String,
+    DateIssue: Date,
   },
   passport: {
     number: String,
