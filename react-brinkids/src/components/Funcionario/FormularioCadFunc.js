@@ -558,7 +558,7 @@ class FormularioCadFunc extends React.Component {
                                 <div className = "row">
                                     <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Local de Emissão: "} type = {"text"} id = {"RGLE"} name= {"RGLE"} Class = {"form-control"} value={this.state.RGLEmissao} onChange={this.ChangeRGLEmissao}/>
                                     <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"UF: "} type = {"text"} id = {"RGUF"} name= {"RGUF"} Class = {"form-control"} value={this.state.RGUF} onChange={this.ChangeRGUF}/>
-                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data da Emissão: "} type = {"text"} id = {"RGDE"} name= {"RGDE"} Class = {"form-control"} value={this.state.RGDateEmissao} onChange={this.ChangeRGDateEmissao}/>
+                                    <TypesInput cod = {1}  ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data da Emissão: "} type = {"date"} id = {"RGDE"} name= {"RGDE"} Class = {"form-control"} value={this.state.RGDateEmissao} onChange={this.ChangeRGDateEmissao}/>
                                 </div>
                             </div >
                             <br></br>
@@ -592,9 +592,9 @@ class FormularioCadFunc extends React.Component {
                                 </div>
                                 <br></br>
                                 <div className = "row">
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Pais Emissor:"} type = {"text"} id = {"PPais"} name= {"PPais"} Class = {"form-control"} value={this.state.PPemissor} onChange={this.ChangePPemissor}/>
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Emissão:"} type = {"date"} id = {"PDE"} name= {"CRSerie"} Class = {"form-control"} value={this.state.PDemissao} onChange={this.ChangePDemissao}/>
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Validade:"} type = {"date"} id = {"PDV"} name= {"CRCat"} Class = {"form-control"} value={this.state.PDvalidade} onChange={this.ChangePDvalidade}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Pais Emissor:"} type = {"text"} id = {"PPais"} name= {"PPais"} Class = {"form-control"} value={this.state.PPemissor} onChange={this.ChangePPemissor}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Emissão:"} type = {"date"} id = {"PDE"} name= {"CRSerie"} Class = {"form-control"} value={this.state.PDemissao} onChange={this.ChangePDemissao}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Validade:"} type = {"date"} id = {"PDV"} name= {"CRCat"} Class = {"form-control"} value={this.state.PDvalidade} onChange={this.ChangePDvalidade}/>
                                 </div>
                             </div >
                             <br></br>
@@ -627,7 +627,7 @@ class FormularioCadFunc extends React.Component {
                                             "Limpador"
                                         ]}
                                     />
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Admissão:"} type = {"text"} id = {"DataAdmisao"} name= {"DataAdmisao"} Class = {"form-control"} value={this.state.DataAdmisao} onChange={this.ChangeDataAdmisao}/>
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data de Admissão:"} type = {"date"} id = {"DataAdmisao"} name= {"DataAdmisao"} Class = {"form-control"} value={this.state.DataAdmisao} onChange={this.ChangeDataAdmisao}/>
                                     <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Registro Interno:"} type = {"text"} id = {"RegInt"} name= {"RegInt"} Class = {"form-control"} value={this.state.RegInterno} onChange={this.ChangeRegInterno}/>
                                 </div>
                             </div >
