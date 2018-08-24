@@ -19,7 +19,7 @@ class Passport extends React.Component {
         super(props)
         this.state = {
             //Responsável por saber qual página vai renderizar:
-            page: "SelectAdult",//ConfirmAdult
+            page: "ConfirmKids",//ConfirmAdult
             selectedSearch:'', // Salva o nome que é colocado na barra de busca
             list:[], //recebe do banco os dados da pessoa que foi buscada
 
@@ -27,10 +27,13 @@ class Passport extends React.Component {
             listConfirmAdult: [], // Dados do Responsável Selecionado na checkBox
             erro:'',
            //achado: false,    
-            confirmAdult:'',
-            //Tela II:
+            confirmAdult:'',            
+            //Tela III:        
+            kidTthatCame:[],
             listConfirmKids: [], // Dados das crianças Selecionadas na checkBox
-
+            //TEla IV:
+            obs:'',
+            rest:'',
         }
 
         //Relacionado a busca
@@ -38,8 +41,24 @@ class Passport extends React.Component {
         this.SearchAdult = this.SearchAdult.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
 
-    }
+        //Relacionado a atualização dos valores Caminho
+        this.ChangeObs = this.ChangeObs.bind(this);
+        this.ChangeRest = this.ChangeRest.bind(this);
 
+    }
+    //Relacionado a atualização dos valores Funções
+       ChangeObs(event) {
+            this.setState({ obs: event.target.value });
+        }
+        ChangeRest(event) {
+            this.setState({ rest: event.target.value });
+        } 
+
+    HorarioAtual(event){
+        let now = new Date;
+        console.log("Hoje é " + now.getDay() + ", " + now.getDate() + " de " + now.getMonth() + " de " + now.getFullYear() );
+
+    }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
         //Bloco que muda o status para o atual do formulario.
         ChangeSearch(event) {
@@ -205,12 +224,30 @@ class Passport extends React.Component {
         }
 
     // FUNÇOES DO BOTÃO VOLTART TELA - FIM
+    
+    componentWillMount(){// Vê com gabriel o caminho 
+        return(
+            <tbody>
+                {this.state.list.map((kidTthatCame,indice) => {
+                    return (
+                        <tr key={kidTthatCame._id}>
+                            <th scope="row">{indice+1}</th>
+                            <td > {kidTthatCame.name.firstName + " " + kidTthatCame.name.surName} </td>
+                            <td >{kidTthatCame.birthday} </td>
+                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(kidTthatCame._id)} /> </td>
+                        </tr>
+                    );
+                })}
+            </tbody>                                        
+        )
+    }
+
 
     render() {  
         //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
             {/* Imprime a tabela com a busca dos Adultos*/ }
-            return (
+            return (                
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -247,7 +284,7 @@ class Passport extends React.Component {
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice+1}</th>
                                                 <td > {findAdult.name.firstName + " "+ findAdult.name.surName} </td>
-                                                <td >{findAdult.phone} </td>
+                                                <td >{findAdult.birthday} </td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult._id)} /> </td>
                                             </tr>
                                         );
@@ -264,6 +301,7 @@ class Passport extends React.Component {
                 </div>
             )
         }
+
         //TELA II - Confirma Dados Adultos:
         else if (this.state.page === "ConfirmAdult") {
             //let Nome = this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName;
@@ -482,7 +520,7 @@ class Passport extends React.Component {
                 </div>
             )
         }
-
+        
         //TELA III - Busca pelas crianças 
         else if (this.state.page === "SelectKids") {
             return (
@@ -512,7 +550,7 @@ class Passport extends React.Component {
                                         <tr>
                                             <th>#</th>
                                             <th >Nome</th>
-                                            <th >Telefone</th>
+                                            <th >Aniversário </th>
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
                                     </thead>
@@ -542,19 +580,133 @@ class Passport extends React.Component {
             )
         }
 
-        //TELA IV
+        //TELA IV - Confirmação das crianças na entrada do passaporte
         else if (this.state.page === "ConfirmKids") {
-            return (
-                <div className="text-center">
-                    <a className="btn btn-md botao" href="/">Cancelar</a>
-                    <button className="btn btn-md botao" onClick = {this.VoltarTelaIII}>Voltar</button>                        
-                    <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
+        {/*
+            Foto (nova foto que será tirada juntas responsável e criança, e ficará armazenado no drive para sempre)
+            Nome da criança
+            Idade da criança
+            Nome do responsável
+            Idade do responsável
+            Parentesco do responsável (deve ser uma lista semelhante ao cadastro de um novo usuário adulto)
+                Caso o usuário já tenha gravado em seu cadastro como responsável da dita criança, retorne a lista com o parentesco salvo.
+                Caso o responsável nessa opção deseje alterar o parentesco, esta mudança não deve ser registrada no perfil do usuário.
+                Caso será uma criança dita qual não tem relação de parentesco salva no sistema, inicie a lista com a opção outros.
+            Data e hora de entrada (data e hora do sistema)
+            Restrições ( deve ser um input com valuer=””, pois devem aparecer novas restrições temporárias)
+            Observações ( deve ser um input com valuer=””, pois devem aparecer novas observações temporárias)
+
+                Os botões finais dependerá da lógica escolhida de exibição este requisito.
+
+            OBS: Nenhum dos input’s devem atualizar o documento children (perfil da Criança), eles são temporários.
+
+                        
+        */} 
+        this.HorarioAtual();          
+        return (                
+            <div className="container-fluid" >
+                   {/* <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Passaporte </li>
+
+                        </ol >
+                    </div>
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle" > Confirmando Cadastro </h3>
+                        <div className="graph" >
+                            <h3 className="inner-tittle" > Perfil Criança </h3>
+
+                            <div className="row">
+                                <div className="col-md-8 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.listConfirmKids[0].name.firstName + " " + this.state.listConfirmKids[0].name.surName}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                        <p>{this.state.listConfirmKids[0].birthday}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row">
+                                <div className="col-md-8 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                        <p>{this.state.listConfirmAdult[0].birthday}</p>
+                                    </div>
+                                </div>
+                            </div>                          
+
+                            //  Parentesco
+
+                            // Data e hora de entrada
+
+                            <br></br>
+
+                            <div className="row">
+                                <div className="graph" >
+                                    <div className="row">
+                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                            <h3 className="inner-tittle" > Observações </h3>
+                                            <br></br>
+                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.listConfirmKids[0].observations} onChange={this.ChangeObs}></textarea>
+                                        </div>
+                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                            <h3 className="inner-tittle" > Observações </h3>
+                                            <br></br>
+                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.listConfirmKids[0].restrictions} onChange={this.ChangeRest}></textarea>
+                                        </div>
+                                    </div>
+                                </div >
+                            </div>                            
+                        </div >
+                        // Foto criança + responsável
+                    </div>*/}
+                    <div className="text-center">
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
+                    </div>
                 </div>
             )
         }
 
-        //TELA V
+        //TELA V - Checagem dos dados finais na entrada do passaporte
         else if (this.state.page === "Finalize") {
+            {/*
+            Confirmação dos dados cadastrados. Deve conter o perfil do responsável e de todas as crianças associadas a este responsável que irão usar o serviço Passaporte.
+            Deve conter nesta tela:
+                Alertas iniciais.
+                Perfil:
+                    Quando Reponsável: Foto (do perfil),Nome, Idade, Telefone, Observações
+                    Quando Criança: Foto (do perfil), Nome, Idade, Parentesco, Sexo, Restrições, Observações.
+                Existiram dois botões:
+                Cancelar:
+                    Cancelar tudo e volta para /home
+                Finalizar:
+                    Ao confirmar os dados a tela principal irá ser encaminhada para /home e abrirá uma nova janela para imprimir o comprovante de entrada.
+    
+            Comprovante para entrada do passaporte
+            Comprovante com a descrição da entrada. O modelo já existe e está disponível no drive do projeto. Esta tela será impressa pelo impressora de cupom, portanto deve está dentro dos padrões para isso. Se possível conter função para exibir a tela de impressão sem a  necessidade de clicar em imprimir.
+    
+            Interação da entrada do passaporte com o status da criança no sistema
+            Deve responder a todas a solicitações de busca de usuário adult e children, assim como o retorno de dados específicos do usuário selecionado para a interação no front. ao finalizar todas as interações, os dados devem ser criados no documento “dashboards” para manutenção do status do serviço.
+    
+            Extra:
+            ATENÇÃO! O desenvolvedor Back deve está junto ao desenvolvedor front, pois este requisito apresenta uma dificuldade maior que as enfrentadas nas telas desenvolvidas anteriormente.
+            */}
             return (
                 <div className="text-center">
                     <a className="btn btn-md botao" href="/">Cancelar</a>
