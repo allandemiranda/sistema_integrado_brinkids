@@ -25,8 +25,8 @@ class Comprovante extends React.Component {
         const byChild = function (events) {
             console.log(events.name);
 
-            if (events.name != undefined) {
-                if (events.service == "PASSAPORTE") {
+            if (events.name !== undefined) {
+                if (events.service === "PASSAPORTE") {
 
                     return (
                         <div id="crianca" key={events.id.toString()}>
