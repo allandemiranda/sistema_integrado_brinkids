@@ -1,7 +1,7 @@
 export default [
     
 {
-    name: { firstName: 'Matheus', surName: 'Souto' },
+    name: {firstName: 'Matheus', surName: 'Souto' },
     phone: [ '123987123' ],
     _id: "5b708fbb11942e1e83a7e088",
     birthday: new Date("1999-04-15T00:00:00.000Z"),
