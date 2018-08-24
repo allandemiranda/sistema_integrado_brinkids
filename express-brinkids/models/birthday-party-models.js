@@ -60,6 +60,6 @@ const birthdayPartySchema = mongoose.Schema({
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const birthdayParty = mongoose.model('Employee', birthdayPartySchema);
+const birthdayParty = mongoose.model('BirthdayParty', birthdayPartySchema);
 
 module.exports = birthdayParty;

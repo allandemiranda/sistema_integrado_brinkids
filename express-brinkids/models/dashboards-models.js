@@ -46,6 +46,6 @@ const dashboardSchema = mongoose.Schema({
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const dashboard = mongoose.model('Employee', dashboardSchema);
+const dashboard = mongoose.model('Dashboard', dashboardSchema);
 
 module.exports = dashboard;
