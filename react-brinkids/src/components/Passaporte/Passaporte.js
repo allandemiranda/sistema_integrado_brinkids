@@ -19,7 +19,7 @@ class Passport extends React.Component {
         super(props)
         this.state = {
             //Responsável por saber qual página vai renderizar:
-            page: "ConfirmKids",//ConfirmAdult
+            page: "SelectAdult",//ConfirmAdult
             selectedSearch:'', // Salva o nome que é colocado na barra de busca
             list:[], //recebe do banco os dados da pessoa que foi buscada
 
@@ -34,16 +34,20 @@ class Passport extends React.Component {
             //TEla IV:
             obs:'',
             rest:'',
+            phone:'',
         }
 
         //Relacionado a busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.SearchAdult = this.SearchAdult.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
+        
 
         //Relacionado a atualização dos valores Caminho
-        this.ChangeObs = this.ChangeObs.bind(this);
+        this.ChangeObs = this.ChangeObs.bind(this); //apontador 
         this.ChangeRest = this.ChangeRest.bind(this);
+        this.ChangePhone= this.ChangePhone.bind(this);
+        
 
     }
     //Relacionado a atualização dos valores Funções
@@ -53,6 +57,9 @@ class Passport extends React.Component {
         ChangeRest(event) {
             this.setState({ rest: event.target.value });
         } 
+        ChangePhone (event){
+            this.setState({ phone: event.target.value });   
+        }
 
     HorarioAtual(event){
         let now = new Date;
@@ -164,7 +171,9 @@ class Passport extends React.Component {
         // Encaminha para a tela II
         TelaII = (event) => {
             this.setState({
-                page: "ConfirmAdult"
+                page: "ConfirmAdult",
+                obs: this.state.listConfirmAdult[0].observations,
+                phone: this.state.listConfirmAdult[0].phone,
             })
         }
 
@@ -405,16 +414,12 @@ class Passport extends React.Component {
                             <div className="row">
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].phone}</p>
+                                        <div className="graph" style={{ padding: 10 + "px" }}>  
+                                            <h5 className="ltTitulo"><b> Telefone: </b></h5>
+                                            <input type = "text" id = "phoneNumber" name = "phoneNumber" className = "form-control"  placeholder = "(00) 99999-9999" value = {this.state.phone} onChange={this.ChangePhone} />
+                                        </div>
                                     </div>
                                 </div>
-                                {/* 
-                                 <div className = "col-md-6 col-sm-6 col-xs-12" >
-                                    <label className = "LetraFormulario" > Telefone: </label>
-                                   <input type = "text" id = "phoneNumber" name = "phoneNumber" className = "form-control"  placeholder = "(00) 99999-9999"value = {this.state.listConfirmAdult[0].phone} onChange={this.ChangePhone} />
-                                </div>                            
-                                */}
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
@@ -488,21 +493,12 @@ class Passport extends React.Component {
 
                             <br></br>
                             <div className="row">
-                            {/*                           
-                                <div className="col-md-6 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Observações: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].observations}</p>
-                                    </div>
-                                </div>
-                            */}
- 
                                 <div className = "graph" >
                                     <div className="row">
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className = "inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.listConfirmAdult[0].observations} onChange={this.ChangeObs}></textarea>
+                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
                                         </div>
                                     </div>
                                 </div >                                                         
@@ -516,6 +512,11 @@ class Passport extends React.Component {
                             </div>
                             <br></br>
                         </div >
+                    </div>
+                    <div className="text-center">
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
                 </div>
             )
