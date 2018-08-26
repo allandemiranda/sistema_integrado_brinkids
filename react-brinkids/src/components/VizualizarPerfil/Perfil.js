@@ -125,7 +125,7 @@ class Perfil extends React.Component {
             editar: true,
 
         });
-        console.log(this.state.perfilEdicao.observations);
+        
         this.setState({
             obs: this.state.perfilEdicao.observations,
             numero: this.state.perfilEdicao.address.number,
