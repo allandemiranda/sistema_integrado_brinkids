@@ -11,6 +11,7 @@ import Adult from './components/Adultos/CadastroAdulto.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
 import Passport from './components/Passaporte/Passaporte.js';
 import Aniversario from './components/Aniversario/CadastroAniversario.js';
+import Perfil from './components/VizualizarPerfil/Perfil.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -68,7 +69,13 @@ class App extends React.Component {
                   path="/Aniversario"
                   layout={MainLayout}
                   component={Aniversario}
-                />                                
+                />
+                <LayoutRoute
+                  exact
+                  path="/Perfil"
+                  layout={MainLayout}
+                  component={Perfil}
+                />                                  
               <Redirect to="/" /> 
             </Switch>
           </GAListener>
