@@ -19,7 +19,7 @@ class Passport extends React.Component {
         super(props)
         this.state = {
             //Responsável por saber qual página vai renderizar:
-            page: "SelectAdult",//ConfirmAdult
+            page: "ConfirmKids",//ConfirmAdult
             selectedSearch:'', // Salva o nome que é colocado na barra de busca
             list:[], //recebe do banco os dados da pessoa que foi buscada
 
@@ -35,6 +35,7 @@ class Passport extends React.Component {
             obs:'',
             rest:'',
             phone:'',
+            file: "",
         }
 
         //Relacionado a busca
@@ -63,7 +64,7 @@ class Passport extends React.Component {
 
     HorarioAtual(event){
         let now = new Date;
-        console.log("Hoje é " + now.getDay() + ", " + now.getDate() + " de " + now.getMonth() + " de " + now.getFullYear() );
+        console.log(now.getDate() + " de " + now.getMonth()  + " de " + now.getFullYear()+ ' ' + now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds());
 
     }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
@@ -187,7 +188,9 @@ class Passport extends React.Component {
         // Encaminha para a tela IV
         TelaIV = (event) => {
             this.setState({
-                page: "ConfirmKids"
+                page: "ConfirmKids",
+                obs: this.state.listConfirmKids[0].observations,
+                rest: this.state.listConfirmKids[0].restrictions,
             })
         }
 
@@ -233,6 +236,24 @@ class Passport extends React.Component {
         }
 
     // FUNÇOES DO BOTÃO VOLTART TELA - FIM
+
+    //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - INÍCIO 
+    
+    /*BLOCO QUE TIRA FOTO DA WEBCAN*/
+    setRef = (webcam) => {
+        this.webcam = webcam;
+    }
+    capture = (event) => {
+        event.preventDefault();
+        var imagem = document.querySelector("#imagem");
+        const imageSrc = this.webcam.getScreenshot();
+        imagem.src = imageSrc;
+        this.imageBase64 = imageSrc;
+        this.setState({
+            file: imageSrc
+        })
+    };
+    //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
     
     componentWillMount(){// Vê com gabriel o caminho 
         return(
@@ -313,47 +334,14 @@ class Passport extends React.Component {
 
         //TELA II - Confirma Dados Adultos:
         else if (this.state.page === "ConfirmAdult") {
-            //let Nome = this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName;
             console.log(`Console.log: ${typeof(this.state.listConfirmAdult)}`);
             console.log(this.state.listComfirm)
-{/*
-            return (
-                <div className="container-fluid">
-                    <ConfirmaAdulto
-                    Name= {this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}
-                    Cpf = {this.state.listConfirmAdult[0].cpf}
-                    Rg = {this.state.listConfirmAdult[0].rg}                
-                    Date = {this.state.listConfirmAdult[0].birthday}
-                    Sexo = {this.state.listConfirmAdult[0].sexuality}
-                    Nacionalidade = {this.state.listConfirmAdult[0].nacionality}                
-                    PhoneNumber = {this.state.listConfirmAdult[0].phone}
-                    MaritalStatus ={this.state.listConfirmAdult[0].maritalStatus}
-                    Email = {this.state.listConfirmAdult[0].email}
-                    Address = {this.state.listConfirmAdult[0].address[0].street}
-                    Neighborhood = {this.state.listConfirmAdult[0].address[0].district}
-                    City = {this.state.listConfirmAdult[0].address[0].city}
-                    Cep = {this.state.listConfirmAdult[0].address[0].cep}
-                    Observation = {this.state.listConfirmAdult[0].observations}
-                    File = {this.state.listConfirmAdult[0].photo}
-                    Number = {this.state.listConfirmAdult[0].address[0].number}
-                    Country = {this.state.listConfirmAdult[0].address[0].country}
-                    State = {this.state.listConfirmAdult[0].address[0].state}
-                    />                   
-                    <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
-                        <button className="btn btn-md botao" onClick = {this.VoltarTelaI}>Voltar</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
-                    </div>
-                </div>                
-            )
-*/}
             return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Cadastro </li>
-                            <li > Adulto </li>
+                            <li > Passport </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -414,10 +402,8 @@ class Passport extends React.Component {
                             <div className="row">
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <div className="graph" style={{ padding: 10 + "px" }}>  
-                                            <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                            <input type = "text" id = "phoneNumber" name = "phoneNumber" className = "form-control"  placeholder = "(00) 99999-9999" value = {this.state.phone} onChange={this.ChangePhone} />
-                                        </div>
+                                        <h5 className="ltTitulo"><b> Telefone: </b></h5>
+                                        <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
                                     </div>
                                 </div>
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
@@ -585,24 +571,22 @@ class Passport extends React.Component {
         else if (this.state.page === "ConfirmKids") {
         {/*
             Foto (nova foto que será tirada juntas responsável e criança, e ficará armazenado no drive para sempre)
-            Nome da criança
+            ==Nome da criança
             Idade da criança
-            Nome do responsável
+            ==Nome do responsável
             Idade do responsável
             Parentesco do responsável (deve ser uma lista semelhante ao cadastro de um novo usuário adulto)
                 Caso o usuário já tenha gravado em seu cadastro como responsável da dita criança, retorne a lista com o parentesco salvo.
                 Caso o responsável nessa opção deseje alterar o parentesco, esta mudança não deve ser registrada no perfil do usuário.
                 Caso será uma criança dita qual não tem relação de parentesco salva no sistema, inicie a lista com a opção outros.
             Data e hora de entrada (data e hora do sistema)
-            Restrições ( deve ser um input com valuer=””, pois devem aparecer novas restrições temporárias)
-            Observações ( deve ser um input com valuer=””, pois devem aparecer novas observações temporárias)
+            ==Restrições ( deve ser um input com valuer=””, pois devem aparecer novas restrições temporárias)
+            ==Observações ( deve ser um input com valuer=””, pois devem aparecer novas observações temporárias)
 
                 Os botões finais dependerá da lógica escolhida de exibição este requisito.
 
-            OBS: Nenhum dos input’s devem atualizar o documento children (perfil da Criança), eles são temporários.
-
-                        
-        */} 
+            OBS: Nenhum dos input’s devem atualizar o documento children (perfil da Criança), eles são temporários.                        
+       /// */} 
         this.HorarioAtual();          
         return (                
             <div className="container-fluid" >
@@ -648,32 +632,68 @@ class Passport extends React.Component {
                                         <p>{this.state.listConfirmAdult[0].birthday}</p>
                                     </div>
                                 </div>
-                            </div>                          
+                            </div> 
 
-                            //  Parentesco
+                            <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
+                                <div className="col-md-6 col-sm-12">
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                    <option value="others" > Outros </option>
+                                    <option value="children" > filho(a) </option>
+                                    <option value="Stepson" > Enteado(a) </option>
+                                    <option value="grandchildren"  > Neto(a) </option>
+                                    <option value="nephews"  > Sobrinho(a) </option>
+                                    <option value="Brother" > Irmão/Irmã </option>
+                                </select >
+                                </div>
+                            </div>
+                                <div className="col-md-6 col-sm-12">
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                                 // Data e hora de entrada
+                                </div>
+                                </div>
 
-                            // Data e hora de entrada
+                            </div>
 
                             <br></br>
-
                             <div className="row">
-                                <div className="graph" >
+                                <div className = "graph" >
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <h3 className="inner-tittle" > Observações </h3>
+                                            <h3 className = "inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.listConfirmKids[0].observations} onChange={this.ChangeObs}></textarea>
+                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <h3 className="inner-tittle" > Observações </h3>
+                                            <h3 className = "inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.listConfirmKids[0].restrictions} onChange={this.ChangeRest}></textarea>
+                                            <textarea className = "form-control" rows = "4" cols = "50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
+                                        </div>                                        
+                                    </div>
+                                </div >                                                         
+                                    
+
+                        // Foto criança + responsável
+                                <div className = "graph" >
+                                    <div className="row text-center">
+                                        <h4 className = "inner-tittle"> Tirando uma foto </h4>
+                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                            <Webcam
+                                                className = "webcan"
+                                                audio={false}
+                                                height={240}
+                                                ref={this.setRef}
+                                                screenshotFormat="image/png"
+                                                width={320}
+                                            />
+                                            <button className="btn btn-md botao" onClick={this.capture}>Take a Photo</button>
+                                            <br></br>
+                                        </div>
+                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                            <img id="imagem" className="webcan" src={this.state.file}/>
                                         </div>
                                     </div>
-                                </div >
-                            </div>                            
-                        </div >
-                        // Foto criança + responsável
+                                </div >                        
                     </div>*/}
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
