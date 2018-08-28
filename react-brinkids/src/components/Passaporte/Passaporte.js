@@ -19,7 +19,7 @@ class Passport extends React.Component {
         super(props)
         this.state = {
             //Responsável por saber qual página vai renderizar:
-            page: "ConfirmKids",//ConfirmAdult
+            page: "SelectAdult",//ConfirmAdult
             selectedSearch:'', // Salva o nome que é colocado na barra de busca
             list:[], //recebe do banco os dados da pessoa que foi buscada
 
@@ -35,7 +35,8 @@ class Passport extends React.Component {
             obs:'',
             rest:'',
             phone:'',
-            file: "",
+            file: '',
+            currentdate:[],
         }
 
         //Relacionado a busca
@@ -65,6 +66,15 @@ class Passport extends React.Component {
     HorarioAtual(event){
         let now = new Date;
         console.log(now.getDate() + " de " + now.getMonth()  + " de " + now.getFullYear()+ ' ' + now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds());
+        this.currentdate = [
+            now.getDate(),
+            now.getMonth() + 1 ,
+            now.getFullYear(),
+            now.getHours(),
+            now.getMinutes(),
+             now.getSeconds()
+        ]
+        console.log(this.currentdate[0] + ',' + this.currentdate[1] +' de '+  this.currentdate[2] +' as '+ this.currentdate[3] +':'+ this.currentdate[4]+':'+ this.currentdate[5]);      
 
     }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
@@ -255,24 +265,6 @@ class Passport extends React.Component {
     };
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
     
-    componentWillMount(){// Vê com gabriel o caminho 
-        return(
-            <tbody>
-                {this.state.list.map((kidTthatCame,indice) => {
-                    return (
-                        <tr key={kidTthatCame._id}>
-                            <th scope="row">{indice+1}</th>
-                            <td > {kidTthatCame.name.firstName + " " + kidTthatCame.name.surName} </td>
-                            <td >{kidTthatCame.birthday} </td>
-                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(kidTthatCame._id)} /> </td>
-                        </tr>
-                    );
-                })}
-            </tbody>                                        
-        )
-    }
-
-
     render() {  
         //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
@@ -282,7 +274,7 @@ class Passport extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passport </li>
+                            <li > Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -307,7 +299,6 @@ class Passport extends React.Component {
                                         <th className="text-center"> Selecionar </th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {        
                                         return (
@@ -334,14 +325,14 @@ class Passport extends React.Component {
 
         //TELA II - Confirma Dados Adultos:
         else if (this.state.page === "ConfirmAdult") {
-            console.log(`Console.log: ${typeof(this.state.listConfirmAdult)}`);
+            console.log(`Console.log: ${typeof (this.state.listConfirmAdult)}`);
             console.log(this.state.listComfirm)
             return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passport </li>
+                            <li > Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -479,20 +470,20 @@ class Passport extends React.Component {
 
                             <br></br>
                             <div className="row">
-                                <div className = "graph" >
+                                <div className="graph" >
                                     <div className="row">
                                         <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <h3 className = "inner-tittle" > Observações </h3>
+                                            <h3 className="inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
                                         </div>
                                     </div>
-                                </div >                                                         
-                                    
+                                </div >
+
                                 <div className="col-md-6 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                        <img src={"http://localhost:3000/img-users/" +this.state.listConfirmAdult[0].photo} />
+                                        <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
                                     </div>
                                 </div>
                             </div>
@@ -516,7 +507,7 @@ class Passport extends React.Component {
                         <div className="sub-heard-part" >
                             <ol className="breadcrumb m-b-0" >
                                 <li > < a href="/" > Home </a></li >
-                                <li > Passport </li>
+                                <li > Passaporte</li>
                             </ol >
                         </div>
                         <div className="graph-visual" >
@@ -541,6 +532,18 @@ class Passport extends React.Component {
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        {this.state.listConfirmAdult[0].children[0].map((findKids,indice) => {
+                                            return (
+                                                <tr key={findKids._id}>
+                                                    <th scope="row">{indice+1}</th>
+                                                    <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
+                                                    <td >{findKids.phone} </td>
+                                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
                                     
                                     <tbody>
                                         {this.state.list.map((findKids,indice) => {
@@ -569,117 +572,102 @@ class Passport extends React.Component {
 
         //TELA IV - Confirmação das crianças na entrada do passaporte
         else if (this.state.page === "ConfirmKids") {
-        {/*
-            Foto (nova foto que será tirada juntas responsável e criança, e ficará armazenado no drive para sempre)
-            ==Nome da criança
-            Idade da criança
-            ==Nome do responsável
-            Idade do responsável
-            Parentesco do responsável (deve ser uma lista semelhante ao cadastro de um novo usuário adulto)
-                Caso o usuário já tenha gravado em seu cadastro como responsável da dita criança, retorne a lista com o parentesco salvo.
-                Caso o responsável nessa opção deseje alterar o parentesco, esta mudança não deve ser registrada no perfil do usuário.
-                Caso será uma criança dita qual não tem relação de parentesco salva no sistema, inicie a lista com a opção outros.
-            Data e hora de entrada (data e hora do sistema)
-            ==Restrições ( deve ser um input com valuer=””, pois devem aparecer novas restrições temporárias)
-            ==Observações ( deve ser um input com valuer=””, pois devem aparecer novas observações temporárias)
+            this.HorarioAtual();
+            return (
+                <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        <div className="sub-heard-part" >
+                            <ol className="breadcrumb m-b-0" >
+                                <li > < a href="/" > Home </a></li >
+                                <li > Passaporte </li>
+                            </ol >
+                        </div>
+                        <div className="graph-visual" >
+                            <h3 className="inner-tittle" > Confirmando Cadastro </h3>
+                            <div className="graph" >
+                                <h3 className="inner-tittle" > Perfil Criança </h3>
 
-                Os botões finais dependerá da lógica escolhida de exibição este requisito.
-
-            OBS: Nenhum dos input’s devem atualizar o documento children (perfil da Criança), eles são temporários.                        
-       /// */} 
-        this.HorarioAtual();          
-        return (                
-            <div className="container-fluid" >
-                   {/* <div className="sub-heard-part" >
-                        <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
-
-                        </ol >
-                    </div>
-                    <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Confirmando Cadastro </h3>
-                        <div className="graph" >
-                            <h3 className="inner-tittle" > Perfil Criança </h3>
-
-                            <div className="row">
-                                <div className="col-md-8 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.listConfirmKids[0].name.firstName + " " + this.state.listConfirmKids[0].name.surName}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{this.state.listConfirmKids[0].birthday}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-8 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].birthday}</p>
-                                    </div>
-                                </div>
-                            </div> 
-
-                            <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
-                                <div className="col-md-6 col-sm-12">
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
-                                    <option value="others" > Outros </option>
-                                    <option value="children" > filho(a) </option>
-                                    <option value="Stepson" > Enteado(a) </option>
-                                    <option value="grandchildren"  > Neto(a) </option>
-                                    <option value="nephews"  > Sobrinho(a) </option>
-                                    <option value="Brother" > Irmão/Irmã </option>
-                                </select >
-                                </div>
-                            </div>
-                                <div className="col-md-6 col-sm-12">
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                                 // Data e hora de entrada
-                                </div>
-                                </div>
-
-                            </div>
-
-                            <br></br>
-                            <div className="row">
-                                <div className = "graph" >
-                                    <div className="row">
-                                        <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <h3 className = "inner-tittle" > Observações </h3>
-                                            <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                <div className="row">
+                                    <div className="col-md-8 col-sm-12">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                            <p>{this.state.listConfirmKids[0].name.firstName + " " + this.state.listConfirmKids[0].name.surName}</p>
                                         </div>
-                                        <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <h3 className = "inner-tittle" > Observações </h3>
-                                            <br></br>
-                                            <textarea className = "form-control" rows = "4" cols = "50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
-                                        </div>                                        
                                     </div>
-                                </div >                                                         
-                                    
+                                    <div className="col-md-4 col-sm-12">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                            <p>{this.state.listConfirmKids[0].birthday}</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        // Foto criança + responsável
-                                <div className = "graph" >
+                                <br></br>
+
+                                <div className="row">
+                                    <div className="col-md-8 col-sm-12">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4 col-sm-12">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                            <p>{this.state.listConfirmAdult[0].birthday}</p>
+                                        </div>
+                                    </div>
+                                </div>                                
+
+                                <br></br>
+{/*
+                                <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
+                                    <div className="col-md-6 col-sm-12">//
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                <option value="others" > Outros </option>
+                                                <option value="children" > filho(a) </option>
+                                                <option value="Stepson" > Enteado(a) </option>
+                                                <option value="grandchildren"  > Neto(a) </option>
+                                                <option value="nephews"  > Sobrinho(a) </option>
+                                                <option value="Brother" > Irmão/Irmã </option>
+                                            </select >
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6 col-sm-12">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5><b> Entrada: </b></h5>
+                                            <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
+                                        </div>
+                                    </div>
+                                </div>
+*/}
+                                <br></br>
+
+                                <div className="row">
+                                    <div className="graph" >
+                                        <div className="row">
+                                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                                <h3 className="inner-tittle" > Observações </h3>
+                                                <br></br>
+                                                <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                            </div>
+                                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                                <h3 className="inner-tittle" > Restrições </h3>
+                                                <br></br>
+                                                <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
+                                            </div>
+                                        </div>
+                                    </div >
+                                </div>
+
+                                <br></br>
+                                <div className="graph" >
                                     <div className="row text-center">
-                                        <h4 className = "inner-tittle"> Tirando uma foto </h4>
+                                        <h4 className="inner-tittle"> Tirando uma foto </h4>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <Webcam
-                                                className = "webcan"
+                                                className="webcan"
                                                 audio={false}
                                                 height={240}
                                                 ref={this.setRef}
@@ -690,20 +678,23 @@ class Passport extends React.Component {
                                             <br></br>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <img id="imagem" className="webcan" src={this.state.file}/>
+                                            <img id="imagem" className="webcan" src={this.state.file} />
                                         </div>
                                     </div>
-                                </div >                        
-                    </div>*/}
+                                </div >                           
+                            </div>
+                        </div>
+                    </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>
                 </div>
+
             )
         }
-
+               
         //TELA V - Checagem dos dados finais na entrada do passaporte
         else if (this.state.page === "Finalize") {
             {/*
