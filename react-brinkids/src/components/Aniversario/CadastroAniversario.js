@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
-
+import ConfDadosAni from './ConfirmaDadosAniversariante.js'
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -26,7 +26,7 @@ class CadastroAniversario extends React.Component {
             DescriçãoDoAni:"",
             ObsDoAni:"",
             ValorPg:"",
-            MetodoPg:"",   
+            MetodoPg:"",
         }
 
         this.ChangeTitulo = this.ChangeTitulo.bind(this);
@@ -74,6 +74,7 @@ class CadastroAniversario extends React.Component {
     ValidaAniversaio = (event) => {
         event.preventDefault();
         var erros = ValidaErros(this.state);
+        
         if(erros.length > 0){
             alert("Houve erro(s) no preechimento do formulário");
             exibeMensagensDeErro(erros);
@@ -82,9 +83,9 @@ class CadastroAniversario extends React.Component {
         else {
             exibeMensagensDeErro(erros);
             console.log("deu tudo certo")
-            // this.setState({
-            //     page: "ConfirmaCad"
-            // })
+            this.setState({
+                page: "ConfDadosAni"
+            })
         }
         function ValidaErros (ani){
 
@@ -136,6 +137,17 @@ class CadastroAniversario extends React.Component {
                 ul.appendChild(li);
             });
         }
+    }
+
+    VoltaFormAni = () => {
+        this.setState({
+            page: "FormularioCad"
+        })
+    }
+    AvancaListConv = () => {
+        this.setState({
+            page: "FormularioListaConv"
+        })
     }
 
     render() {
@@ -208,6 +220,20 @@ class CadastroAniversario extends React.Component {
                             </div>  
                     </div>
                 </div>
+            )
+        }
+        else if(this.state.page === "ConfDadosAni"){
+            return(
+                <div>
+                    <ConfDadosAni Titulo = {this.state.TituloDoAni} Name = {this.state.NomeDoAni} Idade = {this.state.IdadeDoAni}
+                     Date = {this.state.DataDoAni} HI = {this.state.HoraInicio} HF = {this.state.HoraFinal} 
+                     CC = {this.state.QuantCrianca} AC = {this.state.QuantAdulto} Valor = {this.state.ValorPg} Metodo ={this.state.MetodoPg}
+                     Descricao = {this.state.DescriçãoDoAni} Obs = {this.state.ObsDoAni}/>
+                    <div className="text-center">
+                        <button className="btn btn-md botao" onClick={this.VoltaFormAni}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.AvancaListConv}>Avançar</button>
+                    </div> 
+                </div> 
             )
         }
     }
