@@ -34,14 +34,14 @@ router.get('/filter/:search/:type', (req, res) => {
 
     if (listSearch.length === 1) {
       [firstName] = listSearch;
-      query = userAdult.find({ 'name.firstName': new RegExp(firstName) });
+      query = userAdult.find({ 'name.firstName': new RegExp(firstName), isEmployee: false });
     } else {
       // Forma de atribuir valores da lista a variáveis
       // É equivalente a:
       // firstName = listSearch[0]
       // surName = listSearch[1]
       [firstName, surName] = listSearch;
-      query = userAdult.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      query = userAdult.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName), isEmployee: false });
     }
   }
 
@@ -104,11 +104,11 @@ router.post('/', (req, res) => {
           children: JSON.parse(req.body.criancas),
           observations: 'Observações',
           photo: '/caminho',
+          isEmployee: false,
         };
 
         userAdult.create(data, (errAdult, adultResult) => {
           if (errAdult) {
-            console.log(errAdult);
             return res.sendStatus(500);
           }
           const photoNameComponents = photoFile.name.split('.');

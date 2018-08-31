@@ -40,7 +40,7 @@ const employeesSchema = new mongoose.Schema({
   militaryReservist: {
     number: String,
     state: String,
-    DateIssue: Date,
+    category: String,
   },
   passport: {
     number: String,

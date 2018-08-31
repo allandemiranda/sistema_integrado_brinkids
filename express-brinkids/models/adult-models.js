@@ -86,6 +86,7 @@ const userAdultSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isEmployee: Boolean,
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

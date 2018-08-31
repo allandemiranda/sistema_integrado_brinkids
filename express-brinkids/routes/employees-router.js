@@ -2,14 +2,21 @@
 
 const express = require('express');
 const employees = require('../models/employees-models');
+const adult = require('../models/adult-models');
 
 const router = express.Router();
+
+function teste(err, res) {
+  console.log(err);
+  return res.status(500);
+}
 
 router.get('/', (req, res) => {
   employees.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
 router.post('/', (req, res) => {
+
   const data = {
     functions: ['Trabalho1', 'trabalho2'],
     gender: req.body.gender,
@@ -33,7 +40,12 @@ router.post('/', (req, res) => {
     rg: {
       issuingBody: req.body.RgIssuingBody,
       state: req.body.RgState,
-      dateIssue: req.body.RgDateIssue,
+      dateIssue: new Date(req.body.RgDateIssue),
+    },
+    militaryReservist: {
+      number: req.body.MRNumber,
+      state: req.body.MRState,
+      category: req.body.MRCategory,
     },
     electionTitle: {
       number: req.body.ETnumber,
@@ -52,14 +64,14 @@ router.post('/', (req, res) => {
       record: req.body.CNHRecord,
       category: req.body.CNHCategory,
       expirationDate: new Date(req.body.CNHExpirationDate),
-      comments: req.body.comments,
-      placeIssue: req.body.placeIssue,
+      comments: req.body.CNHComments,
+      placeIssue: req.body.CNHPlaceIssue,
       dateIssue: new Date(req.body.CNHDateIssue),
     },
     employeeData: {
       officialPosition: req.body.EDOfficialPosition,
       admissionDate: new Date(req.body.EDAdmissionDate),
-      resignationDate: new Date(req.body.EDResignationDate),
+      resignationDate: '12/12/1970',
       reasonResignation: req.body.EDReasonResignation,
       record: req.body.EDRecord,
       state: req.body.EDState,
@@ -67,10 +79,24 @@ router.post('/', (req, res) => {
     observations: req.body.observations,
   };
 
-  employees.create(
-    data,
-    (err, employeesResult) => (err ? res.sendStatus(500) : res.sendStatus(201)),
-  );
+  adult.findById(req.body.identifier, (errAdult, adultResult) => {
+    if (errAdult) {
+      return res.sendStatus(500);
+    }
+
+    adultResult.set({ isEmployee: true });
+    adultResult.save((err) => {
+      if (err) {
+        return res.sendStatus(500);
+      }
+      return employees.create(
+        data,
+        errEmployee => (
+          errEmployee ? teste(errEmployee, res) : res.sendStatus(201)
+        ),
+      );
+    });
+  });
 });
 
 module.exports = router;

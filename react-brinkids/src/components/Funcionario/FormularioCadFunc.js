@@ -16,6 +16,7 @@ class FormularioCadFunc extends React.Component {
         this.state = {
             page: "FormularioCad",
             //PARTE PESSOAL
+            identifier: "",
             firstName: "",
             surName: "",
             cpf: "",
@@ -215,6 +216,7 @@ class FormularioCadFunc extends React.Component {
             else {
                 const data = new Date(response.data[0].birthday).toISOString();
                 console.log("Data: " + data.slice(0, 10))
+                this.setState({identifier: response.data[0]._id})
                 this.setState({firstName: response.data[0].name.firstName});
                 this.setState({surName: response.data[0].name.surName});
                 this.setState({cpf: response.data[0].cpf});
@@ -343,56 +345,58 @@ class FormularioCadFunc extends React.Component {
     NovoCadastro = (event) => {
         var formData = new FormData();
 
+        formData.append('Identifier', String(this.state.identifier))
+
         formData.append('gender', String(this.state.sexuality))
         formData.append('education', String(this.state.scholl))
         formData.append('fatherName', String(this.state.dad))
         formData.append('motherName', String(this.state.mom))
-        formData.append('city', String(this.state.cidadeNasc))
-        formData.append('state', String(this.state.UFLNasc))
+        formData.append('birthplaceCity', String(this.state.cidadeNasc))
+        formData.append('birthplaceState', String(this.state.UFLNasc))
             
         //Carteira de TRabalho
-        formData.append('number', String(this.state.numberCT))
-        formData.append('series', String(this.state.serieCT))
-        formData.append('state', String(this.state.UFCT))
-        formData.append('PIS_PASEP', String(this.state.PIS))
-        formData.append('dateIssue', String(this.state.DataEmissaoCT))
-        formData.append('placeIssue', String(this.state.LocalEmissaoCT))
+        formData.append('WPNumber', String(this.state.numberCT))
+        formData.append('WPSeries', String(this.state.serieCT))
+        formData.append('WPState', String(this.state.UFCT))
+        formData.append('WPPIS_PASEP', String(this.state.PIS))
+        formData.append('WPDateIssue', String(new Date(this.state.DataEmissaoCT)))
+        formData.append('WPPlaceIssue', String(this.state.LocalEmissaoCT))
             
         //RG
-        formData.append('issuingBody', String(this.state.RGLEmissao))
-        formData.append('state', String(this.state.RGUF))
-        formData.append('dateIssue', String(this.state.RGDateEmissao))
+        formData.append('RgIssuingBody', String(this.state.RGLEmissao))
+        formData.append('RgState', String(this.state.RGUF))
+        formData.append('RgDateIssue', String(new Date(this.state.RGDateEmissao)))
             
         //Titulo de Eleitor
-        formData.append('number', String(this.state.TNumero))
-        formData.append('zone', String(this.state.TZona))
-        formData.append('section', String(this.state.TSecao))
-        formData.append('state', String(this.state.TUF))
+        formData.append('ETnumber', String(this.state.TNumero))
+        formData.append('ETzone', String(this.state.TZona))
+        formData.append('ETsection', String(this.state.TSecao))
+        formData.append('ETstate', String(this.state.TUF))
             
         //Titulo de Rezervista
-        formData.append('number', String(this.state.CRNumero))
-        formData.append('series', String(this.state.CRSerie))
-        formData.append('category', String(this.state.CRCat))
+        formData.append('MRNumber', String(this.state.CRNumero))
+        formData.append('MRState', String(this.state.CRSerie))
+        formData.append('MRCategory', String(this.state.CRCat))
 
         //Passaporte
-        formData.append('number', String(this.state.PNumero))
-        formData.append('type', String(this.state.PTipo))
-        formData.append('issuingCountry', String(this.state.PPemissor))
-        formData.append('dateIssue', String(this.state.PDemissao))
-        formData.append('expirationDate', String(this.state.PDvalidade))
+        formData.append('PPNumber', String(this.state.PNumero))
+        formData.append('PPType', String(this.state.PTipo))
+        formData.append('PPIssuingCountry', String(this.state.PPemissor))
+        formData.append('PPDateIssue', String(new Date(this.state.PDemissao)))
+        formData.append('PPExpirationDate', String(new Date(this.state.PDvalidade)))
 
         //CNH
-        formData.append('record', String(this.state.CNHReg))
-        formData.append('category', String(this.state.CNHCat))
-        formData.append('expirationDate', String(this.state.CNHDval))
-        formData.append('comments', String(this.state.CNHObs))
-        formData.append('placeIssue', String(this.state.CNHLocal))
-        formData.append('dateIssue', String(this.state.CNHDemissao))
+        formData.append('CNHRecord', String(this.state.CNHReg))
+        formData.append('CNHCategory', String(this.state.CNHCat))
+        formData.append('CNHExpirationDate', String(new Date(this.state.CNHDval)))
+        formData.append('CNHComments', String(this.state.CNHObs))
+        formData.append('CNHPlaceIssue', String(this.state.CNHLocal))
+        formData.append('CNHDateIssue', String(new Date(this.state.CNHDemissao)))
             
         //Funcionario
-        formData.append('officialPosition', String(this.state.CargAtual))
-        formData.append('admissionDate', String(this.state.DataAdmisao))
-        formData.append('record', String(this.state.RegInterno))
+        formData.append('EDOfficialPosition', String(this.state.CargAtual))
+        formData.append('EDAdmissionDate', String(new Date(this.state.DataAdmisao)))
+        formData.append('EDRecord', String(this.state.RegInterno))
 
         //OBS
         formData.append('observations', String(this.state.observations))
@@ -413,69 +417,71 @@ class FormularioCadFunc extends React.Component {
     CadastrarFunc = (event) => {
         var formData = new FormData();
 
+        formData.append('Identifier', String(this.state.identifier))
+
         formData.append('gender', String(this.state.sexuality))
         formData.append('education', String(this.state.scholl))
         formData.append('fatherName', String(this.state.dad))
         formData.append('motherName', String(this.state.mom))
-        formData.append('city', String(this.state.cidadeNasc))
-        formData.append('state', String(this.state.UFLNasc))
+        formData.append('birthplaceCity', String(this.state.cidadeNasc))
+        formData.append('birthplaceState', String(this.state.UFLNasc))
             
         //Carteira de TRabalho
-        formData.append('number', String(this.state.numberCT))
-        formData.append('series', String(this.state.serieCT))
-        formData.append('state', String(this.state.UFCT))
-        formData.append('PIS_PASEP', String(this.state.PIS))
-        formData.append('dateIssue', String(this.state.DataEmissaoCT))
-        formData.append('placeIssue', String(this.state.LocalEmissaoCT))
+        formData.append('WPNumber', String(this.state.numberCT))
+        formData.append('WPSeries', String(this.state.serieCT))
+        formData.append('WPState', String(this.state.UFCT))
+        formData.append('WPPIS_PASEP', String(this.state.PIS))
+        formData.append('WPDateIssue', String(new Date(this.state.DataEmissaoCT)))
+        formData.append('WPPlaceIssue', String(this.state.LocalEmissaoCT))
             
         //RG
-        formData.append('issuingBody', String(this.state.RGLEmissao))
-        formData.append('state', String(this.state.RGUF))
-        formData.append('dateIssue', String(this.state.RGDateEmissao))
+        formData.append('RgIssuingBody', String(this.state.RGLEmissao))
+        formData.append('RgState', String(this.state.RGUF))
+        formData.append('RgDateIssue', String(new Date(this.state.RGDateEmissao)))
             
         //Titulo de Eleitor
-        formData.append('number', String(this.state.TNumero))
-        formData.append('zone', String(this.state.TZona))
-        formData.append('section', String(this.state.TSecao))
-        formData.append('state', String(this.state.TUF))
+        formData.append('ETnumber', String(this.state.TNumero))
+        formData.append('ETzone', String(this.state.TZona))
+        formData.append('ETsection', String(this.state.TSecao))
+        formData.append('ETstate', String(this.state.TUF))
             
         //Titulo de Rezervista
-        formData.append('number', String(this.state.CRNumero))
-        formData.append('series', String(this.state.CRSerie))
-        formData.append('category', String(this.state.CRCat))
+        formData.append('MRNumber', String(this.state.CRNumero))
+        formData.append('MRState', String(this.state.CRSerie))
+        formData.append('MRCategory', String(this.state.CRCat))
 
         //Passaporte
-        formData.append('number', String(this.state.PNumero))
-        formData.append('type', String(this.state.PTipo))
-        formData.append('issuingCountry', String(this.state.PPemissor))
-        formData.append('dateIssue', String(this.state.PDemissao))
-        formData.append('expirationDate', String(this.state.PDvalidade))
+        formData.append('PPNumber', String(this.state.PNumero))
+        formData.append('PPType', String(this.state.PTipo))
+        formData.append('PPIssuingCountry', String(this.state.PPemissor))
+        formData.append('PPDateIssue', String(new Date(this.state.PDemissao)))
+        formData.append('PPExpirationDate', String(new Date(this.state.PDvalidade)))
 
         //CNH
-        formData.append('record', String(this.state.CNHReg))
-        formData.append('category', String(this.state.CNHCat))
-        formData.append('expirationDate', String(this.state.CNHDval))
-        formData.append('comments', String(this.state.CNHObs))
-        formData.append('placeIssue', String(this.state.CNHLocal))
-        formData.append('dateIssue', String(this.state.CNHDemissao))
+        formData.append('CNHRecord', String(this.state.CNHReg))
+        formData.append('CNHCategory', String(this.state.CNHCat))
+        formData.append('CNHExpirationDate', String(new Date(this.state.CNHDval)))
+        formData.append('CNHComments', String(this.state.CNHObs))
+        formData.append('CNHPlaceIssue', String(this.state.CNHLocal))
+        formData.append('CNHDateIssue', String(new Date(this.state.CNHDemissao)))
             
         //Funcionario
-        formData.append('officialPosition', String(this.state.CargAtual))
-        formData.append('admissionDate', String(this.state.DataAdmisao))
-        formData.append('record', String(this.state.RegInterno))
+        formData.append('EDOfficialPosition', String(this.state.CargAtual))
+        formData.append('EDAdmissionDate', String(new Date(this.state.DataAdmisao)))
+        formData.append('EDRecord', String(this.state.RegInterno))
 
         //OBS
         formData.append('observations', String(this.state.observations))
-
+    
         axios.post('/employees', formData)
         .then(function (response) {
-            console.log(response)            
-            window.location.href = '/';
+            console.log(response)
+            window.location.href = '/funcionario';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
-            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
         })
     }
 
