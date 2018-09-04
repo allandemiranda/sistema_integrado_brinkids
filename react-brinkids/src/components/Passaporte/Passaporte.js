@@ -621,26 +621,34 @@ class Passport extends React.Component {
 
                                 <br></br>
 {/*
-                                <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
-                                    <div className="col-md-6 col-sm-12">//
-                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
-                                                <option value="others" > Outros </option>
-                                                <option value="children" > filho(a) </option>
-                                                <option value="Stepson" > Enteado(a) </option>
-                                                <option value="grandchildren"  > Neto(a) </option>
-                                                <option value="nephews"  > Sobrinho(a) </option>
-                                                <option value="Brother" > Irmão/Irmã </option>
-                                            </select >
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6 col-sm-12">
-                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5><b> Entrada: </b></h5>
-                                            <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <tbody>
+                                    {this.state.listConfirmAdult[0].children.map((kinshipConfirm, indice) => {
+                                        return (
+                                            <div className="row">
+                                                <div className="col-md-6 col-sm-12">//
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <select id="kinship" name="kinship" className="form-control optionFomulario" value={kinshipConfirm} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                            <option value="others" > Outros </option>
+                                                            <option value="children" > filho(a) </option>
+                                                            <option value="Stepson" > Enteado(a) </option>
+                                                            <option value="grandchildren"  > Neto(a) </option>
+                                                            <option value="nephews"  > Sobrinho(a) </option>
+                                                            <option value="Brother" > Irmão/Irmã </option>
+                                                        </select >
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-6 col-sm-12">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5><b> Entrada: </b></h5>
+                                                        <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+
+                                    })}
+                                </tbody>
+
 */}
                                 <br></br>
 
