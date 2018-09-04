@@ -555,7 +555,7 @@ class Passport extends React.Component {
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
                                                 </tr>
                                             );
-                                        })}
+                                        })} 
                                     </tbody>
                                 </table>
                             </div>
