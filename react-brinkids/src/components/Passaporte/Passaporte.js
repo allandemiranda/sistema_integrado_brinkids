@@ -532,7 +532,7 @@ class Passport extends React.Component {
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS */}
                                         {this.state.listConfirmAdult[0].children[0].map((findKids,indice) => {
                                             return (
                                                 <tr key={findKids._id}>
