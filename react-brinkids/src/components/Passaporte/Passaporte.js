@@ -62,6 +62,9 @@ class Passport extends React.Component {
         ChangePhone (event){
             this.setState({ phone: event.target.value });   
         }
+        Changekinship(event){
+            this.setState({ kinshipConfirm: event.target.value }); 
+        }
 
     HorarioAtual(event){
         let now = new Date;
@@ -191,7 +194,8 @@ class Passport extends React.Component {
         // Encaminha para a tela III
         TelaIII = (event) => {
             this.setState({
-                page: "SelectKids"
+                page: "SelectKids",
+                selectedSearch:''
             })
         }
 
@@ -533,7 +537,7 @@ class Passport extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS */}
-                                        {this.state.listConfirmAdult[0].children[0].map((findKids,indice) => {
+                                        {this.state.listConfirmAdult[0].children.map((findKids,indice) => {
                                             return (
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice+1}</th>
@@ -555,7 +559,7 @@ class Passport extends React.Component {
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
                                                 </tr>
                                             );
-                                        })} 
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
@@ -586,20 +590,25 @@ class Passport extends React.Component {
                             <h3 className="inner-tittle" > Confirmando Cadastro </h3>
                             <div className="graph" >
                                 <h3 className="inner-tittle" > Perfil Criança </h3>
-
                                 <div className="row">
-                                    <div className="col-md-8 col-sm-12">
-                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                            <p>{this.state.listConfirmKids[0].name.firstName + " " + this.state.listConfirmKids[0].name.surName}</p>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4 col-sm-12">
-                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                            <p>{this.state.listConfirmKids[0].birthday}</p>
-                                        </div>
-                                    </div>
+                                    {this.state.listConfirmKids.map((Criançasqueentrarao) => {
+                                        return (
+                                            <div>
+                                                <div className="col-md-8 col-sm-12">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                                        <p>{Criançasqueentrarao.name.firstName + " " + Criançasqueentrarao.name.surName}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-4 col-sm-12">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                                        <p>{Criançasqueentrarao.birthday}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
 
                                 <br></br>
@@ -617,39 +626,31 @@ class Passport extends React.Component {
                                             <p>{this.state.listConfirmAdult[0].birthday}</p>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
 
                                 <br></br>
-{/*
-                                <tbody>
-                                    {this.state.listConfirmAdult[0].children.map((kinshipConfirm, indice) => {
-                                        return (
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-12">//
-                                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <select id="kinship" name="kinship" className="form-control optionFomulario" value={kinshipConfirm} onChange={(event) => this.Changekinship(event, findChild._id)} >
-                                                            <option value="others" > Outros </option>
-                                                            <option value="children" > filho(a) </option>
-                                                            <option value="Stepson" > Enteado(a) </option>
-                                                            <option value="grandchildren"  > Neto(a) </option>
-                                                            <option value="nephews"  > Sobrinho(a) </option>
-                                                            <option value="Brother" > Irmão/Irmã </option>
-                                                        </select >
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-6 col-sm-12">
-                                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <h5><b> Entrada: </b></h5>
-                                                        <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
-                                                    </div>
-                                                </div>
+                                {/*
+                                    <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
+                                        <div className="col-md-6 col-sm-12">//
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                    <option value="others" > Outros </option>
+                                                    <option value="children" > filho(a) </option>
+                                                    <option value="Stepson" > Enteado(a) </option>
+                                                    <option value="grandchildren"  > Neto(a) </option>
+                                                    <option value="nephews"  > Sobrinho(a) </option>
+                                                    <option value="Brother" > Irmão/Irmã </option>
+                                                </select >
                                             </div>
-                                        );
-
-                                    })}
-                                </tbody>
-
-*/}
+                                        </div>
+                                        <div className="col-md-6 col-sm-12">
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5><b> Entrada: </b></h5>
+                                                <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+    */}
                                 <br></br>
 
                                 <div className="row">
@@ -689,7 +690,7 @@ class Passport extends React.Component {
                                             <img id="imagem" className="webcan" src={this.state.file} />
                                         </div>
                                     </div>
-                                </div >                           
+                                </div >
                             </div>
                         </div>
                     </div>
@@ -699,10 +700,9 @@ class Passport extends React.Component {
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>
                 </div>
-
             )
         }
-               
+
         //TELA V - Checagem dos dados finais na entrada do passaporte
         else if (this.state.page === "Finalize") {
             {/*
