@@ -29,8 +29,8 @@ class Perfil extends React.Component {
             flut: true,
             //Aparecer as opçoes quando clikar em editar
             editar: false,
-            senhaNova:'',
-            senhaAtual:'',
+            senhaNova: '',
+            senhaAtual: '',
             //Perfil sendo editado
             perfilEdicao: [],
 
@@ -84,8 +84,8 @@ class Perfil extends React.Component {
     changueNumero(event) { this.setState({ numero: event.target.value }) }
     changueEmail(event) { this.setState({ email: event.target.value }) }
     changuePhone(event) { this.setState({ phone: event.target.value }) }
-    changueSenha(event){this.setState({senhaNova: event.target.value})}
-    changueSenhaAtual(event){this.setState({senhaAtual: event.target.value})}
+    changueSenha(event) { this.setState({ senhaNova: event.target.value }) }
+    changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
         this.state.perfilAtual.observations = this.state.obs,
@@ -498,26 +498,26 @@ class Perfil extends React.Component {
                         <div className="graph" >
                             <h3 className="inner-tittle" > Mudar Senha</h3>
                         </div>
-                        
+
                     </div>
                     <div className="col-md-12 col-sm-12 text-center">
-                                <div className="col-md-6 col-sm-12 text-center" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A SENHA ATUAL </b></h5>
-                                    <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }}  /></p>
-                                </div>
-                                <br></br>
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A NOVA SENHA </b></h5>
-                                    <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }}  /></p>
-                                    
-                                </div>
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                <button onClick={()=>this.setState({page:'Perfil',editar:false})} className="btn btn-md botao botaoAvançar" style={{ }}> Alterar Senha</button>
-                                </div>
-                                </div>
+                        <div className="col-md-6 col-sm-12 text-center" >
+                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A SENHA ATUAL </b></h5>
+                                <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
                             </div>
-                    
+                            <br></br>
+                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A NOVA SENHA </b></h5>
+                                <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
+
+                            </div>
+                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                <button onClick={() => this.setState({ page: 'Perfil', editar: false })} className="btn btn-md botao botaoAvançar" style={{}}> Alterar Senha</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             );
         }
