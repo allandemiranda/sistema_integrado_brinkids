@@ -29,6 +29,8 @@ class Perfil extends React.Component {
             flut: true,
             //Aparecer as opçoes quando clikar em editar
             editar: false,
+            senhaNova:'',
+            senhaAtual:'',
             //Perfil sendo editado
             perfilEdicao: [],
 
@@ -62,6 +64,14 @@ class Perfil extends React.Component {
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
+        this.changuePassword = this.changuePassword.bind(this);
+        this.changueSenha = this.changueSenha.bind(this);
+        this.changueSenhaAtual = this.changueSenhaAtual.bind(this);
+    }
+    changuePassword(event) {
+        this.setState({
+            page: 'Senha',
+        })
     }
     //lembrar de terminar as funçoes changue
     changueObs(event) { this.setState({ obs: event.target.value }) }
@@ -74,6 +84,8 @@ class Perfil extends React.Component {
     changueNumero(event) { this.setState({ numero: event.target.value }) }
     changueEmail(event) { this.setState({ email: event.target.value }) }
     changuePhone(event) { this.setState({ phone: event.target.value }) }
+    changueSenha(event){this.setState({senhaNova: event.target.value})}
+    changueSenhaAtual(event){this.setState({senhaAtual: event.target.value})}
     //funçao que salva apos o editar
     salvar(event) {
         this.state.perfilAtual.observations = this.state.obs,
@@ -125,7 +137,7 @@ class Perfil extends React.Component {
             editar: true,
 
         });
-        
+
         this.setState({
             obs: this.state.perfilEdicao.observations,
             numero: this.state.perfilEdicao.address.number,
@@ -276,7 +288,7 @@ class Perfil extends React.Component {
                                     <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
                                     {this.state.editar && (
                                         <div>
-                                            <button className="btn btn-md botao botaoAvançar" onClick={() => console.log(this.state.flut)} style={{ background: ' #2ab7ec' }}><label>
+                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
                                                 Trocar imagem <span className="glyphicon">&#xe065;</span>
 
                                                 <input id="tipofile" type="file" name="foto" value="" />
@@ -295,7 +307,8 @@ class Perfil extends React.Component {
                                 <br></br>
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" style={{ color: 'red' }}><b> SENHA </b></h5>
-                                    <p>ffffffff</p>
+                                    <p><input type="password" value="senha" style={{ border: 'none', background: 'white', textAlign: 'center', fontSize: 200 + '%' }} disabled /></p>
+                                    {this.state.editar && (<button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>)}
                                 </div>
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" style={{ color: 'red' }}><b> STATUS DE EMPREGO  </b></h5>
@@ -468,7 +481,46 @@ class Perfil extends React.Component {
 
             );
         }
+        if (this.state.page === 'Senha') {
+            return (
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
 
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Vizualizar </li>
+                            <li > Perfil </li>
+                        </ol >
+                    </div>
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
+
+                        <div className="graph" >
+                            <h3 className="inner-tittle" > Mudar Senha</h3>
+                        </div>
+                        
+                    </div>
+                    <div className="col-md-12 col-sm-12 text-center">
+                                <div className="col-md-6 col-sm-12 text-center" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A SENHA ATUAL </b></h5>
+                                    <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }}  /></p>
+                                </div>
+                                <br></br>
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A NOVA SENHA </b></h5>
+                                    <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }}  /></p>
+                                    
+                                </div>
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                <button onClick={()=>this.setState({page:'Perfil',editar:false})} className="btn btn-md botao botaoAvançar" style={{ }}> Alterar Senha</button>
+                                </div>
+                                </div>
+                            </div>
+                    
+                </div>
+            );
+        }
     }
 }
 export default Perfil;
