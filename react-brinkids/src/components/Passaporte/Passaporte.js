@@ -3,15 +3,14 @@ import Webcam from 'react-webcam';
 import axios from 'axios';
 import ConfirmaAdulto from '../Adultos/ConfirmaAdulto.js';
 import TypesInput from '../TypesInput.js';
-import Pessoas from "./temgenteaq";
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
+import moment from 'moment'
 
 import $ from "jquery";
-import temgenteaq from './temgenteaq.js';
 
 
 class Passport extends React.Component {
@@ -37,6 +36,7 @@ class Passport extends React.Component {
             phone:'',
             file: '',
             currentdate:[],
+            preenchido: false, // Variável que vai dizer se foi selecionado alguma coisa
         }
 
         //Relacionado a busca
@@ -75,7 +75,7 @@ class Passport extends React.Component {
             now.getFullYear(),
             now.getHours(),
             now.getMinutes(),
-             now.getSeconds()
+            now.getSeconds()
         ]
         console.log(this.currentdate[0] + ',' + this.currentdate[1] +' de '+  this.currentdate[2] +' as '+ this.currentdate[3] +':'+ this.currentdate[4]+':'+ this.currentdate[5]);      
 
@@ -89,7 +89,7 @@ class Passport extends React.Component {
         // Faz a busca do responsável:
         SearchAdult(event) {
             $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",
+                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name", //url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", 
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -111,26 +111,27 @@ class Passport extends React.Component {
         // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
         selectedAdult(identifier) {
             let achou = false;
-
-        //Desmarca A checkBox
-        this.state.listConfirmAdult.forEach((adult, indice, array) => {
-            if (adult._id === identifier) {
-                delete array[indice];
-                achou = true;
-            }
-        });
-
-        if (!(achou)) {
-            this.state.list.forEach((adult) => {
+            
+            //Desmarca A checkBox
+            this.state.listConfirmAdult.forEach((adult, indice, array) => {
                 if (adult._id === identifier) {
-                    this.state.listConfirmAdult.push(adult);
+                    delete array[indice];
+                    achou = true;
                 }
             });
-        }
 
-        this.setState({ listConfirmAdult: this.state.listConfirmAdult });
-        console.log(this.state.listConfirmAdult)
-    }
+            if (!(achou)) {
+                this.state.list.forEach((adult) => {
+                    if (adult._id === identifier) {
+                        this.state.listConfirmAdult.push(adult);
+                    }
+                });
+            }
+
+            this.setState({ listConfirmAdult: this.state.listConfirmAdult });
+            console.log(this.state.listConfirmAdult)
+            this.preenchido = true;
+        }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL- Fim
 
     // FUNCOES RELACIONADAS A BUSCA DAS CRIANÇAS - Inicio 
@@ -142,7 +143,7 @@ class Passport extends React.Component {
         // Faz a busca das Crianças:
         SearchChild(event) {
             $.ajax({
-                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,
+                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch, //url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -184,18 +185,28 @@ class Passport extends React.Component {
     // FUNÇOES DO BOTÃO AVANÇAR - INICIO 
         // Encaminha para a tela II
         TelaII = (event) => {
-            this.setState({
-                page: "ConfirmAdult",
-                obs: this.state.listConfirmAdult[0].observations,
-                phone: this.state.listConfirmAdult[0].phone,
-            })
+            if(this.preenchido == true){
+                this.setState({
+                    page: "ConfirmAdult",
+                    obs: this.state.listConfirmAdult[0].observations,
+                    phone: this.state.listConfirmAdult[0].phone,
+                })
+            }
+            else{
+                alert(" Selecione um Responsável "),
+                this.setState({
+                    page: "SelectAdult",
+                    selectedSearch:'',
+                    preenchido: false,
+                })
+            }
         }
 
         // Encaminha para a tela III
         TelaIII = (event) => {
             this.setState({
                 page: "SelectKids",
-                selectedSearch:''
+                selectedSearch: '',
             })
         }
 
@@ -253,27 +264,27 @@ class Passport extends React.Component {
 
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - INÍCIO 
     
-    /*BLOCO QUE TIRA FOTO DA WEBCAN*/
-    setRef = (webcam) => {
-        this.webcam = webcam;
-    }
-    capture = (event) => {
-        event.preventDefault();
-        var imagem = document.querySelector("#imagem");
-        const imageSrc = this.webcam.getScreenshot();
-        imagem.src = imageSrc;
-        this.imageBase64 = imageSrc;
-        this.setState({
-            file: imageSrc
-        })
-    };
+        /*BLOCO QUE TIRA FOTO DA WEBCAN*/
+        setRef = (webcam) => {
+            this.webcam = webcam;
+        }
+        capture = (event) => {
+            event.preventDefault();
+            var imagem = document.querySelector("#imagem");
+            const imageSrc = this.webcam.getScreenshot();
+            imagem.src = imageSrc;
+            this.imageBase64 = imageSrc;
+            this.setState({
+                file: imageSrc
+            })
+        };
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
-    
+
     render() {  
         //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
             {/* Imprime a tabela com a busca dos Adultos*/ }
-            return (                
+            return (                 
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -309,7 +320,7 @@ class Passport extends React.Component {
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice+1}</th>
                                                 <td > {findAdult.name.firstName + " "+ findAdult.name.surName} </td>
-                                                <td >{findAdult.birthday} </td>
+                                                <td >{findAdult.phone} </td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult._id)} /> </td>
                                             </tr>
                                         );
@@ -413,7 +424,7 @@ class Passport extends React.Component {
 
                             <div className='row'>
                                 <div className="col-md-12 col-sm-12 col-xs-12">
-                                    <div className="graph ">
+                                    <div className="graph " style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"> <b> Email:</b> </h5>
                                         <p> {this.state.listConfirmAdult[0].email}</p>
                                     </div>
@@ -541,7 +552,7 @@ class Passport extends React.Component {
                                             return (
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice+1}</th>
-                                                    <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
+                                                    <td > {findKids.identifier} </td>
                                                     <td >{findKids.phone} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
                                                 </tr>
@@ -602,32 +613,28 @@ class Passport extends React.Component {
                                                 </div>
                                                 <div className="col-md-4 col-sm-12">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                        <p>{Criançasqueentrarao.birthday}</p>
+                                                        <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                                        <p>{moment(Criançasqueentrarao.birthday,"YYYYMMDD").fromNow()}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-md-8 col-sm-12">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-md-4 col-sm-12">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                                            <p>{moment("20111031", "YYYYMMDD").fromNow()}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         );
                                     })}
                                 </div>
-
-                                <br></br>
-
-                                <div className="row">
-                                    <div className="col-md-8 col-sm-12">
-                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4 col-sm-12">
-                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                            <p>{this.state.listConfirmAdult[0].birthday}</p>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <br></br>
                                 {/*
                                     <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
