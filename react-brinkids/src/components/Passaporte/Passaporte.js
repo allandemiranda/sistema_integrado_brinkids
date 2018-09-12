@@ -634,6 +634,22 @@ class Passport extends React.Component {
                                             </div>
                                         );
                                     })}
+                                    <div className="row">
+                                        <div className="graph" >
+                                            <div className="row">
+                                                <div className="col-md-6 col-sm-12 col-xs-12">
+                                                    <h3 className="inner-tittle" > Observações </h3>
+                                                    <br></br>
+                                                    <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                                </div>
+                                                <div className="col-md-6 col-sm-12 col-xs-12">
+                                                    <h3 className="inner-tittle" > Restrições </h3>
+                                                    <br></br>
+                                                    <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
+                                                </div>
+                                            </div>
+                                        </div >
+                                    </div>
                                 </div>
                                 <br></br>
                                 {/*
@@ -659,23 +675,6 @@ class Passport extends React.Component {
                                     </div>
     */}
                                 <br></br>
-
-                                <div className="row">
-                                    <div className="graph" >
-                                        <div className="row">
-                                            <div className="col-md-6 col-sm-12 col-xs-12">
-                                                <h3 className="inner-tittle" > Observações </h3>
-                                                <br></br>
-                                                <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
-                                            </div>
-                                            <div className="col-md-6 col-sm-12 col-xs-12">
-                                                <h3 className="inner-tittle" > Restrições </h3>
-                                                <br></br>
-                                                <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
-                                            </div>
-                                        </div>
-                                    </div >
-                                </div>
 
                                 <br></br>
                                 <div className="graph" >
