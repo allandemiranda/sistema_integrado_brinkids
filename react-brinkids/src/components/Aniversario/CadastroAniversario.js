@@ -16,7 +16,7 @@ class CadastroAniversario extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            page: "ListaDeCriancaeAdulto",
+            page: "ConfListAni",
             //Dados do Aniversariante
             TituloDoAni:"",
             NomeDoAni:"",
@@ -229,9 +229,94 @@ class CadastroAniversario extends React.Component {
             });
         }
     }
-    ConfListCnv = () => {
+    VaiConfListCnv = (event) => {
         this.setState({
             page: "ConfListConv"
+        })
+    }
+    VoltaFormList = () => {
+        this.setState({
+            page: "ListaDeCriancaeAdulto"
+        })
+    }
+    
+    //Cadastro de Aniversario no Banco
+    CadAni = () => {
+        while(this.state.ListaCria.length < this.state.QuantCrianca){
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{nome: "FREE", idade: "FREE"}]}),
+            })
+        }
+        while(this.state.ListaAdul.length < this.state.QuantAdulto){
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{nome: "FREE"}]}),
+            })
+        }
+        var formData = new FormData();
+
+        formData.append('title', String(this.state.TituloDoAni))
+        formData.append('name', String(this.state.NomeDoAni))
+        formData.append('age', String(this.state.IdadeDoAni))
+        formData.append('start', String(this.state.HoraInicio))
+        formData.append('end', String(this.state.HoraFinal))
+        formData.append('description', String(this.state.DescriçãoDoAni))
+        formData.append('observations', String(this.state.ObsDoAni))
+        formData.append('value', String(this.state.ValorPg))
+        formData.append('method', String(this.state.MetodoPg))
+        formData.append('children', String(this.state.QuantCrianca))
+        formData.append('adults', String(this.state.QuantAdulto))
+        //--------Codigo Aqui------------
+        //formData.append('', String(this.state.UFLNasc))
+    
+        axios.post('/birthdayParty', formData)
+        .then(function (response) {
+            console.log(response)
+            window.location.href = '/';
+        }).catch(function (error) {
+            console.log(error)//LOG DE ERRO
+            alert("Erro no Cadastro");
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+        })
+    }
+    NovoCadAni = () => {
+        while(this.state.ListaCria.length < this.state.QuantCrianca){
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{nome: "FREE", idade: "FREE"}]}),
+            })
+        }
+        while(this.state.ListaAdul.length < this.state.QuantAdulto){
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{nome: "FREE"}]}),
+            })
+        }
+        var formData = new FormData();
+
+        formData.append('title', String(this.state.TituloDoAni))
+        formData.append('name', String(this.state.NomeDoAni))
+        formData.append('age', String(this.state.IdadeDoAni))
+        formData.append('start', String(this.state.HoraInicio))
+        formData.append('end', String(this.state.HoraFinal))
+        formData.append('description', String(this.state.DescriçãoDoAni))
+        formData.append('observations', String(this.state.ObsDoAni))
+        formData.append('value', String(this.state.ValorPg))
+        formData.append('method', String(this.state.MetodoPg))
+        formData.append('children', String(this.state.QuantCrianca))
+        formData.append('adults', String(this.state.QuantAdulto))
+        //--------Codigo Aqui------------
+        //formData.append('', String(this.state.UFLNasc))
+    
+        axios.post('/birthdayParty', formData)
+        .then(function (response) {
+            console.log(response)
+            window.location.href = '/aniversario';
+        }).catch(function (error) {
+            console.log(error)//LOG DE ERRO
+            alert("Erro no Cadastro");
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
         })
     }
 
@@ -426,7 +511,76 @@ class CadastroAniversario extends React.Component {
                         </div>
                         <div className="text-center">
                             <a className= "btn btn-md botao" href="\">Cancelar</a>
-                            <button className="btn btn-md botao botaoAvançar" onClick={this.ConfListCnv}>Avançar</button>
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.VaiConfListCnv}>Avançar</button>
+                        </div> 
+                    </div> 
+                </div>
+            )
+        }
+        else if(this.state.page === "ConfListAni"){
+            return(
+                <div className = "container-fluid" >
+                    <div className = "sub-heard-part" >
+                        <ol className = "breadcrumb m-b-0" >
+                            <li > < a href = "/" > Home </a></li >
+                            <li > Aniversario </li>
+                        </ol >
+                    </div>
+                    <div className = "graph-visual" >
+                        <div className = "graph">
+                            <h3 className = "inner-tittle" > Lista de Crianças </h3>
+                            <div className ="tables table-responsive">
+                                <table className ="table table-hover"> 
+                                    <thead className = "text-center"> 
+                                        <tr> 
+                                            <th>#</th> 
+                                            <th>Name</th> 
+                                            <th>Idade</th> 
+                                        </tr>
+                                    </thead> 
+                                    <tbody>
+                                        {this.state.ListaCria.map((crianca, indice) => {
+                                            return (
+                                                <tr>
+                                                    <th scope="row">{(indice + 1)}</th>
+                                                    <td > {crianca.nome} </td>
+                                                    <td > {crianca.idade} </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div className = "graph">
+                            <h3 className = "inner-tittle" > Lista de Adultos </h3>
+                            <div className ="tables table-responsive">
+                                <table className ="table table-hover"> 
+                                    <thead className = "text-center"> 
+                                        <tr> 
+                                            <th>#</th> 
+                                            <th>Nome</th> 
+                                        </tr>
+                                    </thead> 
+                                    <tbody>
+                                        {this.state.ListaAdul.map((adulto, indice) => {
+                                            return (
+                                                <tr>
+                                                    <th scope="row">{(indice + 1)}</th>
+                                                    <td > {adulto.nome} </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.VoltaFormList}>Voltar</button>
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadAni}>Novo Cadastro</button>
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.CadAni}>Finalizar</button>
                         </div> 
                     </div> 
                 </div>
