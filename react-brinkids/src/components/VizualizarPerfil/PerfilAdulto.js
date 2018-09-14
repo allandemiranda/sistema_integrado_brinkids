@@ -259,7 +259,7 @@ class PerfilAdulto extends React.Component {
                             <td>{events.Nome}</td>
                             <td>{events.Parentesco}</td>
                         </tr>
-                        
+
                     </div>
                 )
             }
@@ -297,7 +297,6 @@ class PerfilAdulto extends React.Component {
                                     }
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 450 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
                                 </div>
-
                             </div>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
@@ -315,12 +314,12 @@ class PerfilAdulto extends React.Component {
 
                                             </tbody>
                                         </table>
-                                       {this.state.editar && ( <button className="btn btn-md botao botaoAvançar" ><label>
-                            Adicionar Criança <span className="glyphicon">&#xe065;</span>
+                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar" ><label>
+                                            Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
-                            <input id="tipofile" type="file" name="foto" value="" />
-                        </label>
-                        </button>)}
+                                            <input id="tipofile" type="file" name="foto" value="" />
+                                        </label>
+                                        </button>)}
                                     </div>
                                 </div>
                             </div>
