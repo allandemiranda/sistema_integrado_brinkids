@@ -21,7 +21,7 @@ class Passport extends React.Component {
             page: "SelectAdult",//ConfirmAdult
             selectedSearch:'', // Salva o nome que é colocado na barra de busca
             list:[], //recebe do banco os dados da pessoa que foi buscada
-
+            listConect:[], // recebe os dados das crianças ligadas aos adultos [Passaporte]
             //Tela I:
             listConfirmAdult: [], // Dados do Responsável Selecionado na checkBox
             erro:'',
@@ -89,7 +89,7 @@ class Passport extends React.Component {
         // Faz a busca do responsável:
         SearchAdult(event) {
             $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name", //url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", 
+                url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -143,7 +143,7 @@ class Passport extends React.Component {
         // Faz a busca das Crianças:
         SearchChild(event) {
             $.ajax({
-                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch, //url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
+                url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -208,6 +208,25 @@ class Passport extends React.Component {
                 page: "SelectKids",
                 selectedSearch: '',
             })
+            // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
+            $.ajax({
+                url: "http://localhost:3001/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
+                dataType: 'json',
+                type: 'GET',
+                error: function (response) {
+                    if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+                },
+                success: function (response) {    //Salva os dados do responsável na variácel LIST
+                    console.log(response.length)
+                    if (response.length === 0) {
+                        alert("Erro esc")
+                        this.setState({ erro: "* Nenhum Responásel Encontrado." })
+                    } else {
+                        console.log("Olar")
+                        this.setState({ listConect: response });
+                    }
+                }.bind(this)
+            });
         }
 
         // Encaminha para a tela IV
@@ -281,7 +300,7 @@ class Passport extends React.Component {
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
 
     render() {  
-        //TELA I - Busca do responsável
+       // //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
             {/* Imprime a tabela com a busca dos Adultos*/ }
             return (                 
@@ -407,7 +426,7 @@ class Passport extends React.Component {
 
                             <div className="row">
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop:-13 + "px" }}>
                                         <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                         <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
                                     </div>
@@ -494,6 +513,8 @@ class Passport extends React.Component {
                                         </div>
                                     </div>
                                 </div >
+
+                                <br></br>
 
                                 <div className="col-md-6 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
@@ -589,124 +610,86 @@ class Passport extends React.Component {
         else if (this.state.page === "ConfirmKids") {
             this.HorarioAtual();
             return (
-                <div className="container-fluid" >
-                    <div className="container-fluid" >
-                        <div className="sub-heard-part" >
-                            <ol className="breadcrumb m-b-0" >
-                                <li > < a href="/" > Home </a></li >
-                                <li > Passaporte </li>
-                            </ol >
-                        </div>
-                        <div className="graph-visual" >
-                            <h3 className="inner-tittle" > Confirmando Cadastro </h3>
-                            <div className="graph" >
-                                <h3 className="inner-tittle" > Perfil Criança </h3>
-                                <div className="row">
-                                    {this.state.listConfirmKids.map((Criançasqueentrarao) => {
-                                        return (
-                                            <div>
-                                                <div className="col-md-8 col-sm-12">
-                                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                        <p>{Criançasqueentrarao.name.firstName + " " + Criançasqueentrarao.name.surName}</p>
+                <div className="containerfluid">
+                    <div className="sub-heard-part">
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Passaporte </li>
+                        </ol >
+                    </div>
+                    <div className="graph-visual">
+                        <h3 className="inner-tittle" > Confirmando Cadastro </h3>
+                        <div className="graph">
+                            <div className="row">
+                                {this.state.listConfirmKids.map((Criançasqueentrarao, indice) => {
+                                    return (
+                                        <div className="container-fluid" >
+                                            <h3 className="inner-tittle" > Perfil Criança {indice + 1}  </h3>
+                                            <div className="graph-visual" >
+                                                <div className="row">
+                                                    <div className="col-md-8 col-sm-12">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5 className="ltTitulo"><b> Nome Criança: </b></h5>
+                                                            <p>{Criançasqueentrarao.name.firstName + " " + Criançasqueentrarao.name.surName}</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="col-md-4 col-sm-12">
-                                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                        <p>{moment(Criançasqueentrarao.birthday,"YYYYMMDD").fromNow()}</p>
+                                                    <div className="col-md-4 col-sm-12">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").fromNow()}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-md-8 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
-                                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
-                                                        </div>
+                                                            <h5 className="ltTitulo"><b> Nome Responsável: </b></h5>
+                                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p></div>
                                                     </div>
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{moment("20111031", "YYYYMMDD").fromNow()}</p>
+                                                            <p>{this.state.listConfirmAdult[0].birthday}</p>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
-                                    <div className="row">
-                                        <div className="graph" >
-                                            <div className="row">
-                                                <div className="col-md-6 col-sm-12 col-xs-12">
-                                                    <h3 className="inner-tittle" > Observações </h3>
-                                                    <br></br>
-                                                    <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
-                                                </div>
-                                                <div className="col-md-6 col-sm-12 col-xs-12">
-                                                    <h3 className="inner-tittle" > Restrições </h3>
-                                                    <br></br>
-                                                    <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
-                                                </div>
-                                            </div>
-                                        </div >
-                                    </div>
-                                </div>
-                                <br></br>
-                                {/*
-                                    <div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
-                                        <div className="col-md-6 col-sm-12">//
-                                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
-                                                    <option value="others" > Outros </option>
-                                                    <option value="children" > filho(a) </option>
-                                                    <option value="Stepson" > Enteado(a) </option>
-                                                    <option value="grandchildren"  > Neto(a) </option>
-                                                    <option value="nephews"  > Sobrinho(a) </option>
-                                                    <option value="Brother" > Irmão/Irmã </option>
-                                                </select >
-                                            </div>
-                                        </div>
-                                        <div className="col-md-6 col-sm-12">
-                                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <h5><b> Entrada: </b></h5>
-                                                <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-    */}
-                                <br></br>
 
-                                <br></br>
-                                <div className="graph" >
-                                    <div className="row text-center">
-                                        <h4 className="inner-tittle"> Tirando uma foto </h4>
-                                        <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <Webcam
-                                                className="webcan"
-                                                audio={false}
-                                                height={240}
-                                                ref={this.setRef}
-                                                screenshotFormat="image/png"
-                                                width={320}
-                                            />
-                                            <button className="btn btn-md botao" onClick={this.capture}>Take a Photo</button>
-                                            <br></br>
+                                                <br></br>
+
+                                                <div className="graph" >
+                                                    <div className="row text-center">
+                                                        <h4 className="inner-tittle"> Tirando uma foto </h4>
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <Webcam
+                                                                className="webcan"
+                                                                audio={false}
+                                                                height={240}
+                                                                ref={this.setRef}
+                                                                screenshotFormat="image/png"
+                                                                width={320}
+                                                            />
+                                                            <button className="btn btn-md botao" onClick={this.capture}>Take a Photo</button>
+                                                            <br></br>
+                                                        </div>
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <img id="imagem" className="webcan" src={this.state.file} />
+                                                        </div>
+                                                    </div>
+                                                </div >
+                                            </div>
+                                            <div className="text-center">
+                                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                                                <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
+                                                <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
+                                            </div>
                                         </div>
-                                        <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <img id="imagem" className="webcan" src={this.state.file} />
-                                        </div>
-                                    </div>
-                                </div >
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
-                    <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
-                        <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
-                    </div>
-                </div>
-            )
+                </div>                
+            )                
         }
 
         //TELA V - Checagem dos dados finais na entrada do passaporte
