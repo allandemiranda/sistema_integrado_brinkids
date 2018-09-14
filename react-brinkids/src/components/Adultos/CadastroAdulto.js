@@ -349,6 +349,10 @@ class CadastroAdulto extends React.Component {
         formData.append('sexuality', String(this.state.sexuality))
         formData.append('observations', String(this.state.observations))
 
+        console.log(this.state.confirmaCrianca.map((child) => {
+            return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
+        }))
+
         formData.append('criancas', JSON.stringify(this.state.confirmaCrianca.map((child) => {
             return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
         })))

@@ -16,7 +16,7 @@ class CadastroAniversario extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            page: "ConfListAni",
+            page: "FormularioListaConv",
             //Dados do Aniversariante
             TituloDoAni:"",
             NomeDoAni:"",
@@ -24,8 +24,8 @@ class CadastroAniversario extends React.Component {
             DataDoAni:"",
             HoraInicio:"",
             HoraFinal:"",
-            QuantCrianca:"",
-            QuantAdulto:"",
+            QuantCrianca:"10",
+            QuantAdulto:"10",
             DescriçãoDoAni:"",
             ObsDoAni:"",
             ValorPg:"",
@@ -236,22 +236,21 @@ class CadastroAniversario extends React.Component {
     }
     VoltaFormList = () => {
         this.setState({
-            page: "ListaDeCriancaeAdulto"
+            page: "FormularioListaConv"
         })
     }
     
     //Cadastro de Aniversario no Banco
     CadAni = () => {
-        while(this.state.ListaCria.length < this.state.QuantCrianca){
+        let i;
+        for(i = this.state.ListaCria.length; i <  this.state.QuantCrianca; i++){
+            console.log("Esotu preso ifinitamente aqui")
             this.setState({
                 ListaCria: update(this.state.ListaCria, {$push: [{nome: "FREE", idade: "FREE"}]}),
             })
+            i++;
         }
-        while(this.state.ListaAdul.length < this.state.QuantAdulto){
-            this.setState({
-                ListaAdul: update(this.state.ListaAdul, {$push: [{nome: "FREE"}]}),
-            })
-        }
+        
         var formData = new FormData();
 
         formData.append('title', String(this.state.TituloDoAni))
@@ -265,13 +264,24 @@ class CadastroAniversario extends React.Component {
         formData.append('method', String(this.state.MetodoPg))
         formData.append('children', String(this.state.QuantCrianca))
         formData.append('adults', String(this.state.QuantAdulto))
+
+        // Gabriel pegou as duas listas de adulto e criança, transformou numa lista só,
+        // adicionou uma nova informação que vai precisar no banco de dados e enviou num único campo
+        // chamado guestList
+        this.state.ListaAdul = this.state.ListaAdul.concat(this.state.ListaCria)
+        this.state.ListaAdul.map((guest) => {
+            guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
+            return guest;
+        })
+
+        formData.append('guestList', JSON.stringify(this.state.ListaAdul))
         //--------Codigo Aqui------------
         //formData.append('', String(this.state.UFLNasc))
     
-        axios.post('/birthdayParty', formData)
+        axios.post('/birthday', formData)
         .then(function (response) {
             console.log(response)
-            window.location.href = '/';
+            //window.location.href = '/';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
@@ -406,7 +416,7 @@ class CadastroAniversario extends React.Component {
                 </div> 
             )
         }
-        else if(this.state.page === "ListaDeCriancaeAdulto"){
+        else if(this.state.page === "FormularioListaConv"){
             return(
                 <div className = "container-fluid" >
                     <div className = "sub-heard-part" >
@@ -517,7 +527,7 @@ class CadastroAniversario extends React.Component {
                 </div>
             )
         }
-        else if(this.state.page === "ConfListAni"){
+        else if(this.state.page === "ConfListConv"){
             return(
                 <div className = "container-fluid" >
                     <div className = "sub-heard-part" >

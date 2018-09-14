@@ -102,7 +102,7 @@ router.post('/', (req, res) => {
           sexuality: req.body.sexuality,
           maritalStatus: req.body.maritalStatus,
           children: JSON.parse(req.body.criancas),
-          observations: 'Observações',
+          observations: req.body.obervations,
           photo: '/caminho',
           isEmployee: false,
         };

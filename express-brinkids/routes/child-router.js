@@ -54,6 +54,13 @@ router.get('/filter/:search', (req, res) => {
   query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
 });
 
+router.get('/identifier/:id_child', (req, res) => {
+  child.findById(
+    req.params.id_child,
+    (err, childResult) => (err ? res.sendStatus(500) : res.status(200).json(childResult)),
+  );
+});
+
 /**
  * Rota para inserção de crianças no banco de dados
  * @param rota Rota usada para requisição
