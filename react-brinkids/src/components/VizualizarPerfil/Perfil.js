@@ -1,8 +1,5 @@
 import React from 'react';
-
 import listaa from './gato';
-
-// CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
@@ -269,8 +266,8 @@ class Perfil extends React.Component {
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
-                            
-                                
+
+
                             </h3>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
@@ -284,7 +281,7 @@ class Perfil extends React.Component {
                                             </label>
                                             </button><br /></div>)
                                     }
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 450 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
+                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
                                 </div>
 
                             </div>
@@ -296,15 +293,16 @@ class Perfil extends React.Component {
                                 <br></br>
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" ><b> SENHA </b></h5>
-                                    <p><input type="password" value="senha" style={{ border: 'none', background: 'white', textAlign: 'center', fontSize: 200 + '%' }} disabled /></p>
+                                    <p><input type="password" value="senha" style={{ border: 'none', background: 'white', textAlign: 'center', fontSize: 110 + '%' }} disabled /></p>
                                     {this.state.editar && (<button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>)}
                                 </div>
                                 <br></br>
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
                                     <p>ffffffff</p>
-                                </div>
+                                </div><br/>
                             </div>
+                            
                             <div className="row">
 
                                 <div className="col-md-12 col-sm-12">
@@ -312,6 +310,7 @@ class Perfil extends React.Component {
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
                                         <p>{this.state.perfilAtual.name.firstName}</p>
                                     </div>
+                                    <br></br>
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
                                         <p>{this.state.perfilAtual.name.surName}</p>
@@ -371,7 +370,7 @@ class Perfil extends React.Component {
                                 </div>
 
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" >
+                                    <div className="graph" style={{ padding: 10 + "px" }} >
                                         <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
                                         <p>{this.state.perfilAtual.maritalStatus}</p>
                                     </div>
@@ -381,11 +380,11 @@ class Perfil extends React.Component {
                             <br></br>
 
                             <div className='row'>
-                                <div className="col-md-6 col-sm-12 col-xs-12">
+                                <div className="col-md-12 col-sm-12 col-xs-12">
                                     <div className="graph " style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Email:</b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.email}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
+                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
                                     </div>
                                 </div>
                             </div>
@@ -397,21 +396,21 @@ class Perfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Endereço: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.street}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
+                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-10">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Bairro: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.district}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
+                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-2 col-sm-2">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Número: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.number}</p>)}
-                                        {this.state.editar && (<input className="form-control" type="text" value={this.state.numero} onChange={this.changueNumero} />)}
+                                        {this.state.editar && (<input className="form-control" style={{float: 'none'}} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
                                     </div>
                                 </div>
                             </div>
@@ -423,28 +422,28 @@ class Perfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> CEP: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.cep}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
+                                        {this.state.editar && (<input type="text"  style={{float: 'none'}} className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Cidade: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.city}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
+                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Estado: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.state}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
+                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> País: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.country}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
+                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
                                     </div>
                                 </div>
                             </div>
@@ -462,15 +461,15 @@ class Perfil extends React.Component {
                                     </div>
                                 </div >
 
-                                    {!this.state.editar && (
-                                    <div style={{textAlign: 'center'}}>
+                                {!this.state.editar && (
+                                    <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.editavel} className="btn btn-md botao botaoAvançar" > Editar</button>
                                         <button onClick={this.voltar} className="btn btn-md botao botaoAvançar" > Voltar</button>
                                     </div>
 
                                 )}
                                 {this.state.editar && (
-                                    <div style={{textAlign: 'center'}}>
+                                    <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.salvar} className="btn btn-md botao botaoAvançar" > Salvar</button>
                                         <button onClick={this.cancelar} className="btn btn-md botao botaoAvançar" > Cancelar</button>
                                     </div>
