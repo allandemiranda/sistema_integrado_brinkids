@@ -1,4 +1,5 @@
 import React from 'react';
+import update from 'react-addons-update';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import ConfDadosAni from './ConfirmaDadosAniversariante.js'
@@ -10,10 +11,12 @@ import './css/style.css';
 
 
 class CadastroAniversario extends React.Component {
+    
+    
     constructor(props){
         super(props);
         this.state = {
-            page: "FormularioCad",
+            page: "ListaDeCriancaeAdulto",
             //Dados do Aniversariante
             TituloDoAni:"",
             NomeDoAni:"",
@@ -27,6 +30,13 @@ class CadastroAniversario extends React.Component {
             ObsDoAni:"",
             ValorPg:"",
             MetodoPg:"",
+            //Lista do Aniversario
+            NomeCrianca: "",
+            IdadeCrianca: "",
+            Adulto: "",
+            ListaCria: [],
+            ListaAdul: [],
+            //lista2: [{nome: '', idade: '', adulto: ''}, {}]
         }
 
         this.ChangeTitulo = this.ChangeTitulo.bind(this);
@@ -41,7 +51,9 @@ class CadastroAniversario extends React.Component {
         this.ChangeObs = this.ChangeObs.bind(this);
         this.ChangeValorPg = this.ChangeValorPg.bind(this);
         this.ChangeMetodoPg = this.ChangeMetodoPg.bind(this);
-        
+        this.ChangeNameCrianca = this.ChangeNameCrianca.bind(this);
+        this.ChangeNameAdulto = this.ChangeNameAdulto.bind(this);
+        this.ChangeIdadeCrianca = this.ChangeIdadeCrianca.bind(this);
     }
 
     //Bloco que muda o status para o atual do formulario.
@@ -68,18 +80,24 @@ class CadastroAniversario extends React.Component {
     ChangeValorPg(event){this.setState({ValorPg: event.target.value});}
 
     ChangeMetodoPg(event){this.setState({MetodoPg: event.target.value});}
+
+    ChangeNameCrianca(event){this.setState({NomeCrianca: event.target.value});}
     
+    ChangeNameAdulto(event){this.setState({Adulto: event.target.value});}
+    
+    ChangeIdadeCrianca(event){this.setState({IdadeCrianca: event.target.value});}
 
     //Função que Valida o Aniversario
     ValidaAniversaio = (event) => {
         event.preventDefault();
         var erros = ValidaErros(this.state);
-        
+
         if(erros.length > 0){
             alert("Houve erro(s) no preechimento do formulário");
             exibeMensagensDeErro(erros);
             return;
         }
+
         else {
             exibeMensagensDeErro(erros);
             console.log("deu tudo certo")
@@ -87,6 +105,7 @@ class CadastroAniversario extends React.Component {
                 page: "ConfDadosAni"
             })
         }
+
         function ValidaErros (ani){
 
             var erros = [];
@@ -124,6 +143,7 @@ class CadastroAniversario extends React.Component {
             if (ani.DescriçãoDoAni.length === 0) {
                 erros.push("A Descrição do Aniversario não pode ser em branco");
             }
+            console.log(erros);
             return erros;
         }
 
@@ -137,8 +157,7 @@ class CadastroAniversario extends React.Component {
                 ul.appendChild(li);
             });
         }
-    }
-
+    }   
     VoltaFormAni = () => {
         this.setState({
             page: "FormularioCad"
@@ -147,6 +166,72 @@ class CadastroAniversario extends React.Component {
     AvancaListConv = () => {
         this.setState({
             page: "FormularioListaConv"
+        })
+    }
+    
+    //Funções Adicionam na Lista de Aniversario
+    AddCrianca = (event) => {
+        event.preventDefault();
+        var erro = [];
+
+        if(this.state.NomeCrianca == ""){
+            erro.push("Nome do Adulto não pode ser em branco.");
+        }
+        if(this.state.IdadeCrianca == ""){
+            erro.push("Idade da criança não pode ser em branco.");
+        }       
+        if(erro.length > 0){
+            exibeMensagensDeErro(erro);
+        }
+        else{
+            exibeMensagensDeErro(erro);
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{nome: this.state.NomeCrianca, idade: this.state.IdadeCrianca}]}),
+                NomeCrianca: "",
+                IdadeCrianca: "",
+            })
+        }
+        function exibeMensagensDeErro(erros){
+            var ul = document.querySelector("#mensagens-erro-crianca");
+            ul.innerHTML = "";
+
+            erros.forEach(function(erro){
+                var li = document.createElement("li");
+                li.textContent = erro;
+                ul.appendChild(li);
+            });
+        }
+    }
+    AddAdulto = (event) => {
+        event.preventDefault();
+        var erro = [];
+        if(this.state.Adulto == ""){
+            erro.push("Nome do Adulto não pode ser em branco.");
+        }
+        if(erro.length > 0){
+            exibeMensagensDeErro(erro);
+        }
+        else{
+            exibeMensagensDeErro(erro);
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{nome: this.state.Adulto}]}),
+                Adulto: "",
+            })
+        }
+        function exibeMensagensDeErro(erros){
+            var ul = document.querySelector("#mensagens-erro-adulto");
+            ul.innerHTML = "";
+
+            erros.forEach(function(erro){
+                var li = document.createElement("li");
+                li.textContent = erro;
+                ul.appendChild(li);
+            });
+        }
+    }
+    ConfListCnv = () => {
+        this.setState({
+            page: "ConfListConv"
         })
     }
 
@@ -234,6 +319,117 @@ class CadastroAniversario extends React.Component {
                         <button className="btn btn-md botao botaoAvançar" onClick={this.AvancaListConv}>Avançar</button>
                     </div> 
                 </div> 
+            )
+        }
+        else if(this.state.page === "ListaDeCriancaeAdulto"){
+            return(
+                <div className = "container-fluid" >
+                    <div className = "sub-heard-part" >
+                        <ol className = "breadcrumb m-b-0" >
+                            <li > < a href = "/" > Home </a></li >
+                            <li > Aniversario </li>
+                        </ol >
+                    </div>
+                    <div className = "graph-visual" >
+                        <div className = "row">
+                            <div className = "col-md-6 col-sm-12">
+                                <div className = "graph" >
+                                    <h3 className = "inner-tittle" > Lista de Crianças </h3>
+                                    <div className = "graph" >
+                                    <form id="form-busca">
+                                        <div className = "form-group" >
+                                            <div className = "row" >
+                                                <TypesInput cod = {1} ClassDiv = {"col-md-8 col-sm-8 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"name"} Class = {"form-control"} value = {this.state.NomeCrianca} 
+                                                    onChange = {this.ChangeNameCrianca}
+                                                />
+                                                <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Idade: "} type = {"number"} id = {"number"} name= {"number"} Class = {"form-control"} value = {this.state.IdadeCrianca}
+                                                    onChange = {this.ChangeIdadeCrianca}
+                                                />
+                                                <br></br>
+                                                <button className="btn botao" type = "submit" onClick = {this.AddCrianca}>Adicionar</button>
+                                                <ul id="mensagens-erro-crianca"></ul>
+                                            </div>
+                                        </div>
+                                    </form>                        
+                                </div>
+                                    <br></br>
+                                    <br></br>
+                                    <div className = "graph">
+                                        <div className ="tables table-responsive">
+                                            <table className ="table table-hover"> 
+                                                <thead className = "text-center"> 
+                                                    <tr> 
+                                                        <th>#</th> 
+                                                        <th>Name</th> 
+                                                        <th>Idade</th> 
+                                                    </tr>
+                                                </thead> 
+                                                <tbody>
+                                                    {this.state.ListaCria.map((crianca, indice) => {
+                                                        return (
+                                                            <tr>
+                                                                <th scope="row">{(indice + 1)}</th>
+                                                                <td > {crianca.nome} </td>
+                                                                <td > {crianca.idade} </td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className = "col-md-6 col-sm-12">
+                                <div className = "graph" >
+                                    <h3 className = "inner-tittle" > Lista de Adultos </h3>
+                                    <div className = "graph" >
+                                        <form id="form-busca">
+                                            <div className = "form-group" >
+                                                <div className = "row" >
+                                                    <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"name"} Class = {"form-control"} 
+                                                        value = {this.state.Adulto} onChange = {this.ChangeNameAdulto}
+                                                    />
+                                                    <br></br>
+                                                    <button className="btn botao" type = "submit" onClick = {this.AddAdulto}>Adicionar</button>
+                                                    <ul id="mensagens-erro-adulto"></ul>
+                                                </div>
+                                            </div>
+                                        </form>                        
+                                    </div>
+                                    <br></br>
+                                    <br></br>
+                                    <div className = "graph">
+                                        <div className ="tables table-responsive">
+                                            <table className ="table table-hover"> 
+                                                <thead className = "text-center"> 
+                                                    <tr> 
+                                                        <th>#</th> 
+                                                        <th>Nome</th> 
+                                                    </tr>
+                                                </thead> 
+                                                <tbody>
+                                                    {this.state.ListaAdul.map((adulto, indice) => {
+                                                        return (
+                                                            <tr>
+                                                                <th scope="row">{(indice + 1)}</th>
+                                                                <td > {adulto.nome} </td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                     </div>
+                                </div>                   
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <a className= "btn btn-md botao" href="\">Cancelar</a>
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.ConfListCnv}>Avançar</button>
+                        </div> 
+                    </div> 
+                </div>
             )
         }
     }
