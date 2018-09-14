@@ -15,6 +15,7 @@ export default [
         children: [],
         observations: 'meio castrado',
         photo: 'img_users/adult/5b708fbb11942e1e83a7e088.png',
+        crianca:[{Nome:'maria',parentesco:'tio avo',id:0}],
         __v: 0 
     },
     

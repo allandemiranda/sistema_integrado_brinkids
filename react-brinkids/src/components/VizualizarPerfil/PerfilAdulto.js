@@ -8,9 +8,7 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 
-
-
-class Perfil extends React.Component {
+class PerfilAdulto extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -242,7 +240,9 @@ class Perfil extends React.Component {
                             const reader = new FileReader();
 
                             reader.onload = function (e) {
+
                                 fotopreview.src = e.target.result;
+
                             }
 
                             reader.readAsDataURL(files[0]);
@@ -251,7 +251,18 @@ class Perfil extends React.Component {
                     }
                 }, 100);
             }
-
+            const byCrianca = function (events) {
+                return (
+                    <div>
+                        <tr style={{ textAlign: 'justify' }} key={events.toString()}>
+                            <td>{events.id}</td>
+                            <td>{events.Nome}</td>
+                            <td>{events.Parentesco}</td>
+                        </tr>
+                        
+                    </div>
+                )
+            }
 
 
             return (
@@ -269,8 +280,8 @@ class Perfil extends React.Component {
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
-                            
-                                
+
+
                             </h3>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
@@ -290,19 +301,27 @@ class Perfil extends React.Component {
                             </div>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> LOGIN </b></h5>
-                                    <p>ffffffff</p>
-                                </div>
-                                <br></br>
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> SENHA </b></h5>
-                                    <p><input type="password" value="senha" style={{ border: 'none', background: 'white', textAlign: 'center', fontSize: 200 + '%' }} disabled /></p>
-                                    {this.state.editar && (<button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>)}
-                                </div>
-                                <br></br>
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
-                                    <p>ffffffff</p>
+                                    <div className="tables table-responsive">
+                                        <table className="table table-hover">
+                                            <thead className="text-center">
+                                                <tr >
+                                                    <th>#</th>
+                                                    <th>Nome</th>
+                                                    <th>Parentesco</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="CriaTabela">
+                                                {this.state.perfilAtual.crianca.map(byCrianca)}
+
+                                            </tbody>
+                                        </table>
+                                       {this.state.editar && ( <button className="btn btn-md botao botaoAvançar" ><label>
+                            Adicionar Criança <span className="glyphicon">&#xe065;</span>
+
+                            <input id="tipofile" type="file" name="foto" value="" />
+                        </label>
+                        </button>)}
+                                    </div>
                                 </div>
                             </div>
                             <div className="row">
@@ -462,15 +481,15 @@ class Perfil extends React.Component {
                                     </div>
                                 </div >
 
-                                    {!this.state.editar && (
-                                    <div style={{textAlign: 'center'}}>
+                                {!this.state.editar && (
+                                    <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.editavel} className="btn btn-md botao botaoAvançar" > Editar</button>
                                         <button onClick={this.voltar} className="btn btn-md botao botaoAvançar" > Voltar</button>
                                     </div>
 
                                 )}
                                 {this.state.editar && (
-                                    <div style={{textAlign: 'center'}}>
+                                    <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.salvar} className="btn btn-md botao botaoAvançar" > Salvar</button>
                                         <button onClick={this.cancelar} className="btn btn-md botao botaoAvançar" > Cancelar</button>
                                     </div>
@@ -525,4 +544,4 @@ class Perfil extends React.Component {
         }
     }
 }
-export default Perfil;
+export default PerfilAdulto;
