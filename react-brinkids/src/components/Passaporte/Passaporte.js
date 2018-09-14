@@ -66,20 +66,6 @@ class Passport extends React.Component {
             this.setState({ kinshipConfirm: event.target.value }); 
         }
 
-    HorarioAtual(event){
-        let now = new Date;
-        console.log(now.getDate() + " de " + now.getMonth()  + " de " + now.getFullYear()+ ' ' + now.getHours() +":"+ now.getMinutes() +":"+ now.getSeconds());
-        this.currentdate = [
-            now.getDate(),
-            now.getMonth() + 1 ,
-            now.getFullYear(),
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds()
-        ]
-        console.log(this.currentdate[0] + ',' + this.currentdate[1] +' de '+  this.currentdate[2] +' as '+ this.currentdate[3] +':'+ this.currentdate[4]+':'+ this.currentdate[5]);      
-
-    }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
         //Bloco que muda o status para o atual do formulario.
         ChangeSearch(event) {
@@ -217,14 +203,8 @@ class Passport extends React.Component {
                     if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
                 },
                 success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response.length)
-                    if (response.length === 0) {
-                        alert("Erro esc")
-                        this.setState({ erro: "* Nenhum Responásel Encontrado." })
-                    } else {
-                        console.log("Olar")
-                        this.setState({ listConect: response });
-                    }
+                    console.log("Olar2")
+                    this.setState({ listConect: response });
                 }.bind(this)
             });
         }
@@ -300,10 +280,10 @@ class Passport extends React.Component {
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
 
     render() {  
-       // //TELA I - Busca do responsável
+        // //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
             {/* Imprime a tabela com a busca dos Adultos*/ }
-            return (                 
+            return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -313,11 +293,11 @@ class Passport extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <div className="graph" >
-                        <div>
-                            <h3 className="inner-tittle " >Selecionar Responsável</h3>
-                        </div>
+                            <div>
+                                <h3 className="inner-tittle " >Selecionar Responsável</h3>
+                            </div>
                             <div className=" text-center">
-                                <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar"/>
+                                <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar" />
                                 <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult}> Pesquisar </button>
                             </div>
                         </div>
@@ -334,11 +314,11 @@ class Passport extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.list.map((findAdult, indice) => {        
+                                    {this.state.list.map((findAdult, indice) => {
                                         return (
                                             <tr key={findAdult._id}>
-                                                <th scope="row">{indice+1}</th>
-                                                <td > {findAdult.name.firstName + " "+ findAdult.name.surName} </td>
+                                                <th scope="row">{indice + 1}</th>
+                                                <td > {findAdult.name.firstName + " " + findAdult.name.surName} </td>
                                                 <td >{findAdult.phone} </td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult._id)} /> </td>
                                             </tr>
@@ -369,141 +349,37 @@ class Passport extends React.Component {
                             <li > Passaporte </li>
                         </ol >
                     </div>
-                    <div className="graph-visual" >
+                    <h3 className="inner-tittle" > Perfil </h3>
+                    <div className="graph-visual">
                         <h3 className="inner-tittle" > Confirmando Cadastro </h3>
-                        <div className="graph" >
-                            <h3 className="inner-tittle" > Perfil </h3>
+                        <div className="graph-visual" >
                             <div className="row">
-                                <div className="col-md-12 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                <div className="graph">
+                                    <div className="col-md-6 col-sm-12 text-center">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                            <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6 col-sm-12 text-center">
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                        </div>
+                                        <br></br>
+                                        <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Telefone: </b></h5>
+                                            <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
+                                        </div>
+                                        <br></br>
+                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                            <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b>  CPF: </b> </h5>
-                                        <p> {this.state.listConfirmAdult[0].cpf} </p>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b>  RG: </b> </h5>
-                                        <p> {this.state.listConfirmAdult[0].rg} </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row" >
-                                <div className="col-md-4 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].birthday}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-sm-4 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nacionalidade: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].nacionality}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-sm-4 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Sexo: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].sexuality}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop:-13 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                        <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
-                                    </div>
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].maritalStatus}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className='row'>
-                                <div className="col-md-12 col-sm-12 col-xs-12">
-                                    <div className="graph " style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"> <b> Email:</b> </h5>
-                                        <p> {this.state.listConfirmAdult[0].email}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-6 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Endereço: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].street}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-sm-10">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Bairro: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].district}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-2 col-sm-2">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Número: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].number}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> CEP: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].cep}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Cidade: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].city}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Estado: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].state}</p>
-                                    </div>
-                                </div>
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> País: </b></h5>
-                                        <p>{this.state.listConfirmAdult[0].address[0].country}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
-                            <div className="row">
+                            </div >
+                            < div className="row" >
                                 <div className="graph" >
                                     <div className="row">
                                         <div className="col-md-12 col-sm-12 col-xs-12">
@@ -513,22 +389,13 @@ class Passport extends React.Component {
                                         </div>
                                     </div>
                                 </div >
+                            </ div>
+                        </div>
 
-                                <br></br>
-
-                                <div className="col-md-6 col-sm-12 text-center">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                        <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
-                                    </div>
-                                </div>
-                            </div>
-                            <br></br>
-                        </div >
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        <button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>
+                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>*/}
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
                 </div>
@@ -599,7 +466,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        <button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>
+                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>*/}
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
                     </div>
                 </div>
@@ -607,8 +474,7 @@ class Passport extends React.Component {
         }
 
         //TELA IV - Confirmação das crianças na entrada do passaporte
-        else if (this.state.page === "ConfirmKids") {
-            this.HorarioAtual();
+        else if (this.state.page === "ConfirmKids") {            
             return (
                 <div className="containerfluid">
                     <div className="sub-heard-part">
@@ -653,6 +519,45 @@ class Passport extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                {/*<div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
+                                                    <div className="col-md-6 col-sm-12">//
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                                <option value="others" > Outros </option>
+                                                                <option value="children" > filho(a) </option>
+                                                                <option value="Stepson" > Enteado(a) </option>
+                                                                <option value="grandchildren"  > Neto(a) </option>
+                                                                <option value="nephews"  > Sobrinho(a) </option>
+                                                                <option value="Brother" > Irmão/Irmã </option>
+                                                            </select >
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-12">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5><b> Entrada: </b></h5>
+                                                            <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
+                                                        </div>
+                                                    </div>
+                                    </div>*/}
+
+                                                <br></br>
+
+                                                <div className="row">
+                                                    <div className="graph" >
+                                                        <div className="row">
+                                                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                                                <h3 className="inner-tittle" > Observações </h3>
+                                                                <br></br>
+                                                                <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                                            </div>
+                                                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                                                <h3 className="inner-tittle" > Restrições </h3>
+                                                                <br></br>
+                                                                <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div >
+                                                </div>
 
                                                 <br></br>
 
@@ -677,16 +582,16 @@ class Passport extends React.Component {
                                                     </div>
                                                 </div >
                                             </div>
-                                            <div className="text-center">
-                                                <a className="btn btn-md botao" href="/">Cancelar</a>
-                                                <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
-                                                <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
-                                            </div>
                                         </div>
                                     );
                                 })}
                             </div>
                         </div>
+                    </div>
+                    <div className="text-center">
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>*/}
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>
                 </div>                
             )                
@@ -719,7 +624,7 @@ class Passport extends React.Component {
             return (
                 <div className="text-center">
                     <a className="btn btn-md botao" href="/">Cancelar</a>
-                    <button className="btn btn-md botao" onClick = {this.VoltarTelaIV}>Voltar</button>                        
+                    {/*<button className="btn btn-md botao" onClick = {this.VoltarTelaIV}>Voltar</button> */}                       
                     <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
                 </div>
             )
