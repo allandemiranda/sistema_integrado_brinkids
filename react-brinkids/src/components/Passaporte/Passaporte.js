@@ -354,13 +354,13 @@ class Passport extends React.Component {
                             <div className="graph">
                                 <h3 className="inner-tittle" style={{ marginTop: -10 + "px" }} > Perfil - Confirmando Cadastro</h3>
                                 <div className="row">
-                                    <div className="col-md-6 col-sm-12 text-center">
+                                    <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
                                             <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
                                         </div>
                                     </div>
-                                    <div className="col-md-6 col-sm-12 text-center">
+                                    <div className="col-md-5 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Nome: </b></h5>
                                             <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
@@ -368,7 +368,7 @@ class Passport extends React.Component {
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
                                             <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                            <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
+                                            <input type="text" id="phoneNumber" name="phoneNumber" className="form-control"className="text-center" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px" }}>
