@@ -349,12 +349,11 @@ class Passport extends React.Component {
                             <li > Passaporte </li>
                         </ol >
                     </div>
-                    <h3 className="inner-tittle" > Perfil </h3>
                     <div className="graph-visual">
-                        <h3 className="inner-tittle" > Confirmando Cadastro </h3>
                         <div className="graph-visual" >
-                            <div className="row">
-                                <div className="graph">
+                            <div className="graph">
+                                <h3 className="inner-tittle" style={{ marginTop: -10 + "px" }} > Perfil - Confirmando Cadastro</h3>
+                                <div className="row">
                                     <div className="col-md-6 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
@@ -378,20 +377,20 @@ class Passport extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div >
-                            < div className="row" >
-                                <div className="graph" >
-                                    <div className="row">
-                                        <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <h3 className="inner-tittle" > Observações </h3>
-                                            <br></br>
-                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
-                                        </div>
-                                    </div>
-                                </div >
-                            </ div>
+                            </div>
                         </div>
-
+                        <br></br>
+                        <div className="graph-visual" >
+                            <div className="graph" style={{ padding: 10 + "px" }} >
+                                <div className="row">
+                                    <div className="col-md-12 col-sm-12 col-xs-12">
+                                        <h3 className="inner-tittle" > Observações </h3>
+                                        <br></br>
+                                        <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                    </div>
+                                </div>
+                            </div >
+                        </div>
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
