@@ -37,6 +37,7 @@ class Passport extends React.Component {
             file: '',
             currentdate:[],
             preenchido: false, // Variável que vai dizer se foi selecionado alguma coisa
+            horaEntradaCriança:'', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
         }
 
         //Relacionado a busca
@@ -279,6 +280,9 @@ class Passport extends React.Component {
         };
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
 
+    // FUNÇÃO QUE SALVA O MOMENTO ATUAL NA VARIÁVEL horaEntradaCriança
+
+
     render() {  
         // //TELA I - Busca do responsável
         if (this.state.page === "SelectAdult") {
@@ -434,7 +438,7 @@ class Passport extends React.Component {
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
                                     </thead>
-                                    <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS */}
+                                    <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS - Falta modificar para aparecer o nome*/}
                                         {this.state.listConfirmAdult[0].children.map((findKids,indice) => {
                                             return (
                                                 <tr key={findKids._id}>
@@ -518,45 +522,43 @@ class Passport extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {/*<div className="row"> // FALTA AJEITA OS CAMINHOS DA INFORMAÇÃO 
+                                                <div className="Row">
                                                     <div className="col-md-6 col-sm-12">//
+                                                        <div className="col-md-6 col-sm-12">
+                                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                                <h5><b> Entrada: </b></h5>
+                                                                <p>{this.horaEntradaCriança = moment().format('LTS')}</p>
+                                                            </div>
+                                                        </div>
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
-                                                            <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                            {/*<select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
                                                                 <option value="others" > Outros </option>
                                                                 <option value="children" > filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
                                                                 <option value="grandchildren"  > Neto(a) </option>
                                                                 <option value="nephews"  > Sobrinho(a) </option>
                                                                 <option value="Brother" > Irmão/Irmã </option>
-                                                            </select >
+                                                            </select >*/}
                                                         </div>
                                                     </div>
-                                                    <div className="col-md-6 col-sm-12">
-                                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                                            <h5><b> Entrada: </b></h5>
-                                                            <p>{this.currentdate[0] + '/0' + this.currentdate[1] + '/' + this.currentdate[2] + ' ás ' + this.currentdate[3] + ':' + this.currentdate[4]}</p>
-                                                        </div>
-                                                    </div>
-                                    </div>*/}
-
-                                                <br></br>
-
-                                                <div className="row">
-                                                    <div className="graph" >
-                                                        <div className="row">
-                                                            <div className="col-md-6 col-sm-12 col-xs-12">
-                                                                <h3 className="inner-tittle" > Observações </h3>
-                                                                <br></br>
-                                                                <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
-                                                            </div>
-                                                            <div className="col-md-6 col-sm-12 col-xs-12">
-                                                                <h3 className="inner-tittle" > Restrições </h3>
-                                                                <br></br>
-                                                                <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div >
                                                 </div>
+                                                <br></br>
+                                                <br></br>
+                                                <div className="graph" >
+                                                    <div className="row">
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <h3 className="inner-tittle" > Observações </h3>
+                                                            <br></br>
+                                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                                        </div>
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <h3 className="inner-tittle" > Restrições </h3>
+                                                            <br></br>
+                                                            <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div >
+
 
                                                 <br></br>
 
@@ -580,6 +582,7 @@ class Passport extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div >
+
                                             </div>
                                         </div>
                                     );
