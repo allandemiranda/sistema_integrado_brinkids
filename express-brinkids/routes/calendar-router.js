@@ -11,8 +11,16 @@ function showErr(err, res) {
 }
 
 /** Esta rota envia todos os documentos referentes a calendario */
-router.get('/', (req, res) => {
-  calendar.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+router.get('/', async (req, res) => {
+  let birthdays;
+
+  try {
+    birthdays = await calendar.all();
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+
+  return res.status(200).json(birthdays);
 });
 
 /** Esta rota cria uma nova data */
