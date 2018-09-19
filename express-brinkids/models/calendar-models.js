@@ -27,7 +27,7 @@ const calendarSchema = new mongoose.Schema({
   associated: String,
 });
 
-calendarSchema.statics.all = async function () {
+calendarSchema.statics.all = async function all() {
   let birthdays;
 
   try {
