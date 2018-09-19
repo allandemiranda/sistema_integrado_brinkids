@@ -23,7 +23,7 @@ class PerfilAdulto extends React.Component {
             //barra de busca
             selectedSearch: '',
             //tipo da pagina 'Busca' ou 'Perfil'
-            page: 'Adicionar',
+            page: 'Busca',
             //n tem uma função especifica mas o universo não aceita funcionar sem ele
             flut: true,
             //Aparecer as opçoes quando clikar em editar
@@ -46,6 +46,7 @@ class PerfilAdulto extends React.Component {
 
             childSearch:'',
             confirmaCrianca: [],
+            kinship:'Outros',
 
         }
         //funçoes para mudar os values e afins
@@ -72,6 +73,14 @@ class PerfilAdulto extends React.Component {
         this.ChangechildSearch = this.ChangechildSearch.bind(this);
         this.Search = this.Search.bind(this);
         this.selecionaCrianca = this.selecionaCrianca.bind(this);
+        this.Changekinship = this.Changekinship.bind(this);
+        this.TheEnd = this.TheEnd.bind(this);
+        this.Adicionar = this.Adicionar.bind(this);
+    }
+    Adicionar(event){
+        this.setState({
+            page:'Adicionar',
+        })
     }
     changuePassword(event) {
         this.setState({
@@ -94,7 +103,7 @@ class PerfilAdulto extends React.Component {
     changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-        this.state.perfilAtual.observations = this.state.obs,
+            this.state.perfilAtual.observations = this.state.obs,
             this.state.perfilAtual.address.number = this.state.numero,
             this.state.perfilAtual.address.state = this.state.estado,
             this.state.perfilAtual.address.district = this.state.bairro,
@@ -207,6 +216,26 @@ class PerfilAdulto extends React.Component {
 
         this.setState({confirmaCrianca: this.state.confirmaCrianca});
     }
+    Changekinship(evento, identifier){
+        this.setState({kinship: evento.target.value})
+
+        console.log(`O estado foi atualizado: ${this.state.kinship}`)
+
+        this.state.confirmaCrianca.forEach((crianca) => {
+            if (crianca._id === identifier) {
+                crianca.kinship = evento.target.value
+            }
+        });
+
+        this.setState({confirmaCrianca: this.state.confirmaCrianca});
+    }
+    TheEnd(event){
+        this.state.perfilAtual.crianca.push({Nome:'joao', parentesco:'tio avoss',id:1});
+        console.log(this.state.perfilAtual.crianca);
+        this.setState({
+            page:'Perfil',
+        })
+    }
     render() {
 
 
@@ -295,7 +324,7 @@ class PerfilAdulto extends React.Component {
             const byCrianca = function (events) {
                 return (
 
-                    <tr style={{ textAlign: 'justify' }} key={events.toString()}>
+                    <tr style={{ textAlign: 'justify' }} key={events._id}>
                         <td>{events.id}</td>
                         <td>{events.Nome}</td>
                         <td>{events.Parentesco}</td>
@@ -363,10 +392,10 @@ class PerfilAdulto extends React.Component {
                                     </div>
 
                                 </div>
-                                {this.state.editar && (<button className="btn btn-md botao botaoAvançar" ><label>
+                                {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
                                     Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
-                                    <input id="tipofile" type="file" name="foto" value="" />
+                                    
                                 </label>
                                 </button>)}
                             </div>
@@ -653,7 +682,6 @@ class PerfilAdulto extends React.Component {
                     <br></br>
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TheEnd}>Finalizar</button>
                     </div>
                 </div>

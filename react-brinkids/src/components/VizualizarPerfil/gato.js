@@ -23,7 +23,7 @@ export default [
         name: { firstName: 'Matheus', surName: 'Felipe' },
         phone: [ '84555555555' ],
         _id: "5b75ee330bb2c51fe2de34e8",
-        birthday: new Date("1997-07-05T00:00:00.000Z"),
+        birthday: new Date("1997-07-05T00:00:00.000Z").toDateString(),
         address: [],
         rg: 222222222,
         cpf: '00000000000',
