@@ -1,64 +1,86 @@
 /** Este documento será responsável por criar as rotas para o calendário */
 
 const express = require('express');
-const calendar = require('../models/calendar-models');
+const Calendar = require('../models/calendar-models');
 
 const router = express.Router();
 
-function showErr(err, res) {
-  console.log(err);
-  return res.sendStatus(500);
-}
 
 /** Esta rota envia todos os documentos referentes a calendario */
-router.get('/', (req, res) => {
-  calendar.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+router.get('/', async (req, res) => {
+  try {
+    const birthdays = await Calendar.find({});
+    res.status(200).json(birthdays);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
 });
 
 /** Esta rota cria uma nova data */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   if (req.body.color
       && req.body.type
       && req.body.title
       && req.body.start
       && req.body.end) {
-    const data = {
+    const calendar = new Calendar({
       color: req.body.color,
       type: req.body.type,
       title: req.body.title,
       start: new Date(req.body.start),
       end: new Date(req.body.end),
       associated: req.body.associated,
-    };
+    });
 
-    return calendar.create(
-      data,
-      (err, childResult) => (err ? showErr(err, res) : res.status(201).json(childResult)),
-    );
+    try {
+      const newCalendar = await calendar.save();
+      return res.status(201).json(newCalendar);
+    } catch (err) {
+      return res.sendStatus(500);
+    }
   }
 
   return res.sendStatus(400);
 });
 
-router.put('/:id', (req, res) => {
-  const data = {
-    title: req.body.title,
-    start: new Date(req.body.start),
-    end: new Date(req.body.end),
-  };
+router.put('/:id', async (req, res) => {
+  if (req.body.title
+      && req.body.start
+      && req.body.end) {
+    try {
+      const calendar = await Calendar.findByIdAndUpdate(
+        req.params.id,
+        {
+          title: req.body.title,
+          start: new Date(req.body.start),
+          end: new Date(req.body.end),
+        },
+      );
 
-  return calendar.findByIdAndUpdate(
-    req.params.id,
-    data,
-    err => (err ? res.sendStatus(500) : res.sendStatus(204)),
-  );
+      if (!calendar) {
+        return res.sendStatus(404);
+      }
+
+      return res.sendStatus(204);
+    } catch (err) {
+      return res.sendStatus(500);
+    }
+  } else {
+    return res.sendStatus(400);
+  }
 });
 
-router.delete('/:id', (req, res) => (
-  calendar.findByIdAndRemove(
-    req.params.id,
-    err => (err ? res.sendStatus(500) : res.sendStatus(204)),
-  )
-));
+router.delete('/:id', async (req, res) => {
+  try {
+    const calendar = await Calendar.findByIdAndRemove(req.params.id);
+
+    if (!calendar) {
+      return res.sendStatus(404);
+    }
+    return res.sendStatus(204);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+});
 
 module.exports = router;

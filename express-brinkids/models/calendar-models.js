@@ -27,6 +27,18 @@ const calendarSchema = new mongoose.Schema({
   associated: String,
 });
 
+calendarSchema.statics.all = async function all() {
+  let birthdays;
+
+  try {
+    birthdays = await this.find({});
+  } catch (err) {
+    return err;
+  }
+
+  return birthdays;
+};
+
 mongoose.connect(`mongodb://localhost/'${config.database}`);
 const calendar = mongoose.model('Calendar', calendarSchema);
 
