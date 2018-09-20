@@ -18,7 +18,7 @@ class Passport extends React.Component {
         super(props)
         this.state = {
             //Responsável por saber qual página vai renderizar:
-            page: "Finalize",//ConfirmAdult SelectAdult
+            page: "SelectAdult",//ConfirmAdult SelectAdult Finalize
             selectedSearch: '', // Salva o nome que é colocado na barra de busca
             list: [], //recebe do banco os dados da pessoa que foi buscada
             listConect: [], // recebe os dados das crianças ligadas aos adultos [Passaporte]
@@ -38,6 +38,7 @@ class Passport extends React.Component {
             currentdate: [],
             preenchido: false, // Variável que vai dizer se foi selecionado alguma coisa
             horaEntradaCriança: '', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
+            kinshipConfirm:'',
         }
 
         //Relacionado a busca
@@ -370,7 +371,7 @@ class Passport extends React.Component {
                                             <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
                                         </div>
                                         <br></br>
-                                        <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
+                                        <div className="graph" style={{ padding: 10 + "px", paddingBottom: 25 + "px", paddingTop: -13 + "px" }}>
                                             <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                             <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" className="text-center" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
                                         </div>
@@ -439,11 +440,11 @@ class Passport extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS - Falta modificar para aparecer o nome*/}
-                                        {this.state.listConfirmAdult[0].children.map((findKids, indice) => {
+                                        {this.state.listConect.map((findKids, indice) => {
                                             return (
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
-                                                    <td > {findKids.identifier} </td>
+                                                    <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{findKids.birthday} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
                                                 </tr>
@@ -531,16 +532,16 @@ class Passport extends React.Component {
                                                         </div>
                                                     </div>
                                                     <div className="col-md-6 col-sm-12">
-                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px"  }}>
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
-                                                            {/*<select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
-                                                                                                            <option value="others" > Outros </option>
-                                                                                                            <option value="children" > filho(a) </option>
-                                                                                                            <option value="Stepson" > Enteado(a) </option>
-                                                                                                            <option value="grandchildren"  > Neto(a) </option>
-                                                                                                            <option value="nephews"  > Sobrinho(a) </option>
-                                                                                                            <option value="Brother" > Irmão/Irmã </option>
-                                                                                                        </select >*/}
+                                                                <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinshipConfirm} onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id)} >
+                                                                <option value="others" > Outros </option>
+                                                                <option value="children" > filho(a) </option>
+                                                                <option value="Stepson" > Enteado(a) </option>
+                                                                <option value="grandchildren"  > Neto(a) </option>
+                                                                <option value="nephews"  > Sobrinho(a) </option>
+                                                                <option value="Brother" > Irmão/Irmã </option>
+                                                            </select >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -610,29 +611,30 @@ class Passport extends React.Component {
                         <div className="graph-visual" >
                             <h3 className="inner-tittle" style={{ marginTop: -10 + "px" }} > Perfil - Confirmação Final</h3>
                             <div className="row">
+                                {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - INÍCIO*/}
                                 <div className="graph" >
                                     <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 40 + "%" }} >Responsável </h3>
                                     <div className="row">
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                {/*<img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />*/}
+                                                <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                {/*<p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>*/}
+                                                <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
                                             </div>
                                             <br></br>
-                                            <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
+                                            <div className="graph" style={{ padding: 10 + "px"}}>
                                                 <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                                {/*<input type="text" id="phoneNumber" name="phoneNumber" className="form-control"className="text-center" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />*/}
-                                            </div>
+                                                <p> {this.state.listConfirmAdult[0].phone}</p>
+                                                </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                {/*<p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>*/}
+                                                <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -643,79 +645,80 @@ class Passport extends React.Component {
                                                 <div className="col-md-12 col-sm-12 col-xs-12">
                                                     <h3 className="inner-tittle" > Observações </h3>
                                                     <br></br>
-                                                    <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                                    <div className="graph" style={{ padding: 10 + "px" }} >                                                    
+                                                        <p>{this.state.listConfirmAdult[0].observations}</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div >
                                     </div>
+                                <br></br>
                                 </div>
-
-
-                                <div className="graph" >
-                                    <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 45 + "%" }} > Crianças </h3>
-                                    <div className="row">
-                                        <div className="col-md-12 col-sm-12 text-center">
-                                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                {/*<p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>*/}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br></br>
-                                    <div className="row">
-                                        <div className="col-md-7 col-sm-12 text-center">
-                                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                {/*<img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />*/}
-                                            </div>
-                                        </div>
-                                        <div className="col-md-5 col-sm-12 text-center">                                            
-                                            <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
-                                                <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                                {/*<input type="text" id="phoneNumber" name="phoneNumber" className="form-control"className="text-center" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />*/}
-                                            </div>
-                                            <br></br>
-                                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                {/*<p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>*/}
-                                            </div>
-                                            <br></br>
-                                            <div className="row">
-                                                <div className="col-md-7 col-sm-12 text-center">
-                                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <h5 className="ltTitulo"><b> Sexo: </b></h5>
-                                                        {/*<p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>*/}
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-5 col-sm-12 text-center">
-                                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                                        <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                        {/*<p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>*/}
-                                                    </div>
+                                {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - FIM*/}
+                                
+                                {/*QUADRO CONFIMAÇÃO FINAL CRIANÇAS- INÍCIO*/}
+                                {this.state.listConfirmKids.map((Criançasqueentrarao, indice) => {
+                                    return(
+                                    <div className="graph" >
+                                        <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 45 + "%" }} > Criança {indice+1}</h3>
+                                        <div className="row">
+                                            <div className="col-md-12 col-sm-12 text-center">
+                                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                                    <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                                    <p>{Criançasqueentrarao.name.firstName + " " + Criançasqueentrarao.name.surName}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <br></br>
-                                    <div className="graph" style={{ padding: 10 + "px" }} >
-                                    <div className="row">                                        
-                                            <div className="col-md-12 col-sm-12 col-xs-12">
-                                                <h3 className="inner-tittle" > Observações </h3>
+                                        <br></br>
+                                        <div className="row">
+                                            <div className="col-md-7 col-sm-12 text-center">
+                                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                                    <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                                    <img src={"http://localhost:3000/img-users/" + Criançasqueentrarao.photo} />
+                                                </div>
+                                            </div>
+                                            <div className="col-md-5 col-sm-12 text-center">     
+                                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                                    <h5 className="ltTitulo"><b> Parentesco: </b></h5>
+                                                    <p>{Criançasqueentrarao.kinship}</p>
+                                                </div>
                                                 <br></br>
-                                                <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                                <div className="row">
+                                                    <div className="col-md-7 col-sm-12 text-center">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5 className="ltTitulo"><b> Sexo: </b></h5>
+                                                            <p>{Criançasqueentrarao.sexuality}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-md-5 col-sm-12 text-center">
+                                                        <div className="graph" style={{ padding: 10 + "px" }}>
+                                                            <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").fromNow()}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div >
-                                    <br></br>
-       
-                                        
-                                </div>
+                                        <br></br>
+                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                        <div className="row">                                        
+                                                <div className="col-md-12 col-sm-12 col-xs-12">
+                                                    <h3 className="inner-tittle" > Observações </h3>
+                                                    <br></br>
+                                                    <div className="graph" style={{ padding: 10 + "px" }} >                                                    
+                                                        <p>{Criançasqueentrarao.observations}</p>
+                                                    </div> </div>
+                                            </div>
+                                        </div >                                      
+                                    </div>    
+                                    )                                    
+                                })}
+                                {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - FIM*/}
                             </div>
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick = {this.VoltarTelaIV}>Voltar</button> */}
+                        <a className="btn btn-md botao" href="/">Cancelar</a>                        
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
                     </div>
                 </div>
