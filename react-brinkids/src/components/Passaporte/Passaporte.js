@@ -377,8 +377,8 @@ class Passport extends React.Component {
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                            <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>
+                                            <h5 className="ltTitulo"><b> Idade: </b></h5>                                        
+                                            <p>{moment(this.state.listConfirmAdult[0].birthday).toNow(true)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -506,7 +506,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").fromNow()}</p>
+                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").toNow(true)}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -634,7 +634,8 @@ class Passport extends React.Component {
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").fromNow()}</p>
+                                                <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -651,11 +652,10 @@ class Passport extends React.Component {
                                                 </div>
                                             </div>
                                         </div >
-                                    </div>
-                                <br></br>
+                                    </div>                                
                                 </div>
                                 {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - FIM*/}
-                                
+                                <div><br></br></div>
                                 {/*QUADRO CONFIMAÇÃO FINAL CRIANÇAS- INÍCIO*/}
                                 {this.state.listConfirmKids.map((Criançasqueentrarao, indice) => {
                                     return(
@@ -693,7 +693,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-5 col-sm-12 text-center">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").fromNow()}</p>
+                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").toNow(true)}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -709,11 +709,12 @@ class Passport extends React.Component {
                                                         <p>{Criançasqueentrarao.observations}</p>
                                                     </div> </div>
                                             </div>
-                                        </div >                                      
-                                    </div>    
+                                        </div >                                     
+                                        <div><br></br></div>                                      
+                                    </div> 
                                     )                                    
                                 })}
-                                {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - FIM*/}
+                                {/*QUADRO CONFIMAÇÃO FINAL Crianças  - FIM*/}
                             </div>
                         </div>
                     </div>
