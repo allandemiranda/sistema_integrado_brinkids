@@ -15,10 +15,8 @@ class CadastroAniversario extends React.Component {
         super(props);
         this.state = {
             Titulo: "",
-            DateBegin: "",
-            DateEnd: "",
-            TimeBegin: "",
-            TimeEnd: "",
+            DateTimeBegin: "",
+            DateTimeEnd: "",
             Description: "",
             Location: "",
             Color: "--",
@@ -49,14 +47,12 @@ class CadastroAniversario extends React.Component {
         else {
             var formData = new FormData();
 
-            formData.append('', String(this.state.Titulo))
-            formData.append('', String(this.state.DateBegin))
-            formData.append('', String(this.state.DateEnd))
-            formData.append('', String(this.state.TimeBegin))
-            formData.append('', String(this.state.TimeEnd))
-            formData.append('', String(this.state.Description))
-            formData.append('', String(this.state.Location))
-            formData.append('', String(this.state.Color)) 
+            formData.append('title', String(this.state.Titulo))
+            formData.append('opening', String(this.state.DateTimeBegin))
+            formData.append('closing', String(this.state.DateTimeEnd))
+            formData.append('description', String(this.state.Description))
+            formData.append('address', String(this.state.Location))
+            formData.append('color', String(this.state.Color)) 
             
             axios.post('', formData)
             .then(function (response) {
@@ -80,17 +76,11 @@ class CadastroAniversario extends React.Component {
             if (event.Titulo.length === 0) {
                 erros.push("O Titulo não pode ser em branco");
             }
-            if (event.DateBegin.length === 0) {
-                erros.push("A data Inicial não pode ser em branco");
+            if (event.DateTimeBegin.length === 0) {
+                erros.push("A Data e a Hora Inicial não pode ser em branco");
             }
-            if (event.DateEnd.length === 0) {
-                erros.push("A Data Final não pode ser em branco");
-            }
-            if (event.TimeBegin.length === 0) {
-                erros.push("A Hora Inicial não pode ser em branco");
-            }
-            if (event.TimeEnd.length === 0) {
-                erros.push("A Hora Final não pode ser em branco");
+            if (event.DateTimeEnd.length === 0) {
+                erros.push("A Data e a Hora Final não pode ser em branco");
             }
             if (event.Description.length === 0) {
                 erros.push("A Descrição não pode ser em branco");
@@ -139,18 +129,12 @@ class CadastroAniversario extends React.Component {
                             </div>
                             <div className="form-group">
                                 <div className="row">
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data Inicial: "} type = {"date"} id = {"DateBegin"} name= {"DateBegin"} Class = {"form-control"} 
-                                        value = {this.state.DateBegin} onChange = {this.ChangeValue}
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data Inicial: "} type = {"datetime-local"} id = {"DateTimeBegin"} name= {"DateTimeBegin"} Class = {"form-control"} 
+                                        value = {this.state.DateTimeBegin} onChange = {this.ChangeValue}
                                     />
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data Final: "} type = {"date"} id = {"DateEnd"} name= {"DateEnd"} Class = {"form-control"} 
-                                            value = {this.state.DateEnd} onChange = {this.ChangeValue}
+                                    <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Data Final: "} type = {"datetime-local"} id = {"DateTimeEnd"} name= {"DateTimeEnd"} Class = {"form-control"} 
+                                            value = {this.state.DateImeEnd} onChange = {this.ChangeValue}
                                     />
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Inicial: "} type = {"time"} id = {"TimeBegin"} name= {"TimeBegin"} Class = {"form-control"} 
-                                            value = {this.state.TimeBegin} onChange = {this.ChangeValue}
-                                    />
-                                    <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"TimeEnd"} name= {"TimeEnd"} Class = {"form-control"} 
-                                            value = {this.state.TimeEnd} onChange = {this.ChangeValue}
-                                    />  
                                 </div>
                             </div>
                             <div className="form-group">
@@ -158,7 +142,7 @@ class CadastroAniversario extends React.Component {
                                     <TypesInput cod = {2} ClassDiv = {"col-md-6 col-sm-12 col-xs-12"} Label = {true} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Descrição:"} cols = {"50"} rows = {"4"} id = {"Description"} name= {"Description"} Class = {"form-control"} 
                                             value={this.state.Description} onChange={this.ChangeValue}/>
                                     <div className="col-md-6 col-sm-12 col-xs-12">
-                                        <TypesInput cod = {1} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Local: "} type = {"adress"} id = {"Location"} name= {"Location"} Class = {"form-control"} 
+                                        <TypesInput cod = {1} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Local: "} type = {"text"} id = {"Location"} name= {"Location"} Class = {"form-control"} 
                                         value = {this.state.Location} onChange = {this.ChangeValue}
                                         />
                                         <label className="LetraFormulario brlabel">Cor</label>
