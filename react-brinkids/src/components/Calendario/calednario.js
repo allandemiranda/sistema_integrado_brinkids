@@ -113,6 +113,7 @@ class Calendar extends React.Component {
           currentValue.start = new Date(currentValue.start);
           currentValue.end = new Date(currentValue.end);
         })
+        console.log(response.data);
         this.setState({ datasRequisicao: response.data });
       })
       .catch((err) => console.log(err));
@@ -250,6 +251,8 @@ class Calendar extends React.Component {
   }
 
   mudarModal(event) {
+    console.log(event);
+    console.log(event._id);
     excluirInicial = event.start;
     excluirFinal = event.end;
     const inicial = event.start.getHours() + ':' + event.start.getMinutes();
@@ -257,10 +260,12 @@ class Calendar extends React.Component {
     const identifier = event._id; // (Gabriel): Criei mais uma variável para colocar no estado e ajudar na requisição de modificar datas
     // (Gabriel): A variável 'identifier' será usada para realizar a consulta no banco de dados pela data específica que estamos modificando
 
-    this.setState({ Titulo: event.title });
-    this.setState({ Hora2: final });
-    this.setState({ Hora: inicial });
-    this.setState({ identifier: identifier }); // (Gabriel): Agora coloco ela no 'state'
+    this.setState({
+      Titulo: event.title,
+      Hora2: final,
+      Hora: inicial,
+      identifier: identifier
+    });
     this.openModalC();
 
   }
@@ -273,6 +278,7 @@ class Calendar extends React.Component {
         // (Gabriel): Se tudo der certo para deletar a data no banco de dados, então vamos deletar a data daqui do front
         this.state.datasRequisicao.forEach((currentValue, index, array) => { // (Gabriel): Vai varrer a lista de datas atrás da data que é para deletar
           if (currentValue._id === this.state.identifier) {// (Gabriel): Se encontrar a data que é para ser removida
+            console.log(array[index]);
             delete array[index]; // (Gabriel): Então delete via notação 'lista[indice]'
           }
         })
