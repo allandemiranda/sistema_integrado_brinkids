@@ -14,6 +14,7 @@ import Aniversario from './components/Aniversario/CadastroAniversario.js';
 import Perfil from './components/VizualizarPerfil/Perfil.js';
 import PerfilAdulto from './components/VizualizarPerfil/PerfilAdulto.js';
 import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
+import Servicos from './components/Serviços_Extras/Serviços';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -89,7 +90,13 @@ class App extends React.Component {
                   path="/PerfilCrianca"
                   layout={MainLayout}
                   component={PerfilCrianca}
-                />                                  
+                />
+                <LayoutRoute
+                  exact
+                  path="/Serviços"
+                  layout={MainLayout}
+                  component={Servicos}
+                />                                   
               <Redirect to="/" /> 
             </Switch>
           </GAListener>

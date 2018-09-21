@@ -1,0 +1,13 @@
+#forms {
+    display: block;
+    width: 50%;
+    height: 37px;
+    padding: 14px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #777;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ddd;
+    border-radius: 0;
+}
