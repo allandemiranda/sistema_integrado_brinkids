@@ -80,25 +80,30 @@ class Passport extends React.Component {
     }
 
     // Faz a busca do responsável:
-    SearchAdult(event) {
-        $.ajax({
-            url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-            },
-            success: function (response) {    //Salva os dados do responsável na variácel LIST
-                console.log(response.length)
-                if (response.length === 0) {
-                    alert("Erro esc")
-                    this.setState({ erro: "* Nenhum Responásel Encontrado." })
-                } else {
-                    console.log("Olar")
-                    this.setState({ list: response });
-                }
-            }.bind(this)
-        });
+    SearchAdult(nomeadult,event) {
+        if(nomeadult.length >= 7){
+            $.ajax({
+                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
+                dataType: 'json',
+                type: 'GET',
+                error: function (response) {
+                    if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+                },
+                success: function (response) {    //Salva os dados do responsável na variácel LIST
+                    console.log(response.length)
+                    if (response.length === 0) {
+                        alert("Erro esc")
+                        this.setState({ erro: "* Nenhum Responásel Encontrado." })
+                    } else {
+                        console.log("Olar")
+                        this.setState({ list: response });
+                    }
+                }.bind(this)
+            });
+        }
+        else{
+            console.log("Número de caracteres menor do que 7!")
+        }
     }
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
@@ -311,7 +316,7 @@ class Passport extends React.Component {
                             </div>
                             <div className=" text-center">
                                 <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar" />
-                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult}> Pesquisar </button>
+                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult(this.state.selectedSearch)}> Pesquisar </button>
                             </div>
                         </div>
                         <br></br>
