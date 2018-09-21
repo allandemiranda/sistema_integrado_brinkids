@@ -12,14 +12,33 @@ class Servico extends React.Component {
             Nome:'',
             Tipo:'Serviço',
             Text:201,
+            Quant: 0,
         }
         this.enviar = this.enviar.bind(this);
+        this.changueQuant = this.changueQuant.bind(this);
+        this.changueNome = this.changueNome.bind(this);
+        this.changueTipo = this.changueTipo.bind(this);
+    }
+    changueTipo(event){
+        this.setState({
+           Tipo:event.target.value,
+        })
+    }
+    changueNome(event){
+        this.setState({
+            Nome:event.target.value,
+        })
     }
     enviar(event) {
        this.setState({
            Text:event.target.value,
        })
     }
+    changueQuant(event) {
+        this.setState({
+            Quant:event.target.value,
+        })
+     }
 
     render() {
 
@@ -41,7 +60,7 @@ class Servico extends React.Component {
 
                             <div className="row" > <p className=" col-md-1">Nome:</p>
                                 <div className="col-md-4 col-sm-8 col-xs-12">
-                                    <input type="text" className="form-control "></input>
+                                    <input type="text" className="form-control " onChange={this.changueNome} value={this.state.Nome}></input>
                                 </div>
                             </div>
 
@@ -49,7 +68,7 @@ class Servico extends React.Component {
 
                             <div className="row" > <p className="col-md-1 col-sm-8 col-xs-12">Tipo:</p>
                                 <div className="col-md-2 col-sm-8 col-xs-12">
-                                    <select type="select" className=" form-control col-md-4 col-sm-8 col-xs-12 " style={{ height: 47 + 'px' }}>
+                                    <select type="select" className=" form-control col-md-4 col-sm-8 col-xs-12 " value={this.state.Tipo} onChange={this.changueTipo} style={{ height: 47 + 'px' }}>
                                         <option value="volvo">Serviço</option>
                                         <option value="saab">Produto</option>
                                     </select>
@@ -61,14 +80,14 @@ class Servico extends React.Component {
                             <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{width: 10+'%'}} >ValorP/unid:</p>
                                 <div className="col-md-4 col-sm-8 col-xs-12">
                                 
-                               <input type="number" id='forms' onChange={this.enviar} value={this.state.Text} size='10' min='0' step=".10" />
+                               <input type="number" id='forms' onChange={this.enviar} value={this.state.Text} size='5' min='0' max='10' step=".10" />
                                 </div>
                             </div>
                             <br></br>
                             
                             <div className="row" >  <p className="col-md-2 col-sm-8 col-xs-12" style={{width: 10+'%'}}>Quantidade:</p>
                                 <div className="col-md-4 col-sm-8 col-xs-12">
-                                <input type="number" id='forms' onChange={this.enviar} value={this.state.Text} size='10' min='0'  />
+                                <input type="number" id='forms' onChange={this.changueQuant} value={this.state.Quant} size='10' min='0'  />
                                 </div>
                             </div>
                             <br></br>
