@@ -11,6 +11,7 @@ import Adult from './components/Adultos/CadastroAdulto.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
 import Passport from './components/Passaporte/Passaporte.js';
 import Aniversario from './components/Aniversario/CadastroAniversario.js';
+import CriaEvento from './components/Eventos/CadastroEvento.js';
 import Perfil from './components/VizualizarPerfil/Perfil.js';
 import PerfilAdulto from './components/VizualizarPerfil/PerfilAdulto.js';
 import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
@@ -66,6 +67,12 @@ class App extends React.Component {
                   path="/Passport"
                   layout={MainLayout}
                   component={Passport}
+                />
+                <LayoutRoute
+                  exact
+                  path="/Event"
+                  layout={MainLayout}
+                  component={CriaEvento}
                 />
               <LayoutRoute
                   exact
