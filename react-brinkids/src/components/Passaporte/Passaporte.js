@@ -8,9 +8,12 @@ import TypesInput from '../TypesInput.js';
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
-import moment from 'moment'
-
+import moment from 'moment';
+import Comprovant from '../Comprovante/comprovante';
+import '../Comprovante/comprovante.css';
+import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
+
 
 
 class Passport extends React.Component {
@@ -39,6 +42,8 @@ class Passport extends React.Component {
             preenchido: false, // Variável que vai dizer se foi selecionado alguma coisa
             horaEntradaCriança: '', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
             kinshipConfirm:'',
+            comprovante: false,
+            no:tabelinha,
         }
 
         //Relacionado a busca
@@ -228,8 +233,11 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela VI
-    Comprovante = (event) => {
-        alert("Encaminhar para o comprovante");
+    Comprovante = (event) => {        
+        this.setState({
+            comprovante:true,
+        })
+        alert("Cadastrado");
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM   
 
@@ -718,6 +726,10 @@ class Passport extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <Comprovant
+                        teste={this.state.comprovante}
+                        tabela={this.state.listConfirmKids}
+                    />
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>                        
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
