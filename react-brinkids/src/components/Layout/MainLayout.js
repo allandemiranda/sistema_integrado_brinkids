@@ -121,6 +121,12 @@ class MainLayout extends React.Component {
 											<li id="menu-mensagens-recebidas"  style={{width:130 + "px"}}><a href="/Perfil">Visualizar</a></li>
 										</ul>
 									</li>
+                                    <li id="menu-mensagens" style={{width: 120 + "px"}} ><a href="/">Eventos <i className="fa fa-angle-right" style={{float: "right", marginRight: -8 + "px", marginTop: 2 + "px"}}></i></a>
+										<ul id="menu-mensagens-sub" >
+										    <li id="menu-mensagens-enviadas" style={{width:130 + "px"}} ><a href="/Event">Novo</a></li>
+											<li id="menu-mensagens-recebidas"  style={{width:130 + "px"}}><a href="/">Visualizar</a></li>
+										</ul>
+									</li>
 								</ul>
 						    </li>
                             <li >
