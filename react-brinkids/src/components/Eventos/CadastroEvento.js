@@ -8,7 +8,7 @@ import './css/Cadastro_Evento.css';
 import './css/style.css';
 
 
-class CadastroAniversario extends React.Component {
+class CadastroEvento extends React.Component {
     
     
     constructor(props){
@@ -118,7 +118,7 @@ class CadastroAniversario extends React.Component {
                 </div>
                 <div className = "graph-visual" >
                     <h3 className = "inner-tittle" >Novo Evento</h3>
-                    <form id="form-criança">
+                    <form>
                         <div className = "graph" >
                             <div className="form-group">
                                 <div className="row">
@@ -176,4 +176,4 @@ class CadastroAniversario extends React.Component {
 
 }
 
-export default CadastroAniversario;
+export default CadastroEvento;

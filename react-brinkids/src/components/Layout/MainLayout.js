@@ -147,6 +147,12 @@ class MainLayout extends React.Component {
                                     <span>Passaporte</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href = "/Desconto">
+                                    <i className = "fa fa-dollar"></i>
+                                    <span>Gerar Desconto</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
