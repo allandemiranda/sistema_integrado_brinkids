@@ -40,7 +40,7 @@ class MainLayout extends React.Component {
                                 <div className = "profile_details_left" >
                                     <ul className = "nofitications-dropdown" >
                                         <li className = "dropdown note" >
-                                            <a href = "/" className = " tooltips" >
+                                            <a href = "/MyProfile" className = " tooltips" >
                                                 < i className = "lnr lnr-user" > </i>
                                                 <span className="badge" style={{marginTop: 9+ 'px'}}>Profile</span >
                                             </a>
@@ -145,6 +145,12 @@ class MainLayout extends React.Component {
                                 <a href = "/Passport">
                                     <i className = "fa fa-globe"></i>
                                     <span>Passaporte</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href = "/Serviços">
+                                <i className="fa fa-tags" aria-hidden="true"></i>
+                                    <span>Serviços</span>
                                 </a>
                             </li>
                         </ul>

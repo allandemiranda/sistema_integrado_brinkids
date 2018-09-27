@@ -29,7 +29,7 @@ class Comprovante extends React.Component {
                 if (events.service === "PASSAPORTE") {
 
                     return (
-                        <div style={{display: 'none'}} id="crianca" key={events.id.toString()}>
+                        <div  id="crianca" key={events.id.toString()}>
                             <div id="dados">
                                 <a>Criança:</a>
                                 <a id="nome"> {events.name}</a>
@@ -129,7 +129,7 @@ class Comprovante extends React.Component {
 
         return (
 
-            <div id='print' className='conteudo' >
+            <div style={{display: 'none'}} id='print' className='conteudo' >
 
 
                 <a className="trilha" >﻿﻿--------------------------------------</a>
