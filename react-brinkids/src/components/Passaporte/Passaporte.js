@@ -250,8 +250,7 @@ class Passport extends React.Component {
     Comprovante = (event) => {
         
         this.setState({
-            comprovante:true,
-            
+            comprovante:true,            
         })
         alert("Cadastrado");
         console.log(this.state.arrayfinal);

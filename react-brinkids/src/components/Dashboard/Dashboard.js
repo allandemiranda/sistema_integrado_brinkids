@@ -258,21 +258,10 @@ class DashBoard extends React.Component {
 								</div>
 							</div>)
 						}
-
-
 					</div>
-
-				}
-				<Comprovante
-				teste={this.state.aba}
-				tabela={this.state.nome}
-				/>
-			</div>
-			
-
+				}			
+			</div>			
 		);
-	
-
 	}
 }
 export default DashBoard;

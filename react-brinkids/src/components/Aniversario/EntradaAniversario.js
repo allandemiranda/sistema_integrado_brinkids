@@ -33,7 +33,7 @@ class EntradaAniversario extends React.Component {
 
     //Relacionado a atualização dos valores Funções
     AdicinarFullNome(event) {
-        this.setState({ obs: event.target.value });
+        this.setState({ firstName: event.target.value });
     }    
 
 
@@ -233,8 +233,8 @@ class EntradaAniversario extends React.Component {
                     <br></br>
                     <div className="graph" >
                         <div className="text-center">
-                            <button className="btn btn-md botao" onClick={this.FinalizarAdulto}> Cancelar </button>
-                            <button className="btn btn-md botao" onClick={this.AvancarConfAdulto}> Avançar </button>                        
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao" onClick={this.AvancarConfAdulto}> Avançar </button>                        
                         </div>
                     </div>
                 </div>
@@ -257,7 +257,20 @@ class EntradaAniversario extends React.Component {
                                 <h3 className="inner-tittle " > Confirmar Entrada Adultos </h3>
                             </div>
                             <div className="row">
-                                
+                                <div className="col-md-12 col-sm-12 text-center">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.adultoSelecionado.name.firstName + " " + this.state.adultoSelecionado.name.surName}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-12 col-sm-12 text-center">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome Completo: </b></h5>
+                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.adultoSelecionado.name} onChange={this.AdicinarFullNome} />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -315,7 +328,7 @@ class EntradaAniversario extends React.Component {
                     <br></br>
                     <div className="graph" >
                         <div className="text-center">
-                            <button className="btn btn-md botao" onClick={this.FinalizarAdulto}> Cancelar </button>
+                            <a className="btn btn-md botao" href="/">Cancelar</a>
                             <button className="btn btn-md botao" onClick={this.AvancarConfAdulto}> Avançar </button>                        
                         </div>
                     </div>
