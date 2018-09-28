@@ -3,36 +3,6 @@
 const mongoose = require('mongoose');
 const config = require('../config');
 
-const addressSchema = new mongoose.Schema({
-  street: {
-    type: String,
-    require: true,
-  },
-  number: {
-    type: Number,
-    require: true,
-  },
-  district: {
-    type: String,
-    require: true,
-  },
-  city: {
-    type: String,
-    require: true,
-  },
-  state: {
-    type: String,
-    require: true,
-  },
-  country: {
-    type: String,
-    require: true,
-  },
-  cep: {
-    type: Number,
-    require: true,
-  },
-});
 
 const childSchema = new mongoose.Schema({
   identifier: String,
@@ -60,7 +30,36 @@ const userAdultSchema = new mongoose.Schema({
     of: String,
     required: true,
   },
-  address: [addressSchema],
+  address: {
+    street: {
+      type: String,
+      require: true,
+    },
+    number: {
+      type: Number,
+      require: true,
+    },
+    district: {
+      type: String,
+      require: true,
+    },
+    city: {
+      type: String,
+      require: true,
+    },
+    state: {
+      type: String,
+      require: true,
+    },
+    country: {
+      type: String,
+      require: true,
+    },
+    cep: {
+      type: Number,
+      require: true,
+    },
+  },
   rg: Number,
   cpf: {
     type: String,

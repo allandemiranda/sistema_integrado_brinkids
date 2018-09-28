@@ -109,6 +109,7 @@ router.post('/', (req, res) => {
 
         userAdult.create(data, (errAdult, adultResult) => {
           if (errAdult) {
+            console.log(errAdult);
             return res.sendStatus(500);
           }
           const photoNameComponents = photoFile.name.split('.');
@@ -134,6 +135,54 @@ router.post('/', (req, res) => {
   } else {
     return res.sendStatus(400);
   }
+});
+
+router.put('/:identifier', async (req, res) => {
+  if (req.files.file
+      && req.body.phone
+      && req.body.email
+      && req.body.street
+      && req.body.district
+      && req.body.number
+      && req.body.cep
+      && req.body.city
+      && req.body.state
+      && req.body.country
+      && req.body.observations) {
+    try {
+      const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
+        $set: {
+          phone: req.body.phone,
+          email: req.body.email,
+          address: {
+            street: req.body.street,
+            district: req.body.district,
+            number: parseInt(req.body.number, 10),
+            cep: req.body.cep,
+            city: req.body.city,
+            state: req.body.state,
+            country: req.body.country,
+          },
+          observations: req.body.observations,
+        },
+      });
+      const photo = req.files.file;
+
+      if (!adultModified) {
+        return res.sendStatus(404);
+      }
+
+      photo.mv(
+        adultModified.photo, // Nome do arquivo
+        errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),
+      );
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+  }
+
+  return res.sendStatus(400);
 });
 
 module.exports = router;
