@@ -17,6 +17,7 @@ import Perfil from './components/VizualizarPerfil/Perfil.js';
 import PerfilAdulto from './components/VizualizarPerfil/PerfilAdulto.js';
 import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
 import Servicos from './components/Serviços_Extras/Serviços';
+import MeuPerfil from './components/VizualizarPerfil/MyPerfil.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -109,7 +110,13 @@ class App extends React.Component {
                   path="/Serviços"
                   layout={MainLayout}
                   component={Servicos}
-                />                                   
+                />
+                <LayoutRoute
+                  exact
+                  path="/MyProfile"
+                  layout={MainLayout}
+                  component={MeuPerfil}
+                />                                               
               <Redirect to="/" /> 
             </Switch>
           </GAListener>
