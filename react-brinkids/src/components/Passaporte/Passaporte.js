@@ -20,6 +20,7 @@ class Passport extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            arrayfinal:[],
             //Responsável por saber qual página vai renderizar:
             page: "SelectAdult",//ConfirmAdult SelectAdult Finalize
             selectedSearch: '', // Salva o nome que é colocado na barra de busca
@@ -235,14 +236,25 @@ class Passport extends React.Component {
         this.setState({
             page: "Finalize"
         })
+        let lista = [...this.state.listConfirmAdult,{belongings: "1",
+        employee: "Rozinha dos Santos"},...this.state.listConfirmKids];
+        console.log("Eu sou a lista suprema que está sendo debugada: ", lista)
+        this.setState({
+            arrayfinal:lista,
+        })
+        alert("Cadastrado");
+        console.log(this.state.arrayfinal);
     }
 
     // Encaminha para a tela VI
-    Comprovante = (event) => {        
+    Comprovante = (event) => {
+        
         this.setState({
             comprovante:true,
+            
         })
         alert("Cadastrado");
+        console.log(this.state.arrayfinal);
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM   
 
@@ -733,11 +745,13 @@ class Passport extends React.Component {
                     </div>
                     <Comprovant
                         teste={this.state.comprovante}
-                        tabela={this.state.listConfirmKids}
+                        tabela={this.state.arrayfinal}
+                        serviso="PASSAPORTE"
+                        
                     />
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>                        
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.comprovante}> Finalizar </button>
                     </div>
                 </div>
             )

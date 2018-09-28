@@ -1,9 +1,9 @@
 
 import React from 'react';
 import './comprovante.css';
-
+var servico;
 class Comprovante extends React.Component {
-
+    servico = this.props.serviso;
 
 
     render() {
@@ -23,13 +23,13 @@ class Comprovante extends React.Component {
             }, 100);
         }
         const byChild = function (events) {
-            console.log(events.name);
+            console.log(events.name,'aksjna');
 
             if (events.name !== undefined) {
-                if (events.service === "PASSAPORTE") {
+                if (servico === "PASSAPORTE") {
 
                     return (
-                        <div  id="crianca" key={events.id.toString()}>
+                        <div  id="crianca" key={events._id.toString()}>
                             <div id="dados">
                                 <a>Criança:</a>
                                 <a id="nome"> {events.name}</a>
@@ -67,10 +67,10 @@ class Comprovante extends React.Component {
                     );
                 } else {
                     return (
-                        <div id="crianca" key={events.id.toString()}>
+                        <div id="crianca" key={events._id.toString()}>
                             <div id="dados">
                                 <a>Criança:</a>
-                                <a id="nome">{events.name}</a>
+                                <a id="nome">{events.name.firstName}</a>
                                 <div className="direita">
 
                                 </div>
@@ -145,16 +145,16 @@ class Comprovante extends React.Component {
                 <div id="responsavel" className="textos">
                     <div>
                         <a>Responsável:</a>
-                        <a id="nome"> {this.props.tabela[0].adultName}</a>
+                        <a id="nome"> {this.props.tabela[0].name.firstName}</a>
                     </div>
                     <div>
                         <a>Telefone:</a>
-                        <a id="telefone"> {this.props.tabela[0].adultPhone}</a>
+                        <a id="telefone"> {this.props.tabela[0].phone}</a>
 
                     </div>
                     <div id="obs">
                         <a>Observações:</a>
-                        <a id="obsTexto"> {this.props.tabela[0].adultobservations}</a>
+                        <a id="obsTexto"></a>
                     </div>
                     <a>-</a>
                 </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import listaa from './gato';
+import axios from 'axios';
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -120,7 +121,17 @@ class PerfilAdulto extends React.Component {
             })
     }
     //função que alterna as paginas
-    ChangePage(event) {
+    async ChangePage(event) {
+        try {
+            const dadosCriancas = this.state.perfilAtual.children.map(async (child) => {
+                const childResponse = await axios.get(`/child/identifier/${child.identifier}`);
+                return childResponse;
+            });
+
+            
+        } catch (err) {
+            console.log(err);
+        }
         this.setState(
             {
                 perfilEdicao: event,
@@ -168,16 +179,24 @@ class PerfilAdulto extends React.Component {
 
     }
     SearchFuncionario(event) {
-        const lista = [];
-        this.setState({ list: [] });
-        this.state.listaFuncionarios.forEach(element => {
+        // const lista = [];
+        // this.setState({ list: [] });
+        // this.state.listaFuncionarios.forEach(element => {
 
-            if (element.name.firstName == this.state.selectedSearch) {
+        //     if (element.name.firstName == this.state.selectedSearch) {
 
-                lista.push(element);
-                this.setState({ list: lista });
-            }
-        });
+        //         lista.push(element);
+        //         this.setState({ list: lista });
+        //     }
+        // });
+        axios.get(`/adult/filter/${this.state.selectedSearch}/nome`)
+            .then((response) => {
+                console.log(response.data);
+                this.setState({ list: response.data });
+            }).catch((err) => {
+                console.log(err);
+            });
+
 
     }
     Search(event) {
@@ -231,7 +250,7 @@ class PerfilAdulto extends React.Component {
     }
     TheEnd(event){
         this.state.perfilAtual.crianca.push({Nome:'joao', parentesco:'tio avoss',id:1});
-        console.log(this.state.perfilAtual.crianca);
+        console.log(this.state.perfilAtual.children);
         this.setState({
             page:'Perfil',
         })
@@ -275,7 +294,6 @@ class PerfilAdulto extends React.Component {
 
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {
-
                                         return (
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice + 1}</th>
@@ -321,13 +339,13 @@ class PerfilAdulto extends React.Component {
                     }
                 }, 100);
             }
-            const byCrianca = function (events) {
+            const byCrianca = function (events, index) {
                 return (
 
                     <tr style={{ textAlign: 'justify' }} key={events._id}>
-                        <td>{events.id}</td>
-                        <td>{events.Nome}</td>
-                        <td>{events.Parentesco}</td>
+                        <td>{events.index + 1}</td>
+                        <td>{events.name}</td>
+                        <td>{events.kinship}</td>
                     </tr>
 
 
@@ -384,7 +402,15 @@ class PerfilAdulto extends React.Component {
                                                 </tr>
                                             </thead>
                                             <tbody id="CriaTabela">
-                                                {this.state.perfilAtual.crianca.map(byCrianca)}
+                                                {this.state.perfilAtual.children.map(function (events, index) {
+                                                    return (
+                                                        <tr style={{ textAlign: 'justify' }} key={events._id}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{events.identifier}</td>
+                                                            <td>{events.kinship}</td>
+                                                        </tr>
+                                                    )
+                                                })}
 
                                             </tbody>
                                         </table>
@@ -492,21 +518,21 @@ class PerfilAdulto extends React.Component {
                                 <div className="col-md-6 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Endereço: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.street}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].street}</p>)}
                                         {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-10">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Bairro: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.district}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].district}</p>)}
                                         {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-2 col-sm-2">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Número: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.number}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].number}</p>)}
                                         {this.state.editar && (<input className="form-control" style={{ float: 'none' }} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
                                     </div>
                                 </div>
@@ -518,28 +544,28 @@ class PerfilAdulto extends React.Component {
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> CEP: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.cep}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].cep}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Cidade: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.city}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].city}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Estado: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.state}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].state}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> País: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.country}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].country}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
                                     </div>
                                 </div>
@@ -553,7 +579,7 @@ class PerfilAdulto extends React.Component {
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></textarea>
+                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}>{this.state.perfilAtual.observations}</textarea>
                                         </div>
                                     </div>
                                 </div >
