@@ -14,7 +14,7 @@ const path = require('path');
 // Rotas
 const adult = require('./routes/adult-router');
 const autentication = require('./routes/autentication-router');
-const birthday = require('./routes/byrthday-party-router');
+const birthday = require('./routes/birthday-party-router');
 const calendar = require('./routes/calendar-router');
 const child = require('./routes/child-router');
 const employees = require('./routes/employees-router');

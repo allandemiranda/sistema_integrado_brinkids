@@ -175,7 +175,7 @@ class CadastroAniversario extends React.Component {
         var erro = [];
 
         if(this.state.NomeCrianca == ""){
-            erro.push("Nome do Adulto não pode ser em branco.");
+            erro.push("Nome da criança não pode ser em branco.");
         }
         if(this.state.IdadeCrianca == ""){
             erro.push("Idade da criança não pode ser em branco.");
@@ -242,14 +242,6 @@ class CadastroAniversario extends React.Component {
     
     //Cadastro de Aniversario no Banco
     CadAni = () => {
-        let i;
-        for(i = this.state.ListaCria.length; i <  this.state.QuantCrianca; i++){
-            console.log("Esotu preso ifinitamente aqui")
-            this.setState({
-                ListaCria: update(this.state.ListaCria, {$push: [{nome: "FREE", idade: "FREE"}]}),
-            })
-            i++;
-        }
         
         var formData = new FormData();
 
@@ -291,16 +283,6 @@ class CadastroAniversario extends React.Component {
         })
     }
     NovoCadAni = () => {
-        while(this.state.ListaCria.length < this.state.QuantCrianca){
-            this.setState({
-                ListaCria: update(this.state.ListaCria, {$push: [{nome: "FREE", idade: "FREE"}]}),
-            })
-        }
-        while(this.state.ListaAdul.length < this.state.QuantAdulto){
-            this.setState({
-                ListaAdul: update(this.state.ListaAdul, {$push: [{nome: "FREE"}]}),
-            })
-        }
         var formData = new FormData();
 
         formData.append('title', String(this.state.TituloDoAni))
