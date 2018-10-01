@@ -12,7 +12,7 @@ const extraServicesSchema = new mongoose.Schema({
 	},
 	text: String,
 	quantity: String,
-)};
+});
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
 const extraServices = mongoose.model('ExtraServices', extraServicesSchema);
