@@ -260,13 +260,13 @@ class CadastroAniversario extends React.Component {
         // Gabriel pegou as duas listas de adulto e criança, transformou numa lista só,
         // adicionou uma nova informação que vai precisar no banco de dados e enviou num único campo
         // chamado guestList
-        this.state.ListaAdul = this.state.ListaAdul.concat(this.state.ListaCria)
+        let guestList = this.state.ListaAdul.concat(this.state.ListaCria)
         this.state.ListaAdul.map((guest) => {
             guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
             return guest;
         })
 
-        formData.append('guestList', JSON.stringify(this.state.ListaAdul))
+        formData.append('guestList', JSON.stringify(guestList))
         //--------Codigo Aqui------------
         //formData.append('', String(this.state.UFLNasc))
     
