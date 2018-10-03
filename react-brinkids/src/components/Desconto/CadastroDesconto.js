@@ -9,9 +9,9 @@ import './css/style.css';
 
 
 class Desconto extends React.Component {
-    
-    
-    constructor(props){
+
+
+    constructor(props) {
         super(props);
         this.state = {
             page: "Desconto",
@@ -32,8 +32,8 @@ class Desconto extends React.Component {
     }
 
     //Bloco que muda o status para o atual do formulario.
-    ChangeValue(event){
-        this.setState({[event.target.name]: event.target.value});
+    ChangeValue(event) {
+        this.setState({ [event.target.name]: event.target.value });
     }
 
 
@@ -46,7 +46,7 @@ class Desconto extends React.Component {
 
         var erros = ValidaErros(this.state);
 
-        if(erros.length > 0){
+        if (erros.length > 0) {
             exibeMensagensDeErro(erros);
         }
         else {
@@ -54,7 +54,7 @@ class Desconto extends React.Component {
                 page: "Temporaridade"
             })
         }
-        function ValidaErros (desc){
+        function ValidaErros(desc) {
 
             var erros = [];
 
@@ -80,17 +80,17 @@ class Desconto extends React.Component {
             return erros;
         }
 
-        function exibeMensagensDeErro(erros){
+        function exibeMensagensDeErro(erros) {
             var ul = document.querySelector("#mensagens-erro");
             ul.innerHTML = "";
 
-            erros.forEach(function(erro){
+            erros.forEach(function (erro) {
                 var li = document.createElement("li");
                 li.textContent = erro;
                 ul.appendChild(li);
             });
         }
-    }   
+    }
 
     ValidaTemporariedade = (event) => {
         event.preventDefault();
@@ -99,16 +99,16 @@ class Desconto extends React.Component {
 
         var erros = [];
 
-        if(this.state.TypeTime === ""){
+        if (this.state.TypeTime === "") {
             erros.push("Intervalo não pode ser em branco")
         }
-        if(this.state.TypeCog === ""){
+        if (this.state.TypeCog === "") {
             erros.push("Tipo de Código não pode ser em branco")
         }
-        if(this.state.Date === ""){
+        if (this.state.Date === "") {
             erros.push("A Data não pode ser em branco")
         }
-        if(erros.length > 0){
+        if (erros.length > 0) {
             exibeMensagensDeErro(erros);
         }
         else {
@@ -116,52 +116,52 @@ class Desconto extends React.Component {
 
             formData.append('name', String(this.state.Name))
             formData.append('description', String(this.state.Description))
-            formData.append('to', String(this.state.TypePeople))            
+            formData.append('to', String(this.state.TypePeople))
             formData.append('type', String(this.state.TypeValue))
             formData.append('amount', String(this.state.Quant))
             formData.append('value', String(this.state.Value))
             formData.append('temporalityType', String(this.state.TypeCog))
             formData.append('temporalityDate', String(this.state.TypeTime))
-            formData.append('validity', String(this.state.Date)) 
-            
+            formData.append('validity', String(this.state.Date))
+
             axios.post('/discount', formData)
-            .then(function (response) {
-                ConstroiListaDesconto();
-                console.log(response);
-                if(this.state.list.length > 0){
-                    this.setState({
-                        page:"MostraDesconto"
-                    })
-                }
-            }).catch(function (error) {
-                console.log(error)//LOG DE ERRO
-                alert("Erro ao Gerar Desconto");
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            })
+                .then(function (response) {
+                    ConstroiListaDesconto();
+                    console.log(response);
+                    if (this.state.list.length > 0) {
+                        this.setState({
+                            page: "MostraDesconto"
+                        })
+                    }
+                }).catch(function (error) {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro ao Gerar Desconto");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
         }
 
-        function ConstroiListaDesconto(){
+        function ConstroiListaDesconto() {
             console.log("Entrei dentro da função");
             console.log(this.state);
             axios.get(`/desconto/filter/${this.state.Name}`)
-            .then((response) => {
-                console.log("Dentro do axios: " + this)                   
-                this.setState({list: response.data});
-            }).catch((error) => {
-                console.log(error)//LOG DE ERRO
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-            })
+                .then((response) => {
+                    console.log("Dentro do axios: " + this)
+                    this.setState({ list: response.data });
+                }).catch((error) => {
+                    console.log(error)//LOG DE ERRO
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                })
         }
 
-        function exibeMensagensDeErro(erros){
+        function exibeMensagensDeErro(erros) {
             var ul = document.querySelector("#mensagens-erro");
             ul.innerHTML = "";
 
-            erros.forEach(function(erro){
+            erros.forEach(function (erro) {
                 var li = document.createElement("li");
                 li.textContent = erro;
                 ul.appendChild(li);
@@ -169,7 +169,7 @@ class Desconto extends React.Component {
         }
     }
 
-    Imprimir = () =>{
+    Imprimir = () => {
 
     }
     NovoDesconto = () => {
@@ -179,26 +179,26 @@ class Desconto extends React.Component {
     }
 
     render() {
-        if(this.state.page === "Desconto"){
+        if (this.state.page === "Desconto") {
             return (
-                <div className = "container-fluid" >
-                    <div className = "sub-heard-part" >
-                        <ol className = "breadcrumb m-b-0" >
-                            <li > < a href = "/" > Home </a></li >
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
                             <li > Desconto </li>
                         </ol >
                     </div>
-                    <div className = "graph-visual" >
-                        <h3 className = "inner-tittle" >Novo Desconto</h3>
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle" >Novo Desconto</h3>
                         <form>
-                            <div className = "graph" >
+                            <div className="graph" >
                                 <div className="form-group">
                                     <div className="row">
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome: "} type = {"text"} id = {"Nome"} name= {"Name"} Class = {"form-control"} 
-                                            value = {this.state.Name} onChange = {this.ChangeValue}
+                                        <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Nome: "} type={"text"} id={"Nome"} name={"Name"} Class={"form-control"}
+                                            value={this.state.Name} onChange={this.ChangeValue}
                                         />
-                                        <TypesInput cod = {2} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} Label = {"True"} ClassLabel = {"LetraFormulario"} NameLabel = {"Descrição: "} id = {"Description"} cols={"50"} rows = {"4"} name= {"Description"} Class = {"form-control"} 
-                                            value = {this.state.Description} onChange = {this.ChangeValue}
+                                        <TypesInput cod={2} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} Label={"True"} ClassLabel={"LetraFormulario"} NameLabel={"Descrição: "} id={"Description"} cols={"50"} rows={"4"} name={"Description"} Class={"form-control"}
+                                            value={this.state.Description} onChange={this.ChangeValue}
                                         />
                                     </div>
                                 </div>
@@ -207,119 +207,119 @@ class Desconto extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <label className="LetraFormulario">Para:</label>
                                             <br></br>
-                                            <label class="radio-inline"><input type="radio" id="Crianca" name="TypePeople" value="Child" onClick = {this.ChangeValue}/><p className="LetraFormulario">  Criança</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Adulto" name="TypePeople" value="Adult" onClick = {this.ChangeValue}/><p className="LetraFormulario">  Adulto</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Crianca" name="TypePeople" value="Child" onClick={this.ChangeValue} /><p className="LetraFormulario">  Criança</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Adulto" name="TypePeople" value="Adult" onClick={this.ChangeValue} /><p className="LetraFormulario">  Adulto</p></label>
                                             <br></br>
                                             <label className="LetraFormulario">Quantidade:</label>
-                                            <input className="form-control" type="number" id="Quant" name="Quant" value={this.state.Quant} onChange = {this.ChangeValue}/>
+                                            <input className="form-control" type="number" id="Quant" name="Quant" value={this.state.Quant} onChange={this.ChangeValue} />
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <label className="LetraFormulario">Tipo:</label>
                                             <br></br>
-                                            <label class="radio-inline"><input type="radio" id="Porcentagem" name="TypeValue" value="Porcentagem" onClick = {this.ChangeValue}/><p className="LetraFormulario">   Porcentagem</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Fixo" name="TypeValue" value="Fixo" onClick = {this.ChangeValue}/><p className="LetraFormulario">    Fixo</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Porcentagem" name="TypeValue" value="Porcentagem" onClick={this.ChangeValue} /><p className="LetraFormulario">   Porcentagem</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Fixo" name="TypeValue" value="Fixo" onClick={this.ChangeValue} /><p className="LetraFormulario">    Fixo</p></label>
                                             <br></br>
                                             <label className="LetraFormulario">Valor:</label>
-                                            <input className="form-control" type="number" id="Value" name="Value" value={this.state.Value} onChange = {this.ChangeValue}/>
+                                            <input className="form-control" type="number" id="Value" name="Value" value={this.state.Value} onChange={this.ChangeValue} />
                                         </div>
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                             <br></br>
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cencelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Proximo</button>
-                            </div> 
+                            </div>
                             <div>
-                                <ul id="mensagens-erro" style={{color: "red"}}></ul>
-                            </div>                       
+                                <ul id="mensagens-erro" style={{ color: "red" }}></ul>
+                            </div>
                         </form >
                     </div>
                 </div>
             )
         }
 
-        else if(this.state.page === "Temporaridade"){
+        else if (this.state.page === "Temporaridade") {
             return (
-                <div className = "container-fluid" >
-                    <div className = "sub-heard-part" >
-                        <ol className = "breadcrumb m-b-0" >
-                            <li > < a href = "/" > Home </a></li >
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
                             <li > Desconto </li>
                         </ol >
                     </div>
-                    <div className = "graph-visual" >
-                        <h3 className = "inner-tittle" >Temporaridade</h3>
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle" >Temporaridade</h3>
                         <form>
-                            <div className = "graph" >
+                            <div className="graph" >
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <label className="LetraFormulario">Tipo de Código:</label>
                                             <br></br>
-                                            <label class="radio-inline"><input type="radio" id="Geral" name="TypeCog" value="Geral" onClick = {this.ChangeValue}/><p className="LetraFormulario">Geral</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Unico" name="TypeCog" value="Unico" onClick = {this.ChangeValue}/><p className="LetraFormulario">Único</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Geral" name="TypeCog" value="Geral" onClick={this.ChangeValue} /><p className="LetraFormulario">Geral</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Unico" name="TypeCog" value="Unico" onClick={this.ChangeValue} /><p className="LetraFormulario">Único</p></label>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <label className="LetraFormulario">Intervalo:</label>
                                             <br></br>
-                                            <label class="radio-inline"><input type="radio" id="Diario" name="TypeTime" value="Diario" onClick = {this.ChangeValue}/><p className="LetraFormulario"> Diario</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Semanal" name="TypeTime" value="Semanal" onClick = {this.ChangeValue}/><p className="LetraFormulario">Semanal</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Mensal" name="TypeTime" value="Mensal" onClick = {this.ChangeValue}/><p className="LetraFormulario">Mensal</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Diario" name="TypeTime" value="Diario" onClick={this.ChangeValue} /><p className="LetraFormulario"> Diario</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Semanal" name="TypeTime" value="Semanal" onClick={this.ChangeValue} /><p className="LetraFormulario">Semanal</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Mensal" name="TypeTime" value="Mensal" onClick={this.ChangeValue} /><p className="LetraFormulario">Mensal</p></label>
                                             <br></br>
-                                            <label class="radio-inline"><input type="radio" id="Anual" name="TypeTime" value="Anual" onClick = {this.ChangeValue}/><p className="LetraFormulario">Anual</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Livre" name="TypeTime" value="Livre" onClick = {this.ChangeValue}/><p className="LetraFormulario">Livre</p></label>
-                                            <label class="radio-inline"><input type="radio" id="Unico" name="TypeTime" value="Unico" onClick = {this.ChangeValue}/><p className="LetraFormulario">Unico</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Anual" name="TypeTime" value="Anual" onClick={this.ChangeValue} /><p className="LetraFormulario">Anual</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Livre" name="TypeTime" value="Livre" onClick={this.ChangeValue} /><p className="LetraFormulario">Livre</p></label>
+                                            <label className="radio-inline"><input type="radio" id="Unico" name="TypeTime" value="Unico" onClick={this.ChangeValue} /><p className="LetraFormulario">Unico</p></label>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <div className="row">
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data de Validade: "} type = {"date"} id = {"Date"} name= {"Date"} Class = {"form-control"} 
-                                            value = {this.state.Date} onChange = {this.ChangeValue}
+                                        <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Data de Validade: "} type={"date"} id={"Date"} name={"Date"} Class={"form-control"}
+                                            value={this.state.Date} onChange={this.ChangeValue}
                                         />
                                     </div>
                                 </div>
-                            </div>    
+                            </div>
                             <br></br>
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cencelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaTemporariedade}>Gerar</button>
-                            </div> 
+                            </div>
                             <div>
-                                <ul id="mensagens-erro" style={{color: "red"}}></ul>
-                            </div>                       
+                                <ul id="mensagens-erro" style={{ color: "red" }}></ul>
+                            </div>
                         </form >
                     </div>
                 </div>
             )
         }
-        else if(this.state.page === "MostraDesconto"){
+        else if (this.state.page === "MostraDesconto") {
             return (
-                <div className = "container-fluid" >
-                    <div className = "sub-heard-part" >
-                        <ol className = "breadcrumb m-b-0" >
-                            <li > < a href = "/" > Home </a></li >
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
                             <li > Desconto </li>
                         </ol>
                     </div>
-                    <div className = "graph-visual" >
-                        <h3 className = "inner-tittle">Descontos Gerados</h3>
-                        <div className = "graph" >
-                            <div className ="tables table-responsive">
-                                <table className ="table table-hover"> 
-                                    <thead className = "text-center"> 
-                                        <tr> 
-                                            <th>#</th> 
-                                            <th>Codigo</th> 
-                                            <th>Tipo</th> 
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle">Descontos Gerados</h3>
+                        <div className="graph" >
+                            <div className="tables table-responsive">
+                                <table className="table table-hover">
+                                    <thead className="text-center">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Codigo</th>
+                                            <th>Tipo</th>
                                             <th>Valor</th>
                                             <th>Para</th>
                                             <th>Tipo C.</th>
                                             <th>Intervalo</th>
-                                            <th>Validade</th> 
+                                            <th>Validade</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         {this.state.list.map((desconto, indice) => {
                                             return (
@@ -337,16 +337,16 @@ class Desconto extends React.Component {
                                         })}
                                     </tbody>
                                 </table>
-                            </div>    
+                            </div>
                             <br></br>
                             <div className="text-center">
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.Imprimir}>Imprimir</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.NovoDesconto}>Novo Desconto</button>
                                 <a className="btn btn-md botao" href="/">Home</a>
-                            </div> 
+                            </div>
                             <div>
-                                <ul id="mensagens-erro" style={{color: "red"}}></ul>
-                            </div>                       
+                                <ul id="mensagens-erro" style={{ color: "red" }}></ul>
+                            </div>
                         </div>
                     </div>
                 </div>
