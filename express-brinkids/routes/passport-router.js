@@ -17,19 +17,18 @@ router.post('/', async (req, res) => {
     && req.body.time
     && req.body.price){
 
-    const data = new Data({
+    const passport = {
       name: req.body.name,
       descripition: req.body.descripition,
       initialTime: req.body.initialTime,
       finalTime: req.body.finalTime,
       time: req.body.time,
       price: req.body.price,
-    });
+    };
 
     try {
     console.log(req.body);
-    const newData = await data.save();
-    return res.status(201).json(newData);
+    return res.status(201).json(passport);
     } catch (err) {
     return res.sendStatus(500);
     }
