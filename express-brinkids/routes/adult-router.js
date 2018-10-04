@@ -137,6 +137,21 @@ router.post('/', (req, res) => {
   }
 });
 
+router.get('/:identifier', async (req, res) => {
+  try {
+    const adultFound = await userAdult.findById(req.params.identifier);
+
+    if (!adultFound) {
+      return res.sendStatus(404);
+    }
+
+    return res.json(adultFound);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
+
 router.put('/:identifier', async (req, res) => {
   if (req.files.file
       && req.body.phone
