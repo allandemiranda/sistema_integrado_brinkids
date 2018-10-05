@@ -90,7 +90,8 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Serviços </li>
+                            <li > Gerenciador De Funções </li>
+                            <li > Lista De cargos </li>
                         </ol >
                     </div>
                     <div className="graph">
@@ -126,6 +127,7 @@ class Gerador extends React.Component {
                         <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Novo' })}>
                             Criar Novo Cargo
                                 </button>
+                                <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Lista' })}>Voltar</button>
                     </div>
                 </div>
             );
@@ -136,7 +138,8 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Desconto </li>
+                            <li > Gerenciador De Funções </li>
+                            <li > Criar Novo Cargo</li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -190,8 +193,8 @@ class Gerador extends React.Component {
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cencelar</a>
-                                <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Proximo</button>
+                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                                <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Salvar</button>
                             </div>
                             <div>
                                 <ul id="mensagens-erro" style={{ color: "red" }}></ul>
