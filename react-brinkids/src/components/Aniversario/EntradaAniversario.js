@@ -19,13 +19,10 @@ class EntradaAniversario extends React.Component {
             //Responsável por saber qual página vai renderizar:
             aniversariante:[], // dados do evento atual
             page: "SelecionarTipoDeEntrada", //Responsável pela tela que esta.
-            listaAdulta:[], //MODIFICAR  Onde está a lista de ADULTOS que virão para a festa
-            listaCrianca:[], //MODIFICAR  Onde está a lista de CRIANÇAS que virão para a festa
-            adultosDentro:[], // lista de ADULTOS que ja deram entrada
-            adultoSelecionado:"", // ADULTOS que foi selecionadaos para da entrada
-            criancaSadultoSelecionado:"", // CRIANÇA que foi selecionadaos para da entrada
-            listaCriancaDentro: [], // lista de crianças que deram entrada
-            listaAdultosDentro:[], // lista de adultos que deram entrada
+            adultoSelecionado:[], // ADULTOS que foi selecionadaos para da entrada.
+            criancaSelecionada:[], // CRIANÇA que foi selecionadaos para da entrada.
+            listaCriancaDentro:[], // lista de crianças que deram entrada.
+            listaAdultosDentro:[], // lista de adultos que deram entrada.
             list:[],
             //Lista Adultos
             name:"",
@@ -84,14 +81,21 @@ class EntradaAniversario extends React.Component {
 
         FinalizarAdulto = (event) =>{
             this.setState({
-                listaAdultosDentro: update(this.state.listaAdultosDentro, {$push: [{type:"adult", name: this.state.adultoSelecionado.name}]}),
+                listaAdultosDentro: update(this.state.listaAdultosDentro, {$push: [{type:"adult", name: this.state.adultoSelecionado[0].name}]}),
                 type: "",
                 name: "",
                 page:"SelecionarTipoDeEntrada",
             })
 
 
-        }        
+        } 
+        
+        AvancarCombinarCrianca = (event) =>{
+            this.setState({
+                page:"CombinarCrianca"
+            })
+
+        }
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
     
 
@@ -131,14 +135,14 @@ class EntradaAniversario extends React.Component {
             });
         }
 
-        this.setState({ listaAdulta: this.state.listaAdulta });
-        console.log(this.state.listaAdulta)
+        this.setState({ adultoSelecionado: this.state.adultoSelecionado });
+        console.log(this.state.adultoSelecionado)
     } 
     // Salva AS informações das CRIANÇAS que apareceram na lista e foi selecionado.
     selectedKids(identifier) {
         let achou = false;
         //Desmarca A checkBox
-        this.state.listaCrianca.forEach((kids, indice, array) => {
+        this.state.aniversariante[0].guestList.forEach((kids, indice, array) => {
             if (kids._id === identifier) {
                 delete array[indice];
                 achou = true;
@@ -146,15 +150,15 @@ class EntradaAniversario extends React.Component {
         });
 
         if (!(achou)) {
-            this.state.list.forEach((kids) => {
+            this.state.aniversariante[0].guestList.forEach((kids) => {
                 if (kids._id === identifier) {
-                    this.state.listaCrianca.push(kids);
+                    this.state.criancaSelecionada.push(kids);
                 }
             });
         }
 
-        this.setState({ listaCrianca: this.state.listaCrianca });
-        console.log(this.state.listaCrianca)
+        this.setState({ criancaSelecionada: this.state.criancaSelecionada });
+        console.log(this.state.criancaSelecionada)
     }  
 
     render() {
@@ -223,7 +227,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-4 col-sm-4">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Já Entraram: </b></h5>
-                                        <p>{/*this.state.adultosDentro*/}</p>
+                                        <p>{/*this.state.listaAdultosDentro*/}</p>
                                     </div>
                                 </div>
                             </div>
@@ -313,7 +317,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.adultoSelecionado.name}</p>
+                                        <p>{this.state.adultoSelecionado[0].name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -321,7 +325,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome Completo: </b></h5>
-                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.adultoSelecionado.name} onChange={this.AdicinarFullNome} />
+                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.adultoSelecionado[0].name} onChange={this.AdicinarFullNome} />
                                     </div>
                                 </div>
                             </div>
@@ -338,7 +342,7 @@ class EntradaAniversario extends React.Component {
             )
         }               
 
-        //TELA IV - Se for Crianças:
+        //TELA IIC - Se for Crianças:
         if(this.state.page === "EntradaCrianca"){
             return (
                 <div className="container-fluid" >
@@ -358,19 +362,21 @@ class EntradaAniversario extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th >Nome</th>                                            
+                                            <th >Nome</th>
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
                                     </thead>
-                                    <tbody> {/* LISTA de pessoas que estaram no Aniversário */}
-                                        {this.state.listaAdulta.map((crianca, indice) => {
-                                            return (
-                                                <tr key={crianca._id}>
-                                                    <th scope="row">{indice + 1}</th>
-                                                    <td > {crianca.name.firstName + " " + crianca.name.surName} </td>                                                    
-                                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(crianca._id)} /> </td>
-                                                </tr>
-                                            );
+                                    <tbody>
+                                        {this.state.aniversariante[0].guestList.map((childlist, indice) => {
+                                            if (childlist.type === "child") {
+                                                return (
+                                                    <tr key={childlist._id}>
+                                                        <th scope="row">{indice + 1}</th>
+                                                        <td > {childlist.name} </td>
+                                                        <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(childlist._id)} /> </td>
+                                                    </tr>
+                                                );
+                                            }
                                         })}
                                     </tbody>
                                 </table>
@@ -382,15 +388,15 @@ class EntradaAniversario extends React.Component {
                     <div className="graph" >
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao" onClick={this.ConfirmaCrianca}> Avançar </button>                        
+                            <button className="btn btn-md botao" onClick={this.AvancarCombinarCrianca}> Avançar </button>                        
                         </div>
                     </div>
                 </div>
             )
         }   
 
-        //TELA V - Confirmação entrada crianças
-        if(this.state.page === "ConfirmaCrianca") {
+        //TELA IIIC - Combinar a entrada da criança da lista com uma que tem no sistema 
+        if(this.state.page === "CombinarCrianca") {
             
         }        
     }
