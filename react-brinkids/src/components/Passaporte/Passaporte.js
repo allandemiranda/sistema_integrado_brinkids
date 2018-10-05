@@ -596,7 +596,7 @@ class Passport extends React.Component {
                                                                 screenshotFormat="image/png"
                                                                 width={320}
                                                             />
-                                                            <button className="btn btn-md botao" onClick={this.capture}>Take a Photo</button>
+                                                            <button className="btn btn-md botao" onClick={this.capture}>Tirar Foto</button>
                                                             <br></br>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
