@@ -13,7 +13,7 @@ class Servico extends React.Component {
             page: 'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 201.50,
+            Text: 0,
             Quant: '',
             lista: [],
             
@@ -64,7 +64,7 @@ class Servico extends React.Component {
             page:'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 201.50,
+            Text: 0,
             Quant: '',
         })
     }
@@ -79,7 +79,7 @@ class Servico extends React.Component {
             page:'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 201.50,
+            Text: 0,
             Quant: '',
             indice: '',
         })
@@ -110,7 +110,7 @@ class Servico extends React.Component {
             page:'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 201.50,
+            Text: 0,
             Quant: '',
         })
     }

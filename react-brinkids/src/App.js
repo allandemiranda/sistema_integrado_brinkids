@@ -19,6 +19,7 @@ import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
 import Servicos from './components/Serviços_Extras/Serviços';
 import MeuPerfil from './components/VizualizarPerfil/MyPerfil.js';
 import EntradaAniversario from './components/Aniversario/EntradaAniversario.js';
+import Gerador from './components/geradorf/Gerador_fun\u00E7oes.js';
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -124,7 +125,13 @@ class App extends React.Component {
                   path="/EntradaAniversario"
                   layout={MainLayout}
                   component={EntradaAniversario}
-                />  
+                />
+                <LayoutRoute
+                  exact
+                  path="/Gerador_funçoes"
+                  layout={MainLayout}
+                  component={Gerador}
+                />    
                                                                  
               <Redirect to="/" /> 
             </Switch>
