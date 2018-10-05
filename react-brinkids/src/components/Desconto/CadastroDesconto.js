@@ -126,7 +126,7 @@ class Desconto extends React.Component {
 
             axios.post('/discount', formData)
                 .then(function (response) {
-                    ConstroiListaDesconto();
+                    this.setState({ list: response.data });
                     console.log(response);
                     if (this.state.list.length > 0) {
                         this.setState({
@@ -227,7 +227,7 @@ class Desconto extends React.Component {
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cencelar</a>
+                                <a className="btn btn-md botao" href="/">Cancelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Proximo</button>
                             </div>
                             <div>
@@ -283,7 +283,7 @@ class Desconto extends React.Component {
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cencelar</a>
+                                <a className="btn btn-md botao" href="/">Cancelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaTemporariedade}>Gerar</button>
                             </div>
                             <div>

@@ -144,7 +144,7 @@ class VerDesconto extends React.Component {
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td >{desconto.codes.numberCode} </td>
-                                                    <td >{desconto.codes.} </td>
+                                                    <td >{desconto.codes.statusBoradlUser.dateUser} </td>
                                                     <td >{desconto.} </td>
                                                     <td >{desconto.to} </td>
                                                 </tr>
