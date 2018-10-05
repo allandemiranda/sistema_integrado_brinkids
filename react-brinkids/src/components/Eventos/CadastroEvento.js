@@ -162,7 +162,7 @@ class CadastroEvento extends React.Component {
                         </div>    
                         <br></br>
                         <div className="text-center">
-                            <a className="btn btn-md botao" href="/">Cencelar</a>
+                            <a className="btn btn-md botao" href="/">Cancelar</a>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaEvento}>Criar Evento</button>
                         </div>                      
                     </form >

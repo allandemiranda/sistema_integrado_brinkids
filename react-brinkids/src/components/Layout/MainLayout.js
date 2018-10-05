@@ -133,11 +133,11 @@ class MainLayout extends React.Component {
                                     <span>Calendário</span >
                                 </a>
                             </li>
-                            <li >
-                                < a href="/Aniversario" >
-                                    < i className="fa fa-gift" > </i>
-                                    <span>Aniversário</span >
-                                </a>
+                            <li id="menu-comunicacao" ><a href="/"><i className="fa fa-edit"></i> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></a>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><a href="/Aniversario">Aniversário <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></a></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><a href="/EntradaAniversario"> Entrada Aniversário <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></a></li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="/Passport">

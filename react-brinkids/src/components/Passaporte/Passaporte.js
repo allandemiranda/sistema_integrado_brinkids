@@ -596,7 +596,7 @@ class Passport extends React.Component {
                                                                 screenshotFormat="image/png"
                                                                 width={320}
                                                             />
-                                                            <button className="btn btn-md botao" onClick={this.capture}>Take a Photo</button>
+                                                            <button className="btn btn-md botao" onClick={this.capture}>Tirar Foto</button>
                                                             <br></br>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
@@ -642,7 +642,7 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult.photo} />
+                                                <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
