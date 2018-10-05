@@ -1,7 +1,7 @@
 import React from 'react';
+import update from 'react-addons-update';
 import Webcam from 'react-webcam';
 import axios from 'axios';
-import ConfirmaAdulto from '../Adultos/ConfirmaAdulto.js';
 import TypesInput from '../TypesInput.js';
 
 // CSS Layout
@@ -24,7 +24,12 @@ class EntradaAniversario extends React.Component {
             adultosDentro:[], // lista de ADULTOS que ja deram entrada
             adultoSelecionado:"", // ADULTOS que foi selecionadaos para da entrada
             criancaSadultoSelecionado:"", // CRIANÇA que foi selecionadaos para da entrada
+            listaCriancaDentro: [], // lista de crianças que deram entrada
+            listaAdultosDentro:[], // lista de adultos que deram entrada
             list:[],
+            //Lista Adultos
+            name:"",
+            type:"",
            }
 
         //Relacionado a atualização dos valores Caminho
@@ -79,8 +84,13 @@ class EntradaAniversario extends React.Component {
 
         FinalizarAdulto = (event) =>{
             this.setState({
-                page:"ConfirmaAdulto",
+                listaAdultosDentro: update(this.state.listaAdultosDentro, {$push: [{type:"adult", name: this.state.adultoSelecionado.name}]}),
+                type: "",
+                name: "",
+                page:"SelecionarTipoDeEntrada",
             })
+
+
         }        
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
     
@@ -256,14 +266,16 @@ class EntradaAniversario extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.state..aniversariante[0].guestList.map((Adultlist, indice) => {
-                                            return (
-                                                <tr key={Adultlist._id}>
-                                                    <th scope="row">{indice + 1}</th>
-                                                    <td > {Adultlist.name} </td>
-                                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(Adultlist._id)} /> </td>
-                                                </tr>
-                                            );
+                                        {this.state.aniversariante[0].guestList.map((Adultlist, indice) => {
+                                            if (Adultlist.type === "adul") {
+                                                return (
+                                                    <tr key={Adultlist._id}>
+                                                        <th scope="row">{indice + 1}</th>
+                                                        <td > {Adultlist.name} </td>
+                                                        <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(Adultlist._id)} /> </td>
+                                                    </tr>
+                                                );
+                                            }
                                         })}
                                     </tbody>
                                 </table>
@@ -282,7 +294,7 @@ class EntradaAniversario extends React.Component {
             )
         }
 
-        //TELA III - Confimação entrada Adultos
+        //TELA IIIA - Confimação entrada Adultos
         if (this.state.page === "ConfirmaAdulto") {
             return (
                 <div className="container-fluid" >
@@ -301,7 +313,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.adultoSelecionado.name.firstName + " " + this.state.adultoSelecionado.name.surName}</p>
+                                        <p>{this.state.adultoSelecionado.name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -370,7 +382,7 @@ class EntradaAniversario extends React.Component {
                     <div className="graph" >
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao" onClick={this.}> Avançar </button>                        
+                            <button className="btn btn-md botao" onClick={this.ConfirmaCrianca}> Avançar </button>                        
                         </div>
                     </div>
                 </div>
