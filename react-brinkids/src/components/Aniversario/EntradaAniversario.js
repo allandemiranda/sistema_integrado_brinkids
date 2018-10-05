@@ -10,6 +10,9 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import moment from 'moment'
 import $ from "jquery";
+import Comprovant from '../Comprovante/comprovante';
+import '../Comprovante/comprovante.css';
+import tabelinha from '../Comprovante/tabelinha';
 
 
 class EntradaAniversario extends React.Component {
@@ -125,6 +128,20 @@ class EntradaAniversario extends React.Component {
             this.setState({
                 page:"foto",
             })
+        }
+
+        AvançarTelaFinal =(event)=>{
+            this.setState({
+                page:"TelaFinal"
+            })
+        }
+
+        FinalizarCrianca = (event) => {            
+            this.setState({
+                comprovante:true,            
+            })
+            alert("Cadastrado");
+            console.log(this.state.arrayfinal);
         }
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
     
@@ -673,28 +690,176 @@ class EntradaAniversario extends React.Component {
             )
 
         }
+
         //TELA VI - Foto
         if (this.state.page === "foto") {
-            <div className="graph" >
-                <div className="row text-center">
-                    <h4 className="inner-tittle"> Tirando uma foto </h4>
-                    <div className="col-md-6 col-sm-12 col-xs-12">
-                        <Webcam
-                            className="webcan"
-                            audio={false}
-                            height={240}
-                            ref={this.setRef}
-                            screenshotFormat="image/png"
-                            width={320}
-                        />
-                        <button className="btn btn-md botao" onClick={this.capture}>Tira Foto</button>
-                        <br></br>
+            return (
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Entrada Aniversário </li>
+                        </ol >
                     </div>
-                    <div className="col-md-6 col-sm-12 col-xs-12">
-                        <img id="imagem" className="webcan" src={this.state.file} />
+                    <div className="graph" >
+                        <div className="row text-center">
+                            <h4 className="inner-tittle"> Tirando uma foto </h4>
+                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                <Webcam
+                                    className="webcan"
+                                    audio={false}
+                                    height={240}
+                                    ref={this.setRef}
+                                    screenshotFormat="image/png"
+                                    width={320}
+                                />
+                                <button className="btn btn-md botao" onClick={this.capture}>Tira Foto</button>
+                                <br></br>
+                            </div>
+                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                <img id="imagem" className="webcan" src={this.state.file} />
+                            </div>
+                        </div>
+                    </div >
+
+                    <div className="text-center">
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.AvançarTelaFinal}> Avançar </button>
                     </div>
                 </div>
-            </div >
+            )
+        }
+
+        //TELA VI - Confirmação Final 
+        if (this.setState.page === "TelaFinal"){
+            return (
+                <div className="container-fluid" >
+                    <div className="sub-heard-part" >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Entrada Aniversário </li>
+                        </ol >
+                    </div>
+                    <div className="graph-visual">
+                        <div className="graph-visual" >
+                            <h3 className="inner-tittle" style={{ marginTop: -10 + "px" }} > Perfil - Confirmação Final</h3>
+                            <div className="row">
+                                {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - INÍCIO*/}
+                                <div className="graph" >
+                                    <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 40 + "%" }} >Responsável </h3>
+                                    <div className="row">
+                                        <div className="col-md-7 col-sm-12 text-center">
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                                <img src={"http://localhost:3000/img-users/" + this.state.responsavel[0].photo} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-5 col-sm-12 text-center">
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                                <p>{this.state.responsavel[0].name.firstName + " " + this.state.responsavel[0].name.surName}</p>
+                                            </div>
+                                            <br></br>
+                                            <div className="graph" style={{ padding: 10 + "px"}}>
+                                                <h5 className="ltTitulo"><b> Telefone: </b></h5>
+                                                <p> {this.state.responsavel[0].phone}</p>
+                                                </div>
+                                            <br></br>
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                                <p>{moment(this.state.responsavel[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br></br>
+                                    <div className="graph-visual" >
+                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                            <div className="row">
+                                                <div className="col-md-12 col-sm-12 col-xs-12">
+                                                    <h3 className="inner-tittle" > Observações </h3>
+                                                    <br></br>
+                                                    <div className="graph" style={{ padding: 10 + "px" }} >                                                    
+                                                        <p>{this.state.responsavel[0].observations}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div >
+                                    </div>                                
+                                </div>
+                            
+                                {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - FIM*/}
+                                <div><br></br></div>
+                                {/*QUADRO CONFIMAÇÃO FINAL CRIANÇAS- INÍCIO*/}
+                                <div className="graph" >
+                                    <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 45 + "%" }} > Criança </h3>
+                                    <div className="row">
+                                        <div className="col-md-12 col-sm-12 text-center">
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                                <p>{this.state.criancaSelecionada[0].name.firstName + " " + this.state.criancaSelecionada[0].name.surName}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br></br>
+                                    <div className="row">
+                                        <div className="col-md-7 col-sm-12 text-center">
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                                <img src={"http://localhost:3000/img-users/" + this.state.criancaSelecionada[0].photo} />
+                                            </div>
+                                        </div>
+                                        <div className="col-md-5 col-sm-12 text-center">
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                <h5 className="ltTitulo"><b> Parentesco: </b></h5>
+                                                <p>{this.state.criancaSelecionada[0].kinship}</p>
+                                            </div>
+                                            <br></br>
+                                            <div className="row">
+                                                <div className="col-md-7 col-sm-12 text-center">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Sexo: </b></h5>
+                                                        <p>{this.state.criancaSelecionada[0].sexuality}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-5 col-sm-12 text-center">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                                        <p>{moment(this.state.criancaSelecionada[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br></br>
+                                    <div className="graph" style={{ padding: 10 + "px" }} >
+                                        <div className="row">
+                                            <div className="col-md-12 col-sm-12 col-xs-12">
+                                                <h3 className="inner-tittle" > Observações </h3>
+                                                <br></br>
+                                                <div className="graph" style={{ padding: 10 + "px" }} >
+                                                    <p>{this.state.criancaSelecionada[0].observations}</p>
+                                                </div> </div>
+                                        </div>
+                                    </div >
+                                    <div><br></br></div>
+                                </div> 
+                                {/*QUADRO CONFIMAÇÃO FINAL Crianças  - FIM*/}
+                            </div>
+                        </div>
+                    </div>
+                    <Comprovant
+                        teste={this.state.comprovante}
+                        tabela={this.state.arrayfinal}
+                        serviso="ANIVERSÁRIO"
+
+                    />
+                    <div className="text-center">
+                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.FinalizarCrianca}> Finalizar </button>
+                    </div>
+                </div>
+            )
         }
     }
 }
