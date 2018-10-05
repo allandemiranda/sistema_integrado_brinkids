@@ -46,7 +46,7 @@ class EntradaAniversario extends React.Component {
     //Requisição dados do evento atual 
     RequisicaoDadosParty() {
         $.ajax({
-            url: "http://localhost:3001",
+            url:"http://localhost:3001",
             dataType: 'json',
             type: 'GET',
             error: function (response) {

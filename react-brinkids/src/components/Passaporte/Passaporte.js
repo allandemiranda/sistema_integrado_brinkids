@@ -81,8 +81,7 @@ class Passport extends React.Component {
     }
 
     // Faz a busca do responsável:
-    SearchAdult(nomeadult,event) {
-        if(nomeadult.length >= 7){
+    SearchAdult(event) {
             $.ajax({
                 url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
                 dataType: 'json',
@@ -101,10 +100,6 @@ class Passport extends React.Component {
                     }
                 }.bind(this)
             });
-        }
-        else{
-            console.log("Número de caracteres menor do que 7!")
-        }
     }
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
@@ -206,6 +201,7 @@ class Passport extends React.Component {
         this.setState({
             page: "SelectKids",
             selectedSearch: '',
+            list:[],
         })
         // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
         $.ajax({
@@ -247,8 +243,7 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela VI
-    Comprovante = (event) => {
-        
+    Comprovante = (event) => {        
         this.setState({
             comprovante:true,            
         })
@@ -293,7 +288,7 @@ class Passport extends React.Component {
     setRef = (webcam) => {
         this.webcam = webcam;
     }
-    capture = (event) => {
+    capture = (event, identifier) => {      
         event.preventDefault();
         var imagem = document.querySelector("#imagem");
         const imageSrc = this.webcam.getScreenshot();
@@ -327,7 +322,7 @@ class Passport extends React.Component {
                             </div>
                             <div className=" text-center">
                                 <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar" />
-                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult(this.state.selectedSearch)}> Pesquisar </button>
+                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult}> Pesquisar </button>
                             </div>
                         </div>
                         <br></br>
@@ -596,7 +591,7 @@ class Passport extends React.Component {
                                                                 screenshotFormat="image/png"
                                                                 width={320}
                                                             />
-                                                            <button className="btn btn-md botao" onClick={this.capture}>Tirar Foto</button>
+                                                            <button className="btn btn-md botao" onClick={(event) => {this.capture(event, Criançasqueentrarao._id)}}>Tirar Foto</button>
                                                             <br></br>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
