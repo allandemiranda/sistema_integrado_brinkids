@@ -1,18 +1,32 @@
 export default [
     {
-        name:'barbeiro',
-        classe:'operacional'
+        Name:'barbeiro',
+        classe:'operacional',
+        Description:'asfasfasfasfasfas'
     },
     {
-        name:'pinico',
-        classe:'operacional'
+        Name:'pinico',
+        classe:'operacional',
+        Description:'asfasfasfasfasfas'
     },
     {
-        name:'amor da minha vida',
-        classe:'operacional'
+        Name:'amor da minha vida',
+        classe:'operacional',
+        Description:'asfasfasfasfasfas'
     },
     {
-        name:'fiz merda hj de manha',
-        classe:'operacional'
-    }
+        Name:'fiz merda hj de manha',
+        classe:'operacional',
+        Description:'asfasfasfasfasfas'
+    },
+    {Name:'jardineiro',
+    classe:'operacional',
+    funcions:[0,1],
+    Description:'asfasfasfasfasfas'
+},
+{Name:'morena',
+classe:'operacional',
+funcions:[0,1],
+Description:'asfasfasfasfasfas'
+}
 ]
