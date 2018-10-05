@@ -8,17 +8,16 @@ router.post('/', async (req, res) => {
     && req.body.text
     && req.body.quantity){
 
-    const data = new Data({
+    const extraServices = {
       name: req.body.name,
       type: req.body.type,
       text: req.body.text,
       quantity: req.body.quantity,
-    });
+    };
 
     try {
     console.log(req.body);
-    const newData = await data.save();
-    return res.status(201).json(newData);
+    return res.status(201).json(extraServices);
     } catch (err) {
     return res.sendStatus(500);
     }

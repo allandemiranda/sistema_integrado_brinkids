@@ -12,7 +12,7 @@ import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js
 import Passport from './components/Passaporte/Passaporte.js';
 import Aniversario from './components/Aniversario/CadastroAniversario.js';
 import CriaEvento from './components/Eventos/CadastroEvento.js';
-import GeraDesconto from './components/Desconto/CadastroDesconto.js';
+import Desconto from './components/Desconto/VisualizaDesconto.js';
 import Perfil from './components/VizualizarPerfil/Perfil.js';
 import PerfilAdulto from './components/VizualizarPerfil/PerfilAdulto.js';
 import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
@@ -57,7 +57,7 @@ class App extends React.Component {
                   exact
                   path="/Desconto"
                   layout={MainLayout}
-                  component={GeraDesconto}
+                  component={Desconto}
                 />
                <LayoutRoute
                   exact

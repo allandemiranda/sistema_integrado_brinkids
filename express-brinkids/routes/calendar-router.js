@@ -2,6 +2,7 @@
 
 const express = require('express');
 const Calendar = require('../models/calendar-models');
+const extraService = require('../models/extra-services-models');
 
 const router = express.Router();
 
@@ -10,7 +11,9 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const birthdays = await Calendar.find({});
-    res.status(200).json(birthdays);
+    const events = await extraService.find({});
+
+    res.status(200).json([...birthdays, ...events]);
   } catch (err) {
     return res.sendStatus(500);
   }
