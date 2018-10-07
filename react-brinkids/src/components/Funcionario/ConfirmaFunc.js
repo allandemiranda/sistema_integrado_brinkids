@@ -30,7 +30,7 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-6 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> E-Mail: </b></h5>
-                                    <p>{this.props.email}</p>
+                                    <p>{this.props.Email}</p>
                                 </div>
                             </div>
                         </div>

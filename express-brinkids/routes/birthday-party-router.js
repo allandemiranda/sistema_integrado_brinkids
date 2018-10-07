@@ -17,9 +17,15 @@ router.post('/', (req, res) => {
     partyFeather: [{ type: req.body.type, id: req.body.id, name: req.body.name }],
   };
 
-  console.log(data);
+  console.log(req.body);
+  try {
+    //console.log(req.body);
+    return res.status(201).json(passport);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
 
-  return res.sendStatus(200);
+return res.sendStatus(200);
 });
 
 module.exports = router;
