@@ -17,11 +17,11 @@ class Perfil extends React.Component {
             //lista de funcionarios apos a busca pelo nome
             list: [],
             //Funcionario selecionado para vizualizar o perfil
-            perfilAtual: [],
+            perfilAtual: listaa[0],
             //barra de busca
             selectedSearch: '',
             //tipo da pagina 'Busca' ou 'Perfil'
-            page: 'Busca',
+            page: 'Perfil',
             //n tem uma função especifica mas o universo não aceita funcionar sem ele
             flut: true,
             //Aparecer as opçoes quando clikar em editar
@@ -283,7 +283,7 @@ class Perfil extends React.Component {
                                     }
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
                                 </div>
-
+                                <br></br>
                             </div>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
@@ -291,18 +291,13 @@ class Perfil extends React.Component {
                                     <p>ffffffff</p>
                                 </div>
                                 <br></br>
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> SENHA </b></h5>
-                                    <p><input type="password" value="senha" style={{ border: 'none', background: 'white', textAlign: 'center', fontSize: 110 + '%' }} disabled /></p>
-                                    {this.state.editar && (<button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>)}
-                                </div>
-                                <br></br>
+
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
                                     <p>ffffffff</p>
-                                </div><br/>
+                                </div><br />
                             </div>
-                            
+
                             <div className="row">
 
                                 <div className="col-md-12 col-sm-12">
@@ -365,7 +360,8 @@ class Perfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.phone}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.phone} onChange={this.changuePhone} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
+
                                     </div>
                                 </div>
 
@@ -384,7 +380,7 @@ class Perfil extends React.Component {
                                     <div className="graph " style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Email:</b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.email}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
                                     </div>
                                 </div>
                             </div>
@@ -396,21 +392,21 @@ class Perfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Endereço: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.street}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-10">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Bairro: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.district}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-2 col-sm-2">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Número: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.number}</p>)}
-                                        {this.state.editar && (<input className="form-control" style={{float: 'none'}} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
+                                        {this.state.editar && (<input className="form-control" style={{ float: 'none' }} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
                                     </div>
                                 </div>
                             </div>
@@ -422,33 +418,148 @@ class Perfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> CEP: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.cep}</p>)}
-                                        {this.state.editar && (<input type="text"  style={{float: 'none'}} className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Cidade: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.city}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Estado: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.state}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> País: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.country}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
                                     </div>
                                 </div>
                             </div>
 
                             <br></br>
+                            <div className="row">
+
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" > <b>Educação:</b> </h5>
+                                        
+                                        <p>{this.state.perfilAtual.education}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>Parentesco:</b>  </h5>
+
+                                        <p><b>Nome do pai:</b> {this.state.perfilAtual.kinship.fatherName}</p>
+                                        <p><b>Nome do Mae:</b> {this.state.perfilAtual.kinship.fatherName}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" > <b>Lugar de Origem:</b> </h5>
+                                        
+                                        <p><b>Cidade:</b> {this.state.perfilAtual.birthplace.city}</p>
+                                        <p><b>Estado:</b> {this.state.perfilAtual.birthplace.state}</p>
+                                    </div>
+                                </div>
+                            </div >
+                            <br></br>
+                            <div className="row">
+
+                                
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>Carteira de trabalho:</b>  </h5>
+
+                                        <p><b>Numero:</b> {this.state.perfilAtual.workPortfolio.number}d</p>
+                                        <p><b>Series:</b> {this.state.perfilAtual.workPortfolio.series}d</p>
+                                        <p><b>Estado:</b> {this.state.perfilAtual.workPortfolio.state}d</p>
+                                        <p><b>PIS_PASEP:</b> {this.state.perfilAtual.workPortfolio.PIS_PASEP}d</p>
+                                        <p><b>Data de Emissão:</b>{this.state.perfilAtual.workPortfolio.dateIssue}d</p>
+                                        <p><b>Lugar de Emissão:</b> {this.state.perfilAtual.workPortfolio.placeIssued}</p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>Título de Eleitor:</b>  </h5>
+
+                                        <p><b>Numero:</b> {this.state.perfilAtual.electionTitleo.number}d</p>
+                                        <p><b>Zona:</b> {this.state.perfilAtual.electionTitle.zone}d</p>
+                                        <p><b>Seção:</b> {this.state.perfilAtual.electionTitle.section}d</p>
+                                        <p><b>Estado:</b> {this.state.perfilAtual.electionTitle.state}d</p>
+                                        
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>Registro Geral:</b>  </h5>
+
+                                        <p><b>Orgão Emissor:</b> {this.state.perfilAtual.rg.issuingBody}d</p>
+                                        <p><b>Data de Emissão:</b> {this.state.perfilAtual.rg.dateIssue}d</p>             
+                                        <p><b>Estado:</b> {this.state.perfilAtual.rg.state}d</p>
+                                        
+                                    </div>
+                                </div>
+                            </div >
+                            <br></br>
+                            <div className="row">
+
+                                
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>Reservista:</b>  </h5>
+
+                                        <p><b>Numero:</b> {this.state.perfilAtual.militaryReservist.number}d</p>
+                                        <p><b>Series:</b> {this.state.perfilAtual.militaryReservist.series}d</p>
+                                        <p><b>Categoría:</b> {this.state.perfilAtual.militaryReservisto.category}d</p>
+                                       
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>Passaporte:</b>  </h5>
+
+                                        <p><b>Numero:</b> {this.state.perfilAtual.passport.number}d</p>
+                                        <p><b>Tipo:</b> {this.state.perfilAtual.passport.type}d</p>
+                                        <p><b>Continente de Emissão:</b> {this.state.perfilAtual.passport.issuingCountry}d</p>
+                                        <p><b>Data de Emissão:</b> {this.state.perfilAtual.passport.dateIssue}d</p>
+                                        <p><b>Data de Expiração:</b> {this.state.perfilAtual.passport.expirationDate}d</p>
+                                        
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+
+                                        <h5 className="ltTitulo" ><b>CNH:</b>  </h5>
+
+                                        <p><b>Registro:</b> {this.state.perfilAtual.cnh.record}d</p>
+                                        <p><b>Categoria:</b> {this.state.perfilAtual.cnh.category}d</p>             
+                                        <p><b>Data de Expiração:</b> {this.state.perfilAtual.cnh.expirationDate}d</p>
+                                        <p><b>Comentários:</b> {this.state.perfilAtual.cnh.comments}d</p>
+                                        <p><b>Local de Emissão:</b> {this.state.perfilAtual.cnh.placeIssue}d</p>
+                                        <p><b>Data de Emissão:</b> {this.state.perfilAtual.cnh.dateIssue }d</p>
+                                        
+                                    </div>
+                                </div>
+                            </div >
+                            <br></br>
+
                             <div className="row">
 
                                 <div className="graph" >
@@ -465,6 +576,7 @@ class Perfil extends React.Component {
                                     <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.editavel} className="btn btn-md botao botaoAvançar" > Editar</button>
                                         <button onClick={this.voltar} className="btn btn-md botao botaoAvançar" > Voltar</button>
+                                        <button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>
                                     </div>
 
                                 )}
