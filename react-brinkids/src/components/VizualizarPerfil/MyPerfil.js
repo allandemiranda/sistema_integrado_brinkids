@@ -105,7 +105,16 @@ class MeuPerfil extends React.Component {
     
     cancelar(event) {
         this.setState({
-            perfilAtual: this.state.reserva,
+            obs: '',
+            email: '',
+            phone: '',
+            estado: '',
+            pais: '',
+            bairro: '',
+            cep: '',
+            cidade: '',
+            numero: '',
+            endereco: '',
             editar: false,
 
         })
@@ -114,6 +123,7 @@ class MeuPerfil extends React.Component {
     editavel(event) {
         this.setState({
             editar: true,
+
 
         });
 
@@ -210,20 +220,17 @@ class MeuPerfil extends React.Component {
                                     }
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
                                 </div>
-
+                                <br></br>
                             </div>
+                            
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" ><b> LOGIN </b></h5>
                                     <p>ffffffff</p>
                                 </div>
                                 <br></br>
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> SENHA </b></h5>
-                                    <p><input type="password" value="senha" style={{ border: 'none', background: 'white', textAlign: 'center', fontSize: 110 + '%' }} disabled /></p>
-                                    {this.state.editar && (<button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>)}
-                                </div>
-                                <br></br>
+                               
+                                
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
                                     <p>ffffffff</p>
@@ -292,7 +299,7 @@ class MeuPerfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.phone}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.phone} onChange={this.changuePhone} />)}
+                                        {this.state.editar && (<input type="text" className="form-control" style={{float: 'none'}} value={this.state.phone} onChange={this.changuePhone} />)}
                                     </div>
                                 </div>
 
@@ -378,20 +385,14 @@ class MeuPerfil extends React.Component {
                             <br></br>
                             <div className="row">
 
-                                <div className="graph" >
-                                    <div className="row">
-                                        <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <h3 className="inner-tittle" > Observações </h3>
-                                            <br></br>
-                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></textarea>
-                                        </div>
-                                    </div>
-                                </div >
+                               
 
                                 {!this.state.editar && (
                                     <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.editavel} className="btn btn-md botao botaoAvançar" > Editar</button>
                                         <button onClick={this.voltar} className="btn btn-md botao botaoAvançar" > Voltar</button>
+                                        <button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>
+                                
                                     </div>
 
                                 )}
