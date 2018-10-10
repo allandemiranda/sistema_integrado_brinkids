@@ -6,6 +6,9 @@
         margin-top: 7px;
     }
 }
+.td-table {
+    font-size: 20px !important;
+}
 .LetraFormulario {
     color: black;
 }
