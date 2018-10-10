@@ -170,7 +170,7 @@ class Desconto extends React.Component {
     }
 
     Imprimir = () => {
-
+        window.print(this.state.list);
     }
     NovoDesconto = () => {
         this.setState({

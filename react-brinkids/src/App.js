@@ -18,6 +18,7 @@ import PerfilAdulto from './components/VizualizarPerfil/PerfilAdulto.js';
 import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
 import Servicos from './components/Serviços_Extras/Serviços';
 import MeuPerfil from './components/VizualizarPerfil/MyPerfil.js';
+import SaidaCrianca from './components/Saidas/SaidaCrianca.js';
 import EntradaAniversario from './components/Aniversario/EntradaAniversario.js';
 import Gerador from './components/geradorf/Gerador_fun\u00E7oes.js';
 
@@ -53,6 +54,12 @@ class App extends React.Component {
                   layout={MainLayout}
                   component={Calendar}
                 />
+                <LayoutRoute
+                  exact
+                  path="/SaidaCrianca"
+                  layout={MainLayout}
+                  component={SaidaCrianca}
+                />                
                 <LayoutRoute
                   exact
                   path="/Desconto"
