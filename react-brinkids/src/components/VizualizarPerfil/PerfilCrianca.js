@@ -46,11 +46,11 @@ class PerfilCrianca extends React.Component {
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.SearchFuncionario = this.SearchFuncionario.bind(this);
-        
+
         this.ChangePage = this.ChangePage.bind(this);
-        
+
         this.editavel = this.editavel.bind(this);
-        
+
         this.changueObs = this.changueObs.bind(this);
         this.changueCep = this.changueCep.bind(this);
         this.changueEndereco = this.changueEndereco.bind(this);
@@ -61,11 +61,11 @@ class PerfilCrianca extends React.Component {
         this.changueNumero = this.changueNumero.bind(this);
         this.changueEmail = this.changueEmail.bind(this);
         this.changuePhone = this.changuePhone.bind(this);
-        
+
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
-        
+
         this.changuePassword = this.changuePassword.bind(this);
         this.changueSenha = this.changueSenha.bind(this);
         this.changueSenhaAtual = this.changueSenhaAtual.bind(this);
@@ -287,10 +287,11 @@ class PerfilCrianca extends React.Component {
                                             </button><br /></div>)
                                     }
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
-                                </div>
 
+                                </div>
+                                <br></br>
                             </div>
-                            
+
                             <div className="row">
 
                                 <div className="col-md-12 col-sm-12">
@@ -309,18 +310,13 @@ class PerfilCrianca extends React.Component {
                             <br></br>
 
                             <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                <div className="col-md-12 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b>  CPF: </b> </h5>
+                                        <h5 className="ltTitulo"><b>  Nnumero de Registro: </b> </h5>
                                         <p>{this.state.perfilAtual.cpf} </p>
                                     </div>
                                 </div>
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b>  RG: </b> </h5>
-                                        <p> {this.state.perfilAtual.rg} </p>
-                                    </div>
-                                </div>
+
                             </div>
 
                             <br></br>
@@ -346,97 +342,16 @@ class PerfilCrianca extends React.Component {
                                 </div>
                             </div>
 
-                            <br></br>
 
-                            <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.phone}</p>)}
-                                        {this.state.editar && (<input type="text" className="form-control" value={this.state.phone} onChange={this.changuePhone} />)}
-                                    </div>
-                                </div>
 
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }} >
-                                        <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
-                                        <p>{this.state.perfilAtual.maritalStatus}</p>
-                                    </div>
-                                </div>
-                            </div>
+
+
 
                             <br></br>
 
-                            <div className='row'>
-                                <div className="col-md-12 col-sm-12 col-xs-12">
-                                    <div className="graph " style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Email:</b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.email}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
-                                    </div>
-                                </div>
-                            </div>
 
-                            <br></br>
 
-                            <div className="row">
-                                <div className="col-md-6 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Endereço: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.street}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
-                                    </div>
-                                </div>
-                                <div className="col-md-4 col-sm-10">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Bairro: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.district}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
-                                    </div>
-                                </div>
-                                <div className="col-md-2 col-sm-2">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Número: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.number}</p>)}
-                                        {this.state.editar && (<input className="form-control" style={{float: 'none'}} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
-                                    </div>
-                                </div>
-                            </div>
 
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> CEP: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.cep}</p>)}
-                                        {this.state.editar && (<input type="text"  style={{float: 'none'}} className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
-                                    </div>
-                                </div>
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Cidade: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.city}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
-                                    </div>
-                                </div>
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Estado: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.state}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
-                                    </div>
-                                </div>
-                                <div className="col-md-3 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> País: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.country}</p>)}
-                                        {this.state.editar && (<input type="text" style={{float: 'none'}} className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br></br>
                             <div className="row">
 
                                 <div className="graph" >
@@ -470,7 +385,7 @@ class PerfilCrianca extends React.Component {
 
             );
         }
-       
+
     }
 }
 export default PerfilCrianca;

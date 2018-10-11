@@ -54,7 +54,7 @@ class CadastroEvento extends React.Component {
             formData.append('address', String(this.state.Location))
             formData.append('color', String(this.state.Color)) 
             
-            axios.post('', formData)
+            axios.post('/event', formData)
             .then(function (response) {
                 alert("Evento Criado Com Sucesso!");
                 console.log(response);

@@ -1,11 +1,11 @@
 export default [
-    
+
     {
-        name: {firstName: 'Gato', surName: 'Abelha' },
-        phone: [ '123987123' ],
+        name: { firstName: 'Gato', surName: 'Abelha' },
+        phone: ['123987123'],
         _id: "5b708fbb11942e1e83a7e088",
         birthday: "1999-04-15T00:00:00.000Z",
-        address: {street:'rua da dona vesa',number: 409,district:'pais dos gatos', city: 'gatolandia',state:'destrito dos gatos',country:'gatinia',cep:6666} ,
+        address: { street: 'rua da dona vesa', number: 409, district: 'pais dos gatos', city: 'gatolandia', state: 'destrito dos gatos', country: 'gatinia', cep: 6666 },
         rg: 12039812309,
         sexuality: 'Masculino',
         cpf: '123098123',
@@ -15,13 +15,30 @@ export default [
         children: [],
         observations: 'meio castrado',
         photo: 'img_users/adult/5b708fbb11942e1e83a7e088.png',
-        crianca:[{Nome:'maria',parentesco:'tio avo',id:0}],
-        __v: 0 
+        crianca: [{ Nome: 'maria', parentesco: 'tio avo', id: 0 }],
+        workPortfolio: {
+            number: 'sss',
+            series: 'sss',
+            state: 'sss',
+            PIS_PASEP: 'sss',
+            dateIssue: 'sss',
+            placeIssue: 'sss',
+        },
+        kinship: {
+            fatherName: 'ccc',
+            motherName: 'dsfsfss'
+        },
+        birthplace:{
+            city:'dddd',
+            state:'safad',
+            
+        },
+        __v: 0
     },
-    
+
     {
         name: { firstName: 'Matheus', surName: 'Felipe' },
-        phone: [ '84555555555' ],
+        phone: ['84555555555'],
         _id: "5b75ee330bb2c51fe2de34e8",
         birthday: new Date("1997-07-05T00:00:00.000Z").toDateString(),
         address: [],
@@ -34,8 +51,8 @@ export default [
         children: [],
         observations: 'Observações',
         photo: 'img_users/adult/5b75ee330bb2c51fe2de34e8.png',
-        __v: 0  
-    
+        __v: 0
+
     },
-    
-    ]
+
+]

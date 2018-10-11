@@ -158,6 +158,18 @@ class MainLayout extends React.Component {
                                     <span>Gerar Desconto</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="/Gerador_funçoes">
+                                <i className="glyphicon glyphicon-user"></i>
+                                    <span>Gerenciador de Serviços</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/SaidaCrianca">
+                                <i className="glyphicon glyphicon-off"></i>
+                                    <span>Saida de Crianças</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

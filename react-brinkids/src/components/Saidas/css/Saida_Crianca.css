@@ -1,0 +1,53 @@
+
+/* TELA CADASTRO CRIANCA */
+
+@media screen and (max-width: 767px) {
+    .brlabel {
+        margin-top: 7px;
+    }
+}
+.td-table {
+    font-size: 20px !important;
+}
+.LetraFormulario {
+    color: black;
+}
+.optionFomulario {
+    padding: 1px 1px !important;
+}
+.botao {
+    background: #00C6D7;
+    color: #fff;
+}
+.botao:hover {
+    background: #052963 !important;
+    color: #fff;
+}
+.opt1 {
+    background-color: blue !important;
+    color: #fff;
+}
+.opt2 {
+    background-color: violet !important;
+    color: #fff;
+}
+.opt3 {
+    background-color: green !important;
+    color: #fff;
+}
+.opt4 {
+    background-color: orange !important;
+    color: #fff;
+}
+.opt5 {
+    background-color: yellow !important;
+    color: #000000;
+}
+.opt6 {
+    background-color: red !important;
+    color: #fff;
+}
+.opt7 {
+    background-color: aqua !important;
+    color: #000000;
+}
