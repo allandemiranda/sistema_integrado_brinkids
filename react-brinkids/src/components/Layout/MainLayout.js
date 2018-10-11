@@ -145,11 +145,11 @@ class MainLayout extends React.Component {
                                     <span>Passaporte</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="/Serviços">
-                                    <i className="fa fa-tags" aria-hidden="true"></i>
-                                    <span>Serviços</span>
-                                </a>
+                            <li id="menu-comunicacao" ><a href="/"><i className="fa fa-tags" aria-hidden="true"></i> <span>Serviços</span> <span className="fa fa-angle-double-right" style={{ float: "right" }}></span></a>
+                                <ul>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><a href="/Serviços">Entrada <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></a></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><a href="/SaidaServicosExtra">Saída <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></a></li>
+                                </ul>
                             </li>
 
                             <li>
