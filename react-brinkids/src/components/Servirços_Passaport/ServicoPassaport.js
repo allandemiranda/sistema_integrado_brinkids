@@ -113,7 +113,7 @@ class ServicoPassaporte extends React.Component {
     }
 
     Apagar =(event)=>{
-        console.log("Apagar");
+        this.state.list.pop();
     }
 
     Adicionar =(event)=>{
