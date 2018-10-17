@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../config');
 
-const passportServiceSchema = new mongoose.Schema({
+const passportServicesSchema = new mongoose.Schema({
 	name: {
 		type: String,
     require: true,
@@ -12,10 +12,10 @@ const passportServiceSchema = new mongoose.Schema({
 	},
 	initialTime: String,
 	finalTime: String,
-  price: String,
-)};
+  	price: String,
+});
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const passportService = mongoose.model('Passport', passportServiceSchema);
+const passportServices = mongoose.model('PassportServices', passportServicesSchema);
 
-module.exports = passportService;
+module.exports = passportServices;

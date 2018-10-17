@@ -246,7 +246,7 @@ class CadastroAdulto extends React.Component {
     Changekinship(evento, identifier){
         this.setState({kinship: evento.target.value})
 
-        console.log(`O estado foi atualizado: ${this.state.kinship}`)
+        console.log('O estado foi atualizado: ${this.state.kinship}');
 
         this.state.confirmaCrianca.forEach((crianca) => {
             if (crianca._id === identifier) {

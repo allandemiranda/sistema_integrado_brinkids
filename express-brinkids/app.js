@@ -20,7 +20,8 @@ const child = require('./routes/child-router');
 const employees = require('./routes/employees-router');
 const product = require('./routes/product-router');
 const extraServices = require('./routes/extra-services-router');
-const passport = require('./routes/passport-router')
+const passport = require('./routes/passport-router');
+const passportServices = require('./routes/passport-services-router');
 
 // Instanciando o objeto do express
 const app = express();
@@ -68,6 +69,7 @@ app.use('/employees', employees);
 app.use('/product', product);
 app.use('/extraServices', extraServices);
 app.use('/passport', passport);
+app.use('/passportServices', passportServices);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

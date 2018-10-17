@@ -249,8 +249,28 @@ class Passport extends React.Component {
         })
         alert("Cadastrado");
         console.log(this.state.arrayfinal);
+        this.TheEnd();
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM   
+    // Axios (versão unstable)
+        TheEnd = (event) => {
+        var formData = new FormData();
+
+        formData.append('time', String(new Date().getTime()));
+        formData.append('price', String(5));
+
+        axios.post('/passport', formData)
+        .then(function (response) {
+            console.log(response);
+            alert("Cadastro Finalizado");
+            window.location.href = '/'
+        }).catch(function (error) {
+            console.log(error); //LOG DE ERRO
+            console.log("Status do erro: " + error.response.status); //HTTP STATUS CODE
+            console.log("Dados do erro: " + error.response.data); //HTTP STATUS TEXT
+            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+        });
+    }
 
     // FUNÇOES DO BOTÃO VOLTART TELA - INICIO 
     // Voltar par Tela I
@@ -745,7 +765,7 @@ class Passport extends React.Component {
                     />
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>                        
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.comprovante}> Finalizar </button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
                     </div>
                 </div>
             )
