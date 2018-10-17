@@ -22,6 +22,7 @@ import SaidaCrianca from './components/Saidas/SaidaCrianca.js';
 import EntradaAniversario from './components/Aniversario/EntradaAniversario.js';
 import Gerador from './components/geradorf/Gerador_fun\u00E7oes.js';
 import SaidaServicosExtra from "./components/Serviços_Extras/SaidaServiçosExtra"
+import ServicoPassaporte from "./components/Servirços_Passaport/ServicoPassaport"
 
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -146,6 +147,12 @@ class App extends React.Component {
                   layout={MainLayout}
                   component={SaidaServicosExtra}
                 />                                    
+                <LayoutRoute
+                  exact
+                  path="/ServicoPassaporte"
+                  layout={MainLayout}
+                  component={ServicoPassaporte}
+                />
                                                                  
               <Redirect to="/" /> 
             </Switch>
