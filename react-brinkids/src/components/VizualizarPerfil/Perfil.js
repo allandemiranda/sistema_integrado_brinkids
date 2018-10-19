@@ -556,7 +556,6 @@ class Perfil extends React.Component {
                                         <p><b>Comentários:</b> {this.state.perfilAtual.cnh.comments}d</p>
                                         <p><b>Local de Emissão:</b> {this.state.perfilAtual.cnh.placeIssue}d</p>
                                         <p><b>Data de Emissão:</b> {this.state.perfilAtual.cnh.dateIssue }d</p>
-                                        
                                     </div>
                                 </div>
                             </div >
