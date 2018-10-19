@@ -51,3 +51,9 @@
     background-color: aqua !important;
     color: #000000;
 }
+.margin_radio_dinheiro{
+    margin-left: 50px !important;
+}
+.margin_radio_card{
+    margin-left: 40px !important;
+}

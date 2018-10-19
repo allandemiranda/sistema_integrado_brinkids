@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import update from 'react-addons-update';
+import moment from 'moment';
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -17,6 +18,8 @@ class SaidaCrianca extends React.Component {
             page: "FinalizarSaida",
             namebutton: "Proxima Criança",
             indice: 1,
+            FormPag: "",
+
             listAdultos: [],
             listCrianca: [],
             CriancasSelecionadas: [],
@@ -70,6 +73,7 @@ class SaidaCrianca extends React.Component {
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
+                    TimeAdult: Date.now(),
                     NameAdult: response.data.name,
                     PhoneAdult: response.data.prone,
                     CPFAdult: response.data.cpf,
@@ -192,6 +196,14 @@ class SaidaCrianca extends React.Component {
     Finalizar = (event) => {
         event.preventDefault();
         console.log("Entrei Aqui");
+        if(this.state.FormPag !== ""){
+            console.log(this.state.FormPag);
+        }
+        else {
+            alert("Selecione uma forma de pagamento");
+            return(0);
+        }
+        
     }
 
 
@@ -464,8 +476,14 @@ class SaidaCrianca extends React.Component {
                                 <div className = "graph">
                                     <div className="form-group">
                                         <div className="row">
-                                            <div className="col-md-12 col-sm-12 col-xs-12 text-center">
-                                                <label className="LetraFormulario">Forma de Pagamentro:</label>
+                                            <div className="col-md-6 col-sm-12 col-xs-12 text-center">
+                                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                                    <h5 className="ltTitulo"><b> Valor Final </b></h5>
+                                                    <p>{this.state.ValorAdult}</p>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6 col-sm-12 col-xs-12">
+                                                <label className="LetraFormulario brlabel">Forma de Pagamentro:</label>
                                                 <br></br>
                                                 <label className="radio-inline"><input type="radio" id="Dinheiro" name="FormPag" value="Dinheiro" onClick={this.ChangeValue} /><p className="LetraFormulario">  Dinheiro</p></label>
                                                 <label className="radio-inline"><input type="radio" id="Cartao" name="FormPag" value="Cartao" onClick={this.ChangeValue} /><p className="LetraFormulario">  Cartão</p></label>
