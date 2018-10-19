@@ -23,8 +23,7 @@ class SaidaCrianca extends React.Component {
             listAdultos: [],
             listCrianca: [],
             CriancasSelecionadas: [],
-            ValorCriancas: [],
-            ValorAdult: "",
+            listFinal: [],
             TimeAdult: "",
             NameAdult: "João",
             PhoneAdult: "900000000",
@@ -34,6 +33,7 @@ class SaidaCrianca extends React.Component {
 
             //Crianças
             ValorCria: "",
+            CodigoDecCria: "",
             NameCria: "",
             PhotoCria: "",
             IdadeCria: "",
@@ -115,7 +115,7 @@ class SaidaCrianca extends React.Component {
             if (crianca.children.id === identifier) {
                 console.log("Entrei aqui");
                 this.setState({
-                    CriancasSelecionadas: update(this.state.CriancasSelecionadas, { $push: [{Crianca:this.state.listCrianca[indice]}] })
+                    CriancasSelecionadas: update(this.state.CriancasSelecionadas, { $push: [this.state.listCrianca[indice]] })
                 })
             }
         });
@@ -124,23 +124,42 @@ class SaidaCrianca extends React.Component {
     ProximaTela = (event) => {
         event.preventDefault();
 
-        //Perguntar como vai funcionar essa parte do valor.
-        this.state.CriancasSelecionadas.Crianca.forEach((indice) =>{
-            this.setState({
-                CriancasSelecionadas: update(this.state.CriancasSelecionadas, { $push: [{Valor:this.state.ValorCriancas[indice]}] })
-            })
-        })
-
         if (this.state.CriancasSelecionadas.length > 0) {
             this.setState({
-                NameCria: this.state.CriancasSelecionadas[0].Crianca.children.name,
-                PhotoCria: this.state.CriancasSelecionadas[0].Crianca.photo,
-                IdadeCria: this.state.CriancasSelecionadas[0].Crianca.children.birthday,
-                TimeCria: this.state.CriancasSelecionadas[0].Crianca.time,
-                ObsCria: this.state.CriancasSelecionadas[0].Crianca.children.observations,
-                RetCria: this.state.CriancasSelecionadas[0].Crianca.children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[0].Crianca.service,
+                NameCria: this.state.CriancasSelecionadas[0].children.name,
+                PhotoCria: this.state.CriancasSelecionadas[0].photo,
+                IdadeCria: this.state.CriancasSelecionadas[0].children.birthday,
+                TimeCria: this.state.CriancasSelecionadas[0].time,
+                ObsCria: this.state.CriancasSelecionadas[0].children.observations,
+                RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
+                ProdutoCria: this.state.CriancasSelecionadas[0].service,
                 page: "MostraCrianca",
+            })
+            var formData = new FormData();
+            
+            formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
+            formData.append('TimeAdult', String(this.state.TimeAdult));
+            
+            axios.post(`/passport`,formData)
+            .then(function (response) {
+                axios.get(`/passport`)
+                .then(function (response) {
+                    this.setState({
+                        ValorCria: response.data,
+                    })
+                }).catch(function (error) {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro no Cadastro");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                alert("Erro no Cadastro");
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
         }
         else {
@@ -151,6 +170,30 @@ class SaidaCrianca extends React.Component {
     ProximaCria = () => {
         var i = this.state.indice;
         if(i < this.state.CriancasSelecionadas.length){
+            var formData = new FormData();            
+            formData.append('idCria', String(this.state.CriancasSelecionadas[i].children.id));
+            formData.append('TimeAdult', String(this.state.TimeAdult));           
+            axios.post(`/passport`,formData)
+            .then(function (response) {
+                axios.get(`/passport`)
+                .then(function (response) {
+                    this.setState({
+                        ValorCria: response.data,
+                    })
+                }).catch(function (error) {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro no Cadastro");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                alert("Erro no Cadastro");
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[i].Crianca.children.name,
                 PhotoCria: this.state.CriancasSelecionadas[i].Crianca.photo,
@@ -166,6 +209,7 @@ class SaidaCrianca extends React.Component {
             this.setState({
                 namebutton: "Finalizar",
             })
+            
         }
         if(i === this.state.CriancasSelecionadas.lengt){
             this.setState({
@@ -174,15 +218,58 @@ class SaidaCrianca extends React.Component {
         }
     }
 
-    VerificaDesconto = (Codigo) => {
+    VerificaDescontoFilhos = (Codigo) => {
+        this.setState({
+            listFinal: update(this.state.listFinal, { $push: [{ID:this.state.CriancasSelecionadas[(this.state.indice - 1)], HoraPai: this.state.TimeAdult, Desconto: Codigo}] }),
+            CodigoDecCria: Codigo,
+        })
+        axios.get(`/discount/filter/${Codigo}`)
+        .then((response) => {
+            alert("Desconto Validado")
+            this.setState({
+                listFinal: update(this.state.listFinal, { $push: [{ID:this.state.CriancasSelecionadas[(this.state.indice - 1)], HoraPai: this.state.TimeAdult, Desconto: Codigo}] }),
+                CodigoDecCria: Codigo,
+            })
+            var formData = new FormData();            
+            formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
+            formData.append('TimeAdult', String(this.state.TimeAdult));
+            formData.append('Desconto', String(this.state.CodigoDecCria));            
+            axios.post(`/passport`,formData)
+            .then(function (response) {
+                axios.get(`/passport`)
+                .then(function (response) {
+                    this.setState({
+                        ValorCria: response.data,
+                    })
+                }).catch(function (error) {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro no Cadastro");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                alert("Erro no Cadastro");
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
+            console.log(response.data);
+        }).catch((error) => {
+            console.log("Não deu certo");
+            console.log(error)//LOG DE ERRO
+            alert("Desconto não encontrado")
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+        })
+    }
+    VerificaDescontoPAi = (Codigo) => {
         axios.get(`/discount/filter/${Codigo}`)
         .then((response) => {
             alert("Desconto Validado")
             console.log(response.data);
-            this.setState({
-                ValorCria: "",
-                ValorAdult: "",
-            })
         }).catch((error) => {
             console.log("Não deu certo");
             console.log(error)//LOG DE ERRO
