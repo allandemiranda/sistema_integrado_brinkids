@@ -8,6 +8,7 @@ export default [
         address: { street: 'rua da dona vesa', number: 409, district: 'pais dos gatos', city: 'gatolandia', state: 'destrito dos gatos', country: 'gatinia', cep: 6666 },
         rg: 12039812309,
         sexuality: 'Masculino',
+        education:'zkjdskdjdk',
         cpf: '123098123',
         email: 'Gatinhobonitinho123@bol.com',
         nacionality: 'Koreano',
@@ -25,13 +26,49 @@ export default [
             placeIssue: 'sss',
         },
         kinship: {
-            fatherName: 'ccc',
-            motherName: 'dsfsfss'
+            fatherName: 'cccfffffffffffffffffffff',
+            motherName: 'dsfsfssffffffffffffffffff'
         },
-        birthplace:{
-            city:'dddd',
-            state:'safad',
-            
+        birthplace: {
+            city: 'dddd',
+            state: 'safad',
+
+        },
+        electionTitle: {
+            number: 'zfsdfsd',
+            zone: 'zfsdfsd',
+            section: 'zfsdfsd',
+            state: 'zfsdfsd',
+        },
+        militaryReservist: {
+            number: 'zfsdfsd',
+            series: 'dads',
+            category: 'dads',
+        },
+        passport: {
+            number: 'zfsdfsd',
+            type: 'asfa',
+            issuingCountry: 'asfa',
+            dateIssue: 'asfa',
+            expirationDate: 'asfa',
+        },
+        cnh: {
+            record: 'dsds',
+            category: 'dsds',
+            expirationDate: 'dsds',
+            comments: 'dsds',
+            placeIssue: 'dsds',
+            dateIssue: 'dsds',
+
+        },
+        employeeData: {
+            officialPosition: 'dsds',
+            admissionDate: 'dsds',
+            resignationDate: 'dsds',
+            reasonResignation: 'dsds',
+            record: 'dsds',
+            state: 'dsds',
+
         },
         __v: 0
     },

@@ -271,7 +271,7 @@ class Perfil extends React.Component {
                             </h3>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                    <br></br>
                                     {this.state.editar && (
                                         <div>
                                             <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
@@ -282,6 +282,7 @@ class Perfil extends React.Component {
                                             </button><br /></div>)
                                     }
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
+                                
                                 </div>
                                 <br></br>
                             </div>
@@ -296,16 +297,17 @@ class Perfil extends React.Component {
                                     <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
                                     <p>ffffffff</p>
                                 </div><br />
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.perfilAtual.name.firstName}</p>
+                                    </div><br></br>
                             </div>
 
                             <div className="row">
 
                                 <div className="col-md-12 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.perfilAtual.name.firstName}</p>
-                                    </div>
-                                    <br></br>
+                                    
+                                    
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
                                         <p>{this.state.perfilAtual.name.surName}</p>
@@ -448,7 +450,7 @@ class Perfil extends React.Component {
                             <div className="row">
 
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px", height: 128+'px' }}>
 
                                         <h5 className="ltTitulo" > <b>Educação:</b> </h5>
                                         
@@ -456,7 +458,7 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px", height: 128+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Parentesco:</b>  </h5>
 
@@ -465,7 +467,7 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px", height: 128+'px' }}>
 
                                         <h5 className="ltTitulo" > <b>Lugar de Origem:</b> </h5>
                                         
@@ -479,7 +481,7 @@ class Perfil extends React.Component {
 
                                 
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px",height: 255+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Carteira de trabalho:</b>  </h5>
 
@@ -492,11 +494,11 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px",height: 255+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Título de Eleitor:</b>  </h5>
 
-                                        <p><b>Numero:</b> {this.state.perfilAtual.electionTitleo.number}d</p>
+                                        <p><b>Numero:</b> {this.state.perfilAtual.electionTitle.number}d</p>
                                         <p><b>Zona:</b> {this.state.perfilAtual.electionTitle.zone}d</p>
                                         <p><b>Seção:</b> {this.state.perfilAtual.electionTitle.section}d</p>
                                         <p><b>Estado:</b> {this.state.perfilAtual.electionTitle.state}d</p>
@@ -504,7 +506,7 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px",height: 255+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Registro Geral:</b>  </h5>
 
@@ -520,18 +522,18 @@ class Perfil extends React.Component {
 
                                 
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px",height: 255+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Reservista:</b>  </h5>
 
                                         <p><b>Numero:</b> {this.state.perfilAtual.militaryReservist.number}d</p>
                                         <p><b>Series:</b> {this.state.perfilAtual.militaryReservist.series}d</p>
-                                        <p><b>Categoría:</b> {this.state.perfilAtual.militaryReservisto.category}d</p>
+                                        <p><b>Categoría:</b> {this.state.perfilAtual.militaryReservist.category}d</p>
                                        
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px",height: 255+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Passaporte:</b>  </h5>
 
@@ -544,7 +546,7 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <div className="graph" style={{ padding: 10 + "px",height: 255+'px' }}>
 
                                         <h5 className="ltTitulo" ><b>CNH:</b>  </h5>
 
