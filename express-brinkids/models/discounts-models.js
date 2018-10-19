@@ -6,6 +6,10 @@ const discountsSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  createdAt: {
+    type: Date,
+    require: true,
+  },
   description: {
     type: String,
     require: true,
@@ -42,12 +46,23 @@ const discountsSchema = new mongoose.Schema({
     statusUnique: String,
     statusUniqueDate: Date,
     statusUniqueUser: String,
-    statusBroadlUser: {
+    statusBroadlUser: [{
       idUser: String,
       dateUser: Date,
-    },
+    }],
   },
 });
+
+discountsSchema.statics.discountsGenerateToday = function () {
+  const today = new Date();
+
+  return this.count({
+    createdAt: {
+      $gte: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+      $lt: today.setDate(today.getDate() + 1),
+    },
+  });
+};
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
 const Discount = mongoose.model('Discount', discountsSchema);
