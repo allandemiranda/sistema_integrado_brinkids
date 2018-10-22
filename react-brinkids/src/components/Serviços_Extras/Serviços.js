@@ -108,12 +108,12 @@ class Servico extends React.Component {
             type: this.state.Tipo,
             unidade: this.state.Quant,
         }
-        axios.put(`/extraServices${this.state.perfilAtual._id}`)
+        axios.put(`/extraServices/${listaTemporaria[this.state.indice]._id}`, data)
             .then((response) => {
 
 
                 console.log(response.data);
-                this.setState({ lista: response.data });
+
             })
             .catch((err) => console.log(err));
         this.setState({
@@ -128,6 +128,16 @@ class Servico extends React.Component {
     }
     excluir(event, indice) {
         let listaTemporaria = this.state.lista;
+
+       
+        axios.put(`/extraServices/${listaTemporaria[event]._id}`)
+        .then((response) => {
+
+
+            console.log(response.data);
+
+        })
+        .catch((err) => console.log(err));
         listaTemporaria.splice(event, 1);
         this.setState({
             lista: listaTemporaria,
@@ -140,8 +150,8 @@ class Servico extends React.Component {
         this.setState({
             Nome: this.state.lista[event].name,
             Tipo: this.state.lista[event].type,
-            Text: this.state.lista[event].preco,
-            Quant: this.state.lista[event].unidade,
+            Text: this.state.lista[event].text,
+            Quant: this.state.lista[event].quantity,
             page: 'Editar',
             indice: event,
         })
@@ -197,8 +207,8 @@ class Servico extends React.Component {
                                                 <th scope="row">{(indice + 1)}</th>
                                                 <td>{servico.name}</td>
                                                 <td>{servico.type}</td>
-                                                <td>{servico.unidade}</td>
-                                                <td>{servico.preco}</td>
+                                                <td>{servico.text}</td>
+                                                <td>{servico.quantity}</td>
                                                 <td><button onClick={() => this.editar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
 
                                             </tr>
@@ -307,14 +317,14 @@ class Servico extends React.Component {
                                 <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{ width: 10 + '%' }} >ValorP/unid:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
 
-                                        <input type="number" id='forms' onChange={this.changueUnidade} value={this.state.Text} size='5' min='0' max='999' step=".50" />
+                                        <input type="number" id='forms' onChange={this.changueUnidade} value={this.state.Quant} size='5' min='0' max='999' step=".50" />
                                     </div>
                                 </div>
                                 <br></br>
 
                                 <div className="row" >  <p className="col-md-2 col-sm-8 col-xs-12" style={{ width: 10 + '%' }}>Unidade:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
-                                        <input type="text" id='forms' onChange={this.changueQuant} value={this.state.Quant} size='10' />
+                                        <input type="text" id='forms' onChange={this.changueQuant} value={this.state.Text} size='10' />
                                     </div>
                                 </div>
                                 <br></br>
