@@ -2,7 +2,8 @@ import React from 'react';
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import TypesInput from '../TypesInput.js';
-import './estilo.css'
+import './estilo.css';
+import axios from 'axios';
 
 class Servico extends React.Component {
     constructor(props) {
@@ -68,6 +69,17 @@ class Servico extends React.Component {
             Quant: '',
         })
     }
+    componentWillMount() {
+        
+        axios.get('/extraServices')
+          .then((response) => {
+            
+            
+            console.log(response.data);
+            this.setState({ lista: response.data });
+          })
+          .catch((err) => console.log(err));
+      }
     Salvar2(event){
         let listaTemporaria = this.state.lista;
         listaTemporaria[this.state.indice].name = this.state.Nome;

@@ -9,6 +9,7 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 
+var foto; 
 class PerfilAdulto extends React.Component {
     constructor(props) {
         super(props)
@@ -18,7 +19,7 @@ class PerfilAdulto extends React.Component {
             listaFuncionarios: listaa,
             //lista de funcionarios apos a busca pelo nome
             list: [],
-            listaAdultos:[],
+            listaAdultos: [],
             //Funcionario selecionado para vizualizar o perfil
             perfilAtual: [],
             //barra de busca
@@ -45,9 +46,10 @@ class PerfilAdulto extends React.Component {
             numero: '',
             endereco: '',
 
-            childSearch:'',
+            childSearch: '',
             confirmaCrianca: [],
-            kinship:'Outros',
+            kinship: 'Outros',
+            photo:'',
 
         }
         //funçoes para mudar os values e afins
@@ -77,10 +79,16 @@ class PerfilAdulto extends React.Component {
         this.Changekinship = this.Changekinship.bind(this);
         this.TheEnd = this.TheEnd.bind(this);
         this.Adicionar = this.Adicionar.bind(this);
+        this.mudarfoto = this.mudarfoto.bind(this);
     }
-    Adicionar(event){
+    mudarfoto(event){
         this.setState({
-            page:'Adicionar',
+            photo:event,
+        })
+    }
+    Adicionar(event) {
+        this.setState({
+            page: 'Adicionar',
         })
     }
     changuePassword(event) {
@@ -89,7 +97,7 @@ class PerfilAdulto extends React.Component {
         })
     }
     //lembrar de terminar as funçoes changue
-    ChangechildSearch(event){this.setState({childSearch: event.target.value})}
+    ChangechildSearch(event) { this.setState({ childSearch: event.target.value }) }
     changueObs(event) { this.setState({ obs: event.target.value }) }
     changueBairro(event) { this.setState({ bairro: event.target.value }) }
     changueCep(event) { this.setState({ cep: event.target.value }) }
@@ -104,42 +112,72 @@ class PerfilAdulto extends React.Component {
     changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-            this.state.perfilAtual.observations = this.state.obs,
-            this.state.perfilAtual.address.number = this.state.numero,
-            this.state.perfilAtual.address.state = this.state.estado,
-            this.state.perfilAtual.address.district = this.state.bairro,
-            this.state.perfilAtual.phone = this.state.phone,
-            this.state.perfilAtual.address.city = this.state.cidade,
-            this.state.perfilAtual.address.cep = this.state.cep,
-            this.state.perfilAtual.email = this.state.email,
-            this.state.perfilAtual.address.street = this.state.endereco,
-            this.state.perfilAtual.address.country = this.state.pais,
-            this.setState({
+        const modifiedDate = {
+            observations: this.state.obs,
+            phone: this.state.phone,
+            email: this.state.email,
+            file:foto,
+                address:[{
+                number: this.state.numero,
+                state: this.state.estado,
+                district: this.state.bairro,
 
-                editar: false,
+                city: this.state.cidade,
+                cep: this.state.cep,
+
+                street: this.state.endereco,
+                country: this.state.pais,
+            }]
+
+        };
+        //this.state.perfilAtual.observations = this.state.obs,
+        //this.state.perfilAtual.address.number = this.state.numero,
+        //this.state.perfilAtual.address.state = this.state.estado,
+        //this.state.perfilAtual.address.district = this.state.bairro,
+        //this.state.perfilAtual.phone = this.state.phone,
+        //this.state.perfilAtual.address.city = this.state.cidade,
+        //this.state.perfilAtual.address.cep = this.state.cep,
+        //this.state.perfilAtual.email = this.state.email,
+        //this.state.perfilAtual.address.street = this.state.endereco,
+        //this.state.perfilAtual.address.country = this.state.pais,
+
+
+        axios.put(`adult/${this.state.perfilAtual._id}`, modifiedDate)
+            .then((response) => {
+
+                // (Gabriel): Renderize a alteração e só se tudo der certo feche o modal
 
             })
+            .catch((err) => console.log(err));
+        this.setState({
+
+            editar: false,
+
+        })
     }
     //função que alterna as paginas
     async ChangePage(event) {
-        try {
-            const dadosCriancas = this.state.perfilAtual.children.map(async (child) => {
-                const childResponse = await axios.get(`/child/identifier/${child.identifier}`);
-                return childResponse;
-            });
-
-            
-        } catch (err) {
-            console.log(err);
-        }
         this.setState(
             {
                 perfilEdicao: event,
                 perfilAtual: event,
                 reserva: event,
                 page: 'Perfil'
-            })
+            });
+        console.log(event);
+        try {
+            const dadosCriancas = this.state.perfilAtual.children.map(async (child) => {
+                const childResponse = await axios.get(`/child/identifier/${child.identifier}`);
+                return childResponse;
+            });
 
+
+        } catch (err) {
+            console.log(err);
+
+        }
+
+        console.log(this.state.perfilEdicao, this.state.perfilAtual);
 
     }
     voltar(event) {
@@ -165,16 +203,16 @@ class PerfilAdulto extends React.Component {
         });
 
         this.setState({
-            obs: this.state.perfilEdicao.observations,
-            numero: this.state.perfilEdicao.address.number,
-            estado: this.state.perfilEdicao.address.state,
-            bairro: this.state.perfilEdicao.address.district,
-            phone: this.state.perfilEdicao.phone,
-            cidade: this.state.perfilEdicao.address.city,
-            cep: this.state.perfilEdicao.address.cep,
-            email: this.state.perfilEdicao.email,
-            endereco: this.state.perfilEdicao.address.street,
-            pais: this.state.perfilEdicao.address.country,
+            obs: this.state.perfilAtual.observations,
+            numero: this.state.perfilAtual.address[0].number,
+            estado: this.state.perfilAtual.address[0].state,
+            bairro: this.state.perfilAtual.address[0].district,
+            phone: this.state.perfilAtual.phone,
+            cidade: this.state.perfilAtual.address[0].city,
+            cep: this.state.perfilAtual.address[0].cep,
+            email: this.state.perfilAtual.email,
+            endereco: this.state.perfilAtual.address[0].street,
+            pais: this.state.perfilAtual.address[0].country,
         })
 
     }
@@ -191,6 +229,7 @@ class PerfilAdulto extends React.Component {
         // });
         axios.get(`/adult/filter/${this.state.selectedSearch}/nome`)
             .then((response) => {
+                console.log(this.state.selectedSearch);
                 console.log(response.data);
                 this.setState({ list: response.data });
             }).catch((err) => {
@@ -233,10 +272,10 @@ class PerfilAdulto extends React.Component {
             });
         }
 
-        this.setState({confirmaCrianca: this.state.confirmaCrianca});
+        this.setState({ confirmaCrianca: this.state.confirmaCrianca });
     }
-    Changekinship(evento, identifier){
-        this.setState({kinship: evento.target.value})
+    Changekinship(evento, identifier) {
+        this.setState({ kinship: evento.target.value })
 
         console.log(`O estado foi atualizado: ${this.state.kinship}`)
 
@@ -246,13 +285,13 @@ class PerfilAdulto extends React.Component {
             }
         });
 
-        this.setState({confirmaCrianca: this.state.confirmaCrianca});
+        this.setState({ confirmaCrianca: this.state.confirmaCrianca });
     }
-    TheEnd(event){
-        this.state.perfilAtual.crianca.push({Nome:'joao', parentesco:'tio avoss',id:1});
+    TheEnd(event) {
+        this.state.perfilAtual.crianca.push({ Nome: 'joao', parentesco: 'tio avoss', id: 1 });
         console.log(this.state.perfilAtual.children);
         this.setState({
-            page:'Perfil',
+            page: 'Perfil',
         })
     }
     render() {
@@ -330,6 +369,8 @@ class PerfilAdulto extends React.Component {
                             reader.onload = function (e) {
 
                                 fotopreview.src = e.target.result;
+                                foto = e.target.result;
+                                
 
                             }
 
@@ -337,6 +378,7 @@ class PerfilAdulto extends React.Component {
                         }
 
                     }
+                   
                 }, 100);
             }
             const byCrianca = function (events, index) {
@@ -364,7 +406,7 @@ class PerfilAdulto extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
+                        <h3 className="inner-tittle" > Vizualizar Perfil Adulto </h3>
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
@@ -373,18 +415,18 @@ class PerfilAdulto extends React.Component {
                             </h3>
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" >
-                                    <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                    <h5 className="ltTitulo"><b>  </b></h5>
                                     {this.state.editar && (
                                         <div>
                                             <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
                                                 Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                <input id="tipofile" type="file" name="foto" value="" />
+                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button>
                                         </div>)
                                     }
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
+                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
 
                                 </div>
                                 <br></br>
@@ -421,7 +463,7 @@ class PerfilAdulto extends React.Component {
                                 {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
                                     Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
-                                    
+
                                 </label>
                                 </button>)}
                             </div>
@@ -605,8 +647,8 @@ class PerfilAdulto extends React.Component {
 
             );
         }
-        if (this.state.page === 'Adicionar'){
-            return(
+        if (this.state.page === 'Adicionar') {
+            return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -638,7 +680,7 @@ class PerfilAdulto extends React.Component {
                                 </thead>
 
                                 <tbody>
-                                    {this.state.list.map((findChild,indice) => {
+                                    {this.state.list.map((findChild, indice) => {
                                         return (
                                             <tr key={findChild._id}>
                                                 <th scope="row">{indice}</th>
@@ -655,36 +697,36 @@ class PerfilAdulto extends React.Component {
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cancelar</a>
                                 <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
-                                <button className="btn btn-md botao botaoAvançar" onClick={()=>this.setState({page:'ConfirmarCriança'})}> Adicinar Criança </button>
+                                <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'ConfirmarCriança' })}> Adicinar Criança </button>
                             </div>
                         </div>
                     </div>
                 </div>
             );
         }
-        if(this.state.page === 'ConfirmarCriança'){
-            return(
-                <div className = "container-fluid">
+        if (this.state.page === 'ConfirmarCriança') {
+            return (
+                <div className="container-fluid">
 
-                     <div className="graph-visual" >
-                    <br></br>
-                    <br></br>
-                    <div className="graph" >
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th >Nome</th>
-                                    <th >Idade</th>
-                                    <th >RG</th>
-                                    <th className="text-center"> Parentesco </th>
+                    <div className="graph-visual" >
+                        <br></br>
+                        <br></br>
+                        <div className="graph" >
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th >Nome</th>
+                                        <th >Idade</th>
+                                        <th >RG</th>
+                                        <th className="text-center"> Parentesco </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.confirmaCrianca.map((findChild,indice) => {
-                                       return (
+                                    {this.state.confirmaCrianca.map((findChild, indice) => {
+                                        return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indice+1}</th>
+                                                <th scope="row">{indice + 1}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
@@ -707,7 +749,7 @@ class PerfilAdulto extends React.Component {
                     </div>
                     <br></br>
                     <div className="text-center">
-                        <button className="btn btn-md botao" onClick = {this.VoltaparaFormulario}>Voltar</button>
+                        <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TheEnd}>Finalizar</button>
                     </div>
                 </div>

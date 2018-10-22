@@ -281,7 +281,7 @@ class Perfil extends React.Component {
                                             </label>
                                             </button><br /></div>)
                                     }
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
+                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                 
                                 </div>
                                 <br></br>
