@@ -4,7 +4,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
-
+import axios from 'axios';
 
 
 class Perfil extends React.Component {
@@ -17,11 +17,11 @@ class Perfil extends React.Component {
             //lista de funcionarios apos a busca pelo nome
             list: [],
             //Funcionario selecionado para vizualizar o perfil
-            perfilAtual: listaa[0],
+            perfilAtual: listaa,
             //barra de busca
             selectedSearch: '',
             //tipo da pagina 'Busca' ou 'Perfil'
-            page: 'Perfil',
+            page: 'Busca',
             //n tem uma função especifica mas o universo não aceita funcionar sem ele
             flut: true,
             //Aparecer as opçoes quando clikar em editar
@@ -150,7 +150,7 @@ class Perfil extends React.Component {
 
     }
     SearchFuncionario(event) {
-        const lista = [];
+        /*const lista = [];
         this.setState({ list: [] });
         this.state.listaFuncionarios.forEach(element => {
 
@@ -159,7 +159,15 @@ class Perfil extends React.Component {
                 lista.push(element);
                 this.setState({ list: lista });
             }
-        });
+        });*/
+        axios.get(`/employees/filter/${this.state.selectedSearch}`)
+            .then((response) => {
+                console.log(this.state.selectedSearch);
+                console.log(response.data);
+                this.setState({ list: response.data });
+            }).catch((err) => {
+                console.log(err);
+            });
 
     }
     ChangeSearch(event) {
@@ -277,7 +285,7 @@ class Perfil extends React.Component {
                                             <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
                                                 Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                <input id="tipofile" type="file" name="foto" value="" />
+                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button><br /></div>)
                                     }

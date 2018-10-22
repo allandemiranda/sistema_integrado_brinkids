@@ -4,9 +4,9 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
+import axios from 'axios';
 
-
-
+var foto;
 class PerfilCrianca extends React.Component {
     constructor(props) {
         super(props)
@@ -32,15 +32,7 @@ class PerfilCrianca extends React.Component {
             perfilEdicao: [],
 
             obs: '',
-            email: '',
-            phone: '',
-            estado: '',
-            pais: '',
-            bairro: '',
-            cep: '',
-            cidade: '',
-            numero: '',
-            endereco: '',
+            
 
         }
         //funçoes para mudar os values e afins
@@ -52,54 +44,21 @@ class PerfilCrianca extends React.Component {
         this.editavel = this.editavel.bind(this);
 
         this.changueObs = this.changueObs.bind(this);
-        this.changueCep = this.changueCep.bind(this);
-        this.changueEndereco = this.changueEndereco.bind(this);
-        this.changueBairro = this.changueBairro.bind(this);
-        this.changueCidade = this.changueCidade.bind(this);
-        this.changueEstado = this.changueEstado.bind(this);
-        this.changuePais = this.changuePais.bind(this);
-        this.changueNumero = this.changueNumero.bind(this);
-        this.changueEmail = this.changueEmail.bind(this);
-        this.changuePhone = this.changuePhone.bind(this);
+
 
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
 
-        this.changuePassword = this.changuePassword.bind(this);
-        this.changueSenha = this.changueSenha.bind(this);
-        this.changueSenhaAtual = this.changueSenhaAtual.bind(this);
+
     }
-    changuePassword(event) {
-        this.setState({
-            page: 'Senha',
-        })
-    }
+
     //lembrar de terminar as funçoes changue
     changueObs(event) { this.setState({ obs: event.target.value }) }
-    changueBairro(event) { this.setState({ bairro: event.target.value }) }
-    changueCep(event) { this.setState({ cep: event.target.value }) }
-    changueEndereco(event) { this.setState({ endereco: event.target.value }) }
-    changueCidade(event) { this.setState({ cidade: event.target.value }) }
-    changueEstado(event) { this.setState({ estado: event.target.value }) }
-    changuePais(event) { this.setState({ pais: event.target.value }) }
-    changueNumero(event) { this.setState({ numero: event.target.value }) }
-    changueEmail(event) { this.setState({ email: event.target.value }) }
-    changuePhone(event) { this.setState({ phone: event.target.value }) }
-    changueSenha(event) { this.setState({ senhaNova: event.target.value }) }
-    changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
         this.state.perfilAtual.observations = this.state.obs,
-            this.state.perfilAtual.address.number = this.state.numero,
-            this.state.perfilAtual.address.state = this.state.estado,
-            this.state.perfilAtual.address.district = this.state.bairro,
-            this.state.perfilAtual.phone = this.state.phone,
-            this.state.perfilAtual.address.city = this.state.cidade,
-            this.state.perfilAtual.address.cep = this.state.cep,
-            this.state.perfilAtual.email = this.state.email,
-            this.state.perfilAtual.address.street = this.state.endereco,
-            this.state.perfilAtual.address.country = this.state.pais,
+           
             this.setState({
 
                 editar: false,
@@ -142,20 +101,11 @@ class PerfilCrianca extends React.Component {
 
         this.setState({
             obs: this.state.perfilEdicao.observations,
-            numero: this.state.perfilEdicao.address.number,
-            estado: this.state.perfilEdicao.address.state,
-            bairro: this.state.perfilEdicao.address.district,
-            phone: this.state.perfilEdicao.phone,
-            cidade: this.state.perfilEdicao.address.city,
-            cep: this.state.perfilEdicao.address.cep,
-            email: this.state.perfilEdicao.email,
-            endereco: this.state.perfilEdicao.address.street,
-            pais: this.state.perfilEdicao.address.country,
         })
 
     }
     SearchFuncionario(event) {
-        const lista = [];
+        /*onst lista = [];
         this.setState({ list: [] });
         this.state.listaFuncionarios.forEach(element => {
 
@@ -164,7 +114,15 @@ class PerfilCrianca extends React.Component {
                 lista.push(element);
                 this.setState({ list: lista });
             }
-        });
+        });*/
+        axios.get(`/child/filter/${this.state.selectedSearch}`)
+            .then((response) => {
+                console.log(this.state.selectedSearch);
+                console.log(response.data);
+                this.setState({ list: response.data });
+            }).catch((err) => {
+                console.log(err);
+            });
 
     }
     ChangeSearch(event) {
@@ -245,6 +203,7 @@ class PerfilCrianca extends React.Component {
 
                             reader.onload = function (e) {
                                 fotopreview.src = e.target.result;
+                                foto = e.target.result;
                             }
 
                             reader.readAsDataURL(files[0]);
@@ -282,11 +241,11 @@ class PerfilCrianca extends React.Component {
                                             <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
                                                 Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                <input id="tipofile" type="file" name="foto" value="" />
+                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button><br /></div>)
                                     }
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src='https://i.pinimg.com/originals/12/74/4e/12744effc2ecc1d84ca7d7e01f9c6bc5.jpg' />
+                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
 
                                 </div>
                                 <br></br>
@@ -341,17 +300,7 @@ class PerfilCrianca extends React.Component {
                                     </div>
                                 </div>
                             </div>
-
-
-
-
-
-
                             <br></br>
-
-
-
-
                             <div className="row">
 
                                 <div className="graph" >
