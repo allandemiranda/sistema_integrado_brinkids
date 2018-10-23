@@ -147,8 +147,8 @@ class PerfilAdulto extends React.Component {
             observations: this.state.obs,
             phone: this.state.phone,
             email: this.state.email,
-            photo:  this._dataURItoBlob(foto),
-                address:[{
+            photo:  foto,
+            address: {
                 number: this.state.numero,
                 state: this.state.estado,
                 district: this.state.bairro,
@@ -158,11 +158,27 @@ class PerfilAdulto extends React.Component {
 
                 street: this.state.endereco,
                 country: this.state.pais,
-            }]
-
+            }
         };
 
-        axios.put(`adult/${this.state.perfilAtual._id}`, modifiedDate)
+        var formData = new FormData();
+
+        console.log(`Foto: ${this._dataURItoBlob(foto)}`)
+
+        formData.append('observations', this.state.obs);
+        formData.append('phone', this.state.phone);
+        formData.append('photo', this._dataURItoBlob(foto));
+        formData.append('number', this.state.numero);
+        formData.append('state', this.state.estado);
+        formData.append('district', this.state.bairro);
+        formData.append('city', this.state.cidade);
+        formData.append('cep', this.state.cep);
+        formData.append('street', this.state.endereco);
+        formData.append('country', this.state.pais);
+
+        console.log(`Numero: ${this.state.numero}`);
+
+        axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
 
 
@@ -224,15 +240,15 @@ class PerfilAdulto extends React.Component {
 
         this.setState({
             obs: this.state.perfilAtual.observations,
-            numero: this.state.perfilAtual.address[0].number,
-            estado: this.state.perfilAtual.address[0].state,
-            bairro: this.state.perfilAtual.address[0].district,
+            numero: this.state.perfilAtual.address.number,
+            estado: this.state.perfilAtual.address.state,
+            bairro: this.state.perfilAtual.address.district,
             phone: this.state.perfilAtual.phone,
-            cidade: this.state.perfilAtual.address[0].city,
-            cep: this.state.perfilAtual.address[0].cep,
+            cidade: this.state.perfilAtual.address.city,
+            cep: this.state.perfilAtual.address.cep,
             email: this.state.perfilAtual.email,
-            endereco: this.state.perfilAtual.address[0].street,
-            pais: this.state.perfilAtual.address[0].country,
+            endereco: this.state.perfilAtual.address.street,
+            pais: this.state.perfilAtual.address.country,
         })
 
     }
@@ -580,21 +596,21 @@ class PerfilAdulto extends React.Component {
                                 <div className="col-md-6 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Endereço: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].street}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.street}</p>)}
                                         {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-10">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Bairro: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].district}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.district}</p>)}
                                         {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.bairro} onChange={this.changueBairro} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-2 col-sm-2">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Número: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].number}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.number}</p>)}
                                         {this.state.editar && (<input className="form-control" style={{ float: 'none' }} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
                                     </div>
                                 </div>
@@ -606,28 +622,28 @@ class PerfilAdulto extends React.Component {
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> CEP: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].cep}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.cep}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Cidade: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].city}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.city}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.cidade} onChange={this.changueCidade} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Estado: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].state}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.state}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> País: </b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.address[0].country}</p>)}
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.address.country}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
                                     </div>
                                 </div>

@@ -8,9 +8,9 @@ const config = require('../config');
 
 const router = express.Router();
 
-function teste(json, res) {
-  console.log(json);
-  return res.status(200).json(json);
+function teste(err, res) {
+  console.log(err);
+  return res.status(500);
 }
 
 // Rota responsável por realizar a pesquisa dos adultos no sistema
@@ -46,7 +46,7 @@ router.get('/filter/:search/:type', (req, res) => {
   }
 
   // Executa a consulta e devolve o status HTTP da requisição
-  query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
+  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
 router.get('/', (req, res) => {
@@ -153,51 +153,38 @@ router.get('/:identifier', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
-  if (req.files.file
-      && req.body.phone
-      && req.body.email
-      && req.body.street
-      && req.body.district
-      && req.body.number
-      && req.body.cep
-      && req.body.city
-      && req.body.state
-      && req.body.country
-      && req.body.observations) {
-    try {
-      const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
-        $set: {
-          phone: req.body.phone,
-          email: req.body.email,
-          address: {
-            street: req.body.street,
-            district: req.body.district,
-            number: parseInt(req.body.number, 10),
-            cep: req.body.cep,
-            city: req.body.city,
-            state: req.body.state,
-            country: req.body.country,
-          },
-          observations: req.body.observations,
+  try {
+    const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
+      $set: {
+        phone: req.body.phone,
+        email: req.body.email,
+        address: {
+          street: req.body.street,
+          district: req.body.district,
+          number: parseInt(req.body.number, 10),
+          cep: req.body.cep,
+          city: req.body.city,
+          state: req.body.state,
+          country: req.body.country,
         },
-      });
-      const photo = req.files.file;
+        observations: req.body.observations,
+      },
+    });
 
-      if (!adultModified) {
-        return res.sendStatus(404);
-      }
+    const photo = req.files.photo;
 
-      photo.mv(
-        adultModified.photo, // Nome do arquivo
-        errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),
-      );
-    } catch (err) {
-      console.log(err);
-      return res.sendStatus(500);
+    if (!adultModified) {
+      return res.sendStatus(404);
     }
-  }
 
-  return res.sendStatus(400);
+    return photo.mv(
+      adultModified.photo, // Nome do arquivo
+      errFile => (errFile ? teste(errFile, res) : res.sendStatus(204)),
+    );
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
 });
 
 module.exports = router;

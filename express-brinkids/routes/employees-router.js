@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
     }
 
     const employee = new Employees({
-      functions: ['Trabalho1', 'trabalho2'],
+      functions: [],
       gender: req.body.gender,
       education: req.body.education,
       kinship: {

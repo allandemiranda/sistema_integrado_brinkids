@@ -158,4 +158,25 @@ router.post('/', (req, res) => {
   }
 });
 
+router.put('/', async (req, res) =>  {
+  if (req.files
+      && req.body.observations
+      && req.body.identifier) {
+    const child = await Child.findByIdAndUpdate(
+      req.body.identifier,
+      {
+        observations: req.body.observations,
+      },
+    );
+
+    req.files.file.mv(child.photo, (errMvFile) => {
+      if (errMvFile) {
+        return res.sendStatus(500);
+      }
+
+      return res.sendStatus(201);
+    });
+  }
+});
+
 module.exports = router;

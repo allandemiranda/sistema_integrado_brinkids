@@ -224,6 +224,7 @@ class Passport extends React.Component {
             page: "ConfirmKids",
             obs: this.state.listConfirmKids[0].observations,
             rest: this.state.listConfirmKids[0].restrictions,
+            file: Array(this.state.listConfirmKids.length),
         })
     }
 
@@ -313,21 +314,31 @@ class Passport extends React.Component {
     setRef = (webcam) => {
         this.webcam = webcam;
     }
-    capture = (event, identifier) => {      
+    capture = (event, identifier, indice_da_foto) => {      
         event.preventDefault();
-        var imagem = document.querySelector("#imagem");
-        const imageSrc = this.webcam.getScreenshot();
-        imagem.src = imageSrc;
-        this.imageBase64 = imageSrc;
-        this.setState({
-            file: imageSrc
-        })
 
-        this.state.listConfirmKids.map((kids, identifier) => {
-            if (kids._id === identifier){
-                kids.fotoFamily = file;
+        /*
+        (Gabriel): Este código pega a foto e liga para a criança específica.
+        Primeiro, selecionamos todas as imagens de dentro do DOM -> #1
+        Segundo, Pegamos a foto e armazenamos para trabalhar com ela -> #2
+        Terceiro, inserimos a foto dentro do HTML específico dela -> #3
+        Quarto, Relacionamos a foto com a sua criança -> #4
+        Quinto, Alteramos seu valor no estado e renderizamos na tela -> #5
+        */
+        var imagem = document.querySelectorAll("#imagem"); // #1
+        const imageSrc = this.webcam.getScreenshot(); // #2
+        imagem[indice_da_foto].src = imageSrc; // #3
+
+        this.state.listConfirmKids.map((kid, indice) => { // #4
+            console.log(identifier);
+            if (kid._id === identifier){
+                kid.fotoFamily = this.state.file[indice_da_foto];
             }
         })
+
+        const novaListaCriancas = this.state.listConfirmKids;
+
+        this.setState({listConfirmKids: novaListaCriancas}); // #5
 
     };
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
@@ -623,11 +634,11 @@ class Passport extends React.Component {
                                                                 screenshotFormat="image/png"
                                                                 width={320}
                                                             />
-                                                            <button className="btn btn-md botao" onClick={(event) => {this.capture(event, Criançasqueentrarao._id)}}>Tirar Foto</button>
+                                                            <button className="btn btn-md botao" onClick={(event) => {this.capture(event, Criançasqueentrarao._id, indice)}}>Tirar Foto</button>
                                                             <br></br>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                                            <img id="imagem" className="webcan" src={this.state.file} />
+                                                            <img id="imagem" className="webcan" src={Criançasqueentrarao.fotoFamily} />
                                                         </div>
                                                     </div>
                                                 </div >

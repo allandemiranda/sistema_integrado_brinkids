@@ -130,7 +130,7 @@ class Servico extends React.Component {
         let listaTemporaria = this.state.lista;
 
        
-        axios.put(`/extraServices/${listaTemporaria[event]._id}`)
+        axios.delete(`/extraServices/${listaTemporaria[event]._id}`)
         .then((response) => {
 
 
