@@ -322,6 +322,13 @@ class Passport extends React.Component {
         this.setState({
             file: imageSrc
         })
+
+        this.state.listConfirmKids.map((kids, identifier) => {
+            if (kids._id === identifier){
+                kids.fotoFamily = file;
+            }
+        })
+
     };
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
 
