@@ -15,7 +15,7 @@ class SaidaCrianca extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            page: "FinalizarSaida",
+            page: "Adultos",
             namebutton: "Proxima Criança",
             indice: 1,
             FormPag: "",
@@ -23,7 +23,8 @@ class SaidaCrianca extends React.Component {
             listAdultos: [],
             listCrianca: [],
             CriancasSelecionadas: [],
-            listFinal: [],
+            ValorCria: [],
+            ValorCriaDesc: [],
             TimeAdult: "",
             NameAdult: "João",
             PhoneAdult: "900000000",
@@ -32,7 +33,6 @@ class SaidaCrianca extends React.Component {
             PhotoAdult: "",
 
             //Crianças
-            ValorCria: "",
             CodigoDecCria: "",
             NameCria: "",
             PhotoCria: "",
@@ -41,6 +41,12 @@ class SaidaCrianca extends React.Component {
             ObsCria: "",
             RetCria: "",
             ProdutoCria: "",
+
+            //Ultima Tela
+            TotalValor: "0",
+            TotalValorDesc: "0",
+            FinalValor: "0",
+
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -54,6 +60,7 @@ class SaidaCrianca extends React.Component {
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
+                alert("Nenhum Adulto está com criança na loja");
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
@@ -136,17 +143,24 @@ class SaidaCrianca extends React.Component {
                 page: "MostraCrianca",
             })
             var formData = new FormData();
-            
+
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
             formData.append('TimeAdult', String(this.state.TimeAdult));
-            
-            axios.post(`/passport`,formData)
-            .then(function (response) {
-                axios.get(`/passport`)
+
+            axios.post(`/passport`, formData)
                 .then(function (response) {
-                    this.setState({
-                        ValorCria: response.data,
-                    })
+                    axios.get(`/passport`)
+                        .then(function (response) {
+                            this.setState({
+                                ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                            })
+                        }).catch(function (error) {
+                            console.log(error)//LOG DE ERRO
+                            alert("Erro no Cadastro");
+                            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                        })
                 }).catch(function (error) {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
@@ -154,13 +168,6 @@ class SaidaCrianca extends React.Component {
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 })
-            }).catch(function (error) {
-                console.log(error)//LOG DE ERRO
-                alert("Erro no Cadastro");
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            })
         }
         else {
             alert("Selecione Alguma Criança");
@@ -169,17 +176,24 @@ class SaidaCrianca extends React.Component {
 
     ProximaCria = () => {
         var i = this.state.indice;
-        if(i < this.state.CriancasSelecionadas.length){
-            var formData = new FormData();            
+        if (i < this.state.CriancasSelecionadas.length) {
+            var formData = new FormData();
             formData.append('idCria', String(this.state.CriancasSelecionadas[i].children.id));
-            formData.append('TimeAdult', String(this.state.TimeAdult));           
-            axios.post(`/passport`,formData)
-            .then(function (response) {
-                axios.get(`/passport`)
+            formData.append('TimeAdult', String(this.state.TimeAdult));
+            axios.post(`/passport`, formData)
                 .then(function (response) {
-                    this.setState({
-                        ValorCria: response.data,
-                    })
+                    axios.get(`/passport`)
+                        .then(function (response) {
+                            this.setState({
+                                ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                            })
+                        }).catch(function (error) {
+                            console.log(error)//LOG DE ERRO
+                            alert("Erro no Cadastro");
+                            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                        })
                 }).catch(function (error) {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
@@ -187,13 +201,6 @@ class SaidaCrianca extends React.Component {
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 })
-            }).catch(function (error) {
-                console.log(error)//LOG DE ERRO
-                alert("Erro no Cadastro");
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            })
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[i].Crianca.children.name,
                 PhotoCria: this.state.CriancasSelecionadas[i].Crianca.photo,
@@ -204,93 +211,120 @@ class SaidaCrianca extends React.Component {
                 ProdutoCria: this.state.CriancasSelecionadas[i].Crianca.service,
                 indice: i++,
             })
-        }        
-        if(i === (this.state.CriancasSelecionadas.lengt - 1)){
+        }
+        if (i === (this.state.CriancasSelecionadas.lengt - 1)) {
             this.setState({
                 namebutton: "Finalizar",
             })
-            
+
         }
-        if(i === this.state.CriancasSelecionadas.lengt){
+        if (i === this.state.CriancasSelecionadas.lengt) {
+            var j=0;
+            var k=0;
+            this.state.ValorCria.map((resp, indice) => {
+                j += resp[indice].value;
+            })
+            this.state.ValorCriaDesc.map((resp, indice) => {
+                k += resp[indice].value;
+            })
             this.setState({
+                CodDes: "",
+                TotalValor: j,
+                TotalValorDesc: k,
+                FinalValor: k,
                 page: "FinalizarSaida",
-            }) 
+            })
         }
     }
 
     VerificaDescontoFilhos = (Codigo) => {
-        this.setState({
-            listFinal: update(this.state.listFinal, { $push: [{ID:this.state.CriancasSelecionadas[(this.state.indice - 1)], HoraPai: this.state.TimeAdult, Desconto: Codigo}] }),
-            CodigoDecCria: Codigo,
-        })
         axios.get(`/discount/filter/${Codigo}`)
-        .then((response) => {
-            alert("Desconto Validado")
-            this.setState({
-                listFinal: update(this.state.listFinal, { $push: [{ID:this.state.CriancasSelecionadas[(this.state.indice - 1)], HoraPai: this.state.TimeAdult, Desconto: Codigo}] }),
-                CodigoDecCria: Codigo,
-            })
-            var formData = new FormData();            
-            formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
-            formData.append('TimeAdult', String(this.state.TimeAdult));
-            formData.append('Desconto', String(this.state.CodigoDecCria));            
-            axios.post(`/passport`,formData)
-            .then(function (response) {
-                axios.get(`/passport`)
-                .then(function (response) {
-                    this.setState({
-                        ValorCria: response.data,
+            .then((response) => {
+                alert("Desconto Validado")
+                var formData = new FormData();
+                formData.append('idCria', String(this.state.CriancasSelecionadas[(this.state.indice - 1)].children.id));
+                formData.append('TimeAdult', String(this.state.TimeAdult));
+                formData.append('Desconto', String(this.state.CodigoDecCria));
+                axios.post(`/passport`, formData)
+                    .then(function (response) {
+                        axios.get(`/passport`)
+                            .then(function (response) {
+                                this.setState({
+                                    ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
+                                })
+                            }).catch(function (error) {
+                                console.log(error)//LOG DE ERRO
+                                alert("Erro no Cadastro");
+                                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                            })
+                    }).catch(function (error) {
+                        console.log(error)//LOG DE ERRO
+                        alert("Erro no Cadastro");
+                        // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
-                }).catch(function (error) {
-                    console.log(error)//LOG DE ERRO
-                    alert("Erro no Cadastro");
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                })
-            }).catch(function (error) {
+            }).catch((error) => {
+                console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
-                alert("Erro no Cadastro");
+                alert("Desconto não encontrado")
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-            console.log(response.data);
-        }).catch((error) => {
-            console.log("Não deu certo");
-            console.log(error)//LOG DE ERRO
-            alert("Desconto não encontrado")
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-        })
     }
     VerificaDescontoPAi = (Codigo) => {
         axios.get(`/discount/filter/${Codigo}`)
-        .then((response) => {
-            alert("Desconto Validado")
-            console.log(response.data);
-        }).catch((error) => {
-            console.log("Não deu certo");
-            console.log(error)//LOG DE ERRO
-            alert("Desconto não encontrado")
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-        })
+            .then((response) => {
+                alert("Desconto Validado")
+                var formData = new FormData();
+                formData.append('ValorFinal', String(this.state.TotalValorDesc));
+                formData.append('Desconto', String(this.state.CodigoDecCria));
+                axios.post(`/passport`, formData)
+                    .then(function (response) {
+                        axios.get(`/passport`)
+                            .then(function (response) {
+                                this.setState({
+                                    FinalValor: response.data,
+                                })
+                            }).catch(function (error) {
+                                console.log(error)//LOG DE ERRO
+                                alert("Erro no Cadastro");
+                                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                            })
+                    }).catch(function (error) {
+                        console.log(error)//LOG DE ERRO
+                        alert("Erro no Cadastro");
+                        // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    })
+            }).catch((error) => {
+                console.log("Não deu certo");
+                console.log(error)//LOG DE ERRO
+                alert("Desconto não encontrado")
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+            })
     }
 
     Finalizar = (event) => {
         event.preventDefault();
         console.log("Entrei Aqui");
-        if(this.state.FormPag !== ""){
+        if (this.state.FormPag !== "") {
             console.log(this.state.FormPag);
+            window.print();
         }
         else {
             alert("Selecione uma forma de pagamento");
-            return(0);
+            return (0);
         }
-        
+
     }
 
 
@@ -318,16 +352,16 @@ class SaidaCrianca extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {this.state.listAdultos.map((resp, indice) => {
+                                         {this.state.listAdultos.map((resp, indice) => {
                                             return (
-                                                <tr key={desconto._id}>
+                                                <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td > {resp.adult.name} </td>
                                                     <td >{resp.adult.phone} </td>
                                                     <td ><button className="btn botao btn-xs" onClick={() => this.Selecionar(resp.adult.name)}>Selecionar</button></td>
                                                 </tr>
                                             );
-                                        })} */}
+                                        })}
                                     </tbody>
                                 </table>
                             </div>
@@ -398,17 +432,17 @@ class SaidaCrianca extends React.Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {/* {this.state.listChianca.map((resp, indice) => {
+                                            {this.state.listChianca.map((resp, indice) => {
                                             return (
-                                                <tr key={desconto._id}>
+                                                <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td > {resp.children.name} </td>
                                                     <td >{resp.service}</td>
-                                                    <td>{resp.time}
+                                                    <td>{resp.time}</td>
                                                     <td ><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(resp.children.id)} /></td>
                                                 </tr>
                                             );
-                                        })} */}
+                                        })}
                                         </tbody>
                                     </table>
                                     <br></br>
@@ -497,10 +531,10 @@ class SaidaCrianca extends React.Component {
                             </div>
                             <br></br>
                             <br></br>
-                            <div className = "graph">
-                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Codigo do Desconto: "} type = {"text"} id = {"CodDes"} name= {"CodDes"} Class = {"form-control"} onChange={this.ChangeValue}/>
+                            <div className="graph">
+                                <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Codigo do Desconto: "} type={"text"} id={"CodDes"} name={"CodDes"} Class={"form-control"} onChange={this.ChangeValue} />
                                 <div className="text-center">
-                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.VerificaDesconto(this.state.CodDes)}>Verificar Desconto</button>
+                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.VerificaDescontoFilhos(this.state.CodDes)}>Verificar Desconto</button>
                                 </div>
                             </div>
                         </div>
@@ -524,49 +558,78 @@ class SaidaCrianca extends React.Component {
                         </ol>
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle">Finalização</h3>                       
+                        <h3 className="inner-tittle">Finalização</h3>
                         <div className="graph" >
                             <div className="tables table-responsive">
                                 <table className="table table-hover">
                                     <thead className="text-center">
                                         <tr>
                                             <th>#</th>
-                                            <th className="text-center">Nome</th>
-                                            <th className="text-center">Produto</th>
+                                            <th className="text-center">Serviço</th>
+                                            <th className="text-center">ID</th>
                                             <th className="text-center">Tempo</th>
                                             <th className="text-center">Valor</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {/* {this.state.CriancaSelecionadas.map((resp, indice) => {
+                                        {this.state.ValorCria.map((resp, indice) => {
                                             return (
-                                                <tr key={desconto._id}>
+                                                <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.Crianca.children.name} </td>
-                                                    <td > {resp.Crianca.service} </td>
-                                                    <td > {resp.Crianca.time} </td>
-                                                    <td > {resp.Valor} </td>
+                                                    <td > {resp.service} </td>
+                                                    <td > {resp.id} </td>
+                                                    <td > {resp.time} </td>
+                                                    <td > {resp.value} </td>
                                                 </tr>
                                             );
-                                        })} */}
+                                        })}
                                     </tbody>
                                 </table>
+                                <br></br>
+                                <p>Total: R$ {this.state.TotalValor}</p>
                             </div>
-                            <br></br>    
-                            <div className = "graph">
-                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Codigo do Desconto: "} type = {"text"} id = {"CodDes"} name= {"CodDes"} Class = {"form-control"} onChange={this.ChangeValue}/>
+                            <br></br>
+                            <div className="tables table-responsive">
+                                <table className="table table-hover">
+                                    <thead className="text-center">
+                                        <tr>
+                                            <th>#</th>
+                                            <th className="text-center">Desconto</th>
+                                            <th className="text-center">ID</th>
+                                            <th className="text-center">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.ValorCriaDesc.map((resp, indice) => {
+                                            return (
+                                                <tr key={resp._id}>
+                                                    <th scope="row">{(indice + 1)}</th>
+                                                    <td > {resp.desconto.name} </td>
+                                                    <td > {resp.id} </td>
+                                                    <td > {resp.value} </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                                <br></br>
+                                <p>Total: R$ {this.state.TotalValorDesc}</p>
+                            </div>
+                            <br></br>
+                            <div className="graph">
+                                <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Codigo do Desconto: "} type={"text"} id={"CodDes"} name={"CodDes"} Class={"form-control"} onChange={this.ChangeValue} />
                                 <div className="text-center">
-                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.VerificaDesconto(this.state.CodDes)}>Verificar Desconto</button>
+                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.VerificaDescontoPAi(this.state.CodDes)}>Verificar Desconto</button>
                                 </div>
                             </div>
                             <form>
-                                <div className = "graph">
+                                <div className="graph">
                                     <div className="form-group">
                                         <div className="row">
                                             <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                                     <h5 className="ltTitulo"><b> Valor Final </b></h5>
-                                                    <p>{this.state.ValorAdult}</p>
+                                                    <p>R$ {this.state.FinalValor}</p>
                                                 </div>
                                             </div>
                                             <div className="col-md-6 col-sm-12 col-xs-12">
