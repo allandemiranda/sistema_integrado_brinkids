@@ -86,7 +86,7 @@ router.post('/', (req, res) => {
           },
           birthday: new Date(req.body.birthday),
           phone: [req.body.phone],
-          address: [{
+          address: {
             street: req.body.street,
             number: parseInt(req.body.number, 10),
             district: req.body.district,
@@ -94,7 +94,7 @@ router.post('/', (req, res) => {
             state: req.body.state,
             country: req.body.country,
             cep: req.body.cep,
-          }],
+          },
           rg: req.body.rg,
           cpf: req.body.cpf,
           email: req.body.email,
@@ -171,16 +171,16 @@ router.put('/:identifier', async (req, res) => {
       },
     });
 
-    const photo = req.files.photo;
-
     if (!adultModified) {
       return res.sendStatus(404);
     }
 
-    return photo.mv(
-      adultModified.photo, // Nome do arquivo
-      errFile => (errFile ? teste(errFile, res) : res.sendStatus(204)),
-    );
+    if (req.files) {
+      return req.files.photo.mv(
+        config.pathPublic() + adultModified.photo, // Nome do arquivo
+        errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),
+      );
+    }
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

@@ -5,7 +5,7 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 import axios from 'axios';
-
+import TypesInput from '../TypesInput.js';
 var foto;
 class PerfilCrianca extends React.Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class PerfilCrianca extends React.Component {
             perfilEdicao: [],
 
             obs: '',
-            
+
 
         }
         //funçoes para mudar os values e afins
@@ -43,7 +43,7 @@ class PerfilCrianca extends React.Component {
 
         this.editavel = this.editavel.bind(this);
 
-        this.changueObs = this.changueObs.bind(this);
+        this.changue = this.changue.bind(this);
 
 
         this.salvar = this.salvar.bind(this);
@@ -54,11 +54,11 @@ class PerfilCrianca extends React.Component {
     }
 
     //lembrar de terminar as funçoes changue
-    changueObs(event) { this.setState({ obs: event.target.value }) }
+    changue(event) { this.setState({ [event.target.name]: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
         this.state.perfilAtual.observations = this.state.obs,
-           
+
             this.setState({
 
                 editar: false,
@@ -256,12 +256,14 @@ class PerfilCrianca extends React.Component {
                                 <div className="col-md-12 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.perfilAtual.name.firstName}</p>
+                                        {!this.state.editar &&(<p>{this.state.perfilAtual.name.firstName}</p>)}
+                                        {this.state.editar && (<input type="text" name="firstName" onChange={this.changue} value={this.state.perfilAtual.name.firstName} />)}
                                     </div>
                                     <br></br>
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
-                                        <p>{this.state.perfilAtual.name.surName}</p>
+                                        {!this.state.editar &&(<p>{this.state.perfilAtual.name.surName}</p>)}
+                                        {this.state.editar && (<input type="text" name="surName" onChange={this.changue} value={this.state.perfilAtual.name.surName} />)}
                                     </div>
                                 </div>
                             </div>
@@ -272,7 +274,8 @@ class PerfilCrianca extends React.Component {
                                 <div className="col-md-12 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  Nnumero de Registro: </b> </h5>
-                                        <p>{this.state.perfilAtual.cpf} </p>
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
+                                        {this.state.editar && (<input type="text" name="number" onChange={this.changue} value={this.state.perfilAtual.number} />)}
                                     </div>
                                 </div>
 
@@ -284,13 +287,18 @@ class PerfilCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{this.state.perfilAtual.birthday}</p>
+                                        {!this.state.editar &&(<p>{this.state.perfilAtual.birthday}</p>)}
+                                        {this.state.editar && (
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {""} type = {"datetime-local"} id = {"DateTimeBegin"} name= {"aniversario"} Class = {"form-control"} 
+                                        value = {this.state.birthday} onChange = {this.change}
+                                    />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nacionalidade: </b></h5>
-                                        <p>{this.state.perfilAtual.nacionality}</p>
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.nacionality}</p>)}
+                                        {this.state.editar && (<input type="text" name="nacionalidade" onChange={this.changue} value={this.state.perfilAtual.nacionality} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4 col-xs-12" >
@@ -308,7 +316,8 @@ class PerfilCrianca extends React.Component {
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></textarea>
+                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.perfilAtual.observations}>{this.state.perfilAtual.observations}</textarea>)}
+                                            {this.state.editar && (<textarea className="form-control" name="obs" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changue} value={this.state.obs}></textarea>)}
                                         </div>
                                     </div>
                                 </div >

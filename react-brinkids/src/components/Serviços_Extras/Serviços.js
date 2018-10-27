@@ -56,15 +56,15 @@ class Servico extends React.Component {
 
             name: this.state.Nome,
             type: this.state.Tipo,
-            unidade: this.state.Quant,
-            preco: this.state.Text,
+            unity: this.state.Quant,
+            value: this.state.Text,
 
         });
         const data = {
             name: this.state.Nome,
             type: this.state.Tipo,
-            text: this.state.Quant,
-            quantity: this.state.Text,
+            unity: this.state.Quant,
+            value: this.state.Text,
         }
 
         axios.post('/extraServices', data)
@@ -99,21 +99,19 @@ class Servico extends React.Component {
     Salvar2(event) {
         let listaTemporaria = this.state.lista;
         listaTemporaria[this.state.indice].name = this.state.Nome;
-        listaTemporaria[this.state.indice].preco = this.state.Text;
+        listaTemporaria[this.state.indice].value = this.state.Text;
         listaTemporaria[this.state.indice].type = this.state.Tipo;
-        listaTemporaria[this.state.indice].unidade = this.state.Quant;
+        listaTemporaria[this.state.indice].unity = this.state.Quant;
         const data = {
             name: this.state.Nome,
-            preco: this.state.Text,
             type: this.state.Tipo,
-            unidade: this.state.Quant,
+            unity: this.state.Quant,
+            value: this.state.Text,
         }
         axios.put(`/extraServices/${listaTemporaria[this.state.indice]._id}`, data)
             .then((response) => {
-
-
+                console.log(listaTemporaria[this.state.indice]._id);
                 console.log(response.data);
-
             })
             .catch((err) => console.log(err));
         this.setState({
@@ -146,12 +144,13 @@ class Servico extends React.Component {
 
     }
     editar(event) {
+
         console.log(this.state.lista[event].preco);
         this.setState({
             Nome: this.state.lista[event].name,
             Tipo: this.state.lista[event].type,
-            Text: this.state.lista[event].text,
-            Quant: this.state.lista[event].quantity,
+            Text: this.state.lista[event].value,
+            Quant: this.state.lista[event].unity,
             page: 'Editar',
             indice: event,
         })
@@ -207,8 +206,8 @@ class Servico extends React.Component {
                                                 <th scope="row">{(indice + 1)}</th>
                                                 <td>{servico.name}</td>
                                                 <td>{servico.type}</td>
-                                                <td>{servico.text}</td>
-                                                <td>{servico.quantity}</td>
+                                                <td>{servico.value}</td>
+                                                <td>{servico.unity}</td>
                                                 <td><button onClick={() => this.editar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
 
                                             </tr>
@@ -317,14 +316,14 @@ class Servico extends React.Component {
                                 <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{ width: 10 + '%' }} >ValorP/unid:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
 
-                                        <input type="number" id='forms' onChange={this.changueUnidade} value={this.state.Quant} size='5' min='0' max='999' step=".50" />
+                                        <input type="number" id='forms' onChange={this.changueQuant} value={this.state.Quant} size='5' min='0' max='999' step=".50" />
                                     </div>
                                 </div>
                                 <br></br>
 
                                 <div className="row" >  <p className="col-md-2 col-sm-8 col-xs-12" style={{ width: 10 + '%' }}>Unidade:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
-                                        <input type="text" id='forms' onChange={this.changueQuant} value={this.state.Text} size='10' />
+                                        <input type="text" id='forms' onChange={this.changueUnidade} value={this.state.Text} size='10' />
                                     </div>
                                 </div>
                                 <br></br>

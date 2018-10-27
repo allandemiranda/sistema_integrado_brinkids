@@ -7,6 +7,8 @@ router.get('/', async (req, res) => {
   try {
     const services = await ExtraServices.find({});
 
+    console.log(services);
+
     return res.status(200).json(services);
   } catch (err) {
     console.log(err);
@@ -32,13 +34,13 @@ router.get('/:identifier', async (req, res) => {
 router.post('/', async (req, res) => {
   if (req.body.name
     && req.body.type
-    && req.body.text
-    && req.body.quantity) {
+    && req.body.unity
+    && req.body.value) {
     const extraServices = new ExtraServices({
       name: req.body.name,
       type: req.body.type,
-      text: req.body.text,
-      quantity: req.body.quantity,
+      unity: req.body.unity,
+      value: req.body.value,
     });
 
     try {
@@ -60,8 +62,8 @@ router.put('/:identifier', async (req, res) => {
       {
         name: req.body.name,
         type: req.body.type,
-        text: req.body.text,
-        quantity: req.body.quantity,
+        unity: req.body.unity,
+        value: req.body.value,
       },
     );
 

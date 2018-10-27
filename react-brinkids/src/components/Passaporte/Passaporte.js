@@ -323,7 +323,7 @@ class Passport extends React.Component {
         Segundo, Pegamos a foto e armazenamos para trabalhar com ela -> #2
         Terceiro, inserimos a foto dentro do HTML específico dela -> #3
         Quarto, Relacionamos a foto com a sua criança -> #4
-        Quinto, Alteramos seu valor no estado e renderizamos na tela -> #5
+        Quinto, Alteramos seu valor no estado e renderizamos na tela -> #5            
         */
         var imagem = document.querySelectorAll("#imagem"); // #1
         const imageSrc = this.webcam.getScreenshot(); // #2

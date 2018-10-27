@@ -158,25 +158,39 @@ router.post('/', (req, res) => {
   }
 });
 
-router.put('/', async (req, res) =>  {
+router.put('/:identifier', async (req, res) =>  {
   if (req.files
       && req.body.observations
-      && req.body.identifier) {
+      && req.body.firstName
+      && req.body.lastName
+      && req.body.number
+      && req.body.birthday
+      && req.body.nacionality
+      && req.body.sexuality) {
     const child = await Child.findByIdAndUpdate(
-      req.body.identifier,
+      req.params.identifier,
       {
+        name: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+        },
+        number: req.body.number,
+        birthday: new Date(req.body.birthday),
+        nacionality: req.body.nacionality,
+        sexuality: req.body.sexuality,
         observations: req.body.observations,
       },
     );
 
-    req.files.file.mv(child.photo, (errMvFile) => {
-      if (errMvFile) {
-        return res.sendStatus(500);
-      }
-
-      return res.sendStatus(201);
-    });
+    if (req.files) {
+      return req.files.file.mv(
+        config.pathPublic() + child.photo,
+        errMvFile => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
+      );
+    }
   }
+
+  return res.sendStatus(400);
 });
 
 module.exports = router;
