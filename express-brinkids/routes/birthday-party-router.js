@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const birthdayParty = require('../models/birthday-party-models');
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const guestList = JSON.parse(req.body.guestList);
-  const data = {
+  const birthday = new Birthday ({
     title: req.body.title,
     birthdayPerson: { name: req.body.name, age: parseInt(req.body.age, 10) },
     start: new Date(req.body.start),
@@ -15,12 +15,12 @@ router.post('/', (req, res) => {
     amount: { children: parseInt(req.body.children, 10), adults: parseInt(req.body.adults, 10) },
     guestList: guestList,
     partyFeather: [{ type: req.body.type, id: req.body.id, name: req.body.name }],
-  };
+  });
 
   console.log(req.body);
   try {
-    //console.log(req.body);
-    return res.status(201).json(passport);
+    const newBirthday = await birthday.save();
+    return res.status(201).json(newBirthday);
   } catch (err) {
     return res.sendStatus(500);
   }

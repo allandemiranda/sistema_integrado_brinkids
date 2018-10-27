@@ -68,14 +68,13 @@ class ServicoPassaporte extends React.Component {
 
         var formData = new FormData();
 
-        formData.append('id', String(this.state.list._id))
         formData.append('name', String(this.state.Nome))
         formData.append('description', String(this.state.Descricao))
         formData.append('finalTime', String(this.state.TempoFinal))
-        formData.append('price', String(this.state.price))
+        formData.append('price', String(this.state.Price))
 
   
-        axios.post('/passaporte', formData)
+        axios.post('/passportServices', formData)
         .then(function (response) {
             console.log(response)
             //window.location.href = '/';
@@ -99,7 +98,7 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.QuebraValor))
 
   
-        axios.post('/passaporte', formData)
+        axios.post('/passport', formData)
         .then(function (response) {
             console.log(response)
             //window.location.href = '/';
@@ -118,7 +117,7 @@ class ServicoPassaporte extends React.Component {
 
     Adicionar =(event)=>{
         $.ajax({
-            url: "http://localhost:3001/passaporte",
+            url: "http://localhost:3001/passportServices",
             dataType: 'json',
             type: 'GET',
 

@@ -13,19 +13,18 @@ router.post('/', async (req, res) => {
   if(req.body.time 
     && req.body.price){
 
-    const data = {
+    const passport = new Passport ({
       time: req.body.time,
       price: req.body.price,
-    };
+    });
 
     try {
-    return res.status(201).json(data);
+      const newPassport = await passport.save();
+      return res.status(201).json(newPassport);
     } catch (err) {
-    return res.sendStatus(500);
+      return res.sendStatus(500);
     }
   }
-
-return res.sendStatus(500);
 });
 
 router.get('/', (req, res) => {
@@ -43,8 +42,6 @@ router.get('/', (req, res) => {
       console.log('Tempo Total:', data.time);
       console.log('Preço:', totalPrice);
     //}
-  
-return res.sendStatus(500);
 });
 
 module.exports = router;

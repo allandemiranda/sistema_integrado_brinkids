@@ -4,29 +4,29 @@ const config = require('../config');
 const dashboardSchema = mongoose.Schema({
   photo: {
     type: String,
-    require: true,
+    required: true,
   },
   service: {
     type: String,
-    require: true,
+    required: true,
   },
   time: {
     type: Date,
-    require: true,
+    required: true,
   },
   belongings: Number,
   children: {
     id: {
       type: String,
-      require: true,
+      required: true,
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     birthday: {
       type: Date,
-      require: true,
+      required: true,
     },
     restrictions: String,
     observations: String,
@@ -34,11 +34,11 @@ const dashboardSchema = mongoose.Schema({
   adult: {
     name: {
       id: String,
-      require: true,
+      required: true,
     },
     phone: {
       type: String,
-      require: true,
+      required: true,
     },
     observations: String,
   },

@@ -4,11 +4,11 @@ const config = require('../config');
 const passportServicesSchema = new mongoose.Schema({
 	name: {
 		type: String,
-    require: true,
+    	required: true,
 	},
 	description: {
 		type: String,
-		require: true,
+		required: true,
 	},
 	initialTime: String,
 	finalTime: String,
@@ -16,6 +16,6 @@ const passportServicesSchema = new mongoose.Schema({
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const passportServices = mongoose.model('PassportServices', passportServicesSchema);
+const passportServices = mongoose.model('passportServices', passportServicesSchema);
 
 module.exports = passportServices;
