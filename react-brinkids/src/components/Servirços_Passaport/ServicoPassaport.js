@@ -89,12 +89,11 @@ class ServicoPassaporte extends React.Component {
     }
 
     Salvar =(event)=>{
-        this.QuebraTempo = this.list.defalt.time;
-        this.QuebraValor = this.list.defalt.price;
+        this.QuebraTempo = this.list.default.time;
+        this.QuebraValor = this.list.default.price;
 
         var formData = new FormData();
 
-        formData.append('id', String(this.state.list._id))
         formData.append('time ', String(this.state.QuebraTempo))
         formData.append('price', String(this.state.QuebraValor))
 
@@ -102,7 +101,7 @@ class ServicoPassaporte extends React.Component {
         axios.post('/passport', formData)
         .then(function (response) {
             console.log(response)
-            window.location.href = '/ServicoPassaporte';
+            //window.location.href = '/ServicoPassaporte';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
