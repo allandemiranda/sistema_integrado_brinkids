@@ -1,5 +1,5 @@
 const express = require('express');
-const passportService = require('../models/passport-services-models');
+const passportServices = require('../models/passport-services-models');
 
 const router = express.Router();
 
@@ -10,10 +10,11 @@ router.post('/', async (req, res) => {
 
   if(req.body.name 
     && req.body.description
+    && req.body.initialTime
     && req.body.finalTime
     && req.body.price){
 
-    const passportServices = new PassportServices({
+    const data = new passportServices({
       name: req.body.name,
       description: req.body.description,
       initialTime: req.body.initialTime,
@@ -22,7 +23,7 @@ router.post('/', async (req, res) => {
     });
 
     try {
-      const newPassportServices = await passportServices.save();
+      const newPassportServices = await data.save();
       return res.status(201).json(newPassportServices);
     } catch (err) {
       return res.sendStatus(500);
@@ -32,16 +33,49 @@ router.post('/', async (req, res) => {
   return res.sendStatus(400);
 });
 
+String.prototype.toMMSS = function () {//convertendo de segundos para o formato mm:ss
+    let sec_num = parseInt(this, 10);
+    let minutes = Math.floor(sec_num / 60);
+    let seconds = sec_num - (minutes * 60);
+
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    return minutes+':'+seconds;
+}
+
+String.prototype.toSS = function () {//convertendo de mm:ss para segundos
+    let nums = this.split(':');
+    let mins = parseInt(nums[1], 10);
+    let secs = mins+parseInt(nums[0],10)*60;
+
+    return secs;
+}
+
 router.get('/', async (req, res) => {
-  console.log(req.params);
-  console.log('agr sim');
-  const data = {
-    initialTime: '00:00', 
-  };
-  try {
-    return res.status(201).json(data);
-  } catch (err) {
-    return res.sendStatus(500);
+  const psjson = await passportServices.find({});
+  let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json
+
+  if(psjson.length===1){//teste pra saber se só tem o json inicial
+    const data = {
+      initialTime: '00:00', 
+    };
+    try {
+      return res.status(201).json(data);
+    } catch (err) {
+      return res.sendStatus(500);
+    }
+  }else{
+    let newInitialTime = String(lastFinalTime.toSS()+1).toMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
+    console.log(newInitialTime);
+    const data = {
+      initialTime: newInitialTime,
+      list: psjson,
+    };
+    try {
+      return res.status(201).json(data);
+    } catch (err) {
+      return res.sendStatus(500);
+    }
   }
 });
 

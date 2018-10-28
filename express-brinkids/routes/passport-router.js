@@ -13,13 +13,13 @@ router.post('/', async (req, res) => {
   if(req.body.time 
     && req.body.price){
 
-    const passport = new Passport ({
+    const data = new passport ({
       time: req.body.time,
       price: req.body.price,
     });
 
     try {
-      const newPassport = await passport.save();
+      const newPassport = await data.save();
       return res.status(201).json(newPassport);
     } catch (err) {
       return res.sendStatus(500);

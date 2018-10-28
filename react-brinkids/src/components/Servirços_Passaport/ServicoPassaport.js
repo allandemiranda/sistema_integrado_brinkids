@@ -70,6 +70,7 @@ class ServicoPassaporte extends React.Component {
 
         formData.append('name', String(this.state.Nome))
         formData.append('description', String(this.state.Descricao))
+        formData.append('initialTime', String(this.state.list.initialTime))
         formData.append('finalTime', String(this.state.TempoFinal))
         formData.append('price', String(this.state.Price))
 
@@ -77,7 +78,7 @@ class ServicoPassaporte extends React.Component {
         axios.post('/passportServices', formData)
         .then(function (response) {
             console.log(response)
-            //window.location.href = '/';
+            window.location.href = '/ServicoPassaporte';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
@@ -101,7 +102,7 @@ class ServicoPassaporte extends React.Component {
         axios.post('/passport', formData)
         .then(function (response) {
             console.log(response)
-            //window.location.href = '/';
+            window.location.href = '/ServicoPassaporte';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
