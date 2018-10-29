@@ -265,7 +265,7 @@ class PerfilAdulto extends React.Component {
         // });
         axios.get(`/adult/filter/${this.state.selectedSearch}/nome`)
             .then((response) => {
-                    console.log(response.data);
+                console.log(response.data);
                 this.setState({ list: response.data });
             }).catch((err) => {
                 console.log(err);
@@ -274,16 +274,23 @@ class PerfilAdulto extends React.Component {
 
     }
     Search(event) {
-        const lista = [];
-        this.setState({ list: [] });
-        this.state.listaFuncionarios.forEach(element => {
+        axios.get(`/child/filter/${this.state.childSearch}`)
+            .then((response) => {
+                console.log(response.data);
+                this.setState({ list: response.data });
+            }).catch((err) => {
+                console.log(err);
+            });
+        // const lista = [];
+        // this.setState({ list: [] });
+        // this.state.listaFuncionarios.forEach(element => {
 
-            if (element.name.firstName == this.state.childSearch) {
+        //     if (element.name.firstName == this.state.childSearch) {
 
-                lista.push(element);
-                this.setState({ list: lista });
-            }
-        });
+        //         lista.push(element);
+        //         this.setState({ list: lista });
+        //     }
+        // });
 
     }
     ChangeSearch(event) {
@@ -415,7 +422,7 @@ class PerfilAdulto extends React.Component {
                     }
 
                 }, 50);
-            }
+            };
             const byCrianca = function (events, index) {
                 return (
 
@@ -427,6 +434,12 @@ class PerfilAdulto extends React.Component {
 
 
                 )
+            };
+            function converter(evento) {
+                 const data = evento.match(/([T,\w\*]+)/g);
+                 const dia = data[2].split(/[T]/g);
+                 
+                return dia[0]+"-"+data[1]+'-'+data[0];
             }
 
 
@@ -448,7 +461,8 @@ class PerfilAdulto extends React.Component {
 
 
                             </h3>
-                            <div className="col-md-6 col-sm-12 text-center">
+                            <div className="row">
+                            <div className="col-md-4 col-sm-4 text-center">
                                 <div className="graph" >
                                     <h5 className="ltTitulo"><b>  </b></h5>
 
@@ -464,10 +478,10 @@ class PerfilAdulto extends React.Component {
                                         </div>)
                                     }
                                 </div>
-                                <br></br>
+                                
                             </div>
-
-                            <div className="col-md-6 col-sm-12 text-center">
+                            
+                            <div className="col-md-8 col-sm-8 text-center">
                                 <div className="graph" >
                                     <div className="tables table-responsive">
                                         <table className="table table-hover">
@@ -502,20 +516,28 @@ class PerfilAdulto extends React.Component {
                                 </label>
                                 </button>)}
                             </div>
-                            <br></br>
+                            </div>
+                            
                             <div className="row">
+                            <br></br>
+                                
+                                <br></br>
+                                    <div className="col-md-6 col-sm-6">
+                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                            <p>{this.state.perfilAtual.name.firstName}</p>
+                                        </div>
+                                    </div>
 
-                                <div className="col-md-12 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }} >
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.perfilAtual.name.firstName}</p>
+                                                 
+                                    <div className="col-md-6 col-sm-6">
+                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                            <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
+                                            <p>{this.state.perfilAtual.name.surName}</p>
+                                        </div>
                                     </div>
-                                    <br></br>
-                                    <div className="graph" style={{ padding: 10 + "px" }} >
-                                        <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
-                                        <p>{this.state.perfilAtual.name.surName}</p>
-                                    </div>
-                                </div>
+
+                                
                             </div>
 
                             <br></br>
@@ -541,7 +563,7 @@ class PerfilAdulto extends React.Component {
                                 <div className="col-md-4 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{this.state.perfilAtual.birthday}</p>
+                                        <p>{converter(this.state.perfilAtual.birthday)}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4 col-xs-12" >
@@ -709,8 +731,8 @@ class PerfilAdulto extends React.Component {
                                     <tr>
                                         <th>#</th>
                                         <th >Nome</th>
-                                        <th >Idade</th>
-                                        <th >RG</th>
+                                        <th >numero de registro</th>
+                                        
                                         <th className="text-center"> Selecionar </th>
                                     </tr>
                                 </thead>
@@ -719,10 +741,10 @@ class PerfilAdulto extends React.Component {
                                     {this.state.list.map((findChild, indice) => {
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indice}</th>
+                                                <th scope="row">{indice+1}</th>
                                                 <td > {findChild.name.firstName} </td>
-                                                <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
+                                                
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(findChild._id)} /> </td>
                                             </tr>
                                         );

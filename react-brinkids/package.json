@@ -14,7 +14,7 @@
     "react-big-calendar": "^0.19.2",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-time-picker": "^1.0.3",
-    "react-date-picker": "^6.11.2",
+    "react-date-picker": "^6.13.0",
     "react-dom": "^16.4.1",
     "react-ga": "^2.5.3",
     "react-modal": "^3.5.1",

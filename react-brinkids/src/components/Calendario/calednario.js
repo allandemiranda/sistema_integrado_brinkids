@@ -13,13 +13,13 @@ import 'moment/locale/pt-br';
 
 import events from './events';
 
-import DatePicker from 'react-date-picker';
+// import DatePicker from 'react-date-picker';
 import Modal from 'react-modal';
 import './styles/DatePicker.css';
 
 
 import { timeFromInt } from 'time-number';
-import TimePicker from 'react-bootstrap-time-picker';
+// import TimePicker from 'react-bootstrap-time-picker';
 import '../../assets/style/font-awesome.css';
 import estilo from './styles/react-big-calendar.css';
 import axios from 'axios';
@@ -303,8 +303,8 @@ class Calendar extends React.Component {
   render() {
 
 
-    const teste = (slotInfo) => {
-
+    function teste() {
+      window.location.href = 'Event';
 
     }
 
@@ -314,9 +314,9 @@ class Calendar extends React.Component {
 
       <div>
 
-        <button className="modal1" type="button" onClick={this.openModal}>adicionar evento</button>
+        <button className="modal1" type="button" onClick={()=> teste()} >adicionar evento</button>
 
-        <Modal
+        {/* <Modal
           isOpen={this.state.modalC}
           onAfterOpen={this.afterOpenModalC}
           onRequestClose={this.closeModalC}
@@ -385,7 +385,7 @@ class Calendar extends React.Component {
 
           <input type="button" className='botao1' value="salvar" onClick={this.mod} />
 
-        </Modal>
+        </Modal> */}
 
 
 

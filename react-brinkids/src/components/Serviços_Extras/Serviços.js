@@ -14,7 +14,7 @@ class Servico extends React.Component {
             page: 'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 0,
+            Text: '',
             Quant: '',
             lista: [],
 
@@ -42,12 +42,14 @@ class Servico extends React.Component {
     }
     changueUnidade(event) {
         this.setState({
-            Text: event.target.value,
+            
+            Quant: event.target.value,
         })
     }
     changueQuant(event) {
         this.setState({
-            Quant: event.target.value,
+            
+            Text: event.target.value,
         })
     }
     Salvar(event) {
@@ -81,7 +83,7 @@ class Servico extends React.Component {
             page: 'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 0,
+            Text: '',
             Quant: '',
         });
     }
@@ -119,7 +121,7 @@ class Servico extends React.Component {
             page: 'Lista',
             Nome: '',
             Tipo: 'Serviço',
-            Text: 0,
+            Text: '',
             Quant: '',
             indice: '',
         })
@@ -206,8 +208,8 @@ class Servico extends React.Component {
                                                 <th scope="row">{(indice + 1)}</th>
                                                 <td>{servico.name}</td>
                                                 <td>{servico.type}</td>
-                                                <td>{servico.value}</td>
                                                 <td>{servico.unity}</td>
+                                                <td>{servico.value}</td>
                                                 <td><button onClick={() => this.editar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
 
                                             </tr>
@@ -259,14 +261,14 @@ class Servico extends React.Component {
                                 <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{ width: 10 + '%' }} >ValorP/unid:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
 
-                                        <input type="number" id='forms' onChange={this.changueUnidade} value={this.state.Text} size='5' min='0' max='999' step=".50" />
+                                        <input type="number" id='forms' onChange={this.changueQuant} value={this.state.Text} size='5' min='0' max='999' step=".50" />
                                     </div>
                                 </div>
                                 <br></br>
 
                                 <div className="row" >  <p className="col-md-2 col-sm-8 col-xs-12" style={{ width: 10 + '%' }}>Unidade:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
-                                        <input type="text" id='forms' onChange={this.changueQuant} value={this.state.Quant} size='10' />
+                                        <input type="text" id='forms' onChange={this.changueUnidade} value={this.state.Quant} size='10' />
                                     </div>
                                 </div>
                                 <br></br>
@@ -316,14 +318,14 @@ class Servico extends React.Component {
                                 <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{ width: 10 + '%' }} >ValorP/unid:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
 
-                                        <input type="number" id='forms' onChange={this.changueQuant} value={this.state.Quant} size='5' min='0' max='999' step=".50" />
+                                        <input type="number" id='forms' onChange={this.changueQuant} value={this.state.Text} size='5' min='0' max='999' step=".50" />
                                     </div>
                                 </div>
                                 <br></br>
 
                                 <div className="row" >  <p className="col-md-2 col-sm-8 col-xs-12" style={{ width: 10 + '%' }}>Unidade:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
-                                        <input type="text" id='forms' onChange={this.changueUnidade} value={this.state.Text} size='10' />
+                                        <input type="text" id='forms' onChange={this.changueUnidade} value={this.state.Quant} size='10' />
                                     </div>
                                 </div>
                                 <br></br>
