@@ -5,7 +5,7 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 import axios from 'axios';
-import TypesInput from '../TypesInput.js';
+
 var foto;
 class PerfilCrianca extends React.Component {
     constructor(props) {
@@ -13,7 +13,7 @@ class PerfilCrianca extends React.Component {
         this.state = {
             reserva: [],
             //lista de funcionarios recebida do banco de dados
-            listaFuncionarios: listaa,
+            listaFuncionarios: [],
             //lista de funcionarios apos a busca pelo nome
             list: [],
             //Funcionario selecionado para vizualizar o perfil
@@ -73,7 +73,8 @@ class PerfilCrianca extends React.Component {
                 perfilAtual: event,
                 reserva: event,
                 page: 'Perfil'
-            })
+            });
+            
 
 
     }
@@ -172,7 +173,7 @@ class PerfilCrianca extends React.Component {
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
-                                                <td > {findAdult.cpf} </td>
+                                                <td > {findAdult.number} </td>
                                                 <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button></td>
                                             </tr>
                                         );
@@ -233,9 +234,11 @@ class PerfilCrianca extends React.Component {
 
 
                             </h3>
-                            <div className="col-md-12 col-sm-12 text-center">
+                            <div className="col-md-4 col-sm-12 text-center">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                    <h5 className="ltTitulo"><b></b></h5>
+
+                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                     {this.state.editar && (
                                         <div>
                                             <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
@@ -245,82 +248,82 @@ class PerfilCrianca extends React.Component {
                                             </label>
                                             </button><br /></div>)
                                     }
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
-
                                 </div>
                                 <br></br>
                             </div>
+                            <div className="col-md-4 col-sm-12">
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                    {!this.state.editar && (<p>{this.state.perfilAtual.name.firstName}</p>)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="firstName" onChange={this.changue} value={this.state.perfilAtual.name.firstName} />)}
+                                </div>
+                                <br></br>
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
+                                    {!this.state.editar && (<p>{this.state.perfilAtual.name.surName}</p>)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="surName" onChange={this.changue} value={this.state.perfilAtual.name.surName} />)}
+                                </div>
+                            </div>
 
+                            <div className="col-md-4 col-sm-6 col-xs-12" >
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <h5 className="ltTitulo"><b>  Numero de Registro: </b> </h5>
+                                    {!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="number" onChange={this.changue} value={this.state.perfilAtual.number} />)}
+                                </div>
+                                <br></br>
+                            </div>
+                            <br></br><br></br>
+                            <div className="col-md-4 col-sm-12">
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                    <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
+                                    {!this.state.editar && (<p>{this.state.perfilAtual.birthday}</p>)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="date" className="form-control" name="aniversario" onChange={this.changue} value={this.state.perfilAtual.birthday} />
+                                    )}
+                                </div>
+                            </div>
                             <div className="row">
 
-                                <div className="col-md-12 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        {!this.state.editar &&(<p>{this.state.perfilAtual.name.firstName}</p>)}
-                                        {this.state.editar && (<input type="text" name="firstName" onChange={this.changue} value={this.state.perfilAtual.name.firstName} />)}
-                                    </div>
-                                    <br></br>
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
-                                        {!this.state.editar &&(<p>{this.state.perfilAtual.name.surName}</p>)}
-                                        {this.state.editar && (<input type="text" name="surName" onChange={this.changue} value={this.state.perfilAtual.name.surName} />)}
-                                    </div>
-                                </div>
+
                             </div>
 
                             <br></br>
 
-                            <div className="row">
-                                <div className="col-md-12 col-sm-6 col-xs-12" >
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b>  Nnumero de Registro: </b> </h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
-                                        {this.state.editar && (<input type="text" name="number" onChange={this.changue} value={this.state.perfilAtual.number} />)}
-                                    </div>
-                                </div>
 
-                            </div>
-
-                            <br></br>
 
                             <div className="row" >
-                                <div className="col-md-4 col-sm-12">
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        {!this.state.editar &&(<p>{this.state.perfilAtual.birthday}</p>)}
-                                        {this.state.editar && (
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {""} type = {"datetime-local"} id = {"DateTimeBegin"} name= {"aniversario"} Class = {"form-control"} 
-                                        value = {this.state.birthday} onChange = {this.change}
-                                    />)}
-                                    </div>
-                                </div>
+
                                 <div className="col-md-4 col-sm-4 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nacionalidade: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.nacionality}</p>)}
-                                        {this.state.editar && (<input type="text" name="nacionalidade" onChange={this.changue} value={this.state.perfilAtual.nacionality} />)}
+                                        {this.state.editar && (<input style={{ float: 'none' }} type="text" name="nacionalidade" className="form-control" onChange={this.changue} value={this.state.perfilAtual.nacionality} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sexo: </b></h5>
-                                        <p>{this.state.perfilAtual.sexuality}</p>
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.sexuality}</p>)}
+                                        {this.state.editar && (
+                                            <select className="form-control" style={{height: 46+'px', float:"none"}}>
+                                            <option value="volvo">Volvo</option>
+                                            <option value="saab">Saab</option>
+                                            <option value="mercedes">Mercedes</option>
+                                            <option value="audi">Audi</option>
+                                          </select>
+                                        )}
                                     </div>
                                 </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo" ><b> Observações:</b> </h5>
+
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.observations}</p>)}
+                                        {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" name="obs" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changue} value={this.state.obs}></textarea>)}
+                                    </div></div>
                             </div>
                             <br></br>
                             <div className="row">
-
-                                <div className="graph" >
-                                    <div className="row">
-                                        <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <h3 className="inner-tittle" > Observações </h3>
-                                            <br></br>
-                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.perfilAtual.observations}>{this.state.perfilAtual.observations}</textarea>)}
-                                            {this.state.editar && (<textarea className="form-control" name="obs" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changue} value={this.state.obs}></textarea>)}
-                                        </div>
-                                    </div>
-                                </div >
 
                                 {!this.state.editar && (
                                     <div style={{ textAlign: 'center' }}>

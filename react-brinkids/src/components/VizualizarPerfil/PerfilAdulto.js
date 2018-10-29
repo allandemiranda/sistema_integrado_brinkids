@@ -131,7 +131,7 @@ class PerfilAdulto extends React.Component {
     changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-            let listatemporaria = this.state.perfilAtual;
+        let listatemporaria = this.state.perfilAtual;
         const modifiedDate = {
             observations: this.state.obs,
             phone: this.state.phone,
@@ -166,29 +166,29 @@ class PerfilAdulto extends React.Component {
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
 
-       
+
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
-                
+
             })
             .catch((err) => console.log(err));
-            listatemporaria.address.number = this.state.numero;
-            listatemporaria.address.state = this.state.estado;
-            listatemporaria.address.district = this.state.bairro;
-            listatemporaria.phone = this.state.phone;
-            listatemporaria.address.city = this.state.cidade;
-            listatemporaria.address.cep = this.state.cep;
-            listatemporaria.observations = this.state.obs;
-            listatemporaria.email = this.state.email;
-            listatemporaria.address.street = this.state.endereco;
-            listatemporaria.address.country = this.state.pais;
+        listatemporaria.address.number = this.state.numero;
+        listatemporaria.address.state = this.state.estado;
+        listatemporaria.address.district = this.state.bairro;
+        listatemporaria.phone = this.state.phone;
+        listatemporaria.address.city = this.state.cidade;
+        listatemporaria.address.cep = this.state.cep;
+        listatemporaria.observations = this.state.obs;
+        listatemporaria.email = this.state.email;
+        listatemporaria.address.street = this.state.endereco;
+        listatemporaria.address.country = this.state.pais;
         this.setState({
             perfilAtual: listatemporaria,
             editar: false,
         });
-        
-        
+
+
 
     }
     //função que alterna as paginas
@@ -200,7 +200,7 @@ class PerfilAdulto extends React.Component {
                 reserva: event,
                 page: 'Perfil'
             });
- 
+
         try {
             const dadosCriancas = this.state.perfilAtual.children.map(async (child) => {
                 const childResponse = await axios.get(`/child/identifier/${child.identifier}`);
@@ -213,7 +213,7 @@ class PerfilAdulto extends React.Component {
 
         }
 
-        
+
 
     }
     voltar(event) {
@@ -250,7 +250,7 @@ class PerfilAdulto extends React.Component {
             endereco: this.state.perfilAtual.address.street,
             pais: this.state.perfilAtual.address.country,
         })
-    
+
     }
     SearchFuncionario(event) {
         // const lista = [];
@@ -265,7 +265,7 @@ class PerfilAdulto extends React.Component {
         // });
         axios.get(`/adult/filter/${this.state.selectedSearch}/nome`)
             .then((response) => {
-                
+                    console.log(response.data);
                 this.setState({ list: response.data });
             }).catch((err) => {
                 console.log(err);
@@ -392,7 +392,7 @@ class PerfilAdulto extends React.Component {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
 
-                     uploadfoto.addEventListener('change', function (e) {
+                    uploadfoto.addEventListener('change', function (e) {
                         showThumbnail(this.files);
                     });
                     function showThumbnail(files) {
@@ -451,6 +451,8 @@ class PerfilAdulto extends React.Component {
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" >
                                     <h5 className="ltTitulo"><b>  </b></h5>
+
+                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                     {this.state.editar && (
                                         <div>
                                             <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
@@ -461,8 +463,6 @@ class PerfilAdulto extends React.Component {
                                             </button>
                                         </div>)
                                     }
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
-
                                 </div>
                                 <br></br>
                             </div>
@@ -656,8 +656,8 @@ class PerfilAdulto extends React.Component {
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" > Observações </h3>
                                             <br></br>
-                                            {!this.state.editar&&(<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}>{this.state.perfilAtual.observations}</textarea>)}
-                                            {this.state.editar&&(<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
+                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}>{this.state.perfilAtual.observations}</textarea>)}
+                                            {this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
                                         </div>
                                     </div>
                                 </div >
