@@ -68,17 +68,17 @@ class ServicoPassaporte extends React.Component {
 
         var formData = new FormData();
 
-        formData.append('id', String(this.state.list._id))
         formData.append('name', String(this.state.Nome))
         formData.append('description', String(this.state.Descricao))
+        formData.append('initialTime', String(this.state.list.initialTime))
         formData.append('finalTime', String(this.state.TempoFinal))
-        formData.append('price', String(this.state.price))
+        formData.append('price', String(this.state.Price))
 
   
-        axios.post('/passaporte', formData)
+        axios.post('/passportServices', formData)
         .then(function (response) {
             console.log(response)
-            //window.location.href = '/';
+            window.location.href = '/ServicoPassaporte';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
@@ -89,20 +89,19 @@ class ServicoPassaporte extends React.Component {
     }
 
     Salvar =(event)=>{
-        this.QuebraTempo = this.list.defalt.time;
-        this.QuebraValor = this.list.defalt.price;
+        this.QuebraTempo = this.list.default.time;
+        this.QuebraValor = this.list.default.price;
 
         var formData = new FormData();
 
-        formData.append('id', String(this.state.list._id))
         formData.append('time ', String(this.state.QuebraTempo))
         formData.append('price', String(this.state.QuebraValor))
 
   
-        axios.post('/passaporte', formData)
+        axios.post('/passport', formData)
         .then(function (response) {
             console.log(response)
-            //window.location.href = '/';
+            //window.location.href = '/ServicoPassaporte';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
@@ -118,7 +117,7 @@ class ServicoPassaporte extends React.Component {
 
     Adicionar =(event)=>{
         $.ajax({
-            url: "http://localhost:3001/passaporte",
+            url: "http://localhost:3001/passportServices",
             dataType: 'json',
             type: 'GET',
 

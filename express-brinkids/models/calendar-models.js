@@ -6,23 +6,23 @@ const config = require('../config');
 const calendarSchema = new mongoose.Schema({
   color: {
     type: String,
-    require: true,
+    required: true,
   },
   type: {
     type: String,
-    require: true,
+    required: true,
   },
   title: {
     type: String,
-    require: true,
+    required: true,
   },
   start: {
     type: Date,
-    require: true,
+    required: true,
   },
   end: {
     type: Date,
-    require: true,
+    required: true,
   },
   associated: String,
 });
