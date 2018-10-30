@@ -159,8 +159,7 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) =>  {
-  if (req.files
-      && req.body.observations
+  if (req.body.observations
       && req.body.firstName
       && req.body.lastName
       && req.body.number
