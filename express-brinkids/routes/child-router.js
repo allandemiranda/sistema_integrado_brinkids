@@ -171,7 +171,7 @@ router.put('/:identifier', async (req, res) =>  {
       {
         name: {
           firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          surName: req.body.lastName,
         },
         number: req.body.number,
         birthday: new Date(req.body.birthday),
@@ -182,7 +182,7 @@ router.put('/:identifier', async (req, res) =>  {
     );
 
     if (req.files) {
-      return req.files.file.mv(
+      return req.files.photo.mv(
         config.pathPublic() + child.photo,
         errMvFile => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
       );
