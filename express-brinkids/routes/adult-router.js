@@ -53,6 +53,21 @@ router.get('/', (req, res) => {
   userAdult.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
+router.get('/:identifier', async (req, res) => {
+  try {
+    const adultFound = await userAdult.findById(req.params.identifier);
+
+    if (!adultFound) {
+      return res.sendStatus(404);
+    }
+
+    return res.json(adultFound);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
+
 router.post('/', (req, res) => {
   if (req.files
       && req.body.firstName
@@ -137,19 +152,28 @@ router.post('/', (req, res) => {
   }
 });
 
-router.get('/:identifier', async (req, res) => {
-  try {
-    const adultFound = await userAdult.findById(req.params.identifier);
+router.post('/appendChild', async (req, res) => {
+  if (req.body.identifier
+    && req.body.kinship
+    && req.body.identifierParent) {
+    try {
+      const adult = await userAdult.findByIdAndUpdate(
+        req.body.identifier,
+        { $push: { identifier: req.body.identifier, kinship: req.body.kinship } },
+      );
 
-    if (!adultFound) {
-      return res.sendStatus(404);
+      if (!adult) {
+        return res.sendStatus(404);
+      }
+
+      return res.sendStatus(201);
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
     }
-
-    return res.json(adultFound);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
   }
+
+  return res.sendStatus(400);
 });
 
 router.put('/:identifier', async (req, res) => {

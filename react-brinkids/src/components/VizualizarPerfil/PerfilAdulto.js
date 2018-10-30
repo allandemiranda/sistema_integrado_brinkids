@@ -330,8 +330,6 @@ class PerfilAdulto extends React.Component {
         this.setState({ confirmaCrianca: this.state.confirmaCrianca });
     }
     TheEnd(event) {
-        this.state.perfilAtual.crianca.push({ Nome: 'joao', parentesco: 'tio avoss', id: 1 });
-        console.log(this.state.perfilAtual.children);
         this.setState({
             page: 'Perfil',
         })
