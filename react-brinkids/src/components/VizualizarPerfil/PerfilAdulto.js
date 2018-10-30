@@ -108,6 +108,7 @@ class PerfilAdulto extends React.Component {
     Adicionar(event) {
         this.setState({
             page: 'Adicionar',
+            list:[],
         })
     }
     changuePassword(event) {
@@ -274,6 +275,7 @@ class PerfilAdulto extends React.Component {
 
     }
     Search(event) {
+        
         axios.get(`/child/filter/${this.state.childSearch}`)
             .then((response) => {
                 console.log(response.data);
@@ -753,7 +755,7 @@ class PerfilAdulto extends React.Component {
 
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cancelar</a>
-                                <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
+                                <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Perfil' })}>Voltar</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'ConfirmarCriança' })}> Adicinar Criança </button>
                             </div>
                         </div>
@@ -788,7 +790,7 @@ class PerfilAdulto extends React.Component {
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
-                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={(event) => this.Changekinship(event, findChild._id)} >
                                                         <option value="others" > Outros </option>
                                                         <option value="children" > filho(a) </option>
                                                         <option value="Stepson" > Enteado(a) </option>
@@ -806,7 +808,7 @@ class PerfilAdulto extends React.Component {
                     </div>
                     <br></br>
                     <div className="text-center">
-                        <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
+                        <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Adicionar' })}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TheEnd}>Finalizar</button>
                     </div>
                 </div>
