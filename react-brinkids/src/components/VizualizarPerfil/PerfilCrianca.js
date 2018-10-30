@@ -81,7 +81,13 @@ class PerfilCrianca extends React.Component {
     changue(event) { this.setState({ [event.target.name]: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-        // this.state.perfilAtual.observations = this.state.obs;
+        this.state.perfilAtual.observations = this.state.obs;
+        this.state.perfilAtual.name.surName = this.state.surName;
+        this.state.perfilAtual.name.firstName = this.state.firstName;
+        this.state.perfilAtual.observations = this.state.obs;
+        this.state.perfilAtual.birthday = this.state.aniversario;
+        this.state.perfilAtual.nacionality = this.state.nacionalidade;
+        this.state.perfilAtual.sexuality = this.state.sexualidade;
 
         var formData = new FormData();
 
@@ -103,7 +109,13 @@ class PerfilCrianca extends React.Component {
             })
             .catch((err) => console.log(err));
         
-
+            this.state.perfilAtual.observations = this.state.obs;
+            this.state.perfilAtual.name.surName = this.state.surName;
+            this.state.perfilAtual.name.firstName = this.state.firstName;
+            this.state.perfilAtual.observations = this.state.obs;
+            this.state.perfilAtual.birthday = this.state.aniversario;
+            this.state.perfilAtual.nacionality = this.state.nacionalidade;
+            this.state.perfilAtual.sexuality = this.state.sexualidade;
             this.setState({
 
                 editar: false,
@@ -380,7 +392,7 @@ class PerfilCrianca extends React.Component {
                                         <h5 className="ltTitulo" ><b> Observações:</b> </h5>
 
                                         {!this.state.editar && (<p>{this.state.perfilAtual.observations}</p>)}
-                                        {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" name="obs" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changue} value={this.state.obs}></textarea>)}
+                                        {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" name="obs" rows="4" cols="50" id="Observacoes"  onChange={this.changue} value={this.state.obs}></textarea>)}
                                     </div></div>
                             </div>
                             <br></br>
