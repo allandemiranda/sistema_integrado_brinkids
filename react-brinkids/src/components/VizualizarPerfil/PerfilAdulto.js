@@ -165,7 +165,7 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-
+                console.log(formData);
 
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
@@ -583,7 +583,14 @@ class PerfilAdulto extends React.Component {
                             <br></br>
 
                             <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                            <div className="col-md-4 col-sm-12 col-xs-12">
+                                    <div className="graph " style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Email:</b></h5>
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.email}</p>)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
+                                    </div>
+                                </div>
+                                <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.phone}</p>)}
@@ -591,7 +598,7 @@ class PerfilAdulto extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }} >
                                         <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
                                         <p>{this.state.perfilAtual.maritalStatus}</p>
@@ -602,13 +609,7 @@ class PerfilAdulto extends React.Component {
                             <br></br>
 
                             <div className='row'>
-                                <div className="col-md-12 col-sm-12 col-xs-12">
-                                    <div className="graph " style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Email:</b></h5>
-                                        {!this.state.editar && (<p>{this.state.perfilAtual.email}</p>)}
-                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
-                                    </div>
-                                </div>
+                                
                             </div>
 
                             <br></br>

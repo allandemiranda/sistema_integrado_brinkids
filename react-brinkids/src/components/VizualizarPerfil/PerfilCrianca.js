@@ -33,6 +33,12 @@ class PerfilCrianca extends React.Component {
 
             obs: '',
 
+            firstName:'',
+            surName:'',
+            number:'',
+            aniversario:'',
+            sexualidade:'',
+            nacionalidade:'',
 
         }
         //funçoes para mudar os values e afins
@@ -57,7 +63,28 @@ class PerfilCrianca extends React.Component {
     changue(event) { this.setState({ [event.target.name]: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-        this.state.perfilAtual.observations = this.state.obs,
+        // this.state.perfilAtual.observations = this.state.obs;
+
+        var formData = new FormData();
+
+        
+        if (foto) {
+            formData.append('photo', this._dataURItoBlob(foto));
+        }
+        formData.append('observations', this.state.obs);
+        formData.append('firstName', this.state.firstName);
+        formData.append('lastName', this.state.surName);
+        formData.append('number', this.state.number);
+        formData.append('birthday', this.state.aniversario);
+        formData.append('nacionality', this.state.nacionalidade);
+        formData.append('sexuality', this.state.sexualidade);
+          
+        axios.put(`child/${this.state.perfilAtual._id}`, formData)
+            .then((response) => {
+
+            })
+            .catch((err) => console.log(err));
+        
 
             this.setState({
 
@@ -95,15 +122,23 @@ class PerfilCrianca extends React.Component {
 
     }
     editavel(event) {
+        console.log(this.state.perfilAtual);
+        const data = this.state.perfilAtual.birthday.match(/([T,\w\*]+)/g);
+        const dia = data[2].split(/[T]/g);
         this.setState({
             editar: true,
-
+            aniversario: data[0]+"-"+data[1]+'-'+dia[0],
+            surName: this.state.perfilAtual.name.surName,
+            firstName: this.state.perfilAtual.name.firstName,
+            number:this.state.perfilAtual.number,
+            nacionalidade:this.state.perfilAtual.nacionality,
+            sexualidade:this.state.perfilAtual.sexuality,
         });
 
         this.setState({
             obs: this.state.perfilEdicao.observations,
         })
-
+        console.log(this.state.surName);
     }
     SearchFuncionario(event) {
         /*onst lista = [];
@@ -212,9 +247,14 @@ class PerfilCrianca extends React.Component {
 
                     }
                 }, 100);
-            }
+            };
 
-
+            function converter(evento) {
+                const data = evento.match(/([T,\w\*]+)/g);
+                const dia = data[2].split(/[T]/g);
+                
+               return dia[0]+"-"+data[1]+'-'+data[0];
+           }
 
             return (
                 <div className="container-fluid" >
@@ -255,13 +295,13 @@ class PerfilCrianca extends React.Component {
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo"><b> Nome: </b></h5>
                                     {!this.state.editar && (<p>{this.state.perfilAtual.name.firstName}</p>)}
-                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="firstName" onChange={this.changue} value={this.state.perfilAtual.name.firstName} />)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="firstName" onChange={this.changue} value={this.state.firstName} />)}
                                 </div>
                                 <br></br>
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
                                     {!this.state.editar && (<p>{this.state.perfilAtual.name.surName}</p>)}
-                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="surName" onChange={this.changue} value={this.state.perfilAtual.name.surName} />)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="surName" onChange={this.changue} value={this.state.surName} />)}
                                 </div>
                             </div>
 
@@ -269,7 +309,7 @@ class PerfilCrianca extends React.Component {
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo"><b>  Numero de Registro: </b> </h5>
                                     {!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
-                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="number" onChange={this.changue} value={this.state.perfilAtual.number} />)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="number" onChange={this.changue} value={this.state.number} />)}
                                 </div>
                                 <br></br>
                             </div>
@@ -277,8 +317,8 @@ class PerfilCrianca extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                    {!this.state.editar && (<p>{this.state.perfilAtual.birthday}</p>)}
-                                    {this.state.editar && (<input style={{ float: 'none' }} type="date" className="form-control" name="aniversario" onChange={this.changue} value={this.state.perfilAtual.birthday} />
+                                    {!this.state.editar && (<p>{converter(this.state.perfilAtual.birthday)}</p>)}
+                                    {this.state.editar && (<input style={{ float: 'none' }} type="date" className="form-control" name="aniversario" onChange={this.changue} value={this.state.aniversario} />
                                     )}
                                 </div>
                             </div>
@@ -297,7 +337,7 @@ class PerfilCrianca extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nacionalidade: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.nacionality}</p>)}
-                                        {this.state.editar && (<input style={{ float: 'none' }} type="text" name="nacionalidade" className="form-control" onChange={this.changue} value={this.state.perfilAtual.nacionality} />)}
+                                        {this.state.editar && (<input style={{ float: 'none' }} type="text" name="nacionalidade" className="form-control" onChange={this.changue} value={this.state.nacionalidade} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4 col-xs-12" >
@@ -305,11 +345,14 @@ class PerfilCrianca extends React.Component {
                                         <h5 className="ltTitulo"><b> Sexo: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.sexuality}</p>)}
                                         {this.state.editar && (
-                                            <select className="form-control" style={{height: 46+'px', float:"none"}}>
-                                            <option value="volvo">Volvo</option>
-                                            <option value="saab">Saab</option>
-                                            <option value="mercedes">Mercedes</option>
-                                            <option value="audi">Audi</option>
+                                            <select className="form-control" onChange={this.changue} name="sexualidade" style={{height: 46+'px', float:"none"}}>
+                                            
+                                            {this.state.perfilAtual.sexuality === "Masculino" && (<option value="Masculino" selected>Masculino</option>)}
+                                            {this.state.perfilAtual.sexuality != "Masculino" && (<option value="Masculino" >Masculino</option>)}
+                                            {this.state.perfilAtual.sexuality === "Feminino" && (<option value="Feminino" selected>Feminino</option>)}
+                                            {this.state.perfilAtual.sexuality != "Feminino" && (<option value="Feminino" >Feminino</option>)}
+                                            
+                                           
                                           </select>
                                         )}
                                     </div>
