@@ -8,6 +8,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
+import { SSL_OP_ALL } from 'constants';
 
 var foto;
 class PerfilAdulto extends React.Component {
@@ -332,6 +333,25 @@ class PerfilAdulto extends React.Component {
         this.setState({ confirmaCrianca: this.state.confirmaCrianca });
     }
     TheEnd(event) {
+        
+        
+        const data = {
+            
+            identifierParent: this.state.perfilAtual._id,
+            listChildren: this.state.confirmaCrianca,
+
+        }
+
+
+
+
+        axios.post(`/appendChild`,data)
+            .then((response) => {
+                console.log(response.data);
+                this.setState({ list: response.data });
+            }).catch((err) => {
+                console.log(err);
+            });
         this.setState({
             page: 'Perfil',
         })
@@ -679,7 +699,7 @@ class PerfilAdulto extends React.Component {
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" > Observações </h3>
                                             <br></br>
-                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}>{this.state.perfilAtual.observations}</textarea>)}
+                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></textarea>)}
                                             {this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
                                         </div>
                                     </div>
