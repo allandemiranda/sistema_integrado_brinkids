@@ -32,8 +32,12 @@ const dashboardSchema = mongoose.Schema({
     observations: String,
   },
   adult: {
+    id: {
+      type: String,
+      required: true,
+    },
     name: {
-      id: String,
+      type: String,
       required: true,
     },
     phone: {
