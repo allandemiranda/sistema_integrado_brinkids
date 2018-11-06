@@ -333,15 +333,19 @@ class PerfilAdulto extends React.Component {
         this.setState({ confirmaCrianca: this.state.confirmaCrianca });
     }
     TheEnd(event) {
-        
-        
+        let listacrianca = [];
+        this.state.confirmaCrianca.map((crianca,indice)=>{
+                listacrianca.push({indentifier:crianca._id,kinship:crianca.kinship})
+
+        });
+        console.log(listacrianca);
         const data = {
             
             identifierParent: this.state.perfilAtual._id,
-            listChildren: this.state.confirmaCrianca,
+            listChildren: listacrianca,
 
         }
-
+            console.log(data);
 
 
 
