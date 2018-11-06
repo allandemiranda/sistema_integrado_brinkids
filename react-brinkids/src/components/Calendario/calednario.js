@@ -64,6 +64,15 @@ class Calendar extends React.Component {
     this.ExcluirEvento = this.ExcluirEvento.bind(this);
     this.ChangeValue = this.ChangeValue.bind(this);
 
+    this.cancelar = this.cancelar.bind(this);
+
+  }
+  cancelar(event){
+    this.setState({
+      page:"Calendario",
+      Titulo: '',
+
+    })
   }
   ChangeValue(event) {
     this.setState({
@@ -323,7 +332,7 @@ class Calendar extends React.Component {
               </div>
               <br></br>
               <div className="text-center">
-                <a className="btn btn-md botao" >Cancelar</a>
+                <a className="btn btn-md botao"  onClick={this.cancelar} >Cancelar</a>
                 {!this.state.editar && (<input type="button" className="btn btn-md botao botaoAvançar" value="Salvar" onClick={this.mod} />)}
                 {this.state.editar && (<input type="button" className="btn btn-md botao botaoAvançar" value="Salvar" onClick={this.mod2} />)}
               </div>
