@@ -30,7 +30,6 @@ router.post('/', async (req, res) => {
     } catch (err) {
       return res.sendStatus(500);
     }
-  }
 });
 
 router.get('/', async (req, res) => {
