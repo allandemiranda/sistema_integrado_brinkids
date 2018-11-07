@@ -9,25 +9,25 @@ class Gaveta extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            Ngavetas:'',
+            Ngavetas: '',
         }
         this.Change = this.Change.bind(this);
     }
-    Change(event){
+    Change(event) {
         this.setState({
             [event.target.name]: event.target.value,
         })
     }
     componentWillMount() {
-    
+
         axios.get('/calendar')
-          .then((response) => {
-            
-            
-            this.setState({ datasRequisicao: response.data });
-          })
-          .catch((err) => console.log(err));
-      }
+            .then((response) => {
+
+
+                this.setState({ datasRequisicao: response.data });
+            })
+            .catch((err) => console.log(err));
+    }
     render() {
         return (
             <div className="container-fluid" >
@@ -43,10 +43,8 @@ class Gaveta extends React.Component {
                             <div>
                                 <h3 className="inner-tittle " >N.gavetas</h3>
                             </div>
-
-
                             <div className=" text-center">
-                                <input type="number" id="selectAdult" name="Ngavetas" className="form-control text-center" value={this.state.Ngavetas} onChange={this.Change}  />
+                                <input type="number" id="selectAdult" name="Ngavetas" className="form-control text-center" value={this.state.Ngavetas} onChange={this.Change} />
                                 <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchFuncionario}> Salvar </button>
                             </div>
                         </div>
