@@ -349,7 +349,7 @@ class PerfilAdulto extends React.Component {
 
 
 
-        axios.post(`/appendChild`,data)
+        axios.post('/adult/appendChild',data)
             .then((response) => {
                 console.log(response.data);
                 this.setState({ list: response.data });
