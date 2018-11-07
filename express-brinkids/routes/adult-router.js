@@ -8,9 +8,9 @@ const config = require('../config');
 
 const router = express.Router();
 
-function teste(json, res) {
-  console.log(json);
-  return res.status(200).json(json);
+function teste(err, res) {
+  console.log(err);
+  return res.sendStatus(500);
 }
 
 // Rota responsável por realizar a pesquisa dos adultos no sistema
@@ -46,7 +46,7 @@ router.get('/filter/:search/:type', (req, res) => {
   }
 
   // Executa a consulta e devolve o status HTTP da requisição
-  query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
+  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
 router.get('/', (req, res) => {
@@ -153,13 +153,12 @@ router.post('/', (req, res) => {
 });
 
 router.post('/appendChild', async (req, res) => {
-  if (req.body.identifier
-    && req.body.kinship
+  if (req.body.listChildren
     && req.body.identifierParent) {
     try {
       const adult = await userAdult.findByIdAndUpdate(
-        req.body.identifier,
-        { $push: { identifier: req.body.identifier, kinship: req.body.kinship } },
+        req.body.identifierParent,
+        { $push: { children: { $each: req.body.listChildren } } },
       );
 
       if (!adult) {
