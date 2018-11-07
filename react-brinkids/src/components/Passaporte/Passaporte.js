@@ -261,11 +261,18 @@ class Passport extends React.Component {
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd= (event) => {
         var formData = new FormData();
-
+        var i;
         formData.append('time', String(moment()/(60000)))
-        formData.append('price', String(5))
+        for(i = 0; i < this.state.listConfirmAdult.length; i++){
+            formData.idAdult.append(String(this.state.listConfirmAdult[i]._id))
+        };
+        for(i = 0; i < this.state.listConfirmKids.length; i++){
+            formData.idCria.append(String(this.state.listConfirmKids[i]._id))
+        };
+        console.log('form')
+        console.log(formData)
         //Fim do formulário;
-        axios.post('/passport', formData)
+        axios.post('/dashboard', formData)
         .then(function (response) {
             console.log(response)
             alert("Cadastro Finalizado")
