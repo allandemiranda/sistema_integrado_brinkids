@@ -46,8 +46,15 @@ router.get('/filter/:search/:type', (req, res) => {
   }
 
   // Executa a consulta e devolve o status HTTP da requisição
-  query.exec((err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+  query.exec((err, result) => (err ? res.sendStatus(500) : enviar(result, res)));
+
 });
+
+function enviar(json, res) { 
+  console.log(json);    
+  return res.status(200).json(json);
+}
+
 
 router.get('/', (req, res) => {
   userAdult.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));

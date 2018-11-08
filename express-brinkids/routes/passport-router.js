@@ -27,13 +27,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/data', async (req, res) => {
-
-  console.log("Aqui vem o req.body:");
-  console.log(req.body);
-  
-});
-
 router.get('/', async (req, res) => {
   console.log(req.params);
   console.log(req.body);
@@ -63,6 +56,10 @@ router.get('/', async (req, res) => {
   console.log('executou router.get()');
   console.log('Tempo Total:', data.time);
   console.log('Preço:', price);
+});
+
+router.get('/data', async (req, res) => {
+
 });
 
 module.exports = router;
