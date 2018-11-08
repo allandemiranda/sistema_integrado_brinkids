@@ -24,6 +24,7 @@ const extraServices = require('./routes/extra-services-router');
 const passport = require('./routes/passport-router');
 const passportServices = require('./routes/passport-services-router');
 const belongings = require('./routes/belongings-router');
+const professionalPosition = require('./routes/professional-position-router');
 
 // Instanciando o objeto do express
 const app = express();
@@ -74,6 +75,7 @@ app.use('/extraServices', extraServices);
 app.use('/passport', passport);
 app.use('/passportServices', passportServices);
 app.use('/belongings', belongings);
+app.use('/professionalPosition', professionalPosition);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
