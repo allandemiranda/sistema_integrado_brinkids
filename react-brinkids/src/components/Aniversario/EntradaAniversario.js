@@ -46,7 +46,7 @@ class EntradaAniversario extends React.Component {
     //Requisição dados do evento atual 
     RequisicaoDadosParty() {
         $.ajax({
-            url:"http://localhost:3001",
+            url:"http://localhost:3001/birthdayParty",
             dataType: 'json',
             type: 'GET',
             error: function (response) {
@@ -97,9 +97,26 @@ class EntradaAniversario extends React.Component {
                 type: "",
                 name: "",
                 page:"SelecionarTipoDeEntrada",
+                comprovante:true,
             })
+            this.state.aniversariante[0].partyFeather: update(this.state.aniversariante[0].partyFeather, {$push: [{type:"adult", name: this.state.adultoSelecionado[0].name}]}),
+            alert("Cadastrado");
 
+            var formData = new FormData();
 
+            formData.append('name', String( this.state.adultoSelecionado[0].name))
+            formData.append('type', String(this.state.aniversariante[0].partyFeather.type))
+    
+            axios.post('/birthdayParty', formData)
+            .then(function (response) {
+                console.log(response)
+                window.location.href = '/birthdayParty';
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
         } 
         
         AvancarCombinarCrianca = (event) =>{
@@ -136,12 +153,30 @@ class EntradaAniversario extends React.Component {
             })
         }
 
-        FinalizarCrianca = (event) => {            
+        FinalizarCrianca = (event) => {    
             this.setState({
-                comprovante:true,            
+                listaCriancaDentro: update(this.state.listaCriancaDentro, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]}),
+                comprovante:true,
             })
-            alert("Cadastrado");
-            console.log(this.state.arrayfinal);
+            this.state.aniversariante[0].partyFeather: update(this.state.aniversariante[0].partyFeather, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]}),
+            
+            var formData = new FormData();
+
+            formData.append('name', String( this.state.criancaSelecionada[0]._id))
+            formData.append('type', String(this.state.aniversariante[0].partyFeather.type))
+    
+            axios.post('/birthdayParty', formData)
+            .then(function (response) {
+                console.log(response)
+                window.location.href = '/birthdayParty';
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
+
+            alert("Cadastrado");  
         }
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
     
@@ -303,7 +338,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 ">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Aniversariante: </b></h5>
-                                        <p>{/*this.state.aniversariante[0].birthdayPerson.name*/}</p>
+                                        <p>{this.state.aniversariante[0].birthdayPerson.name}</p>
                                     </div>
                                     <br></br>
                                 </div>
@@ -312,14 +347,14 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-6 col-sm-6 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Início: </b></h5>
-                                        <p>{/*this.state.aniversariante[0].start*/}</p>
+                                        <p>{this.state.aniversariante[0].start}</p>
                                     </div>
                                     <br></br>
                                 </div>
                                 <div className="col-md-6 col-sm-6 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Fim: </b></h5>
-                                        <p>{/*this.state.aniversariante[0].end*/}</p>
+                                        <p>{this.state.aniversariante[0].end}</p>
                                     </div>
                                     <br></br>
                                 </div>
@@ -328,13 +363,13 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-8 col-sm-4">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Quantidade de Crianças: </b></h5>
-                                        <p>{/*this.state.aniversariante[0].amount.children */}</p>
+                                        <p>{this.state.aniversariante[0].amount.children}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Já Entraram: </b></h5>
-                                        <p>{/*this.sates.criancaDentro*/}</p>
+                                        <p>{this.sates.criancaDentro.length}</p>
                                     </div>
                                 </div>
                             </div>
@@ -342,13 +377,13 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-8 col-sm-4">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Quantidade de Adultos: </b></h5>
-                                        <p>{/*this.state.aniversariante[0].amount.adults*/}</p>
+                                        <p>{this.state.aniversariante[0].amount.adults}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-4">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Já Entraram: </b></h5>
-                                        <p>{/*this.state.listaAdultosDentro*/}</p>
+                                        <p>{this.state.listaAdultosDentro.length}</p>
                                     </div>
                                 </div>
                             </div>
