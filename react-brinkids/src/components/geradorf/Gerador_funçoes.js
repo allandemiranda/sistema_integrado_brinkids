@@ -6,7 +6,7 @@ import lista from './lista.js';
 import Cargo from './cargos.js';
 import TypesInput from '../TypesInput.js';
 import funcoes from './funcoes.js';
-
+import axios from 'axios';
 
 class Gerador extends React.Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class Gerador extends React.Component {
         this.state = {
             Page: 'Lista',
             list: lista,
-            listadecargos: Cargo,
+            listadecargos: [],
             Name: '',
             Description: '',
             editar: false,
@@ -34,6 +34,15 @@ class Gerador extends React.Component {
         this.excluir = this.excluir.bind(this);
 
     }
+    componentWillMount() {
+    
+        axios.get('/professionalPosition')
+          .then((response) => {
+            console.log(response.data);
+            this.setState({ listadecargos: response.data });
+          })
+          .catch((err) => console.log(err));
+      }
     Salvar2(event) {
         let temporario = this.state.listadecargos;
         temporario[this.state.indice] = {

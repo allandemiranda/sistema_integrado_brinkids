@@ -99,7 +99,7 @@ class EntradaAniversario extends React.Component {
                 page:"SelecionarTipoDeEntrada",
                 comprovante:true,
             })
-            this.state.aniversariante[0].partyFeather: update(this.state.aniversariante[0].partyFeather, {$push: [{type:"adult", name: this.state.adultoSelecionado[0].name}]}),
+            this.state.aniversariante[0].partyFeather= update(this.state.aniversariante[0].partyFeather, {$push: [{type:"adult", name: this.state.adultoSelecionado[0].name}]}),
             alert("Cadastrado");
 
             var formData = new FormData();
@@ -158,7 +158,7 @@ class EntradaAniversario extends React.Component {
                 listaCriancaDentro: update(this.state.listaCriancaDentro, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]}),
                 comprovante:true,
             })
-            this.state.aniversariante[0].partyFeather: update(this.state.aniversariante[0].partyFeather, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]}),
+            this.state.aniversariante[0].partyFeather= update(this.state.aniversariante[0].partyFeather, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]});
             
             var formData = new FormData();
 
