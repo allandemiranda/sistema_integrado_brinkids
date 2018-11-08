@@ -468,7 +468,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>*/}
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
                 </div>
@@ -539,7 +539,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>*/}
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
                     </div>
                 </div>
@@ -658,7 +658,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>*/}
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>
                 </div>
