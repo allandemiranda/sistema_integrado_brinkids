@@ -2,6 +2,7 @@
 
 const express = require('express');
 const product = require('../models/product-models');
+const config = require('../config');
 
 const router = express.Router();
 
@@ -21,25 +22,46 @@ router.get('/', (req, res) => {
  * ou ir atrás de pacote mesmo(Talvez o próprio bcrypt sirva já)
  */
 // Rota de inserção de produtos
-router.post('/', (req, res) => {
-  if (req.body.photo
-    && req.body.service
-    && req.body.time) {
-    const data = {
-      photo: req.body.photo,
-      service: req.body.service,
-      time: req.body.time,
-      belongings: parseInt(req.body.belongings, 10),
-      children: JSON.parse(req.body.children),
-      adult: JSON.parse(req.body.adult),
-      observations: req.body.observations,
-    };
+router.post('/', async (req, res) => {
+  console.log(req.body)
+  var childrenObj = req.body.children.split(',');
+  var adultObj = req.body.adult.split(',');
+  console.log(childrenObj)
 
-    product.create(
-      data,
-      err => (err ? res.sendStatus(500) : res.sendStatus(201)),
-    );
+  if (req.body) {
+    const childrenData = {
+        id: String(childrenObj[0]),
+        name: String(childrenObj[1]),
+        birthday: Date(childrenObj[2]),
+        restrictions: String(childrenObj[3]),
+        observations: String(childrenObj[4]),
+    };
+    const adultData = {
+        id: String(adultObj[0]),
+        name: String(adultObj[1]),
+        phone: String(adultObj[2]),
+        observations: String(adultObj[3]),
+    };
+    const data = new product({
+      photo: String(req.body.photo),
+      service: String(req.body.service),
+      time: new Date(req.body.time),
+      belongings: parseInt(req.body.belongings, 10),
+      children: childrenData,
+      adult: adultData,
+    });
+    console.log('Maybe I can try...')
+    console.log(data)
   }
+    try{
+      console.log('trying...')
+      const newProduct = await data.save();
+      console.log(newProduct)
+      return res.sendStatus(201).json(newProduct);
+    }catch (err){
+      console.log('I was failed...')
+      return res.sendStatus(500);
+    }
 });
 
 module.exports = router;

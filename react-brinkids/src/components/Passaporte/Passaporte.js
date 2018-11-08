@@ -261,18 +261,30 @@ class Passport extends React.Component {
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd= (event) => {
         var formData = new FormData();
+        var listAdult = new Array();
+        var listCria = new Array();
         var i;
-        formData.append('time', String(moment()/(60000)))
-        for(i = 0; i < this.state.listConfirmAdult.length; i++){
-            formData.idAdult.append(String(this.state.listConfirmAdult[i]._id))
-        };
         for(i = 0; i < this.state.listConfirmKids.length; i++){
-            formData.idCria.append(String(this.state.listConfirmKids[i]._id))
+            formData.append('photo', String(this.state.listConfirmKids[0]._id))
+            formData.append('service', 'Passaporte')
+            formData.append('time', moment().toNow())
+            formData.append('belongings', '0')
+            listCria.push(String(this.state.listConfirmKids[i]._id))
+            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
+            listCria.push(this.state.listConfirmKids[i].birthday)
+            listCria.push(this.state.listConfirmKids[i].restrictions)
+            listCria.push(this.state.listConfirmKids[i].observations)
+            listAdult.push(this.state.listConfirmAdult[0]._id)
+            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
+            listAdult.push(this.state.listConfirmAdult[0].phone)
+            listAdult.push(this.state.obs)
+            formData.append('children', listCria)
+            formData.append('adult', listAdult)
         };
-        console.log('form')
-        console.log(formData)
+        console.log('Meu form é esse:')
+        console.log(formData);
         //Fim do formulário;
-        axios.post('/dashboard', formData)
+        axios.post('/product', formData)
         .then(function (response) {
             console.log(response)
             alert("Cadastro Finalizado")
