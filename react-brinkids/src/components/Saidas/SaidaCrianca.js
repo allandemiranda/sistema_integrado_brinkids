@@ -51,9 +51,10 @@ class SaidaCrianca extends React.Component {
 
         this.ChangeValue = this.ChangeValue.bind(this);
 
-        axios.get('/dashboards')
+        axios.get('/dashboard')
             .then((response) => {
                 console.log("Dentro do axios: " + this)
+                console.log(response.data);
                 this.setState({
                     listAdultos: response.data,
                 });
@@ -96,7 +97,7 @@ class SaidaCrianca extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-        axios.get(`/dashboards/filter/${resp1}`)
+        axios.get(`/dashboard/filter/${resp1}`)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
@@ -147,7 +148,7 @@ class SaidaCrianca extends React.Component {
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
             formData.append('TimeAdult', String(this.state.TimeAdult));
 
-            axios.post(`/passport`, formData)
+            axios.post(`/passport/data`, formData)
                 .then(function (response) {
                     axios.get(`/passport`)
                         .then(function (response) {

@@ -1,4 +1,3 @@
-
 /**
  * Este arquivo será responsável por criar as rotas relacionadas as crianças
  */

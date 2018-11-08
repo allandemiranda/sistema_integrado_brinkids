@@ -23,40 +23,9 @@ import { timeFromInt } from 'time-number';
 import '../../assets/style/font-awesome.css';
 import estilo from './styles/react-big-calendar.css';
 import axios from 'axios';
-
-const estilos = {
-
-  float: "right",
-  display: "inline-block",
-  width: "45% ",
-  height: "45px",
-  padding: "14px 12px",
-  fontSize: "14px",
+import TypesInput from '../TypesInput.js';
 
 
-
-
-
-};
-const customStyles = {
-  content: {
-    top: '30%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-30%, -30%)',
-    overflow: 'visible',
-    position: 'absolute',
-
-  }
-};
-const iconelixeira = {
-  cursor: "pointer",
-
-
-
-};
 
 /*   */
 
@@ -68,42 +37,51 @@ class Calendar extends React.Component {
     super(props);
 
     this.state = {
+      page: "Calendario",
       calendario: true,
-      showModal: false,
-      modalIsOpen: false,
-      CalendarioF: new Date(),
-      CalendarioI: new Date(),
-      Hora: '0',
-      Hora2: '0',
+
+
+      editar: false,
       Titulo: '',
       identifier: "", // (Gabriel): Criei essa variável para ajudar na requisição de alteração de datas
       modalC: false,
-      datasRequisicao: [] // (Gabriel): criei essa variável para armazenar os dados que virão do servidor
+      datasRequisicao: [], // (Gabriel): criei essa variável para armazenar os dados que virão do servidor
+      DateTimeBegin: '',
+      DateImeEnd: '',
+      Description: '',
+      Location: '',
+      Color: '',
 
     };
 
     this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
 
-    this.openModalC = this.openModalC.bind(this);
-    this.afterOpenModalC = this.afterOpenModalC.bind(this);
-    this.closeModalC = this.closeModalC.bind(this);
-
+    this.editar = this.editar.bind(this);
 
     this.mod = this.mod.bind(this);
     this.mod2 = this.mod2.bind(this);
 
-    this.mudarTitulo = this.mudarTitulo.bind(this);
-    this.mudarModal = this.mudarModal.bind(this);
-
     this.ExcluirEvento = this.ExcluirEvento.bind(this);
+    this.ChangeValue = this.ChangeValue.bind(this);
 
+    this.cancelar = this.cancelar.bind(this);
+
+  }
+  cancelar(event){
+    this.setState({
+      page:"Calendario",
+      Titulo: '',
+
+    })
+  }
+  ChangeValue(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    })
   }
 
   componentWillMount() {
-    Modal.setAppElement('body');
+    
     axios.get('/calendar')
       .then((response) => {
         // (Gabriel): response é um objeto com todos os dados da requisição.
@@ -119,67 +97,32 @@ class Calendar extends React.Component {
       .catch((err) => console.log(err));
   }
 
-  onChange = CalendarioI => this.setState({ CalendarioI });
-  onChange2 = CalendarioF => this.setState({ CalendarioF });
 
-  mudarHora = Hora => this.setState({ Hora });
-  mudarHora2 = Hora2 => this.setState({ Hora2 });
-
-  mudarTitulo(event) {
-
-    this.setState({ Titulo: event.target.value });
-  }
 
   openModal() {
-    this.setState({ modalIsOpen: true, calendario: false });
+    this.setState({ page: "Novo" });
   }
 
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
-  }
 
-  closeModal() {
-    this.setState({ modalIsOpen: false, calendario: true });
-    this.setState({ Titulo: '', Hora: '0', Hora2: '0' });
-  }
-
-  openModalC() {
-    this.setState({ modalC: true, calendario: false });
-  }
-
-  afterOpenModalC() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
-  }
-
-  closeModalC() {
-    this.setState({ modalC: false, calendario: true });
-    this.setState({ Titulo: '', Hora: '0', Hora2: '0' });
-  }
   mod() {
     const titulo = this.state.Titulo;
-    const Final = this.state.CalendarioF;
-    const Inicial = this.state.CalendarioI;
-    const Anoinicial = Inicial.getFullYear(), MesInicial = Inicial.getMonth(), Diainicial = Inicial.getDate();
-    const Anofinal = Final.getFullYear(), Mesfinal = Final.getMonth(), Diaifinal = Final.getDate();
-
-    const HoraI = timeFromInt(this.state.Hora);
-    const HoraF = timeFromInt(this.state.Hora2);
-    const match = HoraI.match(/([\w\*]+)/g);
-    const match2 = HoraF.match(/([\w\*]+)/g);
 
 
+    const HoraI = new Date(this.state.DateTimeBegin);
+    const HoraF = new Date(this.state.DateImeEnd);
+
+
+    console.log(HoraI);
 
     // (Gabriel): Requisição para salvar as datas no servidor.
     // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
     // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
     const data = {
       title: titulo,
-      start: new Date(Anoinicial, MesInicial, Diainicial, match[0], match[1], 0).toString(), // (Gabriel): Necessário enviar as data no formato de texto
-      end: new Date(Anofinal, Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),
+      start: HoraI.toString(), // (Gabriel): Necessário enviar as data no formato de texto
+      end: HoraF.toString(),
       type: "qualque",
-      color: "blue2",
+      color: this.state.Color,
       associated: "Usuario"
     }
 
@@ -189,7 +132,15 @@ class Calendar extends React.Component {
         response.data.start = new Date(response.data.start); // (Gabriel): Necessário modificar as datas para criar um objeto 'Date' já que vem do servidor como string
         response.data.end = new Date(response.data.end);
         this.state.datasRequisicao.push(response.data)
-        this.setState({ datasRequisicao: this.state.datasRequisicao })
+        this.setState({
+          datasRequisicao: this.state.datasRequisicao,
+          page: "Calendario",
+          DateTimeBegin: '',
+          DateImeEnd: '',
+          Description: '',
+          Location: '',
+          Color: '',
+        })
       })
       .catch((err) => console.log(err))
 
@@ -197,78 +148,60 @@ class Calendar extends React.Component {
 
     // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
 
-    this.closeModal();
+
+
+  }
+  editar(event) {
+    this.setState({
+      page: "Novo",
+      Titulo: event.title,
+      DateTimeBegin: event.start,
+      DateImeEnd: event.end,
+      Color: event.color,
+      editar: true,
+      identifier: event._id,
+    })
 
   }
   mod2(event) {
 
-    const titulo = this.state.Titulo;
-    const Final = this.state.CalendarioF;
-    const Inicial = this.state.CalendarioI;
-    const identifier = this.state.identifier; // (Gabriel): Aqui está o identificador
-    const Anoinicial = Inicial.getFullYear(), MesInicial = Inicial.getMonth(), Diainicial = Inicial.getDate();
-    const Anofinal = Final.getFullYear(), Mesfinal = Final.getMonth(), Diaifinal = Final.getDate();
 
     // Não precisa mais desse for mas n irei deletar pra n causar algum problema
-    for (var data in events) {
-
-      if (events[data].start === excluirInicial && events[data].end === excluirFinal) {
-        events.splice(data, 1);
 
 
-      }
-    }
-    const HoraI = this.state.Hora;
-    const HoraF = this.state.Hora2;
-
-    const match = HoraI.match(/([\w\*]+)/g);
-    const match2 = HoraF.match(/([\w\*]+)/g);
 
     const modifiedDate = { // (Gabriel): Aqui conterá todos os dados que se deseja alterar da data
-      title: titulo,
-      start: new Date(Anoinicial, MesInicial, Diainicial, match[0], match[1], 0).toString(), // (Gabriel): Necessário enviar as data no formato de texto
-      end: new Date(Anofinal, Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),
+      title: this.state.Titulo,
+      start: new Date(this.state.DateTimeBegin).toString(), // (Gabriel): Necessário enviar as data no formato de texto
+      end: new Date(this.state.DateImeEnd).toString(),
+
     }
 
     // (Gabriel): Requisição para alterar a data na url '/calendar/<identifier>' utilizando o método HTTP 'PUT'
-    axios.put(`calendar/${identifier}`, modifiedDate)
+    axios.put(`calendar/${this.state.identifier}`, modifiedDate)
       .then((response) => {
         this.state.datasRequisicao.forEach((currentValue) => { // (Gabriel): Vai varrer atrás da data com o identificador para alterar seus valores
-          if (currentValue._id === identifier) { // (Gabriel): Se encontrar, altere o título, por exemplo
-            currentValue.title = titulo;
+          if (currentValue._id === this.state.identifier) { // (Gabriel): Se encontrar, altere o título, por exemplo
+            currentValue.title = this.state.Titulo;
           }
         })
-        this.setState({ datasRequisicao: this.state.datasRequisicao }) // (Gabriel): Renderize a alteração e só se tudo der certo feche o modal
-        this.closeModalC();
+        this.setState({
+          editar:false,
+          datasRequisicao: this.state.datasRequisicao,
+          page: "Calendario",
+          DateTimeBegin: '',
+          DateImeEnd: '',
+          Description: '',
+          Location: '',
+          Color: '',
+
+        }) // (Gabriel): Renderize a alteração e só se tudo der certo feche o modal
+
       })
       .catch((err) => console.log(err)); // (Gabriel): Caso tenha dado errado, exiba uma mensagem de erro
-
-    // Não precisa mais desse 'push' mas n irei deletar pra n causar algum problema
-    events.push({ title: titulo, start: new Date(Anoinicial, MesInicial, Diainicial, match[0], match[1], 0), end: new Date(Anofinal, Mesfinal, Diaifinal, match2[0], match2[1], 0), desc: 'blabla bla' });
-
-
-
   }
 
-  mudarModal(event) {
-    console.log(event);
-    console.log(event._id);
-    excluirInicial = event.start;
-    excluirFinal = event.end;
-    const inicial = event.start.getHours() + ':' + event.start.getMinutes();
-    const final = event.end.getHours() + ':' + event.end.getMinutes();
-    const identifier = event._id; // (Gabriel): Criei mais uma variável para colocar no estado e ajudar na requisição de modificar datas
-    // (Gabriel): A variável 'identifier' será usada para realizar a consulta no banco de dados pela data específica que estamos modificando
 
-    this.setState({
-      Titulo: event.title,
-      Hora2: final,
-      Hora: inicial,
-      identifier: identifier
-    });
-    this.openModalC();
-
-  }
 
 
   ExcluirEvento(event) {
@@ -303,119 +236,116 @@ class Calendar extends React.Component {
   render() {
 
 
-    function teste() {
-      window.location.href = 'Event';
+
+
+
+    if (this.state.page === "Calendario") {
+      return (
+        /*  COMPONENTE CALENDARIO DO REACT */
+
+        <div>
+
+          <button className="modal1" type="button" onClick={this.openModal} >adicionar evento</button>
+
+
+
+
+          {this.state.calendario &&
+            (<BigCalendar
+              selectable
+              events={this.state.datasRequisicao}
+              defaultView={BigCalendar.Views.WEEK}
+              scrollToTime={new Date(1970, 1, 1, 6)}
+              defaultDate={new Date()}
+              onSelectEvent={event => this.editar(event)}
+              onSelectSlot={slotInfo => console.log('sfd')
+                /*alert(
+                  `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
+                  `\nend: ${slotInfo.end.toLocaleString()}` +
+                  `\naction: ${slotInfo.action}`
+                  )*/
+              }
+              eventPropGetter={event => ({
+                style: {
+                  backgroundColor: event.color,
+
+                }
+              })}
+            />)}
+        </div>
+
+
+      );
+    }
+    if (this.state.page === "Novo") {
+      return (
+        <div className="container-fluid" >
+          <div className="sub-heard-part" >
+            <ol className="breadcrumb m-b-0" >
+              <li > < a href="/" > Home </a></li >
+              <li > Evento </li>
+            </ol >
+          </div>
+          <div className="graph-visual" >
+            <h3 className="inner-tittle" >Novo Evento</h3>
+            <form>
+              <div className="graph" >
+                <div className="form-group">
+                  <div className="row">
+                    <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Titulo: "} type={"text"} id={"Titulo"} name={"Titulo"} Class={"form-control"}
+                      value={this.state.Titulo} onChange={this.ChangeValue}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="row">
+                    <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Data Inicial: "} type={"datetime-local"} id={"DateTimeBegin"} name={"DateTimeBegin"} Class={"form-control"}
+                      value={this.state.DateTimeBegin} onChange={this.ChangeValue}
+                    />
+                    <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Data Final: "} type={"datetime-local"} id={"DateTimeEnd"} name={"DateImeEnd"} Class={"form-control"}
+                      value={this.state.DateImeEnd} onChange={this.ChangeValue}
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="row">
+                    <TypesInput cod={2} ClassDiv={"col-md-6 col-sm-12 col-xs-12"} Label={true} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Descrição:"} cols={"50"} rows={"4"} id={"Description"} name={"Description"} Class={"form-control"}
+                      value={this.state.Description} onChange={this.ChangeValue} />
+                    <div className="col-md-6 col-sm-12 col-xs-12">
+                      <TypesInput cod={1} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Local: "} type={"text"} id={"Location"} name={"Location"} Class={"form-control"}
+                        value={this.state.Location} onChange={this.ChangeValue}
+                      />
+                      <label className="LetraFormulario brlabel">Cor</label>
+                      <select id="Color" name="Color" className="form-control optionFomulario" value={this.state.Color} onChange={this.ChangeValue}>
+                        <option value="">--</option>
+                        <option value="blue" className="opt1">Azul</option>
+                        <option value="violet" className="opt2">Violeta</option>
+                        <option value="green" className="opt3">Verde</option>
+                        <option value="orange" className="opt4">Laranja</option>
+                        <option value="yellow" className="opt5">Amarelo</option>
+                        <option value="red" className="opt6">Vermelho</option>
+                        <option value="aqua" className="opt7">Azul claro</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br></br>
+              <div className="text-center">
+                <a className="btn btn-md botao"  onClick={this.cancelar} >Cancelar</a>
+                {!this.state.editar && (<input type="button" className="btn btn-md botao botaoAvançar" value="Salvar" onClick={this.mod} />)}
+                {this.state.editar && (<input type="button" className="btn btn-md botao botaoAvançar" value="Salvar" onClick={this.mod2} />)}
+              </div>
+            </form >
+            <div>
+              <ul id="mensagens-erro" style={{ color: "red" }}></ul>
+            </div>
+          </div>
+        </div>
+      );
 
     }
 
-
-    return (
-      /*  COMPONENTE CALENDARIO DO REACT */
-
-      <div>
-
-        <button className="modal1" type="button" onClick={()=> teste()} >adicionar evento</button>
-
-        {/* <Modal
-          isOpen={this.state.modalC}
-          onAfterOpen={this.afterOpenModalC}
-          onRequestClose={this.closeModalC}
-          style={customStyles}
-          contentLabel="Example Modal2"
-        >
-          <h ref={subtitle => this.subtitle = subtitle}></h>
-          <div className="glyphicon" style={iconelixeira} onClick={this.ExcluirEvento}>&#xe020;</div>
-          <div className="fa" style={{ cursor: "pointer", float: "right" }} onClick={this.closeModalC}>&#xf00d;</div><br /><br />
-
-
-          <div>Titulo: <input type="text" className="titulo2" placeholder="digite o titulo" value={this.state.Titulo} onChange={this.mudarTitulo} /><br />
-          </div>  <br />
-          <div> De: <span>{this.state.Hora} ate {this.state.Hora2}</span></div><br />
-          <input type="button" className='botao1' value="salvar" onClick={this.mod2} />
-        </Modal>
-
-
-
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-
-          <input type="text" className="titulo" placeholder="digite o titulo" value={this.state.Titulo} onChange={this.mudarTitulo} /><br />
-          <h ref={subtitle => this.subtitle = subtitle}></h><br />
-
-
-
-
-
-
-
-
-          <DatePicker
-            dateFormat="YYYY/MM/DD"
-            onChange={this.onChange}
-            value={this.state.CalendarioI}
-          />
-
-          <TimePicker style={estilos} start="00:00" end="23:30" value={this.state.Hora} onChange={this.mudarHora} step={30} format={24} />
-
-
-          <DatePicker
-            selected={this.state.startDate}
-            onChange={this.onChange2}
-            value={this.state.CalendarioF}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            dateFormat="LT"
-            timeCaption="Time"
-          />
-
-
-
-
-          <TimePicker style={estilos} start="00:00" end="23:30" step={30} format={24} value={this.state.Hora2} onChange={this.mudarHora2} />
-
-
-          <br></br>
-          <br></br>
-
-          <input type="button" className='botao1' value="salvar" onClick={this.mod} />
-
-        </Modal> */}
-
-
-
-        {this.state.calendario &&
-          (<BigCalendar
-            selectable
-            events={this.state.datasRequisicao}
-            defaultView={BigCalendar.Views.WEEK}
-            scrollToTime={new Date(1970, 1, 1, 6)}
-            defaultDate={new Date()}
-            onSelectEvent={event => this.mudarModal(event)}
-            onSelectSlot={slotInfo => console.log('sfd')
-              /*alert(
-                `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-                `\nend: ${slotInfo.end.toLocaleString()}` +
-                `\naction: ${slotInfo.action}`
-                )*/
-            }
-            eventPropGetter={event => ({
-              style: {
-                backgroundColor: event.start.getDay() < 5
-                  ? "#ad4ca4"
-                  : "#3174ad",
-              }
-            })}
-          />)}
-      </div>
-
-
-    );
   }
 }
 

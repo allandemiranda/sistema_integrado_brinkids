@@ -4,31 +4,18 @@ const mongoose = require('mongoose');
 const config = require('../config');
 
 const productSchema = new mongoose.Schema({
-  photo: {
-    type: String,
-    require: true,
-  },
-  service: {
-    type: String,
-    require: true,
-  },
-  time: {
-    type: Date,
-    require: true,
-  },
-  belongings: Number,
-  children: {
+   children: {
     id: {
       type: String,
-      require: true,
+      required: true,
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     birthday: {
       type: Date,
-      require: true,
+      required: true,
     },
     restrictions: String,
     observations: String,
@@ -36,18 +23,31 @@ const productSchema = new mongoose.Schema({
   adult: {
     id: {
       type: String,
-      require: true,
+      required: true,
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     phone: {
       type: String,
-      require: true,
+      required: true,
     },
     observations: String,
   },
+  photo: {
+    type: String,
+    required: true,
+  },
+  service: {
+    type: String,
+    required: true,
+  },
+  time: {
+    type: Date,
+    required: true,
+  },
+  belongings: Number,
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

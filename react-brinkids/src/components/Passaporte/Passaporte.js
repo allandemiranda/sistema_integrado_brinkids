@@ -261,11 +261,30 @@ class Passport extends React.Component {
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd= (event) => {
         var formData = new FormData();
-
-        formData.append('time', String(moment()/(60000)))
-        formData.append('price', String(5))
+        var listAdult = new Array();
+        var listCria = new Array();
+        var i;
+        for(i = 0; i < this.state.listConfirmKids.length; i++){
+            formData.append('photo', String(this.state.listConfirmKids[0]._id))
+            formData.append('service', 'Passaporte')
+            formData.append('time', moment().toNow())
+            formData.append('belongings', '0')
+            listCria.push(String(this.state.listConfirmKids[i]._id))
+            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
+            listCria.push(this.state.listConfirmKids[i].birthday)
+            listCria.push(this.state.listConfirmKids[i].restrictions)
+            listCria.push(this.state.listConfirmKids[i].observations)
+            listAdult.push(this.state.listConfirmAdult[0]._id)
+            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
+            listAdult.push(this.state.listConfirmAdult[0].phone)
+            listAdult.push(this.state.obs)
+            formData.append('children', listCria)
+            formData.append('adult', listAdult)
+        };
+        console.log('Meu form é esse:')
+        console.log(formData);
         //Fim do formulário;
-        axios.post('/passport', formData)
+        axios.post('/product', formData)
         .then(function (response) {
             console.log(response)
             alert("Cadastro Finalizado")
@@ -461,7 +480,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>*/}
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
                 </div>
@@ -532,7 +551,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>*/}
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
                     </div>
                 </div>
@@ -651,7 +670,7 @@ class Passport extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        {/*<button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>*/}
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>
                 </div>

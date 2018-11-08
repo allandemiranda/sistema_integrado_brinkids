@@ -12,7 +12,7 @@ import eventos from './tabelas/eventos';
 import noticias from './tabelas/noticias';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
-
+import axios from 'axios';
 
 class DashBoard extends React.Component {
 	constructor(props) {
@@ -23,10 +23,10 @@ class DashBoard extends React.Component {
 			colaps: true,
 
 			teste: true,
-			aba: false,
-
-			nome: [{}, {}],
-
+			aba:false,
+			
+			nome:[{},{}],
+			lista:[],
 			popup: true,
 
 			adultospopup: false,
@@ -43,15 +43,24 @@ class DashBoard extends React.Component {
 		this.mudar3 = this.mudar3.bind(this);
 		this.mudar4 = this.mudar4.bind(this);
 	}
-
+	componentWillMount() {
+    
+		axios.get('/dashboard')
+		  .then((response) => {
+			
+			
+			console.log(response.data);
+			this.setState({lista: response.data });
+		  })
+		  .catch((err) => console.log(err));
+	  }
 	mudar() {
-		//!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
-		this.setState({ nome: tabelinha });
-		this.setState({ aba: true });
+		!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
+		
 	}
 	mudar2() {
-		//!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
-
+		!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
+		
 
 	}
 	mudar3() {

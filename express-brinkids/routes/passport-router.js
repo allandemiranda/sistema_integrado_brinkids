@@ -29,6 +29,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   console.log(req.params);
+  console.log(req.body);
   const psjson = await passportServices.find({});
   var lastFinalTime = psjson[psjson.length-1].finalTime;//Último finalTime do json
   var lastInitialTime = psjson[psjson.length-1].initialTime;
@@ -55,6 +56,10 @@ router.get('/', async (req, res) => {
   console.log('executou router.get()');
   console.log('Tempo Total:', data.time);
   console.log('Preço:', price);
+});
+
+router.get('/data', async (req, res) => {
+
 });
 
 module.exports = router;
