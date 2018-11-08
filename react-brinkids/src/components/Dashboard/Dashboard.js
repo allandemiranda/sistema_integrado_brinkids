@@ -12,6 +12,8 @@ import eventos from './tabelas/eventos';
 import noticias from './tabelas/noticias';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
+
+
 class DashBoard extends React.Component {
 	constructor(props) {
 		super(props);
@@ -19,12 +21,12 @@ class DashBoard extends React.Component {
 		this.state = {
 			comprovant: false,
 			colaps: true,
-			
+
 			teste: true,
-			aba:false,
-			
-			nome:[{},{}],
-			
+			aba: false,
+
+			nome: [{}, {}],
+
 			popup: true,
 
 			adultospopup: false,
@@ -41,15 +43,15 @@ class DashBoard extends React.Component {
 		this.mudar3 = this.mudar3.bind(this);
 		this.mudar4 = this.mudar4.bind(this);
 	}
-	
+
 	mudar() {
 		//!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
-		this.setState({nome:tabelinha});
-		this.setState({aba:true});
+		this.setState({ nome: tabelinha });
+		this.setState({ aba: true });
 	}
 	mudar2() {
 		//!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
-		
+
 
 	}
 	mudar3() {
@@ -60,7 +62,7 @@ class DashBoard extends React.Component {
 	mudar4() {
 
 		!this.state.noticiaspopup ? this.setState({ noticiaspopup: true }) : this.setState({ noticiaspopup: false });
-		
+
 	}
 	render() {
 
@@ -76,7 +78,7 @@ class DashBoard extends React.Component {
 					<td>{events.Responsavel}</td>
 					<td>{events.Telefone}</td>
 					<td>{events.Servico}</td>
-					
+
 				</tr>
 			)
 		}
@@ -106,11 +108,11 @@ class DashBoard extends React.Component {
 				</tr>
 			)
 		}
-		
+
 		return (
 
 			<div className="container-fluid" >
-				
+
 				{this.state.popup &&
 
 					(<div className="alert alert-success" role="alert">
@@ -133,7 +135,7 @@ class DashBoard extends React.Component {
 						<li > DashBoard </li >
 					</ol >
 				</div>
-				
+
 				<div className="graph">
 					<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar}>
 						< span className="fa fa-bars" > </span>
@@ -259,8 +261,8 @@ class DashBoard extends React.Component {
 							</div>)
 						}
 					</div>
-				}			
-			</div>			
+				}
+			</div>
 		);
 	}
 }
