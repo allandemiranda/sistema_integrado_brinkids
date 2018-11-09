@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  userAdult.find({}, (err, result) =>{
+  professionalPosition.find({}, (err, result) =>{
     try{
       res.status(200).json(result)
     }catch (err){
