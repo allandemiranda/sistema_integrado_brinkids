@@ -2,10 +2,10 @@ import React from 'react'
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
-import lista from './lista.js';
-import Cargo from './cargos.js';
-import TypesInput from '../TypesInput.js';
-import funcoes from './funcoes.js';
+import lista from './lista';
+import Cargo from './cargos';
+import TypesInput from '../TypesInput';
+import funcoes from './funcoes';
 import axios from 'axios';
 
 class Gerador extends React.Component {

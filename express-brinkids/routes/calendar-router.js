@@ -8,10 +8,12 @@ const router = express.Router();
 
 
 /** Esta rota envia todos os documentos referentes a calendario */
+//TODO: colocar para aparecer aniversarios
+//TODO: Remover extraServices
 router.get('/', async (req, res) => {
   try {
     const birthdays = await Calendar.find({});
-    const events = await extraService.find({});
+    // const events = await extraService.find({});
 
     res.status(200).json([...birthdays, ...events]);
   } catch (err) {

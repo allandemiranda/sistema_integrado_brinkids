@@ -3,23 +3,6 @@ const belongings = require('../models/belongings-models');
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-
-	if(req.body.number){
-		const data = new belongings ({
-			number: req.body.number,
-		});
-
-		try {
-	      const newBelongings = await data.save();
-	      return res.status(201).json(newBelongings);
-	    } catch (err) {
-	      return res.sendStatus(500);
-	    }
-	 }
-
-	return res.sendStatus(400);
-});
 
 router.get('/', async (req, res) => {
 	try{

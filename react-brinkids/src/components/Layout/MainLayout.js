@@ -160,7 +160,7 @@ class MainLayout extends React.Component {
                                 </a>
                             </li>
                             <li>
-                                <a href="/Gerador_funçoes">
+                                <a href="/Gerador_funcoes">
                                 <i className="glyphicon glyphicon-user"></i>
                                     <span>Gerenciador de Serviços</span>
                                 </a>

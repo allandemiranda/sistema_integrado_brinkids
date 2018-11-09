@@ -85,21 +85,21 @@ class Perfil extends React.Component {
     changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-        this.state.perfilAtual.observations = this.state.obs,
-            this.state.perfilAtual.address.number = this.state.numero,
-            this.state.perfilAtual.address.state = this.state.estado,
-            this.state.perfilAtual.address.district = this.state.bairro,
-            this.state.perfilAtual.phone = this.state.phone,
-            this.state.perfilAtual.address.city = this.state.cidade,
-            this.state.perfilAtual.address.cep = this.state.cep,
-            this.state.perfilAtual.email = this.state.email,
-            this.state.perfilAtual.address.street = this.state.endereco,
-            this.state.perfilAtual.address.country = this.state.pais,
-            this.setState({
+        this.state.perfilAtual.observations = this.state.obs
+        this.state.perfilAtual.address.number = this.state.numero
+        this.state.perfilAtual.address.state = this.state.estado
+        this.state.perfilAtual.address.district = this.state.bairro
+        this.state.perfilAtual.phone = this.state.phone
+        this.state.perfilAtual.address.city = this.state.cidade
+        this.state.perfilAtual.address.cep = this.state.cep
+        this.state.perfilAtual.email = this.state.email
+        this.state.perfilAtual.address.street = this.state.endereco
+        this.state.perfilAtual.address.country = this.state.pais
+        this.setState({
 
-                editar: false,
+            editar: false,
 
-            })
+        })
     }
     //função que alterna as paginas
     ChangePage(event) {

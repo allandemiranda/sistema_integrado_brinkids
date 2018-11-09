@@ -3,7 +3,19 @@ const ExtraServices = require('../models/extra-services-models');
 
 const router = express.Router();
 
-router.get('/:name', async (req, res) => {
+router.get('/', async (req, res) => {
+  try {
+    const service = await ExtraServices.find({});
+    console.log(service);
+
+    return res.status(200).json(service);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
+
+router.get('/search/:name', async (req, res) => {
   try {
     const serviceFound = await ExtraServices.find({ 'name': new RegExp(req.params.name) });
     console.log(serviceFound);

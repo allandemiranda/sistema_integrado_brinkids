@@ -35,7 +35,7 @@ class SaidaServicosExtra extends React.Component {
     }
     Search(event) {
         $.ajax({
-            url: "http://localhost:3001/extraServices/" + this.state.selectedSearch,//
+            url: "http://localhost:3001/extraServices/search/" + this.state.selectedSearch,//
             dataType: 'json',
             type: 'GET',
             error: function (response) {
@@ -105,6 +105,7 @@ class SaidaServicosExtra extends React.Component {
                 valorTotalFinal= valorTotalFinal + this.state.valorTotal[indice];
                 console.log(this.state.valorTotal[indice]);
         })
+
         this.setState({
             Total:valorTotalFinal,
         })

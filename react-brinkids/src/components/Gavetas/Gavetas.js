@@ -27,7 +27,7 @@ class Gaveta extends React.Component {
         axios.get('/belongings')
             .then((response) => {
 
-                this.setState({ Ngavetas: response.data });
+                this.setState({ Ngavetas: response.data[0].number });
             })
             .catch((err) => console.log(err));
     }

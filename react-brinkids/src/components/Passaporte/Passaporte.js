@@ -188,7 +188,7 @@ class Passport extends React.Component {
             })
         }
         else {
-            alert(" Selecione um Responsável "),
+            alert(" Selecione um Responsável ")
                 this.setState({
                     page: "SelectAdult",
                     selectedSearch: '',
@@ -239,8 +239,8 @@ class Passport extends React.Component {
     TelaIV = (event) => {
         this.setState({
             page: "ConfirmKids",
-            obs: this.state.listConfirmKids[0].observations,
-            rest: this.state.listConfirmKids[0].restrictions,
+            obs: this.state.listConfirmKids.observations,
+            rest: this.state.listConfirmKids.restrictions,
             file: Array(this.state.listConfirmKids.length),
         })
     }

@@ -1,0 +1,46 @@
+{
+  "name": "react-brinkids",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.3.1",
+    "moment": "^2.22.2",
+    "rc-time-picker": "^3.3.1",
+    "react": "^16.4.1",
+    "react-addons-update": "^15.6.2",
+    "react-autosuggest": "^9.3.4",
+    "react-big-calendar": "^0.19.2",
+    "react-bootstrap": "^0.32.1",
+    "react-bootstrap-time-picker": "^1.0.3",
+    "react-date-picker": "^6.13.0",
+    "react-dom": "^16.4.1",
+    "react-ga": "^2.5.3",
+    "react-modal": "^3.5.1",
+    "react-new-window": "0.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^2.1.1",
+    "react-select": "^2.0.0",
+    "react-webcam": "^1.0.1",
+    "time-number": "^1.1.0",
+    "universal-cookie": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "ws": "3.3.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
