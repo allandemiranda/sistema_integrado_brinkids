@@ -3,9 +3,9 @@ const ExtraServices = require('../models/extra-services-models');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/:name', async (req, res) => {
   try {
-    const services = await ExtraServices.find({});
+    const services = await ExtraServices.find({ name: req.params.name });
 
     console.log(services);
 
