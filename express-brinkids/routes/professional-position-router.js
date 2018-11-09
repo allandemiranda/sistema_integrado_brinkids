@@ -68,4 +68,20 @@ router.put('/', async (req, res) => {
   }
 });
 
+router.delete('/:identifier', async (req, res) => {
+  try {
+    const deletedProfessionalPosition = await professionalPosition.findByIdAndRemove(req.params.identifier);
+
+    if (!deletedProfessionalPosition) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router;
