@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
       classes: req.body.classes,
       functions: req.body.functions,
     });
-
+  }
     try {
       console.log('tentando salvar...');
       console.log(data);
@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
     } catch (err) {
       return res.sendStatus(500);
     }
-  }
 });
 
 router.get('/', (req, res) => {
@@ -41,9 +40,9 @@ router.get('/', (req, res) => {
 
 router.put('/', async (req, res) => {
   if (req.body.name
-  && req.body.description
-  && req.body.classes
-  && req.body.functions) {
+    && req.body.description
+    && req.body.classes
+    && req.body.functions) {
     const exchangeData = {
       name: req.body.name,
       description: req.body.description,
