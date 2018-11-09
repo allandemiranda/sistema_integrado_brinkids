@@ -26,22 +26,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
-  console.log(req.params);
-  console.log(req.body);
-  const ppjson = await professionalPosition.find({});
-  const data = {
-    identifier: ppjson.identifier,
-    name: ppjson.name,
-    description: ppjson.description,
-    classes: ppjson.classes,
-    functions: ppjson.functions,
-  };
-  try {
-    return res.status(201).json(data);
-  } catch (err) {
-    return res.sendStatus(500);
-  }
+router.get('/', (req, res) => {
+  userAdult.find({}, (err, result) =>{
+    try{
+      res.status(200).json(result)
+    }catch (err){
+      res.sendStatus(500)
+    }
+  });
 });
 
 router.put('/', async (req, res) => {
