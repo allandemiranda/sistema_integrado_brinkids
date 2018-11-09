@@ -36,12 +36,12 @@ class Gerador extends React.Component {
     }
     componentWillMount() {
         axios.get('/professionalPosition')
-          .then((response) => {
-            console.log(response.data);
-            this.setState({ listadecargos: response.data });
-          })
-          .catch((err) => console.log(err));
-      }
+            .then((response) => {
+                console.log(response.data);
+                this.setState({ listadecargos: response.data });
+            })
+            .catch((err) => console.log(err));
+    }
     Salvar2(event) {
         let temporario = this.state.listadecargos;
         temporario[this.state.indice] = {
@@ -88,6 +88,22 @@ class Gerador extends React.Component {
 
     }
     Salvar(event) {
+        var formData = new FormData();
+        formData.append('name', this.state.Name);
+        formData.append('description', this.state.Description);
+        formData.append('classes', this.state.class);
+        formData.append('functions', this.state.funcoescheck);
+        const data = {
+            name:this.state.Name,
+            description:this.state.Description,
+            classes:this.state.class,
+            functions:this.state.funcoescheck,
+        };
+        axios.post(`/professionalPosition`, data)
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((err) => console.log(err));
         let listatemporaria = this.state.listadecargos;
         listatemporaria.push({
             class: this.state.class,
@@ -103,6 +119,7 @@ class Gerador extends React.Component {
             Page: 'Lista',
             class: 'Operacional',
         });
+
     }
     selecionaFuncao(event) {
         let achou = false;
@@ -165,7 +182,7 @@ class Gerador extends React.Component {
                                                     <div className="form-group">
 
                                                         <select className="form-control" style={{ height: 47 + 'px' }} id="exampleFormControlSelect2" onChange={this.changueselect}>
-                                                            
+
                                                             {this.state.listadecargos.map((cargos, indice1) => {
                                                                 if (findAdult.officialPosition.name === cargos.name) {
                                                                     return (
