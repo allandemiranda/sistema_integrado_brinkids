@@ -62,13 +62,13 @@ class Gerador extends React.Component {
     }
     editar(event) {
         let temporario = this.state.listadecargos[event];
-
+            console.log(temporario);
         this.setState({
             editar: true,
-            Name: temporario.Name,
-            Description: temporario.Description,
+            Name: temporario.name,
+            Description: temporario.description,
             Page: 'Novo',
-            class: temporario.classe,
+            class: temporario.classes,
             listaeditave: temporario,
             indice: event,
         })
@@ -93,17 +93,14 @@ class Gerador extends React.Component {
         formData.append('description', this.state.Description);
         formData.append('classes', this.state.class);
         formData.append('functions', this.state.funcoescheck);
-        const data = {
-            name:this.state.Name,
-            description:this.state.Description,
-            classes:this.state.class,
-            functions:this.state.funcoescheck,
-        };
-        axios.post(`/professionalPosition`, data)
+        
+        axios.post(`/professionalPosition`, formData)
             .then((response) => {
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
+        
+        
         let listatemporaria = this.state.listadecargos;
         listatemporaria.push({
             class: this.state.class,
@@ -111,6 +108,7 @@ class Gerador extends React.Component {
             description: this.state.Description,
             funcions: this.state.funcoescheck
         });
+        
         this.setState({
             listadecargos: listatemporaria,
             Name: '',
