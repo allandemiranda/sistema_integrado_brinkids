@@ -143,25 +143,18 @@ class SaidaCrianca extends React.Component {
                 ProdutoCria: this.state.CriancasSelecionadas[0].service,
                 page: "MostraCrianca",
             })
-            var formData = new FormData();
+            /*var formData = new FormData();
 
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
-            formData.append('TimeAdult', String(this.state.TimeAdult));
+            formData.append('TimeAdult', String(this.state.TimeAdult));*/
 
-            axios.post(`/passport/data`, formData)
+            //axios.post(`/passport/data`, formData)
+              //  .then(function (response) {
+            axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + '/' + this.state.TimeAdult)
                 .then(function (response) {
-                    axios.get(`/passport`)
-                        .then(function (response) {
-                            this.setState({
-                                ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
-                            })
-                        }).catch(function (error) {
-                            console.log(error)//LOG DE ERRO
-                            alert("Erro no Cadastro");
-                            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                        })
+                    this.setState({
+                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                    })
                 }).catch(function (error) {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
