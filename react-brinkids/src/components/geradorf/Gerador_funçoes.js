@@ -44,25 +44,30 @@ class Gerador extends React.Component {
     }
     Salvar2(event) {
         let temporario = this.state.listadecargos;
+        console.log(temporario[this.state.indice]);
+        let identifier = temporario[this.state.indice]._id;
         temporario[this.state.indice] = {
             name: this.state.Name,
             description: this.state.Description,
             class: this.state.class,
             funcions: this.state.funcoescheck,
         }
-        const form = {
-            name: this.state.Name,
-            description: this.state.Description,
-            class: this.state.class,
-            funcions: this.state.funcoescheck,
-        }
-        axios.put('/professionalPosition',form)
+        
+      
+        var formData = new FormData();
+        formData.append('name', this.state.Name);
+        formData.append('description', this.state.Description);
+        formData.append('classes', this.state.class);
+        formData.append('functions', this.state.funcoescheck);
+        
+        axios.put(`professionalPosition/${identifier}`,formData)
             .then((response) => {
                 console.log(response.data);
                
             })
             .catch((err) => console.log(err));
-        this.setState({
+        
+            this.setState({
             editar: false,
             Name: '',
             Description: '',
@@ -75,7 +80,8 @@ class Gerador extends React.Component {
     editar(event) {
         let temporario = this.state.listadecargos[event];
             console.log(temporario);
-        this.setState({
+       
+            this.setState({
             editar: true,
             Name: temporario.name,
             Description: temporario.description,
@@ -89,6 +95,12 @@ class Gerador extends React.Component {
 
         let listaTemporaria = this.state.listadecargos;
         let identifier = listaTemporaria[event]._id;
+
+        axios.delete(`/professionalPosition/${identifier}`)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((err) => console.log(err));
 
         listaTemporaria.splice(event, 1);
         this.setState({
