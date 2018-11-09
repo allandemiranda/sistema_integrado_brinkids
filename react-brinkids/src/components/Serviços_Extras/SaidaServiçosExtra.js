@@ -9,6 +9,7 @@ import Comprovant from '../Comprovante/comprovante';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
+import { EventEmitter } from 'events';
 
 class SaidaServicosExtra extends React.Component {
     constructor(props){
@@ -16,19 +17,25 @@ class SaidaServicosExtra extends React.Component {
         this.state = {
             list: [], // lista dos dados que retornam da pesquisa  
             listConfirm: [], // Dados do Serviço Selecionado na checkBox   
-            quantidade:'',
+            quantidade:[],
             page: "TelaInicial",//"Detalhamento",//
-            formaDePagamento:"",
             Total:0,
             FormaDePagamento:"",
+            valorTotal:[],
+            selectedSearch:"",
         }        
         this.Search = this.Search.bind(this);
         this.ChangeQuantidade = this.ChangeQuantidade.bind(this);
+        this.FormaDePagamento = this.ChgangeFormadePagamento.bind(this);
+        this.ChangeSearch = this.ChangeSearch.bind(this);
     }
     // Faz a busca do Serviço:
+    ChangeSearch(event) {
+        this.setState({ selectedSearch: event.target.value });
+    }
     Search(event) {
         $.ajax({
-            url: "http://localhost:3001/",//
+            url: "http://localhost:3001/extraServices/" + this.state.selectedSearch,//
             dataType: 'json',
             type: 'GET',
             error: function (response) {
@@ -53,18 +60,19 @@ class SaidaServicosExtra extends React.Component {
 
         //Desmarca A checkBox
         this.state.listConfirm.forEach((produto, indice, array) => {
+            //adiciona os produtos a lista
             if (produto._id === identifier) {
                 delete array[indice];
                 achou = true;
-                this.state.Total = this.state.Total - (produto.value * this.state.quantidade)
+                //this.state.Total = this.state.Total - (produto.value * this.state.quantidade)
             }
         });
-
+        // apaga o produto da lista
         if (!(achou)) {
-            this.state.listConfirm.forEach((produto) => {
+            this.state.list.forEach((produto) => {
                 if (produto._id === identifier) {
                     this.state.listConfirm.push(produto);
-                    this.state.Total = this.state.Total + (produto.value * this.quantidade)
+                    //this.state.Total = this.state.Total + (produto.value * this.quantidade)
                 }
             });
         }
@@ -73,27 +81,50 @@ class SaidaServicosExtra extends React.Component {
         console.log(this.state.listConfirm)
         this.preenchido = true;
     }
+    ChgangeFormadePagamento(event) {
+        this.setState({ FormaDePagamento: event.target.value });
+    }
 
     ChangeQuantidade(event) {
-        this.setState({ quantidade: event.target.value });
+        let valorTemporario = this.state.valorTotal;
+        let listatemporaria = this.state.quantidade;
+        listatemporaria[event.target.name[2]] = event.target.value;
+        valorTemporario[event.target.name[2]] = (this.state.list[event.target.name[2]].value * listatemporaria[event.target.name[2]])
+        console.log(listatemporaria[event.target.name[2]]  );
+     
+        this.setState({ quantidade: listatemporaria,valorTotal:valorTemporario });
+        console.log(this.state.valorTotal);
     }
 
     TelaII =(event)=>{
         this.setState({ page: "Detalhamento"});
+        let valorTotalFinal= 0;
+
+        this.state.listConfirm.map((valor , indice) => {
+           console.log(valor);
+                valorTotalFinal= valorTotalFinal + this.state.valorTotal[indice];
+                console.log(this.state.valorTotal[indice]);
+        })
+        this.setState({
+            Total:valorTotalFinal,
+        })
     }
 
     Finalizar =(event)=>{
         console.log(this.state.Total);
 
-        var formData = new FormData();
+        let formData = new FormData();
 
         formData.append('extraServices', JSON.stringify(this.state.listConfirm.map((servico) => {
-            return {id: servico._id, name: servico.name, type: servico.type, unity: servico.unity,value: servico.value}
+            return { 
+                    name: servico.name, 
+                    type: servico.type, 
+                    unity: servico.unity,
+                    value: servico.value,
+                    price: this.state.Total,
+                    priceMethod:this.state.FormaDePagamento,
+                    }
         })))
-
-        console.log(this.state.confirmaCrianca.map((servico) => {
-            return {id: servico._id, name: servico.name, type: servico.type, unity: servico.unity,value: servico.value}
-        }))
 
         axios.post('/extraServices', formData)
         .then(function (response) {
@@ -155,8 +186,8 @@ class SaidaServicosExtra extends React.Component {
                                                 <td >{findproduct.type} </td>
                                                 <td>{findproduct.unity}</td> 
                                                 <td> {findproduct.value}</td>
-                                                <input id="ticketNum" type="number" name="ticketNum" value={this.quantidade} onChange={this.ChangeQuantidade} ></input>
-                                                <td>{findproduct.value * this.quantidade}</td>
+                                                <input id="ticketNum" type="number"  name={[0 , indice]}  value={this.state.quantidade[indice]}  onChange={this.ChangeQuantidade} ></input>
+                                                <td>{this.state.valorTotal[indice]}</td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selected(findproduct._id)} /> </td>
                                             </tr>
                                         );
@@ -205,7 +236,7 @@ class SaidaServicosExtra extends React.Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {this.state.list.map((findproduct, indice) => {
+                                            {this.state.listConfirm.map((findproduct, indice) => {
                                                 return (
                                                     <tr key={findproduct._id}>
                                                         <th scope="row">{indice + 1}</th>
@@ -214,7 +245,7 @@ class SaidaServicosExtra extends React.Component {
                                                         <td>{findproduct.unity}</td>
                                                         <td> {findproduct.value}</td>
                                                         <td> {this.state.quantidade} </td>
-                                                        <td>{findproduct.value * this.quantidade}</td>
+                                                        <td>{this.state.valorTotal[indice]}</td>
                                                     </tr>
                                                 );
                                             })}
@@ -231,7 +262,7 @@ class SaidaServicosExtra extends React.Component {
                                     </div>
                                     <div className="col-md-5 col-sm-4 col-xs-4" >
                                         <label className="LetraFormulario" > Forma De Pagamento: </label>                                        
-                                        <select id="FormaDePagamento" name="FormaDePagamento" className="form-control optionFomulario" value={this.state.FormaDePagamento}  >
+                                        <select id="FormaDePagamento" name="FormaDePagamento" className="form-control optionFomulario"   >
                                             <option value="Dinheiro" > Dinheiro </option>
                                             <option value="Cartão" >  Cartão </option>                                            
                                         </select >

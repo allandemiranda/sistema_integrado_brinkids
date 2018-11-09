@@ -5,21 +5,8 @@ const router = express.Router();
 
 router.get('/:name', async (req, res) => {
   try {
-    const services = await ExtraServices.find({ name: req.params.name });
-
-    console.log(services);
-
-    return res.status(200).json(services);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
-  }
-});
-
-router.get('/:identifier', async (req, res) => {
-  try {
-    const serviceFound = ExtraServices.findById(req.params.identifier);
-
+    const serviceFound = await ExtraServices.find({ 'name': new RegExp(req.params.name) });
+    console.log(serviceFound);
     if (!serviceFound) {
       return res.sendStatus(404);
     }
@@ -51,8 +38,6 @@ router.post('/', async (req, res) => {
       return res.sendStatus(500);
     }
   }
-
-  return res.sendStatus(400);
 });
 
 router.put('/:identifier', async (req, res) => {

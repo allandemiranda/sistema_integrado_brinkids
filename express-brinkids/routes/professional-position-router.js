@@ -17,14 +17,15 @@ router.post('/', async (req, res) => {
       classes: req.body.classes,
       functions: req.body.functions,
     });
-  }
-  try {
-    console.log('tentando salvar...');
-    console.log(data);
-    const newProfessionalPosition = await data.save();
-    return res.status(201).json(newProfessionalPosition);
-  } catch (err) {
-    return res.sendStatus(500);
+
+    try {
+      console.log('tentando salvar...');
+      console.log(data);
+      const newProfessionalPosition = await data.save();
+      return res.status(201).json(newProfessionalPosition);
+    } catch (err) {
+      return res.sendStatus(500);
+    }
   }
 });
 
