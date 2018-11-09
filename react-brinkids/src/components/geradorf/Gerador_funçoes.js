@@ -35,7 +35,6 @@ class Gerador extends React.Component {
 
     }
     componentWillMount() {
-    
         axios.get('/professionalPosition')
           .then((response) => {
             console.log(response.data);
