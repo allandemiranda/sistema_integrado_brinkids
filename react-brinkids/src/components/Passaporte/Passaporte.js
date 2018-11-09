@@ -301,7 +301,8 @@ class Passport extends React.Component {
     // Voltar par Tela I
     VoltarTelaI = (event) => {
         this.setState({
-            page: "SelectAdult"
+            page: "SelectAdult",
+            listConfirmAdult: [],
         })
     }
     // Voltar par Tela II
@@ -314,12 +315,14 @@ class Passport extends React.Component {
     // Voltar par Tela III
     VoltarTelaIII = (event) => {
         this.setState({
-            page: "SelectKids"
+            page: "SelectKids",
+            listConfirmKids:[],
+
         })
     }
 
     // Voltar par Tela IV
-    VoltarTelaII = (event) => {
+    VoltarTelaIV = (event) => {
         this.setState({
             page: "ConfirmKids"
         })
@@ -615,7 +618,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-6 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px"  }}>
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
-                                                                <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinshipConfirm} onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id)} >
+                                                                <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id)} >
                                                                 <option value="others" > Outros </option>
                                                                 <option value="children" > filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
@@ -806,7 +809,8 @@ class Passport extends React.Component {
                         
                     />
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>                        
+                        <a className="btn btn-md botao" href="/">Cancelar</a>   
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaIV}>Voltar</button>                     
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
                     </div>
                 </div>

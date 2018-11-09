@@ -30,7 +30,7 @@ class SaidaServicosExtra extends React.Component {
     // Faz a busca do Serviço:
     Search(event) {
         $.ajax({
-            url: "http://localhost:3001/extraServices",//
+            url: "http://localhost:3001/extraServices/" + this.state.selectedSearch,//
             dataType: 'json',
             type: 'GET',
             error: function (response) {
