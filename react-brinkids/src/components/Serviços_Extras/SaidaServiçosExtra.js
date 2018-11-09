@@ -22,12 +22,17 @@ class SaidaServicosExtra extends React.Component {
             Total:0,
             FormaDePagamento:"",
             valorTotal:[],
+            selectedSearch:"",
         }        
         this.Search = this.Search.bind(this);
         this.ChangeQuantidade = this.ChangeQuantidade.bind(this);
         this.FormaDePagamento = this.ChgangeFormadePagamento.bind(this);
+        this.ChangeSearch = this.ChangeSearch.bind(this);
     }
     // Faz a busca do Serviço:
+    ChangeSearch(event) {
+        this.setState({ selectedSearch: event.target.value });
+    }
     Search(event) {
         $.ajax({
             url: "http://localhost:3001/extraServices/" + this.state.selectedSearch,//
@@ -111,7 +116,14 @@ class SaidaServicosExtra extends React.Component {
         let formData = new FormData();
 
         formData.append('extraServices', JSON.stringify(this.state.listConfirm.map((servico) => {
-            return {id: servico._id, name: servico.name, type: servico.type, unity: servico.unity,value: servico.value}
+            return { 
+                    name: servico.name, 
+                    type: servico.type, 
+                    unity: servico.unity,
+                    value: servico.value,
+                    price: this.state.Total,
+                    priceMethod:this.state.FormaDePagamento,
+                    }
         })))
 
         axios.post('/extraServices', formData)
