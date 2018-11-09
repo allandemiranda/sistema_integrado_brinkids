@@ -58,8 +58,9 @@ class Passport extends React.Component {
         this.ChangeRest = this.ChangeRest.bind(this);
         this.ChangePhone = this.ChangePhone.bind(this);
 
-
+        this.TelaIII = this.TelaIII.bind(this);
     }
+    
     //Relacionado a atualização dos valores Funções
     ChangeObs(event) {
         this.setState({ obs: event.target.value });
@@ -92,7 +93,7 @@ class Passport extends React.Component {
                 success: function (response) {    //Salva os dados do responsável na variácel LIST
                     console.log(response.length)
                     if (response.length === 0) {
-                        alert("Erro esc")
+                        alert("Erro: Nenhum Responásel Encontrado")
                         this.setState({ erro: "* Nenhum Responásel Encontrado." })
                     } else {
                         console.log("Olar")
@@ -197,25 +198,41 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela III
-    TelaIII = (event) => {
+    TelaIII(event) {
+        // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
+        // uma requisição para pegar seus dados.
+        const criancas = this.state.listConfirmAdult[0].children.map(async (crianca) => {
+            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+            return response.data;
+        });
+
+        criancas.forEach(async (c) => {
+            const crianca = await c;
+            this.setState({
+                listConect: [...this.state.listConect, crianca]
+            })
+        })
+
         this.setState({
             page: "SelectKids",
             selectedSearch: '',
             list:[],
-        })
-        // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
-        $.ajax({
-            url: "http://localhost:3001/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-            },
-            success: function (response) {    //Salva os dados do responsável na variácel LIST
-                console.log("Olar2")
-                this.setState({ listConect: response });
-            }.bind(this)
         });
+
+
+        // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
+        // $.ajax({
+        //     url: "http://localhost:3001/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
+        //     dataType: 'json',
+        //     type: 'GET',
+        //     error: function (response) {
+        //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+        //     },
+        //     success: function (response) {    //Salva os dados do responsável na variácel LIST
+        //         console.log("Olar2")
+        //         this.setState({ listConect: response });
+        //     }.bind(this)
+        // });
     }
 
     // Encaminha para a tela IV
@@ -267,7 +284,7 @@ class Passport extends React.Component {
         for(i = 0; i < this.state.listConfirmKids.length; i++){
             formData.append('photo', String(this.state.listConfirmKids[0]._id))
             formData.append('service', 'Passaporte')
-            formData.append('time', moment().toNow())
+            formData.append('time', moment().format())
             formData.append('belongings', '0')
             listCria.push(String(this.state.listConfirmKids[i]._id))
             listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
@@ -376,7 +393,8 @@ class Passport extends React.Component {
                             <li > < a href="/" > Home </a></li >
                             <li > Passaporte </li>
                         </ol >
-                    </div>
+                    </div> 
+
                     <div className="graph-visual" >
                         <div className="graph" >
                             <div>
@@ -531,9 +549,6 @@ class Passport extends React.Component {
                                                 </tr>
                                             );
                                         })}
-                                    </tbody>
-
-                                    <tbody>
                                         {this.state.list.map((findKids, indice) => {
                                             return (
                                                 <tr key={findKids._id}>

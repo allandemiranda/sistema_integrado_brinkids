@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const config = require('../config');
 
 const productSchema = new mongoose.Schema({
-   children: {
+  children: {
     id: {
       type: String,
       required: true,

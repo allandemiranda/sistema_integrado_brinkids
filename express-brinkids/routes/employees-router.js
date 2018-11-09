@@ -51,7 +51,7 @@ router.get('/search/:search', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const adultResult = await adult.findByIdAndUpdate(req.body.identifier, { isEmployee: true });
+    const adultResult = await adult.findByIdAndUpdate(req.body.Identifier, { isEmployee: true });
 
     if (!adultResult) {
       return res.sendStatus(404);

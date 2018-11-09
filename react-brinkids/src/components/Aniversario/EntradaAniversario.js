@@ -43,10 +43,9 @@ class EntradaAniversario extends React.Component {
         this.SearchChild = this.SearchChild.bind(this);
     }
 
-    //Requisição dados do evento atual 
-    RequisicaoDadosParty() {
+    componentWillMount() {
         $.ajax({
-            url:"http://localhost:3001/birthdayParty",
+            url:"http://localhost:3001/birthday",
             dataType: 'json',
             type: 'GET',
             error: function (response) {
@@ -55,7 +54,7 @@ class EntradaAniversario extends React.Component {
             success: function (response) {
                 console.log(response.length)
                 if (response.length === 0) {
-                    alert("Erro esc")
+                    alert("Nenhum aniversário encontrado")
                     this.setState({ erro: "* Nenhum Evento Encontrado." })
                 } else {
                     console.log("Olar")
@@ -63,7 +62,6 @@ class EntradaAniversario extends React.Component {
                 }
             }.bind(this)
         });
-
     }
 
     //Relacionado a atualização dos valores Funções
@@ -316,7 +314,6 @@ class EntradaAniversario extends React.Component {
     }
 
     render() {
-        this.RequisicaoDadosParty()
         // //TELA I - Seleção adulto ou criança 
         if (this.state.page === "SelecionarTipoDeEntrada") {
             {/* Imprime a tabela com a busca dos Adultos*/ }
@@ -329,7 +326,8 @@ class EntradaAniversario extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <div className="graph" >
+                        {this.state.aniversariante.length > 0 && 
+                            <div className="graph" >
                             <div className="row">
                                 <div>
                                     <h3 className="inner-tittle " >Aniversário</h3>
@@ -386,7 +384,8 @@ class EntradaAniversario extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>}
+
                     </div>
                     <br></br>
                     <br></br>

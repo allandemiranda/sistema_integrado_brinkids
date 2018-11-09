@@ -23,45 +23,39 @@ router.get('/', (req, res) => {
  */
 // Rota de inserção de produtos
 router.post('/', async (req, res) => {
-  console.log(req.body)
-  var childrenObj = req.body.children.split(',');
-  var adultObj = req.body.adult.split(',');
-  console.log(childrenObj)
+  let childrenObj = req.body.children.split(',');
+  let adultObj = req.body.adult.split(',');
 
-  if (req.body) {
-    const childrenData = {
-        id: String(childrenObj[0]),
-        name: String(childrenObj[1]),
-        birthday: Date(childrenObj[2]),
-        restrictions: String(childrenObj[3]),
-        observations: String(childrenObj[4]),
-    };
-    const adultData = {
-        id: String(adultObj[0]),
-        name: String(adultObj[1]),
-        phone: String(adultObj[2]),
-        observations: String(adultObj[3]),
-    };
-    const data = new product({
-      photo: String(req.body.photo),
-      service: String(req.body.service),
-      time: new Date(req.body.time),
-      belongings: parseInt(req.body.belongings, 10),
-      children: childrenData,
-      adult: adultData,
-    });
-    console.log('Maybe I can try...')
-    console.log(data)
+  const childrenData = {
+    id: String(childrenObj[0]),
+    name: String(childrenObj[1]),
+    birthday: new Date(childrenObj[2]),
+    restrictions: String(childrenObj[3]),
+    observations: String(childrenObj[4]),
+  };
+  const adultData = {
+    id: String(adultObj[0]),
+    name: String(adultObj[1]),
+    phone: String(adultObj[2]),
+    observations: String(adultObj[3]),
+  };
+  const data = new product({
+    photo: String(req.body.photo),
+    service: String(req.body.service),
+    time: new Date(req.body.time),
+    belongings: parseInt(req.body.belongings, 10),
+    children: childrenData,
+    adult: adultData,
+  });
+
+  try {
+    const newProduct = await data.save();
+    console.log(newProduct);
+    return res.status(201).json(newProduct);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
   }
-    try{
-      console.log('trying...')
-      const newProduct = await data.save();
-      console.log(newProduct)
-      return res.sendStatus(201).json(newProduct);
-    }catch (err){
-      console.log('I was failed...')
-      return res.sendStatus(500);
-    }
 });
 
 module.exports = router;
