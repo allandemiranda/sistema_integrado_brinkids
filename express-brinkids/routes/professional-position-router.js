@@ -5,10 +5,11 @@ const config = require('../config');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-  console.log(req.body);
 
-  if(req.body.time 
-    && req.body.price){
+  if(req.body.name
+    && req.body.description
+    && req.body.classes
+    && req.body.functions){
 
     const data = new professionalPosition ({
       name: req.body.name,
@@ -18,6 +19,8 @@ router.post('/', async (req, res) => {
     });
 
     try {
+      console.log('tentando salvar...');
+      console.log(data);
       const newProfessionalPosition = await data.save();
       return res.status(201).json(newProfessionalPosition);
     } catch (err) {
