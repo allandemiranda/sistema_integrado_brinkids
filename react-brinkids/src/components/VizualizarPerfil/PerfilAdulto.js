@@ -109,7 +109,7 @@ class PerfilAdulto extends React.Component {
     Adicionar(event) {
         this.setState({
             page: 'Adicionar',
-            list:[],
+            list: [],
         })
     }
     changuePassword(event) {
@@ -167,7 +167,7 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-                console.log(formData);
+        console.log(formData);
 
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
@@ -194,7 +194,7 @@ class PerfilAdulto extends React.Component {
 
     }
     //função que alterna as paginas
-    async ChangePage(event) {
+    ChangePage(event) {
         this.setState(
             {
                 perfilEdicao: event,
@@ -202,18 +202,25 @@ class PerfilAdulto extends React.Component {
                 reserva: event,
                 page: 'Perfil'
             });
+            console.log(event);
 
-        try {
-            const dadosCriancas = this.state.perfilAtual.children.map(async (child) => {
-                const childResponse = await axios.get(`/child/identifier/${child.identifier}`);
-                return childResponse;
-            });
+        // const dadosCriancas = event.children.map(async (child) => {
+        //     const childResponse = await axios.get(`/child/identifier/${child._id}`);
+        //     console.log(childResponse);
+        //     return childResponse;
+        // });
+        let listacriancas;
+       
+            axios.get(`/child/identifier/${event.children[0].identifier}`)
+                .then((response) => {
+                    console.log(response.data);
+                    
+                }).catch((err) => {
+                    console.log(err);
+                });
+      
 
 
-        } catch (err) {
-            console.log(err);
-
-        }
 
 
 
@@ -276,7 +283,7 @@ class PerfilAdulto extends React.Component {
 
     }
     Search(event) {
-        
+
         axios.get(`/child/filter/${this.state.childSearch}`)
             .then((response) => {
                 console.log(response.data);
@@ -334,22 +341,23 @@ class PerfilAdulto extends React.Component {
     }
     TheEnd(event) {
         let listacrianca = [];
-        this.state.confirmaCrianca.map((crianca,indice)=>{
-                listacrianca.push({indentifier:crianca._id,kinship:crianca.kinship})
+        this.state.confirmaCrianca.map((crianca, indice) => {
+            
+            listacrianca.push({ indentifier: crianca._id, kinship: crianca.kinship })
 
         });
         console.log(listacrianca);
         const data = {
-            
+
             identifierParent: this.state.perfilAtual._id,
             listChildren: listacrianca,
 
         }
-            console.log(data);
+        console.log(data);
 
 
 
-        axios.post('/adult/appendChild',data)
+        axios.post('/adult/appendChild', data)
             .then((response) => {
                 console.log(response.data);
                 this.setState({ list: response.data });
@@ -460,10 +468,10 @@ class PerfilAdulto extends React.Component {
                 )
             };
             function converter(evento) {
-                 const data = evento.match(/([T,\w\*]+)/g);
-                 const dia = data[2].split(/[T]/g);
-                 
-                return dia[0]+"-"+data[1]+'-'+data[0];
+                const data = evento.match(/([T,\w\*]+)/g);
+                const dia = data[2].split(/[T]/g);
+
+                return dia[0] + "-" + data[1] + '-' + data[0];
             }
 
 
@@ -486,82 +494,82 @@ class PerfilAdulto extends React.Component {
 
                             </h3>
                             <div className="row">
-                            <div className="col-md-4 col-sm-4 text-center">
-                                <div className="graph" >
-                                    <h5 className="ltTitulo"><b>  </b></h5>
+                                <div className="col-md-4 col-sm-4 text-center">
+                                    <div className="graph" >
+                                        <h5 className="ltTitulo"><b>  </b></h5>
 
-                                    <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
-                                    {this.state.editar && (
-                                        <div>
-                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                        <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
+                                        {this.state.editar && (
+                                            <div>
+                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
+                                                    Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
-                                            </label>
-                                            </button>
-                                        </div>)
-                                    }
-                                </div>
-                                
-                            </div>
-                            
-                            <div className="col-md-8 col-sm-8 text-center">
-                                <div className="graph" >
-                                    <div className="tables table-responsive">
-                                        <table className="table table-hover">
-                                            <thead className="text-center">
-                                                <tr >
-                                                    <th>#</th>
-                                                    <th>Nome</th>
-                                                    <th>Parentesco</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="CriaTabela">
-                                                {this.state.perfilAtual.children.map(function (events, index) {
-                                                    return (
-                                                        <tr style={{ textAlign: 'justify' }} key={events._id}>
-                                                            <td>{index + 1}</td>
-                                                            <td>{events.identifier}</td>
-                                                            <td>{events.kinship}</td>
-                                                        </tr>
-                                                    )
-                                                })}
-
-                                            </tbody>
-                                        </table>
-
+                                                    <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                </label>
+                                                </button>
+                                            </div>)
+                                        }
                                     </div>
 
                                 </div>
-                                {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
-                                    Adicionar Criança <span className="glyphicon">&#xe065;</span>
+
+                                <div className="col-md-8 col-sm-8 text-center">
+                                    <div className="graph" >
+                                        <div className="tables table-responsive">
+                                            <table className="table table-hover">
+                                                <thead className="text-center">
+                                                    <tr >
+                                                        <th>#</th>
+                                                        <th>Nome</th>
+                                                        <th>Parentesco</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="CriaTabela">
+                                                    {this.state.perfilAtual.children.map(function (events, index) {
+                                                        return (
+                                                            <tr style={{ textAlign: 'justify' }} key={events._id}>
+                                                                <td>{index + 1}</td>
+                                                                <td>{events.identifier}</td>
+                                                                <td>{events.kinship}</td>
+                                                            </tr>
+                                                        )
+                                                    })}
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                    {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
+                                        Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
 
-                                </label>
-                                </button>)}
+                                    </label>
+                                    </button>)}
+                                </div>
                             </div>
-                            </div>
-                            
+
                             <div className="row">
-                            <br></br>
-                                
                                 <br></br>
-                                    <div className="col-md-6 col-sm-6">
-                                        <div className="graph" style={{ padding: 10 + "px" }} >
-                                            <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                            <p>{this.state.perfilAtual.name.firstName}</p>
-                                        </div>
-                                    </div>
 
-                                                 
-                                    <div className="col-md-6 col-sm-6">
-                                        <div className="graph" style={{ padding: 10 + "px" }} >
-                                            <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
-                                            <p>{this.state.perfilAtual.name.surName}</p>
-                                        </div>
+                                <br></br>
+                                <div className="col-md-6 col-sm-6">
+                                    <div className="graph" style={{ padding: 10 + "px" }} >
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.perfilAtual.name.firstName}</p>
                                     </div>
+                                </div>
 
-                                
+
+                                <div className="col-md-6 col-sm-6">
+                                    <div className="graph" style={{ padding: 10 + "px" }} >
+                                        <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
+                                        <p>{this.state.perfilAtual.name.surName}</p>
+                                    </div>
+                                </div>
+
+
                             </div>
 
                             <br></br>
@@ -607,7 +615,7 @@ class PerfilAdulto extends React.Component {
                             <br></br>
 
                             <div className="row">
-                            <div className="col-md-4 col-sm-12 col-xs-12">
+                                <div className="col-md-4 col-sm-12 col-xs-12">
                                     <div className="graph " style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Email:</b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.email}</p>)}
@@ -633,7 +641,7 @@ class PerfilAdulto extends React.Component {
                             <br></br>
 
                             <div className='row'>
-                                
+
                             </div>
 
                             <br></br>
@@ -757,7 +765,7 @@ class PerfilAdulto extends React.Component {
                                         <th>#</th>
                                         <th >Nome</th>
                                         <th >numero de registro</th>
-                                        
+
                                         <th className="text-center"> Selecionar </th>
                                     </tr>
                                 </thead>
@@ -766,10 +774,10 @@ class PerfilAdulto extends React.Component {
                                     {this.state.list.map((findChild, indice) => {
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indice+1}</th>
+                                                <th scope="row">{indice + 1}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{findChild.number} </td>
-                                                
+
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(findChild._id)} /> </td>
                                             </tr>
                                         );
@@ -814,7 +822,7 @@ class PerfilAdulto extends React.Component {
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
-                                                    <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={(event) => this.Changekinship(event, findChild._id)} >
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, findChild._id)} >
                                                         <option value="others" > Outros </option>
                                                         <option value="children" > filho(a) </option>
                                                         <option value="Stepson" > Enteado(a) </option>

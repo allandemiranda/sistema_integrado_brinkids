@@ -99,13 +99,11 @@ class EntradaAniversario extends React.Component {
                 page:"SelecionarTipoDeEntrada",
                 comprovante:true,
             })
-            this.state.aniversariante[0].partyFeather= update(this.state.aniversariante[0].partyFeather, {$push: [{type:"adult", name: this.state.adultoSelecionado[0].name}]}),
-            alert("Cadastrado");
 
             var formData = new FormData();
 
             formData.append('name', String( this.state.adultoSelecionado[0].name))
-            formData.append('type', String(this.state.aniversariante[0].partyFeather.type))
+            formData.append('type', String(this.state.aniversariante[0].type))
     
             axios.post('/birthdayParty', formData)
             .then(function (response) {
@@ -117,6 +115,8 @@ class EntradaAniversario extends React.Component {
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
+
+            alert("Cadastrado");
         } 
         
         AvancarCombinarCrianca = (event) =>{
@@ -158,12 +158,11 @@ class EntradaAniversario extends React.Component {
                 listaCriancaDentro: update(this.state.listaCriancaDentro, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]}),
                 comprovante:true,
             })
-            this.state.aniversariante[0].partyFeather= update(this.state.aniversariante[0].partyFeather, {$push: [{type:"child", id: this.state.criancaSelecionada[0]._id}]});
             
             var formData = new FormData();
 
             formData.append('name', String( this.state.criancaSelecionada[0]._id))
-            formData.append('type', String(this.state.aniversariante[0].partyFeather.type))
+            formData.append('type', String(this.state.aniversariante[0].type))
     
             axios.post('/birthdayParty', formData)
             .then(function (response) {

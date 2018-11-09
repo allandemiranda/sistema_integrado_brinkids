@@ -39,7 +39,7 @@ class Gerador extends React.Component {
         axios.get('/professionalPosition')
           .then((response) => {
             console.log(response.data);
-            this.setState({ listadecargos: response.data });
+            this.setState({ listadecargos: response.data.professionalPosition });
           })
           .catch((err) => console.log(err));
       }
