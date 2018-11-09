@@ -50,6 +50,18 @@ class Gerador extends React.Component {
             class: this.state.class,
             funcions: this.state.funcoescheck,
         }
+        const form = {
+            name: this.state.Name,
+            description: this.state.Description,
+            class: this.state.class,
+            funcions: this.state.funcoescheck,
+        }
+        axios.put('/professionalPosition',form)
+            .then((response) => {
+                console.log(response.data);
+                this.setState({ listadecargos: response.data });
+            })
+            .catch((err) => console.log(err));
         this.setState({
             editar: false,
             Name: '',
@@ -74,7 +86,10 @@ class Gerador extends React.Component {
         })
     }
     excluir(event) {
+
         let listaTemporaria = this.state.listadecargos;
+        let identifier = listaTemporaria[event]._id;
+
         listaTemporaria.splice(event, 1);
         this.setState({
             listadecargos: listaTemporaria,
