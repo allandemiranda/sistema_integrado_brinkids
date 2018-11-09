@@ -13,7 +13,7 @@ class Gerador extends React.Component {
         super(props)
         this.state = {
             Page: 'Lista',
-            list: lista,
+            list: [],
             listadecargos: [],
             Name: '',
             Description: '',
@@ -39,6 +39,13 @@ class Gerador extends React.Component {
             .then((response) => {
                 console.log(response.data);
                 this.setState({ listadecargos: response.data });
+            })
+            .catch((err) => console.log(err));
+
+            axios.get('/employees')
+            .then((response) => {
+                console.log(response.data);
+                this.setState({ list: response.data });
             })
             .catch((err) => console.log(err));
     }
@@ -120,8 +127,13 @@ class Gerador extends React.Component {
         formData.append('description', this.state.Description);
         formData.append('classes', this.state.class);
         formData.append('functions', this.state.funcoescheck);
-        
-        axios.post(`/professionalPosition`, formData)
+        const data = {
+            name:this.state.Name,
+            description:this.state.Description,
+            classes:this.state.class,
+            functions:this.state.funcoescheck,
+        }
+        axios.post(`/professionalPosition`, data)
             .then((response) => {
                 console.log(response.data);
             })
