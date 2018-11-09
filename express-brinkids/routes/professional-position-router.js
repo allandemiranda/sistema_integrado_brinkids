@@ -41,16 +41,16 @@ router.get('/', (req, res) => {
 
 router.put('/', async (req, res) => {
   if (req.body.name
-    && req.body.description
-    && req.body.classes
-    && req.body.functions) {
-      const exchangeData = {
-        name: req.body.name,
-        description: req.body.description,
-        classes: req.body.classes,
-        functions: req.body.functions,
-      };
-
+  && req.body.description
+  && req.body.classes
+  && req.body.functions) {
+    const exchangeData = {
+      name: req.body.name,
+      description: req.body.description,
+      classes: req.body.classes,
+      functions: req.body.functions,
+    };
+  }
     try {
       const professionalPositionChange = await professionalPosition.findByIdAndUpdate(req.body.identifier, exchangeData);
 
@@ -63,9 +63,6 @@ router.put('/', async (req, res) => {
       console.log(err);
       return res.sendStatus(500);
     }
-  } else {
-    return res.sendStatus(400);
-  }
 });
 
 router.delete('/:identifier', async (req, res) => {
