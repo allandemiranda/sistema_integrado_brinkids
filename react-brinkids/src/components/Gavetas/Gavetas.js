@@ -12,6 +12,10 @@ class Gaveta extends React.Component {
             Ngavetas: '',
         }
         this.Change = this.Change.bind(this);
+        this.salvar = this.salvar.bind(this);
+    }
+    salvar(event){
+        
     }
     Change(event) {
         this.setState({
@@ -20,11 +24,10 @@ class Gaveta extends React.Component {
     }
     componentWillMount() {
 
-        axios.get('/calendar')
+        axios.get('/belongings')
             .then((response) => {
 
-
-                this.setState({ datasRequisicao: response.data });
+                this.setState({ Ngavetas: response.data });
             })
             .catch((err) => console.log(err));
     }
