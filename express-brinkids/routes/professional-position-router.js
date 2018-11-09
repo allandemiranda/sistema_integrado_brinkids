@@ -31,7 +31,11 @@ router.get('/', async (req, res) => {
   console.log(req.body);
   const ppjson = await professionalPosition.find({});
   const data = {
-    professionalPosition: ppjson, 
+    identifier: ppjson.identifier,
+    name: ppjson.name,
+    description: ppjson.description,
+    classes: ppjson.classes,
+    functions: ppjson.functions,
   };
   try {
     return res.status(201).json(data);
