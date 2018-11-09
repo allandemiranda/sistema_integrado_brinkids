@@ -45,10 +45,10 @@ router.put('/', async (req, res) => {
     && req.body.classes
     && req.body.functions) {
       const exchangeData = {
-        name: req.body.phone,
-        description: req.body.email,
-        classes: req.body.street,
-        functions: req.body.number,
+        name: req.body.name,
+        description: req.body.description,
+        classes: req.body.classes,
+        functions: req.body.functions,
       };
 
     try {
