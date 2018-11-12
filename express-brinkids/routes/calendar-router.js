@@ -13,9 +13,9 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const birthdays = await Calendar.find({});
-    // const events = await extraService.find({});
+    const events = await extraService.find({});
 
-    res.status(200).json([...birthdays, ...events]);
+    return res.status(200).json([...birthdays, ...events]);
   } catch (err) {
     return res.sendStatus(500);
   }

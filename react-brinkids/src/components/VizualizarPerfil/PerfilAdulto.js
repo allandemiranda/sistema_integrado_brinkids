@@ -343,7 +343,7 @@ class PerfilAdulto extends React.Component {
         let listacrianca = [];
         this.state.confirmaCrianca.map((crianca, indice) => {
             
-            listacrianca.push({ indentifier: crianca._id, kinship: crianca.kinship })
+            listacrianca.push({ identifier: crianca._id, kinship: crianca.kinship })
 
         });
         console.log(listacrianca);

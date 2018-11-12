@@ -345,7 +345,7 @@ class FormularioCadFunc extends React.Component {
     NovoCadastro = (event) => {
         var formData = new FormData();
 
-        formData.append('Identifier', String(this.state.identifier))
+        formData.append('identifier', String(this.state.identifier))
 
         formData.append('gender', String(this.state.sexuality))
         formData.append('education', String(this.state.scholl))
@@ -417,7 +417,7 @@ class FormularioCadFunc extends React.Component {
     CadastrarFunc = (event) => {
         var formData = new FormData();
 
-        formData.append('Identifier', String(this.state.identifier))
+        formData.append('identifier', String(this.state.identifier))
 
         formData.append('gender', String(this.state.sexuality))
         formData.append('education', String(this.state.scholl))
