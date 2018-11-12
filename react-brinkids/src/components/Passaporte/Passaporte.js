@@ -81,8 +81,19 @@ class Passport extends React.Component {
         this.setState({ selectedSearch: event.target.value });
     }
 
+    
+
     // Faz a busca do responsável:
     SearchAdult(event) {
+        let erros = ValidaErros(this.state.selectedSearch);
+
+        if(erros.length === 0){
+            alert("A Busca não pode ser em branco");
+        }
+        else if (erros.length < 8){
+            alert("A Busca nao pode ter menos que 8 caracteres");
+        }
+        else {
             $.ajax({
                 url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
                 dataType: 'json',
@@ -101,6 +112,27 @@ class Passport extends React.Component {
                     }
                 }.bind(this)
             });
+        }
+
+        function ValidaErros (busca){
+            let erros = [];
+            if (busca.length === 0) {
+                erros.push("A Busca não pode ser em branco");
+            }
+            if (busca.length < 8) {
+                erros.push("A Busca nao pode ter menos que 8 caracteres");
+            }
+            return erros;
+        }
+        function exibeMensagensDeErro(erros){
+            var ul = document.querySelector("#mensagens-erro");
+            ul.innerHTML = "";
+            erros.forEach(function(erro){
+                var li = document.createElement("li");
+                li.textContent = erro;
+                ul.appendChild(li);
+            });
+        }
     }
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
@@ -136,21 +168,52 @@ class Passport extends React.Component {
     }
 
     // Faz a busca das Crianças:
-    SearchChild(event) {
-        $.ajax({
-            url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) }
-            },
-            success: function (response) {    //Salva os dados do responsável na variácel LIST
-                console.log(response);
-                //this.setState({ achado: true });
-                this.setState({ list: response });
-            }.bind(this)
-        });
+    SearchChild(event){
+        let erros = ValidaErros(this.state.selectedSearch);
+
+        if(erros.length === 0){
+            alert("A Busca não pode ser em branco");
+        }
+        else if (erros.length < 8){
+            alert("A Busca não pode ser em branco");
+        }
+        else {
+            $.ajax({
+                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
+                dataType: 'json',
+                type: 'GET',
+                error: function (response) {
+                    if (response.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) }
+                },
+                success: function (response) {    //Salva os dados do responsável na variácel LIST
+                    console.log(response);
+                    //this.setState({ achado: true });
+                    this.setState({ list: response });
+                }.bind(this)
+            });
+        }
+
+        function ValidaErros (busca){
+            let erros = [];
+            if (busca.length === 0) {
+                erros.push("A Busca não pode ser em branco");
+            }
+            if (busca.length < 8) {
+                erros.push("A Busca nao pode ter menos que 8 caracteres");
+            }
+            return erros;
+        }
+        function exibeMensagensDeErro(erros){
+            var ul = document.querySelector("#mensagens-erro");
+            ul.innerHTML = "";
+            erros.forEach(function(erro){
+                var li = document.createElement("li");
+                li.textContent = erro;
+                ul.appendChild(li);
+            });
+        }
     }
+    
 
     // Salva AS informações das CRIANÇAS que apareceu na busca e foi selecionado.
     selectedKids(identifier) {
