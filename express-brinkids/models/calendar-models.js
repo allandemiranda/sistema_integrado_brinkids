@@ -8,10 +8,6 @@ const calendarSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
@@ -24,6 +20,8 @@ const calendarSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  description: String,
+  address: String,
   associated: String,
 });
 

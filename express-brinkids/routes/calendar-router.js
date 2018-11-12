@@ -2,20 +2,18 @@
 
 const express = require('express');
 const Calendar = require('../models/calendar-models');
-const extraService = require('../models/extra-services-models');
+const BirthdayParty = require('../models/birthday-party-models');
 
 const router = express.Router();
 
 
 /** Esta rota envia todos os documentos referentes a calendario */
-//TODO: colocar para aparecer aniversarios
-//TODO: Remover extraServices
 router.get('/', async (req, res) => {
   try {
     const birthdays = await Calendar.find({});
-    const events = await extraService.find({});
+    const parties = await BirthdayParty.find({});
 
-    return res.status(200).json([...birthdays, ...events]);
+    return res.status(200).json([...birthdays, ...parties]);
   } catch (err) {
     return res.sendStatus(500);
   }
@@ -24,16 +22,16 @@ router.get('/', async (req, res) => {
 /** Esta rota cria uma nova data */
 router.post('/', async (req, res) => {
   if (req.body.color
-      && req.body.type
       && req.body.title
       && req.body.start
       && req.body.end) {
     const calendar = new Calendar({
       color: req.body.color,
-      type: req.body.type,
       title: req.body.title,
       start: new Date(req.body.start),
       end: new Date(req.body.end),
+      description: req.body.description,
+      address: req.body.address,
       associated: req.body.associated,
     });
 

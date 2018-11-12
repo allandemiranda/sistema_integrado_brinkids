@@ -121,8 +121,9 @@ class Calendar extends React.Component {
       title: titulo,
       start: HoraI.toString(), // (Gabriel): Necessário enviar as data no formato de texto
       end: HoraF.toString(),
-      type: "qualque",
       color: this.state.Color,
+      description: this.state.Description,
+      address: this.state.Location,
       associated: "Usuario"
     }
 
@@ -160,6 +161,8 @@ class Calendar extends React.Component {
       Color: event.color,
       editar: true,
       identifier: event._id,
+      Description:event.description,
+      Location:event.address,
     })
 
   }
