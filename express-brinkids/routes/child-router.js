@@ -159,6 +159,7 @@ router.post('/', (req, res) => {
 
 router.put('/:identifier', async (req, res) =>  {
   if (req.body.observations
+      && req.body.restrictions
       && req.body.firstName
       && req.body.lastName
       && req.body.number
@@ -177,6 +178,7 @@ router.put('/:identifier', async (req, res) =>  {
         nacionality: req.body.nacionality,
         sexuality: req.body.sexuality,
         observations: req.body.observations,
+        restrictions: req.body.restrictions,
       },
     );
 

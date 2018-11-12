@@ -39,6 +39,7 @@ class PerfilCrianca extends React.Component {
             aniversario:'',
             sexualidade:'',
             nacionalidade:'',
+            restricao:'',
 
         }
         //funçoes para mudar os values e afins
@@ -88,7 +89,7 @@ class PerfilCrianca extends React.Component {
         this.state.perfilAtual.birthday = this.state.aniversario;
         this.state.perfilAtual.nacionality = this.state.nacionalidade;
         this.state.perfilAtual.sexuality = this.state.sexualidade;
-
+        this.state.perfilAtual.restrictions = this.state.restricao;
         var formData = new FormData();
 
         
@@ -96,6 +97,7 @@ class PerfilCrianca extends React.Component {
             formData.append('photo', this._dataURItoBlob(foto));
         }
         formData.append('observations', this.state.obs);
+        formData.append('restrictions', this.state.restricao);
         formData.append('firstName', this.state.firstName);
         formData.append('lastName', this.state.surName);
         formData.append('number', this.state.number);
@@ -116,6 +118,7 @@ class PerfilCrianca extends React.Component {
             this.state.perfilAtual.birthday = this.state.aniversario;
             this.state.perfilAtual.nacionality = this.state.nacionalidade;
             this.state.perfilAtual.sexuality = this.state.sexualidade;
+            this.state.perfilAtual.restrictions = this.state.restricao;
             this.setState({
 
                 editar: false,
@@ -163,6 +166,7 @@ class PerfilCrianca extends React.Component {
             number:this.state.perfilAtual.number,
             nacionalidade:this.state.perfilAtual.nacionality,
             sexualidade:this.state.perfilAtual.sexuality,
+            restricao:this.state.perfilAtual.restrictions,
         });
 
         this.setState({
@@ -204,7 +208,7 @@ class PerfilCrianca extends React.Component {
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Procurar Perfil </li>
                         </ol >
                     </div>
@@ -291,7 +295,7 @@ class PerfilCrianca extends React.Component {
                     <div className="sub-heard-part" >
 
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Vizualizar </li>
                             <li > Perfil </li>
                         </ol >
@@ -329,7 +333,7 @@ class PerfilCrianca extends React.Component {
                                 </div>
                                 <br></br>
                                 <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
+                                    <h5 className="ltTitulo"><b> Sobrenome: </b></h5>
                                     {!this.state.editar && (<p>{this.state.perfilAtual.name.surName}</p>)}
                                     {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="surName" onChange={this.changue} value={this.state.surName} />)}
                                 </div>
@@ -363,14 +367,14 @@ class PerfilCrianca extends React.Component {
 
                             <div className="row" >
 
-                                <div className="col-md-4 col-sm-4 col-xs-12" >
+                                <div className="col-md-3 col-sm-4 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nacionalidade: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.nacionality}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" name="nacionalidade" className="form-control" onChange={this.changue} value={this.state.nacionalidade} />)}
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-4 col-xs-12" >
+                                <div className="col-md-3 col-sm-4 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sexo: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.sexuality}</p>)}
@@ -387,13 +391,23 @@ class PerfilCrianca extends React.Component {
                                         )}
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                <div className="col-md-3 col-sm-12 col-xs-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo" ><b> Observações:</b> </h5>
 
                                         {!this.state.editar && (<p>{this.state.perfilAtual.observations}</p>)}
                                         {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" name="obs" rows="4" cols="50" id="Observacoes"  onChange={this.changue} value={this.state.obs}></textarea>)}
-                                    </div></div>
+                                    </div>
+                                </div>
+                                <div className="col-md-3 col-sm-12 col-xs-12">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo" ><b> Restrições:</b> </h5>
+
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.restrictions}</p>)}
+                                        {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" name="restricao" rows="4" cols="50" id="Observacoes"  onChange={this.changue} value={this.state.restricao}></textarea>)}
+                                    </div>
+                                </div>
+                                    
                             </div>
                             <br></br>
                             <div className="row">

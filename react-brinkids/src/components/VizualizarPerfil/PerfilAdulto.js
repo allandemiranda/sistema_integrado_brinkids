@@ -378,7 +378,7 @@ class PerfilAdulto extends React.Component {
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Procurar Perfil </li>
                         </ol >
                     </div>
@@ -480,7 +480,7 @@ class PerfilAdulto extends React.Component {
                     <div className="sub-heard-part" >
 
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Vizualizar </li>
                             <li > Perfil </li>
                         </ol >
@@ -743,7 +743,7 @@ class PerfilAdulto extends React.Component {
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Cadastro </li>
                             <li >Adulto </li>
                         </ol >
@@ -786,7 +786,7 @@ class PerfilAdulto extends React.Component {
                             </table>
 
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                                <a className="btn btn-md botao" hre="/">Cancelar</a>
                                 <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Perfil' })}>Voltar</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'ConfirmarCriança' })}> Adicinar Criança </button>
                             </div>

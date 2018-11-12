@@ -160,7 +160,7 @@ class Perfil extends React.Component {
                 this.setState({ list: lista });
             }
         });*/
-        axios.get(`/employees/filter/${this.state.selectedSearch}`)
+        axios.get(`/employees/search/${this.state.selectedSearch}`)
             .then((response) => {
                 console.log(this.state.selectedSearch);
                 console.log(response.data);
@@ -183,7 +183,7 @@ class Perfil extends React.Component {
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Procurar Perfil </li>
                         </ol >
                     </div>
@@ -609,7 +609,7 @@ class Perfil extends React.Component {
                     <div className="sub-heard-part" >
 
                         <ol className="breadcrumb m-b-0" >
-                            <li > < a href="/" > Home </a></li >
+                            <li > < a hre="/" > Home </a></li >
                             <li > Vizualizar </li>
                             <li > Perfil </li>
                         </ol >
