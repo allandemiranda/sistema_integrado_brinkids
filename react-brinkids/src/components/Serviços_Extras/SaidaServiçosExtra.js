@@ -5,7 +5,7 @@ import axios from 'axios';
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
-import Comprovant from '../Comprovante/comprovante';
+import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
