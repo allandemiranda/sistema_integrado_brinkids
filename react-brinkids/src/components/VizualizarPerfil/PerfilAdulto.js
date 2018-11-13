@@ -36,6 +36,7 @@ class PerfilAdulto extends React.Component {
             //Perfil sendo editado
             perfilEdicao: [],
 
+
             obs: '',
             email: '',
             phone: '',
@@ -202,7 +203,7 @@ class PerfilAdulto extends React.Component {
                 reserva: event,
                 page: 'Perfil'
             });
-            console.log(event);
+        console.log(event);
 
         // const dadosCriancas = event.children.map(async (child) => {
         //     const childResponse = await axios.get(`/child/identifier/${child._id}`);
@@ -210,15 +211,15 @@ class PerfilAdulto extends React.Component {
         //     return childResponse;
         // });
         let listacriancas;
-       
-            axios.get(`/child/identifier/${event.children[0].identifier}`)
-                .then((response) => {
-                    console.log(response.data);
-                    
-                }).catch((err) => {
-                    console.log(err);
-                });
-      
+
+        axios.get(`/child/identifier/${event.children[0].identifier}`)
+            .then((response) => {
+                console.log(response.data);
+
+            }).catch((err) => {
+                console.log(err);
+            });
+
 
 
 
@@ -342,7 +343,7 @@ class PerfilAdulto extends React.Component {
     TheEnd(event) {
         let listacrianca = [];
         this.state.confirmaCrianca.map((crianca, indice) => {
-            
+
             listacrianca.push({ identifier: crianca._id, kinship: crianca.kinship })
 
         });
@@ -490,8 +491,6 @@ class PerfilAdulto extends React.Component {
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
-
-
                             </h3>
                             <div className="row">
                                 <div className="col-md-4 col-sm-4 text-center">
@@ -510,78 +509,26 @@ class PerfilAdulto extends React.Component {
                                             </div>)
                                         }
                                     </div>
-
                                 </div>
 
-                                <div className="col-md-8 col-sm-8 text-center">
-                                    <div className="graph" >
-                                        <div className="tables table-responsive">
-                                            <table className="table table-hover">
-                                                <thead className="text-center">
-                                                    <tr >
-                                                        <th>#</th>
-                                                        <th>Nome</th>
-                                                        <th>Parentesco</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="CriaTabela">
-                                                    {this.state.perfilAtual.children.map(function (events, index) {
-                                                        return (
-                                                            <tr style={{ textAlign: 'justify' }} key={events._id}>
-                                                                <td>{index + 1}</td>
-                                                                <td>{events.identifier}</td>
-                                                                <td>{events.kinship}</td>
-                                                            </tr>
-                                                        )
-                                                    })}
-
-                                                </tbody>
-                                            </table>
-
-                                        </div>
-
-                                    </div>
-                                    {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
-                                        Adicionar Criança <span className="glyphicon">&#xe065;</span>
-
-
-                                    </label>
-                                    </button>)}
-                                </div>
-                            </div>
-
-                            <div className="row">
-                                <br></br>
-
-                                <br></br>
-                                <div className="col-md-6 col-sm-6">
+                                <div className="col-md-4 col-sm-6">
                                     <div className="graph" style={{ padding: 10 + "px" }} >
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
                                         <p>{this.state.perfilAtual.name.firstName}</p>
                                     </div>
-                                </div>
-
-
-                                <div className="col-md-6 col-sm-6">
+                                    <br></br>
                                     <div className="graph" style={{ padding: 10 + "px" }} >
-                                        <h5 className="ltTitulo"><b> SOBRENOME: </b></h5>
+                                        <h5 className="ltTitulo"><b> Sobrenome: </b></h5>
                                         <p>{this.state.perfilAtual.name.surName}</p>
                                     </div>
                                 </div>
 
-
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  CPF: </b> </h5>
                                         <p>{this.state.perfilAtual.cpf} </p>
                                     </div>
-                                </div>
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <br></br>
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  RG: </b> </h5>
                                         <p> {this.state.perfilAtual.rg} </p>
@@ -647,14 +594,14 @@ class PerfilAdulto extends React.Component {
                             <br></br>
 
                             <div className="row">
-                                <div className="col-md-6 col-sm-12">
+                                <div className="col-md-4 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Endereço: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.street}</p>)}
                                         {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.endereco} onChange={this.changueEndereco} />)}
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-10">
+                                <div className="col-md-3 col-sm-10">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Bairro: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.district}</p>)}
@@ -668,11 +615,6 @@ class PerfilAdulto extends React.Component {
                                         {this.state.editar && (<input className="form-control" style={{ float: 'none' }} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
                                     </div>
                                 </div>
-                            </div>
-
-                            <br></br>
-
-                            <div className="row">
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> CEP: </b></h5>
@@ -680,6 +622,12 @@ class PerfilAdulto extends React.Component {
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
                                     </div>
                                 </div>
+                            </div>
+
+                            <br></br>
+
+                            <div className="row">
+                               
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Cidade: </b></h5>
@@ -694,28 +642,63 @@ class PerfilAdulto extends React.Component {
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.estado} onChange={this.changueEstado} />)}
                                     </div>
                                 </div>
-                                <div className="col-md-3 col-sm-12">
+                                <div className="col-md-2 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> País: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.country}</p>)}
                                         {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" value={this.state.pais} onChange={this.changuePais} />)}
                                     </div>
                                 </div>
+                                <div className="col-md-4 col-sm-12 col-xs-12">
+                                <div className="graph" style={{ padding: 10 + "px" }}>
+                                            <h5 className="ltTitulo" > <b>Observações</b> </h5>
+                                           
+                                            {!this.state.editar && (<p>{this.state.perfilAtual.observations}</p>)}
+                                            {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
+                                        </div></div>
                             </div>
 
                             <br></br>
                             <div className="row">
+                                <div className="row">
+                                    <div className="col-md-12 col-sm-8 text-center">
+                                        <div className="graph" >
+                                            <div className="tables table-responsive">
+                                                <table className="table table-hover">
+                                                    <thead className="text-center">
+                                                        <tr >
+                                                            <th>#</th>
+                                                            <th>Nome</th>
+                                                            <th>Parentesco</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="CriaTabela">
+                                                        {this.state.perfilAtual.children.map(function (events, index) {
+                                                            return (
+                                                                <tr style={{ textAlign: 'justify' }} key={events._id}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{events.identifier}</td>
+                                                                    <td>{events.kinship}</td>
+                                                                </tr>
+                                                            )
+                                                        })}
 
-                                <div className="graph" >
-                                    <div className="row">
-                                        <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <h3 className="inner-tittle" > Observações </h3>
-                                            <br></br>
-                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></textarea>)}
-                                            {this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
                                         </div>
+                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
+                                            Adicionar Criança <span className="glyphicon">&#xe065;</span>
+
+
+                                        </label>
+                                        </button>)}
                                     </div>
-                                </div >
+                                </div>
+                                <br></br>
+                                
 
                                 {!this.state.editar && (
                                     <div style={{ textAlign: 'center' }}>
