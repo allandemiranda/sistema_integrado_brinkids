@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-import Comprovante from '../Comprovante/comprovante.js';
+
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/style.css';

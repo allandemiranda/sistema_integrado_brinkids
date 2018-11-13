@@ -44,7 +44,7 @@ class Gaveta extends React.Component {
                     <div className="col-md-6 col-sm-12 text-center">
                         <div className="graph" >
                             <div>
-                                <h3 className="inner-tittle " >N.gavetas</h3>
+                                <h3 className="inner-tittle " >Nº.gavetas</h3>
                             </div>
                             <div className=" text-center">
                                 <input type="number" id="selectAdult" name="Ngavetas" className="form-control text-center" value={this.state.Ngavetas} onChange={this.Change} />

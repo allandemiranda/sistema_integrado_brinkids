@@ -10,7 +10,7 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import moment from 'moment'
 import $ from "jquery";
-import Comprovant from '../Comprovante/comprovante';
+import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 

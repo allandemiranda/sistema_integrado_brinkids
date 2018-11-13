@@ -9,7 +9,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import moment from 'moment';
-import Comprovant from '../Comprovante/comprovante';
+import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
