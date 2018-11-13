@@ -698,7 +698,6 @@ class PerfilAdulto extends React.Component {
                                     </div>
                                 </div>
                                 <br></br>
-                                
 
                                 {!this.state.editar && (
                                     <div style={{ textAlign: 'center' }}>
