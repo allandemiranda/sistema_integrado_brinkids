@@ -39,18 +39,20 @@ class Passport extends React.Component {
             rest: '',
             phone: '',
             file: '', // recebe a imagem 
-            currentdate: [],
-            preenchido: false, // Variável que vai dizer se foi selecionado alguma coisa
+            currentdate: [],        
             horaEntradaCriança: '', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
             kinshipConfirm:'',
             comprovante: false,
             no:tabelinha,
+            dadosComprovante:[],
+
         }
 
         //Relacionado a busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.SearchAdult = this.SearchAdult.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
+        this.Changekinship = this.Changekinship.bind(this);
 
 
         //Relacionado a atualização dos valores Caminho
@@ -177,7 +179,7 @@ class Passport extends React.Component {
     // FUNÇOES DO BOTÃO AVANÇAR - INICIO 
     // Encaminha para a tela II
     TelaII = (event) => {
-        if (this.preenchido == true) {
+        if (this.state.listConfirmAdult.length != 0) {
             this.setState({
                 page: "ConfirmAdult",
                 obs: this.state.listConfirmAdult[0].observations,
@@ -187,9 +189,7 @@ class Passport extends React.Component {
         else {
             alert(" Selecione um Responsável ")
                 this.setState({
-                    page: "SelectAdult",
                     selectedSearch: '',
-                    preenchido: false,
                 })
         }
     }
@@ -234,12 +234,17 @@ class Passport extends React.Component {
 
     // Encaminha para a tela IV
     TelaIV = (event) => {
-        this.setState({
-            page: "ConfirmKids",
-            obs: this.state.listConfirmKids.observations,
-            rest: this.state.listConfirmKids.restrictions,
-            file: Array(this.state.listConfirmKids.length),
-        })
+        if (this.state.listConfirmAdult.length != 0) {
+            this.setState({
+                page: "ConfirmKids",
+                obs: this.state.listConfirmKids.observations,
+                rest: this.state.listConfirmKids.restrictions,
+                file: Array(this.state.listConfirmKids.length),
+            })
+        }
+        else {
+            alert(" Selecione um Responsável ")
+        }
     }
 
     // Encaminha para a tela V
@@ -266,7 +271,17 @@ class Passport extends React.Component {
         console.log(this.state.arrayfinal);
         this.TheEnd();
 
-
+        const objetocomprovante={
+            adult: this.state.confirmAdult,
+           
+            belongingis: { // PEGAR DADDOS COM GABRIEL
+                belongings: "1",
+                employee: "Rozinha dos Santos",
+            },
+           
+            childrens: this.state.listConfirmKids,
+        }
+        this.state.dadosComprovante = objetocomprovante;
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM  
 
@@ -632,11 +647,11 @@ class Passport extends React.Component {
                                                     <div className="col-md-6 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px"  }}>
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
-                                                                <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id)} >
+                                                                <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={this.Changekinship} >
                                                                 <option value="others" > Outros </option>
                                                                 <option value="children" > filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
-                                                                <option value="grandchildren"  > Neto(a) </option>
+                                                                <option value="grandchildren"  >Neto(a) </option>
                                                                 <option value="nephews"  > Sobrinho(a) </option>
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >
@@ -818,7 +833,7 @@ class Passport extends React.Component {
                     </div>
                     <Comprovant
                         teste={this.state.comprovante}
-                        tabela={this.state.arrayfinal}
+                        tabela={this.state.dadosComprovante}
                         serviso="PASSAPORTE"
                     />
                     <div className="text-center">
