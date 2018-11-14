@@ -17,7 +17,7 @@ class PerfilAdulto extends React.Component {
         this.state = {
             reserva: [],
             //lista de funcionarios recebida do banco de dados
-            listaFuncionarios: listaa,
+            listaFuncionarios: [],
             //lista de funcionarios apos a busca pelo nome
             list: [],
             listaAdultos: [],
@@ -52,7 +52,7 @@ class PerfilAdulto extends React.Component {
             confirmaCrianca: [],
             kinship: 'Outros',
             photo: '',
-
+            pode:false,
         }
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -111,6 +111,7 @@ class PerfilAdulto extends React.Component {
         this.setState({
             page: 'Adicionar',
             list: [],
+            confirmaCrianca:[],
         })
     }
     changuePassword(event) {
@@ -196,13 +197,42 @@ class PerfilAdulto extends React.Component {
     }
     //função que alterna as paginas
     ChangePage(event) {
+
+        const criancas = event.children.map(async (crianca,index) => {
+            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+            return response.data;
+        });
+
+        criancas.forEach(async (c, index) => {
+            const crianca = await c;
+           
+            if (index >= criancas.length -1) {
+                console.log(index);
+                this.setState({
+                    
+                    listaFuncionarios: [...this.state.listaFuncionarios, crianca],pode:true,page: 'Perfil',
+                })
+                
+            } else {
+                console.log(criancas.length);
+                this.setState({
+
+                    listaFuncionarios: [...this.state.listaFuncionarios, crianca]
+                })
+                console.log(this.state.listaFuncionarios);
+            }
+
+        })
+        
         this.setState(
             {
                 perfilEdicao: event,
                 perfilAtual: event,
                 reserva: event,
-                page: 'Perfil'
+
             });
+
+        console.log(this.state.listaFuncionarios);
         console.log(event);
 
         // const dadosCriancas = event.children.map(async (child) => {
@@ -210,17 +240,6 @@ class PerfilAdulto extends React.Component {
         //     console.log(childResponse);
         //     return childResponse;
         // });
-        let listacriancas;
-
-        axios.get(`/child/identifier/${event.children[0].identifier}`)
-            .then((response) => {
-                console.log(response.data);
-
-            }).catch((err) => {
-                console.log(err);
-            });
-
-
 
 
 
@@ -362,12 +381,50 @@ class PerfilAdulto extends React.Component {
             .then((response) => {
                 console.log(response.data);
                 this.setState({ list: response.data });
+                axios.get(`/adult/${this.state.perfilAtual._id}`)
+                    .then((response) => {
+                        console.log(response.data);
+                        this.setState({ perfilAtual: response.data, listaFuncionarios: [] });
+                        axios.get(`/adult/${this.state.perfilAtual._id}`)
+                            .then((response) => {
+                                console.log(response.data);
+                                this.setState({ perfilAtual: response.data });
+                                const criancas = this.state.perfilAtual.children.map(async (crianca) => {
+                                    const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                    return response.data;
+                                });
+
+                                criancas.forEach(async (c, index) => {
+                                    const crianca = await c;
+
+                                    if (index === criancas.length - 1) {
+                                        this.setState({
+                                            page: 'Perfil',
+                                            listaFuncionarios: [...this.state.listaFuncionarios, crianca]
+                                        })
+                                    } else {
+                                        this.setState({
+
+                                            listaFuncionarios: [...this.state.listaFuncionarios, crianca]
+                                        })
+                                    }
+
+                                })
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+
+                    }).catch((err) => {
+                        console.log(err);
+                    });
             }).catch((err) => {
                 console.log(err);
             });
-        this.setState({
-            page: 'Perfil',
-        })
+
+
+
+
+
     }
     render() {
 
@@ -427,7 +484,7 @@ class PerfilAdulto extends React.Component {
             );
         }
         if (this.state.page === 'Perfil') {
-            if (this.state.editar) {
+            if (this.state.editar && this.state.pode) {
                 setTimeout(function () {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
@@ -454,7 +511,7 @@ class PerfilAdulto extends React.Component {
 
                     }
 
-                }, 50);
+                }, 150);
             };
             const byCrianca = function (events, index) {
                 return (
@@ -627,7 +684,7 @@ class PerfilAdulto extends React.Component {
                             <br></br>
 
                             <div className="row">
-                               
+
                                 <div className="col-md-3 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Cidade: </b></h5>
@@ -650,12 +707,12 @@ class PerfilAdulto extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo" > <b>Observações</b> </h5>
-                                           
-                                            {!this.state.editar && (<p>{this.state.perfilAtual.observations}</p>)}
-                                            {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
-                                        </div></div>
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo" > <b>Observações</b> </h5>
+
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.observations}</p>)}
+                                        {this.state.editar && (<textarea style={{ float: 'none' }} className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
+                                    </div></div>
                             </div>
 
                             <br></br>
@@ -673,11 +730,14 @@ class PerfilAdulto extends React.Component {
                                                         </tr>
                                                     </thead>
                                                     <tbody id="CriaTabela">
-                                                        {this.state.perfilAtual.children.map(function (events, index) {
+                                                        {this.state.perfilAtual.children.map((events, index) => {
+                                                            console.log(this.state.listaFuncionarios, "lista dentro do map");
+                                                            console.log(this.state.listaFuncionarios[index], "coisa indefinida dentro do map");
+
                                                             return (
                                                                 <tr style={{ textAlign: 'justify' }} key={events._id}>
                                                                     <td>{index + 1}</td>
-                                                                    <td>{events.identifier}</td>
+                                                                    <td>{this.state.listaFuncionarios[index].name.firstName}</td>
                                                                     <td>{events.kinship}</td>
                                                                 </tr>
                                                             )

@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
 router.put('/', async (req, res) => {
   try {
     if (req.body.number === undefined || isNaN(parseInt(req.body.number, 10))) {
+      console.log(req.body.number);
       return res.sendStatus(400);
     }
     const belongings = await Belongings.find({});
@@ -26,7 +27,7 @@ router.put('/', async (req, res) => {
       belongings[0].number = parseInt(req.body.number, 10);
     }
 
-    belongings.save();
+    belongings[0].save();
 
     return res.sendStatus(204);
   } catch (err) {

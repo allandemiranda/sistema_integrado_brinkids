@@ -13,9 +13,16 @@ class Gaveta extends React.Component {
         }
         this.Change = this.Change.bind(this);
         this.salvar = this.salvar.bind(this);
+
     }
     salvar(event){
         
+         axios.put('/belongings', {number: this.state.Ngavetas})
+            .then((response) => {
+
+                this.setState({ Ngavetas: response.data[0].number });
+            })
+            .catch((err) => console.log(err));
     }
     Change(event) {
         this.setState({
@@ -48,7 +55,7 @@ class Gaveta extends React.Component {
                             </div>
                             <div className=" text-center">
                                 <input type="number" id="selectAdult" name="Ngavetas" className="form-control text-center" value={this.state.Ngavetas} onChange={this.Change} />
-                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchFuncionario}> Salvar </button>
+                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.salvar}> Salvar </button>
                             </div>
                         </div>
                     </div>
