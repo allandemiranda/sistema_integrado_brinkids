@@ -4,10 +4,6 @@ const mongoose = require('mongoose');
 const config = require('../config');
 
 const employeesSchema = new mongoose.Schema({
-  functions: {
-    type: Array,
-    of: 'String',
-  },
   gender: String,
   education: String,
   kinship: {
@@ -22,29 +18,7 @@ const employeesSchema = new mongoose.Schema({
     number: String,
     series: String,
     state: String,
-    PIS_PASEP: String,
-    dateIssue: Date,
-    placeIssue: String,
-  },
-  electionTitle: {
-    number: String,
-    zone: String,
-    section: String,
-    state: String,
-  },
-  rg: {
-    issuingBody: String,
-    state: String,
-    dateIssue: String,
-  },
-  militaryReservist: {
-    number: String,
-    state: String,
-    category: String,
-  },
-  passport: {
-    number: String,
-    typeFormat: String,
+    type: String,
     issuingCountry: String,
     dateIssue: Date,
     expirationDate: Date,
@@ -58,12 +32,27 @@ const employeesSchema = new mongoose.Schema({
     dateIssue: Date,
   },
   employeeData: {
-    officialPosition: String,
-    admissionDate: Date,
-    resignationDate: Date,
-    reasonResignation: String,
-    record: String,
-    state: String,
+    officialP: {
+      PIS_PASEP: String,
+      dateIssue: Date,
+      placeIssue: String,
+    },
+    rg: {
+      issuingBody: String,
+      state: String,
+      dateIssue: Date,
+    },
+    electionTitle: {
+      number: String,
+      zone: String,
+      section: String,
+      state: String,
+    },
+    militaryReservist: {
+      number: String,
+      series: String,
+      category: String,
+    },
   },
   observations: String,
 });

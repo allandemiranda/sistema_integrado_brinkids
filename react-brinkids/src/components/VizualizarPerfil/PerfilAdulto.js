@@ -196,33 +196,46 @@ class PerfilAdulto extends React.Component {
 
     }
     //função que alterna as paginas
-    ChangePage(event) {
+    async ChangePage(event) {
 
         const criancas = event.children.map(async (crianca,index) => {
             const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
             return response.data;
         });
+        Promise.all(criancas).then((listaCriancas) => {
+            console.log(listaCriancas, "SOu um filho da puta")
+            this.setState({
+                listaFuncionarios:listaCriancas,
+                page:"Perfil",
+            })
+        });
 
-        criancas.forEach(async (c, index) => {
-            const crianca = await c;
+        // criancas.forEach(async (c, index) => {
+        //     const crianca = await c;
            
-            if (index >= criancas.length -1) {
-                console.log(index);
-                this.setState({
-                    
-                    listaFuncionarios: [...this.state.listaFuncionarios, crianca],pode:true,page: 'Perfil',
-                })
+        //     if (index >= criancas.length -1) {
+        //         console.log(index);
+        //         this.setState(prevState => {
+        //             return {
+        //                 listaFuncionarios: [...prevState.listaFuncionarios, crianca],
+        //                 pode:true,
+                        
+        //             }
+        //         })
                 
-            } else {
-                console.log(criancas.length);
-                this.setState({
+        //     } else {
+        //         console.log(criancas.length);
+        //         this.setState(prevState => {
+        //             return {
+        //                 listaFuncionarios: [...prevState.listaFuncionarios, crianca]
 
-                    listaFuncionarios: [...this.state.listaFuncionarios, crianca]
-                })
-                console.log(this.state.listaFuncionarios);
-            }
+        //             }
 
-        })
+        //         })
+        //         console.log(this.state.listaFuncionarios);
+        //     }
+
+        // })
         
         this.setState(
             {
@@ -233,7 +246,7 @@ class PerfilAdulto extends React.Component {
             });
 
         console.log(this.state.listaFuncionarios);
-        console.log(event);
+        
 
         // const dadosCriancas = event.children.map(async (child) => {
         //     const childResponse = await axios.get(`/child/identifier/${child._id}`);
@@ -379,24 +392,27 @@ class PerfilAdulto extends React.Component {
 
         axios.post('/adult/appendChild', data)
             .then((response) => {
-                console.log(response.data);
+               
                 this.setState({ list: response.data });
                 axios.get(`/adult/${this.state.perfilAtual._id}`)
                     .then((response) => {
-                        console.log(response.data);
+                        
+                      
                         this.setState({ perfilAtual: response.data, listaFuncionarios: [] });
                         axios.get(`/adult/${this.state.perfilAtual._id}`)
                             .then((response) => {
-                                console.log(response.data);
+                                
+                                
                                 this.setState({ perfilAtual: response.data });
                                 const criancas = this.state.perfilAtual.children.map(async (crianca) => {
                                     const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
                                     return response.data;
                                 });
 
+                                
                                 criancas.forEach(async (c, index) => {
                                     const crianca = await c;
-
+                                        console.log(c);
                                     if (index === criancas.length - 1) {
                                         this.setState({
                                             page: 'Perfil',
