@@ -19,7 +19,7 @@ class VisualizaDesconto extends React.Component {
             Nome: "",
             list_descontos: [],
         }
-        axios.get(`/desconto`)
+        axios.get(`/discount`)
         .then((response) => {
             console.log("Dentro do axios: " + this)
             this.setState({ list: response.data });
