@@ -8,7 +8,15 @@ const userSystem = require('../models/userSystem-models');
 const router = express.Router();
 
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+  try {
+    const employees = await Employees.find({}).populate('identifierEmployee');
+
+    return res.status(200).json(employees);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
   Employees.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
@@ -41,8 +49,6 @@ router.get('/search/:search', async (req, res) => {
       [firstName, surName] = listSearch;
       adultSearch = await adult.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName), isEmployee: true }).populate('identifierEmployee');
     }
-
-    console.log(adultSearch);
 
     return res.json(adultSearch);
   } catch (err) {
