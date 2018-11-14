@@ -10,14 +10,13 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const employees = await Employees.find({}).populate('identifierEmployee');
+    const employees = await adult.find({}).populate('identifierEmployee');
 
     return res.status(200).json(employees);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
   }
-  Employees.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
 });
 
 router.get('/:identifier', async (req, res) => {
