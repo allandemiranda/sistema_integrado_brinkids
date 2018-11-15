@@ -711,7 +711,7 @@ class PerfilAdulto extends React.Component {
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" > Observações </h3>
                                             <br></br>
-                                            {!this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></textarea>)}
+                                            {!this.state.editar && (<p className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.perfilAtual.observations}></p>)}
                                             {this.state.editar && (<textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" onChange={this.changueObs} value={this.state.obs}></textarea>)}
                                         </div>
                                     </div>
