@@ -8,8 +8,15 @@ const userSystem = require('../models/userSystem-models');
 const router = express.Router();
 
 
-router.get('/', (req, res) => {
-  Employees.find({}, (err, result) => (err ? res.sendStatus(500) : res.status(200).json(result)));
+router.get('/', async (req, res) => {
+  try {
+    const employees = await adult.find({}).populate('identifierEmployee');
+
+    return res.status(200).json(employees);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
 });
 
 router.get('/:identifier', async (req, res) => {
@@ -36,10 +43,10 @@ router.get('/search/:search', async (req, res) => {
 
     if (listSearch.length === 1) {
       [firstName] = listSearch;
-      adultSearch = await adult.find({ 'name.firstName': new RegExp(firstName), isEmployee: false });
+      adultSearch = await adult.find({ 'name.firstName': new RegExp(firstName), isEmployee: true }).populate('identifierEmployee');
     } else {
       [firstName, surName] = listSearch;
-      adultSearch = await adult.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName), isEmployee: false });
+      adultSearch = await adult.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName), isEmployee: true }).populate('identifierEmployee');
     }
 
     return res.json(adultSearch);
@@ -51,7 +58,10 @@ router.get('/search/:search', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const adultResult = await adult.findByIdAndUpdate(req.body.Identifier, { isEmployee: true });
+    const adultResult = await adult.findByIdAndUpdate(
+      req.body.identifier,
+      { isEmployee: true, identifierEmployee: req.body.identifier },
+    );
 
     if (!adultResult) {
       return res.sendStatus(404);
@@ -120,7 +130,10 @@ router.post('/', async (req, res) => {
     });
 
     const newEmployee = await employee.save();
-    newEmployee.set({ _id: adultResult._id });
+
+    adultResult.identifierEmployee = newEmployee;
+
+    adultResult.save();
 
     return res.sendStatus(201);
   } catch (err) {
@@ -179,14 +192,10 @@ router.put('/reset-password', async (req, res) => {
       return res.sendStatus(404);
     }
 
-    if (req.body.olderPassword === userFind.password) {
-      userFind.set({ password: req.body.newPassword });
-      await userFind.save();
+    userFind.set({ password: 'senha123' });
+    await userFind.save();
 
-      return res.sendStatus(204);
-    }
-
-    return res.sendStatus(400);
+    return res.sendStatus(204);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

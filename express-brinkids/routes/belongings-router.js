@@ -5,40 +5,29 @@ const router = express.Router();
 
 
 router.get('/', async (req, res) => {
-	try{
+  try {
     const belongingsJson = await Belongings.find({});
 
-		return res.status(200).json(belongingsJson);
-	} catch (err) {
+    return res.status(200).json(belongingsJson);
+  } catch (err) {
     console.log(err);
     return res.sendStatus(500);
-	}
+  }
 });
 
 router.put('/', async (req, res) => {
   try {
-    const belongings = await Belongings.find({});
-
-    belongings[0].number += 1;
-
-    belongings.save();
-
-    return res.sendStatus(204);
-	} catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
-	}
-});
-
-router.delete('/', async (req, res) => {
-  try {
-    const belongings = await Belongings.find({});
-
-    // Impede que exista um número negativo de gavetas quando
-    // não tenha nenhuma gaveta usada
-    if (belongings[0].number === 0) {
+    if (req.body.number === undefined || isNaN(parseInt(req.body.number, 10))) {
+      console.log(req.body.number);
       return res.sendStatus(400);
     }
+    const belongings = await Belongings.find({});
+
+    if (req.body.number >= 0) {
+      belongings[0].number = parseInt(req.body.number, 10);
+    }
+
+    belongings[0].save();
 
     return res.sendStatus(204);
   } catch (err) {

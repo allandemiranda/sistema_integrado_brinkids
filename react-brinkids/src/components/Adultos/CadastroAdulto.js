@@ -241,9 +241,12 @@ class CadastroAdulto extends React.Component {
     ChangeNumber(event){
         this.setState({number: event.target.value});
     }
+    Changekinship(event) {
+        this.setState({ kinshipConfirm: event.target.value });
+    }
 
 
-    Changekinship(evento, identifier){
+    /*Changekinship(evento, identifier){
         this.setState({kinship: evento.target.value})
 
         console.log('O estado foi atualizado: ${this.state.kinship}');
@@ -255,7 +258,7 @@ class CadastroAdulto extends React.Component {
         });
 
         this.setState({confirmaCrianca: this.state.confirmaCrianca});
-    }
+    }*/
 
 
 
@@ -640,14 +643,14 @@ class CadastroAdulto extends React.Component {
                                                 <td >{findChild.birthday} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
-                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" value={this.state.kinship} onChange={(event) => this.Changekinship(event, findChild._id)} >
-                                                        <option value="others" > Outros </option>
-                                                        <option value="children" > filho(a) </option>
-                                                        <option value="Stepson" > Enteado(a) </option>
-                                                        <option value="grandchildren"  > Neto(a) </option>
-                                                        <option value="nephews"  > Sobrinho(a) </option>
-                                                        <option value="Brother" > Irmão/Irmã </option>
-                                                    </select >
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={this.Changekinship} >
+                                                                <option value="others" > Outros </option>
+                                                                <option value="children" > filho(a) </option>
+                                                                <option value="Stepson" > Enteado(a) </option>
+                                                                <option value="grandchildren"  >Neto(a) </option>
+                                                                <option value="nephews"  > Sobrinho(a) </option>
+                                                                <option value="Brother" > Irmão/Irmã </option>
+                                                            </select >
                                                 </td>
                                             </tr>
                                         );

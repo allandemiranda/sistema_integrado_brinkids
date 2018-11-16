@@ -16,9 +16,13 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    //TODO: Completar para pegar cada criança e adicionar num dashboard
-    //TODO: Integrar com o front
-    req.body.children.forEach();
+    /**
+     * TODO: Completar para pegar cada criança e adicionar num dashboard
+     * TODO: Integrar com o front
+     */
+    req.body.children.forEach((child) => {
+      
+    });
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

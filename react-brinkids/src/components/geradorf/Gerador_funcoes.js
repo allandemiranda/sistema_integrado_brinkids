@@ -48,6 +48,7 @@ class Gerador extends React.Component {
                 this.setState({ list: response.data });
             })
             .catch((err) => console.log(err));
+            
     }
     Salvar2(event) {
         let temporario = this.state.listadecargos;

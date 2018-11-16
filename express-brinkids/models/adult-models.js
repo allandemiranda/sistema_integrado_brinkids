@@ -89,6 +89,7 @@ const userAdultSchema = new mongoose.Schema({
     required: true,
   },
   isEmployee: Boolean,
+  identifierEmployee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

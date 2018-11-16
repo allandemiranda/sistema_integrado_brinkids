@@ -42,13 +42,13 @@ class Servico extends React.Component {
     }
     changueUnidade(event) {
         this.setState({
-            
+
             Quant: event.target.value,
         })
     }
     changueQuant(event) {
         this.setState({
-            
+
             Text: event.target.value,
         })
     }
@@ -129,15 +129,15 @@ class Servico extends React.Component {
     excluir(event, indice) {
         let listaTemporaria = this.state.lista;
 
-       
+
         axios.delete(`/extraServices/${listaTemporaria[event]._id}`)
-        .then((response) => {
+            .then((response) => {
 
 
-            console.log(response.data);
+                console.log(response.data);
 
-        })
-        .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
         listaTemporaria.splice(event, 1);
         this.setState({
             lista: listaTemporaria,
@@ -180,16 +180,7 @@ class Servico extends React.Component {
                     </div>
                     <div className="graph">
                         <div className="tables table-responsive">
-                            <div className="graph" >
 
-
-                                <div className="row" >
-
-                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'Novo' })}>
-                                        Novo
-                                </button>
-                                </div>
-                            </div>
                             <table className="table table-hover">
                                 <thead className="text-center">
                                     <tr>
@@ -217,8 +208,16 @@ class Servico extends React.Component {
                                     })}
                                 </tbody>
                             </table>
+
                         </div>
+
                     </div>
+                    <div className="text-center">
+                        <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'Novo' })}>
+                            Adicionar Novo Serviço/Produto
+                                </button>
+                    </div>
+
                 </div>
 
             );
