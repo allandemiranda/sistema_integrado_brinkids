@@ -53,6 +53,30 @@ String.prototype.toSS = function () {//convertendo de mm:ss para segundos
 }
 
 router.get('/', async (req, res) => {
+
+  // if(psjson.length>1){//teste pra saber se só tem o json inicial
+  // lista = [];
+
+  // for(i=1; i<psjson.length;i++){
+  //   lista += psjson[i];
+  //   const data = {
+  //     name: .name,
+  //     description: psjson[i].description,
+  //     initialTime: psjson[i].initialTime,
+  //     finalTime: pjson[i].finalTime,
+  //     price: psjson[i].price,
+  //   };
+  // }
+  try {
+    const psjson = await passportServices.find({});
+    psjson.splice(0, 1)
+    return res.status(201).json(psjson);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+});
+
+router.get('/initialTime', async (req, res) => {
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
   let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json

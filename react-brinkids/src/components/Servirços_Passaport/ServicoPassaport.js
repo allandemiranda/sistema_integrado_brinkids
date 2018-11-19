@@ -117,7 +117,7 @@ class ServicoPassaporte extends React.Component {
 
     Adicionar =(event)=>{
         $.ajax({
-            url: "http://localhost:3001/passportServices",
+            url: "http://localhost:3001/passportServices/initialTime",
             dataType: 'json',
             type: 'GET',
 
