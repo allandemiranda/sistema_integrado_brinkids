@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
   // }
   try {
     const psjson = await passportServices.find({});
-    psjson.splice(0, 1)
+    psjson.shift();
     return res.status(201).json(psjson);
   } catch (err) {
     return res.sendStatus(500);
@@ -104,6 +104,23 @@ router.get('/initialTime', async (req, res) => {
     } catch (err) {
       return res.sendStatus(500);
     }
+  }
+});
+
+router.delete('/:identifier', async (req, res) => {
+  console.log('executed');
+  try {
+    const deletedService = await passportServices.findByIdAndRemove(req.params.identifier);
+
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
   }
 });
 

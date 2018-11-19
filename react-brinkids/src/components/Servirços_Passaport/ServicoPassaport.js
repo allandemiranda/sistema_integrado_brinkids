@@ -13,20 +13,20 @@ import '../../assets/style/font-awesome.css';
 import '../Layout/css/icon-font.min.css';
 
 class ServicoPassaporte extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            page:"TelaI",
-            Descricao:"",
-            Nome:"",
-            list:[],
-            Nome:"",
-            Descricao:"",
-            TempoFinal:"",
-            QuebraTempo:0,
-            QuebraValor:0,
-            Price:"",
-        } 
+            page: "TelaI",
+            Descricao: "",
+            Nome: "",
+            list: [],
+            Nome: "",
+            Descricao: "",
+            TempoFinal: "",
+            QuebraTempo: 0,
+            QuebraValor: 0,
+            Price: "",
+        }
         this.changueNome = this.changueNome.bind(this);
         this.changueDescricao = this.changueDescricao.bind(this);
         this.changueTempoFinal = this.changueTempoFinal.bind(this);
@@ -34,35 +34,75 @@ class ServicoPassaporte extends React.Component {
         this.changuePrice = this.changuePrice.bind(this);
         this.ChangeQuebraValor = this.ChangeQuebraValor.bind(this);
         this.ChangeQuebraTempo = this.ChangeQuebraTempo.bind(this);
+        this.requisicao = this.requisicao.bind(this);
+        this.interval = this.interval.bind(this);
+        this.voltar = this.voltar.bind(this);
     }
-    
-    changueNome(event){
-        this.setState({Nome: event.target.value});
+    voltar(event){
+       
+        this.setState({
+            page:"TelaI",
+            list:[],
+        })
+        axios.get('/passportServices')
+        .then((response) => {
+
+
+            console.log(response.data);
+            this.setState({ list: response.data });
+        })
+        .catch((err) => console.log(err));
+    }
+    interval(event) { }
+    requisicao(event) {
+        if(this.state.page==="TelaI")
+       { axios.get('/passportServices')
+       .then((response) => {
+
+
+           console.log(response.data);
+           this.setState({ list: response.data });
+       })}
+    }
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+    changueNome(event) {
+        this.setState({ Nome: event.target.value });
     }
 
-    changueDescricao(event){
-        this.setState({ Descricao: event.target.value});
+    changueDescricao(event) {
+        this.setState({ Descricao: event.target.value });
     }
 
-    changueTempoInicial(event){
-        this.setState({ TempoInicial: event.target.value});
+    changueTempoInicial(event) {
+        this.setState({ TempoInicial: event.target.value });
     }
 
-    changueTempoFinal(event){
-        this.setState({ TempoFinal: event.target.value});
+    changueTempoFinal(event) {
+        this.setState({ TempoFinal: event.target.value });
     }
-    changuePrice(event){
-        this.setState({Price: event.target.value});
+    changuePrice(event) {
+        this.setState({ Price: event.target.value });
     }
     ChangeQuebraValor(event) {
-        this.setState({QuebraValor: event.target.value });
+        this.setState({ QuebraValor: event.target.value });
     }
-    ChangeQuebraTempo(event){
-        this.setState({QuebraTempo: event.target.value});
+    ChangeQuebraTempo(event) {
+        this.setState({ QuebraTempo: event.target.value });
 
     }
+    componentWillMount() {
+        axios.get('/passportServices')
+        .then((response) => {
 
-    criar =(event)=>{        
+
+            console.log(response.data);
+            this.setState({ list: response.data });
+        })
+        this.interval = setInterval(this.requisicao,5000);
+    }
+    criar = (event) => {
         console.log("Dados sendo retornado");
         event.preventDefault();
 
@@ -74,48 +114,57 @@ class ServicoPassaporte extends React.Component {
         formData.append('finalTime', String(this.state.TempoFinal))
         formData.append('price', String(this.state.Price))
 
-  
+
         axios.post('/passportServices', formData)
-        .then(function (response) {
-            console.log(response)
-            window.location.href = '/ServicoPassaporte';
-        }).catch(function (error) {
-            console.log(error)//LOG DE ERRO
-            alert("Erro no Cadastro");
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-        })        
+            .then(function (response) {
+                console.log(response)
+                this.setState({
+                    page: "TelaI",
+                })
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                alert("Erro no Cadastro");
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
     }
 
-    Salvar =(event)=>{
-        this.QuebraTempo = this.list.default.time;
-        this.QuebraValor = this.list.default.price;
+    Salvar = (event) => {
+        console.log('-------------------------------------')
+        console.log(this.list)
+        console.log('-------------------------------------')
+        this.QuebraTempo = this.list.time;
+        this.QuebraValor = this.list.price;
 
         var formData = new FormData();
 
         formData.append('time ', String(this.state.QuebraTempo))
         formData.append('price', String(this.state.QuebraValor))
 
-  
+
         axios.post('/passport', formData)
-        .then(function (response) {
-            console.log(response)
-            //window.location.href = '/ServicoPassaporte';
-        }).catch(function (error) {
-            console.log(error)//LOG DE ERRO
-            alert("Erro no Cadastro");
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-        }) 
+            .then(function (response) {
+                console.log(response)
+                //window.location.href = '/ServicoPassaporte';
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                alert("Erro no Cadastro");
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
     }
 
-    Apagar =(event)=>{
-        this.state.list.pop();
+    Apagar = (event) => {
+        const id = this.state.list[this.state.list.length-1]._id;
+        axios.delete(`http://localhost:3001/passportServices/+${id}` )
+        .then( (response) => {
+            console.log('deu certo');
+        });
     }
 
-    Adicionar =(event)=>{
+    Adicionar = (event) => {
         $.ajax({
             url: "http://localhost:3001/passportServices/initialTime",
             dataType: 'json',
@@ -135,13 +184,14 @@ class ServicoPassaporte extends React.Component {
                 }
             }.bind(this)
         });
-        this.setState({ page: "TelaII"});
+        this.setState({ page: "TelaII" });
     }
 
 
     render() {
         if (this.state.page === "TelaI") {
             return (
+
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -174,7 +224,7 @@ class ServicoPassaporte extends React.Component {
                                                         <td > {TempoServico.name} </td>
                                                         <td >{TempoServico.initialTime} </td>
                                                         <td>{TempoServico.finalTime}</td>
-                                                        <td> {TempoServico.price}</td>>
+                                                        <td> {TempoServico.price}</td>
                                                     </tr>
                                                 );
                                             })}
@@ -225,8 +275,8 @@ class ServicoPassaporte extends React.Component {
             )
         }
 
-        else if (this.state.page ==="TelaII"){
-            return(
+        else if (this.state.page === "TelaII") {
+            return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -262,25 +312,25 @@ class ServicoPassaporte extends React.Component {
                                 <div className="graph" >
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <div className="graph" style={{ padding: 10 + "px" }} style={{float:"none"}}>
+                                            <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Tempo Inicial: </b></h5>
                                                 <p> {this.state.list.initialTime}</p>
                                             </div>
                                         </div>
-                                        <div className="col-md-6 col-sm-12 col-xs-12">                                                                                      
-                                                <div className="graph" style={{ padding: 10 + "px" }} style={{float:"none"}}>
+                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                            <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Tempo Final: </b></h5>
-                                                <input type="time" className="form-control"  onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{width: 100 + "px", marginTop: -37 + "px"}}></input>
-                                            </div>                                        
+                                                <input type="time" className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
+                                            </div>
                                         </div>
-                                        <div className="col-md-3 col-sm-12 col-xs-12 text-left">                                        
+                                        <div className="col-md-3 col-sm-12 col-xs-12 text-left">
                                         </div>
-                                        <div className="col-md-6 col-sm-12 col-xs-12 text-left">    
-                                        <br></br><br></br>                                                                                  
-                                                <div className="graph" style={{ padding: 10 + "px" }} >
+                                        <div className="col-md-6 col-sm-12 col-xs-12 text-left">
+                                            <br></br><br></br>
+                                            <div className="graph" style={{ padding: 10 + "px" }} >
                                                 <h5 className="ltTitulo"><b> Valor: </b></h5>
-                                                <input type="text" className="form-control text-center"  onChange={this.changuePrice} value={this.state.Price} style={{ float: "none", margiTop: -30 +"px", }} placeholder = {"R$"}></input>
-                                            </div>                                        
+                                                <input type="text" className="form-control text-center" onChange={this.changuePrice} value={this.state.Price} style={{ float: "none", margiTop: -30 + "px", }} placeholder={"R$"}></input>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -288,10 +338,10 @@ class ServicoPassaporte extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/ServicoPassaporte"> Voltar</a>
+                        <a className="btn btn-md botao" onClick={this.voltar}> Voltar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.criar}> Criar </button>
                     </div>
-                </div>  
+                </div>
             )
         }
     }

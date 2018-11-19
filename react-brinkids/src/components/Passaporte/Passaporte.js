@@ -106,7 +106,7 @@ class Passport extends React.Component {
                 success: function (response) {    //Salva os dados do responsável na variácel LIST
                     console.log(response.length)
                     if (response.length === 0) {
-                        alert("Erro: Nenhum Responásel Encontrado")
+                        alert("Erro: Nenhum Responsável Encontrado")
                         this.setState({ erro: "* Nenhum Responásel Encontrado." })
                     } else {
                         console.log("Olar")
@@ -254,19 +254,46 @@ class Passport extends React.Component {
         })
 
 
-        let lista = [...this.state.listConfirmAdult,{belongings: "1",
-        employee: "Rozinha dos Santos"},...this.state.listConfirmKids];
-        console.log("Eu sou a lista suprema que está sendo debugada: ", lista)
+        var formData = new FormData();
+        var listAdult = new Array();
+        var listCria = new Array();
+        var i;
+        for(i = 0; i < this.state.listConfirmKids.length; i++){
+            formData.append('photo', String(this.state.listConfirmKids[0]._id))
+            formData.append('service', 'Passaporte')
+            formData.append('time', moment().format())
+            formData.append('belongings', '0')
+            listCria.push(String(this.state.listConfirmKids[i]._id))
+            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
+            listCria.push(this.state.listConfirmKids[i].birthday)
+            listCria.push(this.state.listConfirmKids[i].restrictions)
+            listCria.push(this.state.listConfirmKids[i].observations)
+            listAdult.push(this.state.listConfirmAdult[0]._id)
+            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
+            listAdult.push(this.state.listConfirmAdult[0].phone)
+            listAdult.push(this.state.obs)
+            formData.append('children', listCria)
+            formData.append('adult', listAdult)
+        };
         this.setState({
-            arrayfinal:lista,
+            dadosComprovante:{
+                
+                photo:String(this.state.listConfirmKids[0]._id),
+                service:"Passaporte",
+                time:moment().format(),
+                belongings:0,
+                children:listCria,
+                adult:listAdult
+            //ajeitar o comprovante
+            }
         })
-        console.log(this.state.arrayfinal);
+        
     }
 
     // Encaminha para a tela VI
     Comprovante = (event) => {        
         
-        console.log(this.state.arrayfinal);
+       
         this.TheEnd();
 
         const objetocomprovante={
@@ -279,11 +306,9 @@ class Passport extends React.Component {
            
             childrens: this.state.listConfirmKids,
         }
-        console.log(objetocomprovante);
-        this.state.dadosComprovante = objetocomprovante;
-        this.setState({
-            comprovante:true,
-        })
+       
+        
+        
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM  
 
@@ -320,8 +345,8 @@ class Passport extends React.Component {
         axios.post('/product', formData)
         .then( (response) =>{
             console.log(response.data,"olaa");
-
             this.setState({
+                comprovante:true,
                 dadosComprovante:response.data,
             })
             console.log(this.state.dadosComprovante,"peppe");
@@ -838,11 +863,11 @@ class Passport extends React.Component {
                             </div>
                         </div>
                     </div>
-                   {this.state.comprovante &&(<Comprovant
+                  <Comprovant
                    tabela= {this.state.dadosComprovante}
                    servico = "PASSAPORTE"
                    teste = {this.state.comprovante}
-                   />)}
+                   />
 
                    
                     <div className="text-center">
