@@ -65,9 +65,9 @@ class Calendar extends React.Component {
     this.ChangeValue = this.ChangeValue.bind(this);
 
     this.cancelar = this.cancelar.bind(this);
-this.requisicao = this.requisicao.bind(this);
+    this.requisicao = this.requisicao.bind(this);
   }
-  requisicao(event){
+  requisicao(event) {
     axios.get('/calendar')
       .then((response) => {
         // (Gabriel): response é um objeto com todos os dados da requisição.
@@ -77,18 +77,18 @@ this.requisicao = this.requisicao.bind(this);
           currentValue.start = new Date(currentValue.start);
           currentValue.end = new Date(currentValue.end);
         })
-       
+
         this.setState({ datasRequisicao: response.data });
       })
       .catch((err) => console.log(err));
 
   }
-  interval(event){
+  interval(event) {
 
   }
-  cancelar(event){
+  cancelar(event) {
     this.setState({
-      page:"Calendario",
+      page: "Calendario",
       Titulo: '',
 
     })
@@ -100,13 +100,13 @@ this.requisicao = this.requisicao.bind(this);
   }
   componentWillUnmount() {
     clearInterval(this.interval);
-}
+  }
 
-componentDidMount(){
-  this.interval= setInterval(this.requisicao,5000);
-  this.requisicao();
-  
-}
+  componentDidMount() {
+    this.interval = setInterval(this.requisicao, 5000);
+    this.requisicao();
+
+  }
 
 
   openModal() {
@@ -171,8 +171,8 @@ componentDidMount(){
       Color: event.color,
       editar: true,
       identifier: event._id,
-      Description:event.description,
-      Location:event.address,
+      Description: event.description,
+      Location: event.address,
     })
 
   }
@@ -199,7 +199,7 @@ componentDidMount(){
           }
         })
         this.setState({
-          editar:false,
+          editar: false,
           datasRequisicao: this.state.datasRequisicao,
           page: "Calendario",
           DateTimeBegin: '',
@@ -345,7 +345,7 @@ componentDidMount(){
               </div>
               <br></br>
               <div className="text-center">
-                <a className="btn btn-md botao"  onClick={this.cancelar} >Cancelar</a>
+                <a className="btn btn-md botao" onClick={this.cancelar} >Cancelar</a>
                 {!this.state.editar && (<input type="button" className="btn btn-md botao botaoAvançar" value="Salvar" onClick={this.mod} />)}
                 {this.state.editar && (<input type="button" className="btn btn-md botao botaoAvançar" value="Salvar" onClick={this.mod2} />)}
               </div>

@@ -301,11 +301,11 @@ class CadastroAdulto extends React.Component {
         formData.append('birthday', String(this.state.birthday))
         formData.append('phone', String(this.state.phoneNumber))
         formData.append('street', String(this.state.address))
-        formData.append('number', '') // Não possui esse campo no form
+        formData.append('number', this.state.number) // Não possui esse campo no form
         formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
-        formData.append('state', 'RN') // Não possui esse campo no form
-        formData.append('country', 'Brasil') // Não possui esse campo no form
+        formData.append('state', this.state.state) // Não possui esse campo no form
+        formData.append('country', this.state.country) // Não possui esse campo no form
         formData.append('cep', String(this.state.cep))
         formData.append('nacionality', String(this.state.nacionality))
         formData.append('cpf', String(this.state.cpf))
@@ -338,11 +338,11 @@ class CadastroAdulto extends React.Component {
         formData.append('birthday', String(this.state.birthday))
         formData.append('phone', String(this.state.phoneNumber))
         formData.append('street', String(this.state.address))
-        formData.append('number', '123') // Não possui esse campo no form
+        formData.append('number', this.state.number) // Não possui esse campo no form
         formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
-        formData.append('state', 'RN') // Não possui esse campo no form
-        formData.append('country', 'Brasil') // Não possui esse campo no form
+        formData.append('state', this.state.state) // Não possui esse campo no form
+        formData.append('country', this.state.country) // Não possui esse campo no form
         formData.append('cep', String(this.state.cep))
         formData.append('nacionality', String(this.state.nacionality))
         formData.append('cpf', String(this.state.cpf))

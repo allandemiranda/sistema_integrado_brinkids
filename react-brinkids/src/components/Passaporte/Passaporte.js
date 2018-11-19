@@ -265,9 +265,7 @@ class Passport extends React.Component {
 
     // Encaminha para a tela VI
     Comprovante = (event) => {        
-        this.setState({
-                     
-        })
+        
         console.log(this.state.arrayfinal);
         this.TheEnd();
 
@@ -283,6 +281,9 @@ class Passport extends React.Component {
         }
         console.log(objetocomprovante);
         this.state.dadosComprovante = objetocomprovante;
+        this.setState({
+            comprovante:true,
+        })
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM  
 
@@ -317,11 +318,16 @@ class Passport extends React.Component {
         console.log(formData);
         //Fim do formulário;
         axios.post('/product', formData)
-        .then(function (response) {
-            console.log(response.data)
-            alert("Cadastro Finalizado")
+        .then( (response) =>{
+            console.log(response.data,"olaa");
+
+            this.setState({
+                dadosComprovante:response.data,
+            })
+            console.log(this.state.dadosComprovante,"peppe");
+           
             // window.location.href = '/';
-        }).catch(function (error) {
+        }).catch((error) => {
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -832,6 +838,12 @@ class Passport extends React.Component {
                             </div>
                         </div>
                     </div>
+                   {this.state.comprovante &&(<Comprovant
+                   tabela= {this.state.dadosComprovante}
+                   servico = "PASSAPORTE"
+                   teste = {this.state.comprovante}
+                   />)}
+
                    
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>   

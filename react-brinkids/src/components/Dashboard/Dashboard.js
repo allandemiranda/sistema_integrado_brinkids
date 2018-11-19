@@ -23,10 +23,10 @@ class DashBoard extends React.Component {
 			colaps: true,
 
 			teste: true,
-			aba:false,
-			
-			nome:[{},{}],
-			lista:[],
+			aba: false,
+
+			nome: [{}, {}],
+			lista: [],
 			popup: true,
 
 			adultospopup: false,
@@ -42,26 +42,35 @@ class DashBoard extends React.Component {
 		this.mudar2 = this.mudar2.bind(this);
 		this.mudar3 = this.mudar3.bind(this);
 		this.mudar4 = this.mudar4.bind(this);
+		this.requisicao = this.requisicao.bind(this);
+		this.inteval = this.inteval.bind(this);
+	}
+	inteval(event) {
+
+	}
+	requisicao(event) {
+		axios.get('/dashboard')
+			.then((response) => {
+				this.setState({ lista: response.data });
+			})
+			.catch((err) => console.log(err));
 	}
 	componentWillMount() {
-    
-		axios.get('/dashboard')
-		  .then((response) => {
-			
-			
-			console.log(response.data);
-			this.setState({lista: response.data });
-		  })
-		  .catch((err) => console.log(err));
-		
-	  }
+
+		this.requisicao();
+		this.inteval = setInterval(this.requisicao, 5000);
+
+	}
+	componentWillUnmount() {
+		clearInterval(this.inteval);
+	}
 	mudar() {
 		!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
-		
+
 	}
 	mudar2() {
 		!this.state.adultospopup ? this.setState({ adultospopup: true }) : this.setState({ adultospopup: false });
-		
+
 
 	}
 	mudar3() {

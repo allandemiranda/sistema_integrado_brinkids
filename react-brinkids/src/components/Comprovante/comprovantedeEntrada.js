@@ -23,6 +23,16 @@ class Comprovante extends React.Component {
             }, 100);
         }
         const byChild = function (events) {
+            function Idade(aniversario) {  
+                const hoje = new Date;  
+                const nascimento = new Date(aniversario).val();  
+                var diferencaAnos = hoje.getFullYear() - nascimento.getFullYear();  
+                if (new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()) <  
+                    new Date(hoje.getFullYear(), nascimento.getMonth(), nascimento.getDate()))  
+                  diferencaAnos--;  
+                alert(diferencaAnos);  
+                return diferencaAnos;
+              }  
             console.log(events.name,'aksjna');
 
             if (events.name !== undefined) {
@@ -38,15 +48,15 @@ class Comprovante extends React.Component {
                             </div>
                             <div id="info">
                                 <a>Parentesco:</a>
-                                <a id="parentesco">{events.kinship}</a>
+                                <a id="parentesco">nao ta e4nviando</a>
                                 <div className="direita">
                                     <a>Idade:</a>
-                                    <a id="idade">{events.years}</a>
+                                    <a id="idade">{Idade(events.birthday)}</a>
                                 </div>
                             </div>
                             <div>
                                 <a>Pacote:</a>
-                                <a id="pacote">{events.service}</a>
+                                <a id="pacote">{servico}</a>
                                 <div className="direita">
                                     <a>Entrada:</a>
                                     <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
@@ -55,7 +65,7 @@ class Comprovante extends React.Component {
                             </div>
                             <div id="obs">
                                 <a>Observações:</a>
-                                <a id="obsTexto">{events.observation}</a>
+                                <a id="obsTexto">{events.observations}</a>
                             </div>
                             <div id="restrioes">
                                 <a>Restrições:</a>
@@ -145,11 +155,11 @@ class Comprovante extends React.Component {
                 <div id="responsavel" className="textos">
                     <div>
                         <a>Responsável:</a>
-                        <a id="nome"> {this.props.tabela[0].name.firstName}</a>
+                        <a id="nome"> {this.props.tabela.adult.name}</a>
                     </div>
                     <div>
                         <a>Telefone:</a>
-                        <a id="telefone"> {this.props.tabela[0].phone}</a>
+                        <a id="telefone"> {this.props.tabela.adult.phone}</a>
 
                     </div>
                     <div id="obs">
@@ -159,15 +169,15 @@ class Comprovante extends React.Component {
                     <a>-</a>
                 </div>
                 <div className="criancas textos">
-                    {this.props.tabela.map(byChild)}
+                    {this.props.tabela.children.map(byChild)}
                     <div>
                         <a>Pertences: Gaveta</a>
-                        <a id="gaveta"> {this.props.tabela[1].belongings}</a>
+                        <a id="gaveta"> {this.props.tabela.belongings}</a>
                     </div>
                 </div>
                 <div id="atendente" className="atendente textos">
                     <a>Atendente:</a>
-                    <a> {this.props.tabela[1].employee}</a>
+                    <a> rosinha</a>
                 </div>
                 <div>
                     <div className="rodape">
