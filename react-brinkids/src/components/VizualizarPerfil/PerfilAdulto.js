@@ -731,8 +731,13 @@ class PerfilAdulto extends React.Component {
                                                             return (
                                                                 <tr style={{ textAlign: 'justify' }} key={events._id}>
                                                                     <td>{index + 1}</td>
-                                                                    <td>{this.state.listaFuncionarios[index].name.firstName}</td>
-                                                                    <td>{events.kinship}</td>
+                                                                    <td>{this.state.listaFuncionarios[index].name.firstName+" "+this.state.listaFuncionarios[index].name.surName}</td>
+                                                                   {events.kinship === undefined &&( <td>Outros</td>)}
+                                                                   {events.kinship === "grandchildren"&&(<td>Neto(a)</td>)}
+                                                                   {events.kinship === "Brother"&&(<td>Irmão/Irmã</td>)}
+                                                                  {events.kinship === "nephews"&&( <td>Sobrinho(a)</td>)}
+                                                                  {events.kinship === "children"&&( <td>Filho(a)</td>)}
+                                                                  {events.kinship === "Stepson"&&( <td>Enteado(a)</td>)}
                                                                 </tr>
                                                             )
                                                         })}

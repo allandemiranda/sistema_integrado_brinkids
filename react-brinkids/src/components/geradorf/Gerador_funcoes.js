@@ -222,14 +222,14 @@ class Gerador extends React.Component {
                                                         <select className="form-control" style={{ height: 47 + 'px' }} id="exampleFormControlSelect2" onChange={this.changueselect}>
 
                                                             {this.state.listadecargos.map((cargos, indice1) => {
-                                                                if (findAdult.officialPosition.name === cargos.name) {
+                                                                if (findAdult.officialPosition.name == undefined) {
+                                                                    return (
+                                                                        <option key={indice1 + 1} value={[indice, indice1]}>{cargos.name}</option>
+                                                                    );
+                                                                } else if(findAdult.officialPosition.name === cargos.name){
                                                                     return (
                                                                         <option key={indice1 + 1} value={[indice, indice1]} selected >{cargos.name}</option>
-                                                                    );
-                                                                } else {
-                                                                    return (
-
-                                                                        <option key={indice1 + 1} value={[indice, indice1]}>{cargos.name}</option>
+                                                                        
                                                                     );
                                                                 }
 

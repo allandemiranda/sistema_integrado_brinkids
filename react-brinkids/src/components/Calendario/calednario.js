@@ -53,7 +53,7 @@ class Calendar extends React.Component {
       Color: '',
 
     };
-
+    this.interval = this.interval.bind(this);
     this.openModal = this.openModal.bind(this);
 
     this.editar = this.editar.bind(this);
@@ -65,6 +65,25 @@ class Calendar extends React.Component {
     this.ChangeValue = this.ChangeValue.bind(this);
 
     this.cancelar = this.cancelar.bind(this);
+this.requisicao = this.requisicao.bind(this);
+  }
+  requisicao(event){
+    axios.get('/calendar')
+      .then((response) => {
+        // (Gabriel): response é um objeto com todos os dados da requisição.
+        // Vem desde os dados das datas até status HTTP e por aí vai.
+        // O que deve ser renderizado é 'response.data'
+        response.data.map((currentValue) => {
+          currentValue.start = new Date(currentValue.start);
+          currentValue.end = new Date(currentValue.end);
+        })
+       
+        this.setState({ datasRequisicao: response.data });
+      })
+      .catch((err) => console.log(err));
+
+  }
+  interval(event){
 
   }
   cancelar(event){
@@ -79,24 +98,15 @@ class Calendar extends React.Component {
       [event.target.name]: event.target.value,
     })
   }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+}
 
-  componentWillMount() {
-    
-    axios.get('/calendar')
-      .then((response) => {
-        // (Gabriel): response é um objeto com todos os dados da requisição.
-        // Vem desde os dados das datas até status HTTP e por aí vai.
-        // O que deve ser renderizado é 'response.data'
-        response.data.map((currentValue) => {
-          currentValue.start = new Date(currentValue.start);
-          currentValue.end = new Date(currentValue.end);
-        })
-        console.log(response.data);
-        this.setState({ datasRequisicao: response.data });
-      })
-      .catch((err) => console.log(err));
-  }
-
+componentDidMount(){
+  this.interval= setInterval(this.requisicao,5000);
+  this.requisicao();
+  
+}
 
 
   openModal() {

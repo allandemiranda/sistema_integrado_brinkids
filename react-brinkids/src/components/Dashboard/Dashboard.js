@@ -53,6 +53,7 @@ class DashBoard extends React.Component {
 			this.setState({lista: response.data });
 		  })
 		  .catch((err) => console.log(err));
+		
 	  }
 	mudar() {
 		!this.state.colaps ? this.setState({ colaps: true }) : this.setState({ colaps: false });
