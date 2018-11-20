@@ -418,7 +418,7 @@ class FormularioCadFunc extends React.Component {
         var formData = new FormData();
 
         formData.append('identifier', String(this.state.identifier))
-
+        console.log(this.state.identifier);
         formData.append('gender', String(this.state.sexuality))
         formData.append('education', String(this.state.scholl))
         formData.append('fatherName', String(this.state.dad))

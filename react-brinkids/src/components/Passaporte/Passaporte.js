@@ -249,10 +249,7 @@ class Passport extends React.Component {
 
     // Encaminha para a tela V
     TelaV = (event) => {
-        this.setState({
-            page: "Finalize"
-        })
-
+       
 
         var formData = new FormData();
         var listAdult = new Array();
@@ -287,7 +284,10 @@ class Passport extends React.Component {
             //ajeitar o comprovante
             }
         })
-        
+        this.setState({
+            page: "Finalize"
+        })
+
     }
 
     // Encaminha para a tela VI
@@ -346,9 +346,15 @@ class Passport extends React.Component {
         .then( (response) =>{
             console.log(response.data,"olaa");
             this.setState({
-                comprovante:true,
+                
                 dadosComprovante:response.data,
             })
+            setTimeout((event) => {
+                this.setState({
+                    comprovante:true,
+                    
+                })
+            }, 100);
             console.log(this.state.dadosComprovante,"peppe");
            
             // window.location.href = '/';
@@ -863,11 +869,11 @@ class Passport extends React.Component {
                             </div>
                         </div>
                     </div>
-                  <Comprovant
+                  {this.state.comprovante &&(<Comprovant
                    tabela= {this.state.dadosComprovante}
-                   servico = "PASSAPORTE"
+                   serviso = "PASSAPORTE"
                    teste = {this.state.comprovante}
-                   />
+                   />)}
 
                    
                     <div className="text-center">
