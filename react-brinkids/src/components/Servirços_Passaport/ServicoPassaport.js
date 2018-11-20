@@ -38,31 +38,32 @@ class ServicoPassaporte extends React.Component {
         this.interval = this.interval.bind(this);
         this.voltar = this.voltar.bind(this);
     }
-    voltar(event){
-       
+    voltar(event) {
+
         this.setState({
-            page:"TelaI",
-            list:[],
+            page: "TelaI",
+            list: [],
         })
         axios.get('/passportServices')
-        .then((response) => {
+            .then((response) => {
 
 
-            console.log(response.data);
-            this.setState({ list: response.data });
-        })
-        .catch((err) => console.log(err));
+                console.log(response.data);
+                this.setState({ list: response.data });
+            })
+            .catch((err) => console.log(err));
     }
     interval(event) { }
     requisicao(event) {
-        if(this.state.page==="TelaI")
-       { axios.get('/passportServices')
-       .then((response) => {
+        if (this.state.page === "TelaI") {
+            axios.get('/passportServices')
+                .then((response) => {
 
 
-           console.log(response.data);
-           this.setState({ list: response.data });
-       })}
+                    console.log(response.data);
+                    this.setState({ list: response.data });
+                })
+        }
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -94,13 +95,13 @@ class ServicoPassaporte extends React.Component {
     }
     componentWillMount() {
         axios.get('/passportServices')
-        .then((response) => {
+            .then((response) => {
 
 
-            console.log(response.data);
-            this.setState({ list: response.data });
-        })
-        this.interval = setInterval(this.requisicao,5000);
+                console.log(response.data);
+                this.setState({ list: response.data });
+            })
+        this.interval = setInterval(this.requisicao, 5000);
     }
     criar = (event) => {
         console.log("Dados sendo retornado");
@@ -116,12 +117,17 @@ class ServicoPassaporte extends React.Component {
 
 
         axios.post('/passportServices', formData)
-            .then(function (response) {
+            .then((response) => {
                 console.log(response)
-                this.setState({
-                    page: "TelaI",
-                })
-            }).catch(function (error) {
+                axios.get('/passportServices')
+                    .then((response) => {
+
+
+                        console.log(response.data);
+                        this.setState({ list: response.data, page: "TelaI" });
+                    })
+
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 alert("Erro no Cadastro");
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -157,11 +163,17 @@ class ServicoPassaporte extends React.Component {
     }
 
     Apagar = (event) => {
-        const id = this.state.list[this.state.list.length-1]._id;
-        axios.delete(`http://localhost:3001/passportServices/+${id}` )
-        .then( (response) => {
-            console.log('deu certo');
-        });
+        const id = this.state.list[this.state.list.length - 1]._id;
+        axios.delete(`http://localhost:3001/passportServices/${id}`)
+            .then((response) => {
+                axios.get('/passportServices')
+                    .then((response) => {
+
+
+
+                        this.setState({ list: response.data, });
+                    })
+            });
     }
 
     Adicionar = (event) => {
@@ -251,13 +263,13 @@ class ServicoPassaporte extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
-                                                <h5 className="ltTitulo"><b> Quebra(Min): </b></h5>
+                                                <h5 className="ltTitulo"><b> Quebra (min): </b></h5>
                                                 <input type="number" id="" name="QuebraTempo" className="form-QuebraTempo" className="text-center" placeholder="Tempo" value={this.state.QuebraValor} onChange={this.ChangeQuebraValor} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
-                                                <h5 className="ltTitulo"><b> Valor(R$): </b></h5>
+                                                <h5 className="ltTitulo"><b> Valor (R$): </b></h5>
                                                 <input type="number" id="" name="QuebraValor" className="form-QuebraValor" className="text-center" placeholder="R$" value={this.state.QuebraTempo} onChange={this.ChangeQuebraTempo} />
                                             </div>
                                         </div>

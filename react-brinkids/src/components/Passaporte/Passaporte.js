@@ -338,6 +338,7 @@ class Passport extends React.Component {
             listAdult.push(this.state.obs)
             formData.append('children', listCria)
             formData.append('adult', listAdult)
+            formData.append('kinship', String(this.state.kinshipConfirm))
         };
         console.log('Meu form é esse:')
         console.log(formData);
@@ -347,22 +348,23 @@ class Passport extends React.Component {
             console.log(response.data,"olaa");
             this.setState({
                 
-                dadosComprovante:response.data,
+                dadosComprovante:response.data
             })
             setTimeout((event) => {
+              
                 this.setState({
                     comprovante:true,
                     
                 })
             }, 100);
-            console.log(this.state.dadosComprovante,"peppe");
+           
            
             // window.location.href = '/';
         }).catch((error) => {
             console.log(error)//LOG DE ERRO
-            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+           
         })
         //Fim da parte Marcos.
     }

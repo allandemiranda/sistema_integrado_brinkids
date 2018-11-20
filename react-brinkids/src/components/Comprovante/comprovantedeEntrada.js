@@ -1,8 +1,8 @@
 
 import React from 'react';
 import './comprovante.css';
-import Moment from 'react-moment';
 
+import moment from 'moment';
 var servico;
 class Comprovante extends React.Component {
     servico = this.props.serviso;
@@ -10,33 +10,32 @@ class Comprovante extends React.Component {
 
     render() {
         const rederizar = () => {
-            // var conteudo = document.getElementById('print').innerHTML;
-             window.open('about:blank');
-            // tela_impressao.document.write('<html><head>');
-            // tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
-            // tela_impressao.document.write(('</head><style>html {background:transparent !important; color:#000 !important; text-shadow:none !important; filter:none !important; -ms-filter:none !important; width: 77mm; font-family: Consolas, monaco, monospace; font-style: normal; font-variant: normal; justify-content: center; align-items: center; } html body {width: 74mm; } .trilha {width: 100%; font-size: 3.5mm; word-wrap: break-word; } .naoFiscal {width: 100%; font-size: 3.5mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .textos {width: 100%; font-size: 3.3mm; word-wrap: break-word; } .titulo7 {width: 100%; font-size: 3.6mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .espacoTitulo {margin-right: 1mm; } .textos .direita {float: right; padding-right: 2mm; } .criancas {margin-bottom: 2mm; } .atendente {margin-bottom: 2mm; } .rodape {width: 100%; font-size: 3.3mm; word-wrap: break-word; justify-content: center; align-items: center; display: flex; } table, th, td {border: 0px solid black; } th, td {padding: 0px; text-align: left; }</style><body>'));
-            // tela_impressao.document.write(conteudo);
-            // tela_impressao.document.write('</body></html>');
+            var conteudo = document.getElementById('print').innerHTML;
+            const tela_impressao =window.open('about:blank');
+            tela_impressao.document.write('<html><head>');
+            tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
+            tela_impressao.document.write(('</head><style>html {background:transparent !important; color:#000 !important; text-shadow:none !important; filter:none !important; -ms-filter:none !important; width: 77mm; font-family: Consolas, monaco, monospace; font-style: normal; font-variant: normal; justify-content: center; align-items: center; } html body {width: 74mm; } .trilha {width: 100%; font-size: 3.5mm; word-wrap: break-word; } .naoFiscal {width: 100%; font-size: 3.5mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .textos {width: 100%; font-size: 3.3mm; word-wrap: break-word; } .titulo7 {width: 100%; font-size: 3.6mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .espacoTitulo {margin-right: 1mm; } .textos .direita {float: right; padding-right: 2mm; } .criancas {margin-bottom: 2mm; } .atendente {margin-bottom: 2mm; } .rodape {width: 100%; font-size: 3.3mm; word-wrap: break-word; justify-content: center; align-items: center; display: flex; } table, th, td {border: 0px solid black; } th, td {padding: 0px; text-align: left; }</style><body>'));
+            tela_impressao.document.write(conteudo);
+            tela_impressao.document.write('</body></html>');
         }
         if (this.props.teste) {
             setTimeout(function () {
-                
+                rederizar();
 
             }, 1000);
         }
         const byChild = function (events) {
             function Idade(aniversario) {  
                 const hoje = new Date;  
-                const nascimento = new Date(aniversario).val();  
-                var diferencaAnos = hoje.getFullYear() - nascimento.getFullYear();  
-                if (new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate()) <  
-                    new Date(hoje.getFullYear(), nascimento.getMonth(), nascimento.getDate()))  
-                  diferencaAnos--;  
-                alert(diferencaAnos);  
-                return diferencaAnos;
+                const nascimento = moment(aniversario).format('YYYYMMDD');
+                console.log(nascimento);
+               const a = moment(nascimento, "YYYYMMDD").fromNow();  
+                 a.split(' ');
+                 console.log(a);
+                return moment(nascimento, "YYYYMMDD").fromNow();
               }  
           
-            if (events.name !== undefined) {
+            
                 
 
                     return (
@@ -52,12 +51,12 @@ class Comprovante extends React.Component {
                                 <a id="parentesco">nao ta e4nviando</a>
                                 <div className="direita">
                                     <a>Idade:</a>
-                                    <a id="idade"><time>1976/04/19</time></a>
+                                    <a id="idade">{Idade(events.birthday)}</a>
                                 </div>
                             </div>
                             <div>
                                 <a>Pacote:</a>
-                                <a id="pacote">{servico}</a>
+                                <a id="pacote">Passaporte</a>
                                 <div className="direita">
                                     <a>Entrada:</a>
                                     <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
@@ -132,7 +131,7 @@ class Comprovante extends React.Component {
 
                     // );
                 
-            }
+            
 
         }
 
