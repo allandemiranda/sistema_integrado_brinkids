@@ -319,6 +319,7 @@ class Passport extends React.Component {
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd= (event) => {
         var formData = new FormData();
+<<<<<<< HEAD
         var listCria = [];
 
         const adulto = {
@@ -338,6 +339,28 @@ class Passport extends React.Component {
             }
 
             listCria.push(crianca);
+=======
+        var listAdult = new Array();
+        var listCria = new Array();
+        var i;
+        for(i = 0; i < this.state.listConfirmKids.length; i++){
+            formData.append('photo', String(this.state.listConfirmKids[0]._id))
+            formData.append('service', 'Passaporte')
+            formData.append('time', moment().format())
+            formData.append('belongings', '0')
+            listCria.push(String(this.state.listConfirmKids[i]._id))
+            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
+            listCria.push(this.state.listConfirmKids[i].birthday)
+            listCria.push(this.state.listConfirmKids[i].restrictions)
+            listCria.push(this.state.listConfirmKids[i].observations)
+            listAdult.push(this.state.listConfirmAdult[0]._id)
+            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
+            listAdult.push(this.state.listConfirmAdult[0].phone)
+            listAdult.push(this.state.obs)
+            formData.append('children', listCria)
+            formData.append('adult', listAdult)
+            formData.append('kinship', String(this.state.kinshipConfirm))
+>>>>>>> fd21aa7a00ebc709c812777ab52d7d7566086133
         };
 
         formData.append('photo', String(this.state.listConfirmKids[0]._id))
@@ -354,22 +377,23 @@ class Passport extends React.Component {
             console.log(response.data,"olaa");
             this.setState({
                 
-                dadosComprovante:response.data,
+                dadosComprovante:response.data
             })
             setTimeout((event) => {
+              
                 this.setState({
                     comprovante:true,
                     
                 })
             }, 100);
-            console.log(this.state.dadosComprovante,"peppe");
+           
            
             // window.location.href = '/';
         }).catch((error) => {
             console.log(error)//LOG DE ERRO
-            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+           
         })
         //Fim da parte Marcos.
     }
