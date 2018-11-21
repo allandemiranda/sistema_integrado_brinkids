@@ -1,6 +1,8 @@
 // Este arquivo é responsável por criar as rotas dos produtos do Dashboard
 
 const express = require('express');
+const fs = require('fs');
+
 const Product = require('../models/product-models');
 const config = require('../config');
 
@@ -18,9 +20,9 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
 
   try {
-    const { adult } = req.body;
+    const adult = JSON.parse(req.body.adult);
 
-    const listProduct = req.body.children.map((child, i) => {
+    const products = JSON.parse(req.body.children).map(async (child) => {
       const product = new Product({
         children: {
           id: child._id,
@@ -35,48 +37,36 @@ router.post('/', async (req, res) => {
           phone: adult.phone,
           observations: adult.observations,
         },
-        photo: '',
+        photo: '/123.png',
         service: req.body.service,
         time: new Date(req.body.time),
         belongings: req.body.belongings,
       });
 
-      return product;
+      const productSaved = await product.save();
+
+      productSaved.set({ photo: productSaved._id });
+
+      const photoBase64Data = child.photo.replace(/^data:image\/png;base64,/, '');
+
+      fs.writeFile(`${config.pathPublic()}${config.pathProduct}${productSaved._id}.png`, photoBase64Data, 'base64', function(errFile) {
+        if (errFile) {
+          throw new Error(errFile);
+        }
+      });
+
+      return productSaved;
     });
+
+    const productsSaved = await Promise.all(products);
+
+    console.log(productsSaved);
+
+    return res.status(201).json(productsSaved);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
   }
-  // const childrenData = {
-  //   id: String(childrenObj[0]),
-  //   name: String(childrenObj[1]),
-  //   birthday: new Date(childrenObj[2]),
-  //   restrictions: String(childrenObj[3]),
-  //   observations: String(childrenObj[4]),
-  // };
-  // const adultData = {
-  //   id: String(adultObj[0]),
-  //   name: String(adultObj[1]),
-  //   phone: String(adultObj[2]),
-  //   observations: String(adultObj[3]),
-  // };
-  // const data = new product({
-  //   photo: String(req.body.photo),
-  //   service: String(req.body.service),
-  //   time: new Date(req.body.time),
-  //   belongings: parseInt(req.body.belongings, 10),
-  //   children: childrenData,
-  //   adult: adultData,
-  // });
-
-  // try {
-  //   const newProduct = await data.save();
-  //   console.log(newProduct);
-  //   return res.status(201).json(newProduct);
-  // } catch (err) {
-  //   console.log(err);
-  //   return res.sendStatus(500);
-  // }
 });
 
 module.exports = router;

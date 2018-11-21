@@ -319,12 +319,11 @@ class Passport extends React.Component {
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd= (event) => {
         var formData = new FormData();
-<<<<<<< HEAD
         var listCria = [];
 
         const adulto = {
             _id: this.state.listConfirmAdult[0]._id,
-            name: this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName,
+            name: this.state.listConfirmAdult[0].name.firstName + ' ' + this.state.listConfirmAdult[0].name.surName,
             phone: this.state.listConfirmAdult[0].phone,
             observations: this.state.obs,
         };
@@ -332,45 +331,24 @@ class Passport extends React.Component {
         for(var i = 0; i < this.state.listConfirmKids.length; i++){
             const crianca = {
                 _id: String(this.state.listConfirmKids[i]._id),
-                name: this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName,
+                name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
                 birthday: new Date(this.state.listConfirmKids[i].birthday),
                 restrictions: this.state.listConfirmKids[i].restrictions,
                 observations: this.state.listConfirmKids[i].observations,
+                photo: this.state.listConfirmKids[i].fotoFamily
             }
 
             listCria.push(crianca);
-=======
-        var listAdult = new Array();
-        var listCria = new Array();
-        var i;
-        for(i = 0; i < this.state.listConfirmKids.length; i++){
-            formData.append('photo', String(this.state.listConfirmKids[0]._id))
-            formData.append('service', 'Passaporte')
-            formData.append('time', moment().format())
-            formData.append('belongings', '0')
-            listCria.push(String(this.state.listConfirmKids[i]._id))
-            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
-            listCria.push(this.state.listConfirmKids[i].birthday)
-            listCria.push(this.state.listConfirmKids[i].restrictions)
-            listCria.push(this.state.listConfirmKids[i].observations)
-            listAdult.push(this.state.listConfirmAdult[0]._id)
-            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
-            listAdult.push(this.state.listConfirmAdult[0].phone)
-            listAdult.push(this.state.obs)
-            formData.append('children', listCria)
-            formData.append('adult', listAdult)
-            formData.append('kinship', String(this.state.kinshipConfirm))
->>>>>>> fd21aa7a00ebc709c812777ab52d7d7566086133
         };
 
-        formData.append('photo', String(this.state.listConfirmKids[0]._id))
+        formData.append('photo', this.state.file)
         formData.append('service', 'Passaporte')
         formData.append('time', moment().format())
         formData.append('belongings', '0')
-        formData.append('children', listCria)
-        formData.append('adult', adulto)
-        console.log('Meu form é esse:')
-        console.log(formData);
+        formData.append('children', JSON.stringify(listCria))
+        formData.append('adult', JSON.stringify(adulto));
+
+        console.log(this.state.file);
         //Fim do formulário;
         axios.post('/product', formData)
         .then( (response) =>{
@@ -380,10 +358,8 @@ class Passport extends React.Component {
                 dadosComprovante:response.data
             })
             setTimeout((event) => {
-              
                 this.setState({
                     comprovante:true,
-                    
                 })
             }, 100);
            
@@ -451,10 +427,11 @@ class Passport extends React.Component {
         const imageSrc = this.webcam.getScreenshot(); // #2
         imagem[indice_da_foto].src = imageSrc; // #3
 
+
         this.state.listConfirmKids.map((kid, indice) => { // #4
             console.log(identifier);
             if (kid._id === identifier){
-                kid.fotoFamily = this.state.file[indice_da_foto];
+                kid.fotoFamily = imageSrc;
             }
         })
 
