@@ -45,7 +45,7 @@ router.post('/', async (req, res) => {
 
       const productSaved = await product.save();
 
-      productSaved.set({ photo: productSaved._id });
+      productSaved.set({ photo: `${config.pathProduct}${productSaved._id}.png` });
 
       const photoBase64Data = child.photo.replace(/^data:image\/png;base64,/, '');
 
