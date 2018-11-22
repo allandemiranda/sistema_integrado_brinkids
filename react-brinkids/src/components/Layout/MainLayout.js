@@ -79,7 +79,7 @@ class MainLayout extends React.Component {
                             < span className="fa fa-bars" > </span>
                         </button>
                         <Link to="index.html" >
-                            < span id="logo" > < h1 > BrinKids </h1></span>
+                            < span id="logo" > < h1 > Brinkids </h1></span>
                         </Link>
                     </header>
                     <div className="bordaDaDiv"> </div>

@@ -24,7 +24,7 @@ class VerDesconto extends React.Component {
             list: [],
         }
 
-        axios.get(`/desconto/filter/${this.props.Nome}`)
+        axios.get(`/discount/filter/${this.props.Nome}`)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
@@ -132,24 +132,17 @@ class VerDesconto extends React.Component {
                                         <td > Exemplo</td>
                                         <td > Exemplo</td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td > Exemplo </td>
-                                        <td > Criança </td>
-                                        <td > Exemplo</td>
-                                        <td > mais de 1B</td>
-                                    </tr>
-                                    {/*  {this.state.list.map((desconto, indice) => {
+                                    {this.state.list.map((desconto, indice) => {
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td >{desconto.codes.numberCode} </td>
                                                     <td >{desconto.codes.statusBoradlUser.dateUser} </td>
-                                                    <td >{desconto.} </td>
+                                                    <td >{desconto.statusUniqueUse} </td>
                                                     <td >{desconto.to} </td>
                                                 </tr>
                                             );
-                                        })} */}
+                                        })}
                                 </tbody>
                             </table>
                         </div>
@@ -173,7 +166,7 @@ class VerDesconto extends React.Component {
                                         <td > Criança </td>
                                         <td > Exemplo</td>
                                     </tr>
-                                    {/*  {this.state.list.map((desconto, indice) => {
+                                    {this.state.list.map((desconto, indice) => {
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
@@ -182,7 +175,7 @@ class VerDesconto extends React.Component {
                                                     <td >{desconto.validity} </td>
                                                 </tr>
                                             );
-                                        })} */}
+                                        })}
                                 </tbody>
                             </table>
                         </div>
