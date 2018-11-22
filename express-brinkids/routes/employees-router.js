@@ -60,12 +60,19 @@ router.post('/', async (req, res) => {
   try {
     const adultResult = await adult.findByIdAndUpdate(
       req.body.identifier,
-      { identifierEmployee: req.body.identifier },
+      {
+        identifierEmployee: req.body.identifier,
+        isEmployee: true,
+      },
     );
 
     if (!adultResult) {
       return res.sendStatus(404);
     }
+
+    console.log('-------------------------');
+    console.log(req.body.EDOfficialPosition);
+    console.log('-------------------------');
 
     const employee = new Employees({
       gender: req.body.gender,
