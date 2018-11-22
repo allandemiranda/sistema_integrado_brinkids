@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
   try {
     const adultResult = await adult.findByIdAndUpdate(
       req.body.identifier,
-      { isEmployee: true, identifierEmployee: req.body.identifier },
+      {  identifierEmployee: req.body.identifier },
     );
 
     if (!adultResult) {
@@ -85,7 +85,7 @@ router.post('/', async (req, res) => {
         state: req.body.WPState,
         PIS_PASEP: req.body.WPPIS_PASEP,
         dateIssue: new Date(req.body.WPDateIssue),
-        placeIssue: new Date(req.body.WPPlaceIssue),
+        placeIssue: req.body.WPPlaceIssue,
       },
       rg: {
         issuingBody: req.body.RgIssuingBody,

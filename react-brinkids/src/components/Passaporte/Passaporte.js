@@ -106,7 +106,7 @@ class Passport extends React.Component {
                 success: function (response) {    //Salva os dados do responsável na variácel LIST
                     console.log(response.length)
                     if (response.length === 0) {
-                        alert("Erro: Nenhum Responásel Encontrado")
+                        alert("Erro: Nenhum Responsável Encontrado")
                         this.setState({ erro: "* Nenhum Responásel Encontrado." })
                     } else {
                         console.log("Olar")
@@ -249,50 +249,8 @@ class Passport extends React.Component {
 
     // Encaminha para a tela V
     TelaV = (event) => {
-        this.setState({
-            page: "Finalize"
-        })
+       
 
-
-        let lista = [...this.state.listConfirmAdult,{belongings: "1",
-        employee: "Rozinha dos Santos"},...this.state.listConfirmKids];
-        console.log("Eu sou a lista suprema que está sendo debugada: ", lista)
-        this.setState({
-            arrayfinal:lista,
-        })
-        console.log(this.state.arrayfinal);
-    }
-
-    // Encaminha para a tela VI
-    Comprovante = (event) => {        
-        
-        console.log(this.state.arrayfinal);
-        this.TheEnd();
-
-        const objetocomprovante={
-            adult: this.state.confirmAdult,
-           
-            belongingis: { // PEGAR DADDOS COM GABRIEL
-                belongings: "1",
-                employee: "Rozinha dos Santos",
-            },
-           
-            childrens: this.state.listConfirmKids,
-        }
-        console.log(objetocomprovante);
-        this.state.dadosComprovante = objetocomprovante;
-        this.setState({
-            comprovante:true,
-        })
-    }
-    // FUNÇOES DO BOTÃO AVANÇAR - FIM  
-
-    //Essa parte é de responsabilidade de Marcos Paulo, talvez isso dê errado, mas tentá-lo-ei...
-    //Só quero pegar o que preciso na rota.
-    //O new Date().getTime() recebe o valor em milisegundos, por isso, dividindo por 60000 converto em minutos.
-    //Começando o formulário para enviar no JSON:
-    /*FUNCAO CADASTRA ADULTO*/
-    TheEnd= (event) => {
         var formData = new FormData();
         var listAdult = new Array();
         var listCria = new Array();
@@ -314,24 +272,104 @@ class Passport extends React.Component {
             formData.append('children', listCria)
             formData.append('adult', listAdult)
         };
-        console.log('Meu form é esse:')
-        console.log(formData);
+        this.setState({
+            dadosComprovante:{
+                
+                photo:String(this.state.listConfirmKids[0]._id),
+                service:"Passaporte",
+                time:moment().format(),
+                belongings:0,
+                children:listCria,
+                adult:listAdult
+            //ajeitar o comprovante
+            }
+        })
+        this.setState({
+            page: "Finalize"
+        })
+
+    }
+
+    // Encaminha para a tela VI
+    Comprovante = (event) => {        
+        
+       
+        this.TheEnd();
+
+        const objetocomprovante={
+            adult: this.state.confirmAdult,
+           
+            belongingis: { // PEGAR DADDOS COM GABRIEL
+                belongings: "1",
+                employee: "Rozinha dos Santos",
+            },
+           
+            childrens: this.state.listConfirmKids,
+        }
+       
+        
+        
+    }
+    // FUNÇOES DO BOTÃO AVANÇAR - FIM  
+
+    //Essa parte é de responsabilidade de Marcos Paulo, talvez isso dê errado, mas tentá-lo-ei...
+    //Só quero pegar o que preciso na rota.
+    //O new Date().getTime() recebe o valor em milisegundos, por isso, dividindo por 60000 converto em minutos.
+    //Começando o formulário para enviar no JSON:
+    /*FUNCAO CADASTRA ADULTO*/
+    TheEnd= (event) => {
+        var formData = new FormData();
+        var listCria = [];
+
+        const adulto = {
+            _id: this.state.listConfirmAdult[0]._id,
+            name: this.state.listConfirmAdult[0].name.firstName + ' ' + this.state.listConfirmAdult[0].name.surName,
+            phone: this.state.listConfirmAdult[0].phone,
+            observations: this.state.obs,
+        };
+
+        for(var i = 0; i < this.state.listConfirmKids.length; i++){
+            const crianca = {
+                _id: String(this.state.listConfirmKids[i]._id),
+                name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                birthday: new Date(this.state.listConfirmKids[i].birthday),
+                restrictions: this.state.listConfirmKids[i].restrictions,
+                observations: this.state.listConfirmKids[i].observations,
+                photo: this.state.listConfirmKids[i].fotoFamily
+            }
+
+            listCria.push(crianca);
+        };
+
+        formData.append('photo', this.state.file)
+        formData.append('service', 'Passaporte')
+        formData.append('time', moment().format())
+        formData.append('belongings', '0')
+        formData.append('children', JSON.stringify(listCria))
+        formData.append('adult', JSON.stringify(adulto));
+
+        console.log(this.state.file);
         //Fim do formulário;
         axios.post('/product', formData)
         .then( (response) =>{
             console.log(response.data,"olaa");
-
             this.setState({
-                dadosComprovante:response.data,
+                
+                dadosComprovante:response.data
             })
-            console.log(this.state.dadosComprovante,"peppe");
+            setTimeout((event) => {
+                this.setState({
+                    comprovante:true,
+                })
+            }, 100);
+           
            
             // window.location.href = '/';
         }).catch((error) => {
             console.log(error)//LOG DE ERRO
-            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+           
         })
         //Fim da parte Marcos.
     }
@@ -389,10 +427,11 @@ class Passport extends React.Component {
         const imageSrc = this.webcam.getScreenshot(); // #2
         imagem[indice_da_foto].src = imageSrc; // #3
 
+
         this.state.listConfirmKids.map((kid, indice) => { // #4
             console.log(identifier);
             if (kid._id === identifier){
-                kid.fotoFamily = this.state.file[indice_da_foto];
+                kid.fotoFamily = imageSrc;
             }
         })
 
@@ -838,9 +877,9 @@ class Passport extends React.Component {
                             </div>
                         </div>
                     </div>
-                   {this.state.comprovante &&(<Comprovant
+                  {this.state.comprovante &&(<Comprovant
                    tabela= {this.state.dadosComprovante}
-                   servico = "PASSAPORTE"
+                   serviso = "PASSAPORTE"
                    teste = {this.state.comprovante}
                    />)}
 
