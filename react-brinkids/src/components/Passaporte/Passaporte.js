@@ -69,11 +69,29 @@ class Passport extends React.Component {
     ChangeObs(event) {
         this.setState({ obs: event.target.value });
     }
-    ChangeObsCrianca(event) {
-        this.setState({ obsCrianca: event.target.value });
+    ChangeObsCrianca(event,identifier,indice) {
+        console.log(event.target.value);
+       let listatemporaria = this.state.listConfirmKids;
+       listatemporaria.forEach((crianca,indice)=>{
+                    if(crianca._id===identifier){
+                        crianca.observations = event.target.value;
+                    }
+       });
+       this.setState({
+           listConfirmKids:listatemporaria,
+       })
     }
-    ChangeRest(event) {
-        this.setState({ rest: event.target.value });
+    ChangeRest(event,identifier,indice) {
+        console.log(event.target.value);
+        let listatemporaria = this.state.listConfirmKids;
+        listatemporaria.forEach((crianca,indice)=>{
+                     if(crianca._id===identifier){
+                         crianca.restrictions = event.target.value;
+                     }
+        });
+        this.setState({
+            listConfirmKids:listatemporaria,
+        })
     }
     ChangePhone(event) {
         this.setState({ phone: event.target.value });
@@ -242,12 +260,12 @@ class Passport extends React.Component {
         if (this.state.listConfirmAdult.length != 0) {
             this.setState({
                 page: "ConfirmKids",
-                obsCrianca: this.state.listConfirmKids.observations,
-                rest: this.state.listConfirmKids.restrictions,
+                obsCrianca: this.state.listConfirmKids[0].observations,
+                rest: this.state.listConfirmKids[0].restrictions,
                 file: Array(this.state.listConfirmKids.length),
             })
-            console.log(this.state.listConfirmKids.observations);
-            console.log(this.state.listConfirmKids.restrictions);
+            console.log(this.state.listConfirmKids);
+           
         }
         else {
             alert(" Selecione um Responsável ")
@@ -717,12 +735,12 @@ class Passport extends React.Component {
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                                             <h3 className="inner-tittle" > Observações </h3>
                                                             <br></br>
-                                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="observacoes" value={this.state.obsCrianca} onChange={this.ChangeObsCrianca}></textarea>
+                                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="observacoes" value={Criançasqueentrarao.observations} onChange={(event) => this.ChangeObsCrianca(event, Criançasqueentrarao._id, indice)}></textarea>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                                             <h3 className="inner-tittle" > Restrições </h3>
                                                             <br></br>
-                                                            <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={this.state.rest} onChange={this.ChangeRest}></textarea>
+                                                            <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={Criançasqueentrarao.restrictions} onChange={(event)=>this.ChangeRest(event, Criançasqueentrarao._id, indice)}></textarea>
                                                         </div>
                                                     </div>
                                                 </div >
