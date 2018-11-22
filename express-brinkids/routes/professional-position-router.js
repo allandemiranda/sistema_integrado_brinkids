@@ -1,5 +1,5 @@
 const express = require('express');
-const professionalPosition = require('../models/professional-position-models');
+const ProfessionalPosition = require('../models/professional-position-models');
 const config = require('../config');
 
 const router = express.Router();
@@ -10,8 +10,7 @@ router.post('/', async (req, res) => {
     && req.body.description
     && req.body.classes
     && req.body.functions) {
-
-    const data = new professionalPosition({
+    const data = new ProfessionalPosition({
       name: req.body.name,
       description: req.body.description,
       classes: req.body.classes,
@@ -30,11 +29,11 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  professionalPosition.find({}, (err, result) => {
+  ProfessionalPosition.find({}, (err, result) => {
     try {
-      res.status(200).json(result)
+      res.status(200).json(result);
     } catch (err) {
-      res.sendStatus(500)
+      res.sendStatus(500);
     }
   });
 });
@@ -42,7 +41,7 @@ router.get('/', (req, res) => {
 router.put('/:identifier', async (req, res) => {
 
   try {
-    const professionalPositionChange = await professionalPosition.findByIdAndUpdate(
+    const professionalPositionChange = await ProfessionalPosition.findByIdAndUpdate(
       req.params.identifier,
       {
         name: req.body.name,
@@ -66,7 +65,7 @@ router.put('/:identifier', async (req, res) => {
 
 router.delete('/:identifier', async (req, res) => {
   try {
-    const deletedProfessionalPosition = await professionalPosition.findByIdAndRemove(req.params.identifier);
+    const deletedProfessionalPosition = await ProfessionalPosition.findByIdAndRemove(req.params.identifier);
 
     if (!deletedProfessionalPosition) {
       return res.sendStatus(404);
