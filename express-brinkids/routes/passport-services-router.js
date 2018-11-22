@@ -53,24 +53,16 @@ String.prototype.toSS = function () {//convertendo de mm:ss para segundos
 }
 
 router.get('/', async (req, res) => {
-
-  // if(psjson.length>1){//teste pra saber se só tem o json inicial
-  // lista = [];
-
-  // for(i=1; i<psjson.length;i++){
-  //   lista += psjson[i];
-  //   const data = {
-  //     name: .name,
-  //     description: psjson[i].description,
-  //     initialTime: psjson[i].initialTime,
-  //     finalTime: pjson[i].finalTime,
-  //     price: psjson[i].price,
-  //   };
-  // }
   try {
     const psjson = await passportServices.find({});
-    psjson.shift();
-    return res.status(201).json(psjson);
+    const passportDefault = await passport.find({})[0];
+
+    const data = {
+      services: psjson.shift(),
+      default: passportDefault,
+    };
+
+    return res.status(201).json(data);
   } catch (err) {
     return res.sendStatus(500);
   }
@@ -105,6 +97,12 @@ router.get('/initialTime', async (req, res) => {
       return res.sendStatus(500);
     }
   }
+});
+
+router.put('/', async (req, res) =>{
+  const passportDefault = await passport.find({})[0];
+  passportDefault.time = req.body.time;
+  passportDefault.price = req.body.price;
 });
 
 router.delete('/:identifier', async (req, res) => {

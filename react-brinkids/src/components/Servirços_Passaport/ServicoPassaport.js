@@ -140,8 +140,8 @@ class ServicoPassaporte extends React.Component {
         console.log('-------------------------------------')
         console.log(this.list)
         console.log('-------------------------------------')
-        this.QuebraTempo = this.list.time;
-        this.QuebraValor = this.list.price;
+        this.QuebraTempo = this.list.default.time;
+        this.QuebraValor = this.list.default.price;
 
         var formData = new FormData();
 
@@ -149,7 +149,7 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.QuebraValor))
 
 
-        axios.post('/passport', formData)
+        axios.put('/passport', formData)
             .then(function (response) {
                 console.log(response)
                 //window.location.href = '/ServicoPassaporte';
@@ -231,7 +231,7 @@ class ServicoPassaporte extends React.Component {
                                         <tbody>
                                             {this.state.list.map((TempoServico, indice) => {
                                                 return (
-                                                    <tr key={TempoServico._id}>
+                                                    <tr key={TempoServico.services._id}>
                                                         <th scope="row">{indice + 1}</th>
                                                         <td > {TempoServico.name} </td>
                                                         <td >{TempoServico.initialTime} </td>
