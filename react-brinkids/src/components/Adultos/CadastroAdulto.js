@@ -9,6 +9,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/CadastroAdulto.css';
 import './css/style.css';
+import moment from 'moment';
 
 import $ from "jquery";
 
@@ -640,7 +641,7 @@ class CadastroAdulto extends React.Component {
                                             <tr key={findChild._id}>
                                                 <th scope="row">{indice+1}</th>
                                                 <td > {findChild.name.firstName} </td>
-                                                <td >{findChild.birthday} </td>
+                                                <td > {moment(findChild.birthday).toNow(true)} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={this.Changekinship} >
@@ -708,7 +709,7 @@ class CadastroAdulto extends React.Component {
                                             <tr key={findChild._id}>
                                                 <th scope="row">{indice}</th>
                                                 <td > {findChild.name.firstName} </td>
-                                                <td >{findChild.birthday} </td>
+                                                <td >{moment(findChild.birthday, "YYYYMMDD").toNow(true)}</td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(findChild._id)} /> </td>
                                             </tr>

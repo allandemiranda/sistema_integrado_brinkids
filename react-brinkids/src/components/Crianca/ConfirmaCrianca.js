@@ -4,6 +4,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/style.css';
 import './css/Cadastro_Crianca.css';
+import moment from 'moment';
 
 class ConfirmaCrianca extends React.Component {
     render() {
@@ -30,8 +31,7 @@ class ConfirmaCrianca extends React.Component {
                             <div className="col-md-6 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data: </b></h5>
-                                    <p>{this.props.Date}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.Date).format('DD/MM/YYYY')} </p>
                                 </div>
                             </div>
                         </div>

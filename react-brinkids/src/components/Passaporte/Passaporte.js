@@ -607,7 +607,7 @@ class Passport extends React.Component {
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
-                                                    <td >{findKids.birthday} </td>
+                                                    <td >{moment(findKids.birthday).format('DDMMYYYY')} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
                                                 </tr>
                                             );
@@ -617,7 +617,7 @@ class Passport extends React.Component {
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
-                                                    <td >{findKids.birthday} </td>
+                                                    <td >{moment(findKids.birthday).format('DDMMYYYY')}  </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
                                                 </tr>
                                             );
@@ -678,7 +678,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{this.state.listConfirmAdult[0].birthday}</p>
+                                                            <p>{moment(this.state.listConfirmAdult[0].birthday).format('DD/MM/YYYY')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
