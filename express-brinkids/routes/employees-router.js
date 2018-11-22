@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
   try {
     const adultResult = await adult.findByIdAndUpdate(
       req.body.identifier,
-      {  identifierEmployee: req.body.identifier },
+      { identifierEmployee: req.body.identifier },
     );
 
     if (!adultResult) {
@@ -68,7 +68,6 @@ router.post('/', async (req, res) => {
     }
 
     const employee = new Employees({
-      functions: [],
       gender: req.body.gender,
       education: req.body.education,
       kinship: {
@@ -92,16 +91,16 @@ router.post('/', async (req, res) => {
         state: req.body.RgState,
         dateIssue: new Date(req.body.RgDateIssue),
       },
-      militaryReservist: {
-        number: req.body.MRNumber,
-        state: req.body.MRState,
-        category: req.body.MRCategory,
-      },
       electionTitle: {
         number: req.body.ETnumber,
         zone: req.body.ETzone,
         section: req.body.ETsection,
         state: req.body.ETstate,
+      },
+      militaryReservist: {
+        number: req.body.MRNumber,
+        state: req.body.MRState,
+        category: req.body.MRCategory,
       },
       passport: {
         number: req.body.PPNumber,
