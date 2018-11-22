@@ -46,6 +46,7 @@ class Passport extends React.Component {
             comprovante: false,
             no:tabelinha,
             dadosComprovante:[],
+            kinship: [],
 
         }
 
@@ -96,8 +97,32 @@ class Passport extends React.Component {
     ChangePhone(event) {
         this.setState({ phone: event.target.value });
     }
-    Changekinship(event) {
-        this.setState({ kinshipConfirm: event.target.value });
+    Changekinship(event,identifier,indice) {
+        console.log(event.target.value);
+        let listatemporaria = this.state.listConfirmKids;
+        listatemporaria.forEach((crianca,indice)=>{
+                     if(crianca._id===identifier){
+                        console.log(event.target.value);
+                         if (event.target.value === "others"){
+                            this.state.kinship[indice] = "Outros";
+                        }
+                        else if (event.target.value === "children"){
+                            this.state.kinship[indice] = "filho(a)";
+                        }
+                        else if (event.target.value === "Stepson"){
+                            this.state.kinship[indice] = "Enteado(a)";
+                        }
+                        else if (event.target.value === "grandchildren"){
+                            this.state.kinship[indice] = "Neto(a)";
+                        }
+                        else if (event.target.value === "nephews"){
+                            this.state.kinship[indice] = "Sobrinho(a)";
+                        }
+                        else if (event.target.value === "Brother"){
+                            this.state.kinship[indice] = "Irmã(o)";
+                        }
+                     }
+        });
     }
 
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
@@ -321,16 +346,7 @@ class Passport extends React.Component {
        
         this.TheEnd();
 
-        const objetocomprovante={
-            adult: this.state.confirmAdult,
-           
-            belongingis: { // PEGAR DADDOS COM GABRIEL
-                belongings: "1",
-                employee: "Rozinha dos Santos",
-            },
-           
-            childrens: this.state.listConfirmKids,
-        }
+      
        
         
         
@@ -718,7 +734,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-6 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px"  }}>
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
-                                                                <select id="kinship" name="kinship" className="form-control optionFomulario"  onChange={this.Changekinship} >
+                                                                <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id, indice)} >
                                                                 <option value="others" > Outros </option>
                                                                 <option value="children" > filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
@@ -864,7 +880,7 @@ class Passport extends React.Component {
                                             <div className="col-md-5 col-sm-12 text-center">     
                                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                                     <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                    <p>{Criançasqueentrarao.kinship}</p>
+                                                    <p>{this.state.kinship[indice]}</p>
                                                 </div>
                                                 <br></br>
                                                 <div className="row">
