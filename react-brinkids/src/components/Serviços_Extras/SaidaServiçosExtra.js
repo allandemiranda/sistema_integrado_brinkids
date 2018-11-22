@@ -23,6 +23,10 @@ class SaidaServicosExtra extends React.Component {
             FormaDePagamento:"",
             valorTotal:[],
             selectedSearch:"",
+            dadosComprovante:[],
+            objetocomprovante:[],
+
+
         }        
         this.Search = this.Search.bind(this);
         this.ChangeQuantidade = this.ChangeQuantidade.bind(this);
@@ -138,11 +142,21 @@ class SaidaServicosExtra extends React.Component {
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
             alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
         })
+
+        const objetocomprovante={
+            adult: this.state.confirmAdult,
+            child:this.state.findproduct,
+
+            belongingis: { // PEGAR DADDOS COM GABRIEL
+                belongings: "1",
+                employee: "Rozinha dos Santos",
+            }, 
+        }
+        this.state.dadosComprovante = objetocomprovante;
     }
 
 
     render() {
-        
         if (this.state.page === "TelaInicial"){
             return (
                 <div className="container-fluid" >
@@ -272,6 +286,11 @@ class SaidaServicosExtra extends React.Component {
                             </div > 
                         </div>
                     </div>
+                    <Comprovant
+                        teste={this.state.comprovante}
+                        tabela={this.state.dadosComprovante}
+                        serviso="PASSAPORTE"
+                    />
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}> Finalizar </button>
