@@ -35,8 +35,9 @@ class Passport extends React.Component {
             kidTthatCame: [],
             listConfirmKids: [], // Dados das crianças Selecionadas na checkBox
             //TEla IV:
-            obs: '',
-            rest: '',
+            obs:'',
+            obsCrianca:'',
+            rest:'',
             phone: '',
             file: '', // recebe a imagem 
             currentdate: [],        
@@ -57,6 +58,7 @@ class Passport extends React.Component {
 
         //Relacionado a atualização dos valores Caminho
         this.ChangeObs = this.ChangeObs.bind(this); //apontador 
+        this.ChangeObsCrianca = this.ChangeObsCrianca.bind(this);
         this.ChangeRest = this.ChangeRest.bind(this);
         this.ChangePhone = this.ChangePhone.bind(this);
 
@@ -66,6 +68,9 @@ class Passport extends React.Component {
     //Relacionado a atualização dos valores Funções
     ChangeObs(event) {
         this.setState({ obs: event.target.value });
+    }
+    ChangeObsCrianca(event) {
+        this.setState({ obsCrianca: event.target.value });
     }
     ChangeRest(event) {
         this.setState({ rest: event.target.value });
@@ -237,10 +242,12 @@ class Passport extends React.Component {
         if (this.state.listConfirmAdult.length != 0) {
             this.setState({
                 page: "ConfirmKids",
-                obs: this.state.listConfirmKids.observations,
+                obsCrianca: this.state.listConfirmKids.observations,
                 rest: this.state.listConfirmKids.restrictions,
                 file: Array(this.state.listConfirmKids.length),
             })
+            console.log(this.state.listConfirmKids.observations);
+            console.log(this.state.listConfirmKids.restrictions);
         }
         else {
             alert(" Selecione um Responsável ")
@@ -607,7 +614,7 @@ class Passport extends React.Component {
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
-                                                    <td >{moment(findKids.birthday).format('DDMMYYYY')} </td>
+                                                    <td >{moment(findKids.birthday).format('DD/MM/YYYY')} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
                                                 </tr>
                                             );
@@ -617,7 +624,7 @@ class Passport extends React.Component {
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
-                                                    <td >{moment(findKids.birthday).format('DDMMYYYY')}  </td>
+                                                    <td >{moment(findKids.birthday).format('DD/MM/YYYY')}  </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
                                                 </tr>
                                             );
@@ -710,7 +717,7 @@ class Passport extends React.Component {
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                                             <h3 className="inner-tittle" > Observações </h3>
                                                             <br></br>
-                                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
+                                                            <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="observacoes" value={this.state.obsCrianca} onChange={this.ChangeObsCrianca}></textarea>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                                             <h3 className="inner-tittle" > Restrições </h3>
@@ -788,7 +795,7 @@ class Passport extends React.Component {
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px"}}>
                                                 <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                                <p> {this.state.listConfirmAdult[0].phone}</p>
+                                                <p> {this.state.phone}</p>
                                                 </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
@@ -806,7 +813,7 @@ class Passport extends React.Component {
                                                     <h3 className="inner-tittle" > Observações </h3>
                                                     <br></br>
                                                     <div className="graph" style={{ padding: 10 + "px" }} >                                                    
-                                                        <p>{this.state.listConfirmAdult[0].observations}</p>
+                                                        <p>{this.state.obs}</p>
                                                     </div>
                                                 </div>
                                             </div>
