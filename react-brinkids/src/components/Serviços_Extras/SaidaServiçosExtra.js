@@ -119,8 +119,9 @@ class SaidaServicosExtra extends React.Component {
         console.log(this.state.Total);
 
         let formData = new FormData();
-
+        let listatemporaria = this.state.dadosComprovante;
         formData.append('extraServices', JSON.stringify(this.state.listConfirm.map((servico) => {
+            listatemporaria.push(servico);
             return { 
                     name: servico.name, 
                     type: servico.type, 
@@ -130,29 +131,27 @@ class SaidaServicosExtra extends React.Component {
                     priceMethod:this.state.FormaDePagamento,
                     }
         })))
-
-        axios.post('/extraServices', formData)
-        .then(function (response) {
-            console.log(response)
-            alert("Cadastro Finalizado")
-            window.location.href = '/';
-        }).catch(function (error) {
+        
+        axios.post('http://localhost:3001/extraServices', formData)
+        .then( (response) => {
+            console.log(response.data);           
+            this.setState({
+                dadosComprovante:response.data
+            })
+            setTimeout((event) => {
+                this.setState({
+                    comprovante:true,
+                })
+            }, 100);
+        }).catch( (error) => {
             console.log(error)//LOG DE ERRO
-            console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            
         })
 
-        const objetocomprovante={
-            adult: this.state.confirmAdult,
-            child:this.state.findproduct,
-
-            belongingis: { // PEGAR DADDOS COM GABRIEL
-                belongings: "1",
-                employee: "Rozinha dos Santos",
-            }, 
-        }
-        this.state.dadosComprovante = objetocomprovante;
+        
+        console.log(this.state.dadosComprovante );
     }
 
 
@@ -286,11 +285,11 @@ class SaidaServicosExtra extends React.Component {
                             </div > 
                         </div>
                     </div>
-                    <Comprovant
+                    {/* <Comprovant
                         teste={this.state.comprovante}
                         tabela={this.state.dadosComprovante}
                         serviso="PASSAPORTE"
-                    />
+                    /> */}
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}> Finalizar </button>
