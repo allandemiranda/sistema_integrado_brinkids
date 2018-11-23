@@ -231,11 +231,11 @@ class Perfil extends React.Component {
             );
         }
         if (this.state.page === 'Perfil') {
-            function converter(evente){
+            function converter(evente) {
                 console.log(evente);
                 Moment.locale('pt');
-                
-                
+
+
                 console.log(Moment(evente).format('DD MM YYYY'));
                 return Moment(evente).format('DD MM YYYY');
             }
@@ -275,79 +275,76 @@ class Perfil extends React.Component {
                             <li > Vizualizar </li>
                             <li > Perfil </li>
                         </ol >
-                        
+
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
 
                         <div className="graph" >
-                            <h3 className="inner-tittle" > Perfil
-
-
-                            </h3>
-                            <div className="col-md-4 col-sm-12 text-center">
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <br></br>
-                                    
-                                    <img id='fotopreview' style={{ width: 'auto', minHeight: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
-                                    {this.state.editar && (
-                                        <div>
-                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                Trocar imagem <span className="glyphicon">&#xe065;</span>
-
-                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
-                                            </label>
-                                            </button><br /></div>)
-                                    }
-                                </div>
-                                <br></br>
-                            </div>
-                            <div className="col-md-4 col-sm-12 text-center">
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> LOGIN </b></h5>
-                                    <p>ffffffff</p>
-                                </div>
-                                <br></br>
-
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
-                                    <p>ffffffff</p>
-                                </div><br />
-                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.perfilAtual.name.firstName}</p>
-                                    </div><br></br>
-                            </div>
-
+                            <h3 className="inner-tittle" > Perfil </h3>
                             <div className="row">
 
-                                <div className="col-md-4 col-sm-12">
-                                    
-                                    
+
+                                <div className="col-md-4 col-sm-12 text-center">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <br></br>
+
+                                        <img id='fotopreview' style={{ width: 'auto', minHeight: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
+                                        {this.state.editar && (
+                                            <div>
+                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
+                                                    Trocar imagem <span className="glyphicon">&#xe065;</span>
+
+                                                    <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                </label>
+                                                </button><br /></div>)
+                                        }
+                                    </div>
+                                    <br></br>
+                                </div>
+                                <div className="col-md-4 col-sm-12 text-center">
+
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                        <p>{this.state.perfilAtual.name.firstName}</p>
+                                    </div>
+                                    <br></br>
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sobrenome: </b></h5>
                                         <p>{this.state.perfilAtual.name.surName}</p>
                                     </div>
+
                                 </div>
-                            </div>
+                                <div className="col-md-4 col-sm-12 text-center">
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo" ><b> LOGIN </b></h5>
+                                        <p>ffffffff</p>
+                                    </div>
+                                    <br></br>
 
-                            <br></br>
 
-                            <div className="row">
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                        <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
+                                        <p>ffffffff</p>
+                                    </div><br />
+                                </div>
+
+
+
+
+                                <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  CPF: </b> </h5>
                                         <p>{this.state.perfilAtual.cpf} </p>
                                     </div>
                                 </div>
-                                <div className="col-md-6 col-sm-6 col-xs-12" >
+                                <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  RG: </b> </h5>
                                         <p> {this.state.perfilAtual.rg} </p>
                                     </div>
                                 </div>
                             </div>
-
                             <br></br>
 
                             <div className="row" >
@@ -466,15 +463,15 @@ class Perfil extends React.Component {
                             <div className="row">
 
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 128+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 128 + 'px' }}>
 
                                         <h5 className="ltTitulo" > <b>Educação:</b> </h5>
-                                        
+
                                         <p>{this.state.perfilAtual.education}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 128+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 128 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Parentesco:</b>  </h5>
 
@@ -483,10 +480,10 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 128+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 128 + 'px' }}>
 
                                         <h5 className="ltTitulo" > <b>Lugar de Origem:</b> </h5>
-                                        
+
                                         <p><b>Cidade:</b> {this.state.perfilAtual.identifierEmployee.birthplace.city}</p>
                                         <p><b>Estado:</b> {this.state.perfilAtual.identifierEmployee.birthplace.state}</p>
                                     </div>
@@ -495,9 +492,9 @@ class Perfil extends React.Component {
                             <br></br>
                             <div className="row">
 
-                                
+
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px",minHeight: 255+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 255 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Carteira de trabalho:</b>  </h5>
 
@@ -510,7 +507,7 @@ class Perfil extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px",minHeight: 255+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 255 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Título de Eleitor:</b>  </h5>
 
@@ -518,38 +515,38 @@ class Perfil extends React.Component {
                                         <p><b>Zona:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.zone}</p>
                                         <p><b>Seção:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.section}</p>
                                         <p><b>Estado:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.state}</p>
-                                        
+
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px",minHeight: 255+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 255 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Registro Geral:</b>  </h5>
 
                                         <p><b>Orgão Emissor:</b> {this.state.perfilAtual.identifierEmployee.rg.issuingBody}</p>
-                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.rg.dateIssue)}</p>             
+                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.rg.dateIssue)}</p>
                                         <p><b>Estado:</b> {this.state.perfilAtual.identifierEmployee.rg.state}</p>
-                                        
+
                                     </div>
                                 </div>
                             </div >
                             <br></br>
                             <div className="row">
 
-                                
+
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px",minHeight: 255+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 255 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Reservista:</b>  </h5>
 
                                         <p><b>Numero:</b> {this.state.perfilAtual.identifierEmployee.militaryReservist.number}</p>
                                         <p><b>Series:</b> {this.state.perfilAtual.identifierEmployee.militaryReservist.series}</p>
                                         <p><b>Categoría:</b> {this.state.perfilAtual.identifierEmployee.militaryReservist.category}</p>
-                                       
+
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px",minHeight: 255+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 255 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>Passaporte:</b>  </h5>
 
@@ -558,20 +555,20 @@ class Perfil extends React.Component {
                                         <p><b>Continente de Emissão:</b> {this.state.perfilAtual.identifierEmployee.passport.issuingCountry}</p>
                                         <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.passport.dateIssue)}</p>
                                         <p><b>Data de Expiração:</b> {converter(this.state.perfilAtual.identifierEmployee.passport.expirationDate)}</p>
-                                        
+
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
-                                    <div className="graph" style={{ padding: 10 + "px",minHeight: 255+'px' }}>
+                                    <div className="graph" style={{ padding: 10 + "px", minHeight: 255 + 'px' }}>
 
                                         <h5 className="ltTitulo" ><b>CNH:</b>  </h5>
 
                                         <p><b>Registro:</b> {this.state.perfilAtual.identifierEmployee.cnh.record}</p>
-                                        <p><b>Categoria:</b> {this.state.perfilAtual.identifierEmployee.cnh.category}</p>             
+                                        <p><b>Categoria:</b> {this.state.perfilAtual.identifierEmployee.cnh.category}</p>
                                         <p><b>Data de Expiração:</b> {converter(this.state.perfilAtual.identifierEmployee.cnh.expirationDate)}</p>
                                         <p><b>Comentários:</b> {this.state.perfilAtual.identifierEmployee.cnh.comments}</p>
                                         <p><b>Local de Emissão:</b> {this.state.perfilAtual.identifierEmployee.cnh.placeIssue}</p>
-                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.cnh.dateIssue) }</p>
+                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.cnh.dateIssue)}</p>
                                     </div>
                                 </div>
                             </div >

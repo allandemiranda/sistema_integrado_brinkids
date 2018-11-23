@@ -37,7 +37,18 @@ router.get('/', (req, res) => {
     }
   });
 });
+router.get('/indentifier/:id_Position', async (req, res) => {
+  try {
+    if (!req.params.id_Position) return res.sendStatus(400);
 
+    const professionalPosition = await ProfessionalPosition.findById(req.params.id_Position);
+    console.log(professionalPosition);
+    return res.json(professionalPosition);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 router.put('/:identifier', async (req, res) => {
 
   try {

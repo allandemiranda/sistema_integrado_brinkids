@@ -651,9 +651,9 @@ class FormularioCadFunc extends React.Component {
                                     {/* foi preciso alterar para alinhar com o back devido ao tempo   */}
                                     <div className="col-md-4 col-sm-4 col-xs-12">
                                         <label className="LetraFormulario brlabel" > Cargo Atual:</label>
-                                        <select id="CargAtual" name="CargAtual" className="form-control optionFomulario" onChange={this.ChangeCargAtual}>
+                                        <select id="CargAtual" name="CargAtual" required  className="form-control optionFomulario" onChange={this.ChangeCargAtual}>
+                                        <option disabled selected hidden defaultValue >Selecionar</option>
                                             {this.state.cargos.map((cargo,indice)=>{
-                                                
                                                 
                                                     return(<option value={cargo._id}>{cargo.name}</option>);
                                            

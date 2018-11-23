@@ -150,14 +150,14 @@ router.post('/', async (req, res) => {
 
 router.put('/exchange-data', async (req, res) => {
   if (req.body.phone
-      && req.body.email
-      && req.body.street
-      && req.body.number
-      && req.body.city
-      && req.body.state
-      && req.body.country
-      && req.body.cep
-      && req.body.observations) {
+    && req.body.email
+    && req.body.street
+    && req.body.number
+    && req.body.city
+    && req.body.state
+    && req.body.country
+    && req.body.cep
+    && req.body.observations) {
     const exchangeData = {
       phone: req.body.phone,
       email: req.body.email,
@@ -205,6 +205,39 @@ router.put('/reset-password', async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
+  }
+});
+router.put('/rota', async (req, res) => {
+  if (req.body.officialPosition
+  ) {
+    const exchangeData = {
+
+      employeeData: {
+        officialPosition: req.body.officialPosition,
+    //     admissionDate
+    //     resignationDate: Date,
+    // reasonResignation: String,
+    // record: String,
+    // state: String,
+    //eu queria mudar o o officialposition mas acaba exclyuindo o resto precisop de ajuda aki
+      },
+
+    };
+
+    try {
+      const adultChange = await Employees.findByIdAndUpdate(req.body.identifier, exchangeData);
+
+      if (!adultChange) {
+        return res.sendStauts(404);
+      }
+
+      return res.sendStatus(204);
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+  } else {
+    return res.sendStatus(400);
   }
 });
 

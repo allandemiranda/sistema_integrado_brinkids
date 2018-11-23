@@ -42,13 +42,13 @@ class Gerador extends React.Component {
             })
             .catch((err) => console.log(err));
 
-            axios.get('/employees')
+        axios.get('/employees')
             .then((response) => {
                 console.log(response.data);
                 this.setState({ list: response.data });
             })
             .catch((err) => console.log(err));
-            
+
     }
     Salvar2(event) {
         let temporario = this.state.listadecargos;
@@ -60,22 +60,22 @@ class Gerador extends React.Component {
             class: this.state.class,
             funcions: this.state.funcoescheck,
         }
-        
-      
+
+
         var formData = new FormData();
         formData.append('name', this.state.Name);
         formData.append('description', this.state.Description);
         formData.append('classes', this.state.class);
         formData.append('functions', this.state.funcoescheck);
-        
-        axios.put(`professionalPosition/${identifier}`,formData)
+
+        axios.put(`professionalPosition/${identifier}`, formData)
             .then((response) => {
                 console.log(response.data);
-               
+
             })
             .catch((err) => console.log(err));
-        
-            this.setState({
+
+        this.setState({
             editar: false,
             Name: '',
             Description: '',
@@ -87,9 +87,9 @@ class Gerador extends React.Component {
     }
     editar(event) {
         let temporario = this.state.listadecargos[event];
-            console.log(temporario);
-       
-            this.setState({
+        console.log(temporario);
+
+        this.setState({
             editar: true,
             Name: temporario.name,
             Description: temporario.description,
@@ -105,10 +105,10 @@ class Gerador extends React.Component {
         let identifier = listaTemporaria[event]._id;
 
         axios.delete(`/professionalPosition/${identifier}`)
-        .then((response) => {
-            console.log(response.data);
-        })
-        .catch((err) => console.log(err));
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((err) => console.log(err));
 
         listaTemporaria.splice(event, 1);
         this.setState({
@@ -129,18 +129,18 @@ class Gerador extends React.Component {
         formData.append('classes', this.state.class);
         formData.append('functions', this.state.funcoescheck);
         const data = {
-            name:this.state.Name,
-            description:this.state.Description,
-            classes:this.state.class,
-            functions:this.state.funcoescheck,
+            name: this.state.Name,
+            description: this.state.Description,
+            classes: this.state.class,
+            functions: this.state.funcoescheck,
         }
         axios.post(`/professionalPosition`, data)
             .then((response) => {
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
-        
-        
+
+
         let listatemporaria = this.state.listadecargos;
         listatemporaria.push({
             class: this.state.class,
@@ -148,7 +148,7 @@ class Gerador extends React.Component {
             description: this.state.Description,
             funcions: this.state.funcoescheck
         });
-        
+
         this.setState({
             listadecargos: listatemporaria,
             Name: '',
@@ -181,8 +181,28 @@ class Gerador extends React.Component {
 
     }
     changueselect(event) {
+        
         this.state.list[event.target.value[0]].officialPosition = this.state.listadecargos[event.target.value[2]]
+        
         console.log(this.state.list);
+        
+        var formData = new FormData();
+        
+        formData.append('identifier', String(this.state.list[event.target.value[0]].identifierEmployee._id));
+        formData.append('officialPosition', String(this.state.listadecargos[event.target.value[2]]._id));
+        
+        console.log(this.state.list[event.target.value[0]].identifierEmployee._id, "-------", this.state.listadecargos[event.target.value[2]]._id)
+        
+        axios.put('/employees/rota', formData)
+            .then(function (response) {
+                console.log(response.data)
+                // window.location.href = '/funcionario';
+            }).catch(function (error) {
+                console.log(error)//LOG DE ERRO
+                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
     }
     render() {
         if (this.state.Page === 'Lista') {
@@ -211,6 +231,7 @@ class Gerador extends React.Component {
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {
 
+
                                         return (
                                             <tr key={indice + 1}>
                                                 <th scope="row">{indice + 1}</th>
@@ -222,14 +243,17 @@ class Gerador extends React.Component {
                                                         <select className="form-control" style={{ height: 47 + 'px' }} id="exampleFormControlSelect2" onChange={this.changueselect}>
 
                                                             {this.state.listadecargos.map((cargos, indice1) => {
-                                                                if (findAdult.officialPosition.name == undefined) {
+                                                                if (findAdult.identifierEmployee.employeeData.officialPosition === cargos._id) {
+                                                                    console.log(cargos.name)
+                                                                    console.log(findAdult.identifierEmployee.employeeData.officialPosition, "----", cargos._id)
+                                                                    return (
+
+                                                                        <option key={indice1 + 1} selected value={[indice, indice1]}  >{cargos.name}</option>
+                                                                    );
+                                                                } else {
                                                                     return (
                                                                         <option key={indice1 + 1} value={[indice, indice1]}>{cargos.name}</option>
-                                                                    );
-                                                                } else if(findAdult.officialPosition.name === cargos.name){
-                                                                    return (
-                                                                        <option key={indice1 + 1} value={[indice, indice1]} selected >{cargos.name}</option>
-                                                                        
+
                                                                     );
                                                                 }
 
