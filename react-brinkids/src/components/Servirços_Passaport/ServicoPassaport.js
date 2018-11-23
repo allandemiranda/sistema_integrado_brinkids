@@ -20,6 +20,7 @@ class ServicoPassaporte extends React.Component {
             Descricao: "",
             Nome: "",
             list: [],
+            list2: {price: '0', time: '0'},
             Nome: "",
             Descricao: "",
             TempoFinal: "",
@@ -44,24 +45,29 @@ class ServicoPassaporte extends React.Component {
             page: "TelaI",
             list: [],
         })
-        axios.get('/passportServices')
+        axios.get('http://localhost:3001/passportServices')
             .then((response) => {
 
 
                 console.log(response.data);
-                this.setState({ list: response.data });
+                this.setState({
+                    list: response.data.services,
+                    list2: response.data.default,
+                });
             })
             .catch((err) => console.log(err));
     }
     interval(event) { }
     requisicao(event) {
         if (this.state.page === "TelaI") {
-            axios.get('/passportServices')
+            axios.get('http://localhost:3001/passportServices')
                 .then((response) => {
 
 
-                    console.log(response.data);
-                    this.setState({ list: response.data });
+                    this.setState({
+                        list: response.data.services,
+                        list2: response.data.default,
+                    });
                 })
         }
     }
@@ -87,19 +93,20 @@ class ServicoPassaporte extends React.Component {
         this.setState({ Price: event.target.value });
     }
     ChangeQuebraValor(event) {
-        this.setState({ QuebraValor: event.target.value });
+        this.setState({ list2: {price: event.target.value, time: this.state.list2.time} });
     }
     ChangeQuebraTempo(event) {
-        this.setState({ QuebraTempo: event.target.value });
+        this.setState({ list2: {price: this.state.list2.price, time: event.target.value} });
 
     }
     componentWillMount() {
-        axios.get('/passportServices')
+        axios.get('http://localhost:3001/passportServices')
             .then((response) => {
-
-
-                console.log(response.data);
-                this.setState({ list: response.data });
+                console.log(response.data.default)
+                this.setState({
+                    list: response.data.services,
+                    list2: response.data.default,
+                });
             })
         this.interval = setInterval(this.requisicao, 5000);
     }
@@ -116,15 +123,18 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.Price))
 
 
-        axios.post('/passportServices', formData)
+        axios.post('http://localhost:3001/passportServices', formData)
             .then((response) => {
                 console.log(response)
-                axios.get('/passportServices')
+                axios.get('http://localhost:3001/passportServices')
                     .then((response) => {
 
 
                         console.log(response.data);
-                        this.setState({ list: response.data, page: "TelaI" });
+                        this.setState({
+                            list: response.data.services,
+                            list2: response.data.default,
+                            page: "TelaI" });
                     })
 
             }).catch((error) => {
@@ -138,18 +148,18 @@ class ServicoPassaporte extends React.Component {
 
     Salvar = (event) => {
         console.log('-------------------------------------')
-        console.log(this.list)
+        console.log(this.state.list2)
         console.log('-------------------------------------')
-        this.QuebraTempo = this.list.default.time;
-        this.QuebraValor = this.list.default.price;
+        // this.QuebraTempo = this.state.list2.time;
+        // this.QuebraValor = this.state.list2.price;
 
         var formData = new FormData();
 
-        formData.append('time ', String(this.state.QuebraTempo))
-        formData.append('price', String(this.state.QuebraValor))
+        formData.append('time', String(this.state.list2.time))
+        formData.append('price', String(this.state.list2.price))
 
 
-        axios.put('/passport', formData)
+        axios.put('http://localhost:3001/passportServices', formData)
             .then(function (response) {
                 console.log(response)
                 //window.location.href = '/ServicoPassaporte';
@@ -168,8 +178,6 @@ class ServicoPassaporte extends React.Component {
             .then((response) => {
                 axios.get('/passportServices')
                     .then((response) => {
-
-
 
                         this.setState({ list: response.data, });
                     })
@@ -231,7 +239,7 @@ class ServicoPassaporte extends React.Component {
                                         <tbody>
                                             {this.state.list.map((TempoServico, indice) => {
                                                 return (
-                                                    <tr key={TempoServico.services._id}>
+                                                    <tr key={TempoServico._id}>
                                                         <th scope="row">{indice + 1}</th>
                                                         <td > {TempoServico.name} </td>
                                                         <td >{TempoServico.initialTime} </td>
@@ -264,13 +272,13 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Quebra (min): </b></h5>
-                                                <input type="number" id="" name="QuebraTempo" className="form-QuebraTempo" className="text-center" placeholder="Tempo" value={this.state.QuebraValor} onChange={this.ChangeQuebraValor} />
+                                                <input type="number" id="" name="QuebraTempo" className="form-QuebraTempo" className="text-center" placeholder="Tempo" value={this.state.list2.time} onChange={this.ChangeQuebraTempo} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Valor (R$): </b></h5>
-                                                <input type="number" id="" name="QuebraValor" className="form-QuebraValor" className="text-center" placeholder="R$" value={this.state.QuebraTempo} onChange={this.ChangeQuebraTempo} />
+                                                <input type="number" id="" name="QuebraValor" className="form-QuebraValor" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
                                             </div>
                                         </div>
                                     </div>

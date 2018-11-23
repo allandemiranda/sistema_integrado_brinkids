@@ -51,7 +51,7 @@ class SaidaCrianca extends React.Component {
 
         this.ChangeValue = this.ChangeValue.bind(this);
 
-        axios.get('/dashboard')
+        axios.get('/product')
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 console.log(response.data);
@@ -77,7 +77,7 @@ class SaidaCrianca extends React.Component {
     Selecionar = (resp1) => {
         console.log(resp1);
         var deubom = true;
-        axios.get(`/adult/filter/${resp1}`)
+        axios.get(`/adult/filter/${resp1}/name`)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
@@ -97,7 +97,7 @@ class SaidaCrianca extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-        axios.get(`/dashboard/filter/${resp1}`)
+        axios.get(`/product/filter/${resp1}`)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
@@ -151,11 +151,11 @@ class SaidaCrianca extends React.Component {
             //axios.post(`/passport/data`, formData)
               //  .then(function (response) {
             axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + '/' + this.state.TimeAdult)
-                .then(function (response) {
+                .then((response) => {
                     this.setState({
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                     })
-                }).catch(function (error) {
+                }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -175,20 +175,20 @@ class SaidaCrianca extends React.Component {
             formData.append('idCria', String(this.state.CriancasSelecionadas[i].children.id));
             formData.append('TimeAdult', String(this.state.TimeAdult));
             axios.post(`/passport`, formData)
-                .then(function (response) {
+                .then((response) => {
                     axios.get(`/passport`)
-                        .then(function (response) {
+                        .then((response) => {
                             this.setState({
                                 ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                             })
-                        }).catch(function (error) {
+                        }).catch((error) => {
                             console.log(error)//LOG DE ERRO
                             alert("Erro no Cadastro");
                             // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                             // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                             // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                         })
-                }).catch(function (error) {
+                }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -240,20 +240,20 @@ class SaidaCrianca extends React.Component {
                 formData.append('TimeAdult', String(this.state.TimeAdult));
                 formData.append('Desconto', String(this.state.CodigoDecCria));
                 axios.post(`/passport`, formData)
-                    .then(function (response) {
+                    .then((response) => {
                         axios.get(`/passport`)
-                            .then(function (response) {
+                            .then((response) => {
                                 this.setState({
                                     ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
                                 })
-                            }).catch(function (error) {
+                            }).catch((error) => {
                                 console.log(error)//LOG DE ERRO
                                 alert("Erro no Cadastro");
                                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                             })
-                    }).catch(function (error) {
+                    }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
                         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -277,20 +277,20 @@ class SaidaCrianca extends React.Component {
                 formData.append('ValorFinal', String(this.state.TotalValorDesc));
                 formData.append('Desconto', String(this.state.CodigoDecCria));
                 axios.post(`/passport`, formData)
-                    .then(function (response) {
+                    .then((response) => {
                         axios.get(`/passport`)
-                            .then(function (response) {
+                            .then((response) => {
                                 this.setState({
                                     FinalValor: response.data,
                                 })
-                            }).catch(function (error) {
+                            }).catch((error) => {
                                 console.log(error)//LOG DE ERRO
                                 alert("Erro no Cadastro");
                                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                             })
-                    }).catch(function (error) {
+                    }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
                         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -426,7 +426,7 @@ class SaidaCrianca extends React.Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {this.state.listChianca.map((resp, indice) => {
+                                            {this.state.listCrianca.map((resp, indice) => {
                                             return (
                                                 <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>

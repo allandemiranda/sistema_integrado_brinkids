@@ -55,15 +55,20 @@ String.prototype.toSS = function () {//convertendo de mm:ss para segundos
 router.get('/', async (req, res) => {
   try {
     const psjson = await passportServices.find({});
-    const passportDefault = await passport.find({})[0];
+    const passportDefault = await passport.find({});
+
+    psjson.shift()
 
     const data = {
-      services: psjson.shift(),
-      default: passportDefault,
+      services: psjson,
+      default: passportDefault[0],
     };
+
+    console.log(data);
 
     return res.status(201).json(data);
   } catch (err) {
+    console.log(err);
     return res.sendStatus(500);
   }
 });
@@ -100,9 +105,22 @@ router.get('/initialTime', async (req, res) => {
 });
 
 router.put('/', async (req, res) =>{
-  const passportDefault = await passport.find({})[0];
-  passportDefault.time = req.body.time;
-  passportDefault.price = req.body.price;
+  try {
+    const passportDefault = await passport.find({});
+    console.log('------------------')
+    console.log(req.body)
+    console.log(passportDefault)
+    console.log('------------------')
+    passportDefault[0].time = req.body.time;
+    passportDefault[0].price = req.body.price;
+    passportDefault[0].save();
+    console.log(passportDefault)
+    console.log('------------------')
+
+    return res.sendStatus(204);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
 });
 
 router.delete('/:identifier', async (req, res) => {

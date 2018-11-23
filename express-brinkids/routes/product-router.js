@@ -10,10 +10,22 @@ const router = express.Router();
 
 // Rota que devolve todos os produtos
 router.get('/', (req, res) => {
-  Product.find(
+  return Product.find(
     {}, // Como eu eu quero todos os dados, é necessário passar os parâmetros de busca em branco
     (err, productResult) => (err ? res.sendStatus(500) : res.status(200).json(productResult)),
   );
+});
+
+router.get('/filter/:search/', async (req, res) => {
+  try {
+    const products = await Product.find({ 'adult.name': new RegExp(req.params.search) });
+    
+    return res.json(products);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+  
 });
 
 // Rota de inserção de produtos
