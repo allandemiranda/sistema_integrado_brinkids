@@ -70,10 +70,6 @@ router.post('/', async (req, res) => {
       return res.sendStatus(404);
     }
 
-    console.log('-------------------------');
-    console.log(req.body.EDOfficialPosition);
-    console.log('-------------------------');
-
     const employee = new Employees({
       gender: req.body.gender,
       education: req.body.education,
@@ -208,24 +204,13 @@ router.put('/reset-password', async (req, res) => {
   }
 });
 router.put('/rota', async (req, res) => {
-  if (req.body.officialPosition
-  ) {
-    const exchangeData = {
-
-      employeeData: {
-        officialPosition: req.body.officialPosition,
-    //     admissionDate
-    //     resignationDate: Date,
-    // reasonResignation: String,
-    // record: String,
-    // state: String,
-    //eu queria mudar o o officialposition mas acaba exclyuindo o resto precisop de ajuda aki
-      },
-
-    };
-
+  if (req.body.officialPosition) {
     try {
-      const adultChange = await Employees.findByIdAndUpdate(req.body.identifier, exchangeData);
+      const adultChange = await Employees.findById(req.body.identifier);
+
+      adultChange.employeeData.officialPosition = req.body.officialPosition;
+
+      adultChange.save();
 
       if (!adultChange) {
         return res.sendStauts(404);

@@ -152,8 +152,7 @@ class SaidaCrianca extends React.Component {
               //  .then(function (response) {
             axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + '/' + this.state.TimeAdult)
                 .then((response) => {
-                    this.setState({
-                        
+                    this.setState({                        
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                     })
                 }).catch((error) => {
