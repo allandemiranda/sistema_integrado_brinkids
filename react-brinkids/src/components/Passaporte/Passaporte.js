@@ -341,15 +341,8 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela VI
-    Comprovante = (event) => {        
-        
-       
-        this.TheEnd();
-
-      
-       
-        
-        
+    Comprovante = (event) => {                      
+        this.TheEnd();          
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM  
 
@@ -391,6 +384,7 @@ class Passport extends React.Component {
 
         console.log(this.state.file);
         //Fim do formulário;
+
         axios.post('/product', formData)
         .then( (response) =>{
             console.log(response.data,"olaa");

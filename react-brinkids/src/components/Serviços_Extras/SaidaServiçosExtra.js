@@ -11,7 +11,7 @@ import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
 import { EventEmitter } from 'events';
 
-class SaidaServicosExtra extends React.Component {
+class SaidaServicosExtra extends React.Component {m
     constructor(props){
         super(props)
         this.state = {
@@ -25,8 +25,8 @@ class SaidaServicosExtra extends React.Component {
             selectedSearch:"",
             dadosComprovante:[],
             objetocomprovante:[],
-
-
+            comprovante: false,
+            dadosComprovante:[],
         }        
         this.Search = this.Search.bind(this);
         this.ChangeQuantidade = this.ChangeQuantidade.bind(this);
@@ -116,6 +116,21 @@ class SaidaServicosExtra extends React.Component {
     }
 
     Finalizar =(event)=>{
+        
+        this.setState({
+            dadosComprovante:{
+                
+                photo:String(this.state.listConfirmKids[0]._id),
+                service:"SaidaServiçoExtra ",
+                nome1:listConfirm,
+                nome2:quantidade,
+                nome3:Total,
+                nome4:FormaDePagamento,
+                nome5:valorTotal,
+            //ajeitar o comprovante
+            }
+        })
+
         console.log(this.state.Total);
 
         let formData = new FormData();
@@ -290,12 +305,19 @@ class SaidaServicosExtra extends React.Component {
                         tabela={this.state.dadosComprovante}
                         serviso="PASSAPORTE"
                     /> */}
+
+                    {/* Responsável por fazer o comprovante aparecer */}
+                    {this.state.comprovante && (<Comprovant
+                        tabela={this.state.dadosComprovante}
+                        serviso="PASSAPORTE"
+                        teste={this.state.comprovante}
+                    />)}
+
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}> Finalizar </button>
                     </div>
                 </div>
-
             )
         }
     }
