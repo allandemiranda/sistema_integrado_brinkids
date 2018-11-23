@@ -122,11 +122,11 @@ class SaidaServicosExtra extends React.Component {m
                 
                 photo:String(this.state.listConfirmKids[0]._id),
                 service:"SaidaServiçoExtra ",
-                nome1:listConfirm,
-                nome2:quantidade,
-                nome3:Total,
-                nome4:FormaDePagamento,
-                nome5:valorTotal,
+                nome1:this.state.listConfirm,
+                nome2:this.state.quantidade,
+                nome3:this.state.Total,
+                nome4:this.state.FormaDePagamento,
+                nome5:this.state.valorTotal,
             //ajeitar o comprovante
             }
         })

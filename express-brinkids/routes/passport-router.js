@@ -33,7 +33,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   console.log(req.params.timeAdult);
 
   const productFinded = await product.find({ 'children.id': req.params.idCria });
-  const adultEntered = productFinded.time;
+  const adultEntered = productFinded[0].time;
   console.log('Olha qual tempo achei:', adultEntered);
   const adultExit = req.params.timeAdult;
   const psjson = await passportServices.find({});
