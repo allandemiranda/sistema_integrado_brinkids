@@ -25,6 +25,7 @@
     "react-autosuggest": "^9.3.4",
     "react-big-calendar": "^0.19.2",
     "react-bootstrap": "^0.32.1",
+    "react-bootstrap-tabs": "^1.0.2",
     "react-bootstrap-time-picker": "^1.0.3",
     "react-date-picker": "^6.13.0",
     "react-dom": "^16.4.1",

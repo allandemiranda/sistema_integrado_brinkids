@@ -8,7 +8,7 @@ import {
     withRouter
   } from "react-router-dom";
 
-
+  import logo from './css/logo transp m.png';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -74,15 +74,25 @@ class MainLayout extends React.Component {
                     </div>
                 </div>
                 <div className="sidebar-menu" >
-                    <header className="logo" >
+                    <header className="logo" style={{backgroundColor:"white"}} >
                         <button className="sidebar-icon styleButaoMenu" onClick={this.DiminueMenu}>
                             < span className="fa fa-bars" > </span>
                         </button>
                         <Link to="index.html" >
-                            < span id="logo" > < h1 > Brinkids </h1></span>
+                            < span id="logo" ><img style={{maxWidth:139+"px"}} className="logo_1" alt="logo" src={logo}></img></span>
                         </Link>
                     </header>
                     <div className="bordaDaDiv"> </div>
+                    <div className="down">	
+									  <a ><img src="images/admin.jpg"/></a>
+									  <a ><span class=" name-caret">Jasmin Leo</span></a>
+									 <p>System Administrator in Company</p>
+									<ul>
+									<li><a class="tooltips" href="index.html"><span>Profile</span><i class="lnr lnr-user"></i></a></li>
+										
+										<li><a class="tooltips" href="index.html"><span>Log out</span><i class="lnr lnr-power-switch"></i></a></li>
+										</ul>
+									</div>
                     <div className="menu" >
                         <ul id="menu" >
                             <li >

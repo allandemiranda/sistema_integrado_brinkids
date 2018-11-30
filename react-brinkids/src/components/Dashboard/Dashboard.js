@@ -13,29 +13,39 @@ import noticias from './tabelas/noticias';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import axios from 'axios';
-
+import { Tabs, Tab } from 'react-bootstrap-tabs';
 class DashBoard extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			comprovant: false,
-			colaps: true,
+			colaps: false,
 
-			teste: true,
+			teste: false,
 			aba: false,
 
 			nome: [{}, {}],
 			lista: [],
-			popup: true,
+			popup: false,
 
 			adultospopup: false,
 
-			Eventos: true,
+			Eventos: false,
 			Eventospopup: false,
 
-			Noticias: true,
-			noticiaspopup: false
+			Noticias: false,
+			noticiaspopup: false,
+
+			crincaTab: "tab-current",
+			adultoTab: "",
+			aniversarioTab: "",
+			noticiaTab: "",
+
+			sectionCrianca: "content-current",
+			sectionAdult: "",
+			sectionAniversario: "",
+			sectionNoticia: "",
 
 		};
 		this.mudar = this.mudar.bind(this);
@@ -44,9 +54,66 @@ class DashBoard extends React.Component {
 		this.mudar4 = this.mudar4.bind(this);
 		this.requisicao = this.requisicao.bind(this);
 		this.inteval = this.inteval.bind(this);
+		this.selectCrianca = this.selectCrianca.bind(this);
+		this.selectAdult = this.selectAdult.bind(this);
+		this.selectAniversario = this.selectAniversario.bind(this);
+		this.selectNoticia = this.selectNoticia.bind(this);
+
 	}
 	inteval(event) {
 
+	}
+	selectCrianca(event) {
+		this.setState({
+			crincaTab: "tab-current",
+			adultoTab: "",
+			aniversarioTab: "",
+			noticiaTab: "",
+
+			sectionCrianca: "content-current",
+			sectionAdult: "",
+			sectionAniversario: "",
+			sectionNoticia: "",
+		})
+	}
+	selectAdult(event) {
+		this.setState({
+			crincaTab: "",
+			adultoTab: "tab-current",
+			aniversarioTab: "",
+			noticiaTab: "",
+
+			sectionCrianca: "",
+			sectionAdult: "content-current",
+			sectionAniversario: "",
+			sectionNoticia: "",
+		})
+	}
+	selectAniversario(event) {
+		this.setState({
+			crincaTab: "",
+			adultoTab: "",
+			aniversarioTab: "tab-current",
+			noticiaTab: "",
+
+			sectionCrianca: "",
+			sectionAdult: "",
+			sectionAniversario: "content-current",
+			sectionNoticia: "",
+		})
+	}
+	selectNoticia(event) {
+		this.setState({
+			crincaTab: "",
+			adultoTab: "",
+			aniversarioTab: "",
+			noticiaTab: "tab-current",
+
+			sectionCrianca: "",
+			sectionAdult: "",
+			sectionAniversario: "",
+			sectionNoticia: "content-current",
+		})
 	}
 	requisicao(event) {
 		axios.get('/dashboard')
@@ -131,7 +198,8 @@ class DashBoard extends React.Component {
 		return (
 
 			<div className="container-fluid" >
-
+				<script src="js/jquery-1.10.2.min.js"></script>
+				<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
 				{this.state.popup &&
 
 					(<div className="alert alert-success" role="alert">
@@ -155,7 +223,7 @@ class DashBoard extends React.Component {
 					</ol >
 				</div>
 
-				<div className="graph">
+				{/* <div className="graph">
 					<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar}>
 						< span className="fa fa-bars" > </span>
 					</button>       Crianças
@@ -186,8 +254,69 @@ class DashBoard extends React.Component {
 
 
 					}
-				</div>
+				</div> */}
+				<div id="tabs" class="tabs">
+					<h2 class="inner-tittle">Responsive Horizontal Tabs </h2>
+					<div class="graph">
+						<nav>
+							<ul>
+								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><i class="fas fa-stroopwafel"></i><a class="icon-shop"><i class="lnr lnr-briefcase"></i> <span>Crianças</span></a></li>
+								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><i class="lnr lnr-lighter"></i> <span>Adultos</span></a></li>
+								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><i class="fa fa-cutlery"></i> <span>Aniversarios</span></a></li>
+								<li name="noticiaTab" onClick={this.selectNoticia} className={this.state.noticiaTab}><a class="icon-lab"><i class="fa fa-flask"></i> <span>Notícias</span></a></li>
 
+							</ul>
+						</nav>
+						<div className="content tab">
+							<section className={this.state.sectionCrianca} >
+								<div className="graph">
+									<div className="tables table-responsive">
+										<table className="table table-hover">
+											<thead className="text-center">
+												<tr >
+													<th>#</th>
+													<th>Nome</th>
+													<th>Idade</th>
+													<th>Tempo</th>
+													<th>Responsavel</th>
+													<th>Telefone</th>
+													<th>Serviço</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody id="CriaTabela">
+												{crianca.map(byCrianca)}
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</section>
+							<section className={this.state.sectionAdult} >
+							<div className="graph">
+								<div className="tables table-responsive">
+									<table className="table table-hover">
+										<thead className="text-center">
+											<tr >
+												<th>#</th>
+												<th>Nome</th>
+												<th>Aniversariante</th>
+											</tr>
+										</thead>
+										<tbody id="CriaTabela">
+											{adultos.map(byAdulto)}
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+							</section>
+
+						</div>
+					</div>
+
+
+				</div>
 
 				{this.state.teste &&
 
