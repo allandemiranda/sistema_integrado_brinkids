@@ -86,6 +86,7 @@ class MainLayout extends React.Component {
 										
 										<li><Link class="tooltips" to="/Login"><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
 										</ul>
+                                        
 									</div>
                     <div className="menu" >
                         <ul id="menu" >
