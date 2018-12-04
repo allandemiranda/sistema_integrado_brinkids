@@ -57,7 +57,10 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     }
   }
   const data = {
-    price: price, 
+    service: "",
+    id: "",
+    time: "",
+    value: price, 
   };
   try {
     return res.status(201).json(data);
