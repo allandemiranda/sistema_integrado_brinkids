@@ -14,6 +14,8 @@ import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import axios from 'axios';
 import { Tabs, Tab } from 'react-bootstrap-tabs';
+
+
 class DashBoard extends React.Component {
 	constructor(props) {
 		super(props);
@@ -27,7 +29,7 @@ class DashBoard extends React.Component {
 
 			nome: [{}, {}],
 			lista: [],
-			popup: false,
+			popup: true,
 
 			adultospopup: false,
 
@@ -260,9 +262,9 @@ class DashBoard extends React.Component {
 					<div class="graph">
 						<nav>
 							<ul>
-								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><i class="fas fa-stroopwafel"></i><a class="icon-shop"><i class="lnr lnr-briefcase"></i> <span>Crianças</span></a></li>
-								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><i class="lnr lnr-lighter"></i> <span>Adultos</span></a></li>
-								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><i class="fa fa-cutlery"></i> <span>Aniversarios</span></a></li>
+								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><i class="fas fa-stroopwafel"></i><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Crianças</span></a></li>
+								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><span class="lnr lnr-users"></span> <span>Adultos</span></a></li>
+								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><span class="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
 								<li name="noticiaTab" onClick={this.selectNoticia} className={this.state.noticiaTab}><a class="icon-lab"><i class="fa fa-flask"></i> <span>Notícias</span></a></li>
 
 							</ul>

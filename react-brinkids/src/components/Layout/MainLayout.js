@@ -15,7 +15,7 @@ import '../../assets/style/font-awesome.css';
 import './css/style.css';
 import './css/icon-font.min.css';
 
-
+import perfilImage from './css/admin2.jpg'
 
 var toggle = true;
 class MainLayout extends React.Component {
@@ -43,23 +43,17 @@ class MainLayout extends React.Component {
                             <div className="top_menu" >
                                 <div className="profile_details_left" >
                                     <ul className="nofitications-dropdown" >
+                                       
                                         <li className="dropdown note" >
-                                            <Link to="/MyProfile" className=" tooltips" >
-                                                < i className="lnr lnr-user" > </i>
-                                                
-                                                <span className="badge" style={{ marginTop: 9 + 'px' }}>Profile</span >
+                                            <Link to="/" className=" tooltips" >
+                                                < i className="lnr lnr-home" > </i>
+                                                <span className="badge" style={{ marginTop: 25 + 'px' }}>Home</span >
                                             </Link>
                                         </li>
                                         <li className="dropdown note" >
                                             <Link to="/" className=" tooltips" >
-                                                < i className="lnr lnr-cog" > </i>
-                                                <span className="badge" style={{ marginTop: 9 + 'px' }}>Settings</span >
-                                            </Link>
-                                        </li>
-                                        <li className="dropdown note" >
-                                            <Link to="/Login" className=" tooltips" >
-                                                < i className="lnr lnr-power-switch" ></i>
-                                                <span className="badge" style={{ marginTop: 9 + 'px' }}>Log out</span >
+                                               
+                                                
                                             </Link>
                                         </li>
                                         <div className="clearfix" ></div>
@@ -83,14 +77,14 @@ class MainLayout extends React.Component {
                         </Link>
                     </header>
                     <div className="bordaDaDiv"> </div>
-                    <div className="down">	
-									  <a ><img src="images/admin.jpg"/></a>
+                    <div className="down" style={{paddingTop: 0+'px', paddingBottom:15+'px'}}>	
+									  <a ><img src={perfilImage}/></a>
 									  <a ><span class=" name-caret">Jasmin Leo</span></a>
 									 <p>System Administrator in Company</p>
 									<ul>
-									<li><a class="tooltips" href="index.html"><span>Profile</span><i class="lnr lnr-user"></i></a></li>
+									<li><Link class="tooltips" to="/MyProfile"><span>Profile</span><i class="lnr lnr-user"></i></Link></li>
 										
-										<li><a class="tooltips" href="index.html"><span>Log out</span><i class="lnr lnr-power-switch"></i></a></li>
+										<li><Link class="tooltips" to="/Login"><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
 										</ul>
 									</div>
                     <div className="menu" >
@@ -179,7 +173,7 @@ class MainLayout extends React.Component {
                             <li>
                                 <Link to="/Gerador_funcoes">
                                 <i className="glyphicon glyphicon-user"></i>
-                                    <span>Gerenciador de Serviços</span>
+                                    <span>Gerenciador de Cargos</span>
                                 </Link>
                             </li>
                             <li>
@@ -190,7 +184,7 @@ class MainLayout extends React.Component {
                             </li>
                             <li>
                                 <Link to="/Gavetas">
-                                <i className="glyphicon glyphicon-off"></i>
+                                <i className="glyphicon glyphicon-briefcase"></i>
                                     <span>Gavetas</span>
                                 </Link>
                             </li>
