@@ -91,7 +91,7 @@ class CadastroCrianca extends React.Component {
         var erros = ValidaErros(this.state);
         if(erros.length > 0){
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
-            $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
+            
             return;
         }
         else {

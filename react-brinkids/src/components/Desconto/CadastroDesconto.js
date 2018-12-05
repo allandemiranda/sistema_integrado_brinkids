@@ -139,7 +139,6 @@ class Desconto extends React.Component {
         //Valida erros
         if(erros.length > 0){
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
-            $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
             return;
         }
         else {

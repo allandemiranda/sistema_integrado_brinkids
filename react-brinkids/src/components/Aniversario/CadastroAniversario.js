@@ -1,6 +1,7 @@
 import React from 'react';
 import update from 'react-addons-update';
 import axios from 'axios';
+import $ from 'jquery';
 import TypesInput from '../TypesInput.js';
 import ConfDadosAni from './ConfirmaDadosAniversariante.js'
 // CSS Layout
@@ -16,7 +17,7 @@ class CadastroAniversario extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            page: "FormularioListaConv",
+            page: "FormularioCad",
             //Dados do Aniversariante
             TituloDoAni:"",
             NomeDoAni:"",
@@ -24,8 +25,8 @@ class CadastroAniversario extends React.Component {
             DataDoAni:"",
             HoraInicio:"",
             HoraFinal:"",
-            QuantCrianca:"10",
-            QuantAdulto:"10",
+            QuantCrianca:"",
+            QuantAdulto:"",
             DescriçãoDoAni:"",
             ObsDoAni:"",
             ValorPg:"",
@@ -93,14 +94,11 @@ class CadastroAniversario extends React.Component {
         var erros = ValidaErros(this.state);
 
         if(erros.length > 0){
-            alert("Houve erro(s) no preechimento do formulário");
-            exibeMensagensDeErro(erros);
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
-
         else {
-            exibeMensagensDeErro(erros);
-            console.log("deu tudo certo")
+            $("#alertDiv").addClass('displaynone');
             this.setState({
                 page: "ConfDadosAni"
             })
@@ -111,51 +109,90 @@ class CadastroAniversario extends React.Component {
             var erros = [];
 
             if (ani.TituloDoAni.length === 0) {
+                $("#titulo").addClass('errorBorder');
                 erros.push("O Titulo não pode ser em branco");
             }
             if (ani.NomeDoAni.length === 0) {
+                $("#nome").addClass('errorBorder');
                 erros.push("O Nome do Aniversariante não pode ser em branco");
             }
             if (ani.IdadeDoAni.length === 0) {
+                $("#idade").addClass('errorBorder');
                 erros.push("A Idade do Aniversariante não pode ser em branco");
             }
             if (ani.DataDoAni.length === 0) {
+                $("#Data").addClass('errorBorder');
                 erros.push("A Data não pode ser em branco");
             }
             if (ani.HoraInicio.length === 0) {
+                $("#HI").addClass('errorBorder');
                 erros.push("A Hora Inicial não pode ser em branco");
             }
             if (ani.HoraFinal.length === 0) {
+                $("#HF").addClass('errorBorder');
                 erros.push("A Hora Final não pode ser em branco");
             }
+            if(ani.HoraInicio === ani.HoraFinal){
+                $("#HI").addClass('errorBorder');
+                $("#HF").addClass('errorBorder');
+                erros.push("A Hora Final não pode ser igual a Inicial");
+            }
             if (ani.QuantCrianca.length === 0) {
+                $("#QCC").addClass('errorBorder');
                 erros.push("A Quantiade de Convidados Crianças não pode ser em branco");
             }
             if (ani.QuantAdulto.length === 0) {
+                $("#QCA").addClass('errorBorder');
                 erros.push("A Quantiade de Convidados Adultos não pode ser em branco");
             }
             if (ani.ValorPg.length === 0) {
+                $("#VP").addClass('errorBorder');
                 erros.push("O Valor Pago pelo Aniversario não pode ser em branco");
             }
             if (ani.MetodoPg.length === 0) {
+                $("#MP").addClass('errorBorder');
                 erros.push("O Metodo de Pagamento do Aniversario não pode ser em branco");
             }
             if (ani.DescriçãoDoAni.length === 0) {
+                $("#Descricao").addClass('errorBorder');
                 erros.push("A Descrição do Aniversario não pode ser em branco");
             }
-            console.log(erros);
+            
+            //REMOVENDO CLASSE
+            if (ani.TituloDoAni.length > 0) {
+                $("#titulo").removeClass('errorBorder');
+            }
+            if (ani.NomeDoAni.length > 0) {
+                $("#nome").removeClass('errorBorder');
+            }
+            if (ani.IdadeDoAni.length > 0) {
+                $("#idade").removeClass('errorBorder');
+            }
+            if (ani.DataDoAni.length > 0) {
+                $("#Data").removeClass('errorBorder');
+            }
+            if (ani.HoraInicio.length > 0 && ani.HoraInicio != ani.HoraFinal) {
+                $("#HI").removeClass('errorBorder');
+            }
+            if (ani.HoraFinal.length > 0 && ani.HoraInicio != ani.HoraFinal) {
+                $("#HF").removeClass('errorBorder');
+            }
+            if (ani.QuantCrianca.length > 0) {
+                $("#QCC").removeClass('errorBorder');
+            }
+            if (ani.QuantAdulto.length > 0) {
+                $("#QCA").removeClass('errorBorder');
+            }
+            if (ani.ValorPg.length > 0) {
+                $("#VP").removeClass('errorBorder');
+            }
+            if (ani.MetodoPg.length > 0) {
+                $("#MP").removeClass('errorBorder');
+            }
+            if (ani.DescriçãoDoAni.length > 0) {
+                $("#Descricao").removeClass('errorBorder');
+            }
             return erros;
-        }
-
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
         }
     }   
     VoltaFormAni = () => {
@@ -174,59 +211,54 @@ class CadastroAniversario extends React.Component {
         event.preventDefault();
         var erro = [];
 
-        if(this.state.NomeCrianca == ""){
+        if(this.state.NomeCrianca === ""){
+            $("#name").addClass('errorBorder');
             erro.push("Nome da criança não pode ser em branco.");
         }
-        if(this.state.IdadeCrianca == ""){
+        if(this.state.IdadeCrianca === ""){
+            $("#number").addClass('errorBorder');
             erro.push("Idade da criança não pode ser em branco.");
-        }       
-        if(erro.length > 0){
-            exibeMensagensDeErro(erro);
         }
-        else{
-            exibeMensagensDeErro(erro);
+        //Remove Class
+        if(this.state.NomeCrianca != ""){
+            $("#name").removeClass('errorBorder');
+        }
+        if(this.state.IdadeCrianca != ""){
+            $("#number").removeClass('errorBorder');
+        }      
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
             this.setState({
                 ListaCria: update(this.state.ListaCria, {$push: [{nome: this.state.NomeCrianca, idade: this.state.IdadeCrianca}]}),
                 NomeCrianca: "",
                 IdadeCrianca: "",
             })
         }
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro-crianca");
-            ul.innerHTML = "";
-
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
-        }
     }
     AddAdulto = (event) => {
         event.preventDefault();
         var erro = [];
-        if(this.state.Adulto == ""){
+        if(this.state.Adulto === ""){
+            $("#nameAdult").addClass('errorBorder');
             erro.push("Nome do Adulto não pode ser em branco.");
         }
-        if(erro.length > 0){
-            exibeMensagensDeErro(erro);
-        }
         else{
-            exibeMensagensDeErro(erro);
+            $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
             this.setState({
                 ListaAdul: update(this.state.ListaAdul, {$push: [{nome: this.state.Adulto}]}),
                 Adulto: "",
             })
-        }
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro-adulto");
-            ul.innerHTML = "";
-
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
         }
     }
     VaiConfListCnv = (event) => {
@@ -324,6 +356,9 @@ class CadastroAniversario extends React.Component {
                     </div>
                     <div className = "graph-visual" >
                         <h3 className = "inner-tittle" > Dados do Aniversariante </h3>
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <form id="form-criança">
                             <div className = "graph" >
                                 <div className = "form-group" >
@@ -352,8 +387,8 @@ class CadastroAniversario extends React.Component {
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"} id = {"QCC"} name= {"QCC"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.ChangeValorPg}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Metodo de Pagamento: "} type = {"text"} id = {"QCA"} name= {"QCA"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"} id = {"VP"} name= {"VP"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.ChangeValorPg}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Metodo de Pagamento: "} type = {"text"} id = {"MP"} name= {"MP"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
@@ -409,6 +444,9 @@ class CadastroAniversario extends React.Component {
                     </div>
                     <div className = "graph-visual" >
                         <div className = "row">
+                            <div id="alertDiv" className = "alert displaynone" role = "alert">
+                                <b>ERRO!</b> Ah algo de errado em seu formulario.
+                            </div>
                             <div className = "col-md-6 col-sm-12">
                                 <div className = "graph" >
                                     <h3 className = "inner-tittle" > Lista de Crianças </h3>
@@ -464,7 +502,7 @@ class CadastroAniversario extends React.Component {
                                         <form id="form-busca">
                                             <div className = "form-group" >
                                                 <div className = "row" >
-                                                    <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"name"} Class = {"form-control"} 
+                                                    <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"nameAdult"} name= {"nameAdult"} Class = {"form-control"} 
                                                         value = {this.state.Adulto} onChange = {this.ChangeNameAdulto}
                                                     />
                                                     <br></br>
