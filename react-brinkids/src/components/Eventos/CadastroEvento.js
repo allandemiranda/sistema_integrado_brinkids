@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
+import $ from 'jquery'
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -40,11 +41,14 @@ class CadastroEvento extends React.Component {
         console.log(this.state);
 
         var erros = ValidaErros(this.state);
-        
         if(erros.length > 0){
-            exibeMensagensDeErro(erros);
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
+            return;
         }
         else {
+            $("#alertDiv").addClass('displaynone');
+
             var formData = new FormData();
 
             formData.append('title', String(this.state.Titulo))
@@ -74,38 +78,51 @@ class CadastroEvento extends React.Component {
             var erros = [];
 
             if (event.Titulo.length === 0) {
+                $("#Titulo").addClass('errorBorder');
                 erros.push("O Titulo não pode ser em branco");
             }
             if (event.DateTimeBegin.length === 0) {
+                $("#DateTimeBegin").addClass('errorBorder');
                 erros.push("A Data e a Hora Inicial não pode ser em branco");
             }
             if (event.DateTimeEnd.length === 0) {
+                $("#DateTimeEnd").addClass('errorBorder');
                 erros.push("A Data e a Hora Final não pode ser em branco");
             }
             if (event.Description.length === 0) {
+                $("#Description").addClass('errorBorder');
                 erros.push("A Descrição não pode ser em branco");
             }
             if (event.Location.length === 0) {
+                $("#Location").addClass('errorBorder');
                 erros.push("A Localização não pode ser em branco");
             }
             if (event.Color === "--") {
+                $("#Color").addClass('errorBorder');
                 erros.push("Escolha uma Cor");
-            }            
-            console.log(erros);
+            }
+            //Remove Class            
+            if (event.Titulo.length != 0) {
+                $("#Titulo").removeClass('errorBorder');  
+            }
+            if (event.DateTimeBegin.length != 0) {
+                $("#DateTimeBegin").removeClass('errorBorder');   
+            }
+            if (event.DateTimeEnd.length != 0) {
+                $("#DateTimeEnd").removeClass('errorBorder');   
+            }
+            if (event.Description.length != 0) {
+                $("#Description").removeClass('errorBorder');
+            }
+            if (event.Location.length != 0) {
+                $("#Location").removeClass('errorBorder');  
+            }
+            if (event.Color != "--") {
+                $("#Color").removeClass('errorBorder');
+            }
             return erros;
         }
-
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
-        }
-    }   
+    }
 
     render() {
         return (
@@ -118,6 +135,9 @@ class CadastroEvento extends React.Component {
                 </div>
                 <div className = "graph-visual" >
                     <h3 className = "inner-tittle" >Novo Evento</h3>
+                    <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                    </div>
                     <form>
                         <div className = "graph" >
                             <div className="form-group">
@@ -146,7 +166,7 @@ class CadastroEvento extends React.Component {
                                         value = {this.state.Location} onChange = {this.ChangeValue}
                                         />
                                         <label className="LetraFormulario brlabel">Cor</label>
-                                        <select id ="Color" name="Color" Class ="form-control optionFomulario" value = {this.state.Color} onChange = {this.ChangeValue}>
+                                        <select id ="Color" name="Color" className ="form-control optionFomulario" value = {this.state.Color} onChange = {this.ChangeValue}>
                                             <option value = "">--</option>
                                             <option value = "blue" className = "opt1">Azul</option>
                                             <option value = "violet" className = "opt2">Violeta</option>

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import $ from 'jquery'
 import TypesInput from '../TypesInput.js';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -42,14 +43,14 @@ class Desconto extends React.Component {
     ValidaDesconto = (event) => {
         event.preventDefault();
 
-        console.log(this.state);
-
         var erros = ValidaErros(this.state);
-
-        if (erros.length > 0) {
-            exibeMensagensDeErro(erros);
+        if(erros.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
+            return;
         }
         else {
+            $("#alertDiv").addClass('displaynone');           
             this.setState({
                 page: "Temporaridade"
             })
@@ -57,38 +58,52 @@ class Desconto extends React.Component {
         function ValidaErros(desc) {
 
             var erros = [];
-
+            //ADD Class
             if (desc.Name.length === 0) {
+                $("#Nome").addClass('errorBorder');
                 erros.push("O Nome não pode ser em branco");
             }
             if (desc.Description.length === 0) {
+                $("#Description").addClass('errorBorder');
                 erros.push("A Descrição do Desconto não pode ser em branco");
             }
             if (desc.TypePeople.length === 0) {
+                $("#TP").addClass('errorBorder');
                 erros.push("O Para Quem não pode ser em branco");
             }
             if (desc.TypeValue.length === 0) {
+                $("#TV").addClass('errorBorder');
                 erros.push("O Tipo não pode ser em branco");
             }
             if (desc.Value.length === 0) {
+                $("#Value").addClass('errorBorder');
                 erros.push("O Valor não pode ser em branco");
             }
             if (desc.Quant.length === 0) {
+                $("#Quant").addClass('errorBorder');
                 erros.push("A Quantidade não pode ser em branco");
             }
-            console.log(erros);
+            
+            //Removendo Class
+            if (desc.Name.length != 0) {
+                $("#Nome").removeClass('errorBorder');
+            }
+            if (desc.Description.length != 0) {
+                $("#Description").removeClass('errorBorder');
+            }
+            if (desc.TypePeople.length != 0) {
+                $("#TP").removeClass('errorBorder');
+            }
+            if (desc.TypeValue.length != 0) {
+                $("#TV").removeClass('errorBorder');
+            }
+            if (desc.Value.length != 0) {
+                $("#Value").removeClass('errorBorder'); 
+            }
+            if (desc.Quant.length != 0) {
+                $("#Quant").removeClass('errorBorder');
+            }
             return erros;
-        }
-
-        function exibeMensagensDeErro(erros) {
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-
-            erros.forEach(function (erro) {
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
         }
     }
 
@@ -100,18 +115,35 @@ class Desconto extends React.Component {
         var erros = [];
 
         if (this.state.TypeTime === "") {
+            $("#TT").addClass('errorBorder');
             erros.push("Intervalo não pode ser em branco")
         }
         if (this.state.TypeCog === "") {
+            $("#TC").addClass('errorBorder');
             erros.push("Tipo de Código não pode ser em branco")
         }
         if (this.state.Date === "") {
+            $("#Date").addClass('errorBorder');
             erros.push("A Data não pode ser em branco")
         }
-        if (erros.length > 0) {
-            exibeMensagensDeErro(erros);
+        //Remove Class
+        if (this.state.TypeTime != "") {
+            $("#TT").removeClass('errorBorder');
+        }
+        if (this.state.TypeCog != "") {
+            $("#TC").removeClass('errorBorder');
+        }
+        if (this.state.Date != "") {
+            $("#Date").removeClass('errorBorder');
+        }
+        //Valida erros
+        if(erros.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
+            return;
         }
         else {
+            $("#alertDiv").addClass('displaynone'); 
             var formData = new FormData();
 
             formData.append('name', String(this.state.Name))
@@ -140,32 +172,6 @@ class Desconto extends React.Component {
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 })
-        }
-
-        function ConstroiListaDesconto() {
-            console.log("Entrei dentro da função");
-            console.log(this.state);
-            axios.get(`/desconto/filter/${this.state.Name}`)
-                .then((response) => {
-                    console.log("Dentro do axios: " + this)
-                    this.setState({ list: response.data });
-                }).catch((error) => {
-                    console.log(error)//LOG DE ERRO
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-                })
-        }
-
-        function exibeMensagensDeErro(erros) {
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-
-            erros.forEach(function (erro) {
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
         }
     }
 
@@ -208,7 +214,7 @@ class Desconto extends React.Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <label className="LetraFormulario">Para:</label>
+                                            <label className="LetraFormulario" id="TP">Para:</label>
                                             <br></br>
                                             <label className="radio-inline"><input type="radio" id="Crianca" name="TypePeople" value="Child" onClick={this.ChangeValue} /><p className="LetraFormulario">  Criança</p></label>
                                             <label className="radio-inline"><input type="radio" id="Adulto" name="TypePeople" value="Adult" onClick={this.ChangeValue} /><p className="LetraFormulario">  Adulto</p></label>
@@ -217,7 +223,7 @@ class Desconto extends React.Component {
                                             <input className="form-control" type="number" id="Quant" name="Quant" value={this.state.Quant} onChange={this.ChangeValue} />
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <label className="LetraFormulario">Tipo:</label>
+                                            <label className="LetraFormulario" id="TV">Tipo:</label>
                                             <br></br>
                                             <label className="radio-inline"><input type="radio" id="Porcentagem" name="TypeValue" value="Porcentagem" onClick={this.ChangeValue} /><p className="LetraFormulario">   Porcentagem</p></label>
                                             <label className="radio-inline"><input type="radio" id="Fixo" name="TypeValue" value="Fixo" onClick={this.ChangeValue} /><p className="LetraFormulario">    Fixo</p></label>
@@ -261,13 +267,13 @@ class Desconto extends React.Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <label className="LetraFormulario">Tipo de Código:</label>
+                                            <label className="LetraFormulario" id="TC">Tipo de Código:</label>
                                             <br></br>
                                             <label className="radio-inline"><input type="radio" id="Geral" name="TypeCog" value="Geral" onClick={this.ChangeValue} /><p className="LetraFormulario">Geral</p></label>
                                             <label className="radio-inline"><input type="radio" id="Unico" name="TypeCog" value="Unico" onClick={this.ChangeValue} /><p className="LetraFormulario">Único</p></label>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
-                                            <label className="LetraFormulario">Intervalo:</label>
+                                            <label className="LetraFormulario" id="TT">Intervalo:</label>
                                             <br></br>
                                             <label className="radio-inline"><input type="radio" id="Diario" name="TypeTime" value="Diario" onClick={this.ChangeValue} /><p className="LetraFormulario"> Diario</p></label>
                                             <label className="radio-inline"><input type="radio" id="Semanal" name="TypeTime" value="Semanal" onClick={this.ChangeValue} /><p className="LetraFormulario">Semanal</p></label>
