@@ -3,6 +3,7 @@ import Webcam from 'react-webcam';
 import axios from 'axios';
 import ConfirmaCrianca from './ConfirmaCrianca.js';
 import TypesInput from '../TypesInput.js';
+import $ from 'jquery';
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -89,12 +90,12 @@ class CadastroCrianca extends React.Component {
         event.preventDefault();
         var erros = ValidaErros(this.state);
         if(erros.length > 0){
-            alert("Houve erro(s) no preechimento do formulário");
-            exibeMensagensDeErro(erros);
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
             return;
         }
         else {
-            exibeMensagensDeErro(erros);
+            $("#alertDiv").addClass('displaynone');           
             this.setState({
                 page: "ConfirmaCad"
             })
@@ -102,30 +103,57 @@ class CadastroCrianca extends React.Component {
         function ValidaErros (crianca){
 
             var erros = [];
-
+            //ADD CLASS
             if (crianca.firstName.length === 0) {
+                $("#nome").addClass('errorBorder');
                 erros.push("O Nome não pode ser em branco");
             }
             if (crianca.surName.length === 0) {
+                $("#Sbnome").addClass('errorBorder');
                 erros.push("O Sobrenome não pode ser em branco");
             }
             if (crianca.birthday.length === 0) {
+                $("#Data").addClass('errorBorder');
                 erros.push("A Data não pode ser em branco");
             }
             if (crianca.nacionality.length === 0) {
+                $("#Nacionalidade").addClass('errorBorder');
                 erros.push("A Nascinalidade não pode ser em branco");
             }
             if (crianca.number.length > 11) {
+                $("#number").addClass('errorBorder');
                 erros.push("O campo RG/CPF/Passaporte não pode ter mais de 11 digitos");
             }
             if (crianca.number.length < 8) {
+                $("#number").addClass('errorBorder');
                 erros.push("O campo RG/CPF/Passaporte não pode ter menor que 8 digitos");
             }
             if (crianca.number.length === 0) {
+                $("#number").addClass('errorBorder');
                 erros.push("O campo RG/CPF/Passaporte não pode ser em branco");
             }
             if (crianca.file.length === 0) {
+                $("#foto").addClass('errorBorder');
                 erros.push("Precisamos da sua foto");
+            }
+            //Remove a class
+            if (crianca.firstName.length > 0) {
+                $("#nome").removeClass('errorBorder');
+            }
+            if (crianca.surName.length > 0) {
+                $("#Sbnome").removeClass('errorBorder');
+            }
+            if (crianca.birthday.length > 0) {
+                $("#Data").removeClass('errorBorder'); 
+            }
+            if (crianca.nacionality.length > 0) {
+                $("#Nacionalidade").removeClass('errorBorder');
+            }
+            if (crianca.number.length <= 11 && crianca.number.length >= 8) {
+                $("#number").removeClass('errorBorder');
+            }
+            if (crianca.file.length > 0) {
+                $("#imagem").removeClass('errorBorder');                
             }
             console.log(erros);
             return erros;
@@ -234,6 +262,9 @@ class CadastroCrianca extends React.Component {
                     </div>
                     <div className = "graph-visual" >
                         <h3 className = "inner-tittle" > Novo </h3>
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <div className = "graph" >
                             <h3 className = "inner-tittle" > Perfil </h3>
                             <form id="form-criança">

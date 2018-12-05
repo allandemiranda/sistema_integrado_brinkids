@@ -190,6 +190,9 @@ class Desconto extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Novo Desconto</h3>
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <form>
                             <div className="graph" >
                                 <div className="form-group">
@@ -250,6 +253,9 @@ class Desconto extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Temporaridade</h3>
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <form>
                             <div className="graph" >
                                 <div className="form-group">

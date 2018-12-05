@@ -15,7 +15,6 @@ class Input extends React.Component {
     //FUNCAO QUE CRIA E ADICIONA OS OPTIONS DENTRO DO SELETOR
     GeraOptions = (Options) => {
         let select = []
-        console.log(select)
         var i = 0
         Options.forEach(function(options){
             select.push(<option value = {options} key = {i}>{options}</option>)
