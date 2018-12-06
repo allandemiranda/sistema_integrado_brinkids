@@ -297,9 +297,6 @@ class Desconto extends React.Component {
                                 <a className="btn btn-md botao" href="/">Cancelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaTemporariedade}>Gerar</button>
                             </div>
-                            <div>
-                                <ul id="mensagens-erro" style={{ color: "red" }}></ul>
-                            </div>
                         </form >
                     </div>
                 </div>

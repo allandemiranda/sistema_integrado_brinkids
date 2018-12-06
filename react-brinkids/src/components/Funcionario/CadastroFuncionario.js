@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import FormularioCad from './FormularioCadFunc.js';
+import $ from 'jquery';
 
 
 
@@ -46,13 +47,13 @@ class CadastroFuncionario extends React.Component {
 
         //DIFERENÇA ENTRE BUSCA POR NOME E BUSCA POR CPF, AJUDAR O BACK.
         if(this.state.Name !== ""){
-            var erros = ValidaErros(this.state.Name);
+            var erros = ValidaErros(this.state.Name, 1);
             if(erros.length > 0){
-                alert("Houve erro(s) no preechimento do formulário");
-                exibeMensagensDeErro(erros);
+                $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
                 return;
             }
             else {
+                $("#alertDiv").addClass('displaynone');
                 console.log(`/adult/filter/${this.state.Name}/name`)
                 axios.get(`/adult/filter/${this.state.Name}/name`)
                 .then((response) => {
@@ -67,18 +68,18 @@ class CadastroFuncionario extends React.Component {
                     console.log(error)//LOG DE ERRO
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
         else{
-            var erros = ValidaErros(this.state.CPF);
+            var erros = ValidaErros(this.state.CPF, 2);
             if(erros.length > 0){
-                alert("Houve erro(s) no preechimento do formulário");
-                exibeMensagensDeErro(erros);
+                $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
                 return;
             }
             else {
+                $("#alertDiv").addClass('displaynone');
                 axios.get(`/adult/filter/${this.state.CPF}/cpf`)
                 .then((response) => {                   
                     if (isEmpty(response.data) || response.data.length === 0) {
@@ -92,7 +93,7 @@ class CadastroFuncionario extends React.Component {
                     console.log(error)//LOG DE ERRO
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
             }
         }
@@ -101,25 +102,41 @@ class CadastroFuncionario extends React.Component {
             return Object.keys(obj).length === 0;
         }
 
-        function ValidaErros (busca){
+        function ValidaErros (busca, ind){
             var erros = [];
-            if (busca.length === 0) {
-                erros.push("A Busca não pode ser em branco");
+            if(ind === 1){
+                if (busca.length === 0) {
+                    $("#name").addClass('errorBorder');
+                    $("#number").removeClass('errorBorder');
+                    erros.push("A Busca não pode ser em branco");
+                }
+                if (busca.length < 8) {
+                    $("#name").addClass('errorBorder');
+                    $("#number").removeClass('errorBorder');
+                    erros.push("A Busca nao pode ter menos que 8 caracteres");
+                }
+                if(busca.length > 8){
+                    $("#name").removeClass('errorBorder');
+                    $("#number").removeClass('errorBorder');
+                }
             }
-            if (busca.length < 8) {
-                erros.push("A Busca nao pode ter menos que 8 caracteres");
+            else{
+                if (busca.length === 0) {
+                    $("#number").addClass('errorBorder');
+                    $("#name").removeClass('errorBorder');
+                    erros.push("A Busca não pode ser em branco");
+                }
+                if (busca.length < 8) {
+                    $("#number").addClass('errorBorder');
+                    $("#name").removeClass('errorBorder');
+                    erros.push("A Busca nao pode ter menos que 8 caracteres");
+                }
+                if(busca.length > 8){
+                    $("#number").removeClass('errorBorder');
+                    $("#name").removeClass('errorBorder');
+                }
             }
             return erros;
-        }
-
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
         }
     }
 
@@ -142,6 +159,9 @@ class CadastroFuncionario extends React.Component {
                         </ol >
                     </div>
                     <div className = "graph-visual" >
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <h3 className = "inner-tittle" > Selecionar Adulto </h3>
                         <div className = "graph" >
                             <div className = "graph" >

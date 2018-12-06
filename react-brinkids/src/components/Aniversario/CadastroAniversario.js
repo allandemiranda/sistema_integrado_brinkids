@@ -412,9 +412,6 @@ class CadastroAniversario extends React.Component {
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaAniversaio}>Avançar</button>
                             </div>                      
                         </form >
-                            <div>
-                               <ul id="mensagens-erro" style={{color: "red"}}></ul>
-                            </div>  
                     </div>
                 </div>
             )

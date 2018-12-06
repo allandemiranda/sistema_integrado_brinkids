@@ -362,9 +362,6 @@ class CadastroCrianca extends React.Component {
                                     <a className="btn btn-md botao" href="/crianca">Cencelar</a>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaCriança}>Avançar</button>
                                 </div>
-                                <div>
-                                    <ul id="mensagens-erro" style={{color: "red"}}></ul>
-                                </div>
                             </form >
                         </div >
                     </div>
