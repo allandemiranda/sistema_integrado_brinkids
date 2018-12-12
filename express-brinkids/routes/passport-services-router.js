@@ -53,19 +53,31 @@ String.prototype.toSS = function () {//convertendo de mm:ss para segundos
 }
 
 router.get('/', async (req, res) => {
-  try {
-    const psjson = await passportServices.find({});
-    const passportDefault = await passport.find({});
+  const psjson = await passportServices.find({});
+  const passportDefault = await passport.find({});
+  var data;
 
-    psjson.shift()
+  psjson.shift()
 
-    const data = {
+  if(passportDefault.length===0){
+    data = {
+      services: psjson,
+      default: {
+        price: "0",
+        time: "0",
+      },
+    };
+  }else{
+    data = {
       services: psjson,
       default: passportDefault[0],
     };
-
-    console.log(data);
-
+  }
+  
+  console.log(passportDefault[0])
+  console.log(data);
+  
+  try {
     return res.status(201).json(data);
   } catch (err) {
     console.log(err);
@@ -77,11 +89,10 @@ router.get('/initialTime', async (req, res) => {
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
   let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json
-
   if(psjson.length===1){//teste pra saber se só tem o json inicial
     const data = {
       initialTime: '00:00', 
-      default: pjson,
+      default: pjson[0],
     };
     try {
       return res.status(201).json(data);
@@ -94,7 +105,7 @@ router.get('/initialTime', async (req, res) => {
     const data = {
       initialTime: newInitialTime,
       default: pjson,
-      services: psjson,
+      services: psjson[0],
     };
     try {
       return res.status(201).json(data);
@@ -105,18 +116,18 @@ router.get('/initialTime', async (req, res) => {
 });
 
 router.put('/', async (req, res) =>{
+  const passportDefault = await passport.find({});
+  console.log('------------------')
+  console.log(req.body)
+  console.log(passportDefault[0])
+  console.log('------------------')
+  passportDefault[0].time = req.body.time;
+  passportDefault[0].price = req.body.price;
+  passportDefault[0].save();
+  console.log(passportDefault)
+  console.log('------------------')
+  
   try {
-    const passportDefault = await passport.find({});
-    console.log('------------------')
-    console.log(req.body)
-    console.log(passportDefault)
-    console.log('------------------')
-    passportDefault[0].time = req.body.time;
-    passportDefault[0].price = req.body.price;
-    passportDefault[0].save();
-    console.log(passportDefault)
-    console.log('------------------')
-
     return res.sendStatus(204);
   } catch (err) {
     return res.sendStatus(500);

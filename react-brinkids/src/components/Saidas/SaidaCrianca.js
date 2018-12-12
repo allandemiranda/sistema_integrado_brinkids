@@ -152,8 +152,9 @@ class SaidaCrianca extends React.Component {
               //  .then(function (response) {
             axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + '/' + this.state.TimeAdult)
                 .then((response) => {
+                     console.log(response);
                     this.setState({                        
-                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                        ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
                     })
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
@@ -206,13 +207,13 @@ class SaidaCrianca extends React.Component {
                 indice: i++,
             })
         }
-        if (i === (this.state.CriancasSelecionadas.lengt - 1)) {
+        if (i === (this.state.CriancasSelecionadas.length - 1)) {
             this.setState({
                 namebutton: "Finalizar",
             })
 
         }
-        if (i === this.state.CriancasSelecionadas.lengt) {
+        if (i === this.state.CriancasSelecionadas.length) {
             var j=0;
             var k=0;
             this.state.ValorCria.map((resp, indice) => {

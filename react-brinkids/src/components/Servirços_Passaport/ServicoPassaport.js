@@ -159,7 +159,7 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.list2.price))
 
 
-        axios.put('http://localhost:3001/passportServices', formData)
+        axios.put('http://localhost:3001/passportServices/', formData)
             .then(function (response) {
                 console.log(response)
                 //window.location.href = '/ServicoPassaporte';
