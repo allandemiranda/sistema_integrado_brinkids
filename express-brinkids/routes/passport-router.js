@@ -44,14 +44,11 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   let lastInitialTime = psjson[psjson.length-1].initialTime;
   let lastPrice = psjson[psjson.length-1].price;
   var price;
-  console.log("tempo de saida:",Date(adultExit));
-  console.log("tempo final:", adultTime);
-  console.log("lastprice:", lastPrice);
-  console.log("lastfinaltime:", lastFinalTime.toSS());
+
   if(adultTime>(lastFinalTime.toSS()/60)){
     let time = adultTime - (lastFinalTime.toSS()/60);
     console.log("time sem o ultimo tempo de serviço:", time);
-    price = time*parseInt(pjson[0].price, 10) + parseInt(lastPrice, 10);
+    price = parseFloat(time/parseInt(pjson[0].time, 10)*parseInt(pjson[0].price, 10) + parseInt(lastPrice, 10)).toFixed(2);
     console.log("preço:", price);
   } else {
     for(i = 0; i < psjson.length; i++){
@@ -62,10 +59,10 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     }
   }
   const data = {
-    service: "",
-    id: "",
-    time: "",
-    value: price, 
+    service: "passaport",
+    id: req.params.idCria,
+    time: adultTime,
+    value: "R$ " + price, 
   };
   try {
     return res.status(201).json(data);
