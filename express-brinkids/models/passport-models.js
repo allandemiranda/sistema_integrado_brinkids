@@ -4,15 +4,15 @@ const config = require('../config');
 const passportSchema = new mongoose.Schema({
 	time: {
 	  type: String,
-	  require: true,
+	  required: true,
 	},
 	price:{
 	  type: String,
-	  require: true,
+	  required: true,
 	}
 	});
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const passport = mongoose.model('Passport', passportSchema);
+const passport = mongoose.model('passport', passportSchema);
 
 module.exports = passport;

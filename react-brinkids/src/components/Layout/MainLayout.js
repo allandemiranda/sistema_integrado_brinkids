@@ -12,6 +12,7 @@ import {
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
+import '../../assets/style/fontawesome.css';
 import './css/style.css';
 import './css/icon-font.min.css';
 
@@ -36,12 +37,12 @@ class MainLayout extends React.Component {
     render() {
         const { children } = this.props;
         return (
-            <div className="page-container" >
+            <div className="page-container sidebar-collapsed-back" >
                 <div className="left-content" >
                     <div className="inner-content" >
                         <div className="header-section" >
                             <div className="top_menu" >
-                                <div className="profile_details_left" >
+                                <div className="profile_details_left" style={{width: 15+'%'}}>
                                     <ul className="nofitications-dropdown" >
                                        
                                         <li className="dropdown note" >
@@ -77,7 +78,7 @@ class MainLayout extends React.Component {
                         </Link>
                     </header>
                     <div className="bordaDaDiv"> </div>
-                    <div className="down" style={{paddingTop: 0+'px', paddingBottom:15+'px'}}>	
+                    <div className="down" style={{ paddingBottom:15+'px'}}>	
 									  <a ><img src={perfilImage}/></a>
 									  <a ><span class=" name-caret">Jasmin Leo</span></a>
 									 <p>System Administrator in Company</p>
@@ -92,9 +93,35 @@ class MainLayout extends React.Component {
                         <ul id="menu" >
                             <li >
                                 <Link to="/" >
-                                    < i className="fa fa-tachometer" > </i>
+                                <i class="fa fa-desktop" aria-hidden="true"></i>
                                     <span>Dashboard</span >
                                 </Link>
+                            </li>
+                            <li >
+                                <Link to="/" >
+                                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                    <span>Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                </Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversario </Link></li>
+                                </ul>
+                            </li>
+                            <li >
+                                <Link to="/SaidaCrianca" >
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    <span>Saida</span >
+                                </Link>
+                            </li>
+                            <li >
+                                <Link to="/" >
+                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                    <span>Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                </Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Serviços"> Gerenciamento </Link></li>
+                                </ul>
                             </li>
                             {/*<li id = "menu-academico" >
                                 <Link to = "#" >
@@ -111,7 +138,7 @@ class MainLayout extends React.Component {
                                     </li>
                                 </ul>
                              </li>*/}
-                            <li id="menu-comunicacao" ><Link to="/"><i className="fa fa-edit"></i> <span>Cadastramento</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                            <li id="menu-comunicacao" ><Link to="/"><i class="fa fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul id="menu-comunicacao-sub" >
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                         <ul id="menu-mensagens-sub" >
@@ -145,50 +172,31 @@ class MainLayout extends React.Component {
                                     <span>Calendário</span >
                                 </Link>
                             </li>
-                            <li id="menu-comunicacao" ><Link to="/"><i className="fa fa-edit"></i> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                            <li id="menu-comunicacao" ><Link to="/"><span class="lnr lnr-rocket"></span> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul id="menu-comunicacao-sub" >
                                     <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Aniversario">Aniversário </Link></li>
                                     <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Entrada Aniversário </Link></li>
                                 </ul>
                             </li>
-                            <li>
-                                <Link to="/Passport">
-                                    <i className="fa fa-globe"></i>
-                                    <span>Passaporte</span>
-                                </Link>
-                            </li>
-                            <li id="menu-comunicacao" ><Link to="/"><i className="fa fa-tags" aria-hidden="true"></i> <span>Serviços</span> <span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                           
+                            <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-user-cog"></i> <span>Configurações</span> <span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul>
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Serviços">Entrada </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/SaidaServicosExtra">Saída </Link></li>
+                                    
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoPassaporte">Passaporte </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>
                                 </ul>
                             </li>
 
-                            <li>
-                                <Link to="/Desconto">
-                                    <i className="fa fa-dollar"></i>
-                                    <span>Gerar Desconto</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/Gerador_funcoes">
-                                <i className="glyphicon glyphicon-user"></i>
-                                    <span>Gerenciador de Cargos</span>
-                                </Link>
-                            </li>
+                          
                             <li>
                                 <Link to="/SaidaCrianca">
                                 <i className="glyphicon glyphicon-off"></i>
                                     <span>Saida de Crianças</span>
                                 </Link>
                             </li>
-                            <li>
-                                <Link to="/Gavetas">
-                                <i className="glyphicon glyphicon-briefcase"></i>
-                                    <span>Gavetas</span>
-                                </Link>
-                            </li>
+                            
                         </ul>
                     </div>
                 </div>

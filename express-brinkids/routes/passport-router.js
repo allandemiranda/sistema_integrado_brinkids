@@ -34,33 +34,35 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
   const productFinded = await product.find({ 'children.id': req.params.idCria });
   const adultEntered = productFinded[0].time;
-  console.log('Olha qual tempo achei:', adultEntered);
+  console.log('entrada:', new Date(adultEntered));
   const adultExit = req.params.timeAdult;
+  const adultTime = (adultExit - new Date(adultEntered).getTime())/60000;
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
 
   let lastFinalTime = psjson[psjson.length-1].finalTime;//Último finalTime do json
   let lastInitialTime = psjson[psjson.length-1].initialTime;
   let lastPrice = psjson[psjson.length-1].price;
-  console.log(lastFinalTime);
-  var price = 0;
+  var price;
 
-  if(adultExit>lastFinalTime){
-    let time = adultExit - lastFinalTime;
-    
-    price = time*pjson[0].price + lastPrice;
+  if(adultTime>(lastFinalTime.toSS()/60)){
+    let time = adultTime - (lastFinalTime.toSS()/60);
+    console.log("time sem o ultimo tempo de serviço:", time);
+    price = parseFloat(time/parseInt(pjson[0].time, 10)*parseInt(pjson[0].price, 10) + parseInt(lastPrice, 10)).toFixed(2);
+    console.log("preço:", price);
   } else {
     for(i = 0; i < psjson.length; i++){
-      if(adultExit <= psjson[i].finalTime && adultExit >= psjson[i].initialTime){
+      if(adultTime <= (psjson[i].finalTime.toSS()/60) && adultTime >= (psjson[i].initialTime.toSS()/60)){
         price = psjson[i].price;
+        console.log("preço:", price);
       }
     }
   }
   const data = {
-    service: "",
-    id: "",
-    time: "",
-    value: price, 
+    service: "passaport",
+    id: req.params.idCria,
+    time: adultTime,
+    value: "R$ " + price, 
   };
   try {
     return res.status(201).json(data);

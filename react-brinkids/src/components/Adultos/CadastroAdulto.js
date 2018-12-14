@@ -106,13 +106,11 @@ class CadastroAdulto extends React.Component {
         console.log(this.state);
         var erros = ValidaErros(this.state);
         if(erros.length > 0){
-            alert("Houve erro(s) no preechimento do formulário");
-            exibeMensagensDeErro(erros);
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
         else {
-            //alert("Nenhem Erro Encontrado, Indo para pagina de Confirmação");
-            exibeMensagensDeErro(erros);
+            $("#alertDiv").addClass('displaynone');
             this.setState({
                 page: "childSearchPage"
             })
@@ -123,57 +121,111 @@ class CadastroAdulto extends React.Component {
             var erros = [];
 
             if (adulto.firstName.length === 0) {
+                $("#nome").addClass('errorBorder');
                 erros.push("O Nome não pode estar em branco");
             }
+            else{
+                $("#nome").removeClass('errorBorder');
+            }
+
             if (adulto.surName.length === 0) {
+                $("#Sbnome").addClass('errorBorder');
                 erros.push("O Sobrenome não pode estar em branco");
             }
+            else{
+                $("#Sbnome").removeClass('errorBorder');
+            }
+
             if (adulto.cpf.length === 0){
+                $("#numberCPF").addClass('errorBorder');
                 erros.push("O CPF não pode estar em branco");
             }
+            else{
+                $("#numberCPF").removeClass('errorBorder');
+            }
+
             if (adulto.birthday.length === 0) {
+                $("#Data").addClass('errorBorder');
                 erros.push("A Data não pode estar em branco");
             }
+            else{
+                $("#Data").removeClass('errorBorder');
+            }
+
             if (adulto.nacionality.length === 0) {
+                $("#Nacionalidade").addClass('errorBorder');
                 erros.push("A Nascinalidade não pode estar em branco");
             }
+            else{
+                $("#Nacionalidade").removeClass('errorBorder');
+            }
+
             if (adulto.file.length === 0) {
+                $("#imagem").addClass('errorBorder');
                 erros.push("Precisamos da sua foto");
             }
+            else{
+                $("#imagem").removeClass('errorBorder');
+            }
+
             if (adulto.phoneNumber.length === 0){
+                $("#phoneNumber").addClass('errorBorder');
                 erros.push("O Telefone não pode estar em branco");
             }
+            else{
+                $("#phoneNumber").removeClass('errorBorder');
+            }
+
             if (adulto.email.length === 0){
+                $("#email").addClass('errorBorder');
                 erros.push("O Email não pode estar em branco");
             }
+            else{
+                $("#email").removeClass('errorBorder');
+            }
+
             if (adulto.address.length === 0){
+                $("#endeco").addClass('errorBorder');
                 erros.push("O Endereço não pode estar em branco");
             }
+            else{
+                $("#endeco").removeClass('errorBorder');
+            }
+
             if (adulto.cep.length === 0){
+                $("#cep").addClass('errorBorder');
                 erros.push("O CEP não pode estar em branco");
             }
+            else{
+                $("#cep").removeClass('errorBorder');
+            }
+
             if (adulto.number.length === 0){
+                $("#num").addClass('errorBorder');
                 erros.push("O Número não pode estar em branco");
             }
+            else{
+                $("#num").removeClass('errorBorder');
+            }
+            
             if (adulto.country.length === 0){
+                $("#pais").addClass('errorBorder');
                 erros.push("O País não pode estar em branco");
             }
+            else{
+                $("#pais").removeClass('errorBorder');
+            }
+
             if (adulto.state.length === 0){
+                $("#estado").addClass('errorBorder');
                 erros.push("O Estado não pode estar em branco");
             }
+            else{
+                $("#estado").removeClass('errorBorder');
+            }
+
             return erros;
 
-        }
-
-        function exibeMensagensDeErro(erros){
-            var ul = document.querySelector("#mensagens-erro");
-            ul.innerHTML = "";
-
-            erros.forEach(function(erro){
-                var li = document.createElement("li");
-                li.textContent = erro;
-                ul.appendChild(li);
-            });
         }
     }
 
@@ -426,6 +478,9 @@ class CadastroAdulto extends React.Component {
                     </div>
                     <div className = "graph-visual" >
                         <h3 className = "inner-tittle" > Novo </h3>
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <div className = "graph" >
                             <h3 className = "inner-tittle" > Perfil </h3>
                             <form id="form-criança">
@@ -454,11 +509,11 @@ class CadastroAdulto extends React.Component {
                                     <div className = "row">
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario" > CPF: </label>
-                                            <input type = "text" id = "number" name = "number" className = "form-control" value = {this.state.cpf} onChange={this.ChangeCpf} />
+                                            <input type = "text" id = "numberCPF" name = "number" className = "form-control" value = {this.state.cpf} onChange={this.ChangeCpf} />
                                         </div>
                                         <div className = "col-md-6 col-sm-6 col-xs-12" >
                                             <label className = "LetraFormulario" > RG: </label>
-                                            <input type = "text" id = "number" name = "number" className = "form-control" value = {this.state.rg} onChange={this.ChangeRg} />
+                                            <input type = "text" id = "numberRG" name = "number" className = "form-control" value = {this.state.rg} onChange={this.ChangeRg} />
                                         </div>
                                     </div>
                                 </div >
@@ -522,7 +577,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className = "col-md-2 col-sm-3 col-xs-2" >
                                             <label className = "LetraFormulario" > Número: </label>
-                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.number} onChange={this.ChangeNumber} />
+                                            <input type = "text" id = "num" name = "cep" className = "form-control" value={this.state.number} onChange={this.ChangeNumber} />
                                         </div> 
                                     </div>
                                 </div >
@@ -539,11 +594,11 @@ class CadastroAdulto extends React.Component {
                                         </div> 
                                         <div className = "col-md-3 col-sm-6 col-xs-3" >
                                             <label className = "LetraFormulario" > Estado: </label>
-                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.state} onChange={this.ChangeState} />
+                                            <input type = "text" id = "estado" name = "cep" className = "form-control" value={this.state.state} onChange={this.ChangeState} />
                                         </div>                                      
                                         <div className = "col-md-3 col-sm-6 col-xs-3" >
                                             <label className = "LetraFormulario" > País: </label>
-                                            <input type = "text" id = "cep" name = "cep" className = "form-control" value={this.state.country} onChange={this.ChangeCountry} />
+                                            <input type = "text" id = "pais" name = "cep" className = "form-control" value={this.state.country} onChange={this.ChangeCountry} />
                                         </div> 
                                     </div>
                                 </div >                         
@@ -585,9 +640,6 @@ class CadastroAdulto extends React.Component {
                                 <div className="text-center">
                                     <a className="btn btn-md botao" href="/">Cencelar</a>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ChildSearch}>Avançar</button>
-                                </div>
-                                <div>
-                                    <ul id="mensagens-erro" style={{color: "red"}}></ul>
                                 </div>
                             </form >
                         </div >
@@ -682,6 +734,9 @@ class CadastroAdulto extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <div className="graph" >
                             <h3 className="inner-tittle" > Buscar Criança</h3>
                             <div className=" text-center">
