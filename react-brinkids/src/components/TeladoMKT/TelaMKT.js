@@ -89,8 +89,7 @@ class DashBoard extends React.Component {
 
 
 	}
-	grafico(event){
-		
+	grafico(event){		
 		for(var i = 1; i<=30; i++){
 			let hj = moment().format("MM/DD/YYYY");
 			var novo= moment(hj).subtract( i , 'days').calendar();
