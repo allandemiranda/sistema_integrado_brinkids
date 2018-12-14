@@ -12,6 +12,7 @@ import {
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
+import '../../assets/style/fontawesome.css';
 import './css/style.css';
 import './css/icon-font.min.css';
 
@@ -77,7 +78,7 @@ class MainLayout extends React.Component {
                         </Link>
                     </header>
                     <div className="bordaDaDiv"> </div>
-                    <div className="down" style={{paddingTop: 0+'px', paddingBottom:15+'px'}}>	
+                    <div className="down" style={{ paddingBottom:15+'px'}}>	
 									  <a ><img src={perfilImage}/></a>
 									  <a ><span class=" name-caret">Jasmin Leo</span></a>
 									 <p>System Administrator in Company</p>
@@ -92,9 +93,35 @@ class MainLayout extends React.Component {
                         <ul id="menu" >
                             <li >
                                 <Link to="/" >
-                                    < i className="fa fa-tachometer" > </i>
+                                <i class="fa fa-desktop" aria-hidden="true"></i>
                                     <span>Dashboard</span >
                                 </Link>
+                            </li>
+                            <li >
+                                <Link to="/" >
+                                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                    <span>Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                </Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversario </Link></li>
+                                </ul>
+                            </li>
+                            <li >
+                                <Link to="/SaidaCrianca" >
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    <span>Saida</span >
+                                </Link>
+                            </li>
+                            <li >
+                                <Link to="/" >
+                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                    <span>Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                </Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Serviços"> Gerenciamento </Link></li>
+                                </ul>
                             </li>
                             {/*<li id = "menu-academico" >
                                 <Link to = "#" >
@@ -111,7 +138,7 @@ class MainLayout extends React.Component {
                                     </li>
                                 </ul>
                              </li>*/}
-                            <li id="menu-comunicacao" ><Link to="/"><i className="fa fa-edit"></i> <span>Cadastramento</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                            <li id="menu-comunicacao" ><Link to="/"><i class="fa fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul id="menu-comunicacao-sub" >
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                         <ul id="menu-mensagens-sub" >
