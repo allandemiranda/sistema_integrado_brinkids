@@ -24,6 +24,7 @@ import Gerador from './components/geradorf/Gerador_funcoes.js';
 import SaidaServicosExtra from "./components/Serviços_Extras/SaidaServiçosExtra";
 import ServicoPassaporte from "./components/Servirços_Passaport/ServicoPassaport";
 import gavetas from './components/Gavetas/Gavetas.js';
+import TelaMKT from './components/TeladoMKT/TelaMKT.js';
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
@@ -158,7 +159,13 @@ class App extends React.Component {
                   path="/Gavetas"
                   layout={MainLayout}
                   component={gavetas}
-                />
+              />
+              <LayoutRoute
+                exact
+                path="/TelaMKT"
+                layout={MainLayout}
+                component={TelaMKT}
+              />
                                                                  
               <Redirect to="/" /> 
             </Switch>
