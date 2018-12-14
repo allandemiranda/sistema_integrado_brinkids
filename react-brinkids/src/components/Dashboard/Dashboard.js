@@ -258,14 +258,14 @@ class DashBoard extends React.Component {
 					}
 				</div> */}
 				<div id="tabs" class="tabs">
-					
+
 					<div class="graph">
 						<nav>
 							<ul>
 								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Crianças</span></a></li>
 								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><span class="lnr lnr-users"></span> <span>Adultos</span></a></li>
 								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><span class="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
-								
+
 
 							</ul>
 						</nav>
@@ -295,23 +295,23 @@ class DashBoard extends React.Component {
 								</div>
 							</section>
 							<section className={this.state.sectionAdult} >
-							<div className="graph">
-								<div className="tables table-responsive">
-									<table className="table table-hover">
-										<thead className="text-center">
-											<tr >
-												<th>#</th>
-												<th>Nome</th>
-												<th>Aniversariante</th>
-											</tr>
-										</thead>
-										<tbody id="CriaTabela">
-											{adultos.map(byAdulto)}
+								<div className="graph">
+									<div className="tables table-responsive">
+										<table className="table table-hover">
+											<thead className="text-center">
+												<tr >
+													<th>#</th>
+													<th>Nome</th>
+													<th>Aniversariante</th>
+												</tr>
+											</thead>
+											<tbody id="CriaTabela">
+												{adultos.map(byAdulto)}
 
-										</tbody>
-									</table>
+											</tbody>
+										</table>
+									</div>
 								</div>
-							</div>
 							</section>
 
 						</div>
