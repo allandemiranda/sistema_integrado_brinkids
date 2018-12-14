@@ -3,8 +3,10 @@ import React from 'react';
 
 
 import '../../assets/style/bootstrap.min.css';
-import '../../assets/style/font-awesome.css';
+import '../../assets/style/fontawesome.css';
 import './css/style.css';
+import '../../assets/style/all.css';
+import '../../assets/sprints/solid.svg';
 import './css/Dashboard.css';
 import crianca from './tabelas/crianças';
 import adultos from './tabelas/adultos';

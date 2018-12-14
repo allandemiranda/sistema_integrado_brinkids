@@ -11,8 +11,9 @@ import {
   import logo from './css/logo transp m.png';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
-import '../../assets/style/font-awesome.css';
 import '../../assets/style/fontawesome.css';
+import '../../assets/style/all.css';
+import '../../assets/sprints/solid.svg';
 import './css/style.css';
 import './css/icon-font.min.css';
 
@@ -138,7 +139,7 @@ class MainLayout extends React.Component {
                                     </li>
                                 </ul>
                              </li>*/}
-                            <li id="menu-comunicacao" ><Link to="/"><i class="fa fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                            <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul id="menu-comunicacao-sub" >
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                         <ul id="menu-mensagens-sub" >
