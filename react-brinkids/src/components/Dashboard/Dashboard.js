@@ -258,14 +258,14 @@ class DashBoard extends React.Component {
 					}
 				</div> */}
 				<div id="tabs" class="tabs">
-					<h2 class="inner-tittle">Responsive Horizontal Tabs </h2>
+					
 					<div class="graph">
 						<nav>
 							<ul>
-								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><i class="fas fa-stroopwafel"></i><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Crianças</span></a></li>
+								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Crianças</span></a></li>
 								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><span class="lnr lnr-users"></span> <span>Adultos</span></a></li>
 								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><span class="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
-								<li name="noticiaTab" onClick={this.selectNoticia} className={this.state.noticiaTab}><a class="icon-lab"><i class="fa fa-flask"></i> <span>Notícias</span></a></li>
+								
 
 							</ul>
 						</nav>
