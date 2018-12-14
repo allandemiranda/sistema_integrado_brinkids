@@ -13,7 +13,7 @@ import noticias from './tabelas/noticias';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import axios from 'axios';
-import { Tabs, Tab } from 'react-bootstrap-tabs';
+//import { Tabs, Tab } from 'react-bootstrap-tabs';
 
 
 class DashBoard extends React.Component {
