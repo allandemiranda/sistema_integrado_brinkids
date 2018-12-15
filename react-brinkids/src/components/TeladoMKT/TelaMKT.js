@@ -97,7 +97,7 @@ class DashBoard extends React.Component {
 
 			axios.get('http://localhost:3001/TelaMKT' + novo)
             .then((response) => {
-                console.log(response.data);                
+                console.log(response.data);
                     this.setState.lista.pop(response.data);                 
             })
             .catch((err) => console.log(err));
