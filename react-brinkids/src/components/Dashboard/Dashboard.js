@@ -2,9 +2,9 @@ import React from 'react';
 
 
 
-import '../../assets/style/bootstrap.min.css';
+
 import '../../assets/style/fontawesome.css';
-import './css/style.css';
+
 import '../../assets/style/all.css';
 import '../../assets/sprints/solid.svg';
 import './css/Dashboard.css';
@@ -227,93 +227,97 @@ class DashBoard extends React.Component {
 					</ol >
 				</div>
 
-				{/* <div className="graph">
-					<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar}>
-						< span className="fa fa-bars" > </span>
-					</button>       Crianças
-				{this.state.colaps &&
-
-						(<div className="graph">
-							<div className="tables table-responsive">
-								<table className="table table-hover">
-									<thead className="text-center">
-										<tr >
-											<th>#</th>
-											<th>Nome</th>
-											<th>Idade</th>
-											<th>Tempo</th>
-											<th>Responsavel</th>
-											<th>Telefone</th>
-											<th>Serviço</th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody id="CriaTabela">
-										{crianca.map(byCrianca)}
-
-									</tbody>
-								</table>
-							</div>
-						</div>)
-
-
-					}
-				</div> */}
+				
 				<div id="tabs" class="tabs">
 					
 					<div class="graph">
 						<nav>
 							<ul>
 								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Crianças</span></a></li>
-								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><span class="lnr lnr-users"></span> <span>Adultos</span></a></li>
+								
 								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><span class="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
 								
 
 							</ul>
 						</nav>
 						<div className="content tab">
-							<section className={this.state.sectionCrianca} >
-								<div className="graph">
-									<div className="tables table-responsive">
-										<table className="table table-hover">
-											<thead className="text-center">
-												<tr >
-													<th>#</th>
-													<th>Nome</th>
-													<th>Idade</th>
-													<th>Tempo</th>
-													<th>Responsavel</th>
-													<th>Telefone</th>
-													<th>Serviço</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody id="CriaTabela">
-												{crianca.map(byCrianca)}
-
-											</tbody>
-										</table>
-									</div>
-								</div>
+							<section className={this.state.sectionCrianca}  >
+							<div class="graph graph-visual tables-main">
+                                <div class="tables">
+                                    <table class="table table-hover"> 
+                                        <thead> 
+                                            <tr> 
+                                                <th>#</th> 
+                                                <th style={{textAlign: "center"}}>Criança</th> 
+                                                <th style={{textAlign: "center"}}>Idade</th>
+                                                <th style={{textAlign: "center"}}>Restrição</th>
+                                                <th style={{textAlign: "center"}}>Obs.</th>
+                                                <th style={{textAlign: "center"}}>Entrada</th>
+                                                <th style={{textAlign: "center"}}>Gaveta</th>
+                                                <th style={{textAlign: "center"}}>Responsavel</th>
+                                                <th style={{textAlign: "center"}}>Parentesco</th>
+                                                <th style={{textAlign: "center"}}>Telefone</th>
+                                                <th style={{textAlign: "center"}}>Obs.</th>
+                                            </tr> 
+                                        </thead> 
+                                        <tbody> 
+                                            <tr>
+                                                <th scope="row" href="../foto-tirada-na-entrada">01</th> 
+                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
+                                                <td style={{textAlign: "center"}}>10 anos</td>
+                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Restrições da Criança!');"><a>SIM</a></td>
+                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações da Criança!');">SIM</td>
+                                                <td style={{textAlign: "center"}}>13:12h</td>
+                                                <td style={{textAlign: "center"}}>5</td>
+                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>
+                                                <td style={{textAlign: "center"}}>Pai</td>
+                                                <td style={{textAlign: "center"}}>(84)91151610</td>
+                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>                                                
+                                            </tr>
+                                           
+                                        </tbody> 
+                                    </table>
+                                </div>
+                            </div>
 							</section>
-							<section className={this.state.sectionAdult} >
-							<div className="graph">
-								<div className="tables table-responsive">
-									<table className="table table-hover">
-										<thead className="text-center">
-											<tr >
-												<th>#</th>
-												<th>Nome</th>
-												<th>Aniversariante</th>
-											</tr>
-										</thead>
-										<tbody id="CriaTabela">
-											{adultos.map(byAdulto)}
-
-										</tbody>
-									</table>
-								</div>
-							</div>
+							<section className={this.state.sectionAniversario}>
+							<div class="graph graph-visual tables-main">
+                                <div class="tables">
+                                    <table class="table table-hover"> 
+                                        <thead> 
+                                            <tr> 
+                                                <th>#</th> 
+                                                <th style={{textAlign: "center"}}>Criança</th> 
+                                                <th style={{textAlign: "center"}}>Idade</th>
+                                                <th style={{textAlign: "center"}}>Restrição</th>
+                                                <th style={{textAlign: "center"}}>Obs.</th>
+                                                <th style={{textAlign: "center"}}>Entrada</th>
+                                                <th style={{textAlign: "center"}}>Gaveta</th>
+                                                <th style={{textAlign: "center"}}>Responsavel</th>
+                                                <th style={{textAlign: "center"}}>Parentesco</th>
+                                                <th style={{textAlign: "center"}}>Telefone</th>
+                                                <th style={{textAlign: "center"}}>Obs.</th>
+                                            </tr> 
+                                        </thead> 
+                                        <tbody> 
+                                            <tr>
+                                                <th scope="row" href="../foto-tirada-na-entrada">01</th> 
+                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
+                                                <td style={{textAlign: "center"}}>10 anos</td>
+                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Restrições da Criança!');"><a>SIM</a></td>
+                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações da Criança!');">SIM</td>
+                                                <td style={{textAlign: "center"}}>13:12h</td>
+                                                <td style={{textAlign: "center"}}>5</td>
+                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>
+                                                <td style={{textAlign: "center"}}>Pai</td>
+                                                <td style={{textAlign: "center"}}>(84)91151610</td>
+                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>                                                
+                                            </tr>
+                                           
+                                        </tbody> 
+                                    </table>
+                                </div>
+                            </div>
 							</section>
 
 						</div>

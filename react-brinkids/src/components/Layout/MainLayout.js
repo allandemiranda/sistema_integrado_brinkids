@@ -95,50 +95,18 @@ class MainLayout extends React.Component {
                             <li >
                                 <Link to="/" >
                                 <i class="fa fa-desktop" aria-hidden="true"></i>
-                                    <span>Dashboard</span >
+                                    <span>Painel</span >
                                 </Link>
                             </li>
-                            <li >
-                                <Link to="/" >
-                                <i class="fa fa-sign-in" aria-hidden="true"></i>
-                                    <span>Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
-                                </Link>
-                                <ul id="menu-comunicacao-sub" >
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversario </Link></li>
+                            <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-user-cog"></i> <span>Configurações</span> <span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                                <ul>
+                                    
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoPassaporte">Passaporte </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>
                                 </ul>
                             </li>
-                            <li >
-                                <Link to="/SaidaCrianca" >
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                    <span>Saida</span >
-                                </Link>
-                            </li>
-                            <li >
-                                <Link to="/" >
-                                <i class="fa fa-tags" aria-hidden="true"></i>
-                                    <span>Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
-                                </Link>
-                                <ul id="menu-comunicacao-sub" >
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Serviços"> Gerenciamento </Link></li>
-                                </ul>
-                            </li>
-                            {/*<li id = "menu-academico" >
-                                <Link to = "#" >
-                                    < i className = "lnr lnr-book" ></i>
-                                    <span>Pages</span >
-                                    <span className = "fa fa-angle-right" style = {{ float: "right" }} ></span>
-                                </Link >
-                                <ul id = "menu-academico-sub" >
-                                    <li id = "menu-academico-avaliacoes" >
-                                        <Link to = "/" > Login </Link>
-                                    </li>
-                                    <li id = "menu-academico-boletim" >
-                                        <Link to = "/" > Register </Link>
-                                    </li>
-                                </ul>
-                             </li>*/}
                             <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul id="menu-comunicacao-sub" >
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
@@ -159,44 +127,70 @@ class MainLayout extends React.Component {
                                             <li id="menu-mensagens-recebidas" style={{ width: 130 + "px" }}><Link to="/Perfil">Visualizar</Link></li>
                                         </ul>
                                     </li>
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Eventos <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
-                                        <ul id="menu-mensagens-sub" >
-                                            <li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Event">Novo</Link></li>
-                                            <li id="menu-mensagens-recebidas" style={{ width: 130 + "px" }}><Link to="/">Visualizar</Link></li>
-                                        </ul>
-                                    </li>
+                                    
                                 </ul>
                             </li>
+                            <li >
+                                <Link to="/" >
+                                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                                    <span>Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                </Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversario </Link></li>
+                                </ul>
+                            </li>
+                            <li >
+                                <Link to="/SaidaCrianca" >
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    <span>Saida</span >
+                                </Link>
+                            </li>
+                            
+                            <li >
+                                <Link to="/" >
+                                <i class="fa fa-tags" aria-hidden="true"></i>
+                                    <span>Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                </Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Serviços"> Gerenciamento </Link></li>
+                                </ul>
+                            </li>
+                            <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-rocket"></i> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                                <ul id="menu-comunicacao-sub" >
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Aniversario">Cadastrar </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Visualizar </Link></li>
+                                </ul>
+                            </li>
+                            {/*<li id = "menu-academico" >
+                                <Link to = "#" >
+                                    < i className = "lnr lnr-book" ></i>
+                                    <span>Pages</span >
+                                    <span className = "fa fa-angle-right" style = {{ float: "right" }} ></span>
+                                </Link >
+                                <ul id = "menu-academico-sub" >
+                                    <li id = "menu-academico-avaliacoes" >
+                                        <Link to = "/" > Login </Link>
+                                    </li>
+                                    <li id = "menu-academico-boletim" >
+                                        <Link to = "/" > Register </Link>
+                                    </li>
+                                </ul>
+                             </li>*/}
+                            
                             <li >
                                 <Link to="/Calendario" >
                                     < i className="fa fa-calendar" > </i>
                                     <span>Calendário</span >
                                 </Link>
                             </li>
-                            <li id="menu-comunicacao" ><Link to="/"><span class="lnr lnr-rocket"></span> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
-                                <ul id="menu-comunicacao-sub" >
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Aniversario">Aniversário </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Entrada Aniversário </Link></li>
-                                </ul>
-                            </li>
+                            
                            
-                            <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-user-cog"></i> <span>Configurações</span> <span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
-                                <ul>
-                                    
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoPassaporte">Passaporte </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>
-                                </ul>
-                            </li>
+                            
 
                           
-                            <li>
-                                <Link to="/SaidaCrianca">
-                                <i className="glyphicon glyphicon-off"></i>
-                                    <span>Saida de Crianças</span>
-                                </Link>
-                            </li>
+                           
                             
                         </ul>
                     </div>
