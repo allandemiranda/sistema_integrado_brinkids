@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { Component } from 'react';
 
 import moment from 'moment';
 import '../../assets/style/bootstrap.min.css';
@@ -8,6 +7,44 @@ import '../../assets/sprints/solid.svg';
 import '../Dashboard/css/style.css';
 import '../Dashboard/css/Dashboard.css';
 import axios from 'axios';
+
+import {
+	LineChart,
+	Line,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	Legend,
+
+	BarChart,
+	Bar,
+	ReferenceLine,
+  } from 'recharts';
+
+{/* Dados responsáveis por gerar o gráfico da tela 1 */}
+const dados1 = [
+      {name: 'Page A', Meninos: 4, Meninas: 4, Total: 2},
+      {name: 'Page B', Meninos: 7, Meninas: 5, Total: 0.1},
+      {name: 'Page C', Meninos: 6, Meninas: 9, Total: 8},
+      {name: 'Page D', Meninos: 1, Meninas: 3, Total: 2},
+      {name: 'Page E', Meninos: 8, Meninas: 4, Total:6 },
+      {name: 'Page F', Meninos: 5, Meninas: 8, Total: 9},
+      {name: 'Page G', Meninos: 10, Meninas: 8, Total: 8},
+];
+
+{/* Dados responsáveis por gerar o gráfico da tela 2 */}
+const dados2 = [
+	{name: '0-2', Meninos: -0.5, Meninas: 0.5},
+	{name: '3-4', Meninos: -0.6, Meninas: 0.4},
+	{name: '5-6', Meninos: -0.8, Meninas: 0.2},
+	{name: '7-8', Meninos: -0.5, Meninas: 0.5},
+	{name: '9-10', Meninos: -0.3, Meninas: 0.7},
+	{name: '11-12', Meninos: -0.9, Meninas: 0.1},
+	{name: '13-14', Meninos: -0.2, Meninas: 0.8},
+	{name: '15-16', Meninos: -0.6, Meninas: 0.4},
+	{name: '17-18', Meninos: -0.1, Meninas: 0.9},
+];
 
 class DashBoard extends React.Component {
 	constructor(props) {
@@ -89,18 +126,18 @@ class DashBoard extends React.Component {
 
 
 	}
-	grafico(event){		
-		for(var i = 1; i<=30; i++){
+	grafico(event) {
+		for (var i = 1; i <= 30; i++) {
 			let hj = moment().format("MM/DD/YYYY");
-			var novo= moment(hj).subtract( i , 'days').calendar();
+			var novo = moment(hj).subtract(i, 'days').calendar();
 			console.log(novo);
 
 			axios.get('http://localhost:3001/TelaMKT' + novo)
-            .then((response) => {
-                console.log(response.data);
-                    this.setState.lista.pop(response.data);                 
-            })
-            .catch((err) => console.log(err));
+				.then((response) => {
+					console.log(response.data);
+					this.setState.lista.pop(response.data);
+				})
+				.catch((err) => console.log(err));
 		}
 	}
 
@@ -118,7 +155,7 @@ class DashBoard extends React.Component {
 				</div>
 
 				<div id="tabs" class="tabs">
-				<input type= "button" onClick={this.grafico}></input>
+					<input type="button" onClick={this.grafico}></input>
 					<div class="graph">
 						<nav>
 							<ul>
@@ -129,21 +166,55 @@ class DashBoard extends React.Component {
 							</ul>
 						</nav>
 						<div className="content tab">
+							{/* INICIO - PRIMEIRA TELA  */}
 							<section className={this.state.sectionCrianca} >
 								<div className="graph">
-									Informação Aqui 1
+									<h1 className="text-center"> Fluxo de Crianças na Loja</h1>
+									<LineChart width={810} height={500} data={dados1} margin={{ top: 10, right: 30, left: 0, bottom: 5 }}>
+										<XAxis dataKey="name" />
+										<YAxis />
+										<CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+										<Line type="monotone" dataKey="Meninos" stroke="#052963" activeDot={{ r: 8 }}/>
+										<Line type="monotone" dataKey="Meninas" stroke="#C71585" activeDot={{ r: 8 }}/>
+										<Line type="monotone" dataKey="Total" stroke="#008DE7" activeDot={{ r: 8 }}/>
+										
+										<CartesianGrid strokeDasharray='3 3' />
+										<Tooltip />
+										<YAxis />
+										<XAxis dataKey='name' />
+										<Legend />
+									</LineChart>
 								</div>
 							</section>
+							{/* FIM - PRIMEIRA TELA  */}
+
+							{/* INICIO - SEGUNDA TELA  */}
 							<section className={this.state.sectionAdult} >
 								<div className="graph">
-									Informação Aqui 2
+								<h1 className="text-center"> Dispersão de Crianças Registrada no Sistema </h1>
+									<BarChart width={810} height={500} data={dados2}
+										margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis dataKey="name" />
+										<YAxis />
+										<Tooltip />
+										<Legend />
+										<ReferenceLine y={0} stroke='#000' />
+										{/*<Tooltip content={<CustomTooltip />}/>*/}
+										<Bar dataKey="Meninos" fill="#8884d8" />
+										<Bar dataKey="Meninas" fill="#82ca9d" />
+									</BarChart>
 								</div>
 							</section>
+							{/* FIM - SEGUNDATELA  */}
+
+							{/* INICIO - TERCEIRA TELA  */}
 							<section className={this.state.sectionAniversario} >
 								<div className="graph">
 									Informação Aqui 3
 								</div>
 							</section>
+							{/* FIM - TERCEIRA TELA  */}
 						</div>
 					</div>
 

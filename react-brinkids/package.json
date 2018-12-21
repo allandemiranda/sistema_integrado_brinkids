@@ -39,7 +39,7 @@
     "react-scripts": "^2.1.1",
     "react-select": "^2.0.0",
     "react-webcam": "^1.0.1",
-    "recharts": "^1.4.1",
+    "recharts": "^1.4.2",
     "repeat-string": "^1.6.1",
     "resolve": "^1.8.1",
     "shebang-command": "^1.2.0",
