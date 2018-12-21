@@ -229,14 +229,14 @@ class DashBoard extends React.Component {
 
 				
 				<div id="tabs" class="tabs">
-					
+
 					<div class="graph">
 						<nav>
 							<ul>
-								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Crianças</span></a></li>
+								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Passaporte</span></a></li>
 								
 								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><span class="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
-								
+
 
 							</ul>
 						</nav>
@@ -304,8 +304,8 @@ class DashBoard extends React.Component {
                                                 <th scope="row" href="../foto-tirada-na-entrada">01</th> 
                                                 <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
                                                 <td style={{textAlign: "center"}}>10 anos</td>
-                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Restrições da Criança!');"><a>SIM</a></td>
-                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações da Criança!');">SIM</td>
+                                                <td style={{textAlign: "center"}} ><a onclick={()=>alert('Texto com as Restrições da Criança!')}>SIM</a></td>
+                                                <td style={{textAlign: "center"}}>SIM</td>
                                                 <td style={{textAlign: "center"}}>13:12h</td>
                                                 <td style={{textAlign: "center"}}>5</td>
                                                 <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>

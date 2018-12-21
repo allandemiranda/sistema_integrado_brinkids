@@ -160,7 +160,7 @@ class MainLayout extends React.Component {
                             <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-rocket"></i> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                 <ul id="menu-comunicacao-sub" >
                                     <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Aniversario">Cadastrar </Link></li>
-                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Visualizar </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/VAniversario"> Visualizar </Link></li>
                                 </ul>
                             </li>
                             {/*<li id = "menu-academico" >
