@@ -3761,8 +3761,8 @@ h3.inner-tittle.t-inner {
 /* Content */
 
 .content section {
-    font-size: 1.25em;
-    padding: 3em 1em;
+    font-size:16px;
+    padding: 0em 0em;
     display: none;
     max-width: 1230px;
     margin: 0 auto;

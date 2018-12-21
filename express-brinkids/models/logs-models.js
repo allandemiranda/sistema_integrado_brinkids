@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 const config = require('../config');
 
+const priceDiscountSchema = new mongoose.Schema({
+	code: {
+		type: String,
+		required: true,
+	},
+	type: {
+		type: String,
+		required: true,
+	},
+});
+
 const logsSchema = new mongoose.Schema({
 	activity: {
 	  type: String,
@@ -18,45 +29,14 @@ const logsSchema = new mongoose.Schema({
 	  type: String,
 	  required: true,
 	},
-	to:{
-	  type: String,
-	  required: true,
-	},
-	cco:{
-	  type: String,
-	  required: true,
-	},
-	price:{
-	  type: Number,
-	  required: true,
-	},
-	priceMethod:{
-	  type: String,
-	  required: true,
-	},
-	timeLojaFirst:{
-	  type: String,
-	  required: true,
-	},
-	timeLojaLast:{
-	  type: String,
-	  required: true,
-	},
-	priceDiscount:{
-		id:{
-			type: String,
-			required: true,
-		},
-		code:{
-		  type: String,
-		  required: true,
-		},
-		type:{
-		  type: String,
-		  required: true,
-		},
-	},
-	});
+	to: String,
+	cco: String,
+	price: Number,
+	priceMethod: String,
+	timeLojaFirst: String,
+	timeLojaLast: String,
+	priceDiscount: { priceDiscountSchema },
+});
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
 const logs = mongoose.model('Logs', logsSchema);

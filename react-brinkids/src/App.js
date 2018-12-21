@@ -25,6 +25,7 @@ import SaidaServicosExtra from "./components/Serviços_Extras/SaidaServiçosExtr
 import ServicoPassaporte from "./components/Servirços_Passaport/ServicoPassaport";
 import gavetas from './components/Gavetas/Gavetas.js';
 import TelaMKT from './components/TeladoMKT/TelaMKT.js';
+import VisualizarAniversario from './components/Aniversario/VisualizarAniversario.js';
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
@@ -165,6 +166,12 @@ class App extends React.Component {
                 path="/TelaMKT"
                 layout={MainLayout}
                 component={TelaMKT}
+              />
+              <LayoutRoute
+                exact
+                path="/VAniversario"
+                layout={MainLayout}
+                component={VisualizarAniversario}
               />
                                                                  
               <Redirect to="/" /> 

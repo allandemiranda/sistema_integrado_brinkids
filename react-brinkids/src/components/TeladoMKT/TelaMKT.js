@@ -3,11 +3,11 @@ import React from 'react';
 
 import moment from 'moment';
 import '../../assets/style/bootstrap.min.css';
-import '../../assets/style/font-awesome.css';
+import '../../assets/style/all.css';
+import '../../assets/sprints/solid.svg';
 import '../Dashboard/css/style.css';
 import '../Dashboard/css/Dashboard.css';
 import axios from 'axios';
-
 
 class DashBoard extends React.Component {
 	constructor(props) {
@@ -89,21 +89,23 @@ class DashBoard extends React.Component {
 
 
 	}
-	grafico(event){
-		
+	grafico(event){		
 		for(var i = 1; i<=30; i++){
 			let hj = moment().format("MM/DD/YYYY");
 			var novo= moment(hj).subtract( i , 'days').calendar();
 			console.log(novo);
 
-
-			//lista.pop(negc adicionar no finalk);
+			axios.get('http://localhost:3001/TelaMKT' + novo)
+            .then((response) => {
+                console.log(response.data);
+                    this.setState.lista.pop(response.data);                 
+            })
+            .catch((err) => console.log(err));
 		}
 	}
+
 	render() {
-
 		return (
-
 			<div className="container-fluid" >
 				<script src="js/jquery-1.10.2.min.js"></script>
 				<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
