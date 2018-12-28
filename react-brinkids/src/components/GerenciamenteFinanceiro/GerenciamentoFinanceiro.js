@@ -116,6 +116,7 @@ class GerenciamentoFinanceiro extends React.Component {
             $("#Operador").addClass('displaynone');
             this.setState({
                 ROpr: "false",
+                Operador: "",
             })
         }
         else{
@@ -132,6 +133,7 @@ class GerenciamentoFinanceiro extends React.Component {
             $("#Atividade").addClass('displaynone');
             this.setState({
                 RAtv: "false",
+                Atividade: "",
             })
         }
         else{
@@ -148,6 +150,8 @@ class GerenciamentoFinanceiro extends React.Component {
             $("#DataSaida").addClass('displaynone');
             this.setState({
                 RData: "false",
+                DataEntrada: "",
+                DataSaida: "",
             })
         }
         else{
@@ -307,10 +311,8 @@ class GerenciamentoFinanceiro extends React.Component {
                                             </div>
                                         </form>
                                     </div>
-
-
                                     <div class="tables">
-                                        <table class="table table-hover"> 
+                                        <table class="table table-responsive"> 
                                             <thead> 
                                                 <tr> 
                                                     <th>#</th> 
