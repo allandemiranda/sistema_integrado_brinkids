@@ -44,21 +44,6 @@ const dados = [
       {name: '13/Jan', Passaporte: 10, Aniversario: 8, ServicoProduto: 4, Total: 38},
       {name: '14/Jan', Passaporte: 50, Aniversario: 83, ServicoProduto: 4, Total: 8},
       {name: '15/Jan', Passaporte: 50, Aniversario: 8, ServicoProduto: 4, Total: 8},
-      {name: '16/Jan', Passaporte: 60, Aniversario: 28, ServicoProduto: 4, Total: 8},
-      {name: '17/Jan', Passaporte: 70, Aniversario: 8, ServicoProduto: 4, Total: 18},
-      {name: '18/Jan', Passaporte: 80, Aniversario: 8, ServicoProduto: 4, Total: 8},
-      {name: '19/Jan', Passaporte: 10, Aniversario: 81, ServicoProduto: 4, Total: 8},
-      {name: '20/Jan', Passaporte: 20, Aniversario: 8, ServicoProduto: 4, Total: 48},
-      {name: '21/Jan', Passaporte: 30, Aniversario: 81, ServicoProduto: 4, Total: 18},
-      {name: '22/Jan', Passaporte: 10, Aniversario: 78, ServicoProduto: 4, Total: 8},
-      {name: '23/Jan', Passaporte: 60, Aniversario: 78, ServicoProduto: 4, Total: 68},
-      {name: '24/Jan', Passaporte: 0, Aniversario: 8, ServicoProduto: 4, Total: 8},
-      {name: '25/Jan', Passaporte: 70, Aniversario: 68, ServicoProduto: 4, Total: 38},
-      {name: '26/Jan', Passaporte: 10, Aniversario: 58, ServicoProduto: 4, Total: 8},
-      {name: '27/Jan', Passaporte: 20, Aniversario: 48, ServicoProduto: 4, Total: 28},
-      {name: '28/Jan', Passaporte: 0, Aniversario: 38, ServicoProduto: 4, Total: 81},
-      {name: '29/Jan', Passaporte: 60, Aniversario: 28, ServicoProduto: 4, Total: 8},
-      {name: '30/Jan', Passaporte: 10, Aniversario: 18, ServicoProduto: 4, Total: 28},
 
 ];
 
@@ -209,7 +194,8 @@ class GerenciamentoFinanceiro extends React.Component {
     }
     
 	grafico(event) {
-		for (var i = 1; i <= 30; i++) {
+        event.preventDefault();
+        for (var i = 1; i <= 30; i++) {
 			let hj = moment().format("MM/DD/YYYY");
 			var novo = moment(hj).subtract(i, 'days').calendar();
 			console.log(novo);
@@ -253,9 +239,10 @@ class GerenciamentoFinanceiro extends React.Component {
 						</nav>
 						<div className="content tab">
 							<section className={this.state.sectionGrafico}  >
-                                <div class="graph graph-visual">
-                                    <h5 className="text-center">Janeiro/2012</h5>
-                                    <LineChart width={1100} height={500} data={dados} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                                <br></br>
+                                <div class="graph graph-visual text-center">
+                                    <h5>Janeiro/2012</h5>
+                                    <LineChart className="grafico" width={800} height={600} data={dados} margin={{top: 5, right: 30, bottom: 5}}>
                                         <XAxis dataKey="name"/>
                                         <YAxis/>
                                         <CartesianGrid strokeDasharray="3 3"/>
@@ -266,10 +253,15 @@ class GerenciamentoFinanceiro extends React.Component {
                                         <Line type="monotone" dataKey="ServicoProduto" stroke="rgb(234, 76, 137)" />
                                         <Line type="monotone" dataKey="Total" stroke="#82ca98" />
                                     </LineChart>
+                                    <br></br>
+                                    <div className="text-center">
+                                        <button className="btn botaoAvancar" onClick={this.grafico}>Atualizar</button>
+                                    </div>
                                 </div>
 							</section>
 							
                             <section className={this.state.sectionFluxo}>
+                                <br></br>
                                 <div class="graph graph-visual tables-main">
                                     <div className="graph-visual">
                                         <div id="alertDiv" className = "alert displaynone" role = "alert">
@@ -281,7 +273,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                         <form id="busca-fluxo">
                                             <div className="row">
                                                 <div className="col-md-1 col-sm-1 col-xs-1">
-                                                <button className="btn botao" onClick={this.ROpe}></button>
+                                                <button className="btn botao tam" onClick={this.ROpe}><i class="fas fa-times"></i></button>
                                                 </div>
                                                 <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Operador: "} type={"text"} id={"Operador"} name={"Operador"} Class={"form-control"}
                                                 value={this.state.Operador} onChange={this.ChangeValue}
@@ -289,14 +281,14 @@ class GerenciamentoFinanceiro extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-md-1 col-sm-1 col-xs-1">
-                                                <button className="btn botao" onClick={this.RAtv}></button>
+                                                <button className="btn botao tam" onClick={this.RAtv}><i class="fas fa-times"></i></button>
                                                 </div>
                                                 <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Ativdade: "} type={"test"} id={"Atividade"} name={"Atividade"} Class={"form-control"}
                                                 value={this.state.Atividade} onChange={this.ChangeValue}/>
                                             </div>
                                             <div className="row">
                                                 <div className="col-md-1 col-sm-1 col-xs-1">
-                                                <button className="btn botao" onClick={this.RData}></button>
+                                                <button className="btn botao tam" onClick={this.RData}><i class="fas fa-times"></i></button>
                                                 </div>
                                                 <TypesInput cod={1} ClassDiv={"col-md-5 col-sm-5 col-xs-5"} ClassLabel={"LetraFormulario"} NameLabel={"Data Entrada: "} type={"date"} id={"DataEntrada"} name={"DataEntrada"} Class={"form-control"}
                                                 value={this.state.DataEntrada} onChange={this.ChangeValue}
@@ -307,12 +299,12 @@ class GerenciamentoFinanceiro extends React.Component {
                                             </div>
                                             <br></br>
                                             <div className="text-right">
-                                                <button className="btn botaoAvancar" onClick={this.BuscarFluxo}>Buscar</button>
+                                                <button className="btn botaoAvancar " onClick={this.BuscarFluxo}>Buscar</button>
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="tables">
-                                        <table class="table table-responsive"> 
+                                    <div class="tables table-responsive">
+                                        <table class="table table-hover"> 
                                             <thead> 
                                                 <tr> 
                                                     <th>#</th> 

@@ -18,12 +18,14 @@
 .botao {
     background: #00C6D7;
     color: #fff;
-    height: 50px;
-    width: 50px;
 }
 .botao:hover {
     background: #052963 !important;
     color: #fff;
+}
+.tam {
+    height: 50px;
+    width: 50px;
 }
 .botaoAvancar {
     background: #00C6D7;
@@ -76,40 +78,34 @@
     height: 100px;
 }
 
-@media screen and (max-width: 767px) { 
-  
-    /* Responsive Table */
-    .table-responsive {
-      display: block !important;
-      position: relative !important;
-      width: 100% !important;
+@media screen and (min-width: 1600px ){
+    .grafico {
+        margin-left: 150px;
     }
-  
-    .table-responsive thead,
-    .table-responsive tbody,
-    .table-responsive th,
-    .table-responsive td,
-    .table-responsive tr {
-      display: block !important;
+}
+@media screen and (max-width: 1599px){
+    .grafico {
+        margin-left: 100px !important;
     }
-    .table-responsive td,
-    .table-responsive th {
-      height: 35px !important;
+}
+@media screen and (max-width: 1360px){
+    .grafico {
+        margin-left: 60px !important;
     }
-  
-    .table-responsive thead {
-      float: left !important;
+}
+@media screen and (max-width: 1300px){
+    .grafico {
+        margin-left: 40px !important;
     }
-  
-    .table-responsive tbody {
-      width: auto !important;
-      position: relative !important;
-      overflow-x: auto !important;
-      -webkit-overflow-scrolling: touch !important;
-      white-space: nowrap !important;
+}
+@media screen and (max-width: 1280px){
+    .grafico {
+        margin-left: 20px !important;
     }
-  
-    .table-responsive tbody tr {
-      display: inline-block !important;
+}
+@media screen and (max-width: 1190px){
+    .grafico {
+        margin-left: 0px !important;
+        width: 600px !important;
     }
 }
