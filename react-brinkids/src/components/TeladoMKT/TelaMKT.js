@@ -22,29 +22,8 @@ import {
 	ReferenceLine,
   } from 'recharts';
 
-{/* Dados responsáveis por gerar o gráfico da tela 1 */}
-const dados1 = [
-      {name: 'Page A', Meninos: 4, Meninas: 4, Total: 2},
-      {name: 'Page B', Meninos: 7, Meninas: 5, Total: 0.1},
-      {name: 'Page C', Meninos: 6, Meninas: 9, Total: 8},
-      {name: 'Page D', Meninos: 1, Meninas: 3, Total: 2},
-      {name: 'Page E', Meninos: 8, Meninas: 4, Total:6 },
-      {name: 'Page F', Meninos: 5, Meninas: 8, Total: 9},
-      {name: 'Page G', Meninos: 10, Meninas: 8, Total: 8},
-];
-
-{/* Dados responsáveis por gerar o gráfico da tela 2 */}
-const dados2 = [
-	{name: '0-2', Meninos: -0.5, Meninas: 0.5},
-	{name: '3-4', Meninos: -0.6, Meninas: 0.4},
-	{name: '5-6', Meninos: -0.8, Meninas: 0.2},
-	{name: '7-8', Meninos: -0.5, Meninas: 0.5},
-	{name: '9-10', Meninos: -0.3, Meninas: 0.7},
-	{name: '11-12', Meninos: -0.9, Meninas: 0.1},
-	{name: '13-14', Meninos: -0.2, Meninas: 0.8},
-	{name: '15-16', Meninos: -0.6, Meninas: 0.4},
-	{name: '17-18', Meninos: -0.1, Meninas: 0.9},
-];
+const dados1 = [];
+var  dados2 = []; 
 
 class DashBoard extends React.Component {
 	constructor(props) {
@@ -72,7 +51,20 @@ class DashBoard extends React.Component {
 			sectionAdult: "",
 			sectionAniversario: "",
 			sectionNoticia: "",
+			
+			nome: false,
+			campoNome:'',
+			sexo:false,
+			campoSexo:'',
+			cidade:false,
+			campoCidade:'',
+			idade:false,
+			campoIdade:'',
+			Mes:false,
+			campoMes:'',
 
+			listaBusca:[],
+			listaGraf2:[],
 		};
 		this.mudar2 = this.mudar2.bind(this);
 		this.mudar3 = this.mudar3.bind(this);
@@ -81,7 +73,29 @@ class DashBoard extends React.Component {
 		this.selectAniversario = this.selectAniversario.bind(this);
 		this.grafico = this.grafico.bind(this);
 
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.mudarCampoNome = this.mudarCampoNome.bind(this);
+		this.mudarCampoSexo = this.mudarCampoSexo.bind(this);
+		this.mudarCampoCidade = this.mudarCampoCidade.bind(this);
+		this.mudarCampoIdade = this.mudarCampoIdade.bind(this);
+		this.mudarCampoMes = this.mudarCampoMes.bind(this);
+
 	}
+	mudarCampoNome(event) {
+        this.setState({ campoNome: event.target.value });
+	}
+	mudarCampoSexo(event) {
+        this.setState({ campoSexo: event.target.value });
+	}
+	mudarCampoCidade(event) {
+        this.setState({ campoCidade: event.target.value });
+	}
+	mudarCampoIdade(event) {
+        this.setState({ campoIdade: event.target.value });
+	}
+	mudarCampoMes(event) {
+        this.setState({ campoMes: event.target.value });
+	}	
 	selectCrianca(event) {
 		this.setState({
 			crincaTab: "tab-current",
@@ -135,11 +149,79 @@ class DashBoard extends React.Component {
 			axios.get('http://localhost:3001/TelaMKT' + novo)
 				.then((response) => {
 					console.log(response.data);
-					this.setState.lista.pop(response.data);
+					this.setState.lista.push(response.data);
+					{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
+					dados1.push({
+						name:response.data.name,
+						Meninos: response.date.meninos,
+						Meninas: response.date.meninas,
+						Total: response.date.meninas + response.date.meninos,
+					})
 				})
 				.catch((err) => console.log(err));
+				
 		}
 	}
+		grafico(event) {
+		for (var i = 1; i <= 30; i++) {
+			let hj = moment().format("MM/DD/YYYY");
+			var novo = moment(hj).subtract(i, 'days').calendar();
+			console.log(novo);
+
+			axios.get('http://localhost:3001/TelaMKT' + novo)
+				.then((response) => {
+					console.log(response.data);
+					this.setState.lista.push(response.data);
+					{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
+					dados1.push({
+						name:response.data.name,
+						Meninos: response.data.meninos,
+						Meninas: response.data.meninas,
+						Total: response.data.meninas + response.data.meninos,
+					})
+				})
+				.catch((err) => console.log(err));
+				
+		}
+	}
+	grafico1(event) {
+		axios.get('http://localhost:3001/TelaMKT')
+			.then((response) => {
+				console.log(response.data);
+				this.setState.lista.push(response.data);
+				this.state.listaGraf2 = response.data;
+
+				this.state.listaGraf2.map((dados2)=>{					
+						{/* Dados responsáveis por gerar o gráfico da tela 2 */ }
+						dados2.push({ name: response.data.nome, Meninos: response.data.meninos, Meninas:response.data.meninas })
+				}) 
+			})
+			.catch((err) => console.log(err));
+	}
+
+
+	handleInputChange(event) {
+		const target = event.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+	
+		this.setState({
+		  [name]: value
+		});
+		console.log(value)
+		console.log(target.name)
+		console.log(this.state.selected)
+		
+		if (value === true){
+			this.state.listaBusca.push([this.state.selected],[value]);
+			console.log(this.state.listaBusca)
+		}
+		if (value === false){
+			this.state.listaBusca.pop();
+			this.state.listaBusca.pop();
+			console.log(this.state.listaBusca)
+		}
+	  }
 
 	render() {
 		return (
@@ -155,7 +237,6 @@ class DashBoard extends React.Component {
 				</div>
 
 				<div id="tabs" class="tabs">
-					<input type="button" onClick={this.grafico}></input>
 					<div class="graph">
 						<nav>
 							<ul>
@@ -185,6 +266,7 @@ class DashBoard extends React.Component {
 										<Legend />
 									</LineChart>
 								</div>
+								<button className="btn btn-md botao right" onClick={this.grafico}  style={{ width: 120 + "px"}}>Atualizar</button>
 							</section>
 							{/* FIM - PRIMEIRA TELA  */}
 
@@ -205,13 +287,71 @@ class DashBoard extends React.Component {
 										<Bar dataKey="Meninas" fill="#82ca9d" />
 									</BarChart>
 								</div>
+								<button className="btn btn-md botao right" onClick={this.grafico1}  style={{ width: 120 + "px"}}>Atualizar</button>
 							</section>
 							{/* FIM - SEGUNDATELA  */}
 
 							{/* INICIO - TERCEIRA TELA  */}
 							<section className={this.state.sectionAniversario} >
 								<div className="graph">
-									Informação Aqui 3
+									<h1 className="text-center"> Busca por Crianças do Sistema </h1>
+									<p></p>
+									<form>
+										<label>
+											<input
+												name="nome"
+												type="checkbox"
+												checked={this.state.nome}
+												onChange={this.handleInputChange}
+											/>
+											<input className="form-control text-center" type="text" placeholder="Nome" value={this.state.campoNome} onChange={this.mudarCampoNome} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
+										</label>
+										<br />
+										<label>
+        									<input
+												name="sexo"
+												type="checkbox"
+												checked={this.state.sexo}
+												onChange={this.handleInputChange} 
+											/>
+											<input className="form-control text-center" type="text" placeholder="Sexo" value={this.state.campoSexo} onChange={this.mudarCampoSexo} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
+										</label>
+										<br />
+										<label>
+        									<input
+												name="cidade"
+												type="checkbox"
+												checked={this.state.cidade}
+												onChange={this.handleInputChange} 
+											/>
+											<input className="form-control text-center" type="text" placeholder="Cidade" value={this.state.campoCidade} onChange={this.mudarCampoCidade} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
+										</label>	
+										<br />
+										<label>
+        									<input
+												name="idade"
+												type="checkbox"
+												checked={this.state.idade}
+												onChange={this.handleInputChange} 
+											/>
+											<input className="form-control text-center" type="text" placeholder="Idade" value={this.state.campoIdade} onChange={this.mudarCampoIdade} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
+										</label>	
+										<br />
+										<label>
+        									<input
+												name="Mes"
+												type="checkbox"
+												checked={this.state.Mes}
+												onChange={this.handleInputChange} 
+											/>
+											<input className="form-control text-center" type="text" placeholder="Mês de Aniversário" value={this.state.campoMes} onChange={this.mudarCampoMes} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
+										</label>																												
+									</form>
+									<button className="btn btn-md botao right" onClick={this.VoltarTelaI}  style={{ width: 120 + "px"}}>Pesquisar</button>
+								</div>
+								<br />
+								<br />
+								<div className="graph">
 								</div>
 							</section>
 							{/* FIM - TERCEIRA TELA  */}
