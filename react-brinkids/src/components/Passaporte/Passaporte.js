@@ -13,14 +13,20 @@ import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 
 
 class Passport extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            arrayfinal:[],
+            arrayfinal: [],
             //Responsável por saber qual página vai renderizar:
             page: "SelectAdult",//ConfirmAdult SelectAdult Finalize
             selectedSearch: '', // Salva o nome que é colocado na barra de busca
@@ -35,17 +41,17 @@ class Passport extends React.Component {
             kidTthatCame: [],
             listConfirmKids: [], // Dados das crianças Selecionadas na checkBox
             //TEla IV:
-            obs:'',
-            obsCrianca:'',
-            rest:'',
+            obs: '',
+            obsCrianca: '',
+            rest: '',
             phone: '',
             file: '', // recebe a imagem 
-            currentdate: [],        
+            currentdate: [],
             horaEntradaCriança: '', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
-            kinshipConfirm:'',
+            kinshipConfirm: '',
             comprovante: false,
-            no:tabelinha,
-            dadosComprovante:[],
+            no: tabelinha,
+            dadosComprovante: [],
             kinship: [],
 
         }
@@ -65,63 +71,63 @@ class Passport extends React.Component {
 
         this.TelaIII = this.TelaIII.bind(this);
     }
-    
+
     //Relacionado a atualização dos valores Funções
     ChangeObs(event) {
         this.setState({ obs: event.target.value });
     }
-    ChangeObsCrianca(event,identifier,indice) {
-        console.log(event.target.value);
-       let listatemporaria = this.state.listConfirmKids;
-       listatemporaria.forEach((crianca,indice)=>{
-                    if(crianca._id===identifier){
-                        crianca.observations = event.target.value;
-                    }
-       });
-       this.setState({
-           listConfirmKids:listatemporaria,
-       })
-    }
-    ChangeRest(event,identifier,indice) {
+    ChangeObsCrianca(event, identifier, indice) {
         console.log(event.target.value);
         let listatemporaria = this.state.listConfirmKids;
-        listatemporaria.forEach((crianca,indice)=>{
-                     if(crianca._id===identifier){
-                         crianca.restrictions = event.target.value;
-                     }
+        listatemporaria.forEach((crianca, indice) => {
+            if (crianca._id === identifier) {
+                crianca.observations = event.target.value;
+            }
         });
         this.setState({
-            listConfirmKids:listatemporaria,
+            listConfirmKids: listatemporaria,
+        })
+    }
+    ChangeRest(event, identifier, indice) {
+        console.log(event.target.value);
+        let listatemporaria = this.state.listConfirmKids;
+        listatemporaria.forEach((crianca, indice) => {
+            if (crianca._id === identifier) {
+                crianca.restrictions = event.target.value;
+            }
+        });
+        this.setState({
+            listConfirmKids: listatemporaria,
         })
     }
     ChangePhone(event) {
         this.setState({ phone: event.target.value });
     }
-    Changekinship(event,identifier,indice) {
+    Changekinship(event, identifier, indice) {
         console.log(event.target.value);
         let listatemporaria = this.state.listConfirmKids;
-        listatemporaria.forEach((crianca,indice)=>{
-                     if(crianca._id===identifier){
-                        console.log(event.target.value);
-                         if (event.target.value === "others"){
-                            this.state.kinship[indice] = "Outros";
-                        }
-                        else if (event.target.value === "children"){
-                            this.state.kinship[indice] = "filho(a)";
-                        }
-                        else if (event.target.value === "Stepson"){
-                            this.state.kinship[indice] = "Enteado(a)";
-                        }
-                        else if (event.target.value === "grandchildren"){
-                            this.state.kinship[indice] = "Neto(a)";
-                        }
-                        else if (event.target.value === "nephews"){
-                            this.state.kinship[indice] = "Sobrinho(a)";
-                        }
-                        else if (event.target.value === "Brother"){
-                            this.state.kinship[indice] = "Irmã(o)";
-                        }
-                     }
+        listatemporaria.forEach((crianca, indice) => {
+            if (crianca._id === identifier) {
+                console.log(event.target.value);
+                if (event.target.value === "others") {
+                    this.state.kinship[indice] = "Outros";
+                }
+                else if (event.target.value === "children") {
+                    this.state.kinship[indice] = "filho(a)";
+                }
+                else if (event.target.value === "Stepson") {
+                    this.state.kinship[indice] = "Enteado(a)";
+                }
+                else if (event.target.value === "grandchildren") {
+                    this.state.kinship[indice] = "Neto(a)";
+                }
+                else if (event.target.value === "nephews") {
+                    this.state.kinship[indice] = "Sobrinho(a)";
+                }
+                else if (event.target.value === "Brother") {
+                    this.state.kinship[indice] = "Irmã(o)";
+                }
+            }
         });
     }
 
@@ -131,19 +137,19 @@ class Passport extends React.Component {
         this.setState({ selectedSearch: event.target.value });
     }
 
-    
+
 
     // Faz a busca do responsável:
     SearchAdult(event) {
         let erros = this.state.selectedSearch;
 
-        if(erros.length === 0){
+        if (erros.length === 0) {
             alert("A Busca não pode ser em branco");
         }
-        else if (erros.length < 8){
+        else if (erros.length < 8) {
             alert("A Busca nao pode ter menos que 8 caracteres");
         }
-        else{
+        else {
             $.ajax({
                 url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
                 dataType: 'json',
@@ -184,13 +190,13 @@ class Passport extends React.Component {
     }
 
     // Faz a busca das Crianças:
-    SearchChild(event){
+    SearchChild(event) {
         let erros = this.state.selectedSearch;
 
-        if(erros.length === 0){
+        if (erros.length === 0) {
             alert("A Busca não pode ser em branco");
         }
-        else if (erros.length < 8){
+        else if (erros.length < 8) {
             alert("A Busca nao pode ter menos que 8 caracteres");
         }
         else {
@@ -209,7 +215,7 @@ class Passport extends React.Component {
             });
         }
     }
-    
+
 
     // Salva AS informações das CRIANÇAS que apareceu na busca e foi selecionado.
     selectedKids(kid) {
@@ -236,9 +242,9 @@ class Passport extends React.Component {
         }
         else {
             alert(" Selecione um Responsável ")
-                this.setState({
-                    selectedSearch: '',
-                })
+            this.setState({
+                selectedSearch: '',
+            })
         }
     }
 
@@ -261,7 +267,7 @@ class Passport extends React.Component {
         this.setState({
             page: "SelectKids",
             selectedSearch: '',
-            list:[],
+            list: [],
         });
 
 
@@ -290,7 +296,7 @@ class Passport extends React.Component {
                 file: Array(this.state.listConfirmKids.length),
             })
             console.log(this.state.listConfirmKids);
-           
+
         }
         else {
             alert(" Selecione um Responsável ")
@@ -299,13 +305,13 @@ class Passport extends React.Component {
 
     // Encaminha para a tela V
     TelaV = (event) => {
-       
+
 
         var formData = new FormData();
         var listAdult = new Array();
         var listCria = new Array();
         var i;
-        for(i = 0; i < this.state.listConfirmKids.length; i++){
+        for (i = 0; i < this.state.listConfirmKids.length; i++) {
             formData.append('photo', String(this.state.listConfirmKids[0]._id))
             formData.append('service', 'Passaporte')
             formData.append('time', moment().format())
@@ -323,15 +329,15 @@ class Passport extends React.Component {
             formData.append('adult', listAdult)
         };
         this.setState({
-            dadosComprovante:{
-                
-                photo:String(this.state.listConfirmKids[0]._id),
-                service:"Passaporte",
-                time:moment().format(),
-                belongings:0,
-                children:listCria,
-                adult:listAdult
-            //ajeitar o comprovante
+            dadosComprovante: {
+
+                photo: String(this.state.listConfirmKids[0]._id),
+                service: "Passaporte",
+                time: moment().format(),
+                belongings: 0,
+                children: listCria,
+                adult: listAdult
+                //ajeitar o comprovante
             }
         })
         this.setState({
@@ -341,8 +347,8 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela VI
-    Comprovante = (event) => {                      
-        this.TheEnd();          
+    Comprovante = (event) => {
+        this.TheEnd();
     }
     // FUNÇOES DO BOTÃO AVANÇAR - FIM  
 
@@ -351,7 +357,7 @@ class Passport extends React.Component {
     //O new Date().getTime() recebe o valor em milisegundos, por isso, dividindo por 60000 converto em minutos.
     //Começando o formulário para enviar no JSON:
     /*FUNCAO CADASTRA ADULTO*/
-    TheEnd= (event) => {
+    TheEnd = (event) => {
         var formData = new FormData();
         var listCria = [];
 
@@ -362,7 +368,7 @@ class Passport extends React.Component {
             observations: this.state.obs,
         };
 
-        for(var i = 0; i < this.state.listConfirmKids.length; i++){
+        for (var i = 0; i < this.state.listConfirmKids.length; i++) {
             const crianca = {
                 _id: String(this.state.listConfirmKids[i]._id),
                 name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
@@ -386,26 +392,26 @@ class Passport extends React.Component {
         //Fim do formulário;
 
         axios.post('/product', formData)
-        .then( (response) =>{
-            console.log(response.data,"olaa");
-            this.setState({
-                
-                dadosComprovante:response.data
-            })
-            setTimeout((event) => {
+            .then((response) => {
+                console.log(response.data, "olaa");
                 this.setState({
-                    comprovante:true,
+
+                    dadosComprovante: response.data
                 })
-            }, 100);
-           
-           
-            // window.location.href = '/';
-        }).catch((error) => {
-            console.log(error)//LOG DE ERRO
-            
-            console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-           
-        })
+                setTimeout((event) => {
+                    this.setState({
+                        comprovante: true,
+                    })
+                }, 100);
+
+
+                // window.location.href = '/';
+            }).catch((error) => {
+                console.log(error)//LOG DE ERRO
+
+                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+
+            })
         //Fim da parte Marcos.
     }
     // FUNÇOES DO BOTÃO VOLTART TELA - INICIO 
@@ -427,7 +433,7 @@ class Passport extends React.Component {
     VoltarTelaIII = (event) => {
         this.setState({
             page: "SelectKids",
-            listConfirmKids:[],
+            listConfirmKids: [],
 
         })
     }
@@ -447,7 +453,7 @@ class Passport extends React.Component {
     setRef = (webcam) => {
         this.webcam = webcam;
     }
-    capture = (event, identifier, indice_da_foto) => {      
+    capture = (event, identifier, indice_da_foto) => {
         event.preventDefault();
 
         /*
@@ -465,14 +471,14 @@ class Passport extends React.Component {
 
         this.state.listConfirmKids.map((kid, indice) => { // #4
             console.log(identifier);
-            if (kid._id === identifier){
+            if (kid._id === identifier) {
                 kid.fotoFamily = imageSrc;
             }
         })
 
         const novaListaCriancas = this.state.listConfirmKids;
 
-        this.setState({listConfirmKids: novaListaCriancas}); // #5
+        this.setState({ listConfirmKids: novaListaCriancas }); // #5
 
     };
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
@@ -491,7 +497,7 @@ class Passport extends React.Component {
                             <li > < a href="/" > Home </a></li >
                             <li > Passaporte </li>
                         </ol >
-                    </div> 
+                    </div>
 
                     <div className="graph-visual" >
                         <div className="graph" >
@@ -574,7 +580,7 @@ class Passport extends React.Component {
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px" }}>
-                                            <h5 className="ltTitulo"><b> Idade: </b></h5>                                        
+                                            <h5 className="ltTitulo"><b> Idade: </b></h5>
                                             <p>{moment(this.state.listConfirmAdult[0].birthday).toNow(true)}</p>
                                         </div>
                                     </div>
@@ -686,7 +692,7 @@ class Passport extends React.Component {
                         <div className="graph">
                             <div className="row">
                                 {this.state.listConfirmKids.map((Criançasqueentrarao, indice) => {
-                                    return (                                        
+                                    return (
                                         <div className="container-fluid" >
                                             <h3 className="inner-tittle" > Perfil Criança {indice + 1}  </h3>
                                             <div className="graph-visual" >
@@ -726,9 +732,9 @@ class Passport extends React.Component {
                                                         </div>
                                                     </div>
                                                     <div className="col-md-6 col-sm-12">
-                                                        <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px"  }}>
+                                                        <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
-                                                                <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id, indice)} >
+                                                            <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id, indice)} >
                                                                 <option value="others" > Outros </option>
                                                                 <option value="children" > filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
@@ -750,7 +756,7 @@ class Passport extends React.Component {
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                                             <h3 className="inner-tittle" > Restrições </h3>
                                                             <br></br>
-                                                            <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={Criançasqueentrarao.restrictions} onChange={(event)=>this.ChangeRest(event, Criançasqueentrarao._id, indice)}></textarea>
+                                                            <textarea className="form-control" rows="4" cols="50" id="restrictions" name="restrictions" value={Criançasqueentrarao.restrictions} onChange={(event) => this.ChangeRest(event, Criançasqueentrarao._id, indice)}></textarea>
                                                         </div>
                                                     </div>
                                                 </div >
@@ -766,7 +772,7 @@ class Passport extends React.Component {
                                                                 screenshotFormat="image/png"
                                                                 width={320}
                                                             />
-                                                            <button className="btn btn-md botao" onClick={(event) => {this.capture(event, Criançasqueentrarao._id, indice)}}>Tirar Foto</button>
+                                                            <button className="btn btn-md botao" onClick={(event) => { this.capture(event, Criançasqueentrarao._id, indice) }}>Tirar Foto</button>
                                                             <br></br>
                                                         </div>
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
@@ -821,15 +827,15 @@ class Passport extends React.Component {
                                                 <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
                                             </div>
                                             <br></br>
-                                            <div className="graph" style={{ padding: 10 + "px"}}>
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                                 <p> {this.state.phone}</p>
-                                                </div>
+                                            </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
                                                 <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").toNow(true)}</p>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -840,88 +846,89 @@ class Passport extends React.Component {
                                                 <div className="col-md-12 col-sm-12 col-xs-12">
                                                     <h3 className="inner-tittle" > Observações </h3>
                                                     <br></br>
-                                                    <div className="graph" style={{ padding: 10 + "px" }} >                                                    
+                                                    <div className="graph" style={{ padding: 10 + "px" }} >
                                                         <p>{this.state.obs}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div >
-                                    </div>                                
+                                    </div>
                                 </div>
                                 {/*QUADRO CONFIMAÇÃO FINAL ADULTOS - FIM*/}
                                 <div><br></br></div>
                                 {/*QUADRO CONFIMAÇÃO FINAL CRIANÇAS- INÍCIO*/}
                                 {this.state.listConfirmKids.map((Criançasqueentrarao, indice) => {
-                                    return(
-                                    <div className="graph" >
-                                        <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 45 + "%" }} > Criança {indice+1}</h3>
-                                        <div className="row">
-                                            <div className="col-md-12 col-sm-12 text-center">
-                                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                                    <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                    <p>{Criançasqueentrarao.name.firstName + " " + Criançasqueentrarao.name.surName}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <br></br>
-                                        <div className="row">
-                                            <div className="col-md-7 col-sm-12 text-center">
-                                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                                    <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                    <img src={"http://localhost:3000/img-users/" + Criançasqueentrarao.photo} />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-5 col-sm-12 text-center">     
-                                                <div className="graph" style={{ padding: 10 + "px" }}>
-                                                    <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                    <p>{this.state.kinship[indice]}</p>
-                                                </div>
-                                                <br></br>
-                                                <div className="row">
-                                                    <div className="col-md-7 col-sm-12 text-center">
-                                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                                            <h5 className="ltTitulo"><b> Sexo: </b></h5>
-                                                            <p>{Criançasqueentrarao.sexuality}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-5 col-sm-12 text-center">
-                                                        <div className="graph" style={{ padding: 10 + "px" }}>
-                                                            <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                            <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").toNow(true)}</p>
-                                                        </div>
+                                    return (
+                                        <div className="graph" >
+                                            <h3 className="inner-tittle " style={{ marginTop: -10 + "px", marginLeft: 45 + "%" }} > Criança {indice + 1}</h3>
+                                            <div className="row">
+                                                <div className="col-md-12 col-sm-12 text-center">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Nome: </b></h5>
+                                                        <p>{Criançasqueentrarao.name.firstName + " " + Criançasqueentrarao.name.surName}</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <br></br>
-                                        <div className="graph" style={{ padding: 10 + "px" }} >
-                                        <div className="row">                                        
-                                                <div className="col-md-12 col-sm-12 col-xs-12">
-                                                    <h3 className="inner-tittle" > Observações </h3>
+                                            <br></br>
+                                            <div className="row">
+                                                <div className="col-md-7 col-sm-12 text-center">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
+                                                        <img src={"http://localhost:3000/img-users/" + Criançasqueentrarao.photo} />
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-5 col-sm-12 text-center">
+                                                    <div className="graph" style={{ padding: 10 + "px" }}>
+                                                        <h5 className="ltTitulo"><b> Parentesco: </b></h5>
+                                                        <p>{this.state.kinship[indice]}</p>
+                                                    </div>
                                                     <br></br>
-                                                    <div className="graph" style={{ padding: 10 + "px" }} >                                                    
-                                                        <p>{Criançasqueentrarao.observations}</p>
-                                                    </div> </div>
+                                                    <div className="row">
+                                                        <div className="col-md-7 col-sm-12 text-center">
+                                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                                <h5 className="ltTitulo"><b> Sexo: </b></h5>
+                                                                <p>{Criançasqueentrarao.sexuality}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-5 col-sm-12 text-center">
+                                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                                <h5 className="ltTitulo"><b> Idade: </b></h5>
+                                                                <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").toNow(true)}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div >                                     
-                                        <div><br></br></div>                                      
-                                    </div> 
-                                    )                                    
+                                            <br></br>
+                                            <div className="graph" style={{ padding: 10 + "px" }} >
+                                                <div className="row">
+                                                    <div className="col-md-12 col-sm-12 col-xs-12">
+                                                        <h3 className="inner-tittle" > Observações </h3>
+                                                        <br></br>
+                                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                                            <p>{Criançasqueentrarao.observations}</p>
+                                                        </div> </div>
+                                                </div>
+                                            </div >
+                                            <div><br></br></div>
+                                        </div>
+                                    )
                                 })}
                                 {/*QUADRO CONFIMAÇÃO FINAL Crianças  - FIM*/}
                             </div>
                         </div>
                     </div>
-                  {this.state.comprovante &&(<Comprovant
-                   tabela= {this.state.dadosComprovante}
-                   serviso = "PASSAPORTE"
-                   teste = {this.state.comprovante}
-                   />)}
+                    {this.state.comprovante && (<Comprovant
+                        tabela={this.state.dadosComprovante}
+                        serviso="PASSAPORTE"
+                        teste={this.state.comprovante}
+                    />)}
 
-                   
+
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>   
-                        <button className="btn btn-md botao" onClick={this.VoltarTelaIV}>Voltar</button>                     
+
+                        <Link to="/" className="btn btn-md botao">Cancelar  </Link>
+                        <button className="btn btn-md botao" onClick={this.VoltarTelaIV}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Comprovante}> Finalizar </button>
                     </div>
                 </div>

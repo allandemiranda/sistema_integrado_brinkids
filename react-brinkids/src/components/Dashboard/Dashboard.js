@@ -120,9 +120,10 @@ class DashBoard extends React.Component {
 		})
 	}
 	requisicao(event) {
-		axios.get('/dashboard')
+		axios.get('/product')
 			.then((response) => {
 				this.setState({ lista: response.data });
+				console.log(response.data);
 			})
 			.catch((err) => console.log(err));
 	}
@@ -261,19 +262,24 @@ class DashBoard extends React.Component {
                                             </tr> 
                                         </thead> 
                                         <tbody> 
-                                            <tr>
-                                                <th scope="row" href="../foto-tirada-na-entrada">01</th> 
-                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
-                                                <td style={{textAlign: "center"}}>10 anos</td>
+											{this.state.lista.map((event,index)=>{
+												return(
+													<tr>
+                                                <th scope="row" href="../foto-tirada-na-entrada">{index +1}</th> 
+                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">{event.children.name}</a></td>
+                                                <td style={{textAlign: "center"}}>{event.children.birthday}</td>
                                                 <td style={{textAlign: "center"}} onclick="alert('Texto com as Restrições da Criança!');"><a>SIM</a></td>
                                                 <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações da Criança!');">SIM</td>
                                                 <td style={{textAlign: "center"}}>13:12h</td>
-                                                <td style={{textAlign: "center"}}>5</td>
-                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>
+                                                <td style={{textAlign: "center"}}>{event.belongings}</td>
+                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">{event.adult.name}</a></td>
                                                 <td style={{textAlign: "center"}}>Pai</td>
-                                                <td style={{textAlign: "center"}}>(84)91151610</td>
+                                                <td style={{textAlign: "center"}}>{event.adult.phone}</td>
                                                 <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>                                                
                                             </tr>
+												);
+											})}
+                                            
                                            
                                         </tbody> 
                                     </table>
