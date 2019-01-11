@@ -7,6 +7,8 @@ import '../../assets/sprints/solid.svg';
 import '../Dashboard/css/style.css';
 import '../Dashboard/css/Dashboard.css';
 import axios from 'axios';
+import TypesInput from '../TypesInput.js';
+import $ from 'jquery';
 
 import {
 	LineChart,
@@ -223,6 +225,51 @@ class DashBoard extends React.Component {
 		}
 	  }
 
+	  BuscarFinal = (event) => {
+        event.preventDefault();
+
+        console.log(this.state);
+
+        var erros = [];
+
+        if (this.state.Operador === "" && this.state.Atividade === "" && this.state.DataEntrada === "" && this.state.DataSaida === "") {
+            $("#Operador").addClass('errorBorder');
+            $("#Atividade").addClass('errorBorder');
+            $("#DataEntrada").addClass('errorBorder');
+            $("#DataSaida").addClass('errorBorder');
+            erros.push("Busca não pode ser em branco");
+        }
+        else {
+            $("#Operador").removeClass('errorBorder');
+            $("#Atividade").removeClass('errorBorder');
+            $("#DataEntrada").removeClass('errorBorder');
+            $("#DataSaida").removeClass('errorBorder');
+        }
+        if(erros.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            $("#SucessDiv").addClass('displaynone').removeClass('alert-success');
+            return;
+        }
+        else { 
+            $("#alertDiv").addClass('displaynone').removeClass('alert-danger');
+            $("#SucessDiv").addClass('alert-success').removeClass('displaynone');
+
+            // axios.get()
+            //     .then(function (response) {
+            //         this.setState({ ListaFluxo: response.data });
+            //         console.log(response);
+            //         $("#SucessDiv").addClass('alert-success').removeClass('displaynone');
+            //     }).catch(function (error) {
+            //         console.log(error)//LOG DE ERRO
+            //         $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            //         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            //         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            //         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            //     })
+
+        }
+    }
+
 	render() {
 		return (
 			<div className="container-fluid" >
@@ -266,7 +313,10 @@ class DashBoard extends React.Component {
 										<Legend />
 									</LineChart>
 								</div>
-								<button className="btn btn-md botao right" onClick={this.grafico}  style={{ width: 120 + "px"}}>Atualizar</button>
+								<br></br>
+								<div className="text-center">
+									<button className="btn botaoAvancar" onClick={this.grafico}>Atualizar</button>
+								</div>
 							</section>
 							{/* FIM - PRIMEIRA TELA  */}
 
@@ -287,72 +337,100 @@ class DashBoard extends React.Component {
 										<Bar dataKey="Meninas" fill="#82ca9d" />
 									</BarChart>
 								</div>
-								<button className="btn btn-md botao right" onClick={this.grafico1}  style={{ width: 120 + "px"}}>Atualizar</button>
-							</section>
+								<br></br>
+								<div className="text-center">
+									<button className="btn botaoAvancar" onClick={this.grafico}>Atualizar</button>
+								</div>
+								</section>
 							{/* FIM - SEGUNDATELA  */}
 
 							{/* INICIO - TERCEIRA TELA  */}
-							<section className={this.state.sectionAniversario} >
-								<div className="graph">
+							<section className={this.state.sectionAniversario}>
+							<div class="graph graph-visual tables-main">
 									<h1 className="text-center"> Busca por Crianças do Sistema </h1>
 									<p></p>
-									<form>
-										<label>
-											<input
-												name="nome"
-												type="checkbox"
-												checked={this.state.nome}
-												onChange={this.handleInputChange}
-											/>
-											<input className="form-control text-center" type="text" placeholder="Nome" value={this.state.campoNome} onChange={this.mudarCampoNome} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
-										</label>
-										<br />
-										<label>
-        									<input
-												name="sexo"
-												type="checkbox"
-												checked={this.state.sexo}
-												onChange={this.handleInputChange} 
-											/>
-											<input className="form-control text-center" type="text" placeholder="Sexo" value={this.state.campoSexo} onChange={this.mudarCampoSexo} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
-										</label>
-										<br />
-										<label>
-        									<input
-												name="cidade"
-												type="checkbox"
-												checked={this.state.cidade}
-												onChange={this.handleInputChange} 
-											/>
-											<input className="form-control text-center" type="text" placeholder="Cidade" value={this.state.campoCidade} onChange={this.mudarCampoCidade} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
-										</label>	
-										<br />
-										<label>
-        									<input
-												name="idade"
-												type="checkbox"
-												checked={this.state.idade}
-												onChange={this.handleInputChange} 
-											/>
-											<input className="form-control text-center" type="text" placeholder="Idade" value={this.state.campoIdade} onChange={this.mudarCampoIdade} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
-										</label>	
-										<br />
-										<label>
-        									<input
-												name="Mes"
-												type="checkbox"
-												checked={this.state.Mes}
-												onChange={this.handleInputChange} 
-											/>
-											<input className="form-control text-center" type="text" placeholder="Mês de Aniversário" value={this.state.campoMes} onChange={this.mudarCampoMes} style={{ width: 500 + "px", marginBottom: 20 + "px"}}/>
-										</label>																												
-									</form>
-									<button className="btn btn-md botao right" onClick={this.VoltarTelaI}  style={{ width: 120 + "px"}}>Pesquisar</button>
-								</div>
-								<br />
-								<br />
-								<div className="graph">
-								</div>
+                                    <div className="graph-visual">
+                                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                                            <b>ERRO!</b> Ah algo de errado em seu formulario ou busca.
+                                        </div>
+                                        <div id="SucessDiv" className = "alert displaynone" role = "alert">
+                                            <b>Sucesso!</b> Busca Concluida.
+                                        </div>
+                                        <form id="busca-fluxo">
+                                            <div className="row">
+                                                <div className="col-md-1 col-sm-1 col-xs-1">
+                                                <button className="btn botao tam" onClick={this.ROpe}><i class="fas fa-times"></i></button>
+                                                </div>
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Nome: "} type={"text"} id={"Nome"} name={"Nome"} Class={"form-control"}
+                                                value={this.state.Nome} onChange={this.ChangeValue}
+                                                />
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-md-1 col-sm-1 col-xs-1">
+                                                <button className="btn botao tam" onClick={this.RAtv}><i class="fas fa-times"></i></button>
+                                                </div>
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Sexo: "} type={"test"} id={"Sexo"} name={"Sexo"} Class={"form-control"}
+                                                value={this.state.Sexo} onChange={this.ChangeValue}/>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-md-1 col-sm-1 col-xs-1">
+                                                <button className="btn botao tam" onClick={this.RAtv}><i class="fas fa-times"></i></button>
+                                                </div>
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Cidade:"} type={"test"} id={"Cidade"} name={"Cidade"} Class={"form-control"}
+                                                value={this.state.cidade} onChange={this.ChangeValue}/>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-md-1 col-sm-1 col-xs-1">
+                                                <button className="btn botao tam" onClick={this.RAtv}><i class="fas fa-times"></i></button>
+                                                </div>
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Mes"} type={"test"} id={"Mes"} name={"Mes"} Class={"form-control"}
+                                                value={this.state.Mes} onChange={this.ChangeValue}/>
+                                            </div>
+                                            <br></br>
+                                            <div className="text-right">
+                                                <button className="btn botaoAvancar " onClick={this.BuscarFinal}>Buscar</button>
+                                            </div>	
+                                        </form>
+                                    </div>
+                                    <div class="tables table-responsive">
+                                        <table class="table table-hover"> 
+                                            <thead> 
+                                                <tr> 
+                                                    <th>#</th> 
+                                                    <th style={{textAlign: "center"}}>Atividade</th> 
+                                                    <th style={{textAlign: "center"}}>Ação</th>
+                                                    <th style={{textAlign: "center"}}>Data</th>
+                                                    <th style={{textAlign: "center"}}>Operador</th>
+                                                    <th style={{textAlign: "center"}}>Operado</th>
+                                                    <th style={{textAlign: "center"}}>Operado Carbono</th>
+                                                    <th style={{textAlign: "center"}}>Valor</th>
+                                                    <th style={{textAlign: "center"}}>Metodo de Pagamento</th>
+                                                    <th style={{textAlign: "center"}}>Data Entrada</th>
+                                                    <th style={{textAlign: "center"}}>Data Saída</th>
+                                                    <th style={{textAlign: "center"}}>Disconto Codigo</th>
+                                                    <th style={{textAlign: "center"}}>Disconto Tipo</th>
+                                                </tr> 
+                                            </thead> 
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row" href="../foto-tirada-na-entrada">01</th> 
+                                                    <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
+                                                    <td style={{textAlign: "center"}}>10 anos</td>
+                                                    <td style={{textAlign: "center"}} ><a onclick={()=>alert('Texto com as Restrições da Criança!')}>SIM</a></td>
+                                                    <td style={{textAlign: "center"}}>SIM</td>
+                                                    <td style={{textAlign: "center"}}>13:12h</td>
+                                                    <td style={{textAlign: "center"}}>5</td>
+                                                    <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>
+                                                    <td style={{textAlign: "center"}}>Pai</td>
+                                                    <td style={{textAlign: "center"}}>(84)91151610</td>
+                                                    <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
+                                                    <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>  
+                                                    <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>                                                   
+                                                </tr>                            
+                                            </tbody> 
+                                        </table>
+                                    </div>
+                                </div>
 							</section>
 							{/* FIM - TERCEIRA TELA  */}
 						</div>
