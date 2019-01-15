@@ -7,7 +7,13 @@ import Cargo from './cargos';
 import TypesInput from '../TypesInput';
 import funcoes from './funcoes';
 import axios from 'axios';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+  } from "react-router-dom";
 class Gerador extends React.Component {
     constructor(props) {
         super(props)
@@ -181,18 +187,18 @@ class Gerador extends React.Component {
 
     }
     changueselect(event) {
-        
+
         this.state.list[event.target.value[0]].officialPosition = this.state.listadecargos[event.target.value[2]]
-        
+
         console.log(this.state.list);
-        
+
         var formData = new FormData();
-        
+
         formData.append('identifier', String(this.state.list[event.target.value[0]].identifierEmployee._id));
         formData.append('officialPosition', String(this.state.listadecargos[event.target.value[2]]._id));
-        
+
         console.log(this.state.list[event.target.value[0]].identifierEmployee._id, "-------", this.state.listadecargos[event.target.value[2]]._id)
-        
+
         axios.put('/employees/rota', formData)
             .then(function (response) {
                 console.log(response.data)
@@ -217,7 +223,7 @@ class Gerador extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Funcionarios </h3>
-                        <div className="graph" >
+                        <div className="graph text-center" >
                             <table className="table">
                                 <thead>
                                     <tr>
@@ -282,24 +288,24 @@ class Gerador extends React.Component {
                             <li > Lista De cargos </li>
                         </ol >
                     </div>
-                    <div className="graph">
-                        <div className="tables table-responsive">
+                    <div className="graph text-center">
+                        <div className="tables table-responsive" >
                             <h3 className="inner-tittle" > Cargos </h3>
                             <table className="table table-hover">
                                 <thead className="text-center">
                                     <tr>
-                                        <th>#</th>
-                                        <th>Nome</th>
-                                        <th>Classe</th>
+                                        <th style={{textAlign:'center'}}>#</th>
+                                        <th style={{textAlign:'center'}}>Nome</th>
+                                        <th style={{textAlign:'center'}}>Classe</th>
 
-                                        <th> </th>
+                                        <th style={{textAlign:'center'}}> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {this.state.listadecargos.map((servico, indice) => {
                                         return (
                                             <tr key={indice}>
-                                                <th scope="row">{(indice + 1)}</th>
+                                                <th scope="row" style={{textAlign:'center'}}>{(indice + 1)}</th>
                                                 <td>{servico.name}</td>
 
                                                 <td>{servico.class}</td>
@@ -390,7 +396,7 @@ class Gerador extends React.Component {
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                                <Link className="btn btn-md botao" to="/">Cancelar</Link>
                                 {!this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Salvar}>Salvar</button>)}
                                 {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}>Salvar</button>)}
                             </div>

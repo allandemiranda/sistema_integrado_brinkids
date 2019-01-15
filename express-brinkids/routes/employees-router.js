@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const employees = await adult.find({}).populate('identifierEmployee');
+    const employees = await adult.find({isEmployee: true }).populate('identifierEmployee');
 
     return res.status(200).json(employees);
   } catch (err) {
