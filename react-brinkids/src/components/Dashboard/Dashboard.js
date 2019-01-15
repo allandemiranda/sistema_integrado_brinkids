@@ -130,7 +130,7 @@ class DashBoard extends React.Component {
 	componentWillMount() {
 
 		this.requisicao();
-		this.inteval = setInterval(this.requisicao, 5000);
+		this.inteval = setInterval(this.requisicao, 60000);
 
 	}
 	componentWillUnmount() {
