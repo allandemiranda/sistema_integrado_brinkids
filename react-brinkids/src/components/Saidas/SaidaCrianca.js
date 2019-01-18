@@ -202,12 +202,16 @@ class SaidaCrianca extends React.Component {
             })
 
         }
+        //ESSE IF É ONDE ACONTECE OS SOMATORIOS DOS VALORES FINAIS!!!!!!
         if (this.state.indice === this.state.CriancasSelecionadas.length) {
+            //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
             var j=0;
             var k=0;
+            //AQUI É O VALOR FINAL
             this.state.ValorCria.map((resp, indice) => {
                 j += resp[indice].value;
             })
+            //AQUI É O VALOR FINAL COM DESCONTO
             this.state.ValorCriaDesc.map((resp, indice) => {
                 k += resp[indice].value;
             })
