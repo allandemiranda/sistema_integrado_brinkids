@@ -4,25 +4,25 @@ const config = require('../config');
 const birthdayPartySchema = mongoose.Schema({
   title: {
     type: String,
-    require: true,
+    required: true,
   },
   birthdayPerson: {
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     age: {
       type: Number,
-      require: true,
+      required: true,
     },
   },
   start: {
-    type: Date,
-    require: true,
+    type: String,
+    required: true,
   },
   end: {
-    type: Date,
-    require: true,
+    type: String,
+    required: true,
   },
   description: {
     type: String,
@@ -32,11 +32,11 @@ const birthdayPartySchema = mongoose.Schema({
   payment: {
     value: {
       type: Number,
-      require: true,
+      required: true,
     },
     method: {
       type: String,
-      require: true,
+      required: true,
     },
   },
   amount: {
@@ -47,7 +47,7 @@ const birthdayPartySchema = mongoose.Schema({
     type: String,
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     age: Number,
     id: String,

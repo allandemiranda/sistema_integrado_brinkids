@@ -15,21 +15,40 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const guestList = JSON.parse(req.body.guestList);
-
+  console.log(req.body)
+  const guestList = JSON.stringify(req.body.guestList);
+  var oldArray = req.body.guestList.split('"');
+  var array = new Array();
+  console.log(oldArray.length)
+  for (var i = 0; i < oldArray.length - 1; i+=8) {
+    array.push(String(oldArray[i+1] + oldArray[i+2] + oldArray[i+3] + oldArray[i+4] + oldArray[i+5] + oldArray[i+6] + oldArray[i+7]));
+  }
   const birthday = new BirthdayParty({
     title: req.body.title,
-    birthdayPerson: { name: req.body.name, age: parseInt(req.body.age, 10) },
-    start: new Date(req.body.start),
-    end: new Date(req.body.end),
+    birthdayPerson: { 
+      name: req.body.name, 
+      age: parseInt(req.body.age, 10) 
+    },
+    start: req.body.start,
+    end: req.body.end,
     description: req.body.description,
     observations: req.body.observations,
-    payment: { value: parseInt(req.body.value, 10), method: req.body.method },
-    amount: { children: parseInt(req.body.children, 10), adults: parseInt(req.body.adults, 10) },
-    guestList,
-    partyFeather: [{ type: req.body.type, id: req.body.id, name: req.body.name }],
+    payment: { 
+      value: parseInt(req.body.value, 10),
+      method: req.body.method 
+    },
+    amount: { 
+      children: parseInt(req.body.children, 10), 
+      adults: parseInt(req.body.adults, 10) 
+    },
+    guestList: array,
+    /*partyFeather: { 
+      type: req.body.type, 
+      id: req.body.id, 
+      name: req.body.name 
+    },*/
   });
-
+  console.log(array)
   try {
     const newBirthday = await birthday.save();
     return res.status(201).json(newBirthday);
