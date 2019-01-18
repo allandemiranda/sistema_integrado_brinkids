@@ -1,0 +1,111 @@
+@media screen and (max-width: 767px) {
+    .brlabel {
+        margin-top: 7px;
+    }
+}
+.errorBorder {
+    border: 1px solid red !important;
+}
+.displaynone {
+    display: none;
+}
+.LetraFormulario {
+    color: black;
+}
+.optionFomulario {
+    padding: 1px 1px !important;
+}
+.botao {
+    background: #00C6D7;
+    color: #fff;
+}
+.botao:hover {
+    background: #052963 !important;
+    color: #fff;
+}
+.tam {
+    height: 50px;
+    width: 50px;
+}
+.botaoAvancar {
+    background: #00C6D7;
+    color: #fff;
+}
+.botaoAvancar:hover {
+    background: #052963 !important;
+    color: #fff;
+}
+.opt1 {
+    background-color: blue !important;
+    color: #fff;
+}
+.opt2 {
+    background-color: violet !important;
+    color: #fff;
+}
+.opt3 {
+    background-color: green !important;
+    color: #fff;
+}
+.opt4 {
+    background-color: orange !important;
+    color: #fff;
+}
+.opt5 {
+    background-color: yellow !important;
+    color: #000000;
+}
+.opt6 {
+    background-color: red !important;
+    color: #fff;
+}
+.opt7 {
+    background-color: aqua !important;
+    color: #000000;
+}
+#paddingNome{
+  padding-top: 37px !important;  
+}
+
+@media screen and (max-width: 767px) {
+    .brdiv {
+        margin-top: 20px;
+    }
+}
+
+.divBotao {
+    padding: 9px;
+    height: 100px;
+}
+
+@media screen and (min-width: 1600px ){
+    .grafico {
+        margin-left: 150px;
+    }
+}
+@media screen and (max-width: 1599px){
+    .grafico {
+        margin-left: 100px !important;
+    }
+}
+@media screen and (max-width: 1360px){
+    .grafico {
+        margin-left: 60px !important;
+    }
+}
+@media screen and (max-width: 1300px){
+    .grafico {
+        margin-left: 40px !important;
+    }
+}
+@media screen and (max-width: 1280px){
+    .grafico {
+        margin-left: 20px !important;
+    }
+}
+@media screen and (max-width: 1190px){
+    .grafico {
+        margin-left: 0px !important;
+        width: 600px !important;
+    }
+}

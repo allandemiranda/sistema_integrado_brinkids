@@ -34,9 +34,11 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
   const productFinded = await product.find({ 'children.id': req.params.idCria });
   const adultEntered = productFinded[0].time;
-  console.log('entrada:', new Date(adultEntered));
   const adultExit = req.params.timeAdult;
-  const adultTime = (adultExit - new Date(adultEntered).getTime())/60000;
+  const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000));
+  console.log('entrada:', adultEntered.getTime()/60000);
+  console.log('saída:', adultExit/60000);
+  console.log('diferença em minutos:', adultTime);
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
 
@@ -62,7 +64,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     service: "passaport",
     id: req.params.idCria,
     time: adultTime,
-    value: "R$ " + price, 
+    value: price, 
   };
   try {
     return res.status(201).json(data);

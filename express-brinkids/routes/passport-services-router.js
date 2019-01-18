@@ -60,13 +60,19 @@ router.get('/', async (req, res) => {
   psjson.shift()
 
   if(passportDefault.length===0){
+    const data2 = new passport({
+      time: "0",
+      price: "0",
+    });
     data = {
       services: psjson,
       default: {
-        price: "0",
         time: "0",
+        price: "0",
       },
     };
+    const newPassportServices = await data2.save();
+    //return res.status(201).json(newPassportServices);
   }else{
     data = {
       services: psjson,

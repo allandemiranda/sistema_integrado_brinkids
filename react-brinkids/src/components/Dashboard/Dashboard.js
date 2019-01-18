@@ -15,6 +15,7 @@ import noticias from './tabelas/noticias';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import axios from 'axios';
+import moment from 'moment';
 //import { Tabs, Tab } from 'react-bootstrap-tabs';
 
 
@@ -62,10 +63,16 @@ class DashBoard extends React.Component {
 		this.selectAdult = this.selectAdult.bind(this);
 		this.selectAniversario = this.selectAniversario.bind(this);
 		this.selectNoticia = this.selectNoticia.bind(this);
-
+		this.idade = this.idade.bind(this);
 	}
 	inteval(event) {
 
+	}
+	idade(event) {
+		var birthDay = event;
+		var age = Math.floor(moment(new Date()).diff(moment(birthDay), 'years', true));
+		console.log(age);
+		return age;
 	}
 	selectCrianca(event) {
 		this.setState({
@@ -120,16 +127,17 @@ class DashBoard extends React.Component {
 		})
 	}
 	requisicao(event) {
-		axios.get('/dashboard')
+		axios.get('/product')
 			.then((response) => {
 				this.setState({ lista: response.data });
+				console.log(response.data);
 			})
 			.catch((err) => console.log(err));
 	}
 	componentWillMount() {
 
 		this.requisicao();
-		this.inteval = setInterval(this.requisicao, 5000);
+		this.inteval = setInterval(this.requisicao, 60000);
 
 	}
 	componentWillUnmount() {
@@ -158,46 +166,7 @@ class DashBoard extends React.Component {
 
 
 
-		const byCrianca = function (events) {
-			return (
-				<tr key={events.toString()}>
-					<td>{events.id}</td>
-					<td>{events.Nome}</td>
-					<td>{events.Idade}</td>
-					<td>{events.Tempo}</td>
-					<td>{events.Responsavel}</td>
-					<td>{events.Telefone}</td>
-					<td>{events.Servico}</td>
 
-				</tr>
-			)
-		}
-		const byAdulto = function (events) {
-			return (
-				<tr key={events.toString()}>
-					<td>{events.id}</td>
-					<td>{events.Nome}</td>
-					<td>{events.Aniversariante}</td>
-				</tr>
-			)
-		}
-		const byEvento = function (events) {
-			return (
-				<tr key={events.toString()}>
-					<td>{events.Titulo}</td>
-					<td>{(events.Start.getHours() + ':' + events.Start.getMinutes())}</td>
-					<td>{((events.End.getHours() + 2) + ':' + (events.End.getMinutes() + 11))}</td>
-				</tr>
-			)
-		}
-		const byNoticias = function (events) {
-			return (
-				<tr key={events.toString()}>
-					<td>{events.Titulo}</td>
-					<td>{events.Descricao}</td>
-				</tr>
-			)
-		}
 
 		return (
 
@@ -227,14 +196,14 @@ class DashBoard extends React.Component {
 					</ol >
 				</div>
 
-				
+
 				<div id="tabs" class="tabs">
 
 					<div class="graph">
 						<nav>
 							<ul>
 								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><span class="lnr lnr-user"></span> <span>Passaporte</span></a></li>
-								
+
 								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><span class="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
 
 
@@ -242,82 +211,87 @@ class DashBoard extends React.Component {
 						</nav>
 						<div className="content tab">
 							<section className={this.state.sectionCrianca}  >
-							<div class="graph graph-visual tables-main">
-                                <div class="tables">
-                                    <table class="table table-hover"> 
-                                        <thead> 
-                                            <tr> 
-                                                <th>#</th> 
-                                                <th style={{textAlign: "center"}}>Criança</th> 
-                                                <th style={{textAlign: "center"}}>Idade</th>
-                                                <th style={{textAlign: "center"}}>Restrição</th>
-                                                <th style={{textAlign: "center"}}>Obs.</th>
-                                                <th style={{textAlign: "center"}}>Entrada</th>
-                                                <th style={{textAlign: "center"}}>Gaveta</th>
-                                                <th style={{textAlign: "center"}}>Responsavel</th>
-                                                <th style={{textAlign: "center"}}>Parentesco</th>
-                                                <th style={{textAlign: "center"}}>Telefone</th>
-                                                <th style={{textAlign: "center"}}>Obs.</th>
-                                            </tr> 
-                                        </thead> 
-                                        <tbody> 
-                                            <tr>
-                                                <th scope="row" href="../foto-tirada-na-entrada">01</th> 
-                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
-                                                <td style={{textAlign: "center"}}>10 anos</td>
-                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Restrições da Criança!');"><a>SIM</a></td>
-                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações da Criança!');">SIM</td>
-                                                <td style={{textAlign: "center"}}>13:12h</td>
-                                                <td style={{textAlign: "center"}}>5</td>
-                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>
-                                                <td style={{textAlign: "center"}}>Pai</td>
-                                                <td style={{textAlign: "center"}}>(84)91151610</td>
-                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>                                                
-                                            </tr>
-                                           
-                                        </tbody> 
-                                    </table>
-                                </div>
-                            </div>
+								<div class="graph graph-visual tables-main">
+									<div class="tables">
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th style={{ textAlign: "center" }}>Criança</th>
+													<th style={{ textAlign: "center" }}>Idade</th>
+													<th style={{ textAlign: "center" }}>Restrição</th>
+													<th style={{ textAlign: "center" }}>Obs.</th>
+													<th style={{ textAlign: "center" }}>Entrada</th>
+													<th style={{ textAlign: "center" }}>Gaveta</th>
+													<th style={{ textAlign: "center" }}>Responsavel</th>
+													<th style={{ textAlign: "center" }}>Parentesco</th>
+													<th style={{ textAlign: "center" }}>Telefone</th>
+													<th style={{ textAlign: "center" }}>Obs.</th>
+												</tr>
+											</thead>
+											<tbody>
+												{this.state.lista.map((event, index) => {
+													return (
+														<tr>
+															<th scope="row" href="../foto-tirada-na-entrada">{index + 1}</th>
+															<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-da-criança">{event.children.name}</a></td>
+															<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+															<td style={{ textAlign: "center" }} onclick="alert('Texto com as Restrições da Criança!');"><a>SIM</a></td>
+															<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações da Criança!');">SIM</td>
+															<td style={{ textAlign: "center" }}>13:12h</td>
+															<td style={{ textAlign: "center" }}>{event.belongings}</td>
+															<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-do-responsável">{event.adult.name}</a></td>
+															<td style={{ textAlign: "center" }}>Pai</td>
+															<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+															<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
+														</tr>
+													);
+												})}
+
+
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</section>
 							<section className={this.state.sectionAniversario}>
-							<div class="graph graph-visual tables-main">
-                                <div class="tables">
-                                    <table class="table table-hover"> 
-                                        <thead> 
-                                            <tr> 
-                                                <th>#</th> 
-                                                <th style={{textAlign: "center"}}>Criança</th> 
-                                                <th style={{textAlign: "center"}}>Idade</th>
-                                                <th style={{textAlign: "center"}}>Restrição</th>
-                                                <th style={{textAlign: "center"}}>Obs.</th>
-                                                <th style={{textAlign: "center"}}>Entrada</th>
-                                                <th style={{textAlign: "center"}}>Gaveta</th>
-                                                <th style={{textAlign: "center"}}>Responsavel</th>
-                                                <th style={{textAlign: "center"}}>Parentesco</th>
-                                                <th style={{textAlign: "center"}}>Telefone</th>
-                                                <th style={{textAlign: "center"}}>Obs.</th>
-                                            </tr> 
-                                        </thead> 
-                                        <tbody> 
-                                            <tr>
-                                                <th scope="row" href="../foto-tirada-na-entrada">01</th> 
-                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-da-criança">Allan de Miranda</a></td>
-                                                <td style={{textAlign: "center"}}>10 anos</td>
-                                                <td style={{textAlign: "center"}} ><a onclick={()=>alert('Texto com as Restrições da Criança!')}>SIM</a></td>
-                                                <td style={{textAlign: "center"}}>SIM</td>
-                                                <td style={{textAlign: "center"}}>13:12h</td>
-                                                <td style={{textAlign: "center"}}>5</td>
-                                                <td style={{textAlign: "center"}}><a style={{color: "inherit"}} href="../perfil-do-responsável">Allan de Miranda</a></td>
-                                                <td style={{textAlign: "center"}}>Pai</td>
-                                                <td style={{textAlign: "center"}}>(84)91151610</td>
-                                                <td style={{textAlign: "center"}} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>                                                
-                                            </tr>
-                                           
-                                        </tbody> 
-                                    </table>
-                                </div>
-                            </div>
+								<div class="graph graph-visual tables-main">
+									<div class="tables">
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th style={{ textAlign: "center" }}>Criança</th>
+													<th style={{ textAlign: "center" }}>Idade</th>
+													<th style={{ textAlign: "center" }}>Restrição</th>
+													<th style={{ textAlign: "center" }}>Obs.</th>
+													<th style={{ textAlign: "center" }}>Entrada</th>
+													<th style={{ textAlign: "center" }}>Gaveta</th>
+													<th style={{ textAlign: "center" }}>Responsavel</th>
+													<th style={{ textAlign: "center" }}>Parentesco</th>
+													<th style={{ textAlign: "center" }}>Telefone</th>
+													<th style={{ textAlign: "center" }}>Obs.</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th scope="row" href="../foto-tirada-na-entrada">01</th>
+													<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-da-criança">Allan de Miranda</a></td>
+													<td style={{ textAlign: "center" }}>10 anos</td>
+													<td style={{ textAlign: "center" }} ><a onclick={() => alert('Texto com as Restrições da Criança!')}>SIM</a></td>
+													<td style={{ textAlign: "center" }}>SIM</td>
+													<td style={{ textAlign: "center" }}>13:12h</td>
+													<td style={{ textAlign: "center" }}>5</td>
+													<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-do-responsável">Allan de Miranda</a></td>
+													<td style={{ textAlign: "center" }}>Pai</td>
+													<td style={{ textAlign: "center" }}>(84)91151610</td>
+													<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</section>
 
 						</div>
@@ -326,98 +300,11 @@ class DashBoard extends React.Component {
 
 				</div>
 
-				{this.state.teste &&
 
-					(<div className="graph">
-						<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar2}>
-							< span className="fa fa-bars" > </span>
-						</button>       Adultos
-					{this.state.adultospopup &&
-
-							(<div className="graph">
-								<div className="tables table-responsive">
-									<table className="table table-hover">
-										<thead className="text-center">
-											<tr >
-												<th>#</th>
-												<th>Nome</th>
-												<th>Aniversariante</th>
-											</tr>
-										</thead>
-										<tbody id="CriaTabela">
-											{adultos.map(byAdulto)}
-
-										</tbody>
-									</table>
-								</div>
-							</div>)
-						}
-
-
-					</div>)
 
 				}
 
-				{this.state.Eventos &&
 
-					<div className="graph">
-						<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar3}>
-							< span className="fa fa-bars" > </span>
-						</button>       Eventos
-					{this.state.Eventospopup &&
-
-							(<div className="graph">
-								<div className="tables table-responsive">
-									<table className="table table-hover">
-										<thead className="text-center">
-											<tr>
-
-												<th>Titulo</th>
-												<th>Inicio</th>
-												<th>Fim</th>
-											</tr>
-										</thead>
-										<tbody id="CriaTabela">
-											{eventos.map(byEvento)}
-
-										</tbody>
-									</table>
-								</div>
-							</div>)
-						}
-
-
-					</div>
-
-				}
-				{this.state.Noticias &&
-
-					<div className="graph">
-						<button className="sidebar-icon styleButaoMenu" style={{ float: 'none' }} onClick={this.mudar4}>
-							< span className="fa fa-bars" > </span>
-						</button>     Noticías
-					{this.state.noticiaspopup &&
-
-							(<div className="graph">
-								<div className="tables table-responsive">
-									<table className="table table-hover">
-										<thead className="text-center">
-											<tr>
-
-												<th>Titulo</th>
-												<th>Descrição</th>
-											</tr>
-										</thead>
-										<tbody id="CriaTabela">
-											{noticias.map(byNoticias)}
-
-										</tbody>
-									</table>
-								</div>
-							</div>)
-						}
-					</div>
-				}
 			</div>
 		);
 	}

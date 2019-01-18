@@ -25,6 +25,7 @@ import SaidaServicosExtra from "./components/Serviços_Extras/SaidaServiçosExtr
 import ServicoPassaporte from "./components/Servirços_Passaport/ServicoPassaport";
 import gavetas from './components/Gavetas/Gavetas.js';
 import TelaMKT from './components/TeladoMKT/TelaMKT.js';
+import GFinanceiro from './components/GerenciamenteFinanceiro/GerenciamentoFinanceiro.js';
 import VisualizarAniversario from './components/Aniversario/VisualizarAniversario.js';
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -105,6 +106,12 @@ class App extends React.Component {
                   path="/Perfil"
                   layout={MainLayout}
                   component={Perfil}
+                />
+               <LayoutRoute
+                  exact
+                  path="/GerenciamentoFinanceiro"
+                  layout={MainLayout}
+                  component={GFinanceiro}
                 />
                 <LayoutRoute
                   exact

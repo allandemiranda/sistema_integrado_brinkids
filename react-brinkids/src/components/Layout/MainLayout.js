@@ -69,7 +69,7 @@ class MainLayout extends React.Component {
                         <div className="outter-wp" > {children} </div>
                     </div>
                 </div>
-                <div className="sidebar-menu" >
+                <div className="sidebar-menu">
                     <header className="logo" style={{backgroundColor:"white"}} >
                         <button className="sidebar-icon styleButaoMenu" onClick={this.DiminueMenu}>
                             < span className="fa fa-bars" > </span>
@@ -90,7 +90,7 @@ class MainLayout extends React.Component {
 										</ul>
                                         
 									</div>
-                    <div className="menu" >
+                    <div className="menu"  >
                         <ul id="menu" >
                             <li >
                                 <Link to="/" >
@@ -105,6 +105,8 @@ class MainLayout extends React.Component {
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>
                                     <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/GerenciamentoFinanceiro">Financeiro</Link></li>
+                                    <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/TelaMKT">Marketing</Link></li>
                                 </ul>
                             </li>
                             <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
@@ -178,7 +180,6 @@ class MainLayout extends React.Component {
                                     </li>
                                 </ul>
                              </li>*/}
-                            
                             <li >
                                 <Link to="/Calendario" >
                                     < i className="fa fa-calendar" > </i>
