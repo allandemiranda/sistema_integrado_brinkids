@@ -142,7 +142,8 @@ class SaidaCrianca extends React.Component {
                 ProdutoCria: this.state.CriancasSelecionadas[0].service,
                 page: "MostraCrianca",
             })
-            if(this.state.indice === this.state.CriancasSelecionadas.length){
+            console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
+            if(this.state.indice === this.state.CriancasSelecionadas.length - 1){
 
             }
             /*var formData = new FormData();
@@ -173,7 +174,7 @@ class SaidaCrianca extends React.Component {
 
     ProximaCria = () => {
         if (this.state.indice < this.state.CriancasSelecionadas.length) {
-                axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment())
+                axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
                     .then((response) => {
                         this.setState({
                             ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
@@ -186,17 +187,18 @@ class SaidaCrianca extends React.Component {
                         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
             this.setState({
-                NameCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.children.name,
-                PhotoCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.photo,
-                IdadeCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.children.birthday,
-                TimeCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.time,
-                ObsCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.children.observations,
-                RetCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].Crianca.service,
-                indice: (this.state.indice + 1),
+                NameCria: this.state.CriancasSelecionadas[this.state.indice].children.name,
+                PhotoCria: this.state.CriancasSelecionadas[this.state.indice].children.photo,
+                IdadeCria: this.state.CriancasSelecionadas[this.state.indice].children.birthday,
+                TimeCria: this.state.CriancasSelecionadas[this.state.indice].children.time,
+                ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
+                RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
+                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].children.service,
+                indice: (this.state.indice),
             })
         }
-        if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)) {
+        console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
+        if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)){
             this.setState({
                 namebutton: "Finalizar",
             })
@@ -210,6 +212,7 @@ class SaidaCrianca extends React.Component {
             //AQUI É O VALOR FINAL
             this.state.ValorCria.map((resp, indice) => {
                 j += resp[indice].value;
+                console.log(resp, " ", indice)
             })
             //AQUI É O VALOR FINAL COM DESCONTO
             this.state.ValorCriaDesc.map((resp, indice) => {
