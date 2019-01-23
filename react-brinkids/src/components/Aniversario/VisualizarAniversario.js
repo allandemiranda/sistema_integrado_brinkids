@@ -50,6 +50,7 @@ class VisualizarAniversario extends React.Component {
             QuantCrianca: aniversarioAtual,
             QuantAdulto: aniversarioAtual,
             DescriçãoDoAni: aniversarioAtual,
+        
             ObsDoAni: aniversarioAtual,
             ValorPg: aniversarioAtual,
             MetodoPg: aniversarioAtual,
