@@ -17,12 +17,59 @@ class VisualizarAniversario extends React.Component {
         super(props);
         this.state = {
             list: [],
-            Page:"Lista",
+            Page: "Lista",
+
+            TituloDoAni: "",
+            NomeDoAni: "",
+            IdadeDoAni: "",
+            DataDoAni: "",
+            HoraInicio: "",
+            HoraFinal: "",
+            QuantCrianca: "",
+            QuantAdulto: "",
+            DescriçãoDoAni: "",
+            ObsDoAni: "",
+            ValorPg: "",
+            MetodoPg: "",
         }
-
-
+        this.requisicao = this.requisicao.bind(this);
+        this.editar = this.editar.bind(this);
+        this.excluir = this.excluir.bind(this);
+        this.inteval = this.inteval.bind(this);
 
     }
+    editar(event) {
+        let aniversarioAtual = this.state.list[event];
+        this.setState({
+            TituloDoAni: aniversarioAtual.title,
+            NomeDoAni: aniversarioAtual.birthdayPerson.name,
+            IdadeDoAni: aniversarioAtual.birthdayPerson.age,
+            DataDoAni: aniversarioAtual.start,
+            HoraInicio: aniversarioAtual,
+            HoraFinal: aniversarioAtual,
+            QuantCrianca: aniversarioAtual,
+            QuantAdulto: aniversarioAtual,
+            DescriçãoDoAni: aniversarioAtual,
+            ObsDoAni: aniversarioAtual,
+            ValorPg: aniversarioAtual,
+            MetodoPg: aniversarioAtual,
+        })
+    }
+    requisicao(event) {
+        axios.get('/birthday')
+            .then((response) => {
+                this.setState({ list: response.data });
+                console.log(response.data);
+            })
+            .catch((err) => console.log(err));
+    }
+    componentWillMount() {
+
+        this.requisicao();
+        this.inteval = setInterval(this.requisicao, 60000);
+
+    }
+
     render() {
         if (this.state.Page === "Lista") {
             return (
@@ -59,7 +106,7 @@ class VisualizarAniversario extends React.Component {
                                                 <td > {findAdult.birthdayPerson.name} </td>
                                                 <td > {findAdult.cpf} </td>
                                                 <td > {findAdult.start} </td>
-
+                                                <td><button onClick={() => this.editar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
@@ -70,6 +117,20 @@ class VisualizarAniversario extends React.Component {
                     </div>
                 </div>
             );
+        }
+        if (this.state.Page === "ConfDadosAni") {
+            return (
+                <div>
+                    <ConfDadosAni Titulo={this.state.TituloDoAni} Name={this.state.NomeDoAni} Idade={this.state.IdadeDoAni}
+                        Date={this.state.DataDoAni} HI={this.state.HoraInicio} HF={this.state.HoraFinal}
+                        CC={this.state.QuantCrianca} AC={this.state.QuantAdulto} Valor={this.state.ValorPg} Metodo={this.state.MetodoPg}
+                        Descricao={this.state.DescriçãoDoAni} Obs={this.state.ObsDoAni} />
+                    <div className="text-center">
+                        <button className="btn btn-md botao" onClick={this.VoltaFormAni}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.AvancaListConv}>Avançar</button>
+                    </div>
+                </div>
+            )
         }
     }
 }
