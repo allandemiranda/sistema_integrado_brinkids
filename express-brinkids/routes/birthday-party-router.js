@@ -58,4 +58,58 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.delete('/:identifier', async (req, res) => {
+  try {
+    const deletedService = await BirthdayParty.findByIdAndRemove(req.params.identifier);
+
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
+});
+
+router.put('/:identifier', async (req, res) => {
+  try {
+    const service = await BirthdayParty.findByIdAndUpdate(
+      req.params.identifier,
+      {
+        title: req.body.title,
+        birthdayPerson: { 
+          name: req.body.name, 
+          age: req.body.age, 
+        },
+        start: req.body.start,
+        end: req.body.end,
+        description: req.body.description,
+        observations: req.body.observations,
+        payment: { 
+          value: req.body.value, 
+          method: req.body.method 
+        },
+        amount: { 
+          children: req.body.children,  
+          adults: req.body.adults,  
+        },
+        // guestList: array,
+      },
+    );
+
+    if (!service) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router;
