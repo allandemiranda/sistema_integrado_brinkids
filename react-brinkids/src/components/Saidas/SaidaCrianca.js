@@ -19,6 +19,8 @@ class SaidaCrianca extends React.Component {
             namebutton: "Proxima Criança",
             indice: 1,
             FormPag: "",
+            aux: "0",
+            verified: false,
 
             listAdultos: [],
             listCrianca: [],
@@ -33,7 +35,7 @@ class SaidaCrianca extends React.Component {
             PhotoAdult: "",
 
             //Crianças
-            CodigoDecCria: "",
+            CodDes: "",
             NameCria: "",
             PhotoCria: "",
             IdadeCria: "",
@@ -158,6 +160,7 @@ class SaidaCrianca extends React.Component {
                      console.log(response);
                     this.setState({                        
                         ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
+                        aux: response.value
                     })
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
@@ -173,11 +176,16 @@ class SaidaCrianca extends React.Component {
     }
 
     ProximaCria = () => {
+        this.setState({
+            FinalValor: (this.state.FinalValor + this.state.aux),
+            CodDes: "",
+        })
         if (this.state.indice < this.state.CriancasSelecionadas.length) {
                 axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
                     .then((response) => {
                         this.setState({
                             ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
+                            aux: response.value,
                         })
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
@@ -222,18 +230,18 @@ class SaidaCrianca extends React.Component {
                 CodDes: "",
                 TotalValor: j,
                 TotalValorDesc: k,
-                FinalValor: k,
                 page: "FinalizarSaida",
             })
         }
     }
 
     VerificaDescontoFilhos = (Codigo) => {
-        let verified = false;
         axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
                 alert("Desconto Validado")
-                verified = true;
+                this.setState({
+                    verified: true,
+                })
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -242,44 +250,15 @@ class SaidaCrianca extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-
-        if(verified){
-            axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + this.state.TimeAdult + `/` + this.state.CodigoDecCria) 
-                .then((response) => {
-                    this.setState({
-                        ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                    })
-                }).catch((error) => {
-                    console.log(error)//LOG DE ERRO
-                    alert("Erro no Cadastro");
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                })
-            }
-        }
-
-    VerificaDescontoPAi = (Codigo) => {
-        axios.get(`/discount/filter/${Codigo}`)
-            .then((response) => {
-                alert("Desconto Validado")
-                var formData = new FormData();
-                formData.append('ValorFinal', String(this.state.TotalValorDesc));
-                formData.append('Desconto', String(this.state.CodigoDecCria));
-                axios.post(`/passport`, formData)
+        setTimeout(_=>{
+            console.log(this.state.verified);
+            if(this.state.verified == true){
+                axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + this.state.TimeAdult + `/` + this.state.CodDes) 
                     .then((response) => {
-                        axios.get(`/passport`)
-                            .then((response) => {
-                                this.setState({
-                                    FinalValor: response.data,
-                                })
-                            }).catch((error) => {
-                                console.log(error)//LOG DE ERRO
-                                alert("Erro no Cadastro");
-                                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                            })
+                        this.setState({
+                            ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
+                            aux: response.value
+                        })
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
@@ -287,6 +266,21 @@ class SaidaCrianca extends React.Component {
                         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
+            }
+        },2000);
+        this.setState({
+            verified: false,
+        }) 
+    }
+
+    VerificaDescontoPAi = (Codigo) => {
+        console.log(this.state.verified);
+        axios.get(`/discount/filter/${Codigo}`)
+            .then((response) => {
+                alert("Desconto Validado")
+                this.setState({
+                    verified: true,
+                })
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -295,6 +289,26 @@ class SaidaCrianca extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
+        setTimeout(_=>{
+            console.log(this.state.verified);
+            if(this.state.verified == true){
+                axios.get(`/passport/` + this.state.FinalValor + `/` + this.state.CodDes)
+                .then((response) => {
+                    this.setState({
+                        FinalValor: response.data,
+                    })
+                }).catch((error) => {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro ao colocar Desconto");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+            }
+        },2000);
+        this.setState({
+            verified: false,
+        });
     }
 
     Finalizar = (event) => {
@@ -310,7 +324,6 @@ class SaidaCrianca extends React.Component {
         }
 
     }
-
 
     render() {
         if (this.state.page === "Adultos") {
