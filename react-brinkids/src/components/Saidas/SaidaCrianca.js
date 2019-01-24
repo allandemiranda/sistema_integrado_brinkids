@@ -10,7 +10,7 @@ import '../../assets/style/font-awesome.css';
 import './css/Saida_Crianca.css';
 import './css/style.css';
 
-
+var i=1;//para percorrer como um for na funçao proximaCria, mas ainda não está 100%
 class SaidaCrianca extends React.Component {
     constructor(props) {
         super(props)
@@ -160,7 +160,7 @@ class SaidaCrianca extends React.Component {
                      console.log(response);
                     this.setState({                        
                         ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
-                        aux: response.value
+                        aux: response.data.value
                     })
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
@@ -180,12 +180,19 @@ class SaidaCrianca extends React.Component {
             FinalValor: (this.state.FinalValor + this.state.aux),
             CodDes: "",
         })
+        console.log("pc",this.state.indice, "/", this.state.CriancasSelecionadas.length)
+        if (this.state.indice === (this.state.CriancasSelecionadas.length -1)){
+            this.setState({
+                namebutton: "Finalizar",
+            })
+
+        }
         if (this.state.indice < this.state.CriancasSelecionadas.length) {
                 axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
                     .then((response) => {
                         this.setState({
                             ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
-                            aux: response.value,
+                            aux: response.data.value,
                         })
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
@@ -202,29 +209,29 @@ class SaidaCrianca extends React.Component {
                 ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
                 RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
                 ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].children.service,
-                indice: (this.state.indice),
+                indice: (this.state.indice + (i)),
             })
-        }
-        console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
-        if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)){
-            this.setState({
-                namebutton: "Finalizar",
-            })
-
         }
         //ESSE IF É ONDE ACONTECE OS SOMATORIOS DOS VALORES FINAIS!!!!!!
-        if (this.state.indice === this.state.CriancasSelecionadas.length) {
+        console.log("this is what i need now: ", this.state.indice, "/", this.state.CriancasSelecionadas.length)
+        if (this.state.indice >= this.state.CriancasSelecionadas.length) {//botei >= por não tá dando certo zerar o i que conta os indices
+            console.log("i final: ",i);
+            i=0;//aqui o i do comentário acima
+            console.log("de novo 1: ", i);
             //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
             var j=0;
             var k=0;
             //AQUI É O VALOR FINAL
             this.state.ValorCria.map((resp, indice) => {
-                j += resp[indice].value;
+                j += parseFloat(resp);
                 console.log(resp, " ", indice)
+                console.log("j", j)
             })
             //AQUI É O VALOR FINAL COM DESCONTO
             this.state.ValorCriaDesc.map((resp, indice) => {
-                k += resp[indice].value;
+                //k += parseFloat(resp[indice].value);
+                console.log(resp, " ", indice)
+                console.log("k", k)
             })
             this.setState({
                 CodDes: "",
@@ -233,10 +240,13 @@ class SaidaCrianca extends React.Component {
                 page: "FinalizarSaida",
             })
         }
+        console.log("i do passado: ", i);
+        i++;
+        console.log("new i: ", i);
     }
 
     VerificaDescontoFilhos = (Codigo) => {
-        axios.get(`/discount/filter/${Codigo}`)
+        axios.get(`/discount/`) //tirei do get a parte a seguir para testes: /*filter/${Codigo}*/
             .then((response) => {
                 alert("Desconto Validado")
                 this.setState({
@@ -253,12 +263,13 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + this.state.TimeAdult + `/` + this.state.CodDes) 
+                axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[0].children.id + `/` + moment() + `/` + this.state.CodDes) 
                     .then((response) => {
                         this.setState({
                             ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                            aux: response.value
+                            aux: response.data.value,
                         })
+                        alert("Desconto realizado")                        
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
@@ -297,6 +308,7 @@ class SaidaCrianca extends React.Component {
                     this.setState({
                         FinalValor: response.data,
                     })
+                    alert("Desconto realizado")
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro ao colocar Desconto");
