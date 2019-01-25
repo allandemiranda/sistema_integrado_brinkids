@@ -32,6 +32,13 @@ class VisualizarAniversario extends React.Component {
             ValorPg: "",
             MetodoPg: "",
             AniAtual:"",
+
+             //Lista do Aniversario
+             NomeCrianca: "",
+             IdadeCrianca: "",
+             Adulto: "",
+             ListaCria: [],
+             ListaAdul: [],
         }
         this.requisicao = this.requisicao.bind(this);
         this.editar = this.editar.bind(this);
@@ -295,7 +302,116 @@ class VisualizarAniversario extends React.Component {
         }
         if(this.state.Page ==="ListaC"){
             return(
-                <div></div>
+                <div className = "container-fluid" >
+                <div className = "sub-heard-part" >
+                    <ol className = "breadcrumb m-b-0" >
+                        <li > < a href = "/" > Home </a></li >
+                        <li > Aniversario </li>
+                    </ol >
+                </div>
+                <div className = "graph-visual" >
+                    <div className = "row">
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
+                        <div className = "col-md-6 col-sm-12">
+                            <div className = "graph" >
+                                <h3 className = "inner-tittle" > Lista de Crianças </h3>
+                                <div className = "graph" >
+                                <form id="form-busca">
+                                    <div className = "form-group" >
+                                        <div className = "row" >
+                                            <TypesInput cod = {1} ClassDiv = {"col-md-8 col-sm-8 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"name"} Class = {"form-control"} value = {this.state.NomeCrianca} 
+                                                onChange = {this.ChangeNameCrianca}
+                                            />
+                                            <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Idade: "} type = {"number"} id = {"number"} name= {"number"} Class = {"form-control"} value = {this.state.IdadeCrianca}
+                                                onChange = {this.ChangeIdadeCrianca}
+                                            />
+                                            <br></br>
+                                            <button className="btn botao" type = "submit" onClick = {this.AddCrianca}>Adicionar</button>
+                                            <ul id="mensagens-erro-crianca"></ul>
+                                        </div>
+                                    </div>
+                                </form>                        
+                            </div>
+                                <br></br>
+                                <br></br>
+                                <div className = "graph">
+                                    <div className ="tables table-responsive">
+                                        <table className ="table table-hover"> 
+                                            <thead className = "text-center"> 
+                                                <tr> 
+                                                    <th>#</th> 
+                                                    <th>Name</th> 
+                                                    <th>Idade</th> 
+                                                </tr>
+                                            </thead> 
+                                            <tbody>
+                                                {this.state.ListaCria.map((crianca, indice) => {
+                                                    return (
+                                                        <tr>
+                                                            <th scope="row">{(indice + 1)}</th>
+                                                            <td > {crianca.nome} </td>
+                                                            <td > {crianca.idade} </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className = "col-md-6 col-sm-12">
+                            <div className = "graph" >
+                                <h3 className = "inner-tittle" > Lista de Adultos </h3>
+                                <div className = "graph" >
+                                    <form id="form-busca">
+                                        <div className = "form-group" >
+                                            <div className = "row" >
+                                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"nameAdult"} name= {"nameAdult"} Class = {"form-control"} 
+                                                    value = {this.state.Adulto} onChange = {this.ChangeNameAdulto}
+                                                />
+                                                <br></br>
+                                                <button className="btn botao" type = "submit" onClick = {this.AddAdulto}>Adicionar</button>
+                                                <ul id="mensagens-erro-adulto"></ul>
+                                            </div>
+                                        </div>
+                                    </form>                        
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <div className = "graph">
+                                    <div className ="tables table-responsive">
+                                        <table className ="table table-hover"> 
+                                            <thead className = "text-center"> 
+                                                <tr> 
+                                                    <th>#</th> 
+                                                    <th>Nome</th> 
+                                                </tr>
+                                            </thead> 
+                                            <tbody>
+                                                {this.state.ListaAdul.map((adulto, indice) => {
+                                                    return (
+                                                        <tr>
+                                                            <th scope="row">{(indice + 1)}</th>
+                                                            <td > {adulto.nome} </td>
+                                                        </tr>
+                                                    );
+                                                })}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                 </div>
+                            </div>                   
+                        </div>
+                    </div>
+                    <div className="text-center">
+                        <a className= "btn btn-md botao" href="\">Cancelar</a>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.VaiConfListCnv}>Avançar</button>
+                    </div> 
+                </div> 
+            </div>
             );
         }
     }
