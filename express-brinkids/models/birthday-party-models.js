@@ -43,7 +43,8 @@ const birthdayPartySchema = mongoose.Schema({
     children: Number,
     adults: Number,
   },
-  guestList: [{
+  guestList: 
+  [{
     type: String,
     name: {
       type: String,

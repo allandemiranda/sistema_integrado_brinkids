@@ -15,40 +15,49 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  console.log(req.body)
-  const guestList = JSON.stringify(req.body.guestList);
-  var oldArray = req.body.guestList.split('"');
-  var array = new Array();
-  console.log(oldArray.length)
-  for (var i = 0; i < oldArray.length - 1; i+=8) {
-    array.push(String(oldArray[i+1] + oldArray[i+2] + oldArray[i+3] + oldArray[i+4] + oldArray[i+5] + oldArray[i+6] + oldArray[i+7])); //essa foi a melhor forma que consegui salvar os dados sem um monte de "//" no meio da string
-  }
+ 
+
+
+ 
+  let jasonPaarse = JSON.parse(req.body.guestList)
+
+
+  console.log("===================================")
+  console.log(jasonPaarse)
+  console.log("===================================")
+
+
+
+
+  // for (var i = 0; i < oldArray.length - 1; i+=8) {
+  //   array.push(String(oldArray[i+1] + oldArray[i+2] + oldArray[i+3] + oldArray[i+4] + oldArray[i+5] + oldArray[i+6] + oldArray[i+7])); //essa foi a melhor forma que consegui salvar os dados sem um monte de "//" no meio da string
+  // }
   const birthday = new BirthdayParty({
     title: req.body.title,
-    birthdayPerson: { 
-      name: req.body.name, 
-      age: parseInt(req.body.age, 10) 
+    birthdayPerson: {
+      name: req.body.name,
+      age: parseInt(req.body.age, 10)
     },
     start: req.body.start,//falta ter a data só tem a hora
     end: req.body.end,//aqui tbm
     description: req.body.description,
     observations: req.body.observations,
-    payment: { 
+    payment: {
       value: parseInt(req.body.value, 10),
-      method: req.body.method 
+      method: req.body.method
     },
-    amount: { 
-      children: parseInt(req.body.children, 10), 
-      adults: parseInt(req.body.adults, 10) 
+    amount: {
+      children: parseInt(req.body.children, 10),
+      adults: parseInt(req.body.adults, 10)
     },
-    guestList: array,
+    guestList: req.body.guestList,
     /*partyFeather: { 
       type: req.body.type, 
       id: req.body.id, 
       name: req.body.name 
     },*/
   });
-  console.log(array)
+
   try {
     const newBirthday = await birthday.save();
     return res.status(201).json(newBirthday);
@@ -79,28 +88,29 @@ router.put('/:identifier', async (req, res) => {
     const service = await BirthdayParty.findByIdAndUpdate(
       req.params.identifier,
       {
-        $set:{
+        $set: {
           title: req.body.title,
-          birthdayPerson: { 
-            name: req.body.name, 
-            age: parseInt(req.body.age, 10) 
+          birthdayPerson: {
+            name: req.body.name,
+            age: parseInt(req.body.age, 10)
           },
           start: req.body.start,
           end: req.body.end,
           description: req.body.description,
           observations: req.body.observations,
-          payment: { 
+          payment: {
             value: parseInt(req.body.value, 10),
-            method: req.body.method 
+            method: req.body.method
           },
-          amount: { 
-            children: parseInt(req.body.children, 10), 
-            adults: parseInt(req.body.adults, 10) 
+          amount: {
+            children: parseInt(req.body.children, 10),
+            adults: parseInt(req.body.adults, 10)
           },
-          
-        
-        // guestList: array,}
-      },}
+
+
+          // guestList: array,}
+        },
+      }
     );
 
     if (!service) {
