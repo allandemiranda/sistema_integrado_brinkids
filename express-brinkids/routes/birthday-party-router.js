@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
   var array = new Array();
   console.log(oldArray.length)
   for (var i = 0; i < oldArray.length - 1; i+=8) {
-    array.push(String(oldArray[i+1] + oldArray[i+2] + oldArray[i+3] + oldArray[i+4] + oldArray[i+5] + oldArray[i+6] + oldArray[i+7]));
+    array.push(String(oldArray[i+1] + oldArray[i+2] + oldArray[i+3] + oldArray[i+4] + oldArray[i+5] + oldArray[i+6] + oldArray[i+7])); //essa foi a melhor forma que consegui salvar os dados sem um monte de "//" no meio da string
   }
   const birthday = new BirthdayParty({
     title: req.body.title,
@@ -29,8 +29,8 @@ router.post('/', async (req, res) => {
       name: req.body.name, 
       age: parseInt(req.body.age, 10) 
     },
-    start: req.body.start,
-    end: req.body.end,
+    start: req.body.start,//falta ter a data só tem a hora
+    end: req.body.end,//aqui tbm
     description: req.body.description,
     observations: req.body.observations,
     payment: { 

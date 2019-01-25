@@ -47,7 +47,7 @@ class SaidaCrianca extends React.Component {
             //Ultima Tela
             TotalValor: "0",
             TotalValorDesc: "0",
-            FinalValor: "0",
+            FinalValor: "",
 
         }
 
@@ -145,9 +145,7 @@ class SaidaCrianca extends React.Component {
                 page: "MostraCrianca",
             })
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
-            if(this.state.indice === this.state.CriancasSelecionadas.length - 1){
-
-            }
+            if(this.state.indice === this.state.CriancasSelecionadas.length - 1){}
             /*var formData = new FormData();
 
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
@@ -229,8 +227,8 @@ class SaidaCrianca extends React.Component {
             })
             //AQUI É O VALOR FINAL COM DESCONTO
             this.state.ValorCriaDesc.map((resp, indice) => {
-                //k += parseFloat(resp[indice].value);
-                console.log(resp, " ", indice)
+                k += parseFloat(resp.value);
+                console.log(resp.value, " ", indice)
                 console.log("k", k)
             })
             this.setState({
@@ -246,7 +244,7 @@ class SaidaCrianca extends React.Component {
     }
 
     VerificaDescontoFilhos = (Codigo) => {
-        axios.get(`/discount/`) //tirei do get a parte a seguir para testes: /*filter/${Codigo}*/
+        axios.get(`/discount/filter/`) //tirei do get a parte a seguir para testes: ${Codigo}
             .then((response) => {
                 alert("Desconto Validado")
                 this.setState({
@@ -286,7 +284,7 @@ class SaidaCrianca extends React.Component {
 
     VerificaDescontoPAi = (Codigo) => {
         console.log(this.state.verified);
-        axios.get(`/discount/filter/${Codigo}`)
+        axios.get(`/discount/filter/`)//tirei o ${Codigo}
             .then((response) => {
                 alert("Desconto Validado")
                 this.setState({
@@ -303,7 +301,7 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/` + this.state.FinalValor + `/` + this.state.CodDes)
+                axios.get(`/passport/discountAdult/` + this.state.FinalValor + `/` + this.state.CodDes)
                 .then((response) => {
                     this.setState({
                         FinalValor: response.data,
@@ -613,7 +611,7 @@ class SaidaCrianca extends React.Component {
                                             return (
                                                 <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.desconto.name} </td>
+                                                    <td > {resp.discount} </td>
                                                     <td > {resp.id} </td>
                                                     <td > {resp.value} </td>
                                                 </tr>

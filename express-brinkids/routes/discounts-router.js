@@ -25,6 +25,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/filter/', async (req, res) => {
+  try {
+    const discounts = await Discount.find({});
+
+    return res.json(discounts);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 /**
  * TODO: Quando entrar a parte de login de usuários com token, precisa
  * ajeitar os campos relacionados ao usuário
