@@ -79,25 +79,28 @@ router.put('/:identifier', async (req, res) => {
     const service = await BirthdayParty.findByIdAndUpdate(
       req.params.identifier,
       {
-        title: req.body.title,
-        birthdayPerson: { 
-          name: req.body.name, 
-          age: req.body.age, 
-        },
-        start: req.body.start,
-        end: req.body.end,
-        description: req.body.description,
-        observations: req.body.observations,
-        payment: { 
-          value: req.body.value, 
-          method: req.body.method 
-        },
-        amount: { 
-          children: req.body.children,  
-          adults: req.body.adults,  
-        },
-        // guestList: array,
-      },
+        $set:{
+          title: req.body.title,
+          birthdayPerson: { 
+            name: req.body.name, 
+            age: parseInt(req.body.age, 10) 
+          },
+          start: req.body.start,
+          end: req.body.end,
+          description: req.body.description,
+          observations: req.body.observations,
+          payment: { 
+            value: parseInt(req.body.value, 10),
+            method: req.body.method 
+          },
+          amount: { 
+            children: parseInt(req.body.children, 10), 
+            adults: parseInt(req.body.adults, 10) 
+          },
+          
+        
+        // guestList: array,}
+      },}
     );
 
     if (!service) {

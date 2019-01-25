@@ -38,15 +38,28 @@ class VisualizarAniversario extends React.Component {
         this.excluir = this.excluir.bind(this);
         this.inteval = this.inteval.bind(this);
         this.voltar = this.voltar.bind(this);
+        this.changue = this.changue.bind(this);
 
         this.selecionar = this.selecionar.bind(this);
         this.salvar = this.salvar.bind(this);
 
+        this.listaC = this.listaC.bind(this);
+
+    }
+    listaC(event){
+        this.setState({
+            Page: "ListaC",
+        })
+    }
+    changue(event){
+        this.setState({
+            [event.target.name]:event.target.value,
+        })
     }
     salvar(event){
         console.log('entrei')
         var formData = new FormData();
-
+            console.log(this.state.TituloDoAni)
         formData.append('title', String(this.state.TituloDoAni))
         formData.append('name', String(this.state.NomeDoAni))
         formData.append('age', String(this.state.IdadeDoAni))
@@ -68,7 +81,7 @@ class VisualizarAniversario extends React.Component {
 
         // formData.append('guestList', JSON.stringify(guestList));
         console.log(this.state.AniAtual)
-        axios.put(`/birthday/${this.state.AniAtual._id}`)
+        axios.put(`/birthday/${this.state.AniAtual._id}`,formData)
         .then((response) => {
 
 
@@ -209,6 +222,7 @@ class VisualizarAniversario extends React.Component {
         }
         if(this.state.Page === "FormularioCad") {
             return (
+            
                 <div className = "container-fluid" >
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
@@ -225,32 +239,32 @@ class VisualizarAniversario extends React.Component {
                             <div className = "graph" >
                                 <div className = "form-group" >
                                     <div className ="row">
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Título do Aniversário: "} type = {"text"} id = {"titulo"} name= {"titulo"} Class = {"form-control"} value={this.state.TituloDoAni} onChange={this.ChangeTitulo} />
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Título do Aniversário: "} type = {"text"} id = {"titulo"} name= {"TituloDoAni"} Class = {"form-control"} value={this.state.TituloDoAni} onChange={this.changue} />
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-10 col-sm-10 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome do Aniversáriante: "} type = {"text"} id = {"nome"} name= {"nome"} Class = {"form-control"} value = {this.state.NomeDoAni} onChange={this.ChangeName}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-2 col-sm-2 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Idade: "} type = {"number"} id = {"idade"} name= {"idade"} Class = {"form-control"} value = {this.state.IdadeDoAni} onChange={this.ChangeIdade}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-10 col-sm-10 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome do Aniversáriante: "} type = {"text"} id = {"nome"} name= {"NomeDoAni"} Class = {"form-control"} value = {this.state.NomeDoAni} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-2 col-sm-2 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Idade: "} type = {"number"} id = {"idade"} name= {"IdadeDoAni"} Class = {"form-control"} value = {this.state.IdadeDoAni} onChange={this.changue}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"Data"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.ChangeDate}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora incial: "} type = {"time"} id = {"HI"} name= {"HI"} Class = {"form-control"} value = {this.state.HoraInicio} onChange={this.ChangeHInicial}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"HF"} name= {"HF"} Class = {"form-control"} value = {this.state.HoraFinal} onChange={this.ChangeHFinal}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"DataDoAni"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora incial: "} type = {"time"} id = {"HI"} name= {"HoraInicio"} Class = {"form-control"} value = {this.state.HoraInicio} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"HF"} name= {"HoraFinal"} Class = {"form-control"} value = {this.state.HoraFinal} onChange={this.changue}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Quantidade de Convidados Crianças: "} type = {"number"} id = {"QCC"} name= {"QCC"} Class = {"form-control"} value = {this.state.QuantCrianca} onChange={this.ChangeQCria}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Quantidade de Convidados Adultos: "} type = {"number"} id = {"QCA"} name= {"QCA"} Class = {"form-control"} value = {this.state.QuantAdulto} onChange={this.ChangeQAdul}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Quantidade de Convidados Crianças: "} type = {"number"} id = {"QCC"} name= {"QuantCrianca"} Class = {"form-control"} value = {this.state.QuantCrianca} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Quantidade de Convidados Adultos: "} type = {"number"} id = {"QCA"} name= {"QuantAdulto"} Class = {"form-control"} value = {this.state.QuantAdulto} onChange={this.changue}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"} id = {"VP"} name= {"VP"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.ChangeValorPg}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Metodo de Pagamento: "} type = {"text"} id = {"MP"} name= {"MP"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"} id = {"VP"} name= {"ValorPg"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Metodo de Pagamento: "} type = {"text"} id = {"MP"} name= {"MetodoPg"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.changue}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
@@ -258,12 +272,12 @@ class VisualizarAniversario extends React.Component {
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <h3 className = "inner-tittle" > Descrição do Aniversario </h3>
                                             <br></br>
-                                            <TypesInput cod = {2} Label = {0} cols = {"50"} rows = {"4"} id = {"Descricao"} name= {"Descricao"} Class = {"form-control"} value={this.state.DescriçãoDoAni} onChange={this.ChangeDescricao} />
+                                            <TypesInput cod = {2} Label = {0} cols = {"50"} rows = {"4"} id = {"Descricao"} name= {"DescriçãoDoAni"} Class = {"form-control"} value={this.state.DescriçãoDoAni} onChange={this.changue} />
                                         </div>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <h3 className = "inner-tittle" > Observações </h3>
                                             <br></br>
-                                            <TypesInput cod = {2} Label = {0} cols = {"50"} rows = {"4"} id = {"Observacoes"} name= {"Observacoes"} Class = {"form-control"} value={this.state.ObsDoAni} onChange={this.ChangeObs}/>
+                                            <TypesInput cod = {2} Label = {0} cols = {"50"} rows = {"4"} id = {"Observacoes"} name= {"ObsDoAni"} Class = {"form-control"} value={this.state.ObsDoAni} onChange={this.changue}/>
                                         </div>
                                     </div>
                                 </div>
@@ -271,12 +285,18 @@ class VisualizarAniversario extends React.Component {
                             <br></br>
                             <div className="text-center">
                                 <button className="btn btn-md botao" onClick={this.voltar} >Cancelar</button>
+                                <button className="btn btn-md botao" onClick={this.listaC} >Listas Crianças/Adultos</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.salvar}>Salvar</button>
                             </div>                      
                        
                     </div>
                 </div>
             )
+        }
+        if(this.state.Page ==="ListaC"){
+            return(
+                <div></div>
+            );
         }
     }
 }
