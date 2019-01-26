@@ -10,7 +10,7 @@ import '../../assets/style/font-awesome.css';
 import './css/Saida_Crianca.css';
 import './css/style.css';
 
-var i=1;//para percorrer como um for na funçao proximaCria, mas ainda não está 100%
+
 class SaidaCrianca extends React.Component {
     constructor(props) {
         super(props)
@@ -19,23 +19,32 @@ class SaidaCrianca extends React.Component {
             namebutton: "Proxima Criança",
             indice: 1,
             FormPag: "",
-            aux: "0",
+            //VARIAVEL QUE FAZ A VERIFICAÇÂO SE O DESCONTO DEU CERTO
             verified: false,
 
             listAdultos: [],
             listCrianca: [],
             CriancasSelecionadas: [],
+            
+            //ARRAY DE VARIAVEIS RELACIONADA AS CRIANÇAS
             ValorCria: [],
+            
+            //ARRAY DE VARIVEIS RALACIONADA AS CRIANÇAS COM DESCONTO INCLUSO
             ValorCriaDesc: [],
-            TimeAdult: "",
-            NameAdult: "João",
-            PhoneAdult: "900000000",
-            CPFAdult: "000.000.000-00",
-            ObsAdult: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            PhotoAdult: "",
-
-            //Crianças
+            
+            //VARIAVEL PARA CODIGO DO DESCONTO
             CodDes: "",
+
+            //ADULTO
+            IDAdult: "",
+            TimeAdult: "",
+            NameAdult: "",
+            PhoneAdult: "",
+            CPFAdult: "",
+            ObsAdult: "",
+            PhotoAdult: "",
+            
+            //Criança
             NameCria: "",
             PhotoCria: "",
             IdadeCria: "",
@@ -43,11 +52,13 @@ class SaidaCrianca extends React.Component {
             ObsCria: "",
             RetCria: "",
             ProdutoCria: "",
+            //VARIAVEL PARA GUARDAR O VALOR DA CRIANÇA QUE ESTA SENDO ACESSADA NAQUELE INSTANTE
+            ValorCrianca: "",
 
             //Ultima Tela
             TotalValor: "0",
             TotalValorDesc: "0",
-            FinalValor: "",
+            FinalValor: "0",
 
         }
 
@@ -76,6 +87,7 @@ class SaidaCrianca extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    //FUNÇÃO QUE SELECIONA O ADULTO DESEJADO
     Selecionar = (resp1) => {
         console.log(resp1);
         var deubom = true;
@@ -84,6 +96,7 @@ class SaidaCrianca extends React.Component {
                 console.log("Dentro do axios: " + this)
                 this.setState({
                     TimeAdult: Date.now(),
+                    IDAdult: response.data.id,
                     NameAdult: response.data.name,
                     PhoneAdult: response.data.prone,
                     CPFAdult: response.data.cpf,
@@ -92,7 +105,7 @@ class SaidaCrianca extends React.Component {
                 });
 
             }).catch((error) => {
-                console.log("Não deu certo");
+                console.log("Não deu certo, Adulto não encontrado!");
                 console.log(error)//LOG DE ERRO
                 deubom = false;
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -106,19 +119,24 @@ class SaidaCrianca extends React.Component {
                     listCrianca: response.data,
                 });
             }).catch((error) => {
-                console.log("Não deu certo");
+                console.log("Não deu certo, nenhuma criança esta com esse adulto!");
                 console.log(error)//LOG DE ERRO
                 deubom = false;
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-        if (deubom === true) {
-            this.setState({
-                page: "UsuarioAdulto",
-            })
-        }
+        setTimeout(_=>{
+            console.log(deubom);
+            if (deubom === true) {
+                this.setState({
+                    page: "UsuarioAdulto",
+                })
+            } 
+        },2000);
     }
+
+    //AQUi É A FUNÇÃO QUE SELECIONA AS CRIANÇAS QUE IRÃO SAIR
     selecionaCrianca(identifier) {
         console.log("Entrei aqui");
         this.state.listCrianca.forEach((crianca, indice) => {
@@ -131,6 +149,7 @@ class SaidaCrianca extends React.Component {
         });
     }
 
+    //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
     ProximaTela = (event) => {
         event.preventDefault();
         if (this.state.CriancasSelecionadas.length > 0) {
@@ -145,7 +164,9 @@ class SaidaCrianca extends React.Component {
                 page: "MostraCrianca",
             })
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
-            //if(this.state.indice === this.state.CriancasSelecionadas.length - 1){}
+            if(this.state.indice === this.state.CriancasSelecionadas.length - 1){
+
+            }
             /*var formData = new FormData();
 
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
@@ -157,8 +178,8 @@ class SaidaCrianca extends React.Component {
                 .then((response) => {
                      console.log(response);
                     this.setState({                        
-                        ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
-                        aux: response.data.value
+                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                        ValorCrianca: response.data.value, 
                     })
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
@@ -173,24 +194,14 @@ class SaidaCrianca extends React.Component {
         }
     }
 
+    //FUNÇÃO QUE FAZ PASSAR AS CRIANÇAS 
     ProximaCria = () => {
-        this.setState({
-            FinalValor: (this.state.FinalValor + this.state.aux),
-            CodDes: "",
-        })
-        console.log("pc",this.state.indice, "/", this.state.CriancasSelecionadas.length)
-        if (this.state.indice === (this.state.CriancasSelecionadas.length -1)){
-            this.setState({
-                namebutton: "Finalizar",
-            })
-
-        }
         if (this.state.indice < this.state.CriancasSelecionadas.length) {
                 axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
                     .then((response) => {
                         this.setState({
-                            ValorCria: update(this.state.ValorCria, { $push: [response.data.value] }),
-                            aux: response.data.value,
+                            ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                            ValorCrianca: response.data.value,
                         })
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
@@ -207,44 +218,43 @@ class SaidaCrianca extends React.Component {
                 ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
                 RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
                 ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].children.service,
-                indice: (this.state.indice + (i)),
+                indice: (this.state.indice),
             })
         }
+        console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
+        if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)){
+            this.setState({
+                namebutton: "Finalizar",
+            })
+
+        }
         //ESSE IF É ONDE ACONTECE OS SOMATORIOS DOS VALORES FINAIS!!!!!!
-        console.log("this is what i need now: ", this.state.indice, "/", this.state.CriancasSelecionadas.length)
-        if (this.state.indice >= this.state.CriancasSelecionadas.length) {//botei >= por não tá dando certo zerar o i que conta os indices
-            console.log("i final: ",i);
-            i=0;//aqui o i do comentário acima
-            console.log("de novo 1: ", i);
+        if (this.state.indice === this.state.CriancasSelecionadas.length) {
             //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
             var j=0;
             var k=0;
             //AQUI É O VALOR FINAL
             this.state.ValorCria.map((resp, indice) => {
-                j += parseFloat(resp);
+                j += resp[indice].value;
                 console.log(resp, " ", indice)
-                console.log("j", j)
             })
             //AQUI É O VALOR FINAL COM DESCONTO
             this.state.ValorCriaDesc.map((resp, indice) => {
-                k += parseFloat(resp.value);
-                console.log(resp.value, " ", indice)
-                console.log("k", k)
+                k += resp[indice].value;
             })
             this.setState({
-                CodDes: "",
                 TotalValor: j,
                 TotalValorDesc: k,
+                FinalValor: (j-k),
                 page: "FinalizarSaida",
+                CodDes: "",
             })
         }
-        console.log("i do passado: ", i);
-        i++;
-        console.log("new i: ", i);
     }
 
+    //FUNÇÃO QUE VERIFICA O DESCONTO PARA CRIANÇA E FAZ O DESCONTO CASO EXISTA!
     VerificaDescontoFilhos = (Codigo) => {
-        axios.get(`/discount/filter/`) //tirei do get a parte a seguir para testes: ${Codigo}
+        axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
                 alert("Desconto Validado")
                 this.setState({
@@ -261,13 +271,12 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[0].children.id + `/` + moment() + `/` + this.state.CodDes) 
+                axios.get(`/passport/` + this.state.CodDes + `/` + this.state.ValorCrianca) 
                     .then((response) => {
                         this.setState({
                             ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                            aux: response.data.value,
+                            CodDes: "",
                         })
-                        alert("Desconto realizado")                        
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
@@ -281,10 +290,10 @@ class SaidaCrianca extends React.Component {
             verified: false,
         }) 
     }
-
+    //FUNÇÃO QUE VERIFICA O DESCONTO PARA ADULTO E FAZ O DESCONTO CASO EXISTA!
     VerificaDescontoPAi = (Codigo) => {
         console.log(this.state.verified);
-        axios.get(`/discount/filter/`)//tirei o ${Codigo}
+        axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
                 alert("Desconto Validado")
                 this.setState({
@@ -301,12 +310,12 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/discountAdult/` + this.state.FinalValor + `/` + this.state.CodDes)
+                axios.get(`/passport/` + this.state.FinalValor + `/` + this.state.CodDes + `/`+ this.state.IDAdult)
                 .then((response) => {
                     this.setState({
                         FinalValor: response.data,
+                        CodDes:"",
                     })
-                    alert("Desconto realizado")
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro ao colocar Desconto");
@@ -321,6 +330,7 @@ class SaidaCrianca extends React.Component {
         });
     }
 
+    //Função que finaliza tudo
     Finalizar = (event) => {
         event.preventDefault();
         console.log("Entrei Aqui");
@@ -517,7 +527,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Valor:</b></h5>
-                                        <p>{this.state.ValorCria}</p>
+                                        <p>{this.state.ValorCrianca}</p>
                                     </div>
                                 </div>
                             </div>
@@ -573,7 +583,7 @@ class SaidaCrianca extends React.Component {
                                         <tr>
                                             <th>#</th>
                                             <th className="text-center">Serviço</th>
-                                            <th className="text-center">ID</th>
+                                            <th className="text-center">Nome</th>
                                             <th className="text-center">Tempo</th>
                                             <th className="text-center">Valor</th>
                                         </tr>
@@ -583,8 +593,8 @@ class SaidaCrianca extends React.Component {
                                             return (
                                                 <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.service} </td>
-                                                    <td > {resp.id} </td>
+                                                    <td > {resp[indice].service} </td>
+                                                    <td > {resp.name} </td>
                                                     <td > {resp.time} </td>
                                                     <td > {resp.value} </td>
                                                 </tr>
@@ -602,7 +612,7 @@ class SaidaCrianca extends React.Component {
                                         <tr>
                                             <th>#</th>
                                             <th className="text-center">Desconto</th>
-                                            <th className="text-center">ID</th>
+                                            <th className="text-center">Nome</th>
                                             <th className="text-center">Valor</th>
                                         </tr>
                                     </thead>
@@ -611,8 +621,8 @@ class SaidaCrianca extends React.Component {
                                             return (
                                                 <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.discount} </td>
-                                                    <td > {resp.id} </td>
+                                                    <td > {resp.desconto.name} </td>
+                                                    <td > {resp.name} </td>
                                                     <td > {resp.value} </td>
                                                 </tr>
                                             );
