@@ -10,7 +10,7 @@ import '../../assets/style/font-awesome.css';
 import './css/Saida_Crianca.css';
 import './css/style.css';
 
-
+var i=0;//para percorrer como um for na funçao proximaCria, mas ainda não está 100%
 class SaidaCrianca extends React.Component {
     constructor(props) {
         super(props)
@@ -56,9 +56,9 @@ class SaidaCrianca extends React.Component {
             ValorCrianca: "",
 
             //Ultima Tela
-            TotalValor: "0",
-            TotalValorDesc: "0",
-            FinalValor: "0",
+            TotalValor: 0,
+            TotalValorDesc: 0,
+            FinalValor: 0,
 
         }
 
@@ -133,7 +133,7 @@ class SaidaCrianca extends React.Component {
                     page: "UsuarioAdulto",
                 })
             } 
-        },2000);
+        },1000);
     }
 
     //AQUi É A FUNÇÃO QUE SELECIONA AS CRIANÇAS QUE IRÃO SAIR
@@ -164,9 +164,7 @@ class SaidaCrianca extends React.Component {
                 page: "MostraCrianca",
             })
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
-            if(this.state.indice === this.state.CriancasSelecionadas.length - 1){
-
-            }
+            //if(this.state.indice === this.state.CriancasSelecionadas.length - 1){}
             /*var formData = new FormData();
 
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
@@ -210,18 +208,19 @@ class SaidaCrianca extends React.Component {
                         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
+                    console.log(this.state.CriancasSelecionadas[this.state.indice])
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[this.state.indice].children.name,
-                PhotoCria: this.state.CriancasSelecionadas[this.state.indice].children.photo,
+                PhotoCria: this.state.CriancasSelecionadas[this.state.indice].photo,
                 IdadeCria: this.state.CriancasSelecionadas[this.state.indice].children.birthday,
-                TimeCria: this.state.CriancasSelecionadas[this.state.indice].children.time,
+                TimeCria: this.state.CriancasSelecionadas[this.state.indice].time,
                 ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
                 RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].children.service,
+                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].service,
                 indice: (this.state.indice),
             })
         }
-        console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
+        console.log("pc ",this.state.indice, "/", this.state.CriancasSelecionadas.length)
         if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)){
             this.setState({
                 namebutton: "Finalizar",
@@ -229,34 +228,39 @@ class SaidaCrianca extends React.Component {
 
         }
         //ESSE IF É ONDE ACONTECE OS SOMATORIOS DOS VALORES FINAIS!!!!!!
+        console.log("this is what i need now: ", this.state.indice, "/", this.state.CriancasSelecionadas.length)
+        console.log(this.state.listCrianca)
         if (this.state.indice === this.state.CriancasSelecionadas.length) {
             //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
-            var j=0;
-            var k=0;
+            var j=0.0;
+            var k=0.0;
             //AQUI É O VALOR FINAL
             this.state.ValorCria.map((resp, indice) => {
-                j += resp[indice].value;
-                console.log(resp, " ", indice)
+                j += parseFloat(resp.value);
             })
             //AQUI É O VALOR FINAL COM DESCONTO
             this.state.ValorCriaDesc.map((resp, indice) => {
-                k += resp[indice].value;
+                k += parseFloat(resp.value);
             })
             this.setState({
-                TotalValor: j,
-                TotalValorDesc: k,
-                FinalValor: (j-k),
+                TotalValor: (j).toFixed(2),
+                TotalValorDesc: (k).toFixed(2),
+                FinalValor: parseFloat(j-k).toFixed(2),
                 page: "FinalizarSaida",
                 CodDes: "",
             })
         }
+        console.log("oregairu")
+        this.setState({
+            indice: (this.state.indice+1),
+        })
     }
 
     //FUNÇÃO QUE VERIFICA O DESCONTO PARA CRIANÇA E FAZ O DESCONTO CASO EXISTA!
     VerificaDescontoFilhos = (Codigo) => {
         axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
-                alert("Desconto Validado")
+                //alert("Desconto Validado")
                 this.setState({
                     verified: true,
                 })
@@ -271,12 +275,14 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/` + this.state.CodDes + `/` + this.state.ValorCrianca) 
+                console.log(this.state.indice)
+                axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[this.state.indice - 1].children.id + '/' + this.state.CodDes + `/` + this.state.ValorCrianca) 
                     .then((response) => {
                         this.setState({
                             ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                            CodDes: "",
+                            //CodDes: "",
                         })
+                        alert("Desconto Concluído")
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
@@ -285,7 +291,7 @@ class SaidaCrianca extends React.Component {
                         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
             }
-        },2000);
+        },1000);
         this.setState({
             verified: false,
         }) 
@@ -295,7 +301,7 @@ class SaidaCrianca extends React.Component {
         console.log(this.state.verified);
         axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
-                alert("Desconto Validado")
+                //alert("Desconto Validado")
                 this.setState({
                     verified: true,
                 })
@@ -310,12 +316,13 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/` + this.state.FinalValor + `/` + this.state.CodDes + `/`+ this.state.IDAdult)
+                axios.get(`/passport/discountAdult/` + this.state.IdAdult + `/` + this.state.FinalValor + `/`+ this.state.CodDes)
                 .then((response) => {
                     this.setState({
                         FinalValor: response.data,
                         CodDes:"",
                     })
+                    alert("Desconto Concluído");
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro ao colocar Desconto");
@@ -365,17 +372,17 @@ class SaidaCrianca extends React.Component {
                                             <th>#</th>
                                             <th className="text-center">Nome</th>
                                             <th className="text-center">Telefone</th>
-                                            <th>Selecionar</th>
+                                            <th className="text-center">Selecionar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                          {this.state.listAdultos.map((resp, indice) => {
                                             return (
-                                                <tr key={resp._id}>
+                                                <tr className="text-center" key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.adult.name} </td>
-                                                    <td >{resp.adult.phone} </td>
-                                                    <td ><button className="btn botao btn-xs" onClick={() => this.Selecionar(resp.adult.name)}>Selecionar</button></td>
+                                                    <td className="text-center"> {resp.adult.name} </td>
+                                                    <td className="text-center">{resp.adult.phone} </td>
+                                                    <td className="text-center"><button className="btn botao btn-xs text-center" onClick={() => this.Selecionar(resp.adult.name)}>Selecionar</button></td>
                                                 </tr>
                                             );
                                         })}
@@ -403,13 +410,13 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Nome:</b></h5>
-                                        <p>{this.state.NameAdult}</p>
+                                        <p>{this.state.listCrianca[0].adult.name}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Telefone:</b></h5>
-                                        <p>{this.state.PhoneAdult}</p>
+                                        <p>{this.state.listCrianca[0].adult.phone}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
@@ -424,7 +431,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-6 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Observações: </b></h5>
-                                        <p>{this.state.ObsAdult}</p>
+                                        <p>{this.state.listCrianca[0].adult.observations}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-6 col-sm-12 col-xs-12">
@@ -445,7 +452,7 @@ class SaidaCrianca extends React.Component {
                                                 <th className="text-center">Nome</th>
                                                 <th className="text-center">Produto</th>
                                                 <th className="text-center">Tempo</th>
-                                                <th>Selecionar</th>
+                                                <th className="text-center">Selecionar</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -453,10 +460,10 @@ class SaidaCrianca extends React.Component {
                                             return (
                                                 <tr key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.children.name} </td>
-                                                    <td >{resp.service}</td>
-                                                    <td>{resp.time}</td>
-                                                    <td ><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(resp.children.id)} /></td>
+                                                    <td className="text-center"> {resp.children.name} </td>
+                                                    <td className="text-center">{resp.service}</td>
+                                                    <td className="text-center">{resp.time}</td>
+                                                    <td className="text-center"><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(resp.children.id)} /></td>
                                                 </tr>
                                             );
                                         })}
@@ -591,12 +598,12 @@ class SaidaCrianca extends React.Component {
                                     <tbody>
                                         {this.state.ValorCria.map((resp, indice) => {
                                             return (
-                                                <tr key={resp._id}>
+                                                <tr className="text-center" key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp[indice].service} </td>
-                                                    <td > {resp.name} </td>
-                                                    <td > {resp.time} </td>
-                                                    <td > {resp.value} </td>
+                                                    <td className="text-center"> {resp.service} </td>
+                                                    <td className="text-center"> {resp.name} </td>
+                                                    <td className="text-center"> {resp.time} </td>
+                                                    <td className="text-center"> {resp.value} </td>
                                                 </tr>
                                             );
                                         })}
@@ -619,11 +626,11 @@ class SaidaCrianca extends React.Component {
                                     <tbody>
                                         {this.state.ValorCriaDesc.map((resp, indice) => {
                                             return (
-                                                <tr key={resp._id}>
+                                                <tr className="text-center" key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {resp.desconto.name} </td>
-                                                    <td > {resp.name} </td>
-                                                    <td > {resp.value} </td>
+                                                    <td className="text-center"> {resp.discount} </td>
+                                                    <td className="text-center"> {resp.name} </td>
+                                                    <td className="text-center"> {resp.value} </td>
                                                 </tr>
                                             );
                                         })}

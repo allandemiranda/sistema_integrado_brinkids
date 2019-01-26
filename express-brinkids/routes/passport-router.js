@@ -31,17 +31,22 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/:idCria/:timeAdult', async (req, res) => {
+  
   console.log(req.params.idCria);
   console.log(req.params.timeAdult);
 
   const productFinded = await product.find({ 'children.id': req.params.idCria });
   const adultEntered = productFinded[0].time;
-  console.log(productFinded)
+  
+  const childName = await productFinded[0].children.name;
+
   const adultExit = req.params.timeAdult;
   const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000));
+  
   console.log('entrada:', adultEntered.getTime()/60000);
   console.log('saída:', adultExit/60000);
   console.log('diferença em minutos:', adultTime);
+  
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
 
@@ -49,13 +54,17 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   let lastInitialTime = psjson[psjson.length-1].initialTime;
   let lastPrice = psjson[psjson.length-1].price;
   var price;
+  
   if(productFinded[0].service === 'Passaporte'){
+
     if(adultTime>(lastFinalTime.toSS()/60)){
       let time = adultTime - (lastFinalTime.toSS()/60);
       console.log("time sem o ultimo tempo de serviço:", time);
-      price = parseFloat(time/parseInt(pjson[0].time, 10)*parseInt(pjson[0].price, 10) + parseInt(lastPrice, 10)).toFixed(2);
+      price = parseFloat(time/parseFloat(pjson[0].time, 10)*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
       console.log("preço:", price);
+    
     } else {
+    
       for(i = 0; i < psjson.length; i++){
         if(adultTime <= (psjson[i].finalTime.toSS()/60) && adultTime >= (psjson[i].initialTime.toSS()/60)){
           price = psjson[i].price;
@@ -63,17 +72,20 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
         }
       }
     }
+  
   } else {//preparando pra terminar quando o aniversário tiver executando normal
     price = parseInt(0, 10).toFixed(2);
     if(birthday.start - adultEntered > 15){}
     if(adultExit>birthday.end){}
   }
+  
   const data = {
     service: "passaport",
-    id: req.params.idCria,
+    name: childName,
     time: adultTime,
     value: price, 
   };
+  
   try {
     return res.status(201).json(data);
   } catch (err) {
@@ -85,59 +97,39 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   console.log('Preço:', price);
 });
 
-router.get('/discount/:idCria/:timeAdult/:codDesc', async (req, res) => {
-  
-  console.log(req.params.idCria);
-  console.log(req.params.timeAdult);
+router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
 
-  const discountFinded = await discount.find({ 'name': req.params.codDesc })
   const productFinded = await product.find({ 'children.id': req.params.idCria });
-  const childName = await productFinded[0].children.name;
   const adultEntered = productFinded[0].time;
+  
   const adultExit = req.params.timeAdult;
-
   const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000));
-  console.log('entrada:', adultEntered.getTime()/60000);
-  console.log('saída:', adultExit/60000);
-  console.log('diferença em minutos:', adultTime);
   
-  const psjson = await passportServices.find({});
-  const pjson = await passport.find({});
-  
-  console.log(discountFinded)
+  const discountFinded = await discount.find({ 'name': req.params.codDesc })
 
-  let lastFinalTime = psjson[psjson.length-1].finalTime;//Último finalTime do json
-  let lastInitialTime = psjson[psjson.length-1].initialTime;
-  let lastPrice = psjson[psjson.length-1].price;
-  var price;
+  const childName = await productFinded[0].children.name;
+  console.log(productFinded[0].children.name)
 
-  if(adultTime>(lastFinalTime.toSS()/60)){
-    let time = adultTime - (lastFinalTime.toSS()/60);
-    console.log("time sem o ultimo tempo de serviço:", time);
-    price = parseFloat(time/parseFloat(pjson[0].time, 10)*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
-    console.log("preço:", price);
-  } else {
-    for(i = 0; i < psjson.length; i++){
-      if(adultTime <= (psjson[i].finalTime.toSS()/60) && adultTime >= (psjson[i].initialTime.toSS()/60)){
-        price = psjson[i].price;
-        console.log("preço:", price);
-      }
-    }
-  }
   if(discountFinded[0].type === 'Fixo'){
-    price = parseFloat(price - discountFinded[0].value).toFixed(2);
-    console.log("preço descontado:", price);
-    console.log(productFinded[0].name)
+  
+    price = parseFloat(discountFinded[0].value).toFixed(2);
+    console.log("valor do desconto:", price);
+  
   } else {
-    price = parseFloat(price - price*(discountFinded[0].value/100)).toFixed(2);
-    console.log("preço descontado:", price);
+  
+    price = req.params.valueChild;
+    price = parseFloat(price*(discountFinded[0].value/100)).toFixed(2);
+    console.log("valor do desconto:", price);
+  
   }
+  
   const data = {
     service: "passaport",
-    id: childName,
+    name: childName,
     time: adultTime,
     value: price, 
     discount: discountFinded[0].name,
+  
   };
   try {
     return res.status(201).json(data);
@@ -170,7 +162,7 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
    const data = {
     service: "passaport",
-    id: adultName,
+    name: adultName,
     time: "",
     value: finalPrice, 
     discount: discountFinded[0].name,
