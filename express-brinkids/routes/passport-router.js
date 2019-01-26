@@ -86,19 +86,24 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 });
 
 router.get('/discount/:idCria/:timeAdult/:codDesc', async (req, res) => {
+  
   console.log(req.params.idCria);
   console.log(req.params.timeAdult);
 
   const discountFinded = await discount.find({ 'name': req.params.codDesc })
   const productFinded = await product.find({ 'children.id': req.params.idCria });
+  const childName = await productFinded[0].children.name;
   const adultEntered = productFinded[0].time;
   const adultExit = req.params.timeAdult;
+
   const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000));
   console.log('entrada:', adultEntered.getTime()/60000);
   console.log('saída:', adultExit/60000);
   console.log('diferença em minutos:', adultTime);
+  
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
+  
   console.log(discountFinded)
 
   let lastFinalTime = psjson[psjson.length-1].finalTime;//Último finalTime do json
@@ -129,7 +134,7 @@ router.get('/discount/:idCria/:timeAdult/:codDesc', async (req, res) => {
   }
   const data = {
     service: "passaport",
-    id: req.params.idCria,
+    id: childName,
     time: adultTime,
     value: price, 
     discount: discountFinded[0].name,
@@ -145,11 +150,15 @@ router.get('/discount/:idCria/:timeAdult/:codDesc', async (req, res) => {
   console.log('Preço:', price);
 });
 
-router.get('/discountAdult/:value/:codDesc', async (req, res) => {
+router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
-const discountFinded = await discount.find({ 'name': req.params.codDesc })
+  const discountFinded = await discount.find({ 'name': req.params.codDesc });
   let finalPrice = req.params.value;
   let valueDisc = discountFinded[0].value;
+
+  const adultFinded = await product.find({ 'adult.id': req.params.idAdult });
+  let adultName = adultFinded[0].adult.name;
+  console.log(adultName);
 
   if(discountFinded[0].type === 'Fixo'){
     finalPrice = parseFloat(finalPrice - valueDisc).toFixed(2);
@@ -161,7 +170,7 @@ const discountFinded = await discount.find({ 'name': req.params.codDesc })
 
    const data = {
     service: "passaport",
-    id: "",
+    id: adultName,
     time: "",
     value: finalPrice, 
     discount: discountFinded[0].name,

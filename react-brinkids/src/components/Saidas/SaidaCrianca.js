@@ -145,7 +145,7 @@ class SaidaCrianca extends React.Component {
                 page: "MostraCrianca",
             })
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
-            if(this.state.indice === this.state.CriancasSelecionadas.length - 1){}
+            //if(this.state.indice === this.state.CriancasSelecionadas.length - 1){}
             /*var formData = new FormData();
 
             formData.append('idCria', String(this.state.CriancasSelecionadas[0].children.id));
