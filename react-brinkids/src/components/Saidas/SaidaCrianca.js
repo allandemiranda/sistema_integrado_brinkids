@@ -364,8 +364,16 @@ class SaidaCrianca extends React.Component {
         if (this.state.FormPag !== "") {
             console.log(this.state.FormPag);
             window.print();
-        }
-        else {
+            for(var i = 0; i<this.state.CriancasSelecionadas.length; i++){
+                axios.delete(`/passport/${this.state.CriancasSelecionadas[i].children.id}`)
+                .then((response) => {
+
+                    console.log(response.data);
+
+                }).catch((err) => console.log(err));
+            }
+
+        } else {
             alert("Selecione uma forma de pagamento");
             return (0);
         }

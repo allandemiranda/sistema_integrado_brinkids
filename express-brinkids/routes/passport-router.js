@@ -173,4 +173,23 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 });
 
+router.delete('/:identifier', async (req, res) => {
+  console.log('executed');
+  const productFinded = await product.find({ 'children.id': req.params.identifier });
+  console.log(productFinded[0]._id);
+  try {
+    const deletedService = await product.findByIdAndRemove(productFinded[0]._id);
+
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router;
