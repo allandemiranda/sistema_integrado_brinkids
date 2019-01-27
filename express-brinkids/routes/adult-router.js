@@ -3,10 +3,12 @@
  */
 
 const express = require('express');
+const Logs = require('../models/logs-models')
 const userAdult = require('../models/adult-models');
 const config = require('../config');
 
 const router = express.Router();
+
 
 function teste(err, res) {
   console.log(err);
@@ -68,24 +70,25 @@ router.get('/:identifier', async (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
+ 
   if (req.files
-      && req.body.firstName
-      && req.body.surName
-      && req.body.birthday
-      && req.body.phone
-      && req.body.street
-      && req.body.number
-      && req.body.district
-      && req.body.city
-      && req.body.state
-      && req.body.country
-      && req.body.cep
-      && req.body.nacionality
-      && req.body.sexuality
-      && req.body.cpf
-      && req.body.email
-      && req.body.maritalStatus) {
+    && req.body.firstName
+    && req.body.surName
+    && req.body.birthday
+    && req.body.phone
+    && req.body.street
+    && req.body.number
+    && req.body.district
+    && req.body.city
+    && req.body.state
+    && req.body.country
+    && req.body.cep
+    && req.body.nacionality
+    && req.body.sexuality
+    && req.body.cpf
+    && req.body.email
+    && req.body.maritalStatus) {
     userAdult.findOne({ cpf: req.body.cpf }, (err, adultFound) => {
       if (err) {
         return res.sendStatus(500);
@@ -129,9 +132,11 @@ router.post('/', (req, res) => {
           }
           const photoNameComponents = photoFile.name.split('.');
           const fileName = `${config.pathAdult}${adultResult._id}.png`; /**< url completa da localização do arquivo no computador */
-
+          id = adultResult._id
           adultResult.photo = fileName; /** Atualiza o nome do arquivo */
-          adultResult.save((errAdultSave) => { /** Atualiza no banco a nova informação */
+          adultResult.save((errAdultSave) => { 
+            /** Atualiza no banco a nova informação */
+
             if (errAdultSave) {
               return res.sendStatus(500);
             }
@@ -142,11 +147,23 @@ router.post('/', (req, res) => {
             config.pathPublic() + fileName, // Nome do arquivo
             errFile => (errFile ? res.sendStatus(500) : res.sendStatus(201)),
           );
+          const log = {
+            activity: 'Perfil Adulto',
+            action: 'Criação',
+            dateOperation: new Date(),
+            from: 'f', //ajsuta o id dps de fazer o login funcionar
+            to: adultResult._id,
+          }
+          Logs.create(log,(errLog, logchil)=>{
+            
+          })
         });
+
       } else {
         return res.sendStatus(409);
       }
     });
+  
   } else {
     return res.sendStatus(400);
   }
@@ -160,7 +177,14 @@ router.post('/appendChild', async (req, res) => {
         req.body.identifierParent,
         { $push: { children: { $each: req.body.listChildren } } },
       );
-
+      const log = new Logs({
+        activity: 'Perfil Adulto',
+        action: 'Edição',
+        dateOperation: new Date(),
+        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        to: req.body.identifierParent,
+      })
+      const newLog = await log.save();
       if (!adult) {
         return res.sendStatus(404);
       }
@@ -192,8 +216,16 @@ router.put('/:identifier', async (req, res) => {
         },
         observations: req.body.observations,
       },
-    });
 
+    });
+    const log = new Logs({
+      activity: 'Perfil Adulto',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: req.params.identifier,
+    })
+    const newLog = await log.save();
     if (!adultModified) {
       return res.sendStatus(404);
     }

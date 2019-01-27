@@ -16,6 +16,10 @@ const birthdayPartySchema = mongoose.Schema({
       required: true,
     },
   },
+  birthdayDate:{
+    type:Date,
+    required: true,
+  } ,
   start: {
     type: String,
     required: true,
@@ -45,7 +49,9 @@ const birthdayPartySchema = mongoose.Schema({
   },
   guestList: 
   [{
-    type: String,
+    type: {
+      type:String,
+    },
     name: {
       type: String,
       required: true,

@@ -1,6 +1,6 @@
 const express = require('express');
 const BirthdayParty = require('../models/birthday-party-models');
-
+const Logs = require('../models/logs-models')
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -19,11 +19,11 @@ router.post('/', async (req, res) => {
 
 
  
-  let jasonPaarse = JSON.parse(req.body.guestList)
+  let jasonPaarse = req.body.guestList
 
 
   console.log("===================================")
-  console.log(jasonPaarse)
+  console.log(req.body.guestList[0])
   console.log("===================================")
 
 
@@ -38,6 +38,7 @@ router.post('/', async (req, res) => {
       name: req.body.name,
       age: parseInt(req.body.age, 10)
     },
+    birthdayDate:req.body.birthdayDate,
     start: req.body.start,//falta ter a data só tem a hora
     end: req.body.end,//aqui tbm
     description: req.body.description,
@@ -59,7 +60,23 @@ router.post('/', async (req, res) => {
   });
 
   try {
+
     const newBirthday = await birthday.save();
+    
+      const log = new Logs({
+        activity: 'Aniversario',
+        action: 'Criação',
+        dateOperation: new Date(),
+        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        to: newBirthday._id,
+        price: newBirthday.payment.value,
+        priceMethod: newBirthday.payment.method,
+        
+
+      })
+      const newLog = await log.save();
+     
+    
     return res.status(201).json(newBirthday);
   } catch (err) {
     console.log(err);
@@ -71,6 +88,14 @@ router.delete('/:identifier', async (req, res) => {
   try {
     const deletedService = await BirthdayParty.findByIdAndRemove(req.params.identifier);
 
+    const log = new Logs({
+      activity: 'Aniversario',
+      action: 'Delete',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+
+    })
+    const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);
     }
@@ -113,6 +138,16 @@ router.put('/:identifier', async (req, res) => {
       }
     );
 
+    const log = new Logs({
+      activity: 'Aniversario',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to:req.params.identifier,
+      price: service.payment.value,
+      priceMethod: service.payment.method,
+    })
+    const newLog = await log.save();
     if (!service) {
       return res.sendStatus(404);
     }

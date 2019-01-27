@@ -4,7 +4,7 @@ const express = require('express');
 const adult = require('../models/adult-models');
 const Employees = require('../models/employees-models');
 const userSystem = require('../models/userSystem-models');
-
+const Logs = require('../models/logs-models')
 const router = express.Router();
 
 
@@ -136,6 +136,17 @@ router.post('/', async (req, res) => {
     adultResult.identifierEmployee = newEmployee;
 
     adultResult.save();
+    
+    const log = new Logs({
+      activity: 'Funcionario',
+      action: 'Criação',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: req.body.identifier,
+     
+
+    })
+    const newLog = await log.save();
 
     return res.sendStatus(201);
   } catch (err) {
@@ -171,7 +182,16 @@ router.put('/exchange-data', async (req, res) => {
 
     try {
       const adultChange = await adult.findByIdAndUpdate(req.body.identifier, exchangeData);
-
+      const log = new Logs({
+        activity: 'Funcionario',
+        action: 'Edição',
+        dateOperation: new Date(),
+        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        to: req.body.identifier,
+       
+  
+      })
+      const newLog = await log.save();
       if (!adultChange) {
         return res.sendStauts(404);
       }
@@ -189,7 +209,16 @@ router.put('/exchange-data', async (req, res) => {
 router.put('/reset-password', async (req, res) => {
   try {
     const userFind = await userSystem.findById(req.body.identifier);
+    const log = new Logs({
+      activity: 'Funcionario',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: req.body.identifier,
+     
 
+    })
+    const newLog = await log.save();
     if (!userFind) {
       return res.sendStatus(404);
     }

@@ -11,6 +11,7 @@ import './css/Cadastro_Aniversario.css';
 import './css/style.css';
 
 
+
 class CadastroAniversario extends React.Component {
     
     
@@ -233,7 +234,7 @@ class CadastroAniversario extends React.Component {
         else {
             $("#alertDiv").addClass('displaynone');
             this.setState({
-                ListaCria: update(this.state.ListaCria, {$push: [{nome: this.state.NomeCrianca, idade: this.state.IdadeCrianca}]}),
+                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca}]}),
                 NomeCrianca: "",
                 IdadeCrianca: "",
             })
@@ -256,7 +257,7 @@ class CadastroAniversario extends React.Component {
         else {
             $("#alertDiv").addClass('displaynone');
             this.setState({
-                ListaAdul: update(this.state.ListaAdul, {$push: [{nome: this.state.Adulto}]}),
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult'}]}),
                 Adulto: "",
             })
         }
@@ -288,21 +289,39 @@ class CadastroAniversario extends React.Component {
         formData.append('method', String(this.state.MetodoPg))
         formData.append('children', String(this.state.QuantCrianca))
         formData.append('adults', String(this.state.QuantAdulto))
+        let guestLista = this.state.ListaAdul.concat(this.state.ListaCria)
+        const data={
+            title: String(this.state.TituloDoAni),
+            name:String(this.state.NomeDoAni),
+            age:String(this.state.IdadeDoAni),
+            start:String(this.state.HoraInicio),
+            end:String(this.state.HoraFinal),
+            description:String(this.state.DescriçãoDoAni),
+            observations:String(this.state.ObsDoAni),
+            value:String(this.state.ValorPg),
+            method:String(this.state.MetodoPg),
+            children:String(this.state.QuantCrianca),
+            adults: String(this.state.QuantAdulto),
+            guestList: guestLista,
+            birthdayDate: this.state.DataDoAni,
 
+
+        }
+        console.log(this.state.DataDoAni)
         // Gabriel pegou as duas listas de adulto e criança, transformou numa lista só,
         // adicionou uma nova informação que vai precisar no banco de dados e enviou num único campo
         // chamado guestList
-        let guestList = this.state.ListaAdul.concat(this.state.ListaCria)
-        this.state.ListaAdul.map((guest) => {
-            guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
-            return guest;
-        })
-
-        formData.append('guestList', JSON.stringify(guestList))
+        
+        // this.state.ListaAdul.map((guest) => {
+        //     guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
+        //     return guest;
+        // })
+        // console.log(guestList)
+        // formData.append('guestList', guestList)
         //--------Codigo Aqui------------
         //formData.append('', String(this.state.UFLNasc))
     
-        axios.post('/birthday', formData)
+        axios.post('/birthday', data)
         .then(function (response) {
             console.log(response)
             //window.location.href = '/';
@@ -481,8 +500,8 @@ class CadastroAniversario extends React.Component {
                                                         return (
                                                             <tr>
                                                                 <th scope="row">{(indice + 1)}</th>
-                                                                <td > {crianca.nome} </td>
-                                                                <td > {crianca.idade} </td>
+                                                                <td > {crianca.name} </td>
+                                                                <td > {crianca.age} </td>
                                                             </tr>
                                                         );
                                                     })}
@@ -525,7 +544,7 @@ class CadastroAniversario extends React.Component {
                                                         return (
                                                             <tr>
                                                                 <th scope="row">{(indice + 1)}</th>
-                                                                <td > {adulto.nome} </td>
+                                                                <td > {adulto.name} </td>
                                                             </tr>
                                                         );
                                                     })}
@@ -570,8 +589,8 @@ class CadastroAniversario extends React.Component {
                                             return (
                                                 <tr>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {crianca.nome} </td>
-                                                    <td > {crianca.idade} </td>
+                                                    <td > {crianca.name} </td>
+                                                    <td > {crianca.age} </td>
                                                 </tr>
                                             );
                                         })}
@@ -596,7 +615,7 @@ class CadastroAniversario extends React.Component {
                                             return (
                                                 <tr>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {adulto.nome} </td>
+                                                    <td > {adulto.name} </td>
                                                 </tr>
                                             );
                                         })}

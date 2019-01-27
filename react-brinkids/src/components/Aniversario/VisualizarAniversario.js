@@ -1,6 +1,7 @@
 import React from 'react';
 import update from 'react-addons-update';
 import axios from 'axios';
+import moment from 'moment';
 import $ from 'jquery';
 import TypesInput from '../TypesInput.js';
 import ConfDadosAni from './ConfirmaDadosAniversariante.js'
@@ -131,13 +132,22 @@ class VisualizarAniversario extends React.Component {
     }
     selecionar(event) {
         let aniversarioAtual = this.state.list[event];
+        let listacria = [];
+        let listaadult= [];
+        aniversarioAtual.guestList.map((pessoa,indice)=>{
+            if(pessoa.type==="adult"){
+               listaadult.push(pessoa);
+            }else{
+                listacria.push(pessoa);
+            }
+        })
         this.setState({
             TituloDoAni: aniversarioAtual.title,
             NomeDoAni: aniversarioAtual.birthdayPerson.name,
             IdadeDoAni: aniversarioAtual.birthdayPerson.age,
-            DataDoAni: aniversarioAtual.start,
-            HoraInicio: "13:00",
-            HoraFinal: "14:00",
+            DataDoAni: moment(aniversarioAtual.birthdayDate).format("DD/MM/YYYY"),
+            HoraInicio:aniversarioAtual.start ,
+            HoraFinal: aniversarioAtual.end,
             QuantCrianca: aniversarioAtual.amount.children,
             QuantAdulto: aniversarioAtual.amount.adults,
             DescriçãoDoAni: aniversarioAtual.description,
@@ -148,6 +158,8 @@ class VisualizarAniversario extends React.Component {
             Page:"ConfDadosAni",
 
             AniAtual:aniversarioAtual,
+            ListaCria:listacria,
+            ListaAdul:listaadult,
         })
     }
     requisicao(event) {
@@ -184,7 +196,7 @@ class VisualizarAniversario extends React.Component {
                                         <th>#</th>
                                         <th>Titulo</th>
                                         <th >Aniversariante</th>
-                                        <th >Responsavel</th>
+                                       
                                         <th> Data </th>
                                         <th></th>
                                     </tr>
@@ -199,8 +211,8 @@ class VisualizarAniversario extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.title} </td>
                                                 <td > {findAdult.birthdayPerson.name} </td>
-                                                <td > {findAdult.cpf} </td>
-                                                <td > {findAdult.start} </td>
+                                               
+                                                <td > {moment(findAdult.birthdayDate).format("DD/MM/YYYY")} </td>
                                                 <td><button onClick={() => this.selecionar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
@@ -257,7 +269,7 @@ class VisualizarAniversario extends React.Component {
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"DataDoAni"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"DataDoAni"} Class = {"form-control"} value = {moment(this.state.DataDoAni).format("YYYY-MM-DD")} onChange={this.changue}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora incial: "} type = {"time"} id = {"HI"} name= {"HoraInicio"} Class = {"form-control"} value = {this.state.HoraInicio} onChange={this.changue}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"HF"} name= {"HoraFinal"} Class = {"form-control"} value = {this.state.HoraFinal} onChange={this.changue}/>
                                     </div>
@@ -348,10 +360,11 @@ class VisualizarAniversario extends React.Component {
                                             </thead> 
                                             <tbody>
                                                 {this.state.ListaCria.map((crianca, indice) => {
+                                                    console.log(this.state.ListaCria)
                                                     return (
                                                         <tr>
                                                             <th scope="row">{(indice + 1)}</th>
-                                                            <td > {crianca.nome} </td>
+                                                            <td > {crianca.name} </td>
                                                             <td > {crianca.idade} </td>
                                                         </tr>
                                                     );
@@ -395,7 +408,7 @@ class VisualizarAniversario extends React.Component {
                                                     return (
                                                         <tr>
                                                             <th scope="row">{(indice + 1)}</th>
-                                                            <td > {adulto.nome} </td>
+                                                            <td > {adulto.name} </td>
                                                         </tr>
                                                     );
                                                 })}
