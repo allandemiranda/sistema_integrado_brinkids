@@ -80,7 +80,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   }
   
   const data = {
-    service: "passaport",
+    service: "Passaporte",
     name: childName,
     time: adultTime,
     value: price, 
@@ -124,7 +124,6 @@ router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
   }
   
   const data = {
-    service: "passaport",
     name: childName,
     time: adultTime,
     value: price, 
@@ -153,18 +152,16 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
   console.log(adultName);
 
   if(discountFinded[0].type === 'Fixo'){
-    finalPrice = parseFloat(finalPrice - valueDisc).toFixed(2);
+    finalPrice = parseFloat(valueDisc).toFixed(2);
     console.log("preço descontado:", finalPrice);
   } else {
-    finalPrice = parseFloat(finalPrice - finalPrice*(valueDisc/100)).toFixed(2);
+    finalPrice = parseFloat(finalPrice*(valueDisc/100)).toFixed(2);
     console.log("preço descontado:", finalPrice);
   }
 
    const data = {
-    service: "passaport",
     name: adultName,
-    time: "",
-    value: finalPrice, 
+    value: finalPrice, //valor que vai ficar no final para o cliente pagar
     discount: discountFinded[0].name,
   };
   try {

@@ -10,7 +10,6 @@ import '../../assets/style/font-awesome.css';
 import './css/Saida_Crianca.css';
 import './css/style.css';
 
-var i=0;//para percorrer como um for na funçao proximaCria, mas ainda não está 100%
 class SaidaCrianca extends React.Component {
     constructor(props) {
         super(props)
@@ -56,9 +55,9 @@ class SaidaCrianca extends React.Component {
             ValorCrianca: "",
 
             //Ultima Tela
-            TotalValor: 0,
-            TotalValorDesc: 0,
-            FinalValor: 0,
+            TotalValor: 0.00,
+            TotalValorDesc: 0.00,
+            FinalValor: 0.00,
 
         }
 
@@ -71,6 +70,7 @@ class SaidaCrianca extends React.Component {
                 this.setState({
                     listAdultos: response.data,
                 });
+                console.log("adultos", this.state.listAdultos)
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -79,7 +79,7 @@ class SaidaCrianca extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-
+            console.log(this.state.listAdultos)
     }
 
     //Bloco que muda o status para o atual do formulario.
@@ -88,31 +88,34 @@ class SaidaCrianca extends React.Component {
     }
 
     //FUNÇÃO QUE SELECIONA O ADULTO DESEJADO
-    Selecionar = (resp1) => {
+    Selecionar = (resp1, respName) => {
         console.log(resp1);
         var deubom = true;
-        axios.get(`/adult/filter/${resp1}/name`)
-            .then((response) => {
-                console.log("Dentro do axios: " + this)
-                this.setState({
-                    TimeAdult: Date.now(),
-                    IDAdult: response.data.id,
-                    NameAdult: response.data.name,
-                    PhoneAdult: response.data.prone,
-                    CPFAdult: response.data.cpf,
-                    ObsAdult: response.data.observations,
-                    PhotoAdult: response.data.photo,
-                });
+        setTimeout(_=> {
+            axios.get('/adult/' + resp1)
+                .then((response) => {
+                    console.log("Dentro do axios: " + this)
+                    this.setState({
+                        TimeAdult: moment().format(),
+                        IDAdult: response.data._id,
+                        NameAdult: response.data.name,
+                        PhoneAdult: response.data.phone,
+                        CPFAdult: response.data.cpf,
+                        ObsAdult: response.data.observations,
+                        PhotoAdult: response.data.photo,
+                    });
 
-            }).catch((error) => {
-                console.log("Não deu certo, Adulto não encontrado!");
-                console.log(error)//LOG DE ERRO
-                deubom = false;
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-            })
-        axios.get(`/product/filter/${resp1}`)
+                }).catch((error) => {
+                    console.log("Não deu certo, Adulto não encontrado!");
+                    console.log(error)//LOG DE ERRO
+                    deubom = false;
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                })
+            }, 1000);
+        console.log(this.state.NameAdult)
+        axios.get('/product/filter/' + respName)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
@@ -121,13 +124,13 @@ class SaidaCrianca extends React.Component {
             }).catch((error) => {
                 console.log("Não deu certo, nenhuma criança esta com esse adulto!");
                 console.log(error)//LOG DE ERRO
-                deubom = false;
+                //deubom = false;
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
         setTimeout(_=>{
-            console.log(deubom);
+            //console.log(deubom);
             if (deubom === true) {
                 this.setState({
                     page: "UsuarioAdulto",
@@ -245,7 +248,7 @@ class SaidaCrianca extends React.Component {
             this.setState({
                 TotalValor: (j).toFixed(2),
                 TotalValorDesc: (k).toFixed(2),
-                FinalValor: parseFloat(j-k).toFixed(2),
+                FinalValor: (j-k).toFixed(2),
                 page: "FinalizarSaida",
                 CodDes: "",
             })
@@ -260,7 +263,7 @@ class SaidaCrianca extends React.Component {
     VerificaDescontoFilhos = (Codigo) => {
         axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
-                //alert("Desconto Validado")
+                alert("Desconto Validado")
                 this.setState({
                     verified: true,
                 })
@@ -301,7 +304,7 @@ class SaidaCrianca extends React.Component {
         console.log(this.state.verified);
         axios.get(`/discount/filter/${Codigo}`)
             .then((response) => {
-                //alert("Desconto Validado")
+                alert("Desconto Validado")
                 this.setState({
                     verified: true,
                 })
@@ -316,13 +319,30 @@ class SaidaCrianca extends React.Component {
         setTimeout(_=>{
             console.log(this.state.verified);
             if(this.state.verified == true){
-                axios.get(`/passport/discountAdult/` + this.state.IdAdult + `/` + this.state.FinalValor + `/`+ this.state.CodDes)
+                axios.get(`/passport/discountAdult/` + this.state.IDAdult + `/` + this.state.FinalValor + `/`+ this.state.CodDes)
                 .then((response) => {
                     this.setState({
-                        FinalValor: response.data,
-                        CodDes:"",
+                        //CodDes:"",
+                        ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
                     })
                     alert("Desconto Concluído");
+
+                    var j=0.0;
+                    var k=0.0;
+                    //AQUI É O VALOR FINAL
+                    this.state.ValorCria.map((resp, indice) => {
+                        j += parseFloat(resp.value);
+                    })
+                    //AQUI É O VALOR FINAL COM DESCONTO
+                    this.state.ValorCriaDesc.map((resp, indice) => {
+                        k += parseFloat(resp.value);
+                    })
+                    this.setState({
+                        TotalValor: (j).toFixed(2),
+                        TotalValorDesc: (k).toFixed(2),
+                        FinalValor: (j-k).toFixed(2),
+                    })
+
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro ao colocar Desconto");
@@ -382,7 +402,7 @@ class SaidaCrianca extends React.Component {
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td className="text-center"> {resp.adult.name} </td>
                                                     <td className="text-center">{resp.adult.phone} </td>
-                                                    <td className="text-center"><button className="btn botao btn-xs text-center" onClick={() => this.Selecionar(resp.adult.name)}>Selecionar</button></td>
+                                                    <td className="text-center"><button className="btn botao btn-xs text-center" onClick={() => this.Selecionar(resp.adult.id, this.state.listAdultos[indice].adult.name)}>Selecionar</button></td>
                                                 </tr>
                                             );
                                         })}
@@ -410,13 +430,13 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Nome:</b></h5>
-                                        <p>{this.state.listCrianca[0].adult.name}</p>
+                                        <p>{this.state.NameAdult.firstName + " " +this.state.NameAdult.surName }</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Telefone:</b></h5>
-                                        <p>{this.state.listCrianca[0].adult.phone}</p>
+                                        <p>{this.state.PhoneAdult}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
@@ -431,7 +451,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-6 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Observações: </b></h5>
-                                        <p>{this.state.listCrianca[0].adult.observations}</p>
+                                        <p>{this.state.ObsAdult}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-6 col-sm-12 col-xs-12">
