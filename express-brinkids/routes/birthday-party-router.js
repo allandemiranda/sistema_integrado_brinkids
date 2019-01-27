@@ -109,7 +109,7 @@ router.delete('/:identifier', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
-  try {
+  try { 
     const service = await BirthdayParty.findByIdAndUpdate(
       req.params.identifier,
       {
