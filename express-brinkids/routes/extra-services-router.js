@@ -1,6 +1,6 @@
 const express = require('express');
 const ExtraServices = require('../models/extra-services-models');
-
+const Logs = require('../models/logs-models')
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -44,7 +44,16 @@ router.post('/', async (req, res) => {
 
     try {
       const newService = await extraServices.save();
-
+      const log = new Logs({
+        activity: 'Serviços',
+        action: 'Criação',
+        dateOperation: new Date(),
+        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        to: newService._id,
+       
+  
+      })
+      const newLog = await log.save();
       return res.status(201).json(newService);
     } catch (err) {
       return res.sendStatus(500);
@@ -63,7 +72,15 @@ router.put('/:identifier', async (req, res) => {
         value: req.body.value,
       },
     );
-
+    const log = new Logs({
+      activity: 'Serviços',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: req.params.identifier,
+     
+    })
+    const newLog = await log.save();
     if (!service) {
       return res.sendStatus(404);
     }
@@ -79,7 +96,13 @@ router.put('/:identifier', async (req, res) => {
 router.delete('/:identifier', async (req, res) => {
   try {
     const deletedService = await ExtraServices.findByIdAndRemove(req.params.identifier);
-
+    const log = new Logs({
+      activity: 'Serviços',
+      action: 'Delete',
+      dateOperation: new Date(),
+     
+    })
+    const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);
     }

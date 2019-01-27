@@ -27,6 +27,7 @@ const passportServices = require('./routes/passport-services-router');
 const belongings = require('./routes/belongings-router');
 const professionalPosition = require('./routes/professional-position-router');
 const telaMkt = require('./routes/tela-mkt-router');
+const logs = require('./routes/logs-router');
 
 // Instanciando o objeto do express
 const app = express();
@@ -66,6 +67,7 @@ app.use(cors());
 
 // Usando as rotas
 app.use('/adult', adult);
+app.use('/log', logs);
 app.use('/authentication', autentication);
 app.use('/birthday', birthday);
 app.use('/calendar', calendar);

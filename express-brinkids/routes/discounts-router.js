@@ -1,5 +1,6 @@
 const express = require('express');
 const Discount = require('../models/discounts-models');
+const Logs = require('../models/logs-models')
 const config = require('../config');
 
 const router = express.Router();
@@ -89,6 +90,16 @@ router.post('/', async (req, res) => {
       }
 
       const newDiscount = await discount.save();
+      const log = new Logs({
+        activity: 'Desconto',
+        action: 'Criação',
+        dateOperation: new Date(),
+        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        to:newDiscount._id,
+       
+
+      })
+      const newLog = await log.save();
 
       return res.sendStatus(204);
     } catch (err) {

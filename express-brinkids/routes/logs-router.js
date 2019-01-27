@@ -22,9 +22,9 @@ router.post('/', async (req, res) => {
 		timeLojaFirst: req.body.timeLojaFirst,
 		timeLojaLast: req.body.timeLojaLast,
 		priceDiscount:{
-			id:/**/,
-			code:/**/,
-			type:/**/,
+			id:'s',
+			code:'s',
+			type:'s',
 		},
 		});
 
@@ -35,3 +35,16 @@ router.post('/', async (req, res) => {
 	    return res.sendStatus(500);
 	  }
 });
+
+router.get('/', async (req, res) => {
+  try {
+    const log = await logs.find({});
+  
+
+    return res.status(200).json(log);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+});
+
+module.exports = router

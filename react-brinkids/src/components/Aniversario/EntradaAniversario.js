@@ -430,15 +430,15 @@ class EntradaAniversario extends React.Component {
                                         {
 
 
-                                            JSON.parse(this.state.aniversariante[0].guestList[0]).map((event, indice) => {
+                                            this.state.aniversariante[0].guestList.map((event, indice) => {
                                                 console.log(event.type)
                                                 if (event.type !== undefined) {
 
-                                                    console.log(event.nome)
+                                                   
                                                     return (
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
-                                                            <td > {event.nome} </td>
+                                                            <td > {event.name} </td>
                                                             <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event._id)} /> </td>
                                                         </tr>
                                                     );
@@ -536,7 +536,7 @@ class EntradaAniversario extends React.Component {
                                         {
 
 
-                                            JSON.parse(this.state.aniversariante[0].guestList[0]).map((event, indice) => {
+                                            this.state.aniversariante[0].guestList.map((event, indice) => {
                                                 console.log(event.type)
                                                 if (event.type === undefined) {
 
@@ -544,7 +544,7 @@ class EntradaAniversario extends React.Component {
                                                     return (
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
-                                                            <td > {event.nome} </td>
+                                                            <td > {event.name} </td>
                                                             <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event._id)} /> </td>
                                                         </tr>
                                                     );
