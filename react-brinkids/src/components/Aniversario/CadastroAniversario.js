@@ -234,7 +234,7 @@ class CadastroAniversario extends React.Component {
         else {
             $("#alertDiv").addClass('displaynone');
             this.setState({
-                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca}]}),
+                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca, type:"children",id:'"'}]}),
                 NomeCrianca: "",
                 IdadeCrianca: "",
             })
@@ -257,7 +257,7 @@ class CadastroAniversario extends React.Component {
         else {
             $("#alertDiv").addClass('displaynone');
             this.setState({
-                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult'}]}),
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
                 Adulto: "",
             })
         }

@@ -272,7 +272,8 @@ class DashBoard extends React.Component {
 													</thead>
 													<tbody>
 														{this.state.lista.map((event, index) => {
-															return (
+															if(event.service === "Passaporte"){
+																return (
 																<tr>
 																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
 																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
@@ -295,7 +296,7 @@ class DashBoard extends React.Component {
 																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
 																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 																</tr>
-															);
+															);}
 														})}
 
 
@@ -324,19 +325,33 @@ class DashBoard extends React.Component {
 														</tr>
 													</thead>
 													<tbody>
-														<tr>
-															<th scope="row" href="../foto-tirada-na-entrada">01</th>
-															<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-da-criança">Allan de Miranda</a></td>
-															<td style={{ textAlign: "center" }}>10 anos</td>
-															<td style={{ textAlign: "center" }} ><a onclick={() => alert('Texto com as Restrições da Criança!')}>SIM</a></td>
-															<td style={{ textAlign: "center" }}>SIM</td>
-															<td style={{ textAlign: "center" }}>13:12h</td>
-															<td style={{ textAlign: "center" }}>5</td>
-															<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-do-responsável">Allan de Miranda</a></td>
-															<td style={{ textAlign: "center" }}>Pai</td>
-															<td style={{ textAlign: "center" }}>(84)91151610</td>
-															<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
-														</tr>
+													{this.state.lista.map((event, index) => {
+														if(event.service==="Aniversario"){
+															return (
+																<tr>
+																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
+																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
+																	<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+
+																	{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Restrições!\n\n'+event.children.restrictions)}><a>SIM</a></td>)}
+																	{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+
+																	{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.children.observations)}><a>SIM</a></td>)}
+																	{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+
+
+
+																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
+																	<td style={{ textAlign: "center" }}>{event.belongings}</td>
+																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
+																	<td style={{ textAlign: "center" }}>Pai</td>
+																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+
+																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
+																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																</tr>
+															);}
+														})}
 
 													</tbody>
 												</table>
