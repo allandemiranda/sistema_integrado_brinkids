@@ -364,6 +364,7 @@ class SaidaCrianca extends React.Component {
         if (this.state.FormPag !== "") {
             console.log(this.state.FormPag);
             window.print();
+            console.log("Número de delete que devem aparecer: ", this.state.CriancasSelecionadas.length)
             for(var i = 0; i<this.state.CriancasSelecionadas.length; i++){
                 axios.delete(`/passport/${this.state.CriancasSelecionadas[i].children.id}`)
                 .then((response) => {
@@ -372,7 +373,7 @@ class SaidaCrianca extends React.Component {
 
                 }).catch((err) => console.log(err));
             }
-
+            alert("Produto finalizado");
         } else {
             alert("Selecione uma forma de pagamento");
             return (0);

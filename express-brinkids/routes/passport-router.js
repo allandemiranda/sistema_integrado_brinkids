@@ -36,26 +36,27 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   console.log(req.params.timeAdult);
 
   const productFinded = await product.find({ 'children.id': req.params.idCria });
-  const adultEntered = productFinded[0].time;
+  const adultEntered = (productFinded[0].time.getTime()/60000);
   
   const childName = await productFinded[0].children.name;
 
-  const adultExit = req.params.timeAdult;
-  const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000));
+  const adultExit = (req.params.timeAdult/60000);
+  const adultTime = (adultExit - adultEntered);
   
-  console.log('entrada:', adultEntered.getTime()/60000);
-  console.log('saída:', adultExit/60000);
+  console.log('entrada:', adultEntered);
+  console.log('saída:', adultExit);
   console.log('diferença em minutos:', adultTime);
   
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
 
-  let lastFinalTime = psjson[psjson.length-1].finalTime;//Último finalTime do json
-  let lastInitialTime = psjson[psjson.length-1].initialTime;
-  let lastPrice = psjson[psjson.length-1].price;
+  let lastFinalTime = psjson[psjson.length-1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (psjson)
+  let lastInitialTime = psjson[psjson.length-1].initialTime;//último tempo inicial do passaporte service
+  let lastPrice = psjson[psjson.length-1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
   var price;
-  
+  var serviceName;
   if(productFinded[0].service === 'Passaporte'){
+    serviceName = "Passaporte";
 
     if(adultTime>(lastFinalTime.toSS()/60)){
       let time = adultTime - (lastFinalTime.toSS()/60);
@@ -74,13 +75,39 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     }
   
   } else {//preparando pra terminar quando o aniversário tiver executando normal
+    serviceName = "Aniversário";
+    var extraTime = 0;
     price = parseInt(0, 10).toFixed(2);
-    if(birthday.start - adultEntered > 15){}
-    if(adultExit>birthday.end){}
+
+    if(((birthday.start.getTime()/60000) - adultEntered) > 15){
+      extraTime += ((birthday.start.getTime()/60000) - adultEntered);
+    }
+
+    if(adultExit>(birthday.end.getTime()/60000)){
+      extraTime += (adultExit - (birthday.start.getTime()/60000));
+    }
+
+    adultTime = extraTime;
+    if(adultTime>(lastFinalTime.toSS()/60)){
+      let time = adultTime - (lastFinalTime.toSS()/60);
+      console.log("time sem o ultimo tempo de serviço:", time);
+      price = parseFloat(time/parseFloat(pjson[0].time, 10)*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+      console.log("preço:", price);
+    
+    } else {
+    
+      for(i = 0; i < psjson.length; i++){
+        if(adultTime <= (psjson[i].finalTime.toSS()/60) && adultTime >= (psjson[i].initialTime.toSS()/60)){
+          price = psjson[i].price;
+          console.log("preço:", price);
+        }
+      }
+    }
+  
   }
   
   const data = {
-    service: "Passaporte",
+    service: serviceName,
     name: childName,
     time: adultTime,
     value: price, 
@@ -99,15 +126,15 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
 router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
 
-  const productFinded = await product.find({ 'children.id': req.params.idCria });
-  const adultEntered = productFinded[0].time;
+  const productFinded = await product.find({ 'children.id': req.params.idCria }); //achando o produto pelo id da criança, vindo do fronto na var idCria
+  const adultEntered = productFinded[0].time; // pegando o tempo que o resposável deixou a criança na loja do produto
   
-  const adultExit = req.params.timeAdult;
-  const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000));
+  const adultExit = req.params.timeAdult; // pegando o tempo que o adulto tirou a criança/produto da loja
+  const adultTime = ((adultExit/60000) - (adultEntered.getTime()/60000)); // tempo que a criança ficou na loja
   
-  const discountFinded = await discount.find({ 'name': req.params.codDesc })
+  const discountFinded = await discount.find({ 'name': req.params.codDesc }) //pesquisando desconto pelo código que recebe do front
 
-  const childName = await productFinded[0].children.name;
+  const childName = await productFinded[0].children.name; // nome da criança pra salvar quem vai usar o desconto, já que essa rota é só de desconto para crianças
   console.log(productFinded[0].children.name)
 
   if(discountFinded[0].type === 'Fixo'){
