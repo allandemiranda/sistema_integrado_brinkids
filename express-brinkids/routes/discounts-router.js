@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/filter/', async (req, res) => {
+router.get('/filter/:code', async (req, res) => {
   try {
     const discounts = await Discount.find({});
 
