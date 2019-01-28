@@ -105,7 +105,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     for(i = 0; i < birthdayFinded.length; i++){//for para calcular qual o ultimo aniversário que a criança estará, esses calculos estão meio sem nexo, mas ainda não entendi como ter ctz que a criança tá no aniversário certo, só quando ela é cadastrada no sistema e bate com as informaões da guestList
       birthdayDate = birthdayFinded[i].birthdayDate.toISOString();
       test = (birthdayDate+"@"+birthdayFinded[i].end).toDate().getTime()/60000;
-      if (saveTheDate < test && ((birthdayDate+"@"+birthdayFinded[i].start).toDate().getTime()/60000) - adultEntered < 120) {
+      if (saveTheDate < test && ((birthdayDate+"@"+birthdayFinded[i].start).toDate().getTime()/60000) - adultEntered < 120) {//aqui só é aceito como o aniversário certo quando o adulto deixa a criança pelo menos 2 horas antes, pra que não calcule com o valor do aniversário do dia que vem
         console.log( ( (birthdayDate+"@"+birthdayFinded[i].start).toDate().getTime()/60000 - adultEntered))
         saveTheDate = test;
         x=i;
