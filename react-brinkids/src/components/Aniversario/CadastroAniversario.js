@@ -289,8 +289,11 @@ class CadastroAniversario extends React.Component {
         formData.append('method', String(this.state.MetodoPg))
         formData.append('children', String(this.state.QuantCrianca))
         formData.append('adults', String(this.state.QuantAdulto))
+        
         let guestLista = this.state.ListaAdul.concat(this.state.ListaCria)
+        
         const data={
+            
             title: String(this.state.TituloDoAni),
             name:String(this.state.NomeDoAni),
             age:String(this.state.IdadeDoAni),

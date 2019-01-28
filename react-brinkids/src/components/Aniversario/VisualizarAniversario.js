@@ -54,6 +54,60 @@ class VisualizarAniversario extends React.Component {
         this.listaC = this.listaC.bind(this);
 
     }
+    AddCrianca = (event) => {
+        event.preventDefault();
+        var erro = [];
+
+        if(this.state.NomeCrianca === ""){
+            $("#name").addClass('errorBorder');
+            erro.push("Nome da criança não pode ser em branco.");
+        }
+        if(this.state.IdadeCrianca === ""){
+            $("#number").addClass('errorBorder');
+            erro.push("Idade da criança não pode ser em branco.");
+        }
+        //Remove Class
+        if(this.state.NomeCrianca != ""){
+            $("#name").removeClass('errorBorder');
+        }
+        if(this.state.IdadeCrianca != ""){
+            $("#number").removeClass('errorBorder');
+        }      
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca, type:"children",id:'"'}]}),
+                NomeCrianca: "",
+                IdadeCrianca: "",
+            })
+        }
+    }
+    AddAdulto = (event) => {
+        event.preventDefault();
+        var erro = [];
+        if(this.state.Adulto === ""){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Nome do Adulto não pode ser em branco.");
+        }
+        else{
+            $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
+                Adulto: "",
+            })
+        }
+    }
     listaC(event){
         this.setState({
             Page: "ListaC",
@@ -79,8 +133,26 @@ class VisualizarAniversario extends React.Component {
         formData.append('method', String(this.state.MetodoPg))
         formData.append('children', String(this.state.QuantCrianca))
         formData.append('adults', String(this.state.QuantAdulto))
+        let guestLista = this.state.ListaAdul.concat(this.state.ListaCria)
+        
+        const data={
+            
+            title: String(this.state.TituloDoAni),
+            name:String(this.state.NomeDoAni),
+            age:String(this.state.IdadeDoAni),
+            start:String(this.state.HoraInicio),
+            end:String(this.state.HoraFinal),
+            description:String(this.state.DescriçãoDoAni),
+            observations:String(this.state.ObsDoAni),
+            value:String(this.state.ValorPg),
+            method:String(this.state.MetodoPg),
+            children:String(this.state.QuantCrianca),
+            adults: String(this.state.QuantAdulto),
+            guestList: guestLista,
+            birthdayDate: this.state.DataDoAni,
 
 
+        }
         // let guestList = this.state.ListaAdul.concat(this.state.ListaCria)
         // this.state.ListaAdul.map((guest) => {
         //     guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
@@ -88,8 +160,8 @@ class VisualizarAniversario extends React.Component {
         // })
 
         // formData.append('guestList', JSON.stringify(guestList));
-        console.log(this.state.AniAtual)
-        axios.put(`/birthday/${this.state.AniAtual._id}`,formData)
+        console.log(data)
+        axios.put(`/birthday/${this.state.AniAtual._id}`,data)
         .then((response) => {
 
 
@@ -333,11 +405,11 @@ class VisualizarAniversario extends React.Component {
                                 <form id="form-busca">
                                     <div className = "form-group" >
                                         <div className = "row" >
-                                            <TypesInput cod = {1} ClassDiv = {"col-md-8 col-sm-8 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"name"} Class = {"form-control"} value = {this.state.NomeCrianca} 
-                                                onChange = {this.ChangeNameCrianca}
+                                            <TypesInput cod = {1} ClassDiv = {"col-md-8 col-sm-8 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"NomeCrianca"} Class = {"form-control"} value = {this.state.NomeCrianca} 
+                                                onChange = {this.changue}
                                             />
-                                            <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Idade: "} type = {"number"} id = {"number"} name= {"number"} Class = {"form-control"} value = {this.state.IdadeCrianca}
-                                                onChange = {this.ChangeIdadeCrianca}
+                                            <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Idade: "} type = {"number"} id = {"number"} name= {"IdadeCrianca"} Class = {"form-control"} value = {this.state.IdadeCrianca}
+                                                onChange = {this.changue}
                                             />
                                             <br></br>
                                             <button className="btn botao" type = "submit" onClick = {this.AddCrianca}>Adicionar</button>
@@ -365,7 +437,7 @@ class VisualizarAniversario extends React.Component {
                                                         <tr>
                                                             <th scope="row">{(indice + 1)}</th>
                                                             <td > {crianca.name} </td>
-                                                            <td > {crianca.idade} </td>
+                                                            <td > {crianca.age} </td>
                                                         </tr>
                                                     );
                                                 })}
@@ -382,8 +454,8 @@ class VisualizarAniversario extends React.Component {
                                     <form id="form-busca">
                                         <div className = "form-group" >
                                             <div className = "row" >
-                                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"nameAdult"} name= {"nameAdult"} Class = {"form-control"} 
-                                                    value = {this.state.Adulto} onChange = {this.ChangeNameAdulto}
+                                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"nameAdult"} name= {"Adulto"} Class = {"form-control"} 
+                                                    value = {this.state.Adulto} onChange = {this.changue}
                                                 />
                                                 <br></br>
                                                 <button className="btn botao" type = "submit" onClick = {this.AddAdulto}>Adicionar</button>
@@ -420,8 +492,8 @@ class VisualizarAniversario extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className= "btn btn-md botao" href="\">Cancelar</a>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.VaiConfListCnv}>Avançar</button>
+                        
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.editar}>Voltar</button>
                     </div> 
                 </div> 
             </div>

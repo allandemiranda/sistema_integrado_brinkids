@@ -132,7 +132,7 @@ router.put('/:identifier', async (req, res) => {
             adults: parseInt(req.body.adults, 10)
           },
 
-
+          guestList: req.body.guestList
           // guestList: array,}
         },
       }
