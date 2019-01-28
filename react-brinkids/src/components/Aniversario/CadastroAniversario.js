@@ -65,7 +65,7 @@ class CadastroAniversario extends React.Component {
 
     ChangeIdade(event){this.setState({IdadeDoAni: event.target.value});}
 
-    ChangeDate(event){this.setState({DataDoAni: event.target.value});}
+    ChangeDate(event){this.setState({DataDoAni: event.target.value});console.log(event.target.value)}
 
     ChangeHInicial(event){this.setState({HoraInicio: event.target.value});}
 
@@ -306,7 +306,7 @@ class CadastroAniversario extends React.Component {
             children:String(this.state.QuantCrianca),
             adults: String(this.state.QuantAdulto),
             guestList: guestLista,
-            birthdayDate: this.state.DataDoAni,
+            birthdayDate: String(this.state.DataDoAni),
 
 
         }

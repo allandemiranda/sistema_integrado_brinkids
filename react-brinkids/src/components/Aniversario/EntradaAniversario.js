@@ -20,6 +20,7 @@ class EntradaAniversario extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            FullName: "",
             //Responsável por saber qual página vai renderizar:
             aniversariante: [], // dados do evento atual
             page: "SelecionarTipoDeEntrada", //Responsável pela tela que esta.
@@ -90,11 +91,14 @@ class EntradaAniversario extends React.Component {
 
     AvancarConfAdulto = (event) => {
         this.setState({
+            FullName: this.state.adultoSelecionado[0].name,
             page: "ConfirmaAdulto",
         })
     }
 
     FinalizarAdulto = (event) => {
+        let listaAdultosDentros = this.state.listaAdultosDentro;
+        listaAdultosDentros.push({ type: "adult", name: this.state.FullName });
         this.setState({
             listaAdultosDentro: update(this.state.listaAdultosDentro, { $push: [{ type: "adult", name: this.state.adultoSelecionado[0].name }] }),
             type: "",
@@ -103,15 +107,16 @@ class EntradaAniversario extends React.Component {
             comprovante: true,
         })
 
-        var formData = new FormData();
-
-        formData.append('name', String(this.state.adultoSelecionado[0].name))
-        formData.append('type', String(this.state.aniversariante[0].type))
-
-        axios.post('/birthdayParty', formData)
+       
+        const data = {
+            adult: listaAdultosDentros,
+            identifier: this.state.aniversariante[0]._id,
+        }
+       
+        axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
             .then(function (response) {
                 console.log(response)
-                window.location.href = '/birthdayParty';
+                 window.location.href = '/birthdayParty';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -176,7 +181,7 @@ class EntradaAniversario extends React.Component {
             phone: this.state.responsavel[0].phone,
             observations: this.state.responsavel[0].obs,
         }
-        
+
         for (var i = 0; i < this.state.criancaSelecionada.length; i++) {
             const crianca = {
                 _id: String(this.state.criancaSelecionada[i]._id),
@@ -191,7 +196,7 @@ class EntradaAniversario extends React.Component {
         };
         var formData = new FormData();
 
-       
+
 
         formData.append('photo', this.state.file)
         formData.append('service', 'Aniversario')
@@ -199,12 +204,12 @@ class EntradaAniversario extends React.Component {
         formData.append('belongings', '0')
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
-       
+
         axios.post('/product', formData)
-            .then( (response)=> {
+            .then((response) => {
                 console.log(response.data)
                 // window.location.href = '/birthdayParty';
-            }).catch( (error)=> {
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -536,7 +541,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome Completo: </b></h5>
-                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.adultoSelecionado[0].name} onChange={this.AdicinarFullNome} />
+                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.FullNome} onChange={this.changue} />
                                     </div>
                                 </div>
                             </div>

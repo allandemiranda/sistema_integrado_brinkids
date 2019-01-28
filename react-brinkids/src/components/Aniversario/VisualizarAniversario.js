@@ -284,7 +284,7 @@ class VisualizarAniversario extends React.Component {
                                                 <td > {findAdult.title} </td>
                                                 <td > {findAdult.birthdayPerson.name} </td>
                                                
-                                                <td > {moment(findAdult.birthdayDate).format("DD/MM/YYYY")} </td>
+                                                <td > {moment(findAdult.birthdayDate).add(1,"days").format("DD/MM/YYYY")} </td>
                                                 <td><button onClick={() => this.selecionar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );

@@ -60,7 +60,9 @@ const birthdayPartySchema = mongoose.Schema({
     id: String,
   }],
   partyFeather: [{
-    type: String,
+    type: {
+      type:String
+    } ,
     id: String,
     name: String,
   }],
