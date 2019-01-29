@@ -142,21 +142,32 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
       console.log("tempo extra: ", extraTime)
     }
 
-    adultTime = extraTime;
-    if(adultTime>(lastFinalTime.toSS()/60)){
-      let time = adultTime - (lastFinalTime.toSS()/60);
-      console.log("time sem o ultimo tempo de serviço:", time);
-      price = parseFloat((1+parseInt(time/parseFloat(pjson[0].time, 10)))*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
-      console.log("preço:", price);
+    if(adultExit >= birthdayStart && adultExit <= birthdayEnd){
+
+      price = 0.00;
+
+    }else{
     
-    } else {
-    
-      for(i = 0; i < psjson.length; i++){
-        if(adultTime <= (psjson[i].finalTime.toSS()/60) && adultTime >= (psjson[i].initialTime.toSS()/60)){
-          price = psjson[i].price;
-          console.log("preço:", price);
+      adultTime = extraTime;
+      if(adultTime>(lastFinalTime.toSS()/60)){
+        let time = adultTime - (lastFinalTime.toSS()/60);
+        console.log("time sem o ultimo tempo de serviço:", time);
+        price = parseFloat((1+parseInt(time/parseFloat(pjson[0].time, 10)))*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+        console.log("preço:", price);
+      
+      } else {
+      
+        for(i = 0; i < psjson.length; i++){
+          
+          if(adultTime <= (psjson[i].finalTime.toSS()/60) && adultTime >= (psjson[i].initialTime.toSS()/60)){
+            price = psjson[i].price;
+            console.log("preço:", price);
+          }
+
         }
+      
       }
+    
     }
   
   }

@@ -414,6 +414,7 @@ class SaidaCrianca extends React.Component {
                                     </thead>
                                     <tbody>
                                          {this.state.listAdultos.map((resp, indice) => {
+                                            console.log("It's my time: ", this.state.listAdultos)
                                             return (
                                                 <tr className="text-center" key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
