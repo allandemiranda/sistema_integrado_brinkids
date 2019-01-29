@@ -166,6 +166,7 @@ router.put('/partyFeather/:identifier', async (req, res) => {
   
  
     console.log(req.body.adult)
+   if(req.body.adult){ 
     try {
       const birthday = await BirthdayParty.findById(req.params.identifier);
       birthday.partyFeather.push(req.body.adult[0]);
@@ -184,6 +185,28 @@ router.put('/partyFeather/:identifier', async (req, res) => {
     } catch (err) {
       console.log(err);
       return res.sendStatus(500);
+    }
+  }
+    if(req.body.child){
+      try {
+        const birthday = await BirthdayParty.findById(req.params.identifier);
+        birthday.partyFeather.push(req.body.child[0]);
+        console.log(birthday);
+       
+        birthday.save()
+  
+        if (!birthday) {
+          console.log("=================")
+          console.log("olaaaaaa")
+          console.log("=================")
+          return res.sendStauts(404);
+        }
+  
+        return res.sendStatus(204);
+      } catch (err) {
+        console.log(err);
+        return res.sendStatus(500);
+      }
     }
  
 });

@@ -45,39 +45,56 @@ class EntradaAniversario extends React.Component {
         //Relacionado a Atualização do esta sendo digitado na busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
+        this.requisicao = this.requisicao.bind(this);
     }
-
+requisicao(event){
+    $.ajax({
+        url: "http://localhost:3001/birthday",
+        dataType: 'json',
+        type: 'GET',
+        error: function (response) {
+            if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+        },
+        success: function (response) {
+            console.log(response.length)
+            if (response.length === 0) {
+                alert("Nenhum aniversário encontrado")
+                this.setState({ erro: "* Nenhum Evento Encontrado." })
+            } else {
+                let adulto=[];
+                let crianca=[];
+                response[0].partyFeather.map((pessoa,indice)=>{
+                    if(pessoa.type ==="adult"){
+                        adulto.push(pessoa)
+                    }else{
+                        crianca.push(pessoa)
+                    }
+                })
+                console.log("Olar")
+                this.setState({
+                    listaAdultosDentro:adulto,
+                    listaCriancaDentro:crianca,
+                    aniversariante: response
+                });
+            }
+        }.bind(this)
+    });
+}
     componentWillMount() {
-        $.ajax({
-            url: "http://localhost:3001/birthday",
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-            },
-            success: function (response) {
-                console.log(response.length)
-                if (response.length === 0) {
-                    alert("Nenhum aniversário encontrado")
-                    this.setState({ erro: "* Nenhum Evento Encontrado." })
-                } else {
-                    console.log("Olar")
-                    this.setState({
-                        aniversariante: response
-                    });
-                }
-            }.bind(this)
-        });
+        this.requisicao();
     }
 
     //Relacionado a atualização dos valores Funções
     AdicinarFullNome(event) {
-        this.setState({ firstName: event.target.value });
+        this.setState({ FullName: event.target.value });
     }
 
 
     // FUNÇOES RELACIONADAS A BOTÕES - INICIO     
     SelecionarCrianca = (event) => {
+        
+       
+
         this.setState({
             page: "EntradaCrianca",
         })
@@ -100,23 +117,23 @@ class EntradaAniversario extends React.Component {
         let listaAdultosDentros = this.state.listaAdultosDentro;
         listaAdultosDentros.push({ type: "adult", name: this.state.FullName });
         this.setState({
-            listaAdultosDentro: update(this.state.listaAdultosDentro, { $push: [{ type: "adult", name: this.state.adultoSelecionado[0].name }] }),
+           
             type: "",
             name: "",
             page: "SelecionarTipoDeEntrada",
             comprovante: true,
         })
 
-       
+
         const data = {
             adult: listaAdultosDentros,
             identifier: this.state.aniversariante[0]._id,
         }
-       
+
         axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
             .then(function (response) {
                 console.log(response)
-                 window.location.href = '/birthdayParty';
+
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -125,6 +142,7 @@ class EntradaAniversario extends React.Component {
             })
 
         alert("Cadastrado");
+        this.requisicao();
     }
 
     AvancarCombinarCrianca = (event) => {
@@ -167,9 +185,10 @@ class EntradaAniversario extends React.Component {
     }
 
     FinalizarCrianca = (event) => {
+        let listaC = [];
 
         this.setState({
-            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada[0]._id }] }),
+            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada[0]._id, name: this.state.criancaSelecionada[0].name}] }),
             comprovante: true,
         })
 
@@ -191,7 +210,7 @@ class EntradaAniversario extends React.Component {
                 observations: this.state.criancaSelecionada[i].observations,
                 photo: this.state.file,
             }
-
+            listaC.push({ type: "child", id: this.state.criancaSelecionada[i]._id, name: this.state.criancaSelecionada[i].name.firstName + ' ' + this.state.criancaSelecionada[i].name.surName})
             listCria.push(crianca);
         };
         var formData = new FormData();
@@ -204,12 +223,30 @@ class EntradaAniversario extends React.Component {
         formData.append('belongings', '0')
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
-
+        
+        const data = {
+            child: listaC,
+            identifier: this.state.aniversariante[0]._id,
+        }
+        console.log(listCria)
         axios.post('/product', formData)
             .then((response) => {
-                console.log(response.data)
-                // window.location.href = '/birthdayParty';
-            }).catch((error) => {
+
+               
+                axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+                    .then((response) =>{
+                        console.log(response)
+                        this.setState({
+                            page:"SelecionarTipoDeEntrada"
+                        })
+                    }).catch( (error) =>{
+                        console.log(error)//LOG DE ERRO
+                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    })
+            
+                }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -217,6 +254,7 @@ class EntradaAniversario extends React.Component {
             })
 
         alert("Cadastrado");
+        this.requisicao();
     }
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
 
@@ -419,7 +457,7 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-4 col-sm-4">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Já Entraram: </b></h5>
-                                            <p>{this.state.criancaDentro.length}</p>
+                                            <p>{this.state.listaCriancaDentro.length}</p>
                                         </div>
                                     </div>
                                 </div>

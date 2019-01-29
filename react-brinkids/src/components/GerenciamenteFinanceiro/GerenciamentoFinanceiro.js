@@ -74,6 +74,23 @@ class GerenciamentoFinanceiro extends React.Component {
         this.ChangeValue = this.ChangeValue.bind(this);
         this.requisicao = this.requisicao.bind(this);
         this.inteval = this.inteval.bind(this);
+        this.serch = this.serch.bind(this);
+    }
+    serch(event){
+        const data = {
+            operador: this.state.Operador,
+            atividade:this.state.Atividade,
+            start:this.state.DataEntrada,
+            end:this.state.DataSaida,
+        }
+       console.log(data);
+            axios.put('/log/filter', data)
+            .then((response) => {
+                this.setState({ ListaFluxo: response.data });
+              console.log(response.data);
+            })
+            .catch((err) => console.log(err));
+        
     }
     inteval(event) {
 
@@ -321,7 +338,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                             </div>
                                             <br></br>
                                             <div className="text-right">
-                                                <button className="btn botaoAvancar " onClick={this.BuscarFluxo}>Buscar</button>
+                                                <input type="button"  onClick={this.serch}/>
                                             </div>
                                         </form>
                                     </div>
