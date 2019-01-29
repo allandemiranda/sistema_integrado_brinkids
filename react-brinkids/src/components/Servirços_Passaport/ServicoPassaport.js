@@ -108,7 +108,7 @@ class ServicoPassaporte extends React.Component {
                     list2: response.data.default,
                 });
             })
-        this.interval = setInterval(this.requisicao, 5000);
+        this.interval = setInterval(this.requisicao, 10000);
     }
     criar = (event) => {
         console.log("Dados sendo retornado");

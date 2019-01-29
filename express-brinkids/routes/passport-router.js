@@ -71,7 +71,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     if(adultTime>(lastFinalTime.toSS()/60)){
       let time = adultTime - (lastFinalTime.toSS()/60);
       console.log("time sem o ultimo tempo de serviço:", time);
-      price = parseFloat(time/parseFloat(pjson[0].time, 10)*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+      price = parseFloat((1+parseInt(time/parseFloat(pjson[0].time, 10)))*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
       console.log("preço:", price);
     
     } else {
@@ -146,7 +146,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     if(adultTime>(lastFinalTime.toSS()/60)){
       let time = adultTime - (lastFinalTime.toSS()/60);
       console.log("time sem o ultimo tempo de serviço:", time);
-      price = parseFloat(time/parseFloat(pjson[0].time, 10)*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+      price = parseFloat((1+parseInt(time/parseFloat(pjson[0].time, 10)))*parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
       console.log("preço:", price);
     
     } else {
@@ -164,7 +164,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   const data = {
     service: serviceName,
     name: childName,
-    time: adultTime,
+    time: parseInt(adultTime),
     value: price, 
   };
   
@@ -193,8 +193,13 @@ router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
   console.log(productFinded[0].children.name)
 
   if(discountFinded[0].type === 'Fixo'){
-  
+
     price = parseFloat(discountFinded[0].value).toFixed(2);
+    
+    if(req.params.valueChild <= discountFinded[0].value){
+      price = parseFloat(req.params.valueChild).toFixed(2);
+    }
+    
     console.log("valor do desconto:", price);
   
   } else {

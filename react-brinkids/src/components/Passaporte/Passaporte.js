@@ -31,7 +31,7 @@ class Passport extends React.Component {
             page: "SelectAdult",//ConfirmAdult SelectAdult Finalize
             selectedSearch: '', // Salva o nome que é colocado na barra de busca
             list: [], //recebe do banco os dados da pessoa que foi buscada
-            listConect: [], // recebe os dados das crianças ligadas aos adultos [Passaporte]
+            listConnect: [], // recebe os dados das crianças ligadas aos adultos [Passaporte]
             //Tela I:
             listConfirmAdult: [], // Dados do Responsável Selecionado na checkBox
             erro: '',
@@ -252,18 +252,23 @@ class Passport extends React.Component {
     TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
-        const criancas = this.state.listConfirmAdult[0].children.map(async (crianca) => {
-            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-            return response.data;
-        });
+        console.log(this.state.listConfirmAdult[0].children[0])
+        if(this.state.listConfirmAdult[0].children[0] === null){
 
-        criancas.forEach(async (c) => {
-            const crianca = await c;
-            this.setState({
-                listConect: [...this.state.listConect, crianca]
+        }else{
+
+            const criancas = this.state.listConfirmAdult[0].children.map(async (crianca) => {
+                const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                return response.data;
+            });
+
+            criancas.forEach(async (c) => {
+                const crianca = await c;
+                this.setState({
+                    listConnect: [...this.state.listConnect, crianca]
+                })
             })
-        })
-
+        }
         this.setState({
             page: "SelectKids",
             selectedSearch: '',
@@ -281,7 +286,7 @@ class Passport extends React.Component {
         //     },
         //     success: function (response) {    //Salva os dados do responsável na variácel LIST
         //         console.log("Olar2")
-        //         this.setState({ listConect: response });
+        //         this.setState({ listConnect: response });
         //     }.bind(this)
         // });
     }
@@ -643,7 +648,7 @@ class Passport extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS - Falta modificar para aparecer o nome*/}
-                                        {this.state.listConect.map((findKids, indice) => {
+                                        {this.state.listConnect.map((findKids, indice) => {
                                             
                                             return (
                                                 <tr key={findKids._id}>
@@ -657,7 +662,7 @@ class Passport extends React.Component {
                                         {this.state.list.map((findKids, indice) => {
                                             return (
                                                 <tr key={findKids._id}>
-                                                    <th scope="row">{this.state.listConect.length + 1}</th>
+                                                    <th scope="row">{this.state.listConnect.length + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{moment(findKids.birthday).format('DD/MM/YYYY')}  </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>

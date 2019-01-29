@@ -169,7 +169,7 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-        console.log(formData);
+        console.log("form: ", formData);
 
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
@@ -197,18 +197,26 @@ class PerfilAdulto extends React.Component {
     }
     //função que alterna as paginas
     async ChangePage(event) {
-
-        const criancas = event.children.map(async (crianca, index) => {
-            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-            return response.data;
-        });
-        Promise.all(criancas).then((listaCriancas) => {
-            console.log(listaCriancas, "SOu um filho da puta")
+        console.log("this is what i need now:: ",event, "\n" ,event.children[0]);
+        if(event.children[0] === null){
             this.setState({
-                listaFuncionarios: listaCriancas,
                 page: "Perfil",
             })
-        });
+        }else{
+
+            const criancas = event.children.map(async (crianca, index) => {
+                const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                return response.data;
+            });
+         
+            Promise.all(criancas).then((listaCriancas) => {
+                console.log(listaCriancas, "SOu um filho da puta")
+                this.setState({
+                    listaFuncionarios: listaCriancas,
+                    page: "Perfil",
+                })
+            });
+        }
 
         // criancas.forEach(async (c, index) => {
         //     const crianca = await c;

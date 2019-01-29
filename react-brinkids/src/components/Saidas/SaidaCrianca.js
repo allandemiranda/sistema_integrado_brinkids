@@ -337,11 +337,19 @@ class SaidaCrianca extends React.Component {
                     this.state.ValorCriaDesc.map((resp, indice) => {
                         k += parseFloat(resp.value);
                     })
-                    this.setState({
-                        TotalValor: (j).toFixed(2),
-                        TotalValorDesc: (k).toFixed(2),
-                        FinalValor: (j-k).toFixed(2),
-                    })
+                    if(k>j){
+                        this.setState({
+                            TotalValor: (j).toFixed(2),
+                            TotalValorDesc: (k).toFixed(2),
+                            FinalValor: (0).toFixed(2),
+                        })   
+                    } else {
+                        this.setState({
+                            TotalValor: (j).toFixed(2),
+                            TotalValorDesc: (k).toFixed(2),
+                            FinalValor: (j-k).toFixed(2),
+                        })
+                    }
 
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
