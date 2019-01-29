@@ -381,14 +381,14 @@ class Passport extends React.Component {
             listCria.push(crianca);
         };
 
-        formData.append('photo', this.state.file)
+        formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
         formData.append('service', 'Passaporte')
         formData.append('time', moment().format())
         formData.append('belongings', '0')
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
 
-        console.log(this.state.file);
+        console.log(this.state.file,JSON.stringify(listCria));
         //Fim do formulário;
 
         axios.post('/product', formData)
@@ -565,7 +565,7 @@ class Passport extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
+                                            <img src={this.state.listConfirmAdult[0].photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
@@ -644,6 +644,7 @@ class Passport extends React.Component {
                                     </thead>
                                     <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS - Falta modificar para aparecer o nome*/}
                                         {this.state.listConect.map((findKids, indice) => {
+                                            
                                             return (
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
@@ -656,7 +657,7 @@ class Passport extends React.Component {
                                         {this.state.list.map((findKids, indice) => {
                                             return (
                                                 <tr key={findKids._id}>
-                                                    <th scope="row">{indice + 1}</th>
+                                                    <th scope="row">{this.state.listConect.length + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{moment(findKids.birthday).format('DD/MM/YYYY')}  </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
@@ -818,7 +819,7 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
+                                                <img src={ this.state.listConfirmAdult[0].photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -874,7 +875,7 @@ class Passport extends React.Component {
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                        <img src={"http://localhost:3000/img-users/" + Criançasqueentrarao.photo} />
+                                                        <img src={ Criançasqueentrarao.photo} />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">

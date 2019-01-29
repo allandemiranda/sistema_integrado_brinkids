@@ -147,13 +147,16 @@ class DashBoard extends React.Component {
 	grafico(event) {
 		for (var i = 1; i <= 30; i++) {
 			let hj = moment().format("MM/DD/YYYY");
-			var novo = moment(hj).subtract(i, 'days').calendar();
-			console.log(novo);
+			var novo = moment(hj).subtract(i, 'days');
+			
+			console.log(novo.format("MM/DD/YYYY"));
 
-			axios.get('http://localhost:3001/TelaMKT' + novo)
+			axios.get(`/TelaMKT/${novo.format("MM/DD/YYYY")}`)
 				.then((response) => {
 					console.log(response.data);
-					this.setState.lista.push(response.data);
+					this.setState({
+						lista: response.data,
+					})
 					{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
 					dados1.push({
 						name: response.data.name,
@@ -166,28 +169,28 @@ class DashBoard extends React.Component {
 
 		}
 	}
-	grafico(event) {
-		for (var i = 1; i <= 30; i++) {
-			let hj = moment().format("MM/DD/YYYY");
-			var novo = moment(hj).subtract(i, 'days').calendar();
-			console.log(novo);
+	// grafico(event) {
+	// 	for (var i = 1; i <= 30; i++) {
+	// 		let hj = moment().format("MM/DD/YYYY");
+	// 		var novo = moment(hj).subtract(i, 'days').calendar();
+	// 		console.log(novo);
 
-			axios.get('http://localhost:3001/TelaMKT' + novo)
-				.then((response) => {
-					console.log(response.data);
-					this.setState.lista.push(response.data);
-					{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
-					dados1.push({
-						name: response.data.name,
-						Meninos: response.data.meninos,
-						Meninas: response.data.meninas,
-						Total: response.data.meninas + response.data.meninos,
-					})
-				})
-				.catch((err) => console.log(err));
+	// 		axios.get('http://localhost:3001/TelaMKT' + novo)
+	// 			.then((response) => {
+	// 				console.log(response.data);
+	// 				this.setState.lista.push(response.data);
+	// 				{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
+	// 				dados1.push({
+	// 					name: response.data.name,
+	// 					Meninos: response.data.meninos,
+	// 					Meninas: response.data.meninas,
+	// 					Total: response.data.meninas + response.data.meninos,
+	// 				})
+	// 			})
+	// 			.catch((err) => console.log(err));
 
-		}
-	}
+	// 	}
+	// }
 	grafico1(event) {
 		axios.get('http://localhost:3001/TelaMKT')
 			.then((response) => {

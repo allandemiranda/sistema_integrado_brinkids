@@ -256,7 +256,9 @@ class FormularioCadFunc extends React.Component {
     //Função que Valida o Funcionario
     ValidaFuncionario = (event) => {
          event.preventDefault();
-         var erros = ValidaErros(this.state);
+         var erros = [] ;
+         //voltar as coisas normais dps
+        //  ValidaErros(this.state)
          if(erros.length > 0){
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
@@ -267,146 +269,146 @@ class FormularioCadFunc extends React.Component {
                 page: "ConfirmaCad"
             })
         }
-         function ValidaErros(funcio) {
+        //  function ValidaErros(funcio) {
 
-             var erros = [];
+        //      var erros = [];
 
-             if (funcio.scholl.length === 0) {
-                $("#scholl").addClass('errorBorder');
-                erros.push("A Escola não pode ser em branco");
-             }
-             else{
-                $("#scholl").removeClass('errorBorder'); 
-             }
-             if (funcio.dad.length === 0) {
-                $("#dad").addClass('errorBorder');
-                erros.push("O nome do Pai não pode ser em branco");
-             }
-             else{
-                $("#dad").removeClass('errorBorder'); 
-             }
-             if (funcio.mom.length === 0) {
-                $("#mom").addClass('errorBorder');
-                erros.push("O nome do Mae não pode ser em branco");
-             }
-             else{
-                $("#mom").removeClass('errorBorder'); 
-             }
-             if (funcio.cidadeNasc.length === 0) {
-                $("#LN").addClass('errorBorder');
-                erros.push("A Cidade de Nascimento não pode ser em branco");
-             }
-             else{
-                $("#LN").removeClass('errorBorder'); 
-             }
-             if (funcio.UFLNasc.length === 0) {
-                $("#UFN").addClass('errorBorder');
-                erros.push("A UF de Nascimento não pode ser em branco");
-             }
-             else{
-                $("#UFN").removeClass('errorBorder'); 
-             }
+        //      if (funcio.scholl.length === 0) {
+        //         $("#scholl").addClass('errorBorder');
+        //         erros.push("A Escola não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#scholl").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.dad.length === 0) {
+        //         $("#dad").addClass('errorBorder');
+        //         erros.push("O nome do Pai não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#dad").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.mom.length === 0) {
+        //         $("#mom").addClass('errorBorder');
+        //         erros.push("O nome do Mae não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#mom").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.cidadeNasc.length === 0) {
+        //         $("#LN").addClass('errorBorder');
+        //         erros.push("A Cidade de Nascimento não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#LN").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.UFLNasc.length === 0) {
+        //         $("#UFN").addClass('errorBorder');
+        //         erros.push("A UF de Nascimento não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#UFN").removeClass('errorBorder'); 
+        //      }
             
-             // Carteira de Trabalho
-             if (funcio.numberCT.length === 0) {
-                $("#NumberCT").addClass('errorBorder');
-                erros.push("A Numero da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#NumberCT").removeClass('errorBorder'); 
-             }
-             if (funcio.serieCT.length === 0) {
-                $("#SerieCT").addClass('errorBorder');
-                erros.push("A Serie da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#SerieCT").removeClass('errorBorder'); 
-             }
-             if (funcio.UFCT.length === 0) {
-                $("#Se").addClass('errorBorder');
-                erros.push("A UF da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#Se").removeClass('errorBorder'); 
-             }
-             if (funcio.PIS.length === 0) {
-                $("#PIS").addClass('errorBorder');
-                erros.push("O PIS/PASEP da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#PIS").removeClass('errorBorder'); 
-             }
-             if (funcio.DataEmissaoCT.length === 0) {
-                $("#CTDE").addClass('errorBorder');
-                erros.push("A Data de Emissão da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#CTDE").removeClass('errorBorder'); 
-             }
-             if (funcio.LocalEmissaoCT.length === 0) {
-                $("#CTLE").addClass('errorBorder');
-                erros.push("O Local de Emissão da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#CTLE").removeClass('errorBorder'); 
-             }
+        //      // Carteira de Trabalho
+        //      if (funcio.numberCT.length === 0) {
+        //         $("#NumberCT").addClass('errorBorder');
+        //         erros.push("A Numero da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#NumberCT").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.serieCT.length === 0) {
+        //         $("#SerieCT").addClass('errorBorder');
+        //         erros.push("A Serie da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#SerieCT").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.UFCT.length === 0) {
+        //         $("#Se").addClass('errorBorder');
+        //         erros.push("A UF da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#Se").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.PIS.length === 0) {
+        //         $("#PIS").addClass('errorBorder');
+        //         erros.push("O PIS/PASEP da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#PIS").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.DataEmissaoCT.length === 0) {
+        //         $("#CTDE").addClass('errorBorder');
+        //         erros.push("A Data de Emissão da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#CTDE").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.LocalEmissaoCT.length === 0) {
+        //         $("#CTLE").addClass('errorBorder');
+        //         erros.push("O Local de Emissão da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#CTLE").removeClass('errorBorder'); 
+        //      }
    
-             //RG
-             if (funcio.RGLEmissao.length === 0) {
-                $("#RGLE").addClass('errorBorder');
-                erros.push("O Local de Emissão do RG não pode ser em branco");
-             }
-             else{
-                $("#RGLE").removeClass('errorBorder'); 
-             }
-             if (funcio.RGUF.length === 0) {
-                $("#RGUF").addClass('errorBorder');
-                erros.push("O UF do RG não pode ser em branco");
-             }
-             else{
-                $("#RGUF").removeClass('errorBorder'); 
-             }
-             if (funcio.RGDateEmissao.length === 0) {
-                $("#RGDE").addClass('errorBorder');
-                erros.push("A Data de Emissão do RG não pode ser em branco");
-             }
-             else{
-                $("#RGDE").removeClass('errorBorder'); 
-             }
+        //      //RG
+        //      if (funcio.RGLEmissao.length === 0) {
+        //         $("#RGLE").addClass('errorBorder');
+        //         erros.push("O Local de Emissão do RG não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#RGLE").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.RGUF.length === 0) {
+        //         $("#RGUF").addClass('errorBorder');
+        //         erros.push("O UF do RG não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#RGUF").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.RGDateEmissao.length === 0) {
+        //         $("#RGDE").addClass('errorBorder');
+        //         erros.push("A Data de Emissão do RG não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#RGDE").removeClass('errorBorder'); 
+        //      }
             
-             //Titulo Eleitoral
-             if (funcio.TNumero.length === 0) {
-                $("#TLNumero").addClass('errorBorder');
-                erros.push("O Numero do Titulo de Eleitor não pode ser em branco");
-             }
-             else{
-                $("#TLNumero").removeClass('errorBorder'); 
-             }
-             if (funcio.TZona.length === 0) {
-                $("#TLLE").addClass('errorBorder');
-                erros.push("A Zona Eleitoral não pode ser em branco");
-             }
-             else{
-                $("#TLLE").removeClass('errorBorder'); 
-             }
-             if (funcio.TSecao.length === 0) {
-                $("#TLUF").addClass('errorBorder');
-                erros.push("A Seção Eleitoral não pode ser em branco");
-             }
-             else{
-                $("#TLUF").removeClass('errorBorder'); 
-             }
+        //      //Titulo Eleitoral
+        //      if (funcio.TNumero.length === 0) {
+        //         $("#TLNumero").addClass('errorBorder');
+        //         erros.push("O Numero do Titulo de Eleitor não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#TLNumero").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.TZona.length === 0) {
+        //         $("#TLLE").addClass('errorBorder');
+        //         erros.push("A Zona Eleitoral não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#TLLE").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.TSecao.length === 0) {
+        //         $("#TLUF").addClass('errorBorder');
+        //         erros.push("A Seção Eleitoral não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#TLUF").removeClass('errorBorder'); 
+        //      }
             
-             // Funcionario
-             if (funcio.DataAdmisao.length === 0) {
-                $("#DataAdmisao").addClass('errorBorder');
-                erros.push("A Data de Admissão do Funcionario não pode ser em branco");
-             }
-             else{
-                $("#DataAdmisao").removeClass('errorBorder'); 
-             }
-             return erros;
-         }
+        //      // Funcionario
+        //      if (funcio.DataAdmisao.length === 0) {
+        //         $("#DataAdmisao").addClass('errorBorder');
+        //         erros.push("A Data de Admissão do Funcionario não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#DataAdmisao").removeClass('errorBorder'); 
+        //      }
+        //      return erros;
+        //  }
 
     }
 

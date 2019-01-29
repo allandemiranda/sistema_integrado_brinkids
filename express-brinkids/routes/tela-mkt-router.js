@@ -4,7 +4,7 @@ const Child = require('../models/child-models');
 
 const router = express.Router();
 
-router.get('/:day/:month/:year', async (req, res) => {
+router.get('/:month/:day/:year', async (req, res) => {
   try {
     const today = moment(`${req.params.year}-${req.params.month}-${req.params.day}`).startOf('day');
 

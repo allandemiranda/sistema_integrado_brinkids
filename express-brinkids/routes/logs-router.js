@@ -51,17 +51,14 @@ router.get('/', async (req, res) => {
 
 
 router.put('/filter', async (req, res) => {
-	console.log("=========================")
-	console.log(req.body)
-	console.log("=========================")
-
+	console.log("entrei========sssss")
 	if (req.body.operador !== "") {
 
 		if (req.body.atividade !== "") {
 
 			if (req.body.start !== "" && req.body.end !== "") {
 				try {
-					const Log = await logs.find({ 'activity': new RegExp(req.body.operador), 'action': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+					const Log = await logs.find({ 'from': new RegExp(req.body.operador), 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
 
 					return res.json(Log);
 				} catch (err) {
@@ -70,7 +67,7 @@ router.put('/filter', async (req, res) => {
 				}
 			}
 			try {
-				const Log = await logs.find({ 'activity': new RegExp(req.body.operador), 'action': new RegExp(req.body.atividade) });
+				const Log = await logs.find({ 'from': new RegExp(req.body.operador), 'activity': new RegExp(req.body.atividade) });
 
 				return res.json(Log);
 			} catch (err) {
@@ -79,7 +76,7 @@ router.put('/filter', async (req, res) => {
 			}
 		} else if (req.body.start !== "" && req.body.end !== "") {
 			try {
-				const Log = await logs.find({ 'activity': new RegExp(req.body.operador), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+				const Log = await logs.find({ 'from': new RegExp(req.body.operador), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
 
 				return res.json(Log);
 			} catch (err) {
@@ -88,7 +85,7 @@ router.put('/filter', async (req, res) => {
 			}
 		}
 		try {
-			const Log = await logs.find({ activity:req.body.operador });
+			const Log = await logs.find({ 'from':req.body.operador });
 
 			return res.json(Log);
 		} catch (err) {
@@ -99,7 +96,7 @@ router.put('/filter', async (req, res) => {
 
 		if (req.body.start !== "" && req.body.end !== "") {
 			try {
-				const Log = await logs.find({ 'action': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+				const Log = await logs.find({ 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
 
 				return res.json(Log);
 			} catch (err) {
@@ -108,7 +105,7 @@ router.put('/filter', async (req, res) => {
 			}
 		}
 		try {
-			const Log = await logs.find({ 'action': new RegExp(req.body.atividade) });
+			const Log = await logs.find({ 'activity': new RegExp(req.body.atividade) });
 
 			return res.json(Log);
 		} catch (err) {
@@ -118,6 +115,15 @@ router.put('/filter', async (req, res) => {
 	} else if (req.body.start !== "" && req.body.end !== "") {
 		try {
 			const Log = await logs.find({ 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+
+			return res.json(Log);
+		} catch (err) {
+			console.log(err);
+			return res.sendStatus(500);
+		}
+	}else{
+		try {
+			const Log = await logs.find({});
 
 			return res.json(Log);
 		} catch (err) {

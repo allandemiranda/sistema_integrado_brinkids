@@ -2,7 +2,7 @@
 
 const express = require('express');
 const fs = require('fs');
-
+const Logs = require('../models/logs-models')
 const Product = require('../models/product-models');
 const config = require('../config');
 
@@ -19,13 +19,13 @@ router.get('/', (req, res) => {
 router.get('/filter/:search/', async (req, res) => {
   try {
     const products = await Product.find({ 'adult.name': new RegExp(req.params.search) });
-    
+
     return res.json(products);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
   }
-  
+
 });
 
 // Rota de inserção de produtos
@@ -35,6 +35,8 @@ router.post('/', async (req, res) => {
     const adult = JSON.parse(req.body.adult);
 
     const products = JSON.parse(req.body.children).map(async (child) => {
+
+
       const product = new Product({
         children: {
           id: child._id,
@@ -54,6 +56,33 @@ router.post('/', async (req, res) => {
         time: new Date(req.body.time),
         belongings: req.body.belongings,
       });
+      if (req.body.service === "Aniversario") {
+        
+        const log = new Logs({
+          activity: req.body.service,
+          action: 'Entrada',
+          dateOperation: new Date(),
+          from: 'f', //ajsuta o id dps de fazer o login funcionar
+          to: child._id,
+          timeLojaFirst: new Date(req.body.time),
+
+        })
+        const newLog = await log.save();
+      } else if (req.body.service === "Passaporte") {
+        
+        const log = new Logs({
+          activity: req.body.service,
+          action: 'Entrada',
+          dateOperation: new Date(),
+          from: 'f', //ajsuta o id dps de fazer o login funcionar
+          to: child._id,
+          timeLojaFirst: new Date(req.body.time),
+
+
+        })
+        const newLog = await log.save();
+      }
+
 
       const productSaved = await product.save();
 
@@ -61,12 +90,12 @@ router.post('/', async (req, res) => {
 
       const photoBase64Data = child.photo.replace(/^data:image\/png;base64,/, '');
 
-      fs.writeFile(`${config.pathPublic()}${config.pathProduct}${productSaved._id}.png`, photoBase64Data, 'base64', function(errFile) {
+      fs.writeFile(`${config.pathPublic()}${config.pathProduct}${productSaved._id}.png`, photoBase64Data, 'base64', function (errFile) {
         if (errFile) {
           throw new Error(errFile);
         }
       });
-
+      
       return productSaved;
     });
 

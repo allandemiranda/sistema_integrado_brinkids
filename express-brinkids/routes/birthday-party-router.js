@@ -15,10 +15,10 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
- 
 
 
- 
+
+
   let jasonPaarse = req.body.guestList
 
 
@@ -63,21 +63,21 @@ router.post('/', async (req, res) => {
   try {
 
     const newBirthday = await birthday.save();
-    
-      const log = new Logs({
-        activity: 'Aniversario',
-        action: 'Criação',
-        dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
-        to: newBirthday._id,
-        price: newBirthday.payment.value,
-        priceMethod: newBirthday.payment.method,
-        
 
-      })
-      const newLog = await log.save();
-     
-    
+    const log = new Logs({
+      activity: 'Aniversario',
+      action: 'Criação',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: newBirthday._id,
+      price: newBirthday.payment.value,
+      priceMethod: newBirthday.payment.method,
+
+
+    })
+    const newLog = await log.save();
+
+
     return res.status(201).json(newBirthday);
   } catch (err) {
     console.log(err);
@@ -110,7 +110,7 @@ router.delete('/:identifier', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
-  try { 
+  try {
     const service = await BirthdayParty.findByIdAndUpdate(
       req.params.identifier,
       {
@@ -134,7 +134,7 @@ router.put('/:identifier', async (req, res) => {
           },
 
           guestList: req.body.guestList,
-         
+
           // guestList: array,}
         },
       }
@@ -145,7 +145,7 @@ router.put('/:identifier', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: 'f', //ajsuta o id dps de fazer o login funcionar
-      to:req.params.identifier,
+      to: req.params.identifier,
       price: service.payment.value,
       priceMethod: service.payment.method,
     })
@@ -163,15 +163,15 @@ router.put('/:identifier', async (req, res) => {
 });
 
 router.put('/partyFeather/:identifier', async (req, res) => {
-  
- 
-    console.log(req.body.adult)
-   if(req.body.adult){ 
+
+
+  console.log(req.body.adult)
+  if (req.body.adult) {
     try {
       const birthday = await BirthdayParty.findById(req.params.identifier);
       birthday.partyFeather.push(req.body.adult[0]);
       console.log(birthday);
-     
+
       birthday.save()
 
       if (!birthday) {
@@ -180,35 +180,35 @@ router.put('/partyFeather/:identifier', async (req, res) => {
         console.log("=================")
         return res.sendStauts(404);
       }
-
+      
       return res.sendStatus(204);
     } catch (err) {
       console.log(err);
       return res.sendStatus(500);
     }
   }
-    if(req.body.child){
-      try {
-        const birthday = await BirthdayParty.findById(req.params.identifier);
-        birthday.partyFeather.push(req.body.child[0]);
-        console.log(birthday);
-       
-        birthday.save()
-  
-        if (!birthday) {
-          console.log("=================")
-          console.log("olaaaaaa")
-          console.log("=================")
-          return res.sendStauts(404);
-        }
-  
-        return res.sendStatus(204);
-      } catch (err) {
-        console.log(err);
-        return res.sendStatus(500);
+  if (req.body.child) {
+    try {
+      const birthday = await BirthdayParty.findById(req.params.identifier);
+      birthday.partyFeather.push(req.body.child[0]);
+      console.log(birthday);
+
+      birthday.save()
+
+      if (!birthday) {
+        console.log("=================")
+        console.log("olaaaaaa")
+        console.log("=================")
+        return res.sendStauts(404);
       }
+     
+      return res.sendStatus(204);
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
     }
- 
+  }
+
 });
 
 module.exports = router;

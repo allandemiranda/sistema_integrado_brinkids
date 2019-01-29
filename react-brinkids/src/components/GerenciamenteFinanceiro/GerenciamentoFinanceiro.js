@@ -383,10 +383,10 @@ class GerenciamentoFinanceiro extends React.Component {
                                                             {fluxo.priceMethod !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.priceMethod}</td>)}
                                                             {fluxo.priceMethod === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
-                                                            {fluxo.timeLojaFirst !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.timeLojaFirst}</td>)}
+                                                            {fluxo.timeLojaFirst !== undefined && (<td style={{ textAlign: "center" }}><a>{moment(fluxo.timeLojaFirst).format("DD/MM/YYYY HH:mm")}</a></td>)}
                                                             {fluxo.timeLojaFirst === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
-                                                            {fluxo.timeLojaLast !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.timeLojaLast}</td>)}
+                                                            {fluxo.timeLojaLast !== undefined && (<td style={{ textAlign: "center" }}><a>{ moment(fluxo.timeLojaLast).format("DD/MM/YYYY HH:mm")}</a></td>)}
                                                             {fluxo.timeLojaLast === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
 
