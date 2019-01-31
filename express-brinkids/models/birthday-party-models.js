@@ -56,15 +56,17 @@ const birthdayPartySchema = mongoose.Schema({
       type: String,
       required: true,
     },
+    nameChild:String,
     age: Number,
     id: String,
   }],
   partyFeather: [{
     type: {
       type:String
-    } ,
+    },
     id: String,
     name: String,
+    nameChild:String,
   }],
 });
 

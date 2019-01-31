@@ -47,39 +47,39 @@ class EntradaAniversario extends React.Component {
         this.SearchChild = this.SearchChild.bind(this);
         this.requisicao = this.requisicao.bind(this);
     }
-requisicao(event){
-    $.ajax({
-        url: "http://localhost:3001/birthday",
-        dataType: 'json',
-        type: 'GET',
-        error: function (response) {
-            if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-        },
-        success: function (response) {
-            console.log(response.length)
-            if (response.length === 0) {
-                alert("Nenhum aniversário encontrado")
-                this.setState({ erro: "* Nenhum Evento Encontrado." })
-            } else {
-                let adulto=[];
-                let crianca=[];
-                response[0].partyFeather.map((pessoa,indice)=>{
-                    if(pessoa.type ==="adult"){
-                        adulto.push(pessoa)
-                    }else{
-                        crianca.push(pessoa)
-                    }
-                })
-                console.log("Olar")
-                this.setState({
-                    listaAdultosDentro:adulto,
-                    listaCriancaDentro:crianca,
-                    aniversariante: response
-                });
-            }
-        }.bind(this)
-    });
-}
+    requisicao(event) {
+        $.ajax({
+            url: "http://localhost:3001/birthday",
+            dataType: 'json',
+            type: 'GET',
+            error: function (response) {
+                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+            },
+            success: function (response) {
+                console.log(response.length)
+                if (response.length === 0) {
+                    alert("Nenhum aniversário encontrado")
+                    this.setState({ erro: "* Nenhum Evento Encontrado." })
+                } else {
+                    let adulto = [];
+                    let crianca = [];
+                    response[0].partyFeather.map((pessoa, indice) => {
+                        if (pessoa.type === "adult") {
+                            adulto.push(pessoa)
+                        } else {
+                            crianca.push(pessoa)
+                        }
+                    })
+                    console.log("Olar")
+                    this.setState({
+                        listaAdultosDentro: adulto,
+                        listaCriancaDentro: crianca,
+                        aniversariante: response
+                    });
+                }
+            }.bind(this)
+        });
+    }
     componentWillMount() {
         this.requisicao();
     }
@@ -92,8 +92,8 @@ requisicao(event){
 
     // FUNÇOES RELACIONADAS A BOTÕES - INICIO     
     SelecionarCrianca = (event) => {
-        
-       
+
+
 
         this.setState({
             page: "EntradaCrianca",
@@ -108,16 +108,17 @@ requisicao(event){
 
     AvancarConfAdulto = (event) => {
         this.setState({
-            FullName: this.state.adultoSelecionado[0].name,
+            FullName: this.state.adultoSelecionado.name,
             page: "ConfirmaAdulto",
         })
     }
 
     FinalizarAdulto = (event) => {
         let listaAdultosDentros = this.state.listaAdultosDentro;
-        listaAdultosDentros.push({ type: "adult", name: this.state.FullName });
+        console.log(this.state.FullName)
+        listaAdultosDentros= { type: "adult", name: this.state.FullName };
         this.setState({
-           
+
             type: "",
             name: "",
             page: "SelecionarTipoDeEntrada",
@@ -131,10 +132,13 @@ requisicao(event){
         }
 
         axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
-            .then(function (response) {
+            .then((response)=> {
                 console.log(response)
-
-            }).catch(function (error) {
+                this.setState({
+                    page: "SelecionarTipoDeEntrada"
+                })
+                this.requisicao();
+            }).catch( (error)=> {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -162,9 +166,8 @@ requisicao(event){
 
     ConfirmarResp = (event) => {
         let temporario = [];
-        this.state.adultoSelecionado.map((event, indice) => {
-            event.id = this.state.criancaSelecionada[indice]._id;
-        })
+
+        this.state.adultoSelecionado.id = this.state.criancaSelecionada._id
         this.setState({
             page: "ConfirmarResp",
             listacriancaCombinacao: temporario,
@@ -188,7 +191,7 @@ requisicao(event){
         let listaC = [];
 
         this.setState({
-            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada[0]._id, name: this.state.criancaSelecionada[0].name}] }),
+            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name }] }),
             comprovante: true,
         })
 
@@ -200,22 +203,24 @@ requisicao(event){
             phone: this.state.responsavel[0].phone,
             observations: this.state.responsavel[0].obs,
         }
+        const crianca = {
+            _id: String(this.state.criancaSelecionada._id),
+            name: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName,
+            birthday: new Date(this.state.criancaSelecionada.birthday),
+            restrictions: this.state.criancaSelecionada.restrictions,
+            observations: this.state.criancaSelecionada.observations,
+            photo: this.state.file,
+        }
 
-        for (var i = 0; i < this.state.criancaSelecionada.length; i++) {
-            const crianca = {
-                _id: String(this.state.criancaSelecionada[i]._id),
-                name: this.state.criancaSelecionada[i].name.firstName + ' ' + this.state.criancaSelecionada[i].name.surName,
-                birthday: new Date(this.state.criancaSelecionada[i].birthday),
-                restrictions: this.state.criancaSelecionada[i].restrictions,
-                observations: this.state.criancaSelecionada[i].observations,
-                photo: this.state.file,
-            }
-            listaC.push({ type: "child", id: this.state.criancaSelecionada[i]._id, name: this.state.criancaSelecionada[i].name.firstName + ' ' + this.state.criancaSelecionada[i].name.surName})
-            listCria.push(crianca);
-        };
+
+        listaC = { type: "child", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName }
+        listCria.push(crianca);
+
         var formData = new FormData();
 
-
+        console.log(this.state.file)
+        console.log(listCria)
+        console.log(adulto)
 
         formData.append('photo', this.state.file)
         formData.append('service', 'Aniversario')
@@ -223,30 +228,32 @@ requisicao(event){
         formData.append('belongings', '0')
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
-        
+
         const data = {
             child: listaC,
             identifier: this.state.aniversariante[0]._id,
         }
-        console.log(listCria)
+        console.log(listaC)
         axios.post('/product', formData)
             .then((response) => {
 
-               
+
                 axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
-                    .then((response) =>{
+                    .then((response) => {
                         console.log(response)
                         this.setState({
-                            page:"SelecionarTipoDeEntrada"
+                            page: "SelecionarTipoDeEntrada"
                         })
-                    }).catch( (error) =>{
+                        this.requisicao();
+
+                    }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                         console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                         alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
-            
-                }).catch((error) => {
+
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -278,24 +285,26 @@ requisicao(event){
 
     // Salva AS informações dos ADULTOS que apareceram na lista e foi selecionado.
     selectedAdultLista(identifier) {
-        let achou = false;
-        //Desmarca A checkBox
-        this.state.adultoSelecionado.forEach((adultos, indice, array) => {
+
+        this.state.aniversariante[0].guestList.forEach((adultos) => {
             if (adultos.name === identifier) {
-                array.splice(indice, 1);
-                achou = true;
+                if(adultos.type === "adult"){
+                    this.setState({
+                        adultoSelecionado: adultos,
+                        page: "ConfirmaAdulto",
+                    });
+                }else{
+                    this.setState({
+                        adultoSelecionado: adultos,
+                        page: "CombinarCrianca",
+                    });
+                }
+               
             }
         });
 
-        if (!(achou)) {
-            this.state.aniversariante[0].guestList.forEach((adultos) => {
-                if (adultos.name === identifier) {
-                    this.state.adultoSelecionado.push(adultos);
-                }
-            });
-        }
 
-        this.setState({ adultoSelecionado: this.state.adultoSelecionado });
+
         console.log(this.state.adultoSelecionado)
     }
 
@@ -324,34 +333,28 @@ requisicao(event){
 
     // Salva AS informações das CRIANÇAS que apareceram na lista e foi selecionado.
     selectedKids(identifier) {
-        let achou = false;
-        //Desmarca A checkBox
-        this.state.criancaSelecionada.forEach((kids, indice, array) => {
+
+
+
+        this.state.list.forEach((kids, indice) => {
+
+
             if (kids._id === identifier) {
-                array.splice(indice, 1);
-                achou = true;
+                this.setState({
+                    criancaSelecionada: kids,
+                    page: "SelecionarResponsavel",
+                    selectedSearch: "",
+                    list: []
+                });
+
+
+
+
             }
         });
 
-        if (!(achou)) {
 
 
-            this.state.list.forEach((kids, indice) => {
-
-                console.log(kids)
-                if (kids._id === identifier) {
-                    if (this.state.criancaSelecionada.length < this.state.adultoSelecionado.length) {
-                        this.state.criancaSelecionada.push(kids);
-                    } else {
-                        alert("limite de crianças atingido")
-                    }
-
-
-                }
-            });
-        }
-
-        this.setState({ criancaSelecionada: this.state.criancaSelecionada });
         console.log(this.state.criancaSelecionada)
     }
 
@@ -402,6 +405,7 @@ requisicao(event){
                 this.setState({ list: response });
             }.bind(this)
         });
+        console.log(this.state.adultoSelecionado)
     }
 
     render() {
@@ -527,7 +531,7 @@ requisicao(event){
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
                                                             <td > {event.name} </td>
-                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)} /> </td>
+                                                            <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                         </tr>
                                                     );
                                                 }
@@ -571,7 +575,7 @@ requisicao(event){
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.adultoSelecionado[0].name}</p>
+                                        <p>{this.state.adultoSelecionado.name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -579,7 +583,7 @@ requisicao(event){
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome Completo: </b></h5>
-                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.FullNome} onChange={this.changue} />
+                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.FullName} onChange={ this.AdicinarFullNome} />
                                     </div>
                                 </div>
                             </div>
@@ -633,7 +637,7 @@ requisicao(event){
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
                                                             <td > {event.name} </td>
-                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)} /> </td>
+                                                            <td className="text-center">   <button type="button" name="selectchild" onClick={() => this.selectedAdultLista(event.name)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                         </tr>
                                                     );
                                                 }
@@ -651,7 +655,7 @@ requisicao(event){
                     <div className="graph" >
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao" onClick={this.AvancarCombinarCrianca}> Avançar </button>
+                            <button className="btn btn-md botao" onClick={this.AvancarCombinarCrianca}> Criança Extra </button>
                         </div>
                     </div>
                 </div>
@@ -698,7 +702,7 @@ requisicao(event){
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{findKids.phone} </td>
-                                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
+                                                    <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button> </td>
                                                 </tr>
                                             );
                                         })}
@@ -749,7 +753,7 @@ requisicao(event){
                                 </thead>
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {
-                                        console.log(findAdult)
+
                                         return (
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice + 1}</th>
@@ -940,7 +944,7 @@ requisicao(event){
                                         <div className="col-md-12 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                <p>{this.state.criancaSelecionada[0].name.firstName + " " + this.state.criancaSelecionada[0].name.surName}</p>
+                                                <p>{this.state.criancaSelecionada.name.firstName + " " + this.state.criancaSelecionada.name.surName}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -949,26 +953,26 @@ requisicao(event){
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.criancaSelecionada[0].photo} />
+                                                <img src={this.state.criancaSelecionada.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                <p>{this.state.criancaSelecionada[0].kinship}</p>
+                                                <p>{this.state.criancaSelecionada.kinship}</p>
                                             </div>
                                             <br></br>
                                             <div className="row">
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sexo: </b></h5>
-                                                        <p>{this.state.criancaSelecionada[0].sexuality}</p>
+                                                        <p>{this.state.criancaSelecionada.sexuality}</p>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                        <p>{moment(this.state.criancaSelecionada[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                        <p>{moment(this.state.criancaSelecionada.birthday, "YYYYMMDD").toNow(true)}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -981,7 +985,7 @@ requisicao(event){
                                                 <h3 className="inner-tittle" > Observações </h3>
                                                 <br></br>
                                                 <div className="graph" style={{ padding: 10 + "px" }} >
-                                                    <p>{this.state.criancaSelecionada[0].observations}</p>
+                                                    <p>{this.state.criancaSelecionada.observations}</p>
                                                 </div> </div>
                                         </div>
                                     </div >

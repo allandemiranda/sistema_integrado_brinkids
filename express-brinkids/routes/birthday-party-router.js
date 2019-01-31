@@ -87,7 +87,7 @@ router.post('/', async (req, res) => {
 
 router.delete('/:identifier', async (req, res) => {
   try {
-    const deletedService = await BirthdayParty.findByIdAndRemove(req.params.identifier);
+    const deletedService = await BirthdayParty.findOneAndDelete(req.params.identifier);
 
     const log = new Logs({
       activity: 'Aniversario',
@@ -169,7 +169,7 @@ router.put('/partyFeather/:identifier', async (req, res) => {
   if (req.body.adult) {
     try {
       const birthday = await BirthdayParty.findById(req.params.identifier);
-      birthday.partyFeather.push(req.body.adult[0]);
+      birthday.partyFeather.push(req.body.adult);
       console.log(birthday);
 
       birthday.save()
@@ -190,7 +190,7 @@ router.put('/partyFeather/:identifier', async (req, res) => {
   if (req.body.child) {
     try {
       const birthday = await BirthdayParty.findById(req.params.identifier);
-      birthday.partyFeather.push(req.body.child[0]);
+      birthday.partyFeather.push(req.body.child);
       console.log(birthday);
 
       birthday.save()
