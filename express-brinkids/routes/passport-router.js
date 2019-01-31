@@ -142,7 +142,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
       console.log("tempo extra: ", extraTime)
     }
 
-    if(adultExit >= birthdayStart && adultExit <= birthdayEnd){
+    if((adultEntered >= (birthdayStart-15)) && adultExit <= birthdayEnd){
 
       price = 0.00;
 
