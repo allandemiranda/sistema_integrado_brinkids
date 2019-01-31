@@ -22,6 +22,7 @@ class SaidaCrianca extends React.Component {
             verified: false,
 
             listAdultos: [],
+            listAdultosSemDuplicado: [],
             listCrianca: [],
             CriancasSelecionadas: [],
             
@@ -69,6 +70,7 @@ class SaidaCrianca extends React.Component {
                 console.log(response.data);
                 this.setState({
                     listAdultos: response.data,
+                    verified: true,
                 });
                 console.log("adultos", this.state.listAdultos)
             }).catch((error) => {
@@ -80,6 +82,29 @@ class SaidaCrianca extends React.Component {
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
             console.log(this.state.listAdultos)
+            setTimeout(_=>{
+                if(this.state.verified === true){
+                    var cont = 0;
+                    this.state.listAdultos.forEach((adulto, indice) => {
+                        cont = 0;
+                        console.log(cont + " Começo do laço");
+                        this.state.listAdultos.forEach((resp, i) => {
+                            if(adulto.name[indice] === resp.name[i]){
+                                cont++;
+                                console.log(cont);
+                                if(cont === 1) {
+                                    this.setState({
+                                        listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, {$push: [this.state.listAdultos[indice]]})
+                                    })
+                                }
+                            }
+                        })
+                    });
+                }           
+                this.setState({
+                    verified: false,
+                })
+            },2000);
     }
 
     //Bloco que muda o status para o atual do formulario.
@@ -413,8 +438,8 @@ class SaidaCrianca extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         {this.state.listAdultos.map((resp, indice) => {
-                                            console.log("It's my time: ", this.state.listAdultos)
+                                         {this.state.listAdultosSemDuplicado.map((resp, indice) => {
+                                            console.log("It's my time: ", this.state.listAdultosSemDuplicado)
                                             return (
                                                 <tr className="text-center" key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
