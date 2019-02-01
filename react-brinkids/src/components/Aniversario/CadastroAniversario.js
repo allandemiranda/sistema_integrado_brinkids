@@ -3,7 +3,14 @@ import update from 'react-addons-update';
 import axios from 'axios';
 import $ from 'jquery';
 import TypesInput from '../TypesInput.js';
-import ConfDadosAni from './ConfirmaDadosAniversariante.js'
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+  } from "react-router-dom";
+import ConfDadosAni from './ConfirmaDadosAniversariante.js';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -325,10 +332,12 @@ class CadastroAniversario extends React.Component {
         //formData.append('', String(this.state.UFLNasc))
     
         axios.post('/birthday', data)
-        .then(function (response) {
+        .then((response) =>{
+            
             console.log(response)
+            alert("cadastro realizado")
             //window.location.href = '/';
-        }).catch(function (error) {
+        }).catch( (error)=> {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
             // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -629,7 +638,7 @@ class CadastroAniversario extends React.Component {
                         <div className="text-center">
                             <button className="btn btn-md botao botaoAvançar" onClick={this.VoltaFormList}>Voltar</button>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadAni}>Novo Cadastro</button>
-                            <button className="btn btn-md botao botaoAvançar" onClick={this.CadAni}>Finalizar</button>
+                            <Link className="btn btn-md botao botaoAvançar" to="/" onClick={this.CadAni}>Finalizar</Link>
                         </div> 
                     </div> 
                 </div>

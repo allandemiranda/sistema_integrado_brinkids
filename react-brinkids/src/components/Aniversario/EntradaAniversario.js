@@ -46,6 +46,29 @@ class EntradaAniversario extends React.Component {
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
         this.requisicao = this.requisicao.bind(this);
+        this.criancaExtra = this.criancaExtra.bind(this);
+    }
+    criancaExtra(event){
+        let crianca ={ type: "children", id: "", name:"Criança Extra" }
+        const data = {
+            childExtra: crianca,
+            identifier: this.state.aniversariante[0]._id,
+            id: this.state.adultoSelecionado._id,
+        }
+        axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+                    .then((response) => {
+                        console.log(response)
+                        this.setState({
+                            page: "EntradaCrianca"
+                        })
+                        this.requisicao();
+
+                    }).catch((error) => {
+                        console.log(error)//LOG DE ERRO
+                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    })
     }
     requisicao(event) {
         $.ajax({
@@ -116,7 +139,7 @@ class EntradaAniversario extends React.Component {
     FinalizarAdulto = (event) => {
         let listaAdultosDentros = this.state.listaAdultosDentro;
         console.log(this.state.FullName)
-        listaAdultosDentros= { type: "adult", name: this.state.FullName };
+        listaAdultosDentros = { type: "adult", name: this.state.FullName };
         this.setState({
 
             type: "",
@@ -132,13 +155,13 @@ class EntradaAniversario extends React.Component {
         }
 
         axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
-            .then((response)=> {
+            .then((response) => {
                 console.log(response)
                 this.setState({
                     page: "SelecionarTipoDeEntrada"
                 })
                 this.requisicao();
-            }).catch( (error)=> {
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -191,7 +214,7 @@ class EntradaAniversario extends React.Component {
         let listaC = [];
 
         this.setState({
-            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name }] }),
+            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "children", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name }] }),
             comprovante: true,
         })
 
@@ -213,9 +236,9 @@ class EntradaAniversario extends React.Component {
         }
 
 
-        listaC = { type: "child", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName }
+        listaC = { type: "children", id: this.state.criancaSelecionada._id, nameChild: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName, name: this.state.adultoSelecionado.name, age: this.state.adultoSelecionado.age }
         listCria.push(crianca);
-
+        console.log(listaC.age)
         var formData = new FormData();
 
         console.log(this.state.file)
@@ -232,6 +255,7 @@ class EntradaAniversario extends React.Component {
         const data = {
             child: listaC,
             identifier: this.state.aniversariante[0]._id,
+            id: this.state.adultoSelecionado._id,
         }
         console.log(listaC)
         axios.post('/product', formData)
@@ -288,18 +312,18 @@ class EntradaAniversario extends React.Component {
 
         this.state.aniversariante[0].guestList.forEach((adultos) => {
             if (adultos.name === identifier) {
-                if(adultos.type === "adult"){
+                if (adultos.type === "adult") {
                     this.setState({
                         adultoSelecionado: adultos,
                         page: "ConfirmaAdulto",
                     });
-                }else{
+                } else {
                     this.setState({
                         adultoSelecionado: adultos,
                         page: "CombinarCrianca",
                     });
                 }
-               
+
             }
         });
 
@@ -583,7 +607,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome Completo: </b></h5>
-                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.FullName} onChange={ this.AdicinarFullNome} />
+                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.FullName} onChange={this.AdicinarFullNome} />
                                     </div>
                                 </div>
                             </div>
@@ -629,13 +653,14 @@ class EntradaAniversario extends React.Component {
 
 
                                             this.state.aniversariante[0].guestList.map((event, indice) => {
-                                                console.log(event.type)
-                                                if (event.type === "children") {
-
+                                                
+                                               
+                                                if (event.type === "children" && event.nameChild === undefined) {
+                                                  
 
                                                     return (
-                                                        <tr >
-                                                            <th scope="row">{indice + 1}</th>
+                                                        <tr key={indice} >
+                                                            <th scope="row">{indice}</th>
                                                             <td > {event.name} </td>
                                                             <td className="text-center">   <button type="button" name="selectchild" onClick={() => this.selectedAdultLista(event.name)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                         </tr>
@@ -655,7 +680,7 @@ class EntradaAniversario extends React.Component {
                     <div className="graph" >
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao" onClick={this.AvancarCombinarCrianca}> Criança Extra </button>
+                            <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
                         </div>
                     </div>
                 </div>
