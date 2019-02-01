@@ -72,7 +72,7 @@ class SaidaCrianca extends React.Component {
                     listAdultos: response.data,
                     verified: true,
                 });
-                console.log("adultos", this.state.listAdultos)
+                // console.log("adultos", this.state.listAdultos)
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -82,29 +82,44 @@ class SaidaCrianca extends React.Component {
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
             console.log(this.state.listAdultos)
-            setTimeout(_=>{
-                if(this.state.verified === true){
-                    var cont = 0;
-                    this.state.listAdultos.forEach((adulto, indice) => {
-                        cont = 0;
-                        console.log(cont + " Começo do laço");
-                        this.state.listAdultos.forEach((resp, i) => {
-                            if(adulto.name[indice] === resp.name[i]){
-                                cont++;
-                                console.log(cont);
-                                if(cont === 1) {
-                                    this.setState({
-                                        listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, {$push: [this.state.listAdultos[indice]]})
-                                    })
-                                }
-                            }
-                        })
+
+            ///Função que limpa a lista de duplicatas.
+            function noRepeat(arr) {
+                var cleaned = [];
+                arr.forEach(function(item) {
+                    var unique = true;
+                    cleaned.forEach(function(item2) {
+                        console.log("item: ", item.adult.id);
+                        console.log("item2: ", item2.adult.id)
+                        if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
+                            unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
+                        };
                     });
+                    if (unique){  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
+                        cleaned.push(item)
+                    };
+                });
+                return cleaned;
+            }
+
+            setTimeout(_=>{
+
+                if(this.state.verified === true){
+
+                    var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
+                    console.log("unificado: ", noRepeatedList)
+
+                    for(var i = 0; i < noRepeatedList.length; i++){
+                        this.setState({
+                            listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, {$push: [noRepeatedList[i]]})//salavdno no this.state
+                        })
+                    }
+
                 }           
                 this.setState({
                     verified: false,
                 })
-            },2000);
+            }, 500)
     }
 
     //Bloco que muda o status para o atual do formulario.
