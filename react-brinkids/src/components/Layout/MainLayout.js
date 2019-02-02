@@ -7,7 +7,7 @@ import {
     Redirect,
     withRouter
   } from "react-router-dom";
-
+  import { logout } from "../Login/service/auth";
   import logo from './css/logo transp m.png';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -86,7 +86,7 @@ class MainLayout extends React.Component {
 									<ul>
 									<li><Link class="tooltips" to="/MyProfile"><span>Profile</span><i class="lnr lnr-user"></i></Link></li>
 										
-										<li><Link class="tooltips" to="/Login"><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
+										<li><Link class="tooltips" to="/Login" onClick={()=>logout()}><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
 										</ul>
                                         
 									</div>

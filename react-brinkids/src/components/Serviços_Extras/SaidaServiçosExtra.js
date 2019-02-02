@@ -120,7 +120,7 @@ class SaidaServicosExtra extends React.Component {m
         this.setState({
             dadosComprovante:{
                 
-                photo:String(this.state.listConfirmKids[0]._id),
+                
                 service:"SaidaServiçoExtra ",
                 nome1:this.state.listConfirm,
                 nome2:this.state.quantidade,
@@ -153,6 +153,7 @@ class SaidaServicosExtra extends React.Component {m
             this.setState({
                 dadosComprovante:response.data
             })
+            console.log(response.data)
             setTimeout((event) => {
                 this.setState({
                     comprovante:true,

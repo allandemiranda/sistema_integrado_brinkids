@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({ /**< Criação do Schema que conterá 4
   user: String, /**< Um campo de usuário do tipo texto e servirá autenticação e consulta no banco */
   password: String, /**< Um campo de senha. Obs.: Ela é deve ser criptografada antes de ser salva */
   employees: Boolean, /**< Checa se é um funcionário ou não */
+  id:String,
 });
 
 /**

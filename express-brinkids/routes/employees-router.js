@@ -3,14 +3,14 @@
 const express = require('express');
 const adult = require('../models/adult-models');
 const Employees = require('../models/employees-models');
-const userSystem = require('../models/userSystem-models');
+
 const Logs = require('../models/logs-models')
 const router = express.Router();
-
+const userSystem = require('../models/userSystem-models');
 
 router.get('/', async (req, res) => {
   try {
-    const employees = await adult.find({isEmployee: true }).populate('identifierEmployee');
+    const employees = await adult.find({ isEmployee: true }).populate('identifierEmployee');
 
     return res.status(200).json(employees);
   } catch (err) {
@@ -130,20 +130,28 @@ router.post('/', async (req, res) => {
       },
       observations: req.body.observations,
     });
-
+    const usuario = adultResult.email.split("@");
+    
+    const Login = new userSystem({
+      user: usuario[0] + req.body.EDRecord,
+      password: 'senha123',
+      id: req.body.identifier,
+      employees: adultResult.isEmployee,
+    })
+    const newLogin = await Login.save();
     const newEmployee = await employee.save();
 
     adultResult.identifierEmployee = newEmployee;
 
     adultResult.save();
-    
+
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Criação',
       dateOperation: new Date(),
       from: 'f', //ajsuta o id dps de fazer o login funcionar
       to: req.body.identifier,
-     
+
 
     })
     const newLog = await log.save();
@@ -188,8 +196,8 @@ router.put('/exchange-data', async (req, res) => {
         dateOperation: new Date(),
         from: 'f', //ajsuta o id dps de fazer o login funcionar
         to: req.body.identifier,
-       
-  
+
+
       })
       const newLog = await log.save();
       if (!adultChange) {
@@ -215,7 +223,7 @@ router.put('/reset-password', async (req, res) => {
       dateOperation: new Date(),
       from: 'f', //ajsuta o id dps de fazer o login funcionar
       to: req.body.identifier,
-     
+
 
     })
     const newLog = await log.save();

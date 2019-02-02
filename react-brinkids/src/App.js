@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import LayoutRoute from './components/Layout/LayoutRoute.js';
 import MainLayout from './components/Layout/MainLayout.js';
 import CadastroCrianca from './components/Crianca/CadastroCrianca.js';
@@ -27,166 +27,178 @@ import gavetas from './components/Gavetas/Gavetas.js';
 import TelaMKT from './components/TeladoMKT/TelaMKT.js';
 import GFinanceiro from './components/GerenciamenteFinanceiro/GerenciamentoFinanceiro.js';
 import VisualizarAniversario from './components/Aniversario/VisualizarAniversario.js';
+import { isAuthenticated } from "./components/Login/service/auth";
+
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
-class App extends React.Component {
-    render(){
-      return(
-        <BrowserRouter basename={getBasename()}>
-          <GAListener>
-            <Switch>
-                <LayoutRoute
-                  exact
-                  path="/Login"
-                  layout={Login}
-                />
-                <LayoutRoute
-                  exact
-                  path="/"
-                  layout={MainLayout}
-                  component={DashBoard}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Crianca"
-                  layout={MainLayout}
-                  component={CadastroCrianca}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Calendario"
-                  layout={MainLayout}
-                  component={Calendar}
-                />
-                <LayoutRoute
-                  exact
-                  path="/SaidaCrianca"
-                  layout={MainLayout}
-                  component={SaidaCrianca}
-                />                
-                <LayoutRoute
-                  exact
-                  path="/Desconto"
-                  layout={MainLayout}
-                  component={Desconto}
-                />
-               <LayoutRoute
-                  exact
-                  path="/Adult"
-                  layout={MainLayout}
-                  component={Adult}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Funcionario"
-                  layout={MainLayout}
-                  component={CadastroFuncionario}
-                />   
-               <LayoutRoute
-                  exact
-                  path="/Passport"
-                  layout={MainLayout}
-                  component={Passport}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Event"
-                  layout={MainLayout}
-                  component={CriaEvento}
-                />
-              <LayoutRoute
-                  exact
-                  path="/Aniversario"
-                  layout={MainLayout}
-                  component={Aniversario}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Perfil"
-                  layout={MainLayout}
-                  component={Perfil}
-                />
-               <LayoutRoute
-                  exact
-                  path="/GerenciamentoFinanceiro"
-                  layout={MainLayout}
-                  component={GFinanceiro}
-                />
-                <LayoutRoute
-                  exact
-                  path="/PerfilAdulto"
-                  layout={MainLayout}
-                  component={PerfilAdulto}
-                />
-                <LayoutRoute
-                  exact
-                  path="/PerfilCrianca"
-                  layout={MainLayout}
-                  component={PerfilCrianca}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Serviços"
-                  layout={MainLayout}
-                  component={Servicos}
-                />
-                <LayoutRoute
-                  exact
-                  path="/MyProfile"
-                  layout={MainLayout}
-                  component={MeuPerfil}
-                />
-                /> 
-                <LayoutRoute
-                  exact
-                  path="/EntradaAniversario"
-                  layout={MainLayout}
-                  component={EntradaAniversario}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Gerador_funcoes"
-                  layout={MainLayout}
-                  component={Gerador}
-                />
-                <LayoutRoute
-                  exact
-                  path="/SaidaServicosExtra"
-                  layout={MainLayout}
-                  component={SaidaServicosExtra}
-                />                                    
-                <LayoutRoute
-                  exact
-                  path="/ServicoPassaporte"
-                  layout={MainLayout}
-                  component={ServicoPassaporte}
-                />
-                <LayoutRoute
-                  exact
-                  path="/Gavetas"
-                  layout={MainLayout}
-                  component={gavetas}
-              />
-              <LayoutRoute
-                exact
-                path="/TelaMKT"
-                layout={MainLayout}
-                component={TelaMKT}
-              />
-              <LayoutRoute
-                exact
-                path="/VAniversario"
-                layout={MainLayout}
-                component={VisualizarAniversario}
-              />
-                                                                 
-              <Redirect to="/" /> 
-            </Switch>
-          </GAListener>
-        </BrowserRouter>
-      );
-    }
-  }
+const PrivateRoute = ({ component: Component, layout: Layout, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    isAuthenticated()
+      ? <Layout>
+        <Component {...props} />
+      </Layout>
+      : <Redirect to='/login' />
+  )} />
 
-  export default App;
+)
+class App extends React.Component {
+  render() {
+    return (
+      <BrowserRouter basename={getBasename()}>
+        <GAListener>
+          <Switch>
+            <Route
+              exact
+              path="/Login"
+              component={Login}
+            />
+            <PrivateRoute
+              exact
+              path="/"
+              layout={MainLayout}
+              component={DashBoard}
+            />
+            <PrivateRoute
+              exact
+              path="/Crianca"
+              layout={MainLayout}
+              component={CadastroCrianca}
+            />
+            <PrivateRoute
+
+              path="/Calendario"
+              layout={MainLayout}
+              component={Calendar}
+            />
+            <PrivateRoute
+              exact
+              path="/SaidaCrianca"
+              layout={MainLayout}
+              component={SaidaCrianca}
+            />
+            <PrivateRoute
+              exact
+              path="/Desconto"
+              layout={MainLayout}
+              component={Desconto}
+            />
+            <PrivateRoute
+              exact
+              path="/Adult"
+              layout={MainLayout}
+              component={Adult}
+            />
+            <PrivateRoute
+              exact
+              path="/Funcionario"
+              layout={MainLayout}
+              component={CadastroFuncionario}
+            />
+            <PrivateRoute
+              exact
+              path="/Passport"
+              layout={MainLayout}
+              component={Passport}
+            />
+            <PrivateRoute
+              exact
+              path="/Event"
+              layout={MainLayout}
+              component={CriaEvento}
+            />
+            <PrivateRoute
+              exact
+              path="/Aniversario"
+              layout={MainLayout}
+              component={Aniversario}
+            />
+            <PrivateRoute
+              exact
+              path="/Perfil"
+              layout={MainLayout}
+              component={Perfil}
+            />
+            <PrivateRoute
+              exact
+              path="/GerenciamentoFinanceiro"
+              layout={MainLayout}
+              component={GFinanceiro}
+            />
+            <PrivateRoute
+              exact
+              path="/PerfilAdulto"
+              layout={MainLayout}
+              component={PerfilAdulto}
+            />
+            <PrivateRoute
+              exact
+              path="/PerfilCrianca"
+              layout={MainLayout}
+              component={PerfilCrianca}
+            />
+            <PrivateRoute
+              exact
+              path="/Serviços"
+              layout={MainLayout}
+              component={Servicos}
+            />
+            <PrivateRoute
+              exact
+              path="/MyProfile"
+              layout={MainLayout}
+              component={MeuPerfil}
+            />
+            />
+                <PrivateRoute
+              exact
+              path="/EntradaAniversario"
+              layout={MainLayout}
+              component={EntradaAniversario}
+            />
+            <PrivateRoute
+              exact
+              path="/Gerador_funcoes"
+              layout={MainLayout}
+              component={Gerador}
+            />
+            <PrivateRoute
+              exact
+              path="/SaidaServicosExtra"
+              layout={MainLayout}
+              component={SaidaServicosExtra}
+            />
+            <PrivateRoute
+              exact
+              path="/ServicoPassaporte"
+              layout={MainLayout}
+              component={ServicoPassaporte}
+            />
+            <PrivateRoute
+              exact
+              path="/Gavetas"
+              layout={MainLayout}
+              component={gavetas}
+            />
+            <PrivateRoute
+              exact
+              path="/TelaMKT"
+              layout={MainLayout}
+              component={TelaMKT}
+            />
+            <PrivateRoute
+              exact
+              path="/VAniversario"
+              layout={MainLayout}
+              component={VisualizarAniversario}
+            />
+
+            <Redirect to="/" />
+          </Switch>
+        </GAListener>
+      </BrowserRouter>
+    );
+  }
+}
+
+export default App;
