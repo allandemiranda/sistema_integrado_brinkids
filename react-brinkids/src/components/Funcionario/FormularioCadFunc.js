@@ -10,6 +10,9 @@ import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Funcionario.css';
 import './css/style.css';
 
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 class FormularioCadFunc extends React.Component {
     constructor(props) {

@@ -12,6 +12,10 @@ import $ from "jquery";
 import '../../assets/style/font-awesome.css';
 import '../Layout/css/icon-font.min.css';
 
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+
 class ServicoPassaporte extends React.Component {
     constructor(props) {
         super(props)

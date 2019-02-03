@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:identifier', async (req, res) => {
   try {
-    const adultFound = await adult.find({ _id: req.params.identifier, isEmployee: true });
+    const adultFound = await adult.find({ _id: req.params.identifier, isEmployee: true }).populate('identifierEmployee');
 
     if (!adultFound) {
       return res.sendStatus(404);
@@ -231,7 +231,7 @@ router.put('/reset-password', async (req, res) => {
       return res.sendStatus(404);
     }
 
-    userFind.set({ password: 'senha123' });
+    userFind.set({ password: 'senha1234' });
     await userFind.save();
 
     return res.sendStatus(204);
@@ -260,6 +260,33 @@ router.put('/rota', async (req, res) => {
     }
   } else {
     return res.sendStatus(400);
+  }
+});
+
+router.put('/password', async (req, res) => {
+  try {
+    const userFind = await userSystem.findById(req.body.identifier);
+    const log = new Logs({
+      activity: 'Funcionario',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: req.body.identifier,
+
+
+    })
+    const newLog = await log.save();
+    if (!userFind) {
+      return res.sendStatus(404);
+    }
+
+    userFind.set({ password:req.body.password });
+    await userFind.save();
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
   }
 });
 

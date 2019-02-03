@@ -9,7 +9,9 @@ import '../Dashboard/css/Dashboard.css';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import $ from 'jquery';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 import {
 	LineChart,
 	Line,

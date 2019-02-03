@@ -5,8 +5,11 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 import Moment from 'moment';
+var foto;
 class Perfil extends React.Component {
     constructor(props) {
         super(props)

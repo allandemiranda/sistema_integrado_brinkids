@@ -10,7 +10,9 @@ import '../../assets/style/all.css';
 import './css/GF.css';
 import TypesInput from '../TypesInput.js';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 //import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {
     LineChart,

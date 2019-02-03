@@ -11,6 +11,10 @@ import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
 import { EventEmitter } from 'events';
 
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+
 class SaidaServicosExtra extends React.Component {m
     constructor(props){
         super(props)
@@ -116,10 +120,18 @@ class SaidaServicosExtra extends React.Component {m
     }
 
     Finalizar =(event)=>{
-        
-        this.setState({
-            dadosComprovante:{
+        const dadosComprovante ={
                 
+            service:"SaidaServiçoExtra ",
+            nome1:this.state.listConfirm,
+            nome2:this.state.quantidade,
+            nome3:this.state.Total,
+            nome4:this.state.FormaDePagamento,
+            nome5:this.state.valorTotal,
+        //ajeitar o comprovante
+        }
+        this.setState({
+            dadosComprovante:{   
                 
                 service:"SaidaServiçoExtra ",
                 nome1:this.state.listConfirm,
@@ -134,9 +146,10 @@ class SaidaServicosExtra extends React.Component {m
         console.log(this.state.Total);
 
         let formData = new FormData();
-        let listatemporaria = this.state.dadosComprovante;
+        let listatemporaria =dadosComprovante;
+        console.log(listatemporaria)
         formData.append('extraServices', JSON.stringify(this.state.listConfirm.map((servico) => {
-            listatemporaria.push(servico);
+            // listatemporaria.push(servico);
             return { 
                     name: servico.name, 
                     type: servico.type, 

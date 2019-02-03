@@ -2,7 +2,9 @@ import React from 'react';
 
 import listaa from './gato';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -396,7 +398,7 @@ class PerfilAdulto extends React.Component {
         }
         console.log(data);
 
-
+        
 
         axios.post('/adult/appendChild', data)
             .then((response) => {

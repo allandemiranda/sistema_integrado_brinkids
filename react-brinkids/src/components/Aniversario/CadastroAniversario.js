@@ -16,7 +16,9 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Aniversario.css';
 import './css/style.css';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 
 class CadastroAniversario extends React.Component {
@@ -64,7 +66,23 @@ class CadastroAniversario extends React.Component {
         this.ChangeNameAdulto = this.ChangeNameAdulto.bind(this);
         this.ChangeIdadeCrianca = this.ChangeIdadeCrianca.bind(this);
     }
+    getFuncionario = () => {
 
+
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+
+                this.setState({
+                    nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                })
+
+            })
+            .catch((err) => console.log(err));
+
+    }
     //Bloco que muda o status para o atual do formulario.
     ChangeTitulo(event){this.setState({TituloDoAni: event.target.value});}
 
@@ -335,8 +353,8 @@ class CadastroAniversario extends React.Component {
         .then((response) =>{
             
             console.log(response)
-            alert("cadastro realizado")
-            //window.location.href = '/';
+            
+            
         }).catch( (error)=> {
             console.log(error)//LOG DE ERRO
             alert("Erro no Cadastro");
@@ -345,6 +363,7 @@ class CadastroAniversario extends React.Component {
             // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
         })
     }
+   
     NovoCadAni = () => {
         var formData = new FormData();
 

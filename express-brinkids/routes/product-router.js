@@ -10,6 +10,7 @@ const router = express.Router();
 
 // Rota que devolve todos os produtos
 router.get('/', (req, res) => {
+ console.log(req.headers['cookie']) 
   return Product.find(
     {}, // Como eu eu quero todos os dados, é necessário passar os parâmetros de busca em branco
     (err, productResult) => (err ? res.sendStatus(500) : res.status(200).json(productResult)),

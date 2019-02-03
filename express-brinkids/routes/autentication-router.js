@@ -1,8 +1,8 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+
 const userSystem = require('../models/userSystem-models');
 const config = require('../config');
-
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 // Cria usuario

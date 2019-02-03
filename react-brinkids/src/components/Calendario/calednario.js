@@ -24,7 +24,9 @@ import '../../assets/style/font-awesome.css';
 import estilo from './styles/react-big-calendar.css';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 
 /*   */
@@ -67,6 +69,23 @@ class Calendar extends React.Component {
     this.cancelar = this.cancelar.bind(this);
     this.requisicao = this.requisicao.bind(this);
   }
+  getFuncionario = () => {
+
+
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
+
+    axios.get(`/employees/${b.id}`)
+        .then((response) => {
+
+            this.setState({
+                nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+            })
+
+        })
+        .catch((err) => console.log(err));
+
+}
   requisicao(event) {
     axios.get('/calendar')
       .then((response) => {

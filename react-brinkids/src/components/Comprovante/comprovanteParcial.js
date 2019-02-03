@@ -1,6 +1,9 @@
 
 import React from 'react';
 import './comprovante.css';
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 var servico;
 
 class ComprovanteParcial extends React.Component {
@@ -8,6 +11,23 @@ class ComprovanteParcial extends React.Component {
 
 
     render() {
+        // getFuncionario = () => {
+
+
+        //     const a = getToken();
+        //     const b = jwt.verify(a, config.secret_auth);
+    
+        //     axios.get(`/employees/${b.id}`)
+        //         .then((response) => {
+    
+        //             this.setState({
+        //                 nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+        //             })
+    
+        //         })
+        //         .catch((err) => console.log(err));
+    
+        // }
         const rederizar = () => {
             var conteudo = document.getElementById('print').innerHTML;
             const tela_impressao = window.open('about:blank');

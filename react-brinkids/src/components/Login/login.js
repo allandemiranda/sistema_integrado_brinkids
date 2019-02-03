@@ -5,10 +5,10 @@ import './login.css';
 import $ from "jquery";
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-
+import jwt from'jsonwebtoken';
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
-
+import config from './service/config';
 
 import { login } from "./service/auth";
 
@@ -58,7 +58,9 @@ class App extends Component {
   textoPassword(event) {
     this.setState({ password: event.target.value })
   }
-
+  sair=()=>{
+    this.props.history.push("/"); //lembrar q é assim q se redireciona com react
+}
   loginSubmit(event) {
     
     if (this.state.user.length > 0 && this.state.password.length > 0) {
@@ -67,14 +69,16 @@ class App extends Component {
         type: 'get',
         statusCode: { //A partir do status da resposta, ele executa uma função
           200: function (data) {
-            alert(data['token'])
+            
             console.log(data['token'])
             this.setState({ loading: true });
             const cookies = new Cookies();
             cookies.set('TOKEN_KEY', (data['token']), { path: '/' });
             login(data['token'])
             
-            
+            const dados = jwt.verify(data['token'],config.secret_auth);
+            console.log(dados)
+            this.sair()
 
           }.bind(this),
           401: function () {

@@ -8,7 +8,9 @@ import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Evento.css';
 import './css/style.css';
 
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 class CadastroEvento extends React.Component {
     
     

@@ -20,7 +20,9 @@ import {
     Redirect,
     withRouter
 } from "react-router-dom";
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 class Passport extends React.Component {
     constructor(props) {

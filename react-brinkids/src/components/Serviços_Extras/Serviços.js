@@ -5,6 +5,11 @@ import TypesInput from '../TypesInput.js';
 import './estilo.css';
 import axios from 'axios';
 
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+
+
 class Servico extends React.Component {
     constructor(props) {
         super(props);
@@ -18,6 +23,8 @@ class Servico extends React.Component {
             Quant: '',
             lista: [],
 
+            nomeFunc: ""
+
         }
         this.changueUnidade = this.changueUnidade.bind(this);
         this.changueQuant = this.changueQuant.bind(this);
@@ -30,6 +37,24 @@ class Servico extends React.Component {
         this.Salvar2 = this.Salvar2.bind(this);
 
     }
+    getFuncionario = () => {
+
+
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+
+                this.setState({
+                    nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                })
+
+            })
+            .catch((err) => console.log(err));
+
+    }
+
     changueTipo(event) {
         this.setState({
             Tipo: event.target.value,
@@ -67,6 +92,7 @@ class Servico extends React.Component {
             type: this.state.Tipo,
             unity: this.state.Quant,
             value: this.state.Text,
+            employeer: this.state.nomeFunc,
         }
 
         axios.post('/extraServices', data)
@@ -80,7 +106,7 @@ class Servico extends React.Component {
 
         this.setState({
             lista: listaTemporaria,
-            page: 'Lista',
+
             Nome: '',
             Tipo: 'Serviço',
             Text: '',
@@ -88,13 +114,13 @@ class Servico extends React.Component {
         });
     }
     componentWillMount() {
-
+        this.getFuncionario();
         axios.get('/extraServices')
             .then((response) => {
 
 
                 console.log(response.data);
-                this.setState({ lista: response.data });
+                this.setState({ lista: response.data, })
             })
             .catch((err) => console.log(err));
     }
