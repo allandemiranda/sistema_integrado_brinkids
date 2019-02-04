@@ -7,7 +7,7 @@ export default [
         _id:5,
         funcao: 'Adicionar pessoas mais pequenas',
     },
-    {
+    { 
         _id:3,
         funcao: 'mandar pessoas pequenas pro iraque',
     },
