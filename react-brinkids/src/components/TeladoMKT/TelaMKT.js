@@ -497,6 +497,8 @@ class DashBoard extends React.Component {
 													<th style={{ textAlign: "center" }}>Cidade</th>
 													<th style={{ textAlign: "center" }}>Foto</th>
 													<th style={{ textAlign: "center" }}>Ultima visita</th>
+													<th style={{ textAlign: "center" }}> Responsável</th>
+													<th style={{ textAlign: "center" }}> Email</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -519,21 +521,6 @@ class DashBoard extends React.Component {
                                                         </tr>
                                                     );
                                                 })}  */}
-												<tr>
-													<th scope="row" href="../foto-tirada-na-entrada">01</th>
-													<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-da-criança">Allan de Miranda</a></td>
-													<td style={{ textAlign: "center" }}>10 anos</td>
-													<td style={{ textAlign: "center" }} ><a onclick={() => alert('Texto com as Restrições da Criança!')}>SIM</a></td>
-													<td style={{ textAlign: "center" }}>SIM</td>
-													<td style={{ textAlign: "center" }}>13:12h</td>
-													<td style={{ textAlign: "center" }}>5</td>
-													<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} href="../perfil-do-responsável">Allan de Miranda</a></td>
-													<td style={{ textAlign: "center" }}>Pai</td>
-													<td style={{ textAlign: "center" }}>(84)91151610</td>
-													<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
-													<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
-													<td style={{ textAlign: "center" }} onclick="alert('Texto com as Observações do Responsável!');"><a>SIM</a></td>
-												</tr>
 											</tbody>
 										</table>
 									</div>
