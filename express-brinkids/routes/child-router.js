@@ -4,9 +4,13 @@
 
 const express = require('express');
 const Child = require('../models/child-models');
-const config = require('../config');
+
 const Logs = require('../models/logs-models')
 const router = express.Router();
+
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 
 function teste(json, res) {
   console.log(json);
@@ -73,6 +77,11 @@ router.get('/indentifier/:id_Child', async (req, res) => {
  * @return código de status HTTP
  */
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   const actualDate = new Date()/**< Data atual do sistema */
   const ChildDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
   
@@ -149,7 +158,7 @@ router.post('/', async (req, res) => {
               activity: 'Perfil Criança',
               action: 'Criação',
               dateOperation: new Date(),
-              from: 'f', //ajsuta o id dps de fazer o login funcionar
+              from: funcionario, //ajsuta o id dps de fazer o login funcionar
               to: ChildCreateResult._id,
             }
             Logs.create(log,(errLog, logchil)=>{
@@ -173,6 +182,11 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) =>  {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   if (req.body.observations
       && req.body.restrictions
       && req.body.firstName
@@ -200,7 +214,7 @@ router.put('/:identifier', async (req, res) =>  {
       activity: 'Pefil Criança',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.params.identifier,
      
 

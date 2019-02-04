@@ -7,6 +7,9 @@ const Employees = require('../models/employees-models');
 const Logs = require('../models/logs-models')
 const router = express.Router();
 const userSystem = require('../models/userSystem-models');
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+
 
 router.get('/', async (req, res) => {
   try {
@@ -57,6 +60,10 @@ router.get('/search/:search', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const adultResult = await adult.findByIdAndUpdate(
       req.body.identifier,
@@ -131,7 +138,7 @@ router.post('/', async (req, res) => {
       observations: req.body.observations,
     });
     const usuario = adultResult.email.split("@");
-    
+
     const Login = new userSystem({
       user: usuario[0] + req.body.EDRecord,
       password: 'senha123',
@@ -149,7 +156,7 @@ router.post('/', async (req, res) => {
       activity: 'Funcionario',
       action: 'Criação',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.body.identifier,
 
 
@@ -164,6 +171,10 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/exchange-data', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   if (req.body.phone
     && req.body.email
     && req.body.street
@@ -194,7 +205,7 @@ router.put('/exchange-data', async (req, res) => {
         activity: 'Funcionario',
         action: 'Edição',
         dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: req.body.identifier,
 
 
@@ -215,13 +226,17 @@ router.put('/exchange-data', async (req, res) => {
 });
 
 router.put('/reset-password', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const userFind = await userSystem.findById(req.body.identifier);
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.body.identifier,
 
 
@@ -241,14 +256,29 @@ router.put('/reset-password', async (req, res) => {
   }
 });
 router.put('/rota', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   if (req.body.officialPosition) {
+   
     try {
       const adultChange = await Employees.findById(req.body.identifier);
 
       adultChange.employeeData.officialPosition = req.body.officialPosition;
 
       adultChange.save();
+      const log = new Logs({
+        activity: 'Funcionario',
+        action: 'Edição',
+        dateOperation: new Date(),
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: req.body.identifier,
 
+
+      })
+      const newLog = await log.save();
       if (!adultChange) {
         return res.sendStauts(404);
       }
@@ -264,13 +294,17 @@ router.put('/rota', async (req, res) => {
 });
 
 router.put('/password', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const userFind = await userSystem.findById(req.body.identifier);
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.body.identifier,
 
 
@@ -280,7 +314,7 @@ router.put('/password', async (req, res) => {
       return res.sendStatus(404);
     }
 
-    userFind.set({ password:req.body.password });
+    userFind.set({ password: req.body.password });
     await userFind.save();
 
     return res.sendStatus(204);

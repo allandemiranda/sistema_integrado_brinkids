@@ -5,6 +5,8 @@ const config = require('../config');
 
 const router = express.Router();
 
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 const numberCode = async () => {
   const actualDate = new Date();
 
@@ -41,6 +43,11 @@ router.get('/filter/:code', async (req, res) => {
  * ajeitar os campos relacionados ao usuário
  */
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   if (req.body.name
       && req.body.description
       && req.body.to
@@ -94,7 +101,7 @@ router.post('/', async (req, res) => {
         activity: 'Desconto',
         action: 'Criação',
         dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to:newDiscount._id,
        
 

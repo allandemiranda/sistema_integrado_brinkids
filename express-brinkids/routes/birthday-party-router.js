@@ -2,7 +2,9 @@ const express = require('express');
 const BirthdayParty = require('../models/birthday-party-models');
 const Logs = require('../models/logs-models')
 const router = express.Router();
-
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 router.get('/', async (req, res) => {
   try {
     const parties = await BirthdayParty.find({});
@@ -16,7 +18,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
-
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
 
   let jasonPaarse = req.body.guestList
@@ -68,7 +73,7 @@ router.post('/', async (req, res) => {
       activity: 'Aniversario',
       action: 'Criação',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: newBirthday._id,
       price: newBirthday.payment.value,
       priceMethod: newBirthday.payment.method,
@@ -86,6 +91,10 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const deletedService = await BirthdayParty.findOneAndDelete(req.params.identifier);
 
@@ -93,7 +102,7 @@ router.delete('/:identifier', async (req, res) => {
       activity: 'Aniversario',
       action: 'Delete',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
 
     })
     const newLog = await log.save();
@@ -110,6 +119,10 @@ router.delete('/:identifier', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const service = await BirthdayParty.findByIdAndUpdate(
       req.params.identifier,
@@ -144,7 +157,7 @@ router.put('/:identifier', async (req, res) => {
       activity: 'Aniversario',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.params.identifier,
       price: service.payment.value,
       priceMethod: service.payment.method,
@@ -164,7 +177,10 @@ router.put('/:identifier', async (req, res) => {
 
 router.put('/partyFeather/:identifier', async (req, res) => {
 
-
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
   if (req.body.adult) {
     try {
@@ -245,7 +261,14 @@ router.put('/partyFeather/:identifier', async (req, res) => {
       return res.sendStatus(500);
     }
   }
-
+  const log = new Logs({
+    activity: 'Aniversario',
+    action: 'Edição',
+    dateOperation: new Date(),
+    from: funcionario, //ajsuta o id dps de fazer o login funcionar
+    to: req.params.identifier,
+    
+  })
 });
 
 module.exports = router;

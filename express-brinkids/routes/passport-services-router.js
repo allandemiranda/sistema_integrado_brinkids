@@ -3,6 +3,9 @@ const passportServices = require('../models/passport-services-models');
 const passport = require('../models/passport-models');
 
 const router = express.Router();
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 
 router.post('/', async (req, res) => {
 

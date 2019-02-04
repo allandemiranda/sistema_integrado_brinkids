@@ -5,8 +5,10 @@
 const express = require('express');
 const Logs = require('../models/logs-models')
 const userAdult = require('../models/adult-models');
-const config = require('../config');
 
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 const router = express.Router();
 
 
@@ -17,6 +19,7 @@ function teste(err, res) {
 
 // Rota responsável por realizar a pesquisa dos adultos no sistema
 router.get('/filter/:search/:type', (req, res) => {
+  
   // 'search': Contém a pesquisa da página. Pode ser o CPF ou o nome
   // 'type': Indica se é desejado pesquisar por CPF ou por nome
   // Inicia a variável que vai receber a consulta
@@ -71,6 +74,10 @@ router.get('/:identifier', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
  
   if (req.files
     && req.body.firstName
@@ -151,7 +158,7 @@ router.post('/', async (req, res) => {
             activity: 'Perfil Adulto',
             action: 'Criação',
             dateOperation: new Date(),
-            from: 'f', //ajsuta o id dps de fazer o login funcionar
+            from: funcionario, //ajsuta o id dps de fazer o login funcionar
             to: adultResult._id,
           }
           Logs.create(log,(errLog, logchil)=>{
@@ -170,6 +177,10 @@ router.post('/', async (req, res) => {
 });
 
 router.post('/appendChild', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   if (req.body.listChildren
     && req.body.identifierParent) {
     try {
@@ -181,7 +192,7 @@ router.post('/appendChild', async (req, res) => {
         activity: 'Perfil Adulto',
         action: 'Edição',
         dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: req.body.identifierParent,
       })
       const newLog = await log.save();
@@ -200,6 +211,10 @@ router.post('/appendChild', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
       $set: {
@@ -222,7 +237,7 @@ router.put('/:identifier', async (req, res) => {
       activity: 'Perfil Adulto',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.params.identifier,
     })
     const newLog = await log.save();

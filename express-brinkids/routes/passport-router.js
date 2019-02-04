@@ -5,10 +5,20 @@ const product = require('../models/product-models');
 const discount = require('../models/discounts-models');
 const birthday = require('../models/birthday-party-models');
 const config = require('../config');
+const adult = require('../models/adult-models');
+const Employees = require('../models/employees-models');
 
+const Logs = require('../models/logs-models')
 const router = express.Router();
 
+const jwt = require('jsonwebtoken');
+
+
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
   console.log("Aqui vem o req.body:");
   console.log(req.body);
@@ -23,6 +33,16 @@ router.post('/', async (req, res) => {
 
     try {
       const newPassport = await data.save();
+      const log = new Logs({
+        activity: 'Passaporte',
+        action: 'Criação',
+        dateOperation: new Date(),
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: newPassport._id,
+  
+  
+      })
+      const newLog = await log.save();
       return res.status(201).json(newPassport);
     } catch (err) {
       return res.sendStatus(500);
@@ -272,11 +292,26 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 });
 
 router.delete('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   console.log('executed');
   const productFinded = await product.find({ 'children.id': req.params.identifier });
   console.log(productFinded[0]._id);
   try {
     const deletedService = await product.findByIdAndRemove(productFinded[0]._id);
+    const log = new Logs({
+      activity: 'Passaporte',
+      action: 'Delete',
+      dateOperation: new Date(),
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: productFinded[0]._id,
+
+
+    })
+    const newLog = await log.save()
 
     if (!deletedService) {
       return res.sendStatus(404);

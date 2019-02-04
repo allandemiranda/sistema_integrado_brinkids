@@ -6,10 +6,10 @@ const router = express.Router();
 
 const userSystem = require('../models/userSystem-models');
 const Employees = require('../models/employees-models');
- 
+
 const config = require('../config');
 const jwt = require('jsonwebtoken');
-
+const adult = require('../models/adult-models');
 
 // const dados = jwt.verify(tokken, config.secret_auth);
 
@@ -43,9 +43,12 @@ router.get('/search/:name', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  
-  
-  
+
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+
   if (req.body.name
     && req.body.type
     && req.body.unity
@@ -63,12 +66,12 @@ router.post('/', async (req, res) => {
         activity: 'Serviços',
         action: 'Criação',
         dateOperation: new Date(),
-        from: req.body.employeer, //ajsuta o id dps de fazer o login funcionar
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: newService._id,
-       
-  
+
+
       })
-      
+
       const newLog = await log.save();
       return res.status(201).json(newService);
     } catch (err) {
@@ -78,6 +81,10 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const service = await ExtraServices.findByIdAndUpdate(
       req.params.identifier,
@@ -92,9 +99,9 @@ router.put('/:identifier', async (req, res) => {
       activity: 'Serviços',
       action: 'Edição',
       dateOperation: new Date(),
-      from: usuario.name.surName, //ajsuta o id dps de fazer o login funcionar
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.params.identifier,
-     
+
     })
     const newLog = await log.save();
     if (!service) {
@@ -111,13 +118,20 @@ router.put('/:identifier', async (req, res) => {
 
 router.delete('/:identifier', async (req, res) => {
   try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
     const deletedService = await ExtraServices.findByIdAndRemove(req.params.identifier);
+    
     const log = new Logs({
       activity: 'Serviços',
       action: 'Delete',
       dateOperation: new Date(),
-     
+      from: funcionario,
     })
+    
     const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);

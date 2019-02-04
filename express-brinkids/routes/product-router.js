@@ -4,13 +4,19 @@ const express = require('express');
 const fs = require('fs');
 const Logs = require('../models/logs-models')
 const Product = require('../models/product-models');
+
+
 const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 
 const router = express.Router();
 
 // Rota que devolve todos os produtos
 router.get('/', (req, res) => {
- console.log(req.headers['cookie']) 
+ 
+ 
+//  console.log("Cookies: ", req.cookies.TOKEN_KEY) 
   return Product.find(
     {}, // Como eu eu quero todos os dados, é necessário passar os parâmetros de busca em branco
     (err, productResult) => (err ? res.sendStatus(500) : res.status(200).json(productResult)),
@@ -31,6 +37,10 @@ router.get('/filter/:search/', async (req, res) => {
 
 // Rota de inserção de produtos
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
   try {
     const adult = JSON.parse(req.body.adult);
@@ -63,7 +73,7 @@ router.post('/', async (req, res) => {
           activity: req.body.service,
           action: 'Entrada',
           dateOperation: new Date(),
-          from: 'f', //ajsuta o id dps de fazer o login funcionar
+          from:funcionario, //ajsuta o id dps de fazer o login funcionar
           to: child._id,
           timeLojaFirst: new Date(req.body.time),
 
@@ -75,7 +85,7 @@ router.post('/', async (req, res) => {
           activity: req.body.service,
           action: 'Entrada',
           dateOperation: new Date(),
-          from: 'f', //ajsuta o id dps de fazer o login funcionar
+          from: funcionario, //ajsuta o id dps de fazer o login funcionar
           to: child._id,
           timeLojaFirst: new Date(req.body.time),
 
