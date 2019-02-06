@@ -55,7 +55,7 @@ class GerenciamentoFinanceiro extends React.Component {
 
         this.state = {
 
-            ListaGrafico: [],
+            ListaGrafico: dados,
             ListaFluxo: [],
             ROpr: "true",
             RAtv: "true",
@@ -77,22 +77,23 @@ class GerenciamentoFinanceiro extends React.Component {
         this.requisicao = this.requisicao.bind(this);
         this.inteval = this.inteval.bind(this);
         this.serch = this.serch.bind(this);
+        this.grafico = this.grafico.bind(this);
     }
-    serch(event){
+    serch(event) {
         const data = {
             operador: this.state.Operador,
-            atividade:this.state.Atividade,
-            start:this.state.DataEntrada,
-            end:this.state.DataSaida,
+            atividade: this.state.Atividade,
+            start: this.state.DataEntrada,
+            end: this.state.DataSaida,
         }
-       console.log(data);
-            axios.put('/log/filter', data)
+        console.log(data);
+        axios.put('/log/filter', data)
             .then((response) => {
                 this.setState({ ListaFluxo: response.data });
-              console.log(response.data);
+                console.log(response.data);
             })
             .catch((err) => console.log(err));
-        
+
     }
     inteval(event) {
 
@@ -234,20 +235,71 @@ class GerenciamentoFinanceiro extends React.Component {
         }
     }
 
-    grafico(event) {
+    async grafico(event) {
+        let listadedatas = [];
         event.preventDefault();
-        for (var i = 1; i <= 30; i++) {
+        const lista = [];
+        for (var i = 0; i < 30; i++) {
             let hj = moment().format("MM/DD/YYYY");
-            var novo = moment(hj).subtract(i, 'days').calendar();
-            console.log(novo);
+            var novo = moment(hj).subtract(i, 'days');
 
-            axios.get('http://localhost:3001/TelaMKT' + novo)
-                .then((response) => {
-                    console.log(response.data);
-                    this.setState.ListaGrafico.pop(response.data);
-                })
-                .catch((err) => console.log(err));
+            const a = moment(novo).format("MM/DD/YYYY")
+            console.log(a);
+            lista.push(a);
+
         }
+        const datas = lista.map(async (crianca, index) => {
+
+            const a = moment(crianca).startOf('day').toDate();
+         
+
+            const response = await axios.get(`/tela-mkt/${moment(a)}`);
+            return response.data;
+        });
+        let listaparaostate = [];
+        var passaporte = 0;
+        var aniversario = 0;
+        var servicoproduto = 0;
+        var total = 0;
+        var nome = '';
+        Promise.all(datas).then((listagraficos) => {
+            console.log(listagraficos)
+            listagraficos.map((date, indice) => {
+
+                date.map((info, index) => {
+                    if (info.activity === "Aniversario" && info.action ==="Entrada") {
+                        aniversario = aniversario + 1;
+                    }
+                    if (info.activity === "Passaporte" && info.action ==="Entrada") {
+                        passaporte = passaporte + 1;
+                    }
+                    if (info.activity === "Serviços"  && info.action ==="Saida") {
+                        servicoproduto = servicoproduto + 1;
+                    }
+                    nome = moment(date[0].dateOperation).format("DD/MM")
+                })
+                
+                    const temporario = {
+                        name: nome, Passaporte: passaporte, Aniversario: aniversario, ServicoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
+                    }
+                    listaparaostate.push(temporario);
+                
+
+                passaporte = 0;
+                aniversario = 0;
+                servicoproduto = 0;
+                total = 0;
+                nome = '';
+            })
+           this.setState({
+               listagraficos:listaparaostate
+           })
+            console.log(this)
+        });
+
+        console.log(this)
+
+
     }
 
 
@@ -283,7 +335,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                 <br></br>
                                 <div class="graph graph-visual text-center">
                                     <h5>Janeiro/2012</h5>
-                                    <LineChart className="grafico" width={800} height={600} data={dados} margin={{ top: 5, right: 30, bottom: 5 }}>
+                                    <LineChart className="grafico" width={800} height={600} data={this.state.listagraficos} margin={{ top: 5, right: 30, bottom: 5 }}>
                                         <XAxis dataKey="name" />
                                         <YAxis />
                                         <CartesianGrid strokeDasharray="3 3" />
@@ -340,7 +392,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                             </div>
                                             <br></br>
                                             <div className="text-right">
-                                                <input type="button"  onClick={this.serch}/>
+                                                <input type="button" onClick={this.serch} />
                                             </div>
                                         </form>
                                     </div>
@@ -388,7 +440,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                                             {fluxo.timeLojaFirst !== undefined && (<td style={{ textAlign: "center" }}><a>{moment(fluxo.timeLojaFirst).format("DD/MM/YYYY HH:mm")}</a></td>)}
                                                             {fluxo.timeLojaFirst === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
-                                                            {fluxo.timeLojaLast !== undefined && (<td style={{ textAlign: "center" }}><a>{ moment(fluxo.timeLojaLast).format("DD/MM/YYYY HH:mm")}</a></td>)}
+                                                            {fluxo.timeLojaLast !== undefined && (<td style={{ textAlign: "center" }}><a>{moment(fluxo.timeLojaLast).format("DD/MM/YYYY HH:mm")}</a></td>)}
                                                             {fluxo.timeLojaLast === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
 

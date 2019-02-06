@@ -132,12 +132,15 @@ class VerDesconto extends React.Component {
                                         <td > Exemplo</td>
                                         <td > Exemplo</td>
                                     </tr>
+                                    {/* //FALTA EDITAR DESCONTO */}
                                     {this.state.list.map((desconto, indice) => {
+                                        console.log(desconto)
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td >{desconto.codes.numberCode} </td>
-                                                    <td >{desconto.codes.statusBoradlUser.dateUser} </td>
+                                                    
+                                                   {desconto.codes.statusBoradlUser !==  [] &&  ( <td >{desconto.codes.statusBoradlUser} </td>)}
                                                     <td >{desconto.statusUniqueUse} </td>
                                                     <td >{desconto.to} </td>
                                                 </tr>

@@ -8,7 +8,7 @@ const config = require('../config');
 const jwt = require('jsonwebtoken');
 const adult = require('../models/adult-models');
 const router = express.Router();
-
+const moment = require('moment');
 
 /** Esta rota envia todos os documentos referentes a calendario */
 router.get('/', async (req, res) => {
@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
       const log = new Logs({
         activity: 'Evento',
         action: 'Criação',
-        dateOperation: new Date(),
+        dateOperation: moment().format(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: newCalendar._id,
        

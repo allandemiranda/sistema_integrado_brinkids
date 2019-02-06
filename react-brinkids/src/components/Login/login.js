@@ -11,7 +11,7 @@ import { Link, withRouter } from "react-router-dom";
 import config from './service/config';
 
 import { login } from "./service/auth";
-
+import { getToken } from "./service/auth";
 import { Route } from 'react-router-dom';
 import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
 import Inicio from '../Dashboard/inicio';

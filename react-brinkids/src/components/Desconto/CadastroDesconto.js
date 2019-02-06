@@ -156,14 +156,13 @@ class Desconto extends React.Component {
             formData.append('validity', String(this.state.Date))
 
             axios.post('/discount', formData)
-                .then((response)=> {
-                    this.setState({ list: response.data });
-                    console.log(response);
-                    if (this.state.list.length > 0) {
+                .then((response)=> { 
+                    console.log(response.data)      
                         this.setState({
+                            list: response.data,
                             page: "MostraDesconto"
                         })
-                    }
+                    
                 }).catch( (error) =>{
                     console.log(error)//LOG DE ERRO
                     alert("Erro ao Gerar Desconto");

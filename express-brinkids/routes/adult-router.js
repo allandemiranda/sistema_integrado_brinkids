@@ -5,7 +5,7 @@
 const express = require('express');
 const Logs = require('../models/logs-models')
 const userAdult = require('../models/adult-models');
-
+const moment = require('moment');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const adult = require('../models/adult-models');
@@ -19,7 +19,7 @@ function teste(err, res) {
 
 // Rota responsável por realizar a pesquisa dos adultos no sistema
 router.get('/filter/:search/:type', (req, res) => {
-  
+
   // 'search': Contém a pesquisa da página. Pode ser o CPF ou o nome
   // 'type': Indica se é desejado pesquisar por CPF ou por nome
   // Inicia a variável que vai receber a consulta
@@ -76,9 +76,15 @@ router.get('/:identifier', async (req, res) => {
 router.post('/', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
-  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
-  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
- 
+  var funcionario='oi';
+  
+  if (!b.admin) {
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+     funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  } else {
+     funcionario = "admin"
+  }
+
   if (req.files
     && req.body.firstName
     && req.body.surName
@@ -141,7 +147,7 @@ router.post('/', async (req, res) => {
           const fileName = `${config.pathAdult}${adultResult._id}.png`; /**< url completa da localização do arquivo no computador */
           id = adultResult._id
           adultResult.photo = fileName; /** Atualiza o nome do arquivo */
-          adultResult.save((errAdultSave) => { 
+          adultResult.save((errAdultSave) => {
             /** Atualiza no banco a nova informação */
 
             if (errAdultSave) {
@@ -161,8 +167,8 @@ router.post('/', async (req, res) => {
             from: funcionario, //ajsuta o id dps de fazer o login funcionar
             to: adultResult._id,
           }
-          Logs.create(log,(errLog, logchil)=>{
-            
+          Logs.create(log, (errLog, logchil) => {
+
           })
         });
 
@@ -170,7 +176,7 @@ router.post('/', async (req, res) => {
         return res.sendStatus(409);
       }
     });
-  
+
   } else {
     return res.sendStatus(400);
   }

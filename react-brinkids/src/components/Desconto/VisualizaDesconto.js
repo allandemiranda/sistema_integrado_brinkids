@@ -99,6 +99,7 @@ class VisualizaDesconto extends React.Component {
                                             </td>
                                         </tr>
                                         {this.state.list_descontos.map((desconto, indice) => {
+                                            
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th id="paddingNome" scope="row">{(indice + 1)}</th>
@@ -109,7 +110,7 @@ class VisualizaDesconto extends React.Component {
                                                     <td id="paddingNome" >{desconto.validity} </td>
                                                     <td >
                                                         <button className="btn botao btn-xs" onClick={()  => this.VerDesconto(desconto.name)}><i className="fa fa-eye"></i></button>
-                                                        <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto.name)}><i className="fa fa-trash-o"></i></button>
+                                                        <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto._id)}><i className="fa fa-trash-o"></i></button>
                                                     </td>
                                                 </tr>
                                             );

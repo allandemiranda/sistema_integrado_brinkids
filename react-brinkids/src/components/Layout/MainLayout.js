@@ -30,7 +30,7 @@ class MainLayout extends React.Component {
             FuncionarioLogado: [],
             name: "",
             cargo: "",
-            page:"",
+            page: "",
 
         }
         this.DiminueMenu = this.DiminueMenu.bind(this);
@@ -40,29 +40,37 @@ class MainLayout extends React.Component {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
         console.log(b)
-        axios.get(`/employees/${b.id}`)
-            .then((response) => {
-                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-                console.log(response.data);
-                this.setState({
-                    FuncionarioLogado: response.data[0],
-                    name: response.data[0].name.firstName + " " + response.data[0].name.surName,
-                })
-
-                axios.get(`/professionalPosition/indentifier/${id}`)
-                    .then((response) => {
-
-                        console.log(response.data);
-                        this.setState({
-                            cargo: response.data.name,
-                            page:"carregado"
-                        })
-
-
+        if (!b.admin) {
+            axios.get(`/employees/${b.id}`)
+                .then((response) => {
+                    let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+                    console.log(response.data);
+                    this.setState({
+                        FuncionarioLogado: response.data[0],
+                        name: response.data[0].name.firstName + " " + response.data[0].name.surName,
                     })
-                    .catch((err) => console.log(err));
+
+                    axios.get(`/professionalPosition/indentifier/${id}`)
+                        .then((response) => {
+
+                            console.log(response.data);
+                            this.setState({
+                                cargo: response.data.name,
+                                page: "carregado"
+                            })
+
+
+                        })
+                        .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+        } else {
+            this.setState({
+                page: "carregado",
+                cargo: "admino",
+                name: "admins"
             })
-            .catch((err) => console.log(err));
+        }
 
     }
     componentWillMount() {
@@ -90,7 +98,7 @@ class MainLayout extends React.Component {
     render() {
 
         const { children } = this.props;
-        if (this.state.page ==="carregado") {
+        if (this.state.page === "carregado") {
             return (
                 <div className="page-container sidebar-collapsed-back" >
                     <div className="left-content" >
@@ -129,13 +137,17 @@ class MainLayout extends React.Component {
                                 < span className="fa fa-bars" > </span>
                             </button>
                             <Link to="index.html" >
-                                < span id="logo" ><img style={{ maxWidth: 139 + "px" }} className="logo_1" alt="logo" src={logo}></img></span>
+                              < span id="logo" ><img style={{ maxWidth: 139 + "px" }} className="logo_1" alt="logo" src={logo}></img></span>
+                             
                             </Link>
                         </header>
                         <div className="bordaDaDiv"> </div>
                         <div className="down" style={{ paddingBottom: 15 + 'px' }}>
-                            <a ><img img style={{ maxWidth: 139 + "px" }} src={this.state.FuncionarioLogado.photo} /></a>
-                            <a ><span className=" name-caret">{this.state.FuncionarioLogado.name.firstName+" "+this.state.FuncionarioLogado.name.surName}</span></a>
+                            {this.state.name !== "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={this.state.FuncionarioLogado.photo} /></a>)}
+                            {this.state.name === "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={logo} /></a>)}
+                            
+                            {this.state.name !== "admins" && (<a ><span className=" name-caret">{this.state.FuncionarioLogado.name.firstName + " " + this.state.FuncionarioLogado.name.surName}</span></a>)}
+                            {this.state.name === "admins" && (<a ><span className=" name-caret">{this.state.name}</span></a>)}
                             <p>{this.state.cargo}</p>
                             <ul>
                                 <li><Link class="tooltips" to="/MyProfile"><span>Profile</span><i class="lnr lnr-user"></i></Link></li>

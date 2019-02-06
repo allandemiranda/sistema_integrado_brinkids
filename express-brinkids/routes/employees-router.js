@@ -62,8 +62,16 @@ router.get('/search/:search', async (req, res) => {
 router.post('/', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
-  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
-  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+ var funcionario='oi';
+  console.log(b)
+  if (b.id) {
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  } 
+  if(!b.id) {
+    console.log("========ola")
+     funcionario = "admin"
+  }
   try {
     const adultResult = await adult.findByIdAndUpdate(
       req.body.identifier,

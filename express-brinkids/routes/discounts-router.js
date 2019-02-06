@@ -7,6 +7,7 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 const adult = require('../models/adult-models');
+
 const numberCode = async () => {
   const actualDate = new Date();
 
@@ -47,15 +48,15 @@ router.post('/', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  
+
   if (req.body.name
-      && req.body.description
-      && req.body.to
-      && req.body.amount
-      && req.body.type
-      && req.body.value
-      && req.body.temporalityType
-      && req.body.validity) {
+    && req.body.description
+    && req.body.to
+    && req.body.amount
+    && req.body.type
+    && req.body.value
+    && req.body.temporalityType
+    && req.body.validity) {
     try {
       let discount;
 
@@ -102,13 +103,13 @@ router.post('/', async (req, res) => {
         action: 'Criação',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to:newDiscount._id,
-       
+        to: newDiscount._id,
+
 
       })
       const newLog = await log.save();
 
-      return res.sendStatus(204);
+      return res.json(newDiscount);
     } catch (err) {
       console.log(err);
       return res.sendStatus(500);
@@ -117,5 +118,32 @@ router.post('/', async (req, res) => {
     return res.sendStatus(400);
   }
 });
+router.delete('/filter/:identifier', async (req, res) => {
+  try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
+    const deletedService = await Discount.findByIdAndRemove(req.params.identifier);
+    
+    const log = new Logs({
+      activity: 'Descontos',
+      action: 'Delete',
+      dateOperation: new Date(),
+      from: funcionario,
+    })
+    
+    const newLog = await log.save();
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
 
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
+});
 module.exports = router;
