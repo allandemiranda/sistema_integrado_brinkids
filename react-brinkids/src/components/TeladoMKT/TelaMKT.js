@@ -68,7 +68,8 @@ class DashBoard extends React.Component {
 			campoIdade: '',
 			Mes: true,
 			campoMes: '',
-
+			menina: 0,
+			menino: 0,
 			listaBusca: [],
 			listaGraf2: [],
 			listaGraf: []
@@ -165,89 +166,192 @@ class DashBoard extends React.Component {
 			const a = moment(crianca).startOf('day').toDate();
 
 
-			const response = await axios.get(`/tela-mkt/${moment(a)}`);
+			const response = await axios.get(`/tela-mkt/mkt/${moment(a)}`);
 			return response.data;
 		});
-		let listaparaostate = [];
-		var menina = 0;
-		var menino = 0;
-		var nome = '';
+		var listafinal = [];
 		Promise.all(datas).then((listagraficos) => {
 
-			listagraficos.map((date, indice) => {
+			const mala = [];
+			const mip = "olaaa";
+			listagraficos.map((event, indice) => {
+				if (event.length !== 0) {
+					mala.push(event)
+				}
+			})
 
-				date.map(async (info, index) => {
 
-					if (info.activity === "Aniversario" && info.action === "Entrada") {
-						const response = await axios.get(`/child/indentifier/${info.to}`);
-						console.log(response.data)
-						if (response.data !== null) {
-							if (response.data.sexuality === "Feminino" || response.data.sexuality === null) {
-								menina = menina + 1;
-							}
-							if (response.data.sexuality === "Masculino") {
-								menino = menino + 1;
-							}
-						}
-						return response.data;
+			return mala
+		}).then((credo) => {
+
+			const passaport = [];
+			const aniversario = [];
+
+			credo.map((live, index) => {
+
+				live.map((dado, indez) => {
+
+					if (dado.activity === "Passaporte") {
+
+						passaport.push(dado);
+
+					} else if (dado.activity === "Aniversario") {
+
+						aniversario.push(dado);
 
 					}
-					if (info.activity === "Passaporte" && info.action === "Entrada") {
-						const response = await axios.get(`/child/indentifier/${info.to}`);
-						if (response.data.sexuality === "Feminino") {
-							console.log("entrei")
+				})
+			})
+
+			const passe = {
+
+				passaporte: passaport,
+				aniversario: aniversario,
+
+			}
+
+			return passe;
+
+		}).then((lista) => {
+			console.log(lista)
+			const tot = [];
+
+			const datas = lista.aniversario.map(async (crianca, index) => {
+				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
+
+				var temporario = null;
+				if (axior.data !== null) {
+					temporario = {
+						dia: moment(crianca.dateOperation).format("DD/MM"),
+						sexo: axior.data.sexuality,
+					}
+
+
+
+				}
+				const retu = {
+					temporario, child: axior.data
+				}
+				return retu;
+			});
+			const datase = lista.passaporte.map(async (crianca, index) => {
+				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
+
+				var temporario = null;
+				if (axior.data !== null) {
+					temporario = {
+						dia: moment(crianca.dateOperation).format("DD/MM"),
+						sexo: axior.data.sexuality,
+					}
+
+					return axior.data;
+				}
+				const retu = {
+					temporario, child: axior.data
+				}
+				return retu;
+
+
+
+			});
+			const envio = datas.concat(datase)
+
+			return envio;
+
+		}).then((file) => {
+			console.log(file)
+			Promise.all(file).then((god) => {
+				const lista = [];
+				god.map((event, indice) => {
+					var menino = 0;
+					var menina = 0;
+					if (event !== null) {
+						if (event.child.sexuality === "Feminino") {
 							menina = menina + 1;
-						}
-						if (response.data.sexuality === "Masculino") {
+						} else if (event.child.sexuality === "Masculino") {
 							menino = menino + 1;
 						}
-						return response.data;
+						lista.push({ name: event.temporario.dia, Meninos: menina, Meninas: menina, Total: menino + menina })
 					}
-					console.log(menino,menina)
-					nome = moment(date[0].dateOperation).format("DD/MM")
 				})
-
-				const temporario = {
-					name: nome, Meninas: menina, Meninos: menino, Total: menino + menina
-				}
-				listaparaostate.push(temporario);
-
-
-				menino = 0;
-				menina = 0;
-				nome = '';
-			})
-			console.log(listaparaostate)
-			this.setState({
-				listaGraf: listaparaostate
+				return lista;
+			}).then((pilo) => {
+				console.log(pilo)
 			})
 
+
+			// const lista = [];
+			// file.tot.map((cris, indez) => {
+			// 	console.log(cris)
+			// const menino = 0;
+			// const menina = 0;
+			// 	if (cris.sexo === "Feminino") {
+			// 		console.log("entreo")
+			// 		menina++;
+			// 	} else if (cris.sexo === "Masculino") {
+			// 		menino++;
+			// 	}
+			// 	lista.push({ name: cris.dia, Meninos: menina, Meninas: menina, Total: menino + menina })
+			// 	console.log({ name: cris.dia, Meninos: menina, Meninas: menina, Total: menino + menina })
+			// })
+
+
+
+
+
+			// for(const a=0;a<file[0].tamanho;a++){
+			// 	if(file[0].tot[a].sexo === 'Feminino'){
+			// 		console.log("entrei====")
+			// 		menina = menina + 1;
+			// 	}else if(file[0].tot[a].sexo === "Masculino"){
+			// 		menino = menino + 1;
+			// 	}
+			// 	lista.push({ name: file.tot[a].dia, Meninos: menina, Meninas: menina, Total: menino + menina })
+			// }
+			// console.log(lista)
 		});
+
+
 
 
 	}
-	// grafico(event) {
-	// 	for (var i = 1; i <= 30; i++) {
-	// 		let hj = moment().format("MM/DD/YYYY");
-	// 		var novo = moment(hj).subtract(i, 'days').calendar();
-	// 		console.log(novo);
 
-	// 		axios.get('http://localhost:3001/TelaMKT' + novo)
-	// 			.then((response) => {
-	// 				console.log(response.data);
-	// 				this.setState.lista.push(response.data);
-	// 				{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
-	// 				dados1.push({
-	// 					name: response.data.name,
-	// 					Meninos: response.data.meninos,
-	// 					Meninas: response.data.meninas,
-	// 					Total: response.data.meninas + response.data.meninos,
-	// 				})
-	// 			})
-	// 			.catch((err) => console.log(err));
+
+
+
+	// listagraficos.map((event, indice) => {
+
+	// 	if (event.length !== 0) {
+	// 		event.map((cria, indice) => {
+	// 			if (cria.activity === "Passaporte") {
+	// 				passaporte.push(cria);
+	// 			} else if (cria.activity === "Aniversario") {
+	// 				aniversario.push(cria);
+	// 			}
+	// 		})
+	// 	}
+	// })else{return null}
+	// const passs = passaporte.map(async (criancas, index) => {
+	// 	console.log(criancas)
+
+	// 	const response = await axios.get(`/child/indentifier/${criancas.to}`);
+	// 	console.log(response.data, 'ddddddd')
+	// 	if (response.data.sexuality === "Feminino") {
+
+	// 		menina = menina + 1;
 
 	// 	}
-	// }
+	// 	if (response.data.sexuality === "Masculino") {
+
+	// 		menino = menino + 1;
+
+	// 	}
+	// 	return response.data;
+
+	// });
+
+
+
 	grafico1(event) {
 		axios.get('http://localhost:3001/TelaMKT')
 			.then((response) => {
@@ -446,7 +550,7 @@ class DashBoard extends React.Component {
 							<section className={this.state.sectionCrianca} >
 								<div className="graph">
 									<h1 className="text-center"> Fluxo de Crianças na Loja</h1>
-									<LineChart width={810} height={500} data={dados1} margin={{ top: 10, right: 30, left: 0, bottom: 5 }}>
+									<LineChart width={810} height={500} data={this.state.listaGraf} margin={{ top: 10, right: 30, left: 0, bottom: 5 }}>
 										<XAxis dataKey="name" />
 										<YAxis />
 										<CartesianGrid stroke="#eee" strokeDasharray="5 5" />

@@ -20,5 +20,23 @@ router.get('/:date', async (req, res) => {
     return res.sendStatus(500);
   }
 });
+router.get('/mkt/:date', async (req, res) => {
+  console.log(req.params.date)
+  try {
+    const today = moment().startOf('day').toDate()
+    const todayd = moment(req.params.date).endOf('day').toDate()
+
+    const childs = await Logs.find({
+      'dateOperation': { $gte: req.params.date, $lte:moment(todayd) },
+      $or: [ { 'activity':'Passaporte','action':'Entrada' } , { 'activity':'Aniversario' ,'action':'Entrada' } ] ,
+
+       });
+   
+    return res.json(childs);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 
 module.exports = router;
