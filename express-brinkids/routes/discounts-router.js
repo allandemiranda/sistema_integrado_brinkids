@@ -8,12 +8,12 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const adult = require('../models/adult-models');
 
-const numberCode = async () => {
+const numberCode = async (i) => {
   const actualDate = new Date();
 
   const totalDiscountsToday = await Discount.discountsGenerateToday();
 
-  const stringCode = `BRK${actualDate.getDate()}${actualDate.getMonth() + 1}${actualDate.getFullYear() % 100}${totalDiscountsToday + 1}`;
+  const stringCode = `BRK${actualDate.getDate()}${actualDate.getMonth() + 1}${actualDate.getFullYear() % 100}${totalDiscountsToday + i}`;
 
   return stringCode;
 };
@@ -61,6 +61,7 @@ router.post('/', async (req, res) => {
       let discount;
 
       if (req.body.value === 'Unico') {
+        console.log("entrei")
         discount = new Discount({
           name: req.body.name,
           createdAt: new Date(),
@@ -80,6 +81,11 @@ router.post('/', async (req, res) => {
           },
         });
       } else {
+        let temporario = []
+        for(var as = 1;as<=parseInt(req.body.amount, 10);as++){
+          temporario.push({numberCode: await numberCode(as),statusBroadlUser: []})
+        }
+        console.log(temporario)
         discount = new Discount({
           name: req.body.name,
           createdAt: new Date(),
@@ -88,12 +94,11 @@ router.post('/', async (req, res) => {
           amount: parseInt(req.body.amount, 10),
           type: req.body.type,
           value: parseInt(req.body.value, 10),
-          temporalityTaype: req.body.temporalityTaype,
+          temporalityType: req.body.temporalityType,
           validity: new Date(req.body.validity),
-          codes: {
-            numberCode: await numberCode(),
-            statusBroadlUser: [],
-          },
+          temporalityDate:req.body.temporalityDate,
+          
+          codes:temporario,
         });
       }
 

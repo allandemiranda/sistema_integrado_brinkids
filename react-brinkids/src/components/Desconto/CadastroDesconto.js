@@ -7,6 +7,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
+import moment from'moment';
 
 
 class Desconto extends React.Component {
@@ -328,17 +329,17 @@ class Desconto extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.state.list.map((desconto, indice) => {
+                                        {this.state.list.codes.map((desconto, indice) => {
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {desconto.codes.numberCode} </td>
-                                                    <td >{desconto.type} </td>
-                                                    <td >{desconto.value} </td>
-                                                    <td >{desconto.to} </td>
-                                                    <td >{desconto.temporalityType} </td>
-                                                    <td >{desconto.temporalityDate} </td>
-                                                    <td >{desconto.validity} </td>
+                                                    <td > {desconto.numberCode} </td>
+                                                    <td >{this.state.list.type} </td>
+                                                    <td >{this.state.list.value} </td>
+                                                    <td >{this.state.list.to} </td>
+                                                    <td >{this.state.list.temporalityType} </td>
+                                                    <td >{this.state.list.temporalityDate} </td>
+                                                    <td >{moment(this.state.list.validity).format("DD/MM/YYYY")} </td>
                                                 </tr>
                                             );
                                         })}

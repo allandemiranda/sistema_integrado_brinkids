@@ -7,6 +7,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
+import moment from'moment';
 
 
 class VisualizaDesconto extends React.Component {
@@ -22,6 +23,7 @@ class VisualizaDesconto extends React.Component {
         axios.get(`/discount`)
         .then((response) => {
             console.log("Dentro do axios: " + this)
+            console.log(response.data)
             this.setState({ list_descontos: response.data });
         }).catch((error) => {
             console.log("Não deu certo");
@@ -107,7 +109,7 @@ class VisualizaDesconto extends React.Component {
                                                     <td id="paddingNome" >{desconto.to} </td>
                                                     <td id="paddingNome" >{desconto.type} </td>
                                                     <td id="paddingNome" >{desconto.value} </td>
-                                                    <td id="paddingNome" >{desconto.validity} </td>
+                                                    <td id="paddingNome" >{moment(desconto.validity).format("DD/MM/YYYY")} </td>
                                                     <td >
                                                         <button className="btn botao btn-xs" onClick={()  => this.VerDesconto(desconto.name)}><i className="fa fa-eye"></i></button>
                                                         <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto._id)}><i className="fa fa-trash-o"></i></button>

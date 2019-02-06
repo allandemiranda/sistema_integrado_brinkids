@@ -34,11 +34,15 @@ const discountsSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  temporalityDate: {
+    type: String,
+    require: true,
+  },
   validity: {
     type: Date,
     require: true,
   },
-  codes: {
+  codes: [{
     numberCode: {
       type: String,
       require: true,
@@ -50,7 +54,7 @@ const discountsSchema = new mongoose.Schema({
       idUser: String,
       dateUser: Date,
     }],
-  },
+  }],
 });
 
 discountsSchema.statics.discountsGenerateToday = function (cb) {

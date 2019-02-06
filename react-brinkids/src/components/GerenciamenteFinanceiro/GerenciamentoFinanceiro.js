@@ -343,7 +343,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                         <Legend />
                                         <Line type="monotone" dataKey="Passaporte" stroke="rgb(5, 41, 99)" />
                                         <Line type="monotone" dataKey="Aniversario" stroke="rgb(0, 198, 215)" />
-                                        <Line type="monotone" dataKey="ServicoProduto" stroke="rgb(234, 76, 137)" />
+                                        <Line type="monotone" dataKey="ServiçoProduto" stroke="rgb(234, 76, 137)" />
                                         <Line type="monotone" dataKey="Total" stroke="#82ca98" />
                                     </LineChart>
                                     <br></br>

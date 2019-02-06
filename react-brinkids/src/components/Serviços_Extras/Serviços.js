@@ -90,7 +90,7 @@ class Servico extends React.Component {
 
         this.setState({
             lista: listaTemporaria,
-
+            page:"Lista",
             Nome: '',
             Tipo: 'Serviço',
             Text: '',
@@ -98,7 +98,7 @@ class Servico extends React.Component {
         });
     }
     componentWillMount() {
-        this.getFuncionario();
+     
         axios.get('/extraServices')
             .then((response) => {
 

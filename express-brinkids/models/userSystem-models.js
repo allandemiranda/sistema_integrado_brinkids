@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({ /**< Criação do Schema que conterá 4
   password: String, /**< Um campo de senha. Obs.: Ela é deve ser criptografada antes de ser salva */
   employees: Boolean, /**< Checa se é um funcionário ou não */
   id:String,
+  admin:Boolean,
 });
 
 /**

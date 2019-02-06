@@ -56,7 +56,7 @@ class DashBoard extends React.Component {
 			sectionAniversario: "",
 			sectionNoticia: "",
 
-			lista:[],
+			lista: [],
 
 			nomeC: true,
 			campoNome: '',
@@ -71,6 +71,7 @@ class DashBoard extends React.Component {
 
 			listaBusca: [],
 			listaGraf2: [],
+			listaGraf: []
 		};
 		this.mudar2 = this.mudar2.bind(this);
 		this.mudar3 = this.mudar3.bind(this);
@@ -147,29 +148,83 @@ class DashBoard extends React.Component {
 
 	}
 	grafico(event) {
-		for (var i = 1; i <= 30; i++) {
+		let listadedatas = [];
+		event.preventDefault();
+		const lista = [];
+		for (var i = 0; i < 15; i++) {
 			let hj = moment().format("MM/DD/YYYY");
 			var novo = moment(hj).subtract(i, 'days');
-			
-			console.log(novo.format("MM/DD/YYYY"));
 
-			axios.get(`/TelaMKT/${novo.format("MM/DD/YYYY")}`)
-				.then((response) => {
-					console.log(response.data);
-					this.setState({
-						lista: response.data,
-					})
-					{/* Dados responsáveis por gerar o gráfico da tela 1 */ }
-					dados1.push({
-						name: response.data.name,
-						Meninos: response.date.meninos,
-						Meninas: response.date.meninas,
-						Total: response.date.meninas + response.date.meninos,
-					})
-				})
-				.catch((err) => console.log(err));
+			const a = moment(novo).format("MM/DD/YYYY")
+			console.log(a);
+			lista.push(a);
 
 		}
+		const datas = lista.map(async (crianca, index) => {
+
+			const a = moment(crianca).startOf('day').toDate();
+
+
+			const response = await axios.get(`/tela-mkt/${moment(a)}`);
+			return response.data;
+		});
+		let listaparaostate = [];
+		var menina = 0;
+		var menino = 0;
+		var nome = '';
+		Promise.all(datas).then((listagraficos) => {
+
+			listagraficos.map((date, indice) => {
+
+				date.map(async (info, index) => {
+
+					if (info.activity === "Aniversario" && info.action === "Entrada") {
+						const response = await axios.get(`/child/indentifier/${info.to}`);
+						console.log(response.data)
+						if (response.data !== null) {
+							if (response.data.sexuality === "Feminino" || response.data.sexuality === null) {
+								menina = menina + 1;
+							}
+							if (response.data.sexuality === "Masculino") {
+								menino = menino + 1;
+							}
+						}
+						return response.data;
+
+					}
+					if (info.activity === "Passaporte" && info.action === "Entrada") {
+						const response = await axios.get(`/child/indentifier/${info.to}`);
+						if (response.data.sexuality === "Feminino") {
+							console.log("entrei")
+							menina = menina + 1;
+						}
+						if (response.data.sexuality === "Masculino") {
+							menino = menino + 1;
+						}
+						return response.data;
+					}
+					console.log(menino,menina)
+					nome = moment(date[0].dateOperation).format("DD/MM")
+				})
+
+				const temporario = {
+					name: nome, Meninas: menina, Meninos: menino, Total: menino + menina
+				}
+				listaparaostate.push(temporario);
+
+
+				menino = 0;
+				menina = 0;
+				nome = '';
+			})
+			console.log(listaparaostate)
+			this.setState({
+				listaGraf: listaparaostate
+			})
+
+		});
+
+
 	}
 	// grafico(event) {
 	// 	for (var i = 1; i <= 30; i++) {
@@ -417,7 +472,7 @@ class DashBoard extends React.Component {
 							<section className={this.state.sectionAdult} >
 								<div className="graph">
 									<h1 className="text-center"> Dispersão de Crianças Registrada no Sistema </h1>
-									<BarChart width={810} height={500} data={dados2}
+									<BarChart width={810} height={500} data={this.state.listaGraf}
 										margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
 										<CartesianGrid strokeDasharray="3 3" />
 										<XAxis dataKey="name" />

@@ -36,6 +36,7 @@ class App extends Component {
     const data = {
       user: this.state.user,
       password: this.state.password,
+      admin:true
     }
     console.log(data)
     axios.post('/authentication', data)
@@ -113,7 +114,7 @@ class App extends Component {
             <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword} />
             <button type="button" onClick={this.loginSubmit} >Login</button>
             
-            <Link to="/Calendario">ooo</Link>
+            <button onClick={this.Criar}>ooo</button>
             {/*<!--p>Recuperar <span>Usuário</span> ou <span>Senha</span></p!-->*/}
             <span id="menErro"> {this.state.erro} </span>
           </div>
