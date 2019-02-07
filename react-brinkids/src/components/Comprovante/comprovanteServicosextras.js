@@ -5,7 +5,7 @@ import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
 import moment from 'moment';
-import './comprovante.css';
+
 
 var servico;
 class Comprovanteservico extends React.Component {
@@ -35,8 +35,9 @@ class Comprovanteservico extends React.Component {
 
             var conteudo = document.getElementById('print').innerHTML;
             const tela_impressao = window.open('about:blank');
-            tela_impressao.document.write('<html><head>');
+            tela_impressao.document.write('<!DOCTYPE html><html><head>');
 
+            tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
             tela_impressao.document.write(('</head><style>html {background:transparent !important; color:#000 !important; text-shadow:none !important; filter:none !important; -ms-filter:none !important; width: 77mm; font-family: Consolas, monaco, monospace; font-style: normal; font-variant: normal; justify-content: center; align-items: center; } html body {width: 80mm; height: auto; } .trilha {width: 100%; font-size: 3.5mm; word-wrap: break-word; } .naoFiscal {width: 100%; font-size: 3.5mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .textos {width: 100%; font-size: 3.3mm; word-wrap: break-word; } .titulo7 {width: 100%; font-size: 3.6mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .espacoTitulo {margin-right: 1mm; } .textos .direita {float: right; padding-right: 2mm; } .criancas {margin-bottom: 2mm; } .atendente {margin-bottom: 2mm; } .rodape {width: 100%; font-size: 3.3mm; word-wrap: break-word; justify-content: center; align-items: center; display: flex; } table, th, td {border: 0px solid black; } th, td {padding: 0px; text-align: left; }</style><body>'));
             tela_impressao.document.write(conteudo);
             tela_impressao.document.write('</body></html>');
@@ -66,9 +67,9 @@ class Comprovanteservico extends React.Component {
                 <div className="titulo7">
                     <a className="espacoTitulo">Produto / Serviço</a>
                 </div>
-                <div id="datalhamento" className="criancas textos">
+                <div id="datalhamento" className="textos">
                     <a>Detalhamento</a>
-                    <table >
+                    <table style={{ width: 100 + '%' }} >
                         <thead>
                             <tr>
                                 <td>Serviço / Produto</td>
@@ -91,18 +92,18 @@ class Comprovanteservico extends React.Component {
                             })}
                         </tbody>
                     </table>
-                    <div class="direita">
+                    <div className="direita" style={{marginBottom: 2+'mm'}}>
                         <a>Total:  R$</a>
                         <a id="valorServicos">{this.props.tabela.Total}</a>
                     </div>
-                    <div >
+                    <div  style={{marginTop: 6+'mm'}} >
                         <a>Valor pago: R$</a>
-                        <a id="valor">1234,00</a>
-                        <a>em</a>
-                        <a id="metodo">{this.props.tabela.metodo}</a>
+                        <a id="valor">1234,00 </a>
+                        <a> em </a>
+                        <a id="metodo"> {this.props.tabela.metodo}</a>
                     </div>
                 </div>
-                <div id="atendente" className="atendente textos" >
+                <div id="atendente" className="atendente textos" style={{marginTop: 3+'mm'}} >
                     <a>Atendente:</a>
                     <a>1234567891123456789212345678</a>
                 </div>

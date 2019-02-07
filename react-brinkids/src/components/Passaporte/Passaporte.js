@@ -23,7 +23,7 @@ import {
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
-
+import {Num} from './favetas';
 class Passport extends React.Component {
     constructor(props) {
         super(props)
@@ -142,9 +142,9 @@ class Passport extends React.Component {
 
 
     // Faz a busca do responsável:
-    SearchAdult(event) {
+    async  SearchAdult(event) {
         let erros = this.state.selectedSearch;
-
+        console.log(await Num())
         if (erros.length === 0) {
             alert("A Busca não pode ser em branco");
         }
@@ -364,7 +364,7 @@ class Passport extends React.Component {
     //O new Date().getTime() recebe o valor em milisegundos, por isso, dividindo por 60000 converto em minutos.
     //Começando o formulário para enviar no JSON:
     /*FUNCAO CADASTRA ADULTO*/
-    TheEnd = (event) => {
+    TheEnd = async (event) => {
         var formData = new FormData();
         var listCria = [];
 
@@ -391,7 +391,7 @@ class Passport extends React.Component {
         formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
         formData.append('service', 'Passaporte')
         formData.append('time', moment().format())
-        formData.append('belongings', '0')
+        formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
 

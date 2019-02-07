@@ -152,15 +152,16 @@ router.put('/:identifier', async (req, res) => {
         },
       }
     );
-
+    const changuePrice =  await Logs.update({'to': req.params.identifier},{$set: { "price" : parseInt(req.body.value, 10)}})
+    console.log(changuePrice)
     const log = new Logs({
       activity: 'Aniversario',
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.params.identifier,
-      price: service.payment.value,
-      priceMethod: service.payment.method,
+      price: parseInt(req.body.value, 10),
+      priceMethod: req.body.method,
     })
     const newLog = await log.save();
     if (!service) {

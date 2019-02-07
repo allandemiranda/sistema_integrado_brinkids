@@ -11,7 +11,8 @@ router.get('/:date', async (req, res) => {
     const todayd = moment(req.params.date).endOf('day').toDate()
 
     const childs = await Logs.find({
-      'dateOperation': { $gte: req.params.date, $lte:moment(todayd) }
+      'dateOperation': { $gte: req.params.date, $lte:moment(todayd) },
+      $or: [ { 'activity':'Passaporte','action':'Saida' },{ 'activity':'Serviços','action':'Saida' } , { 'activity':'Aniversario' ,'action':'Edição' },{ 'activity':'Aniversario' ,'action':'Criação' } ] ,
        });
    
     return res.json(childs);
@@ -31,6 +32,19 @@ router.get('/mkt/:date', async (req, res) => {
       $or: [ { 'activity':'Passaporte','action':'Entrada' } , { 'activity':'Aniversario' ,'action':'Entrada' } ] ,
 
        });
+   
+    return res.json(childs);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
+router.get('/', async (req, res) => {
+  console.log("oiiii")
+  try {
+   
+
+    const childs = await Child.find({});
    
     return res.json(childs);
   } catch (err) {

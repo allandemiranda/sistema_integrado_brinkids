@@ -9,9 +9,9 @@ import '../Dashboard/css/Dashboard.css';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import $ from 'jquery';
-import { getToken } from "../Login/service/auth";
-import jwt from 'jsonwebtoken';
-import config from '../Login/service/config';
+// import { getToken } from "../Login/service/auth";
+// import jwt from 'jsonwebtoken';
+// import config from '../Login/service/config';
 import {
 	LineChart,
 	Line,
@@ -80,6 +80,7 @@ class DashBoard extends React.Component {
 		this.selectAdult = this.selectAdult.bind(this);
 		this.selectAniversario = this.selectAniversario.bind(this);
 		this.grafico = this.grafico.bind(this);
+		this.grafico1 = this.grafico1.bind(this);
 
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.mudarCampoNome = this.mudarCampoNome.bind(this);
@@ -157,7 +158,7 @@ class DashBoard extends React.Component {
 			var novo = moment(hj).subtract(i, 'days');
 
 			const a = moment(novo).format("MM/DD/YYYY")
-			console.log(a);
+
 			lista.push(a);
 
 		}
@@ -213,7 +214,7 @@ class DashBoard extends React.Component {
 			return passe;
 
 		}).then((lista) => {
-			console.log(lista)
+
 			const tot = [];
 
 			const datas = lista.aniversario.map(async (crianca, index) => {
@@ -226,14 +227,13 @@ class DashBoard extends React.Component {
 						sexo: axior.data.sexuality,
 					}
 
-
-
 				}
 				const retu = {
 					temporario, child: axior.data
 				}
 				return retu;
 			});
+
 			const datase = lista.passaporte.map(async (crianca, index) => {
 				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
 
@@ -243,8 +243,6 @@ class DashBoard extends React.Component {
 						dia: moment(crianca.dateOperation).format("DD/MM"),
 						sexo: axior.data.sexuality,
 					}
-
-					return axior.data;
 				}
 				const retu = {
 					temporario, child: axior.data
@@ -259,110 +257,86 @@ class DashBoard extends React.Component {
 			return envio;
 
 		}).then((file) => {
-			console.log(file)
+
 			Promise.all(file).then((god) => {
+
 				const lista = [];
 				god.map((event, indice) => {
+
 					var menino = 0;
 					var menina = 0;
+
 					if (event !== null) {
 						if (event.child.sexuality === "Feminino") {
 							menina = menina + 1;
 						} else if (event.child.sexuality === "Masculino") {
 							menino = menino + 1;
 						}
-						lista.push({ name: event.temporario.dia, Meninos: menina, Meninas: menina, Total: menino + menina })
+						lista.push({ name: event.temporario.dia, Meninos: menino, Meninas: menina, Total: menino + menina })
 					}
 				})
+
+				for (var p = 0; p < lista.length; p++) {
+					for (var y = 0; y < lista.length; y++) {
+						if (lista[p].name === lista[y].name) {
+
+							lista.splice(y, 1)
+						}
+					}
+				}
+
 				return lista;
 			}).then((pilo) => {
-				console.log(pilo)
+				this.setState({
+					listaGraf: pilo
+				})
 			})
-
-
-			// const lista = [];
-			// file.tot.map((cris, indez) => {
-			// 	console.log(cris)
-			// const menino = 0;
-			// const menina = 0;
-			// 	if (cris.sexo === "Feminino") {
-			// 		console.log("entreo")
-			// 		menina++;
-			// 	} else if (cris.sexo === "Masculino") {
-			// 		menino++;
-			// 	}
-			// 	lista.push({ name: cris.dia, Meninos: menina, Meninas: menina, Total: menino + menina })
-			// 	console.log({ name: cris.dia, Meninos: menina, Meninas: menina, Total: menino + menina })
-			// })
-
-
-
-
-
-			// for(const a=0;a<file[0].tamanho;a++){
-			// 	if(file[0].tot[a].sexo === 'Feminino'){
-			// 		console.log("entrei====")
-			// 		menina = menina + 1;
-			// 	}else if(file[0].tot[a].sexo === "Masculino"){
-			// 		menino = menino + 1;
-			// 	}
-			// 	lista.push({ name: file.tot[a].dia, Meninos: menina, Meninas: menina, Total: menino + menina })
-			// }
-			// console.log(lista)
 		});
-
-
-
-
 	}
 
-
-
-
-	// listagraficos.map((event, indice) => {
-
-	// 	if (event.length !== 0) {
-	// 		event.map((cria, indice) => {
-	// 			if (cria.activity === "Passaporte") {
-	// 				passaporte.push(cria);
-	// 			} else if (cria.activity === "Aniversario") {
-	// 				aniversario.push(cria);
-	// 			}
-	// 		})
-	// 	}
-	// })else{return null}
-	// const passs = passaporte.map(async (criancas, index) => {
-	// 	console.log(criancas)
-
-	// 	const response = await axios.get(`/child/indentifier/${criancas.to}`);
-	// 	console.log(response.data, 'ddddddd')
-	// 	if (response.data.sexuality === "Feminino") {
-
-	// 		menina = menina + 1;
-
-	// 	}
-	// 	if (response.data.sexuality === "Masculino") {
-
-	// 		menino = menino + 1;
-
-	// 	}
-	// 	return response.data;
-
-	// });
-
-
-
 	grafico1(event) {
-		axios.get('http://localhost:3001/TelaMKT')
+		axios.get(`/tela-mkt`)
 			.then((response) => {
-				console.log(response.data);
-				this.setState.lista.push(response.data);
-				this.state.listaGraf2 = response.data;
+				let lista = [];
+				const mapa = response.data.map((event, indice) => {
+					const temporario = { aniver: moment(event.birthday).format("DD/MM"), sexo: event.sexuality }
+					lista.push({ aniver: moment(event.birthday).format("DD/MM"), sexo: event.sexuality });
+					return temporario;
+				});
 
-				this.state.listaGraf2.map((dados2) => {
-					{/* Dados responsáveis por gerar o gráfico da tela 2 */ }
-					dados2.push({ name: response.data.nome, Meninos: response.data.meninos, Meninas: response.data.meninas })
+
+				let lista2 = lista;
+
+				for (var t = 0; t < lista.length; t++) {
+					for (var p = 0; p < lista.length; p++) {
+						if (lista[t].aniver === lista[p].aniver && p !== t) {
+							lista2.splice(p, 1);
+						}
+					}
+				}
+
+				const lista3 = [];
+
+				lista2.map((event, indice) => {
+					var menina = 0;
+					var menino = 0;
+					mapa.map((min, index) => {
+						if (event.aniver === min.aniver) {
+							if (min.sexo === "Feminino") {
+								menina = menina + 1;
+							} else if (min.sexo === "Masculino") {
+
+								menino = menino + 1;
+							}
+						}
+
+					})
+					lista3.push({ name: event.aniver, Meninas: menina, Meninos: menino });
 				})
+				this.setState({
+					listaGraf2: lista3,
+				})
+
 			})
 			.catch((err) => console.log(err));
 	}
@@ -539,9 +513,9 @@ class DashBoard extends React.Component {
 					<div class="graph">
 						<nav>
 							<ul>
-								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a class="icon-shop"><i class="far fa-chart-bar"></i> <span>Fluxo</span></a></li>
-								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><i class="fas fa-chart-pie"></i> <span>Dispersão</span></a></li>
-								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a class="icon-food"><i class="fab fa-grav"></i> <span>Busca</span></a></li>
+								<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a className="icon-shop"><i className="far fa-chart-bar"></i> <span>Fluxo</span></a></li>
+								<li name="adultoTab" onClick={this.selectAdult} className={this.state.adultoTab}><a class="icon-cup"><i className="fas fa-chart-pie"></i> <span>Dispersão</span></a></li>
+								<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a className="icon-food"><i className="fab fa-grav"></i> <span>Busca</span></a></li>
 
 							</ul>
 						</nav>
@@ -576,7 +550,7 @@ class DashBoard extends React.Component {
 							<section className={this.state.sectionAdult} >
 								<div className="graph">
 									<h1 className="text-center"> Dispersão de Crianças Registrada no Sistema </h1>
-									<BarChart width={810} height={500} data={this.state.listaGraf}
+									<BarChart width={810} height={500} data={this.state.listaGraf2}
 										margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
 										<CartesianGrid strokeDasharray="3 3" />
 										<XAxis dataKey="name" />
@@ -591,7 +565,7 @@ class DashBoard extends React.Component {
 								</div>
 								<br></br>
 								<div className="text-center">
-									<button className="btn botaoAvancar" onClick={this.grafico}>Atualizar</button>
+									<button className="btn botaoAvancar" onClick={this.grafico1}>Atualizar</button>
 								</div>
 							</section>
 							{/* FIM - SEGUNDATELA  */}

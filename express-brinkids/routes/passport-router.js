@@ -222,7 +222,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
 
   const childName = await productFinded[0].children.name; // nome da criança pra salvar quem vai usar o desconto, já que essa rota é só de desconto para crianças
   console.log(productFinded[0].children.name)
-
+console.log(discountFinded)
   if(discountFinded[0].type === 'Fixo'){
 
     price = parseFloat(discountFinded[0].value).toFixed(2);
@@ -263,8 +263,9 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
   const discountFinded = await discount.find({ 'name': req.params.codDesc });
   let finalPrice = req.params.value;
+  console.log(req.params.codDesc)
   let valueDisc = discountFinded[0].value;
-
+  
   const adultFinded = await product.find({ 'adult.id': req.params.idAdult });
   let adultName = adultFinded[0].adult.name;
   console.log(adultName);
