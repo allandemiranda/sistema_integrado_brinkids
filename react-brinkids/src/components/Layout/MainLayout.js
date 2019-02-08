@@ -137,10 +137,10 @@ class MainLayout extends React.Component {
                             <button className="sidebar-icon styleButaoMenu" onClick={this.DiminueMenu}>
                                 < span className="fa fa-bars" > </span>
                             </button>
-                            <Link to="index.html" >
+                           
                               < span id="logo" ><img style={{ maxWidth: 139 + "px" }} className="logo_1" alt="logo" src={logo}></img></span>
                              
-                            </Link>
+                            
                         </header>
                         <div className="bordaDaDiv"> </div>
                         <div className="down" style={{ paddingBottom: 15 + 'px' }}>
@@ -153,7 +153,7 @@ class MainLayout extends React.Component {
                             <ul>
                                 <li><Link class="tooltips" to="/MyProfile"><span>Profile</span><i class="lnr lnr-user"></i></Link></li>
 
-                                <li><Link class="tooltips" to="/Login" onClick={() => logout()}><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
+                                <li><a class="tooltips"  onClick={() => logout()}><span>Log out</span><i class="lnr lnr-power-switch"></i></a></li>
                             </ul>
 
                         </div>
