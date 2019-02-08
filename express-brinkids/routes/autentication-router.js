@@ -30,6 +30,7 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
   // Primeiro checa se existe um usuário no sistema
   userSystem.findOne({ user: req.query.user }, (err, user) => {
+    console.log(req.query.user)
     if (err) {
       return res.sendStatus(500);
     }

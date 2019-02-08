@@ -109,7 +109,7 @@ class Gerador extends React.Component {
 
         let listaTemporaria = this.state.listadecargos;
         let identifier = listaTemporaria[event]._id;
-
+        
         axios.delete(`/professionalPosition/${identifier}`)
             .then((response) => {
                 console.log(response.data);

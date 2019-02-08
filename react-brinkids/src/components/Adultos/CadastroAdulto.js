@@ -385,7 +385,9 @@ class CadastroAdulto extends React.Component {
         formData.append('rg', String(this.state.rg))
         formData.append('sexuality', String(this.state.sexuality))
         formData.append('observations', String(this.state.observations))
-
+        formData.append('criancas', JSON.stringify(this.state.confirmaCrianca.map((child) => {
+            return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
+        })))
         axios.post('/adult', formData)
         .then(function (response) {
             console.log(response)

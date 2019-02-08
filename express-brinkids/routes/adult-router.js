@@ -102,6 +102,7 @@ router.post('/', async (req, res) => {
     && req.body.cpf
     && req.body.email
     && req.body.maritalStatus) {
+      
     userAdult.findOne({ cpf: req.body.cpf }, (err, adultFound) => {
       if (err) {
         return res.sendStatus(500);
