@@ -8,6 +8,11 @@ export const getToken = () => localStorage.getItem(TOKEN_KEY);
 export const login = token =>
     localStorage.setItem(TOKEN_KEY, token);
 
-export const logout = () =>
-    localStorage.removeItem(TOKEN_KEY);
+export const logout = (req , res) =>{
+    const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  alert(b)
+    // localStorage.removeItem(TOKEN_KEY);
+    
+}
 

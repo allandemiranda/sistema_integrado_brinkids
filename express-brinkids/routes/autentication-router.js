@@ -68,8 +68,8 @@ router.get('/', (req, res) => {
 //   }
 // })
 
-router.get('/mostra_usuarios', (req, res) => {
-  userSystem.find({}, (err, result) => {
+router.get('/mostra_usuarios/:identifier', (req, res) => {
+  userSystem.find({ 'id': req.params.identifier }, (err, result) => {
     return err ? res.sendStatus(500) : res.status(200).json(result);
   });
 });

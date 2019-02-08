@@ -44,6 +44,7 @@ class Perfil extends React.Component {
             cidade: '',
             numero: '',
             endereco: '',
+            user:"",
 
         }
         //funçoes para mudar os values e afins
@@ -116,14 +117,23 @@ class Perfil extends React.Component {
     }
     //função que alterna as paginas
     ChangePage(event) {
-        this.setState(
-            {
-                perfilEdicao: event,
-                perfilAtual: event,
-                reserva: event,
-                page: 'Perfil'
-            })
+        axios.get(`/authentication/mostra_usuarios/${event._id}`)
+        .then((response) => {
+            console.log(response.data)
+            this.setState(
+                {   user:response.data[0].user,
+                    perfilEdicao: event,
+                    perfilAtual: event,
+                    reserva: event,
+                    page: 'Perfil'
+                })
+    
+            
+        }).catch((err) => {
+            console.log(err);
+        });
 
+        
 
     }
     voltar(event) {
@@ -163,20 +173,10 @@ class Perfil extends React.Component {
 
     }
     SearchFuncionario(event) {
-        /*const lista = [];
-        this.setState({ list: [] });
-        this.state.listaFuncionarios.forEach(element => {
-
-            if (element.name.firstName == this.state.selectedSearch) {
-
-                lista.push(element);
-                this.setState({ list: lista });
-            }
-        });*/
+       
         axios.get(`/employees/search/${this.state.selectedSearch}`)
             .then((response) => {
-                console.log(this.state.selectedSearch);
-                console.log(response.data);
+                
                 this.setState({ list: response.data });
             }).catch((err) => {
                 console.log(err);
@@ -331,14 +331,14 @@ class Perfil extends React.Component {
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo" ><b> LOGIN </b></h5>
-                                        <p>ffffffff</p>
+                                        <p>{this.state.user}</p>
                                     </div>
                                     <br></br>
 
 
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
-                                        <p>ffffffff</p>
+                                        <p>Ativo</p>
                                     </div><br />
                                 </div>
 
