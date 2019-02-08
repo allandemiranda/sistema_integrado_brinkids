@@ -432,7 +432,8 @@ class Passport extends React.Component {
     // Voltar par Tela II
     VoltarTelaII = (event) => {
         this.setState({
-            page: "ConfirmAdult"
+            page: "ConfirmAdult",
+            listConnect:[],
         })
     }
 
