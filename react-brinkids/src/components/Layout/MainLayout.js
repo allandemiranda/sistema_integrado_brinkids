@@ -38,6 +38,7 @@ class MainLayout extends React.Component {
     }
     requisicao() {
         const a = getToken();
+        console.log(jwt.verify(a, config.secret_auth))
         const b = jwt.verify(a, config.secret_auth);
         console.log(b)
         if (!b.admin) {

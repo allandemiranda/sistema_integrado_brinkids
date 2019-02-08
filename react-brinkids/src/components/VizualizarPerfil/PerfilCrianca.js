@@ -58,8 +58,17 @@ class PerfilCrianca extends React.Component {
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
+        this.excluir = this.excluir.bind(this);
 
+    }
+    excluir(event,indice){
 
+        axios.delete(`child/${event}`)
+            .then((response) => {
+                let temporario = this.state.list;
+                temporario.splice(indice,1);
+            })
+            .catch((err) => console.log(err));
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -245,7 +254,7 @@ class PerfilCrianca extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.number} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id,indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}

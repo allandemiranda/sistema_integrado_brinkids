@@ -67,6 +67,16 @@ class Perfil extends React.Component {
         this.changuePassword = this.changuePassword.bind(this);
         this.changueSenha = this.changueSenha.bind(this);
         this.changueSenhaAtual = this.changueSenhaAtual.bind(this);
+        this.excluir = this.excluir.bind(this);
+    }
+    excluir(event,indice){
+
+        axios.delete(`adult/${event}`)
+            .then((response) => {
+                let temporario = this.state.list;
+                temporario.splice(indice,1);
+            })
+            .catch((err) => console.log(err));
     }
     changuePassword(event) {
         this.setState({
@@ -220,7 +230,7 @@ class Perfil extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.cpf} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id,indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}

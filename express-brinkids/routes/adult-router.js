@@ -262,5 +262,33 @@ router.put('/:identifier', async (req, res) => {
     return res.sendStatus(500);
   }
 });
+router.delete('/:identifier', async (req, res) => {
+  try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
+    const deletedService = await userAdult.findByIdAndRemove(req.params.identifier);
+    
+    const log = new Logs({
+      activity: 'Perfil Adulto',
+      action: 'Delete',
+      dateOperation: new Date(),
+      from: funcionario,
+    })
+    
+    const newLog = await log.save();
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
+});
 
 module.exports = router;

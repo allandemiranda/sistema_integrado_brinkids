@@ -29,7 +29,7 @@ import GFinanceiro from './components/GerenciamenteFinanceiro/GerenciamentoFinan
 import VisualizarAniversario from './components/Aniversario/VisualizarAniversario.js';
 import { isAuthenticated } from "./components/Login/service/auth";
 import { getToken } from "./components/Login/service/auth";
-import jwt from'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import moment from 'moment';
 import config from './components/Login/service/config';
 
@@ -39,8 +39,9 @@ const getBasename = () => {
 
 const PrivateRoute = ({ component: Component, layout: Layout, ...rest }) => (
   <Route {...rest} render={(props) => (
-    isAuthenticated() && (moment((jwt.verify(getToken(),config.secret_auth).exp)*1000).format("DD MMM YYYY hh:mm a")> moment( Date()).format("DD MMM YYYY hh:mm a"))
-      ?( <Layout>
+    isAuthenticated() && (jwt.verify(getToken(), config.secret_auth, function (err, decoded) {
+      if (err){ return false}else{return true}}))
+      ? (<Layout>
         <Component {...props} />
       </Layout>)
       : (<Redirect to='/login' />)
