@@ -96,13 +96,13 @@ class App extends Component {
       axios.get(`/authentication?user=${this.state.user}&password=${this.state.password}`)
       .then((response) => {
 
-        console.log(data['token'])
+        console.log(response.data['token'])
         this.setState({ loading: true });
         const cookies = new Cookies();
-        cookies.set('TOKEN_KEY', (data['token']), { path: '/' });
-        login(data['token'])
+        cookies.set('TOKEN_KEY', (response.data['token']), { path: '/' });
+        login(response.data['token'])
         
-        const dados = jwt.verify(data['token'],config.secret_auth);
+        const dados = jwt.verify(response.data['token'],config.secret_auth);
         console.log(dados)
         this.sair()
        
