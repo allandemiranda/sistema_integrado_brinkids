@@ -13,7 +13,8 @@ import {
     Link,
     Redirect,
     withRouter
-  } from "react-router-dom";
+} from "react-router-dom";
+import $ from 'jquery';
 class Gerador extends React.Component {
     constructor(props) {
         super(props)
@@ -22,6 +23,7 @@ class Gerador extends React.Component {
             list: [],
             listadecargos: [],
             Name: '',
+            clikado:true,
             Description: '',
             editar: false,
             listafuncoes: funcoes,
@@ -54,7 +56,8 @@ class Gerador extends React.Component {
                 this.setState({ list: response.data });
             })
             .catch((err) => console.log(err));
-
+           
+            
     }
     Salvar2(event) {
         let temporario = this.state.listadecargos;
@@ -109,7 +112,7 @@ class Gerador extends React.Component {
 
         let listaTemporaria = this.state.listadecargos;
         let identifier = listaTemporaria[event]._id;
-        
+
         axios.delete(`/professionalPosition/${identifier}`)
             .then((response) => {
                 console.log(response.data);
@@ -167,23 +170,26 @@ class Gerador extends React.Component {
     }
     selecionaFuncao(event) {
         let achou = false;
-
-        this.state.funcoescheck.forEach((funcao, indice, array) => {
-            if (funcao._id === event) {
-                delete array[indice];
+       
+        this.state.funcoescheck.map((funcao, indice) => {
+            console.log(this.state.funcoescheck);
+            console.log(funcao)
+            if (funcao.id === event) {
+                this.state.funcoescheck.splice(indice,1);
                 achou = true;
             }
         });
 
         if (!(achou)) {
-            this.state.listafuncoes.forEach((funcao) => {
-                if (funcao._id === event) {
+            this.state.listafuncoes.map((funcao) => {
+                if (funcao.id === event) {
                     this.state.funcoescheck.push(funcao);
+                   
                 }
             });
         }
-
-        this.setState({ funcoescheck: this.state.funcoescheck });
+       
+       
 
     }
     changueselect(event) {
@@ -210,7 +216,36 @@ class Gerador extends React.Component {
                 alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
+    verificaStatus=(nome)=> {
+        
+        if(this.state.clikado){
+           
+            console.log("entrei no habilitando todos")
+            this.setState({
+                funcoescheck:this.state.listafuncoes,
+                clikado:false,
+            })
+        }else{
+            this.setState({
+                funcoescheck:[],
+                clikado:true,
+            })
+            console.log("entrei no desahabilitando todos")
+            
+        }
+        $(document).on('change', '.checkDoc', function () {
+            $("input[name=docTipo]").prop({
+                checked: this.checked,
+
+            });
+        });
+    }
     render() {
+
+       
+
+
+
         if (this.state.Page === 'Lista') {
             return (
 
@@ -294,21 +329,21 @@ class Gerador extends React.Component {
                             <table className="table table-hover">
                                 <thead className="text-center">
                                     <tr>
-                                        <th style={{textAlign:'center'}}>#</th>
-                                        <th style={{textAlign:'center'}}>Nome</th>
-                                        <th style={{textAlign:'center'}}>Classe</th>
+                                        <th style={{ textAlign: 'center' }}>#</th>
+                                        <th style={{ textAlign: 'center' }}>Nome</th>
+                                        <th style={{ textAlign: 'center' }}>Classe</th>
 
-                                        <th style={{textAlign:'center'}}> </th>
+                                        <th style={{ textAlign: 'center' }}> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {this.state.listadecargos.map((servico, indice) => {
                                         return (
                                             <tr key={indice}>
-                                                <th scope="row" style={{textAlign:'center'}}>{(indice + 1)}</th>
+                                                <th scope="row" style={{ textAlign: 'center' }}>{(indice + 1)}</th>
                                                 <td>{servico.name}</td>
 
-                                                <td>{servico.class}</td>
+                                                <td>{servico.classes}</td>
 
                                                 <td><button onClick={() => this.editar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
 
@@ -366,30 +401,31 @@ class Gerador extends React.Component {
                                     <div className="row">
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" >Funçoes</h3>
-                                            <table className="table table-hover">
-                                                <thead className="text-center">
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Nome</th>
+                                            <form name="form1">
+                                                <table className="table table-hover">
+                                                    <thead className="text-center">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Nome</th>
 
 
-                                                        <th> </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {this.state.listafuncoes.map((servico, indice) => {
-                                                        return (
-                                                            <tr key={indice}>
-                                                                <th scope="row">{(indice + 1)}</th>
-                                                                <td>{servico.funcao}</td>
-                                                                <td><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaFuncao(servico._id)} /></td>
+                                                            <th><input type="checkbox" name="docTipo" class="checkDoc" value="false" onClick={ this.verificaStatus} /> </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {funcoes.map((servico, indice) => {
+                                                            return (
+                                                                <tr key={indice}>
+                                                                    <th scope="row">{(indice + 1)}</th>
+                                                                    <td>{servico.funcao}</td>
+                                                                    <td><input type="checkbox" name="docTipo" value="true" onClick={()=>this.selecionaFuncao(indice)} /></td>
 
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                </tbody>
-                                            </table>
-
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -397,8 +433,8 @@ class Gerador extends React.Component {
                             <br></br>
                             <div className="text-center">
                                 <Link className="btn btn-md botao" to="/">Cancelar</Link>
-                                {!this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Salvar}>Salvar</button>)}
-                                {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}>Salvar</button>)}
+                                {!this.state.editar && (<input type="button" value="Salvar" className="btn btn-md botao botaoAvançar" onClick={this.Salvar}/>)}
+                                {this.state.editar && (<input type="button" value="Salvar"  className="btn btn-md botao botaoAvançar" onClick={this.salvar2}/>)}
                             </div>
                             <div>
                                 <ul id="mensagens-erro" style={{ color: "red" }}></ul>

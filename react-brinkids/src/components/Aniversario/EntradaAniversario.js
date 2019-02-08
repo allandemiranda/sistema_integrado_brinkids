@@ -91,7 +91,7 @@ class EntradaAniversario extends React.Component {
     }
     requisicao(event) {
         $.ajax({
-            url: "http://localhost:3001/birthday",
+            url: "/birthday",
             dataType: 'json',
             type: 'GET',
             error: function (response) {
@@ -405,7 +405,7 @@ class EntradaAniversario extends React.Component {
     SearchAdult(nomeadult, event) {
         if (nomeadult.length >= 7) {
             $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
+                url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -436,7 +436,7 @@ class EntradaAniversario extends React.Component {
     // Faz a busca das Crianças:
     SearchChild(event) {
         $.ajax({
-            url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
+            url: "/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
             dataType: 'json',
             type: 'GET',
             error: function (response) {

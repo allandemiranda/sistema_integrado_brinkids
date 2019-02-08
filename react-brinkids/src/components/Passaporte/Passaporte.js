@@ -23,7 +23,7 @@ import {
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
-import {Num} from './favetas';
+import { Num } from './favetas';
 class Passport extends React.Component {
     constructor(props) {
         super(props)
@@ -55,6 +55,7 @@ class Passport extends React.Component {
             no: tabelinha,
             dadosComprovante: [],
             kinship: [],
+            nomeFuncionario:"",
 
         }
 
@@ -175,19 +176,35 @@ class Passport extends React.Component {
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
     selectedAdult(adult) {
-        const adultFind = this.state.listConfirmAdult.findIndex((adults) => adults._id === adult._id);
+        this.setState({
+            listConfirmAdult: adult,
+            page: "ConfirmAdult",
+        })
 
-        if (adultFind === -1) {
-            this.state.listConfirmAdult.push(adult);
-        } else {
-            this.state.listConfirmAdult.splice(adultFind, 1);
-        }
+
     }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL- Fim
 
     // FUNCOES RELACIONADAS A BUSCA DAS CRIANÇAS - Inicio 
     //Bloco que muda o status para o atual do formulario.
     ChangeSearch(event) {
+
+        const b = jwt.verify(getToken(), config.secret_auth);
+
+
+        axios.get(`/adult/${b.id}`)
+            .then((response) => {
+                
+            const name= response.data.name.firstName +" " +response.data.name.surName;
+                this.setState({
+                    nomeFuncionario:response.data.name.firstName +" " +response.data.name.surName
+                })
+console.log(name)
+            }).catch((err) => {
+                console.log(err);
+            });
+       
+        
         this.setState({ selectedSearch: event.target.value });
     }
 
@@ -238,8 +255,8 @@ class Passport extends React.Component {
         if (this.state.listConfirmAdult.length != 0) {
             this.setState({
                 page: "ConfirmAdult",
-                obs: this.state.listConfirmAdult[0].observations,
-                phone: this.state.listConfirmAdult[0].phone,
+                obs: this.state.listConfirmAdult.observations,
+                phone: this.state.listConfirmAdult.phone,
             })
         }
         else {
@@ -254,12 +271,12 @@ class Passport extends React.Component {
     TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
-        console.log(this.state.listConfirmAdult[0].children[0])
-        if(this.state.listConfirmAdult[0].children[0] === null){
+        console.log(this.state.listConfirmAdult.children[0])
+        if (this.state.listConfirmAdult.children[0] === null) {
 
-        }else{
+        } else {
 
-            const criancas = this.state.listConfirmAdult[0].children.map(async (crianca) => {
+            const criancas = this.state.listConfirmAdult.children.map(async (crianca) => {
                 const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
                 return response.data;
             });
@@ -280,7 +297,7 @@ class Passport extends React.Component {
 
         // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
         // $.ajax({
-        //     url: "/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
+        //     url: "/adult/filter/" + this.state.listConfirmAdult.children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
         //     dataType: 'json',
         //     type: 'GET',
         //     error: function (response) {
@@ -311,29 +328,30 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela V
-    TelaV = (event) => {
+    TelaV = async(event) => {
 
 
         var formData = new FormData();
-        var listAdult = new Array();
-        var listCria = new Array();
+        var listCria = [];
+
+        const adulto = {
+            _id: this.state.listConfirmAdult._id,
+            name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
+            phone: this.state.listConfirmAdult.phone,
+            observations: this.state.obs,
+        };
         var i;
         for (i = 0; i < this.state.listConfirmKids.length; i++) {
-            formData.append('photo', String(this.state.listConfirmKids[0]._id))
-            formData.append('service', 'Passaporte')
-            formData.append('time', moment().format())
-            formData.append('belongings', '0')
-            listCria.push(String(this.state.listConfirmKids[i]._id))
-            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
-            listCria.push(this.state.listConfirmKids[i].birthday)
-            listCria.push(this.state.listConfirmKids[i].restrictions)
-            listCria.push(this.state.listConfirmKids[i].observations)
-            listAdult.push(this.state.listConfirmAdult[0]._id)
-            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
-            listAdult.push(this.state.listConfirmAdult[0].phone)
-            listAdult.push(this.state.obs)
-            formData.append('children', listCria)
-            formData.append('adult', listAdult)
+            const crianca = {
+                _id: String(this.state.listConfirmKids[i]._id),
+                name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                birthday: new Date(this.state.listConfirmKids[i].birthday),
+                restrictions: this.state.listConfirmKids[i].restrictions,
+                observations: this.state.listConfirmKids[i].observations,
+                photo: this.state.listConfirmKids[i].fotoFamily
+            }
+
+            listCria.push(crianca);
         };
         this.setState({
             dadosComprovante: {
@@ -341,9 +359,10 @@ class Passport extends React.Component {
                 photo: String(this.state.listConfirmKids[0]._id),
                 service: "Passaporte",
                 time: moment().format(),
-                belongings: 0,
+                belongings:  await Num(),
                 children: listCria,
-                adult: listAdult
+                adult: adulto,
+                funcionario:this.state.nomeFuncionario
                 //ajeitar o comprovante
             }
         })
@@ -369,9 +388,9 @@ class Passport extends React.Component {
         var listCria = [];
 
         const adulto = {
-            _id: this.state.listConfirmAdult[0]._id,
-            name: this.state.listConfirmAdult[0].name.firstName + ' ' + this.state.listConfirmAdult[0].name.surName,
-            phone: this.state.listConfirmAdult[0].phone,
+            _id: this.state.listConfirmAdult._id,
+            name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
+            phone: this.state.listConfirmAdult.phone,
             observations: this.state.obs,
         };
 
@@ -394,19 +413,24 @@ class Passport extends React.Component {
         formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
+        formData.append('funcionario', this.state.nomeFuncionario);
 
-        console.log(this.state.file,JSON.stringify(listCria));
+        
         //Fim do formulário;
 
         axios.post('/product', formData)
             .then((response) => {
                 console.log(response.data, "olaa");
                 this.setState({
-
-                    dadosComprovante: response.data
+                    dadosComprovante:{
+                        i:response.data,
+                        funcionario:this.state.nomeFuncionario
+                    }
                 })
                 setTimeout((event) => {
+                    console.log(this.state.dadosComprovante)
                     this.setState({
+
                         comprovante: true,
                     })
                 }, 100);
@@ -433,7 +457,7 @@ class Passport extends React.Component {
     VoltarTelaII = (event) => {
         this.setState({
             page: "ConfirmAdult",
-            listConnect:[],
+            listConnect: [],
         })
     }
 
@@ -536,7 +560,7 @@ class Passport extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + " " + findAdult.name.surName} </td>
                                                 <td >{findAdult.phone} </td>
-                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult)} /> </td>
+                                                <td className="text-center">    <button name="selectchild" onClick={() => this.selectedAdult(findAdult)}><span className="glyphicon">&#xe065;</span></button> </td>
                                             </tr>
                                         );
                                     })}
@@ -573,13 +597,13 @@ class Passport extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={this.state.listConfirmAdult[0].photo} />
+                                            <img src={this.state.listConfirmAdult.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                            <p>{this.state.listConfirmAdult.name.firstName + " " + this.state.listConfirmAdult.name.surName}</p>
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 25 + "px", paddingTop: -13 + "px" }}>
@@ -589,7 +613,7 @@ class Passport extends React.Component {
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                            <p>{moment(this.state.listConfirmAdult[0].birthday).toNow(true)}</p>
+                                            <p>{moment(this.state.listConfirmAdult.birthday).toNow(true)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -652,7 +676,7 @@ class Passport extends React.Component {
                                     </thead>
                                     <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS - Falta modificar para aparecer o nome*/}
                                         {this.state.listConnect.map((findKids, indice) => {
-                                            
+
                                             return (
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
@@ -723,12 +747,12 @@ class Passport extends React.Component {
                                                     <div className="col-md-8 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Nome Responsável: </b></h5>
-                                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p></div>
+                                                            <p>{this.state.listConfirmAdult.name.firstName + " " + this.state.listConfirmAdult.name.surName}</p></div>
                                                     </div>
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{moment(this.state.listConfirmAdult[0].birthday).format('DD/MM/YYYY')} </p>
+                                                            <p>{moment(this.state.listConfirmAdult.birthday).format('DD/MM/YYYY')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -827,13 +851,13 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={ this.state.listConfirmAdult[0].photo} />
+                                                <img src={this.state.listConfirmAdult.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                                <p>{this.state.listConfirmAdult.name.firstName + " " + this.state.listConfirmAdult.name.surName}</p>
                                             </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
@@ -843,7 +867,7 @@ class Passport extends React.Component {
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                <p>{moment(this.state.listConfirmAdult.birthday, "YYYYMMDD").toNow(true)}</p>
 
                                             </div>
                                         </div>
@@ -883,7 +907,7 @@ class Passport extends React.Component {
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                        <img src={ Criançasqueentrarao.photo} />
+                                                        <img src={Criançasqueentrarao.photo} />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">

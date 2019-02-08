@@ -67,7 +67,7 @@ class SaidaServicosExtra extends React.Component {
             })
             .catch((err) => console.log(err));
         $.ajax({
-            url: "http://localhost:3001/extraServices/search/" + this.state.selectedSearch,//
+            url: "/extraServices/search/" + this.state.selectedSearch,//
             dataType: 'json',
             type: 'GET',
             error: function (response) {

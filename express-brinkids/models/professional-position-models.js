@@ -14,10 +14,12 @@ const professionalPositionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  functions: {
-    type: String,
-    required: true,
-  },
+  functions: [{
+    id: {
+      type: Number,
+      required: true,
+    }
+  }],
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

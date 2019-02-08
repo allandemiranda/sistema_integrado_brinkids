@@ -5,29 +5,15 @@ import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
 import moment from 'moment';
+
+
 var servico;
 class Comprovante extends React.Component {
     servico = this.props.serviso;
 
-
-    render() {
-        // getFuncionario = () => {
-
-
-        //     const a = getToken();
-        //     const b = jwt.verify(a, config.secret_auth);
-
-        //     axios.get(`/employees/${b.id}`)
-        //         .then((response) => {
-
-        //             this.setState({
-        //                 nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
-        //             })
-
-        //         })
-        //         .catch((err) => console.log(err));
-
-        // }
+    
+    render  () {
+       
         const rederizar = () => {
             var conteudo = document.getElementById('print').innerHTML;
             const tela_impressao = window.open('about:blank');
@@ -43,7 +29,7 @@ class Comprovante extends React.Component {
             setTimeout(function () {
                 tela_impressao.print();
 
-            }, 100);
+            }, 200);
 
         }
         if (this.props.teste) {
@@ -105,60 +91,6 @@ class Comprovante extends React.Component {
 
             );
 
-            // return (
-            //     <div id="crianca" key={events._id.toString()}>
-            //         <div id="dados">
-            //             <a>Criança:</a>
-            //             <a id="nome">{events.name.firstName}</a>
-            //             <div className="direita">
-
-            //             </div>
-            //         </div>
-            //         <div id="info">
-            //             <a>Parentesco:</a>
-            //             <a id="parentesco">{events.kinship}</a>
-            //             <div className="direita">
-            //                 <a>Idade:</a>
-            //                 <a id="idade">{events.years}</a>
-            //             </div>
-            //         </div>
-            //         <div>
-            //             <a>Pacote:</a>
-            //             <a id="pacote">{events.service}</a>
-            //             <div className="direita">
-            //                 <a>Entrada:</a>
-            //                 <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
-            //                 <a>h</a>
-            //             </div>
-            //         </div>
-            //         <div id="obs">
-            //             <a>Observações:</a>
-            //             <a id="obsTexto">{events.observation}</a>
-            //         </div>
-            //         <div id="restrioes">
-            //             <a>Restrições:</a>
-            //             <a id="restricoesTexto">{events.restrictions}</a>
-            //         </div>
-            //         <div id="aniversario">
-            //             <div>
-            //                 <a>Aniversariante:</a>
-            //                 <a id="nome">{events.birthdays}</a>
-            //             </div>
-            //             <div>
-            //                 <a>Início:</a>
-            //                 <a id="horaInicio">{events.beginning}</a>
-            //                 <a>h</a>
-            //                 <div className="direita">
-            //                     <a>Finaliza:</a>
-            //                     <a id="horaFim">{events.end}</a>
-            //                     <a>h</a>
-            //                 </div>
-            //             </div>
-            //         </div>
-            //         <a>-</a>
-            //     </div>
-
-            // );
 
 
 
@@ -185,29 +117,29 @@ class Comprovante extends React.Component {
                     <div id="responsavel" className="textos">
                         <div>
                             <a>Responsável:</a>
-                            <a id="nome"> {this.props.tabela[0].adult.name}</a>
+                            <a id="nome"> {this.props.tabela.i[0].adult.name}</a>
                         </div>
                         <div>
                             <a>Telefone:</a>
-                            <a id="telefone"> {this.props.tabela[0].adult.phone}</a>
+                            <a id="telefone"> {this.props.tabela.i[0].adult.phone}</a>
 
                         </div>
                         <div id="obs">
                             <a>Observações:</a>
-                            <a id="obsTexto">{this.props.tabela[0].adult.observations}</a>
+                            <a id="obsTexto">{this.props.tabela.i[0].adult.observations}</a>
                         </div>
                         <a>-</a>
                     </div>
                     <div className="criancas textos">
-                        {this.props.tabela.map((evento) => byChild(evento))}
+                        {this.props.tabela.i.map((evento) => byChild(evento))}
                         <div>
                             <a>Pertences: Gaveta</a>
-                            <a id="gaveta"> {this.props.tabela[0].belongings}</a>
+                            <a id="gaveta"> {this.props.tabela.i[0].belongings}</a>
                         </div>
                     </div>
                     <div id="atendente" className="atendente textos">
                         <a>Atendente:</a>
-                        <a> rosinha</a>
+                        <a> {this.props.tabela.funcionario}</a>
                     </div>
                     <div>
                         <div className="rodape">

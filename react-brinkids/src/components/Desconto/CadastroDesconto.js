@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { Component } from 'react';
 import axios from 'axios';
 import $ from 'jquery'
 import TypesInput from '../TypesInput.js';
@@ -7,10 +7,10 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
-import moment from'moment';
+import moment from 'moment';
 
 
-class Desconto extends React.Component {
+class Desconto extends Component {
 
 
     constructor(props) {
@@ -30,9 +30,15 @@ class Desconto extends React.Component {
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
-
+       
+        this.cancelar = this.cancelar.bind(this);
     }
-
+    sair=()=>{
+        this.props.history.push("/");
+    }
+    cancelar(evente) {
+        this.sair();
+    }
     //Bloco que muda o status para o atual do formulario.
     ChangeValue(event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -45,13 +51,13 @@ class Desconto extends React.Component {
         event.preventDefault();
 
         var erros = ValidaErros(this.state);
-        if(erros.length > 0){
+        if (erros.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
             return;
         }
         else {
-            $("#alertDiv").addClass('displaynone');           
+            $("#alertDiv").addClass('displaynone');
             this.setState({
                 page: "Temporaridade"
             })
@@ -84,7 +90,7 @@ class Desconto extends React.Component {
                 $("#Quant").addClass('errorBorder');
                 erros.push("A Quantidade não pode ser em branco");
             }
-            
+
             //Removendo Class
             if (desc.Name.length != 0) {
                 $("#Nome").removeClass('errorBorder');
@@ -99,7 +105,7 @@ class Desconto extends React.Component {
                 $("#TV").removeClass('errorBorder');
             }
             if (desc.Value.length != 0) {
-                $("#Value").removeClass('errorBorder'); 
+                $("#Value").removeClass('errorBorder');
             }
             if (desc.Quant.length != 0) {
                 $("#Quant").removeClass('errorBorder');
@@ -138,12 +144,12 @@ class Desconto extends React.Component {
             $("#Date").removeClass('errorBorder');
         }
         //Valida erros
-        if(erros.length > 0){
+        if (erros.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
         else {
-            $("#alertDiv").addClass('displaynone'); 
+            $("#alertDiv").addClass('displaynone');
             var formData = new FormData();
 
             formData.append('name', String(this.state.Name))
@@ -157,14 +163,14 @@ class Desconto extends React.Component {
             formData.append('validity', String(this.state.Date))
 
             axios.post('/discount', formData)
-                .then((response)=> { 
-                    console.log(response.data)      
-                        this.setState({
-                            list: response.data,
-                            page: "MostraDesconto"
-                        })
-                    
-                }).catch( (error) =>{
+                .then((response) => {
+                    console.log(response.data)
+                    this.setState({
+                        list: response.data,
+                        page: "MostraDesconto"
+                    })
+
+                }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro ao Gerar Desconto");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -195,7 +201,7 @@ class Desconto extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Novo Desconto</h3>
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Ah algo de errado em seu formulario.
                         </div>
                         <form>
@@ -235,7 +241,8 @@ class Desconto extends React.Component {
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                               <a href="/Desconto"><button type="button"className="btn btn-md botao" >Cancelar</button></a>
+
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Proximo</button>
                             </div>
                             <div>
@@ -258,7 +265,7 @@ class Desconto extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Temporaridade</h3>
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Ah algo de errado em seu formulario.
                         </div>
                         <form>

@@ -411,6 +411,8 @@ class SaidaCrianca extends React.Component {
 
     //Função que finaliza tudo
     Finalizar = (event) => {
+        
+        
         event.preventDefault();
         console.log("Entrei Aqui");
         if (this.state.FormPag !== "") {
@@ -418,14 +420,23 @@ class SaidaCrianca extends React.Component {
             window.print();
             console.log("Número de delete que devem aparecer: ", this.state.CriancasSelecionadas.length)
             for(var i = 0; i<this.state.CriancasSelecionadas.length; i++){
-                axios.delete(`/passport/${this.state.CriancasSelecionadas[i].children.id}`)
+                const comprovante = {
+                    valor: this.state.FinalValor,
+                    valor2: this.state.TotalValor,
+                    idpai:this.state.IDAdult,
+                    Form:this.state.FormPag,
+                    idcria:this.state.CriancasSelecionadas[i].children.id,
+                    entrada:this.state.listCrianca[i],
+                }
+                console.log(comprovante)
+                axios.post(`/passport/a/`,comprovante)
                 .then((response) => {
 
                     console.log(response.data);
 
                 }).catch((err) => console.log(err));
             }
-            alert("Produto finalizado");
+           
         } else {
             alert("Selecione uma forma de pagamento");
             return (0);

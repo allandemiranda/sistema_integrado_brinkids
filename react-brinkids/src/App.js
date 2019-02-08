@@ -36,11 +36,23 @@ import config from './components/Login/service/config';
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
 };
-
+const very = (a) => {
+  console.log(typeof(a.location.pathname) )
+  var conclusao;
+  jwt.verify(getToken(), config.secret_auth, function (err, decoded) {
+    if (err) {
+      conclusao = false;
+      return false
+    } else {
+      conclusao = true
+      return true
+    }
+  })
+  return conclusao;
+}
 const PrivateRoute = ({ component: Component, layout: Layout, ...rest }) => (
   <Route {...rest} render={(props) => (
-    isAuthenticated() && (jwt.verify(getToken(), config.secret_auth, function (err, decoded) {
-      if (err){ return false}else{return true}}))
+    isAuthenticated() && very(props)
       ? (<Layout>
         <Component {...props} />
       </Layout>)

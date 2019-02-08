@@ -485,7 +485,7 @@ class FormularioCadFunc extends React.Component {
         axios.post('/employees', formData)
             .then(function (response) {
                 console.log(response)
-                // window.location.href = '/funcionario';
+                window.location.href = '/funcionario';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -559,7 +559,7 @@ class FormularioCadFunc extends React.Component {
         axios.post('/employees', formData)
             .then(function (response) {
                 console.log(response.data)
-                // window.location.href = '/funcionario';
+                window.location.href = '/funcionario';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
