@@ -103,19 +103,30 @@ class CadastroAdulto extends React.Component {
 
         // Faz a busca das crianças
         Search(event){
-            $.ajax({
-                url: "http://localhost:3001/child/filter/" + this.state.childSearch,
-                dataType:'json',
-                type: 'GET',
-                error: function(response){
-                if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
-                },
-                success: function(response){    //Imprime os resutados encontrados na forma de tabela
-                    console.log(response);
-                    this.setState({achado: true});
-                    this.setState({list: response});
-                }.bind(this)
-            });
+            axios.get(`/child/filter/${this.state.childSearch}`)
+            .then((response) => {
+
+                this.setState({
+                    achado: true,
+                    list: response.data
+                })
+
+            })
+            .catch((err) => console.log(err));
+
+            // $.ajax({
+            //     url: "h/child/filter/" + this.state.childSearch,
+            //     dataType:'json',
+            //     type: 'GET',
+            //     error: function(response){
+            //     if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
+            //     },
+            //     success: function(response){    //Imprime os resutados encontrados na forma de tabela
+            //         console.log(response);
+            //         this.setState({achado: true});
+            //         this.setState({list: response});
+            //     }.bind(this)
+            // });
         }
 
      /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO*/
