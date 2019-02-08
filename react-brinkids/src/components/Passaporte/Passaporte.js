@@ -153,7 +153,7 @@ class Passport extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
+                url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -203,7 +203,7 @@ class Passport extends React.Component {
         }
         else {
             $.ajax({
-                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
+                url: "/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
                 dataType: 'json',
                 type: 'GET',
                 error: function (response) {
@@ -280,7 +280,7 @@ class Passport extends React.Component {
 
         // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
         // $.ajax({
-        //     url: "http://localhost:3001/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
+        //     url: "/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
         //     dataType: 'json',
         //     type: 'GET',
         //     error: function (response) {

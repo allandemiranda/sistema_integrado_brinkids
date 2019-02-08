@@ -24,7 +24,7 @@ class ServicoPassaporte extends React.Component {
             Descricao: "",
             Nome: "",
             list: [],
-            list2: {price: '0', time: '0'},
+            list2: { price: '0', time: '0' },
             Nome: "",
             Descricao: "",
             TempoFinal: "",
@@ -58,12 +58,13 @@ class ServicoPassaporte extends React.Component {
                     list: response.data.services,
                     list2: response.data.default,
                 });
+                this.requisicao();
             })
             .catch((err) => console.log(err));
     }
     interval(event) { }
     requisicao(event) {
-        if (this.state.page === "TelaI") {
+       
             axios.get('/passportServices')
                 .then((response) => {
 
@@ -73,7 +74,7 @@ class ServicoPassaporte extends React.Component {
                         list2: response.data.default,
                     });
                 })
-        }
+        
     }
     componentWillUnmount() {
         clearInterval(this.interval);
@@ -97,10 +98,10 @@ class ServicoPassaporte extends React.Component {
         this.setState({ Price: event.target.value });
     }
     ChangeQuebraValor(event) {
-        this.setState({ list2: {price: event.target.value, time: this.state.list2.time} });
+        this.setState({ list2: { price: event.target.value, time: this.state.list2.time } });
     }
     ChangeQuebraTempo(event) {
-        this.setState({ list2: {price: this.state.list2.price, time: event.target.value} });
+        this.setState({ list2: { price: this.state.list2.price, time: event.target.value } });
 
     }
     componentWillMount() {
@@ -112,7 +113,7 @@ class ServicoPassaporte extends React.Component {
                     list2: response.data.default,
                 });
             })
-        this.interval = setInterval(this.requisicao, 10000);
+
     }
     criar = (event) => {
         console.log("Dados sendo retornado");
@@ -138,7 +139,9 @@ class ServicoPassaporte extends React.Component {
                         this.setState({
                             list: response.data.services,
                             list2: response.data.default,
-                            page: "TelaI" });
+                            page: "TelaI"
+                        });
+                        this.requisicao;
                     })
 
             }).catch((error) => {
@@ -166,6 +169,7 @@ class ServicoPassaporte extends React.Component {
         axios.put('/passportServices/', formData)
             .then(function (response) {
                 console.log(response)
+                this.requisicao;
                 //window.location.href = '/ServicoPassaporte';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
@@ -184,6 +188,7 @@ class ServicoPassaporte extends React.Component {
                     .then((response) => {
 
                         this.setState({ list: response.data, });
+                        this.requisicao();
                     })
             });
     }
@@ -249,13 +254,14 @@ class ServicoPassaporte extends React.Component {
                                                         <td >{TempoServico.initialTime} </td>
                                                         <td>{TempoServico.finalTime}</td>
                                                         <td> {TempoServico.price}</td>
+                                                        {indice > 0 && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
                                                     </tr>
                                                 );
                                             })}
                                         </tbody>
                                     </table>
                                     <div className="text-right">
-                                        <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button>
+
                                     </div>
                                 </div>
                                 <div className="text-right">
