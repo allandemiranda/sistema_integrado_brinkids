@@ -65,34 +65,56 @@ class App extends Component {
   loginSubmit(event) {
     
     if (this.state.user.length > 0 && this.state.password.length > 0) {
-      $.ajax({
-        url: `http://127.0.0.1:3001/authentication?user=${this.state.user}&password=${this.state.password}`,
-        type: 'get',
-        statusCode: { //A partir do status da resposta, ele executa uma função
-          200: function (data) {
+      // $.ajax({
+      //   url: `http://127.0.0.1:3001/authentication?user=${this.state.user}&password=${this.state.password}`,
+      //   type: 'get',
+      //   statusCode: { //A partir do status da resposta, ele executa uma função
+      //     200: function (data) {
             
-            console.log(data['token'])
-            this.setState({ loading: true });
-            const cookies = new Cookies();
-            cookies.set('TOKEN_KEY', (data['token']), { path: '/' });
-            login(data['token'])
+      //       console.log(data['token'])
+      //       this.setState({ loading: true });
+      //       const cookies = new Cookies();
+      //       cookies.set('TOKEN_KEY', (data['token']), { path: '/' });
+      //       login(data['token'])
             
-            const dados = jwt.verify(data['token'],config.secret_auth);
-            console.log(dados)
-            this.sair()
+      //       const dados = jwt.verify(data['token'],config.secret_auth);
+      //       console.log(dados)
+      //       this.sair()
 
-          }.bind(this),
-          401: function () {
-            this.setState({ erro: "* Senha incorreta" })
-          }.bind(this),
-          404: function () {
-            this.setState({ erro: "* Usuário não existe" })
-          }.bind(this),
-          500: function () {
-            this.setState({ erro: "* Erro no Servidor.Tente novamente em alguns minutos." })
-          }.bind(this)
-        }
-      });
+      //     }.bind(this),
+      //     401: function () {
+      //       this.setState({ erro: "* Senha incorreta" })
+      //     }.bind(this),
+      //     404: function () {
+      //       this.setState({ erro: "* Usuário não existe" })
+      //     }.bind(this),
+      //     500: function () {
+      //       this.setState({ erro: "* Erro no Servidor.Tente novamente em alguns minutos." })
+      //     }.bind(this)
+      //   }
+      // });
+      axios.get(`/authentication?user=${this.state.user}&password=${this.state.password}`)
+      .then((response) => {
+
+        console.log(data['token'])
+        this.setState({ loading: true });
+        const cookies = new Cookies();
+        cookies.set('TOKEN_KEY', (data['token']), { path: '/' });
+        login(data['token'])
+        
+        const dados = jwt.verify(data['token'],config.secret_auth);
+        console.log(dados)
+        this.sair()
+       
+
+
+      }).catch((error) => {
+        console.log(error)
+        //LOG DE ERRO
+        // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+        // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+
+      })
     }
     else {
       this.setState({ erro: "* Por favor, preencha os campos acima" })

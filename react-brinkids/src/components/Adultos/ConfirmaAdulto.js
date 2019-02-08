@@ -161,7 +161,7 @@ class ConfirmaAdulto extends React.Component {
                             <div className="col-md-6 col-sm-12 text-center">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Sua Foto: </b></h5>
-                                    <img src = {"http://localhost:3000/img-users/" + this.props.File}/>
+                                    <img src = { this.props.File}/>
                                 </div>
                             </div>
                         </div>
