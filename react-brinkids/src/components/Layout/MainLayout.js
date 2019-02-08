@@ -35,6 +35,11 @@ class MainLayout extends React.Component {
         }
         this.DiminueMenu = this.DiminueMenu.bind(this);
         this.requisicao = this.requisicao.bind(this);
+        this.deslogar = this.deslogar.bind(this);
+    }
+    deslogar=()=>{
+        logout();
+        this.props.history.push("/Login");
     }
     requisicao() {
         const a = getToken();
@@ -153,7 +158,7 @@ class MainLayout extends React.Component {
                             <ul>
                                 <li><Link class="tooltips" to="/MyProfile"><span>Profile</span><i class="lnr lnr-user"></i></Link></li>
 
-                                <li><a class="tooltips"  onClick={() => logout()}><span>Log out</span><i class="lnr lnr-power-switch"></i></a></li>
+                                <li><Link class="tooltips" to="/Login" onClick={this.deslogar}><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
                             </ul>
 
                         </div>
