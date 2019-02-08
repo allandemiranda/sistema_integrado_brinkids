@@ -89,7 +89,7 @@ router.post('/', async (req, res) => {
    * Checa se a criança possui menos de 14 anos ou não
    * Se possuir menos de 14 anos, ela é adicionada ao sistema
    */
-  if (checkAge(actualDate, ChildDate)) {
+ 
     /**
      * Checa se todos os dados obrigatórios da criança foram enviados na requisição
      */
@@ -176,9 +176,7 @@ router.post('/', async (req, res) => {
     } else {
       return res.sendStatus(400);
     }
-  } else {
-    return res.sendStatus(400);
-  }
+  
 });
 
 router.put('/:identifier', async (req, res) =>  {
