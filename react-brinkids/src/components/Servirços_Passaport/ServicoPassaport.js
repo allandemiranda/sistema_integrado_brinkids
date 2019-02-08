@@ -49,7 +49,7 @@ class ServicoPassaporte extends React.Component {
             page: "TelaI",
             list: [],
         })
-        axios.get('http://localhost:3001/passportServices')
+        axios.get('/passportServices')
             .then((response) => {
 
 
@@ -64,7 +64,7 @@ class ServicoPassaporte extends React.Component {
     interval(event) { }
     requisicao(event) {
         if (this.state.page === "TelaI") {
-            axios.get('http://localhost:3001/passportServices')
+            axios.get('/passportServices')
                 .then((response) => {
 
 
@@ -104,7 +104,7 @@ class ServicoPassaporte extends React.Component {
 
     }
     componentWillMount() {
-        axios.get('http://localhost:3001/passportServices')
+        axios.get('/passportServices')
             .then((response) => {
                 console.log(response.data.default)
                 this.setState({
@@ -127,10 +127,10 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.Price))
 
 
-        axios.post('http://localhost:3001/passportServices', formData)
+        axios.post('/passportServices', formData)
             .then((response) => {
                 console.log(response)
-                axios.get('http://localhost:3001/passportServices')
+                axios.get('/passportServices')
                     .then((response) => {
 
 
@@ -163,7 +163,7 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.list2.price))
 
 
-        axios.put('http://localhost:3001/passportServices/', formData)
+        axios.put('/passportServices/', formData)
             .then(function (response) {
                 console.log(response)
                 //window.location.href = '/ServicoPassaporte';
@@ -178,7 +178,7 @@ class ServicoPassaporte extends React.Component {
 
     Apagar = (event) => {
         const id = this.state.list[this.state.list.length - 1]._id;
-        axios.delete(`http://localhost:3001/passportServices/${id}`)
+        axios.delete(`/passportServices/${id}`)
             .then((response) => {
                 axios.get('/passportServices')
                     .then((response) => {
@@ -190,7 +190,7 @@ class ServicoPassaporte extends React.Component {
 
     Adicionar = (event) => {
         $.ajax({
-            url: "http://localhost:3001/passportServices/initialTime",
+            url: "/passportServices/initialTime",
             dataType: 'json',
             type: 'GET',
 
