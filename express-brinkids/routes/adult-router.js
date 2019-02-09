@@ -77,7 +77,7 @@ router.post('/', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
   var funcionario='oi';
-  
+  console.log(b)
   if (!b.admin) {
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
      funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;

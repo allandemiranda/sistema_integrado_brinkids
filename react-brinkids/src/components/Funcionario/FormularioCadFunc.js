@@ -624,12 +624,12 @@ class FormularioCadFunc extends React.Component {
         //OBS
         formData.append('observations', String(this.state.observations))
         console.log(this.props)
-        this.props.history.push("/");
+        
         axios.post('/employees', formData)
             .then((response) => {
                 console.log(response.data)
                 alert("cadastrado")
-                this.props.history.push("/");
+               window.location.href="/";
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE

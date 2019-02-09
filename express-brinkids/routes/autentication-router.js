@@ -7,12 +7,27 @@ const router = express.Router();
 
 // Cria usuario
 router.post('/', (req, res) => {
+  console.log(req.body)
   if (req.body.user && req.body.password) {
-    const dados = {
-      user: req.body.user,
-      password: req.body.password,
-      employees: true,
-    };
+    let dados;
+    if(req.body.user ==="admin"){
+      console.log("entrei")
+      
+       dados = {
+        user: req.body.user,
+        password: req.body.password,
+        employees: true,
+        admin:true,
+      };
+    }else{
+      dados = {
+        user: req.body.user,
+        password: req.body.password,
+        employees: true,
+        admin:true,
+      };
+    }
+   console.log(dados)
 
     userSystem.create(dados, (err, small) => {
       if (err) {
