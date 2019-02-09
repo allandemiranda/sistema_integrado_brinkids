@@ -568,8 +568,8 @@ console.log(name)
                             </table>
 
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
-                                <button className="btn btn-md botao botaoAvançar" onClick={this.TelaII}> Avançar </button>
+                                <Link className="btn btn-md botao" to="/">Cancelar</Link>
+                               
                             </div>
                         </div>
                     </div>
@@ -633,7 +633,7 @@ console.log(name)
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
@@ -702,7 +702,7 @@ console.log(name)
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
                     </div>
@@ -821,7 +821,7 @@ console.log(name)
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>

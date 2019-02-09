@@ -14,7 +14,13 @@ import { EventEmitter } from 'events';
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 class SaidaServicosExtra extends React.Component {
     m
     constructor(props) {
@@ -290,7 +296,7 @@ class SaidaServicosExtra extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: "carrinho" })}> Carrinho </button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaII}> Finalizar </button>
                     </div>

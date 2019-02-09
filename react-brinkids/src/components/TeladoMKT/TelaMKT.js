@@ -90,6 +90,12 @@ class DashBoard extends React.Component {
 		this.mudarCampoMes = this.mudarCampoMes.bind(this);
 
 	}
+	componentDidMount() {
+
+		this.grafico();
+		this.grafico1();
+
+    }
 	mudarCampoNome(event) {
 		this.setState({ campoNome: event.target.value });
 	}
@@ -151,7 +157,7 @@ class DashBoard extends React.Component {
 	}
 	grafico(event) {
 		let listadedatas = [];
-		event.preventDefault();
+		
 		const lista = [];
 		for (var i = 0; i < 15; i++) {
 			let hj = moment().format("MM/DD/YYYY");
@@ -257,16 +263,16 @@ class DashBoard extends React.Component {
 			return envio;
 
 		}).then((file) => {
-
+			console.log(file )
 			Promise.all(file).then((god) => {
 
 				const lista = [];
 				god.map((event, indice) => {
-
+					console.log(event)
 					var menino = 0;
 					var menina = 0;
 
-					if (event !== null) {
+					if (event.child !== null) {
 						if (event.child.sexuality === "Feminino") {
 							menina = menina + 1;
 						} else if (event.child.sexuality === "Masculino") {

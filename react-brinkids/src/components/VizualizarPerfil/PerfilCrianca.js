@@ -62,11 +62,14 @@ class PerfilCrianca extends React.Component {
 
     }
     excluir(event,indice){
-
+        let temporario = this.state.list;
         axios.delete(`child/${event}`)
             .then((response) => {
-                let temporario = this.state.list;
+               
                 temporario.splice(indice,1);
+                this.setState({
+                    list:temporario,
+                })
             })
             .catch((err) => console.log(err));
     }

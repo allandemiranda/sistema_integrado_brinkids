@@ -116,7 +116,7 @@ router.post('/', async (req, res) => {
             firstName: req.body.firstName,
             surName: req.body.surName,
           },
-          birthday: new Date(req.body.birthday),
+          birthday:req.body.birthday,
           phone: [req.body.phone],
           address: {
             street: req.body.street,

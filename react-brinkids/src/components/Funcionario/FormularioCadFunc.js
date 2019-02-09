@@ -3,21 +3,29 @@ import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import ConfirmaFunc from './ConfirmaFunc.js'
 import $ from "jquery";
-
+import CadastrarFun from './CadastroFuncionario.js';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Funcionario.css';
 import './css/style.css';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
+
 
 class FormularioCadFunc extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            cargoName:"",
             cargos: [],
             page: "FormularioCad",
             //PARTE PESSOAL
@@ -121,7 +129,7 @@ class FormularioCadFunc extends React.Component {
         this.ChangeCargAtual = this.ChangeCargAtual.bind(this);
         this.ChangeDataAdmisao = this.ChangeDataAdmisao.bind(this);
         this.ChangeRegInterno = this.ChangeRegInterno.bind(this);
-
+       
         this.ChangeObs = this.ChangeObs.bind(this);
 
     }
@@ -191,7 +199,7 @@ class FormularioCadFunc extends React.Component {
 
     ChangeCNHDemissao(event) { this.setState({ CNHDemissao: event.target.value }); }
 
-    ChangeCargAtual(event) {console.log(event.target.value); this.setState({ CargAtual: event.target.value }); }
+
 
     ChangeDataAdmisao(event) { this.setState({ DataAdmisao: event.target.value }); }
 
@@ -258,11 +266,11 @@ class FormularioCadFunc extends React.Component {
 
     //Função que Valida o Funcionario
     ValidaFuncionario = (event) => {
-         event.preventDefault();
-         var erros = [] ;
-         //voltar as coisas normais dps
+        event.preventDefault();
+        var erros = [];
+        //voltar as coisas normais dps
         //  ValidaErros(this.state)
-         if(erros.length > 0){
+        if (erros.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
@@ -311,7 +319,7 @@ class FormularioCadFunc extends React.Component {
         //      else{
         //         $("#UFN").removeClass('errorBorder'); 
         //      }
-            
+
         //      // Carteira de Trabalho
         //      if (funcio.numberCT.length === 0) {
         //         $("#NumberCT").addClass('errorBorder');
@@ -355,7 +363,7 @@ class FormularioCadFunc extends React.Component {
         //      else{
         //         $("#CTLE").removeClass('errorBorder'); 
         //      }
-   
+
         //      //RG
         //      if (funcio.RGLEmissao.length === 0) {
         //         $("#RGLE").addClass('errorBorder');
@@ -378,7 +386,7 @@ class FormularioCadFunc extends React.Component {
         //      else{
         //         $("#RGDE").removeClass('errorBorder'); 
         //      }
-            
+
         //      //Titulo Eleitoral
         //      if (funcio.TNumero.length === 0) {
         //         $("#TLNumero").addClass('errorBorder');
@@ -401,7 +409,7 @@ class FormularioCadFunc extends React.Component {
         //      else{
         //         $("#TLUF").removeClass('errorBorder'); 
         //      }
-            
+
         //      // Funcionario
         //      if (funcio.DataAdmisao.length === 0) {
         //         $("#DataAdmisao").addClass('errorBorder');
@@ -483,10 +491,70 @@ class FormularioCadFunc extends React.Component {
         formData.append('observations', String(this.state.observations))
 
         axios.post('/employees', formData)
-            .then(function (response) {
-                console.log(response)
-                window.location.href = '/funcionario';
-            }).catch(function (error) {
+            .then((response) => {
+
+                this.setState({
+
+                    page: "FormularioCad",
+                    //PARTE PESSOAL
+                    identifier: "",
+                    firstName: "",
+                    surName: "",
+                    cpf: "",
+                    birthday: "",
+                    nacionality: "",
+                    maritalStatus: "",
+                    phoneNumber: "",
+                    email: "",
+                    sexuality: "",
+                    scholl: "",
+                    dad: "",
+                    mom: "",
+                    //Local de Nascimento
+                    cidadeNasc: "",
+                    UFLNasc: "",
+                    //Carteira de trabalho
+                    numberCT: "",
+                    serieCT: "",
+                    UFCT: "",
+                    PIS: "",
+                    DataEmissaoCT: "",
+                    LocalEmissaoCT: "",
+                    //RG
+                    RGLEmissao: "",
+                    RGUF: "",
+                    RGDateEmissao: "",
+                    //Titulo Eleitoral
+                    TNumero: "",
+                    TZona: "",
+                    TSecao: "",
+                    TUF: "",
+                    //Carteira de Rezevista
+                    CRNumero: "",
+                    CRSerie: "",
+                    CRCat: "",
+                    //Passaporte
+                    PNumero: "",
+                    PTipo: "",
+                    PPemissor: "",
+                    PDemissao: "",
+                    PDvalidade: "",
+                    //CNH:
+                    CNHReg: "",
+                    CNHCat: "",
+                    CNHDval: "",
+                    CNHObs: "",
+                    CNHLocal: "",
+                    CNHDemissao: "",
+                    //Funcionario
+                    CargAtual: "",
+                    DataAdmisao: "",
+                    RegInterno: "",
+                    //OBS
+                    observations: "",
+                })
+
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -495,7 +563,7 @@ class FormularioCadFunc extends React.Component {
     }
 
     /*FUNCAO CADASTRA CRIANÇA*/
-    CadastrarFunc = (event) => {
+    CadastrarFunc=(event)=>{
         var formData = new FormData();
 
         formData.append('identifier', String(this.state.identifier))
@@ -506,7 +574,7 @@ class FormularioCadFunc extends React.Component {
         formData.append('motherName', String(this.state.mom))
         formData.append('birthplaceCity', String(this.state.cidadeNasc))
         formData.append('birthplaceState', String(this.state.UFLNasc))
-        console.log(this.state.CargAtual,"cargo atual");
+        console.log(this.state.CargAtual, "cargo atual");
         //Carteira de TRabalho
         formData.append('WPNumber', String(this.state.numberCT))
         formData.append('WPSeries', String(this.state.serieCT))
@@ -555,19 +623,28 @@ class FormularioCadFunc extends React.Component {
 
         //OBS
         formData.append('observations', String(this.state.observations))
-
+        console.log(this.props)
+        this.props.history.push("/");
         axios.post('/employees', formData)
-            .then(function (response) {
+            .then((response) => {
                 console.log(response.data)
-                window.location.href = '/funcionario';
-            }).catch(function (error) {
+                alert("cadastrado")
+                this.props.history.push("/");
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
-
+    ChangeCargAtual(event) {
+        const ba = event.target.value.split(",")
+        
+        this.setState({ 
+            CargAtual: ba[1],
+            cargoName:ba[0]
+         });
+    }
     render() {
         if (this.state.page === "FormularioCad") {
             return (
@@ -580,7 +657,7 @@ class FormularioCadFunc extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Ah algo de errado em seu formulario.
                         </div>
                         <h3 className="inner-tittle" > Perfil </h3>
@@ -722,13 +799,13 @@ class FormularioCadFunc extends React.Component {
                                     {/* foi preciso alterar para alinhar com o back devido ao tempo   */}
                                     <div className="col-md-4 col-sm-4 col-xs-12">
                                         <label className="LetraFormulario brlabel" > Cargo Atual:</label>
-                                        <select id="CargAtual" name="CargAtual" required  className="form-control optionFomulario" onChange={this.ChangeCargAtual}>
-                                        <option disabled selected hidden defaultValue >Selecionar</option>
-                                            {this.state.cargos.map((cargo,indice)=>{
-                                                
-                                                    return(<option value={cargo._id}>{cargo.name}</option>);
-                                           
-                                            
+                                        <select id="CargAtual" name="CargAtual" required className="form-control optionFomulario" onChange={this.ChangeCargAtual}>
+                                            <option disabled selected hidden defaultValue >Selecionar</option>
+                                            {this.state.cargos.map((cargo, indice) => {
+
+                                                return (<option value={[cargo.name,cargo._id]}>{cargo.name}</option>);
+
+
                                             })}
                                         </select>
                                     </div>
@@ -809,7 +886,7 @@ class FormularioCadFunc extends React.Component {
                         CNDataV={this.state.CNHDval}
                         CNObs={this.state.CNHObs}
                         //Funci
-                        FCA={this.state.CargAtual}
+                        FCA={this.state.cargoName}
                         FDA={this.state.DataAdmisao}
                         FRI={this.state.RegInterno}
 
@@ -819,7 +896,7 @@ class FormularioCadFunc extends React.Component {
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarFunc}>Finalizar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarFunc.bind(this)}>Finalizar</button>
                     </div>
                 </div>
             )

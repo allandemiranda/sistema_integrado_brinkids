@@ -10,7 +10,13 @@ import '../../assets/style/font-awesome.css';
 import './css/CadastroAdulto.css';
 import './css/style.css';
 import moment from 'moment';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 import $ from "jquery";
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
@@ -114,19 +120,6 @@ class CadastroAdulto extends React.Component {
             })
             .catch((err) => console.log(err));
 
-            // $.ajax({
-            //     url: "h/child/filter/" + this.state.childSearch,
-            //     dataType:'json',
-            //     type: 'GET',
-            //     error: function(response){
-            //     if( response.length === 0){this.setState({erro: "* Nenhum Criança Encontrada."})}           
-            //     },
-            //     success: function(response){    //Imprime os resutados encontrados na forma de tabela
-            //         console.log(response);
-            //         this.setState({achado: true});
-            //         this.setState({list: response});
-            //     }.bind(this)
-            // });
         }
 
      /*BLOCO QUE VALIDA TODA A PARTE DO FORMULARIO*/
@@ -400,11 +393,32 @@ class CadastroAdulto extends React.Component {
             return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
         })))
         axios.post('/adult', formData)
-        .then(function (response) {
+        .then( (response)=> {
             console.log(response)
             //alert("Cadastro Finalizado, Redirecionando para um novo Cadastro")
-            window.location.href = '/adult';
-        }).catch(function (error) {
+            this.setState({
+                page:"FormularioCad",
+                firstName: "",
+                surName: "",
+                cpf: "",
+                rg:"",
+                birthday: "",
+                nacionality: "",
+                sexuality: "Masculino",
+                phoneNumber: "",
+                maritalStatus:" Casado",
+                email:"",
+                address:"",
+                neighborhood:"",
+                city:"",
+                cep:"",           
+                observations: "",
+                file: "",
+                number:"",
+                state:"",
+                country:"",
+            })
+        }).catch( (error)=> {
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -415,7 +429,6 @@ class CadastroAdulto extends React.Component {
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd= (event) => {
         var formData = new FormData();
-
         formData.append('file', this._dataURItoBlob(this.imageBase64))
         formData.append('firstName', String(this.state.firstName))
         formData.append('surName', String(this.state.surName))
@@ -435,21 +448,16 @@ class CadastroAdulto extends React.Component {
         formData.append('rg', String(this.state.rg))
         formData.append('sexuality', String(this.state.sexuality))
         formData.append('observations', String(this.state.observations))
-
-        console.log(this.state.confirmaCrianca.map((child) => {
-            return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
-        }))
-
         formData.append('criancas', JSON.stringify(this.state.confirmaCrianca.map((child) => {
             return {identifier: child._id, kinship: child.kinship ? child.kinship : 'others'}
         })))
 
         axios.post('/adult', formData)
-        .then(function (response) {
+        .then( (response)=> {
             console.log(response)
             alert("Cadastro Finalizado")
-            window.location.href = '/';
-        }).catch(function (error) {
+            this.props.history.push("/");
+        }).catch( (error) =>{
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -669,7 +677,7 @@ class CadastroAdulto extends React.Component {
                                     </div>
                                 </div >
                                 <div className="text-center">
-                                    <a className="btn btn-md botao" href="/">Cencelar</a>
+                                    <Link className="btn btn-md botao" to="/">Cencelar</Link>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ChildSearch}>Avançar</button>
                                 </div>
                             </form >
@@ -805,7 +813,7 @@ class CadastroAdulto extends React.Component {
                             </table>
 
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                                <Link className="btn btn-md botao"to="/">Cancelar</Link>
                                 <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaAdulto}> Adicinar Criança </button>
                             </div>

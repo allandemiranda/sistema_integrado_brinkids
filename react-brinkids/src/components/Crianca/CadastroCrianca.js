@@ -4,7 +4,13 @@ import axios from 'axios';
 import ConfirmaCrianca from './ConfirmaCrianca.js';
 import TypesInput from '../TypesInput.js';
 import $ from 'jquery';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -38,6 +44,7 @@ class CadastroCrianca extends React.Component {
         this.ChangeSexo = this.ChangeSexo.bind(this);
         this.ChangeObs = this.ChangeObs.bind(this);
         this.ChangeRet = this.ChangeRet.bind(this);
+        this.CadastrarCrianca = this.CadastrarCrianca.bind(this);
     }
     getFuncionario = () => {
 
@@ -210,11 +217,13 @@ class CadastroCrianca extends React.Component {
         formData.append('restrictions', String(this.state.restrictions))
         formData.append('observations', String(this.state.observations))
 
-        axios.post('/crianca', formData)
-        .then(function (response) {
+        axios.post('/child', formData)
+        .then((response) =>{
             console.log(response)
-            window.location.href = '/crianca';
-        }).catch(function (error) {
+            this.setState({
+                page:"FormularioCad",
+            }) 
+        }).catch( (error)=> {
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -223,7 +232,7 @@ class CadastroCrianca extends React.Component {
     }
 
     /*FUNCAO CADASTRA CRIANÇA*/
-    CadastrarCrianca = (event) => {
+    CadastrarCrianca(event){
         var formData = new FormData();
 
         formData.append('file', this._dataURItoBlob(this.imageBase64))
@@ -237,10 +246,10 @@ class CadastroCrianca extends React.Component {
         formData.append('observations', String(this.state.observations))
 
         axios.post('/child', formData)
-        .then(function (response) {
+        .then((response)=> {
             console.log(response)
-            window.location.href = '/';
-        }).catch(function (error) {
+            this.props.history.push("/");
+        }).catch( (error) =>{
             console.log(error)//LOG DE ERRO
             console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -378,7 +387,7 @@ class CadastroCrianca extends React.Component {
                                     </div>
                                 </div >
                                 <div className="text-center">
-                                    <a className="btn btn-md botao" href="/crianca">Cencelar</a>
+                                    <Link className="btn btn-md botao" to="/">Cencelar</Link>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaCriança}>Avançar</button>
                                 </div>
                             </form >

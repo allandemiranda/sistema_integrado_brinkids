@@ -33,7 +33,7 @@ export const Num = async () => {
                     })
                     for (var p = 0; p < temporario.length; p++) {
                         if (temporario[p] === true) {
-                            numero = p;
+                            numero = p+1;
                             temporario[p] = false;
                             break;
                         }

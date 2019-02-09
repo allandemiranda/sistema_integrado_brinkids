@@ -20,7 +20,7 @@ import '../../assets/sprints/solid.svg';
 import './css/style.css';
 import './css/icon-font.min.css';
 import axios from 'axios';
-
+import moment from 'moment';
 
 var toggle = true;
 class MainLayout extends React.Component {
@@ -43,9 +43,19 @@ class MainLayout extends React.Component {
     }
     requisicao() {
         const a = getToken();
-        console.log(jwt.verify(a, config.secret_auth))
+       
         const b = jwt.verify(a, config.secret_auth);
-        console.log(b)
+        const z = moment()
+        const u = moment(b.exp*1000)
+       
+       
+        if(moment(u).isBefore(z)){
+            logout();
+            this.props.history.push("/Login");
+        }
+            
+            
+    
         if (!b.admin) {
             axios.get(`/employees/${b.id}`)
                 .then((response) => {

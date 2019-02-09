@@ -3,7 +3,7 @@ import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import FormularioCad from './FormularioCadFunc.js';
 import $ from 'jquery';
-
+import { withRouter } from 'react-router'; 
 
 
 // CSS Layout
@@ -45,7 +45,7 @@ class CadastroFuncionario extends React.Component {
     BuscaAdulto(event){
         event.preventDefault();
 
-        console.log("Entrou na função: " + this)
+       
 
         //DIFERENÇA ENTRE BUSCA POR NOME E BUSCA POR CPF, AJUDAR O BACK.
         if(this.state.Name !== ""){
@@ -56,10 +56,10 @@ class CadastroFuncionario extends React.Component {
             }
             else {
                 $("#alertDiv").addClass('displaynone');
-                console.log(`/adult/filter/${this.state.Name}/name`)
+               
                 axios.get(`/adult/filter/${this.state.Name}/name`)
                 .then((response) => {
-                    console.log("Dentro do axios: " + this)                   
+                                       
                     if (isEmpty(response.data) || response.data.length === 0) {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
@@ -88,7 +88,7 @@ class CadastroFuncionario extends React.Component {
                         alert("Nenhum adulto foi encontrado com essa busca")
                     } 
                     else {
-                        console.log(this)
+                       
                         this.setState({list: response.data});
                     }
                 }).catch((error) => {
@@ -231,4 +231,4 @@ class CadastroFuncionario extends React.Component {
     }
 }
 
-export default CadastroFuncionario;
+export default withRouter(CadastroFuncionario); ;

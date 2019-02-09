@@ -8,7 +8,13 @@ import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
 import moment from'moment';
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 
 class VisualizaDesconto extends React.Component {
 
@@ -123,7 +129,7 @@ class VisualizaDesconto extends React.Component {
                         </div>
                         <br></br>
                         <div className="text-center">
-                            <a className="btn btn-md botao" href="/">Home</a>
+                            <Link className="btn btn-md botao" to="/">Home</Link>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.GeraDesconto}>Novo</button>
                         </div>
                     </div>
