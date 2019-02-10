@@ -55,7 +55,7 @@ class Passport extends React.Component {
             no: tabelinha,
             dadosComprovante: [],
             kinship: [],
-            nomeFuncionario:"",
+            nomeFuncionario: "",
 
         }
 
@@ -153,24 +153,39 @@ class Passport extends React.Component {
             alert("A Busca nao pode ter menos que 8 caracteres");
         }
         else {
-            $.ajax({
-                url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
-                dataType: 'json',
-                type: 'GET',
-                error: function (response) {
-                    if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-                },
-                success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response.length)
-                    if (response.length === 0) {
+            axios.get(`/adult/filter/${this.state.selectedSearch}/name`)
+                .then((response) => {
+
+                    if (response.data.length === 0) {
                         alert("Erro: Nenhum Responsável Encontrado")
                         this.setState({ erro: "* Nenhum Responásel Encontrado." })
                     } else {
                         console.log("Olar")
-                        this.setState({ list: response });
+                        this.setState({ list: response.data });
                     }
-                }.bind(this)
-            });
+                    // window.location.href = '/';
+                }).catch((error) => {
+
+
+                })
+            // // $.ajax({
+            // //     url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
+            // //     dataType: 'json',
+            // //     type: 'GET',
+            // //     error: function (response) {
+            // //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+            // //     },
+            // //     success: function (response) {    //Salva os dados do responsável na variácel LIST
+            // //         console.log(response.length)
+            // //         if (response.length === 0) {
+            // //             alert("Erro: Nenhum Responsável Encontrado")
+            // //             this.setState({ erro: "* Nenhum Responásel Encontrado." })
+            // //         } else {
+            // //             console.log("Olar")
+            // //             this.setState({ list: response });
+            // //         }
+            // //     }.bind(this)
+            // });
         }
     }
 
@@ -194,17 +209,17 @@ class Passport extends React.Component {
 
         axios.get(`/adult/${b.id}`)
             .then((response) => {
-                
-            const name= response.data.name.firstName +" " +response.data.name.surName;
+
+                const name = response.data.name.firstName + " " + response.data.name.surName;
                 this.setState({
-                    nomeFuncionario:response.data.name.firstName +" " +response.data.name.surName
+                    nomeFuncionario: response.data.name.firstName + " " + response.data.name.surName
                 })
-console.log(name)
+                console.log(name)
             }).catch((err) => {
                 console.log(err);
             });
-       
-        
+
+
         this.setState({ selectedSearch: event.target.value });
     }
 
@@ -219,19 +234,17 @@ console.log(name)
             alert("A Busca nao pode ter menos que 8 caracteres");
         }
         else {
-            $.ajax({
-                url: "/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
-                dataType: 'json',
-                type: 'GET',
-                error: function (response) {
-                    if (response.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) }
-                },
-                success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response);
-                    //this.setState({ achado: true });
-                    this.setState({ list: response });
-                }.bind(this)
-            });
+            axios.get(`/child/filter/${this.state.selectedSearch}`)
+                .then((response) => {
+                    if (response.data.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) } else {
+                        this.setState({ list: response.data });
+                    }
+                    // window.location.href = '/';
+                }).catch((error) => {
+
+
+                })
+
         }
     }
 
@@ -328,7 +341,7 @@ console.log(name)
     }
 
     // Encaminha para a tela V
-    TelaV = async(event) => {
+    TelaV = async (event) => {
 
 
         var formData = new FormData();
@@ -359,10 +372,10 @@ console.log(name)
                 photo: String(this.state.listConfirmKids[0]._id),
                 service: "Passaporte",
                 time: moment().format(),
-                belongings:  await Num(),
+                belongings: await Num(),
                 children: listCria,
                 adult: adulto,
-                funcionario:this.state.nomeFuncionario
+                funcionario: this.state.nomeFuncionario
                 //ajeitar o comprovante
             }
         })
@@ -390,7 +403,7 @@ console.log(name)
         const adulto = {
             _id: this.state.listConfirmAdult._id,
             name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
-            phone: this.state.listConfirmAdult.phone,
+            phone: this.state.phone,
             observations: this.state.obs,
         };
 
@@ -401,9 +414,10 @@ console.log(name)
                 birthday: new Date(this.state.listConfirmKids[i].birthday),
                 restrictions: this.state.listConfirmKids[i].restrictions,
                 observations: this.state.listConfirmKids[i].observations,
-                photo: this.state.listConfirmKids[i].fotoFamily
+                photo: this.state.listConfirmKids[i].fotoFamily,
+                kinship: this.state.kinship[i],
             }
-
+            console.log(this.state.kinship[i])
             listCria.push(crianca);
         };
 
@@ -415,28 +429,35 @@ console.log(name)
         formData.append('adult', JSON.stringify(adulto));
         formData.append('funcionario', this.state.nomeFuncionario);
 
-        
+
         //Fim do formulário;
 
         axios.post('/product', formData)
             .then((response) => {
                 console.log(response.data, "olaa");
                 this.setState({
-                    dadosComprovante:{
-                        i:response.data,
-                        funcionario:this.state.nomeFuncionario
+                    dadosComprovante: {
+                        i: response.data,
+                        funcionario: this.state.nomeFuncionario
                     }
                 })
-                setTimeout((event) => {
-                    console.log(this.state.dadosComprovante)
-                    this.setState({
 
-                        comprovante: true,
-                    })
-                }, 100);
 
 
                 // window.location.href = '/';
+            }).then(() => {
+
+
+                this.setState({
+
+                    comprovante: true,
+                })
+
+            }).then(() => {
+                alert("saida finalizada")
+                setTimeout((event) => {
+                    this.props.history.push("/");
+                }, 100);
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
 
@@ -569,7 +590,7 @@ console.log(name)
 
                             <div className="text-center">
                                 <Link className="btn btn-md botao" to="/">Cancelar</Link>
-                               
+
                             </div>
                         </div>
                     </div>

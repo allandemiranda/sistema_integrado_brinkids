@@ -161,7 +161,7 @@ router.put('/:identifier', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
+      to: req.body.title,
       price: parseInt(req.body.value, 10),
       priceMethod: req.body.method,
     })

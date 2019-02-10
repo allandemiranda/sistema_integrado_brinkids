@@ -76,25 +76,37 @@ class Calendar extends React.Component {
     const b = jwt.verify(a, config.secret_auth);
 
     axios.get(`/employees/${b.id}`)
-        .then((response) => {
+      .then((response) => {
 
-            this.setState({
-                nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
-            })
-
+        this.setState({
+          nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
         })
-        .catch((err) => console.log(err));
 
-}
+      })
+      .catch((err) => console.log(err));
+
+  }
   requisicao(event) {
     axios.get('/calendar')
       .then((response) => {
         // (Gabriel): response é um objeto com todos os dados da requisição.
         // Vem desde os dados das datas até status HTTP e por aí vai.
-        // O que deve ser renderizado é 'response.data'
+        // O que deve ser renderizadonsole.log(r é 'response.data'
+
         response.data.map((currentValue) => {
-          currentValue.start = new Date(currentValue.start);
-          currentValue.end = new Date(currentValue.end);
+
+          if (currentValue.color !== undefined) {
+            currentValue.start = new Date(currentValue.start);
+            currentValue.end = new Date(currentValue.end);
+          } else {
+            let dia = moment(currentValue.birthdayDate).add(1, "days");
+            let hora = moment(dia).format("YYYY-MM-DD")
+            let start = moment(hora + " " + currentValue.start).format("YYYY-MM-DD HH:MM:SS")
+            let end = moment(hora + " " + currentValue.end).format("YYYY-MM-DD HH:MM:SS.000")
+
+            currentValue.start = new Date(start);
+            currentValue.end = new Date(end);
+          }
         })
 
         this.setState({ datasRequisicao: response.data });
@@ -122,7 +134,7 @@ class Calendar extends React.Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.requisicao, 5000);
+    this.interval = setInterval(this.requisicao, 10000);
     this.requisicao();
 
   }
@@ -182,17 +194,22 @@ class Calendar extends React.Component {
 
   }
   editar(event) {
-    this.setState({
-      page: "Novo",
-      Titulo: event.title,
-      DateTimeBegin: event.start,
-      DateImeEnd: event.end,
-      Color: event.color,
-      editar: true,
-      identifier: event._id,
-      Description: event.description,
-      Location: event.address,
-    })
+  
+    if (event.color) {
+      this.setState({
+        page: "Novo",
+        Titulo: event.title,
+        DateTimeBegin: event.start,
+        DateImeEnd: event.end,
+        Color: event.color,
+        editar: true,
+        identifier: event._id,
+        Description: event.description,
+        Location: event.address,
+      })
+    } else {
+      alert("Você Não Pode Editar Esse Evento")
+    }
 
   }
   mod2(event) {

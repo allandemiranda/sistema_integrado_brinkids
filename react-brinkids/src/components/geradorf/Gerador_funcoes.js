@@ -338,6 +338,7 @@ class Gerador extends React.Component {
                                 </thead>
                                 <tbody>
                                     {this.state.listadecargos.map((servico, indice) => {
+                                        console.log(servico)
                                         return (
                                             <tr key={indice}>
                                                 <th scope="row" style={{ textAlign: 'center' }}>{(indice + 1)}</th>

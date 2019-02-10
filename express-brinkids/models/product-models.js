@@ -48,6 +48,7 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   belongings: Number,
+  kinship:String,
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

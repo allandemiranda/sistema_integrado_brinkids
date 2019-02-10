@@ -166,7 +166,7 @@ router.post('/', async (req, res) => {
             action: 'Criação',
             dateOperation: new Date(),
             from: funcionario, //ajsuta o id dps de fazer o login funcionar
-            to: adultResult._id,
+            to: adultResult.name.firstName+" "+adultResult.name.surName,
           }
           Logs.create(log, (errLog, logchil) => {
 
@@ -200,7 +200,7 @@ router.post('/appendChild', async (req, res) => {
         action: 'Edição',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: req.body.identifierParent,
+        to: adult.name.firstName+" "+adult.name.surName,
       })
       const newLog = await log.save();
       if (!adult) {
@@ -245,7 +245,7 @@ router.put('/:identifier', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
+      to: adultModified.name.firstName+" "+adultModified.name.surName,
     })
     const newLog = await log.save();
     if (!adultModified) {
@@ -271,12 +271,13 @@ router.delete('/:identifier', async (req, res) => {
     const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
     
     const deletedService = await userAdult.findByIdAndRemove(req.params.identifier);
-    
+   
     const log = new Logs({
       activity: 'Perfil Adulto',
       action: 'Delete',
       dateOperation: new Date(),
       from: funcionario,
+      to:deletedService.name.firstName+" "+deletedService.name.surName,
     })
     
     const newLog = await log.save();

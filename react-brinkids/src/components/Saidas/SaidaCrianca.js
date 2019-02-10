@@ -18,6 +18,7 @@ class SaidaCrianca extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            dadoscomprovante:[],
             page: "Adultos",
             namebutton: "Proxima Criança",
             indice: 1,
@@ -412,12 +413,11 @@ class SaidaCrianca extends React.Component {
     //Função que finaliza tudo
     Finalizar = (event) => {
         
-        
+        console.log(this.state.CriancasSelecionadas,"dddddd")
         event.preventDefault();
         console.log("Entrei Aqui");
         if (this.state.FormPag !== "") {
-            console.log(this.state.FormPag);
-            window.print();
+           let temporario=[];
             console.log("Número de delete que devem aparecer: ", this.state.CriancasSelecionadas.length)
             for(var i = 0; i<this.state.CriancasSelecionadas.length; i++){
                 const comprovante = {
@@ -428,14 +428,19 @@ class SaidaCrianca extends React.Component {
                     idcria:this.state.CriancasSelecionadas[i].children.id,
                     entrada:this.state.listCrianca[i],
                 }
-                console.log(comprovante)
-                axios.post(`/passport/a/`,comprovante)
+                temporario.push(comprovante);
+                console.log(temporario)
+                
+            }
+            axios.post(`/passport/a/`,temporario)
                 .then((response) => {
 
                     console.log(response.data);
+                    this.setState({
+                        dadoscomprovante:temporario,
+                    });
 
                 }).catch((err) => console.log(err));
-            }
            
         } else {
             alert("Selecione uma forma de pagamento");

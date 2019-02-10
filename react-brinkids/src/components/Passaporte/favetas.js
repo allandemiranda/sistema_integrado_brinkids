@@ -26,14 +26,16 @@ export const Num = async () => {
                     let numero;
                     mip.Gavetasusadas.map((event, indice) => {
                         mip.Ngavetas.map((invent, index) => {
+                           
                             if (event === index) {
                                 temporario[index] = false;
                             }
+                            console.log(event,"==",index,":::",temporario[index])
                         })
                     })
                     for (var p = 0; p < temporario.length; p++) {
                         if (temporario[p] === true) {
-                            numero = p+1;
+                            numero = p;
                             temporario[p] = false;
                             break;
                         }

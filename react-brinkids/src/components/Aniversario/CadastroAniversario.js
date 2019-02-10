@@ -335,6 +335,7 @@ class CadastroAniversario extends React.Component {
 
 
         }
+        console.log(data)
         console.log(this.state.DataDoAni)
         // Gabriel pegou as duas listas de adulto e criança, transformou numa lista só,
         // adicionou uma nova informação que vai precisar no banco de dados e enviou num único campo

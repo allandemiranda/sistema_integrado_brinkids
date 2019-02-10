@@ -48,7 +48,7 @@ class MainLayout extends React.Component {
         const z = moment()
         const u = moment(b.exp*1000)
        
-       
+       console.log(b)
         if(moment(u).isBefore(z)){
             logout();
             this.props.history.push("/Login");

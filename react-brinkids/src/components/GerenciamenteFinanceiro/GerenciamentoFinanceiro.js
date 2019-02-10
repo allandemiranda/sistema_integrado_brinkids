@@ -99,17 +99,19 @@ class GerenciamentoFinanceiro extends React.Component {
 
     }
     requisicao(event) {
+        
         axios.get('/log')
             .then((response) => {
                 this.setState({ ListaFluxo: response.data });
+                
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
     }
     componentWillMount() {
-
+        this.grafico();
         this.requisicao();
-        this.inteval = setInterval(this.requisicao, 60000);
+       
 
     }
     componentWillUnmount() {
@@ -237,14 +239,14 @@ class GerenciamentoFinanceiro extends React.Component {
 
     async grafico(event) {
         let listadedatas = [];
-        event.preventDefault();
+      
         const lista = [];
         for (var i = 0; i < 30; i++) {
             let hj = moment().format("MM/DD/YYYY");
             var novo = moment(hj).subtract(i, 'days');
 
             const a = moment(novo).format("MM/DD/YYYY")
-            console.log(a);
+            
             lista.push(a);
 
         }
@@ -263,7 +265,7 @@ class GerenciamentoFinanceiro extends React.Component {
         var total = 0;
         var nome = '';
         Promise.all(datas).then((listagraficos) => {
-            console.log(listagraficos)
+           
             listagraficos.map((date, indice) => {
 
                 date.map((info, index) => {
@@ -277,11 +279,13 @@ class GerenciamentoFinanceiro extends React.Component {
                         servicoproduto = servicoproduto + info.price;
                     }
                     nome = moment(date[0].dateOperation).format("DD/MM")
+                    console.log(nome)
                 })
                 
                     const temporario = {
                         name: nome, Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
                     }
+                    
                     listaparaostate.push(temporario);
                 
 
@@ -291,6 +295,7 @@ class GerenciamentoFinanceiro extends React.Component {
                 total = 0;
                 nome = '';
             })
+            console.log(listaparaostate)
            this.setState({
                listagraficos:listaparaostate
            })

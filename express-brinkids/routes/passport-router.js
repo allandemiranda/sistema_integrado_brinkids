@@ -301,39 +301,42 @@ router.post('/a', async (req, res) => {
 
   console.log(req.body);
   console.log('executed');
+  const products = req.body.map(async (child) => {
 
+    try {
+      const deletedService = await product.findByIdAndRemove(child.entrada._id);
+  
+      const log = new Logs({
+        activity: 'Passaporte',
+        action: 'Saida',
+        dateOperation: new Date(),
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: child.entrada.adult.name,
+        price:child.valor2,
+        cco: child.entrada.children.name,
+        priceMethod: child.Form,
+        timeLojaLast: new Date(),
+        timeLojaFirst: child.entrada.time,
+  
+      })
+      const newLog = await log.save()
+  
+      if (!deletedService) {
+        return res.sendStatus(404);
+      }
+  
+      return res.sendStatus(204);
+    } catch (err) {
+      console.log(err);
+  
+      return res.sendStatus(500);
+    }
+  });
   const productFinded = await product.find({ 'children.id': req.body.idcria });
 
   console.log(productFinded[0]._id);
 
-  try {
-    const deletedService = await product.findByIdAndRemove(productFinded[0]._id);
-
-    const log = new Logs({
-      activity: 'Passaporte',
-      action: 'Saida',
-      dateOperation: new Date(),
-      from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.body.idpai,
-      price: req.body.valor2,
-      cco: req.body.idcria,
-      priceMethod: req.body.Form,
-      timeLojaLast: new Date(),
-      timeLojaFirst: req.body.entrada.time,
-
-    })
-    const newLog = await log.save()
-
-    if (!deletedService) {
-      return res.sendStatus(404);
-    }
-
-    return res.sendStatus(204);
-  } catch (err) {
-    console.log(err);
-
-    return res.sendStatus(500);
-  }
+ 
 });
 
 module.exports = router;

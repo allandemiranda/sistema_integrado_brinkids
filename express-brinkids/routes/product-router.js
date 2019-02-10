@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-
+console.log(req.body)
   try {
     const adult = JSON.parse(req.body.adult);
 
@@ -66,6 +66,7 @@ router.post('/', async (req, res) => {
         service: req.body.service,
         time: new Date(req.body.time),
         belongings: req.body.belongings,
+        kinship:child.kinship
       });
       if (req.body.service === "Aniversario") {
         
@@ -74,7 +75,8 @@ router.post('/', async (req, res) => {
           action: 'Entrada',
           dateOperation: new Date(),
           from:funcionario, //ajsuta o id dps de fazer o login funcionar
-          to: child._id,
+          to: adult.name,
+          cco:child.name,
           timeLojaFirst: new Date(req.body.time),
 
         })
@@ -86,7 +88,8 @@ router.post('/', async (req, res) => {
           action: 'Entrada',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar
-          to: child._id,
+          to: adult.name,
+          cco:child.name,
           timeLojaFirst: new Date(req.body.time),
 
 

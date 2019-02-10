@@ -4,210 +4,334 @@ import './comprovante.css';
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
-var servico;
+import moment from 'moment';
 
-class ComprovantedeSaida extends React.Component {
+
+var servico;
+var conteudo;
+class Comprovantesaida extends React.Component {
     servico = this.props.serviso;
 
+    componentDidMount(){
+        conteudo = document.getElementById('print').innerHTML;
+        console.log(conteudo)
+        this.rederizar();
+    }
+    rederizar = () => {
+        console.log(conteudo)
+        const tela_impressao = window.open('about:blank');
+        tela_impressao.document.write('<html><head>');
+        tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
+        tela_impressao.document.write(('</head><style>html {background:transparent !important; color:#000 !important; text-shadow:none !important; filter:none !important; -ms-filter:none !important; width: 77mm; font-family: Consolas, monaco, monospace; font-style: normal; font-variant: normal; justify-content: center; align-items: center; } html body {width: 80mm; height: auto; } .trilha {width: 100%; font-size: 3.5mm; word-wrap: break-word; } .naoFiscal {width: 100%; font-size: 3.5mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .textos {width: 100%; font-size: 3.3mm; word-wrap: break-word; } .titulo7 {width: 100%; font-size: 3.6mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .espacoTitulo {margin-right: 1mm; } .textos .direita {float: right; padding-right: 2mm; } .criancas {margin-bottom: 2mm; } .atendente {margin-bottom: 2mm; } .rodape {width: 100%; font-size: 3.3mm; word-wrap: break-word; justify-content: center; align-items: center; display: flex; } table, th, td {border: 0px solid black; } th, td {padding: 0px; text-align: left; }</style><body>'));
+        tela_impressao.document.write(conteudo);
+        tela_impressao.document.write('</body></html>');
 
-    render() {
-        // getFuncionario = () => {
 
+        tela_impressao.focus();
 
-        //     const a = getToken();
-        //     const b = jwt.verify(a, config.secret_auth);
-    
-        //     axios.get(`/employees/${b.id}`)
-        //         .then((response) => {
-    
-        //             this.setState({
-        //                 nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
-        //             })
-    
-        //         })
-        //         .catch((err) => console.log(err));
-    
-        // }
-        const rederizar = () => {
-            var conteudo = document.getElementById('print').innerHTML;
-            const tela_impressao = window.open('about:blank');
-            tela_impressao.document.write('<html><head>');
-            tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
-            tela_impressao.document.write(('</head><style>html {background:transparent !important; color:#000 !important; text-shadow:none !important; filter:none !important; -ms-filter:none !important; width: 77mm; font-family: Consolas, monaco, monospace; font-style: normal; font-variant: normal; justify-content: center; align-items: center; } html body {width: 74mm; } .trilha {width: 100%; font-size: 3.5mm; word-wrap: break-word; } .naoFiscal {width: 100%; font-size: 3.5mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .textos {width: 100%; font-size: 3.3mm; word-wrap: break-word; } .titulo7 {width: 100%; font-size: 3.6mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .espacoTitulo {margin-right: 1mm; } .textos .direita {float: right; padding-right: 2mm; } .criancas {margin-bottom: 2mm; } .atendente {margin-bottom: 2mm; } .rodape {width: 100%; font-size: 3.3mm; word-wrap: break-word; justify-content: center; align-items: center; display: flex; } table, th, td {border: 0px solid black; } th, td {padding: 0px; text-align: left; }</style><body>'));
-            tela_impressao.document.write(conteudo);
-            tela_impressao.document.write('</body></html>');
-            window.print();
-        }
-        if (this.props.teste) {
-            setTimeout(function () {
-                rederizar();
+        setTimeout(function () {
+            tela_impressao.print();
 
-            }, 100);
-        }
+        }, 200);
+
+    }
+    render  () {
+       
+        
+        
+            
+                
+
+            
+      
         const byChild = function (events) {
-            console.log(events.name,'aksjna');
-
-            if (events.name !== undefined) {
-                if (servico === "PASSAPORTE") {
-
-                    return (
-                        <div  id="crianca" key={events._id.toString()}>
-                            <div id="dados">
-                                <a>Criança:</a>
-                                <a id="nome"> {events.name}</a>
-                                <div className="direita">
-                                </div>
-                            </div>
-                            <div id="info">
-                                <a>Parentesco:</a>
-                                <a id="parentesco">{events.kinship}</a>
-                                <div className="direita">
-                                    <a>Idade:</a>
-                                    <a id="idade">{events.years}</a>
-                                </div>
-                            </div>
-                            <div>
-                                <a>Pacote:</a>
-                                <a id="pacote">{events.service}</a>
-                                <div className="direita">
-                                    <a>Entrada:</a>
-                                    <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
-                                    <a>h</a>
-                                </div>
-                            </div>
-                            <div id="obs">
-                                <a>Observações:</a>
-                                <a id="obsTexto">{events.observation}</a>
-                            </div>
-                            <div id="restrioes">
-                                <a>Restrições:</a>
-                                <a id="restricoesTexto">{events.restrictions}</a>
-                            </div>
-                            <a>-</a>
-                        </div>
-
-                    );
-                } else {
-                    return (
-                        <div id="crianca" key={events._id.toString()}>
-                            <div id="dados">
-                                <a>Criança:</a>
-                                <a id="nome">{events.name.firstName}</a>
-                                <div className="direita">
-
-                                </div>
-                            </div>
-                            <div id="info">
-                                <a>Parentesco:</a>
-                                <a id="parentesco">{events.kinship}</a>
-                                <div className="direita">
-                                    <a>Idade:</a>
-                                    <a id="idade">{events.years}</a>
-                                </div>
-                            </div>
-                            <div>
-                                <a>Pacote:</a>
-                                <a id="pacote">{events.service}</a>
-                                <div className="direita">
-                                    <a>Entrada:</a>
-                                    <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
-                                    <a>h</a>
-                                </div>
-                            </div>
-                            <div id="obs">
-                                <a>Observações:</a>
-                                <a id="obsTexto">{events.observation}</a>
-                            </div>
-                            <div id="restrioes">
-                                <a>Restrições:</a>
-                                <a id="restricoesTexto">{events.restrictions}</a>
-                            </div>
-                            <div id="aniversario">
-                                <div>
-                                    <a>Aniversariante:</a>
-                                    <a id="nome">{events.birthdays}</a>
-                                </div>
-                                <div>
-                                    <a>Início:</a>
-                                    <a id="horaInicio">{events.beginning}</a>
-                                    <a>h</a>
-                                    <div className="direita">
-                                        <a>Finaliza:</a>
-                                        <a id="horaFim">{events.end}</a>
-                                        <a>h</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <a>-</a>
-                        </div>
-
-                    );
-                }
+            console.log(events);
+            function Idade(aniversario) {
+                const hoje = new Date;
+                const nascimento = moment(aniversario).format('YYYYMMDD');
+                console.log(nascimento);
+                const a = moment(nascimento, "YYYYMMDD").fromNow();
+                a.split(' ');
+                console.log(a);
+                return moment(nascimento, "YYYYMMDD").fromNow();
             }
 
-        }
 
 
 
-        return (
-
-            <div style={{display: 'none'}} id='print' className='conteudo' >
-
-
-                <a className="trilha" >﻿﻿--------------------------------------</a>
-                <a className="naoFiscal">****** NÃO É DOCUMENTO FISCAL ******</a>
-                <div className="titulo7">
-                    <a className="espacoTitulo">BRINKIDS</a>
-                    <a className="espacoTitulo">-</a>
-                    <a id="doc" className="espacoTitulo">ENTRADA</a>
-                    <a className="espacoTitulo">-</a>
-                    <a id="data">{new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear()}</a>
-
-                </div>
-                <div id="responsavel" className="textos">
-                    <div>
-                        <a>Responsável:</a>
-                        <a id="nome"> {this.props.tabela[0].name.firstName}</a>
+            return (
+                <div id="crianca" key={events.children.id}>
+                    <div id="dados">
+                        <a>Criança:</a>
+                        <a id="nome"> {events.children.name}</a>
+                        <div className="direita">
+                        </div>
+                    </div>
+                    <div id="info">
+                        <a>Parentesco:</a>
+                        <a id="parentesco">{events.kinship}</a>
+                        <div className="direita">
+                            <a>Idade:</a>
+                            <a id="idade">{Idade(events.children.birthday)}</a>
+                        </div>
                     </div>
                     <div>
-                        <a>Telefone:</a>
-                        <a id="telefone"> {this.props.tabela[0].phone}</a>
-
+                        <a>Pacote:</a>
+                        <a id="pacote">Passaporte</a>
+                        <div className="direita">
+                            <a>Entrada:</a>
+                            <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
+                            <a>h</a>
+                        </div>
                     </div>
                     <div id="obs">
                         <a>Observações:</a>
-                        <a id="obsTexto"></a>
+                        <a id="obsTexto">{events.children.observations}</a>
+                    </div>
+                    <div id="restrioes">
+                        <a>Restrições:</a>
+                        <a id="restricoesTexto">{events.children.restrictions}</a>
                     </div>
                     <a>-</a>
                 </div>
-                <div className="criancas textos">
-                    {this.props.tabela.map(byChild)}
-                    <div>
-                        <a>Pertences: Gaveta</a>
-                        <a id="gaveta"> {this.props.tabela[1].belongings}</a>
+
+            );
+
+
+
+
+        }
+
+
+
+        if (this.props.teste) {
+            return (
+
+                <div style={{ display: 'none' }} id='print' className='conteudo' >
+
+
+<a class="trilha">﻿﻿--------------------------------------</a>
+        <a class="naoFiscal">****** NÃO É DOCUMENTO FISCAL ******</a>
+        <div class="titulo">
+            <a class="espacoTitulo">BRINKIDS</a>
+            <a class="espacoTitulo">-</a>
+            <a id="data">01/01/2001</a>
+        </div>
+        <div class="titulo">
+            <a class="espacoTitulo">SAÍDA</a>
+            <a id="hora">01:01</a>
+            <a class="espacoTitulo">h</a>
+            <a class="espacoTitulo">-</a>
+            <a class="espacoTitulo">DOC FINAL</a>
+        </div>
+        <div id="responsavel" class="textos">
+            <div>
+                <a>Responsável:</a>
+                <a id="nome">12345678911234567892123456</a>
+            </div>
+            <div>
+                <a>Telefone:</a>
+                <a id="telefone">(84)991151610</a>
+                <div class="direita">
+                    <a>ID:</a>
+                    <a id="id">A01</a>
+                </div>
+            </div>
+            <div id="obs">
+                <a>Observações:</a>
+                <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+            </div>
+            <a>-</a>
+        </div>
+        <div class="criancas textos">
+            <div id="crianca">
+                <div id="dados">
+                    <a>Criança:</a>
+                    <a id="nome">1234567891123456789212</a>
+                    <div class="direita">
+                        <a>ID:</a>
+                        <a id="id">C01</a>
                     </div>
                 </div>
-                <div id="atendente" className="atendente textos">
-                    <a>Atendente:</a>
-                    <a> {this.props.tabela[1].employee}</a>
+                <div id="info">
+                    <a>Parentesco:</a>
+                    <a id="parentesco">12345678911234567</a>
+                    <div class="direita">
+                        <a>Idade:</a>
+                        <a id="idade">12</a>
+                    </div>
                 </div>
                 <div>
-                    <div className="rodape">
-                        <a>www.brinkidsonline.com.br</a>
-                    </div>
-                    <div className="rodape">
-                        <a>contato@brinkidsonline.com.br</a>
-                    </div>
-                    <div className="rodape">
-                        <a>Fone: (84) 3206-8293</a>
+                    <a>Pacote:</a>
+                    <a id="pacote">PASSAPORTE</a>
+                    <div class="direita">
+                        <a>Entrada:</a>
+                        <a id="hora">10:10</a>
+                        <a>h</a>
                     </div>
                 </div>
-                <a className="trilha">﻿﻿--------------------------------------</a>
+                <div id="obs">
+                    <a>Observações:</a>
+                    <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                </div>
+                <div id="restrioes">
+                    <a>Restrições:</a>
+                    <a id="restricoesTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                </div>
+                <a>-</a>
             </div>
-        );
+            <div id="crianca">
+                <div id="dados">
+                    <a>Criança:</a>
+                    <a id="nome">1234567891123456789212</a>
+                    <div class="direita">
+                        <a>ID:</a>
+                        <a id="id">C02</a>
+                    </div>
+                </div>
+                <div id="info">
+                    <a>Parentesco:</a>
+                    <a id="parentesco">12345678911234567</a>
+                    <div class="direita">
+                        <a>Idade:</a>
+                        <a id="idade">12</a>
+                    </div>
+                </div>
+                <div>
+                    <a>Pacote:</a>
+                    <a id="pacote">ANIVERSÁRIO</a>
+                    <div class="direita">
+                        <a>Entrada:</a>
+                        <a id="hora">10:10</a>
+                        <a>h</a>
+                    </div>
+                </div>
+                <div id="obs">
+                    <a>Observações:</a>
+                    <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                </div>
+                <div id="restrioes">
+                    <a>Restrições:</a>
+                    <a id="restricoesTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
+                </div>
+                <div id="aniversario">
+                    <div>
+                        <a>Aniversariante:</a>
+                        <a id="nome">12345678912345678921234</a>
+                    </div>
+                    <div>
+                        <a>Início:</a>
+                        <a id="horaInicio">10:10</a>
+                        <a>h</a>
+                        <div class="direita">
+                            <a>Finaliza:</a>
+                            <a id="horaFim">10:10</a>
+                            <a>h</a>
+                        </div>
+                    </div>
+                </div>
+                <a>-</a>
+            </div>
+            <div>
+                <a>Pertences: Gaveta</a>
+                <a id="gaveta">001</a>
+            </div>
+        </div>
+        <div id="datalhamento" class="textos">
+            <a>Detalhamento</a>
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                        <td>Serviço</td>
+                        <td>ID</td>
+                        <td>Quant.</td>
+                        <td>Valor</td>
+                    </tr>
+                </thead>
+                <tbody id="servicos">
+                    <tr>
+                        <td><a>PASSAPORTE</a></td>
+                        <td><a id="id">C01</a></td>
+                        <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
+                        <td><a class="espacoTitulo">R$</a><a id="valor">50,00</a></td>
+                    </tr>
+                    <tr>
+                        <td><a>ANIVERSÁRIO</a></td>
+                        <td><a id="id">C02</a></td>
+                        <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
+                        <td><a class="espacoTitulo">R$</a><a id="valor">0,00</a></td>
+                    </tr>
+                    <tr>
+                        <td><a>12345678911234567</a></td>
+                        <td><a id="id">123</a></td>
+                        <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
+                        <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="direita" style="margin-bottom: 2mm;">
+                <a>Total:  R$</a>
+                <a id="valorServicos">0000,00</a>
+            </div>
+            <table style="width:100%">
+                <thead>
+                    <tr>
+                        <td>Desconto</td>
+                        <td>ID</td>
+                        <td>Valor</td>
+                    </tr>
+                </thead>
+                <tbody id="descontos">
+                    <tr>
+                        <td><a>ANIVERSÁRIO 10%</a></td>
+                        <td><a id="id">C01</a></td>
+                        <td><a class="espacoTitulo">R$</a><a id="valor">10,00</a></td>
+                    </tr>
+                    <tr>
+                        <td><a>LOGISTA 10%</a></td>
+                        <td><a id="id">C02</a></td>
+                        <td><a class="espacoTitulo">R$</a><a id="valor">20,00</a></td>
+                    </tr>
+                    <tr>
+                        <td><a>12345678911234567892123</a></td>
+                        <td><a id="id">123</a></td>
+                        <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="direita">
+                <a>Total:  R$</a>
+                <a id="valorDescontos">0000,00</a>
+            </div>
+            <div style="margin-top: 6mm;">
+                <a>Valor pago: R$</a>
+                <a id="valor">1234,00</a>
+                <a>em</a>
+                <a id="metodo">1234567891123</a>
+            </div>
+        </div>
+        <div id="atendente" class="atendente textos" style="margin-top: 3mm;">
+            <a>Atendente:</a>
+            <a>1234567891123456789212345678</a>
+        </div>
+        <div>
+            <div class="rodape">
+                <a>www.brinkidsonline.com.br</a>
+            </div>
+            <div class="rodape">
+                <a>contato@brinkidsonline.com.br</a>
+            </div>
+            <div class="rodape">
+                <a>Fone: (84) 3206-8293</a>
+            </div>
+        </div>
+        <a class="trilha">﻿﻿--------------------------------------</a>
+                </div>
+            );
+        }
     }
 
 }
 
 
-export default ComprovantedeSaida;
+export default Comprovantesaida;
