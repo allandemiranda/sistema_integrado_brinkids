@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -52,7 +53,7 @@ class ConfirmaAdulto extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Nascimento: </b></h5>
-                                    <p>{this.props.Date}</p>
+                                    <p>{moment(this.props.Date).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className = "col-md-4 col-sm-4 col-xs-12" >

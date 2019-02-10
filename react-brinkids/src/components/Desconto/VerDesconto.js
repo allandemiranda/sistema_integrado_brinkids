@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
+
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -12,15 +14,15 @@ class VerDesconto extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            Name: "exemplo",
-            Description: "...................",
-            TypePeople: "Criança",
-            TypeValue: "Fixo",
-            Value: "1000",
-            Quant: "40",
-            TypeCog: "Unico",
-            TypeTime: "Mensal",
-            Date: "05/12/2009",
+            Name: "",
+            Description: "",
+            TypePeople: "",
+            TypeValue: "",
+            Value: "",
+            Quant: "",
+            TypeCog: "",
+            TypeTime: "",
+            Date: "",
             list: [],
         }
 
@@ -37,8 +39,10 @@ class VerDesconto extends React.Component {
                     Quant: response.data.amount,
                     TypeCog: response.data.temporalityTaype,
                     TypeTime: response.data.temporalityDate,
-                    Date: response.data.validity,
+                    Date: response.data.validity
                 });
+                console.log(response.data);
+                console.log(this.state.list);
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -105,7 +109,7 @@ class VerDesconto extends React.Component {
                                     </div>
                                     <div className="col-md-4 col-sm-4 col-xs-12">
                                         <label className="LetraFormulario">Validade:</label>
-                                        <input type="date" id="Validade" name="Validade" className="form-control" value={this.state.Date} disabled />
+                                        <p id="Validade" name="Validade">{moment(this.state.Date).add(1,"days").format("DD/MM/YYYY")}</p>
                                     </div>
                                 </div>
                             </div>
@@ -125,24 +129,17 @@ class VerDesconto extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td > Exemplo </td>
-                                        <td > Criança </td>
-                                        <td > Exemplo</td>
-                                        <td > Exemplo</td>
-                                    </tr>
                                     {/* //FALTA EDITAR DESCONTO */}
-                                    {this.state.list.map((desconto, indice) => {
+                                    {this.state.list.codes.map((desconto, indice) => {
                                         console.log(desconto)
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td >{desconto.codes.numberCode} </td>
+                                                    <td >{desconto.numberCode} </td>
                                                     
-                                                   {desconto.codes.statusBoradlUser !==  [] &&  ( <td >{desconto.codes.statusBoradlUser} </td>)}
+                                                   {desconto.statusBoradlUser !==  [] &&  ( <td >{desconto.statusBoradlUser} </td>)}
                                                     <td >{desconto.statusUniqueUse} </td>
-                                                    <td >{desconto.to} </td>
+                                                    <td >{this.state.TypePeople} </td>
                                                 </tr>
                                             );
                                         })}
@@ -169,13 +166,13 @@ class VerDesconto extends React.Component {
                                         <td > Criança </td>
                                         <td > Exemplo</td>
                                     </tr>
-                                    {this.state.list.map((desconto, indice) => {
+                                    {this.state.list.codes.map((desconto, indice) => {
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td >{desconto.codes.numberCode} </td>
-                                                    <td >{desconto.to} </td>
-                                                    <td >{desconto.validity} </td>
+                                                    <td >{desconto.numberCode} </td>
+                                                    <td >{this.state.TypePeople} </td>
+                                                    <td >{moment(this.state.Date).add(1,"days").format("DD/MM/YYYY")} </td>
                                                 </tr>
                                             );
                                         })}

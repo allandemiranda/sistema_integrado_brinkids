@@ -2,19 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import GeraDesconto from './CadastroDesconto.js';
 import VerDesconto from './VerDesconto.js';
+import moment from 'moment';
+
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
-import moment from'moment';
-import {
-    BrowserRouter as Router,
-    Route,
-    Link,
-    Redirect,
-    withRouter
-} from "react-router-dom";
+
 
 class VisualizaDesconto extends React.Component {
 
@@ -29,7 +24,6 @@ class VisualizaDesconto extends React.Component {
         axios.get(`/discount`)
         .then((response) => {
             console.log("Dentro do axios: " + this)
-            console.log(response.data)
             this.setState({ list_descontos: response.data });
         }).catch((error) => {
             console.log("Não deu certo");
@@ -94,20 +88,7 @@ class VisualizaDesconto extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th id="paddingNome" scope="row">1</th>
-                                            <td id="paddingNome"> joão </td>
-                                            <td id="paddingNome" > Criança </td>
-                                            <td id="paddingNome" > Exemplo</td>
-                                            <td id="paddingNome" > mais de 1B</td>
-                                            <td id="paddingNome" >12/12/12</td>
-                                            <td >
-                                                <button className="btn botao btn-sm" onClick={() => this.VerDesconto("joão")}><i className="fa fa-eye"></i></button>
-                                                <button className="btn botao btn-sm" onClick={() => this.ExcluirDesconto("joão")}><i className="fa fa-trash-o "></i></button>
-                                            </td>
-                                        </tr>
                                         {this.state.list_descontos.map((desconto, indice) => {
-                                            
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th id="paddingNome" scope="row">{(indice + 1)}</th>
@@ -115,10 +96,10 @@ class VisualizaDesconto extends React.Component {
                                                     <td id="paddingNome" >{desconto.to} </td>
                                                     <td id="paddingNome" >{desconto.type} </td>
                                                     <td id="paddingNome" >{desconto.value} </td>
-                                                    <td id="paddingNome" >{moment(desconto.validity).format("DD/MM/YYYY")} </td>
+                                                    <td id="paddingNome" >{moment(desconto.validity).add(1,"days").format("DD/MM/YYYY")} </td>
                                                     <td >
                                                         <button className="btn botao btn-xs" onClick={()  => this.VerDesconto(desconto.name)}><i className="fa fa-eye"></i></button>
-                                                        <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto._id)}><i className="fa fa-trash-o"></i></button>
+                                                        <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto.name)}><i className="fa fa-trash-o"></i></button>
                                                     </td>
                                                 </tr>
                                             );
@@ -129,7 +110,7 @@ class VisualizaDesconto extends React.Component {
                         </div>
                         <br></br>
                         <div className="text-center">
-                            <Link className="btn btn-md botao" to="/">Home</Link>
+                            <a className="btn btn-md botao" href="/">Home</a>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.GeraDesconto}>Novo</button>
                         </div>
                     </div>

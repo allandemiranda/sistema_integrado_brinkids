@@ -31,7 +31,7 @@ class ConfirmaCrianca extends React.Component {
                             <div className="col-md-6 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data: </b></h5>
-                                    <p>{moment(this.props.Date).format('DD/MM/YYYY')} </p>
+                                    <p>{moment(this.props.Date).add(1,"days").format('DD/MM/YYYY')} </p>
                                 </div>
                             </div>
                         </div>
