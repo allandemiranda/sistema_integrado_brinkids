@@ -139,7 +139,7 @@ class VerDesconto extends React.Component {
                                                     <tr key={desconto._id}>
                                                         <th scope="row">{(indice + 1)}</th>
                                                         <td >{desconto.numberCode} </td>                                                
-                                                        <td >{desconto.statusBroadlUser[0]} </td>
+                                                        {desconto.statusBroadlUser.length > 0 && <td >{desconto.statusBroadlUser[0]} </td>}
                                                         <td >{desconto.statusUniqueUse} </td>
                                                         <td >{this.state.TypePeople} </td>
                                                     </tr>
