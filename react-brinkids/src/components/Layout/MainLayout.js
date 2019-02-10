@@ -172,7 +172,7 @@ class MainLayout extends React.Component {
                             </ul>
 
                         </div>
-                        <div className="menu"  >
+                        <div className="menu">
                             <ul id="menu" >
                                 <li >
                                     <Link to="/" >
