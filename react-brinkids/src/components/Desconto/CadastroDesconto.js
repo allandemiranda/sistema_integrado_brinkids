@@ -346,7 +346,7 @@ class Desconto extends Component {
                                                     <td >{this.state.list.to} </td>
                                                     <td >{this.state.list.temporalityType} </td>
                                                     <td >{this.state.list.temporalityDate} </td>
-                                                    <td >{moment(this.state.list.validity).format("DD/MM/YYYY")} </td>
+                                                    <td >{moment(this.state.list.validity).add(1,"days").format("DD/MM/YYYY")} </td>
                                                 </tr>
                                             );
                                         })}
