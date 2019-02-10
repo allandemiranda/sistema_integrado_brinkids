@@ -36,14 +36,7 @@ class Comprovante extends React.Component {
 
     }
     render  () {
-       
-        
-        
-            
-                
-
-            
-      
+           
         const byChild = function (events) {
             console.log(events);
             function Idade(aniversario) {
@@ -55,9 +48,6 @@ class Comprovante extends React.Component {
                 console.log(a);
                 return moment(nascimento, "YYYYMMDD").fromNow();
             }
-
-
-
 
             return (
                 <div id="crianca" key={events.children.id}>
@@ -97,13 +87,7 @@ class Comprovante extends React.Component {
 
             );
 
-
-
-
         }
-
-
-
         if (this.props.teste) {
             return (
 

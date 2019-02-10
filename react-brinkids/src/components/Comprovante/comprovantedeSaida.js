@@ -12,7 +12,7 @@ var conteudo;
 class Comprovantesaida extends React.Component {
     servico = this.props.serviso;
 
-    componentDidMount(){
+    componentDidMount() {
         conteudo = document.getElementById('print').innerHTML;
         console.log(conteudo)
         this.rederizar();
@@ -35,15 +35,15 @@ class Comprovantesaida extends React.Component {
         }, 200);
 
     }
-    render  () {
-       
-        
-        
-            
-                
+    render() {
 
-            
-      
+
+
+
+
+
+
+
         const byChild = function (events) {
             console.log(events);
             function Idade(aniversario) {
@@ -60,19 +60,19 @@ class Comprovantesaida extends React.Component {
 
 
             return (
-                <div id="crianca" key={events.children.id}>
+                <div id="crianca" key={events.entrada.children.id}>
                     <div id="dados">
                         <a>Criança:</a>
-                        <a id="nome"> {events.children.name}</a>
+                        <a id="nome"> {events.entrada.children.name}</a>
                         <div className="direita">
                         </div>
                     </div>
                     <div id="info">
                         <a>Parentesco:</a>
-                        <a id="parentesco">{events.kinship}</a>
+                        <a id="parentesco">{events.entrada.kinship}</a>
                         <div className="direita">
                             <a>Idade:</a>
-                            <a id="idade">{Idade(events.children.birthday)}</a>
+                            <a id="idade">{Idade(events.entrada.children.birthday)}</a>
                         </div>
                     </div>
                     <div>
@@ -80,17 +80,17 @@ class Comprovantesaida extends React.Component {
                         <a id="pacote">Passaporte</a>
                         <div className="direita">
                             <a>Entrada:</a>
-                            <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
+                            <a id="hora">{moment(events.entrada.time).format("HH:MM")}</a>
                             <a>h</a>
                         </div>
                     </div>
                     <div id="obs">
                         <a>Observações:</a>
-                        <a id="obsTexto">{events.children.observations}</a>
+                        <a id="obsTexto">{events.entrada.children.observations}</a>
                     </div>
                     <div id="restrioes">
                         <a>Restrições:</a>
-                        <a id="restricoesTexto">{events.children.restrictions}</a>
+                        <a id="restricoesTexto">{events.entrada.children.restrictions}</a>
                     </div>
                     <a>-</a>
                 </div>
@@ -105,227 +105,134 @@ class Comprovantesaida extends React.Component {
 
 
         if (this.props.teste) {
+            console.log(this.props.tabela)
             return (
 
                 <div style={{ display: 'none' }} id='print' className='conteudo' >
 
 
-<a class="trilha">﻿﻿--------------------------------------</a>
-        <a class="naoFiscal">****** NÃO É DOCUMENTO FISCAL ******</a>
-        <div class="titulo">
-            <a class="espacoTitulo">BRINKIDS</a>
-            <a class="espacoTitulo">-</a>
-            <a id="data">01/01/2001</a>
-        </div>
-        <div class="titulo">
-            <a class="espacoTitulo">SAÍDA</a>
-            <a id="hora">01:01</a>
-            <a class="espacoTitulo">h</a>
-            <a class="espacoTitulo">-</a>
-            <a class="espacoTitulo">DOC FINAL</a>
-        </div>
-        <div id="responsavel" class="textos">
-            <div>
-                <a>Responsável:</a>
-                <a id="nome">12345678911234567892123456</a>
-            </div>
-            <div>
-                <a>Telefone:</a>
-                <a id="telefone">(84)991151610</a>
-                <div class="direita">
-                    <a>ID:</a>
-                    <a id="id">A01</a>
-                </div>
-            </div>
-            <div id="obs">
-                <a>Observações:</a>
-                <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
-            </div>
-            <a>-</a>
-        </div>
-        <div class="criancas textos">
-            <div id="crianca">
-                <div id="dados">
-                    <a>Criança:</a>
-                    <a id="nome">1234567891123456789212</a>
-                    <div class="direita">
-                        <a>ID:</a>
-                        <a id="id">C01</a>
+                    <a className="trilha" >﻿﻿--------------------------------------</a>
+                    <a className="naoFiscal">****** NÃO É DOCUMENTO FISCAL ******</a>
+                    <div className="titulo7">
+                        <a className="espacoTitulo">BRINKIDS</a>
+                        <a className="espacoTitulo">-</a>
+                        <a id="doc" className="espacoTitulo">ENTRADA</a>
+                        <a className="espacoTitulo">-</a>
+                        <a id="data">{new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear()}</a>
+
                     </div>
-                </div>
-                <div id="info">
-                    <a>Parentesco:</a>
-                    <a id="parentesco">12345678911234567</a>
-                    <div class="direita">
-                        <a>Idade:</a>
-                        <a id="idade">12</a>
+                    <div id="responsavel" className="textos">
+                        <div>
+                            <a>Responsável:</a>
+                            <a id="nome"> {this.props.tabela[0].entrada.adult.name}</a>
+                        </div>
+                        <div>
+                            <a>Telefone:</a>
+                            <a id="telefone"> {this.props.tabela[0].entrada.adult.phone}</a>
+
+                        </div>
+                        <div id="obs">
+                            <a>Observações:</a>
+                            <a id="obsTexto">{this.props.tabela[0].entrada.adult.observations}</a>
+                        </div>
+                        <a>-</a>
                     </div>
-                </div>
-                <div>
-                    <a>Pacote:</a>
-                    <a id="pacote">PASSAPORTE</a>
-                    <div class="direita">
-                        <a>Entrada:</a>
-                        <a id="hora">10:10</a>
-                        <a>h</a>
-                    </div>
-                </div>
-                <div id="obs">
-                    <a>Observações:</a>
-                    <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
-                </div>
-                <div id="restrioes">
-                    <a>Restrições:</a>
-                    <a id="restricoesTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
-                </div>
-                <a>-</a>
-            </div>
-            <div id="crianca">
-                <div id="dados">
-                    <a>Criança:</a>
-                    <a id="nome">1234567891123456789212</a>
-                    <div class="direita">
-                        <a>ID:</a>
-                        <a id="id">C02</a>
-                    </div>
-                </div>
-                <div id="info">
-                    <a>Parentesco:</a>
-                    <a id="parentesco">12345678911234567</a>
-                    <div class="direita">
-                        <a>Idade:</a>
-                        <a id="idade">12</a>
-                    </div>
-                </div>
-                <div>
-                    <a>Pacote:</a>
-                    <a id="pacote">ANIVERSÁRIO</a>
-                    <div class="direita">
-                        <a>Entrada:</a>
-                        <a id="hora">10:10</a>
-                        <a>h</a>
-                    </div>
-                </div>
-                <div id="obs">
-                    <a>Observações:</a>
-                    <a id="obsTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
-                </div>
-                <div id="restrioes">
-                    <a>Restrições:</a>
-                    <a id="restricoesTexto">123456789112345678921234567893123456789123456789112345678921234567893123456789</a>
-                </div>
-                <div id="aniversario">
-                    <div>
-                        <a>Aniversariante:</a>
-                        <a id="nome">12345678912345678921234</a>
-                    </div>
-                    <div>
-                        <a>Início:</a>
-                        <a id="horaInicio">10:10</a>
-                        <a>h</a>
-                        <div class="direita">
-                            <a>Finaliza:</a>
-                            <a id="horaFim">10:10</a>
-                            <a>h</a>
+                    <div className="criancas textos">
+                        {this.props.tabela.map((evento) => byChild(evento))}
+                        <div>
+                            <a>Pertences: Gaveta</a>
+                            <a id="gaveta"> {this.props.tabela[0].entrada.belongings + 1}</a>
                         </div>
                     </div>
-                </div>
-                <a>-</a>
-            </div>
-            <div>
-                <a>Pertences: Gaveta</a>
-                <a id="gaveta">001</a>
-            </div>
-        </div>
-        <div id="datalhamento" class="textos">
-            <a>Detalhamento</a>
-            <table style="width:100%">
-                <thead>
-                    <tr>
-                        <td>Serviço</td>
-                        <td>ID</td>
-                        <td>Quant.</td>
-                        <td>Valor</td>
-                    </tr>
-                </thead>
-                <tbody id="servicos">
-                    <tr>
-                        <td><a>PASSAPORTE</a></td>
-                        <td><a id="id">C01</a></td>
-                        <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
-                        <td><a class="espacoTitulo">R$</a><a id="valor">50,00</a></td>
-                    </tr>
-                    <tr>
-                        <td><a>ANIVERSÁRIO</a></td>
-                        <td><a id="id">C02</a></td>
-                        <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
-                        <td><a class="espacoTitulo">R$</a><a id="valor">0,00</a></td>
-                    </tr>
-                    <tr>
-                        <td><a>12345678911234567</a></td>
-                        <td><a id="id">123</a></td>
-                        <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
-                        <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="direita" style="margin-bottom: 2mm;">
-                <a>Total:  R$</a>
-                <a id="valorServicos">0000,00</a>
-            </div>
-            <table style="width:100%">
-                <thead>
-                    <tr>
-                        <td>Desconto</td>
-                        <td>ID</td>
-                        <td>Valor</td>
-                    </tr>
-                </thead>
-                <tbody id="descontos">
-                    <tr>
-                        <td><a>ANIVERSÁRIO 10%</a></td>
-                        <td><a id="id">C01</a></td>
-                        <td><a class="espacoTitulo">R$</a><a id="valor">10,00</a></td>
-                    </tr>
-                    <tr>
-                        <td><a>LOGISTA 10%</a></td>
-                        <td><a id="id">C02</a></td>
-                        <td><a class="espacoTitulo">R$</a><a id="valor">20,00</a></td>
-                    </tr>
-                    <tr>
-                        <td><a>12345678911234567892123</a></td>
-                        <td><a id="id">123</a></td>
-                        <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="direita">
-                <a>Total:  R$</a>
-                <a id="valorDescontos">0000,00</a>
-            </div>
-            <div style="margin-top: 6mm;">
-                <a>Valor pago: R$</a>
-                <a id="valor">1234,00</a>
-                <a>em</a>
-                <a id="metodo">1234567891123</a>
-            </div>
-        </div>
-        <div id="atendente" class="atendente textos" style="margin-top: 3mm;">
-            <a>Atendente:</a>
-            <a>1234567891123456789212345678</a>
-        </div>
-        <div>
-            <div class="rodape">
-                <a>www.brinkidsonline.com.br</a>
-            </div>
-            <div class="rodape">
-                <a>contato@brinkidsonline.com.br</a>
-            </div>
-            <div class="rodape">
-                <a>Fone: (84) 3206-8293</a>
-            </div>
-        </div>
-        <a class="trilha">﻿﻿--------------------------------------</a>
+                    <div id="datalhamento" class="textos">
+                        <a>Detalhamento</a>
+                        <table style={{width:100+'%'}}>
+                            <thead>
+                                <tr>
+                                    <td>Serviço</td>
+                                    <td>ID</td>
+                                    <td>Quant.</td>
+                                    <td>Valor</td>
+                                </tr>
+                            </thead>
+                            <tbody id="servicos">
+                                <tr>
+                                    <td><a>PASSAPORTE</a></td>
+                                    <td><a id="id">C01</a></td>
+                                    <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
+                                    <td><a class="espacoTitulo">R$</a><a id="valor">50,00</a></td>
+                                </tr>
+                                <tr>
+                                    <td><a>ANIVERSÁRIO</a></td>
+                                    <td><a id="id">C02</a></td>
+                                    <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
+                                    <td><a class="espacoTitulo">R$</a><a id="valor">0,00</a></td>
+                                </tr>
+                                <tr>
+                                    <td><a>12345678911234567</a></td>
+                                    <td><a id="id">123</a></td>
+                                    <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
+                                    <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="direita" style={{marginBottom: 2+'mm'}}>
+                            <a>Total:  R$</a>
+                            <a id="valorServicos">0000,00</a>
+                        </div>
+                        <table style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td>Desconto</td>
+                                    <td>ID</td>
+                                    <td>Valor</td>
+                                </tr>
+                            </thead>
+                            <tbody id="descontos">
+                                <tr>
+                                    <td><a>ANIVERSÁRIO 10%</a></td>
+                                    <td><a id="id">C01</a></td>
+                                    <td><a class="espacoTitulo">R$</a><a id="valor">10,00</a></td>
+                                </tr>
+                                <tr>
+                                    <td><a>LOGISTA 10%</a></td>
+                                    <td><a id="id">C02</a></td>
+                                    <td><a class="espacoTitulo">R$</a><a id="valor">20,00</a></td>
+                                </tr>
+                                <tr>
+                                    <td><a>12345678911234567892123</a></td>
+                                    <td><a id="id">123</a></td>
+                                    <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="direita">
+                            <a>Total:  R$</a>
+                            <a id="valorDescontos">0000,00</a>
+                        </div>
+                        <div style={{marginTop: 6+'mm'}}>
+                            <a>Valor pago: R$</a>
+                            <a id="valor">1234,00</a>
+                            <a>em</a>
+                            <a id="metodo">1234567891123</a>
+                        </div>
+                    </div>
+                    <div id="atendente" className="atendente textos">
+                        <a>Atendente:</a>
+                        <a> {this.props.tabela[0].funcionario}</a>
+                    </div>
+                    <div>
+                        <div className="rodape">
+                            <a>www.brinkidsonline.com.br</a>
+                        </div>
+                        <div className="rodape">
+                            <a>contato@brinkidsonline.com.br</a>
+                        </div>
+                        <div className="rodape">
+                            <a>Fone: (84) 3206-8293</a>
+                        </div>
+                    </div>
+                    <a className="trilha">﻿﻿--------------------------------------</a>
                 </div>
             );
         }

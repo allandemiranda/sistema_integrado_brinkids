@@ -299,10 +299,10 @@ router.post('/a', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
-  console.log(req.body);
+  console.log( Stringify(req.body));
   console.log('executed');
   const products = req.body.map(async (child) => {
-
+   
     try {
       const deletedService = await product.findByIdAndRemove(child.entrada._id);
   

@@ -454,9 +454,10 @@ class Passport extends React.Component {
                 })
 
             }).then(() => {
-                alert("saida finalizada")
+               
                 setTimeout((event) => {
                     this.props.history.push("/");
+                    
                 }, 100);
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
