@@ -24,25 +24,27 @@ class VerDesconto extends React.Component {
             TypeTime: "",
             Date: "",
             list: [],
+            codigos: [],
         }
-
         axios.get(`/discount/filter/${this.props.Nome}`)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
                     list: response.data,
-                    Name: response.data.name,
-                    Description: response.data.description,
-                    TypePeople: response.data.to,
-                    TypeValue: response.data.type,
-                    Value: response.data.value,
-                    Quant: response.data.amount,
-                    TypeCog: response.data.temporalityTaype,
-                    TypeTime: response.data.temporalityDate,
-                    Date: response.data.validity
                 });
-                console.log(response.data);
-                console.log(this.state.list);
+                this.setState({
+                    Name: this.state.list[0].name,
+                    Description:this.state.list[0].description,
+                    TypePeople: this.state.list[0].to,
+                    TypeValue: this.state.list[0].type,
+                    Value: this.state.list[0].value,
+                    Quant: this.state.list[0].amount,
+                    TypeCog: this.state.list[0].temporalityType,
+                    TypeTime: this.state.list[0].temporalityDate,
+                    Date: this.state.list[0].validity,
+                    codigos: this.state.list[0].codes
+                });
+                console.log(this.state.codigos)
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -50,6 +52,7 @@ class VerDesconto extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
+        
     }
     
     render() {
@@ -129,19 +132,19 @@ class VerDesconto extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* //FALTA EDITAR DESCONTO */}
-                                    {this.state.list.codes.map((desconto, indice) => {
-                                        console.log(desconto)
-                                            return (
-                                                <tr key={desconto._id}>
-                                                    <th scope="row">{(indice + 1)}</th>
-                                                    <td >{desconto.numberCode} </td>
-                                                    
-                                                   {desconto.statusBoradlUser !==  [] &&  ( <td >{desconto.statusBoradlUser} </td>)}
-                                                    <td >{desconto.statusUniqueUse} </td>
-                                                    <td >{this.state.TypePeople} </td>
-                                                </tr>
-                                            );
+                                    {this.state.codigos.map((desconto, indice) => {
+                                            if(desconto.statusBroadlUser.length > 0){
+                                                console.log("entrei")
+                                                return (
+                                                    <tr key={desconto._id}>
+                                                        <th scope="row">{(indice + 1)}</th>
+                                                        <td >{desconto.numberCode} </td>                                                
+                                                        <td >{desconto.statusBroadlUser[0]} </td>
+                                                        <td >{desconto.statusUniqueUse} </td>
+                                                        <td >{this.state.TypePeople} </td>
+                                                    </tr>
+                                                );
+                                            }  
                                         })}
                                 </tbody>
                             </table>
@@ -160,13 +163,7 @@ class VerDesconto extends React.Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td > Exemplo </td>
-                                        <td > Criança </td>
-                                        <td > Exemplo</td>
-                                    </tr>
-                                    {this.state.list.codes.map((desconto, indice) => {
+                                    {this.state.codigos.map((desconto, indice) => {
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
