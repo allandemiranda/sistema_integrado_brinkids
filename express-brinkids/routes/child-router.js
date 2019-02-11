@@ -168,7 +168,7 @@ router.post('/', async (req, res) => {
               action: 'Criação',
               dateOperation: new Date(),
               from: funcionario, //ajsuta o id dps de fazer o login funcionar
-              to: ChildCreateResult._id,
+              to: req.body.firstName+" "+req.body.surName,
             }
             Logs.create(log,(errLog, logchil)=>{
 
@@ -222,7 +222,7 @@ router.put('/:identifier', async (req, res) =>  {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
+      to: req.body.firstName+" "+req.body.lastName,
      
 
     })
