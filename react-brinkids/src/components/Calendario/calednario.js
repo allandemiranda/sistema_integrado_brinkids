@@ -105,7 +105,7 @@ class Calendar extends React.Component {
            
             let start = moment(hora + " " +  moment(currentValue.start).format("HH:mm")).format("YYYY-MM-DD HH:mm")
             let end = moment(hora + " " +  moment(currentValue.end).format("HH:mm")).format("YYYY-MM-DD HH:mm:ss")
-           console.log(star,end)
+           console.log(start,end)
             currentValue.start = new Date(start);
             currentValue.end = new Date(end);
             
