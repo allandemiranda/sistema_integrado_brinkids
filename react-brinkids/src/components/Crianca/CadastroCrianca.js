@@ -34,7 +34,8 @@ class CadastroCrianca extends React.Component {
             sexuality: "Masculino",
             restrictions: "",
             observations: "",
-            file: ""
+            file: "",
+            nomeValido: true,
         }
         this.ChangeName = this.ChangeName.bind(this);
         this.ChangeSurname = this.ChangeSurname.bind(this);
@@ -121,10 +122,24 @@ class CadastroCrianca extends React.Component {
             return;
         }
         else {
-            $("#alertDiv").addClass('displaynone');           
-            this.setState({
+            var tamanho = this.state.firstName.length;
+            for (var i = 0; i < tamanho; i++) {
+                var c = this.state.firstName.charAt(i);
+                if (c === ' ') {
+                    this.state.nomeValido = false;
+                }
+            }
+            if (this.state.nomeValido === false) {
+                alert("Carácter Invalido. No campo NOME não é permitido o uso de espaço");
+                this.state.nomeValido = true;
+                return;
+            }
+            else {
+                $("#alertDiv").addClass('displaynone');           
+                this.setState({
                 page: "ConfirmaCad"
             })
+            }
         }
         function ValidaErros (crianca){
 

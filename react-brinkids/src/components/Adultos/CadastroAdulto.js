@@ -46,7 +46,7 @@ class CadastroAdulto extends React.Component {
             number:"",
             state:"",
             country:"",
-
+            nomeValido: true,
 
             
             // Estados Relacionado a busca de crianças
@@ -84,8 +84,6 @@ class CadastroAdulto extends React.Component {
 
     }
     getFuncionario = () => {
-
-
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
 
@@ -131,11 +129,26 @@ class CadastroAdulto extends React.Component {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
-        else {
-            $("#alertDiv").addClass('displaynone');
-            this.setState({
-                page: "childSearchPage"
-            })
+        else{
+            var tamanho = this.state.firstName.length;
+            for (var i = 0; i < tamanho; i++) {
+                var c = this.state.firstName.charAt(i);
+                if (c === ' ') {
+                    this.state.nomeValido = false;
+                }
+            }
+            if (this.state.nomeValido === false) {
+                alert("Carácter Invalido. No campo NOME não é permitido o uso de espaço");
+                this.state.nomeValido = true;
+                return;
+            }
+            else {
+                $("#alertDiv").addClass('displaynone');
+                this.setState({
+                    page: "childSearchPage"
+                })
+            }
+            
         }
 
         function ValidaErros (adulto){
@@ -263,7 +276,7 @@ class CadastroAdulto extends React.Component {
 
     //Bloco que muda o status para o atual do formulario.
     ChangeName(event){
-        this.setState({firstName: event.target.value});
+        this.setState({firstName: event.target.value}); 
     }
     ChangeSurname(event){
         this.setState({surName: event.target.value});
