@@ -518,6 +518,51 @@ class SaidaCrianca extends React.Component {
 
     }
 
+    //Função para voltar a tela de escolha de responsavel
+    VoltarEscolhaAdulto = (event) => {
+        this.setState({
+            page: "Adultos",
+        })
+    }
+    VoltarCrianca = (nomeCrianca) => {
+        if(nomeCrianca === this.state.this.state.CriancasSelecionadas[0].children.name){
+            this.setState({
+                page: "UsuarioAdulto",
+            })
+        }
+        else{
+            console.log(this.state.indice);
+            this.setState({
+                indice: (this.state.indice - 1),
+            })
+            console.log(this.state.indice);
+            axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
+                .then((response) => {
+                    this.setState({
+                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                        ValorCrianca: response.data.value,
+                    })
+                }).catch((error) => {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro no Cadastro");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+            console.log(this.state.CriancasSelecionadas[this.state.indice])
+            this.setState({
+                NameCria: this.state.CriancasSelecionadas[this.state.indice].children.name,
+                PhotoCria: this.state.CriancasSelecionadas[this.state.indice].photo,
+                IdadeCria: this.state.CriancasSelecionadas[this.state.indice].children.birthday,
+                TimeCria: this.state.CriancasSelecionadas[this.state.indice].time,
+                ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
+                RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
+                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].service,
+                indice: (this.state.indice),
+            })
+        }
+    }
+
     render() {
         if (this.state.page === "Adultos") {
             return (
@@ -639,6 +684,7 @@ class SaidaCrianca extends React.Component {
                                     <br></br>
                                     <div className="text-center">
                                         <a className="btn btn-md botao" href="/">Cancelar</a>
+                                        <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarEscolhaAdulto}>Voltar</button>
                                         <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela}>Proximo</button>
                                     </div>
                                 </form>
@@ -733,6 +779,7 @@ class SaidaCrianca extends React.Component {
                         <br></br>
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarCrianca(this.state.NameCria)}>{this.state.namebutton}</button>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaCria}>{this.state.namebutton}</button>
                         </div>
                     </div>
@@ -842,6 +889,7 @@ class SaidaCrianca extends React.Component {
 
                                 <div className="text-center">
                                     <a className="btn btn-md botao" href="/">Cancelar</a>
+                                    <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarCrianca(this.state.NameCria)}>Voltar</button>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}>Finalizar</button>
                                 </div>
                             </form>
