@@ -169,6 +169,7 @@ router.post('/', async (req, res) => {
               dateOperation: new Date(),
               from: funcionario, //ajsuta o id dps de fazer o login funcionar
               to: req.body.firstName+" "+req.body.surName,
+              id:ChildCreateResult._id
             }
             Logs.create(log,(errLog, logchil)=>{
 
@@ -223,6 +224,7 @@ router.put('/:identifier', async (req, res) =>  {
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.body.firstName+" "+req.body.lastName,
+      id:req.params.identifier,
      
 
     })
@@ -251,6 +253,7 @@ router.delete('/:identifier', async (req, res) => {
       action: 'Delete',
       dateOperation: new Date(),
       from: funcionario,
+      id:req.params.identifier,
     })
     
     const newLog = await log.save();

@@ -309,7 +309,7 @@ class DashBoard extends React.Component {
 			});
 
 			const datase = lista.passaporte.map(async (crianca, index) => {
-				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
+				const axior = await axios.get(`/child/indentifier/${crianca.id}`);
 
 				var temporario = null;
 				if (axior.data !== null) {

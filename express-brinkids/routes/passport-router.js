@@ -9,7 +9,7 @@ const adult = require('../models/adult-models');
 const Employees = require('../models/employees-models');
 var app = express();
 var bodyParser = require("body-parser");
-app.use(bodyParser.json({limit: '300kb'}));
+app.use(bodyParser.json({ limit: '300kb' }));
 
 const Logs = require('../models/logs-models')
 const router = express.Router();
@@ -222,7 +222,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
   const adultTime = ((adultExit / 60000) - (adultEntered.getTime() / 60000)); // tempo que a criança ficou na loja
 
   const discountFinded = await discount.find({ 'codes': req.params.codDesc }) //pesquisando desconto pelo código que recebe do front
-console.log(discountFinded)
+  console.log(discountFinded)
   const childName = await productFinded[0].children.name; // nome da criança pra salvar quem vai usar o desconto, já que essa rota é só de desconto para crianças
   console.log(productFinded[0].children.name)
   console.log(discountFinded)
@@ -286,8 +286,8 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
     name: adultName,
     value: finalPrice, //valor que vai ficar no final para o cliente pagar
     discount: discountFinded[0].name,
-    tipo:discountFinded[0].type,
-    valueD:discountFinded[0].value,
+    tipo: discountFinded[0].type,
+    valueD: discountFinded[0].value,
   };
   try {
     return res.status(201).json(data);
@@ -305,43 +305,43 @@ router.post('/a', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
-  console.log( req.body);
+  console.log(req.body);
   console.log('executed');
   const products = req.body.map(async (child) => {
-   
+
     try {
       const deletedService = await product.findByIdAndRemove(child.entrada._id);
-  
+
       const log = new Logs({
         activity: 'Passaporte',
         action: 'Saida',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: child.entrada.adult.name,
-        price:child.valor2,
+        price: child.valor2,
         cco: child.entrada.children.name,
         priceMethod: child.Form,
         timeLojaLast: new Date(),
         timeLojaFirst: child.entrada.time,
-  
+
       })
       const newLog = await log.save()
-  
+
       if (!deletedService) {
         return res.sendStatus(404);
       }
-  
+
       return res.sendStatus(204);
     } catch (err) {
       console.log(err);
-  
+
       return res.sendStatus(500);
     }
   });
   const productFinded = await product.find({ 'children.id': req.body.idcria });
 
 
- 
+
 });
 
 module.exports = router;

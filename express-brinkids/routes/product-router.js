@@ -78,6 +78,7 @@ console.log(req.body)
           to: adult.name,
           cco:child.name,
           timeLojaFirst: new Date(req.body.time),
+          id:child._id
 
         })
         const newLog = await log.save();
@@ -91,6 +92,7 @@ console.log(req.body)
           to: adult.name,
           cco:child.name,
           timeLojaFirst: new Date(req.body.time),
+          id:child._id,
 
 
         })

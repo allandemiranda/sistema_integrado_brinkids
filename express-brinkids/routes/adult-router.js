@@ -167,6 +167,7 @@ router.post('/', async (req, res) => {
             dateOperation: new Date(),
             from: funcionario, //ajsuta o id dps de fazer o login funcionar
             to: adultResult.name.firstName+" "+adultResult.name.surName,
+            id: adultResult._id,
           }
           Logs.create(log, (errLog, logchil) => {
 
@@ -201,6 +202,7 @@ router.post('/appendChild', async (req, res) => {
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: adult.name.firstName+" "+adult.name.surName,
+        id: req.body.identifierParent,
       })
       const newLog = await log.save();
       if (!adult) {
@@ -246,6 +248,7 @@ router.put('/:identifier', async (req, res) => {
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: adultModified.name.firstName+" "+adultModified.name.surName,
+      id:req.params.identifier,
     })
     const newLog = await log.save();
     if (!adultModified) {
@@ -279,6 +282,7 @@ router.delete('/:identifier', async (req, res) => {
       dateOperation: new Date(),
       from: funcionario,
       to:deletedService.name.firstName+" "+deletedService.name.surName,
+      id:req.params.identifier,
     })
     
     const newLog = await log.save();
