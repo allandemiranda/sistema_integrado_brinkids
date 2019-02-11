@@ -243,7 +243,7 @@ class SaidaCrianca extends React.Component {
     ProximaTela = (event) => {
         event.preventDefault();
         const b = jwt.verify(getToken(), config.secret_auth);
-
+        console.log("aaaaaaa entrei")
 
         axios.get(`/adult/${b.id}`)
             .then((response) => {
@@ -258,6 +258,7 @@ class SaidaCrianca extends React.Component {
             });
        
         if (this.state.CriancasSelecionadas.length > 0) {
+            console.log("entrei no if");
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[0].children.name,
                 PhotoCria: this.state.CriancasSelecionadas[0].photo,
