@@ -80,6 +80,7 @@ class Desconto extends Component {
                 $("#TP").addClass('errorBorder');
                 erros.push("O Para Quem não pode ser em branco");
             }
+            
             if (desc.TypeValue.length === 0) {
                 $("#TV").addClass('errorBorder');
                 erros.push("O Tipo não pode ser em branco");
