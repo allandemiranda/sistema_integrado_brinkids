@@ -70,7 +70,7 @@ class SaidaCrianca extends React.Component {
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
-
+        this.ProximaTela = this.ProximaTela.bind(this);
         
     }
     requisicao=()=>{
@@ -240,10 +240,8 @@ class SaidaCrianca extends React.Component {
     }
 
     //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
-    ProximaTela = (event) => {
-        this.setState({
-            page: "MostraCrianca",
-        })
+    ProximaTela (event){
+        
        
         const b = jwt.verify(getToken(), config.secret_auth);
         console.log("aaaaaaa entrei")
@@ -289,6 +287,7 @@ class SaidaCrianca extends React.Component {
                     this.setState({
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                         ValorCrianca: response.data.value,
+                        page: "MostraCrianca",
                     })
                 }).then(()=>{
                     
