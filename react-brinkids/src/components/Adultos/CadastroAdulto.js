@@ -177,12 +177,14 @@ class CadastroAdulto extends React.Component {
                 }
             }
             if (this.state.nomeValido === false) {
+                $("#nome").addClass('errorBorder');
                 alert("Carácter Invalido. No campo NOME não é permitido o uso de espaço");
                 this.state.nomeValido = true;
                 return;
             }
             else {
                 $("#alertDiv").addClass('displaynone');
+                $("#nome").removeClass('errorBorder');
                 this.setState({
                     page: "childSearchPage"
                 })
