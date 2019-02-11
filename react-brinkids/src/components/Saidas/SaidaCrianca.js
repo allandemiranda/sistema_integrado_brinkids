@@ -71,7 +71,7 @@ class SaidaCrianca extends React.Component {
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
-
+        this.ProximaTela = this.ProximaTela.bind(this);
         
     }
     requisicao=()=>{
@@ -241,11 +241,9 @@ class SaidaCrianca extends React.Component {
     }
 
     //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
-    ProximaTela = (event) => {
-        this.setState({
-            page: "MostraCrianca",
-        })
-        event.preventDefault();
+    ProximaTela (event){
+        
+       
         const b = jwt.verify(getToken(), config.secret_auth);
         console.log("aaaaaaa entrei")
 
@@ -290,6 +288,7 @@ class SaidaCrianca extends React.Component {
                     this.setState({
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                         ValorCrianca: response.data.value,
+                        page: "MostraCrianca",
                     })
                 }).then(()=>{
                     
@@ -732,7 +731,7 @@ class SaidaCrianca extends React.Component {
                                     <div className="text-center">
                                         <a className="btn btn-md botao" href="/">Cancelar</a>
                                         <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarEscolhaAdulto}>Voltar</button>
-                                        <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela}>Proximo</button>
+                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Proximo"/>Proximo
                                     </div>
                                 </form>
                             </div>
@@ -826,7 +825,11 @@ class SaidaCrianca extends React.Component {
                         <br></br>
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
+<<<<<<< HEAD
                             <button className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria, true)}>Voltar</button>
+=======
+                            <button className="btn btn-md botao botaoAvançar" onClick={()=>this.VoltarCrianca(this.state.NameCria)}>{this.state.namebutton}</button>
+>>>>>>> d23cff4d2fa28f7bce1a2747bea081d452c49000
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaCria}>{this.state.namebutton}</button>
                         </div>
                     </div>

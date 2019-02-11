@@ -274,7 +274,7 @@ class GerenciamentoFinanceiro extends React.Component {
     async grafico(event) {
         let listadedatas = [];
 
-        const lista = [];
+        var lista = [];
         for (var i = 0; i < 30; i++) {
             let hj = moment().format("MM/DD/YYYY");
             var novo = moment(hj).subtract(i, 'days');

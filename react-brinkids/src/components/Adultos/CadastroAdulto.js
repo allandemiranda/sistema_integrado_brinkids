@@ -212,7 +212,7 @@ class CadastroAdulto extends React.Component {
                 $("#Sbnome").removeClass('errorBorder');
             }
 
-            if (adulto.cpf.length === 0) {
+            if (adulto.cpf.length === 0|| $.isNumeric(adulto.cpf) === false) {
                 $("#numberCPF").addClass('errorBorder');
                 erros.push("O CPF não pode estar em branco");
             }
@@ -244,7 +244,7 @@ class CadastroAdulto extends React.Component {
                 $("#imagem").removeClass('errorBorder');
             }
 
-            if (adulto.phoneNumber.length === 0) {
+            if (adulto.phoneNumber.length === 0 || $.isNumeric(adulto.phoneNumber) === false) {
                 $("#phoneNumber").addClass('errorBorder');
                 erros.push("O Telefone não pode estar em branco");
             }
@@ -268,15 +268,15 @@ class CadastroAdulto extends React.Component {
                 $("#endeco").removeClass('errorBorder');
             }
 
-            if (adulto.cep.length === 0) {
+            if (adulto.cep.length === 0 || $.isNumeric(adulto.cep) === false)  {
                 $("#cep").addClass('errorBorder');
-                erros.push("O CEP não pode estar em branco");
+                erros.push("CEP Inválido");
             }
             else {
                 $("#cep").removeClass('errorBorder');
             }
 
-            if (adulto.number.length === 0) {
+            if (adulto.number.length === 0 || $.isNumeric(adulto.number) === false) {
                 $("#num").addClass('errorBorder');
                 erros.push("O Número não pode estar em branco");
             }
@@ -377,15 +377,12 @@ class CadastroAdulto extends React.Component {
 
     /*Changekinship(evento, identifier){
         this.setState({kinship: evento.target.value})
-
         console.log('O estado foi atualizado: ${this.state.kinship}');
-
         this.state.confirmaCrianca.forEach((crianca) => {
             if (crianca._id === identifier) {
                 crianca.kinship = evento.target.value
             }
         });
-
         this.setState({confirmaCrianca: this.state.confirmaCrianca});
     }*/
 
