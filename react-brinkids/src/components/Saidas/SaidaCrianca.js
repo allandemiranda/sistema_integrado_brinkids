@@ -244,7 +244,7 @@ class SaidaCrianca extends React.Component {
         this.setState({
             page: "MostraCrianca",
         })
-        event.preventDefault();
+       
         const b = jwt.verify(getToken(), config.secret_auth);
         console.log("aaaaaaa entrei")
 
