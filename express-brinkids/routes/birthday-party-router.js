@@ -152,6 +152,12 @@ router.put('/:identifier', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  let inicio = req.body.start;
+  let inicio2 = inicio.split(":");
+  let inicioFinal = moment().utc().hour(inicio2[0]).minute(inicio2[1]);
+  let final = req.body.end;
+  let final2 = final.split(":");
+  let final3 = moment().utc().hour(final2[0]).minute(final2[1]);
   try {
     const service = await BirthdayParty.findByIdAndUpdate(
       req.params.identifier,
@@ -162,8 +168,8 @@ router.put('/:identifier', async (req, res) => {
             name: req.body.name,
             age: parseInt(req.body.age, 10)
           },
-          start: req.body.start,
-          end: req.body.end,
+          start: inicioFinal,
+          end: final3,
           description: req.body.description,
           observations: req.body.observations,
           payment: {
