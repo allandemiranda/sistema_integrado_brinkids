@@ -825,11 +825,7 @@ class SaidaCrianca extends React.Component {
                         <br></br>
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-<<<<<<< HEAD
-                            <button className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria, true)}>Voltar</button>
-=======
                             <button className="btn btn-md botao botaoAvançar" onClick={()=>this.VoltarCrianca(this.state.NameCria)}>{this.state.namebutton}</button>
->>>>>>> d23cff4d2fa28f7bce1a2747bea081d452c49000
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaCria}>{this.state.namebutton}</button>
                         </div>
                     </div>
