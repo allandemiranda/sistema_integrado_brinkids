@@ -364,7 +364,7 @@ class DashBoard extends React.Component {
 					}
 				}
 
-				return lista;
+				return lista.reverse();
 			}).then((pilo) => {
 				this.setState({
 					listaGraf: pilo
