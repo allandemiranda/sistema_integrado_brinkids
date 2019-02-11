@@ -241,6 +241,7 @@ class SaidaCrianca extends React.Component {
 
     //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
     ProximaTela = (event) => {
+        event.preventDefault();
         const b = jwt.verify(getToken(), config.secret_auth);
 
 
@@ -255,7 +256,7 @@ class SaidaCrianca extends React.Component {
             }).catch((err) => {
                 console.log(err);
             });
-        event.preventDefault();
+       
         if (this.state.CriancasSelecionadas.length > 0) {
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[0].children.name,
