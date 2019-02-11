@@ -94,18 +94,19 @@ class Calendar extends React.Component {
         // O que deve ser renderizadonsole.log(r é 'response.data'
 
         response.data.map((currentValue) => {
-
+          console.log(response.data)
           if (currentValue.color !== undefined) {
             currentValue.start = new Date(currentValue.start);
             currentValue.end = new Date(currentValue.end);
           } else {
             let dia = moment(currentValue.birthdayDate).add(1, "days");
             let hora = moment(dia).format("YYYY-MM-DD")
-            let start = moment(hora + " " + currentValue.start).format("YYYY-MM-DD HH:MM:SS")
-            let end = moment(hora + " " + currentValue.end).format("YYYY-MM-DD HH:MM:SS.000")
+            let start = moment(hora + " " + currentValue.start).format("YYYY-MM-DD HH:mm:ss")
+            let end = moment(hora + " " + currentValue.end).format("YYYY-MM-DD HH:mm:ss.000")
 
             currentValue.start = new Date(start);
             currentValue.end = new Date(end);
+            console.log(currentValue.start,currentValue.end)
           }
         })
 
