@@ -272,6 +272,16 @@ class CadastroCrianca extends React.Component {
                 console.log(response)
                 this.setState({
                     page: "FormularioCad",
+                    firstName: "",
+                    surName: "",
+                    number: "",
+                    birthday: "",
+                    nacionality: "",
+                    sexuality: "Masculino",
+                    restrictions: "",
+                    observations: "",
+                    file: "",
+                    nomeValido: true,
                 })
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
