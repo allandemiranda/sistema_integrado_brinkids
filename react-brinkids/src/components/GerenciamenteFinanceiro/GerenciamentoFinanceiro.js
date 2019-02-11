@@ -314,11 +314,16 @@ class GerenciamentoFinanceiro extends React.Component {
                     }
                     nome = moment(date[0].dateOperation).format("DD/MM")
                     console.log(nome)
+                   
                 })
-
                 const temporario = {
                     name: nome, Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
                 }
+                lista.map((indi)=>{
+                    const ime = moment(indi).format("DD/MM");
+
+                })
+               
 
                 listaparaostate.push(temporario);
 
