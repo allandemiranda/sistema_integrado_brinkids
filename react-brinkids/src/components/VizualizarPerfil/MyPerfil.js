@@ -11,6 +11,7 @@ import { logout } from "../Login/service/auth";
 import { getFuncionario } from "../Login/service/auth";
 import axios from 'axios';
 import config from '../Login/service/config';
+import moment from 'moment'
 var foto;
 class MeuPerfil extends React.Component {
     constructor(props) {
@@ -383,7 +384,7 @@ class MeuPerfil extends React.Component {
                                 <div className="col-md-4 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{this.state.perfilAtual.birthday}</p>
+                                        <p>{moment(this.state.perfilAtual.birthday).add(1,"days").format("DD/MM/YYYY")}</p>
                                     </div>
                                 </div>
 

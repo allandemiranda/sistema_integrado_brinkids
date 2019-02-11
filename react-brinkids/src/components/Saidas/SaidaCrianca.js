@@ -51,6 +51,7 @@ class SaidaCrianca extends React.Component {
             PhotoAdult: "",
 
             //Criança
+            Aux: "",
             NameCria: "",
             PhotoCria: "",
             IdadeCria: "",
@@ -264,13 +265,13 @@ class SaidaCrianca extends React.Component {
             console.log("entrei no if");
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[0].children.name,
+                Aux: this.state.CriancasSelecionadas[0].children.name,
                 PhotoCria: this.state.CriancasSelecionadas[0].photo,
                 IdadeCria: this.state.CriancasSelecionadas[0].children.birthday,
                 TimeCria: this.state.CriancasSelecionadas[0].time,
                 ObsCria: this.state.CriancasSelecionadas[0].children.observations,
                 RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[0].service,
-                
+                ProdutoCria: this.state.CriancasSelecionadas[0].service,                
             })
 
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
@@ -299,7 +300,10 @@ class SaidaCrianca extends React.Component {
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 })
-        }
+            this.setState({
+                page: "MostraCrianca",
+            })    
+            }
         else {
             alert("Selecione Alguma Criança");
         }
@@ -533,11 +537,45 @@ class SaidaCrianca extends React.Component {
             page: "Adultos",
         })
     }
-    VoltarCrianca = (nomeCrianca) => {
-        if(nomeCrianca === this.state.CriancasSelecionadas[0].children.name){
+    VoltarCrianca = (nomeCrianca, check) => {
+        if(nomeCrianca === this.state.Aux && check === true){
             this.setState({
                 page: "UsuarioAdulto",
             })
+        }
+        else if(nomeCrianca === this.state.Aux && check === false){
+            this.setState({
+                NameCria: this.state.CriancasSelecionadas[0].children.name,
+                Aux: this.state.CriancasSelecionadas[0].children.name,
+                PhotoCria: this.state.CriancasSelecionadas[0].photo,
+                IdadeCria: this.state.CriancasSelecionadas[0].children.birthday,
+                TimeCria: this.state.CriancasSelecionadas[0].time,
+                ObsCria: this.state.CriancasSelecionadas[0].children.observations,
+                RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
+                ProdutoCria: this.state.CriancasSelecionadas[0].service,                
+            })
+
+            console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
+            axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + moment() + '/')
+                .then((response) => {
+                    console.log(response);
+                    console.log(this.state.page)
+                    this.setState({
+                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
+                        ValorCrianca: response.data.value,
+                    })
+                }).then(()=>{
+                    
+                }).catch((error) => {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro no Cadastro");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+            this.setState({
+                page: "MostraCrianca",
+            }) 
         }
         else{
             console.log(this.state.indice);
@@ -683,7 +721,7 @@ class SaidaCrianca extends React.Component {
                                                         <th scope="row">{(indice + 1)}</th>
                                                         <td className="text-center"> {resp.children.name} </td>
                                                         <td className="text-center">{resp.service}</td>
-                                                        <td className="text-center">{resp.time}</td>
+                                                    <td className="text-center">{moment(resp.time).format("HH:mm")}</td>
                                                         <td className="text-center"><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(resp.children.id)} /></td>
                                                     </tr>
                                                 );
@@ -750,7 +788,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Tempo:</b></h5>
-                                        <p>{this.state.TimeCria}</p>
+                                        <p>{moment(this.state.TimeCria).format("HH:mm")}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
@@ -788,7 +826,7 @@ class SaidaCrianca extends React.Component {
                         <br></br>
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarCrianca(this.state.NameCria)}>{this.state.namebutton}</button>
+                            <button className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria, true)}>Voltar</button>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaCria}>{this.state.namebutton}</button>
                         </div>
                     </div>
@@ -898,7 +936,7 @@ class SaidaCrianca extends React.Component {
 
                                 <div className="text-center">
                                     <a className="btn btn-md botao" href="/">Cancelar</a>
-                                    <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarCrianca(this.state.NameCria)}>Voltar</button>
+                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria, false)}>Voltar</button>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}>Finalizar</button>
                                 </div>
                             </form>
