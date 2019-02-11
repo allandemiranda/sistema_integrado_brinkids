@@ -241,6 +241,9 @@ class SaidaCrianca extends React.Component {
 
     //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
     ProximaTela = (event) => {
+        this.setState({
+            page: "MostraCrianca",
+        })
         event.preventDefault();
         const b = jwt.verify(getToken(), config.secret_auth);
         console.log("aaaaaaa entrei")
@@ -288,9 +291,7 @@ class SaidaCrianca extends React.Component {
                         ValorCrianca: response.data.value,
                     })
                 }).then(()=>{
-                    this.setState({
-                        page: "MostraCrianca",
-                    })
+                    
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
