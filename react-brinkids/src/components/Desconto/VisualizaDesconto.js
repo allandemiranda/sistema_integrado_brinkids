@@ -83,10 +83,18 @@ class VisualizaDesconto extends React.Component {
         console.log("Fui Clicado");
         axios.delete(`/discount/filter/${name}`)
             .then((response) => {
-                this.setState({
-                    page: "VisualizarDesconto",
-                })
-                console.log(response);
+                axios.get(`/discount`)
+                    .then((response) => {
+                        console.log("Dentro do axios: " + this)
+                        this.setState({ list_descontos: response.data, page: "VisualizarDesconto", });
+                    }).catch((error) => {
+                        console.log("Não deu certo");
+                        console.log(error)//LOG DE ERRO
+                        // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                    })
+
                 alert("Desconto Excluido!");
             }).catch((error) => {
                 console.log(error);
@@ -128,6 +136,7 @@ class VisualizaDesconto extends React.Component {
                                     </thead>
                                     <tbody>
                                         {this.state.list_descontos.map((desconto, indice) => {
+                                            console.log(desconto)
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th id="paddingNome" scope="row">{(indice + 1)}</th>
@@ -138,7 +147,7 @@ class VisualizaDesconto extends React.Component {
                                                     <td id="paddingNome" >{moment(desconto.validity).add(1, "days").format("DD/MM/YYYY")} </td>
                                                     <td >
                                                         <button className="btn botao btn-xs" onClick={() => this.VerDesconto(desconto.name)}><i className="fa fa-eye"></i></button>
-                                                        <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto.name)}><i className="fa fa-trash-o"></i></button>
+                                                        <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto._id)}><i className="fa fa-trash-o"></i></button>
                                                     </td>
                                                 </tr>
                                             );

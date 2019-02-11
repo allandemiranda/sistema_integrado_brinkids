@@ -11,6 +11,8 @@ import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
 import '../../assets/style/font-awesome.css';
 import '../Layout/css/icon-font.min.css';
+import './css/Servicos_Passaport.css';
+import './css/style.css';
 
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
@@ -272,17 +274,18 @@ class ServicoPassaporte extends React.Component {
                                                 <th >Inicial (Min)</th>
                                                 <th> Final (Min)</th>
                                                 <th> Valor </th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {this.state.list.map((TempoServico, indice) => {
                                                 return (
                                                     <tr key={TempoServico._id}>
-                                                        <th scope="row">{indice + 1}</th>
-                                                        <td > {TempoServico.name} </td>
-                                                        <td >{TempoServico.initialTime} </td>
-                                                        <td>{TempoServico.finalTime}</td>
-                                                        <td> {TempoServico.price}</td>
+                                                        <th id="paddingNome" scope="row">{indice + 1}</th>
+                                                        <td id="paddingNome" > {TempoServico.name} </td>
+                                                        <td id="paddingNome" >{TempoServico.initialTime} </td>
+                                                        <td id="paddingNome" >{TempoServico.finalTime}</td>
+                                                        <td id="paddingNome" > {TempoServico.price}</td>
                                                         {indice > 0 && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
                                                     </tr>
                                                 );

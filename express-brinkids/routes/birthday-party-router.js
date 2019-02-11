@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
   }
 });
 router.get('/a', async (req, res) => {
-  // const hj = moment().format("YYYY-MM-DD")
+  const hj = moment().format("YYYY-MM-DD")
   // let p = "08:30"
   // let h = p.split(":");
   // let i =moment().hour(h[0]).minute(h[1]);

@@ -20,11 +20,14 @@ import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
 
+import ComprovanteLogin from '../Comprovante/comprovanteLogin.js';
 
 class FormularioCadFunc extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            comprovante:false,
+            dadosComprovates:"",
             cargoName:"",
             cargos: [],
             page: "FormularioCad",
@@ -624,13 +627,28 @@ class FormularioCadFunc extends React.Component {
         //OBS
         formData.append('observations', String(this.state.observations))
         console.log(this.props)
-        
+        const ba = this.state.email.split("@");
+        const login = ba+this.state.RegInterno;
+        const dadosComprovates={
+            login:login,
+            nome:this.state.firstName +" "+this.state.surName,
+        }
         axios.post('/employees', formData)
             .then((response) => {
                 console.log(response.data)
-                alert("cadastrado")
-               window.location.href="/";
-            }).catch((error) => {
+                this.setState({
+                    dadosComprovates:dadosComprovates,
+                    comprovante:true,
+                })
+               
+               
+            }).then(()=>{
+                setTimeout(()=>{
+                    alert("cadastrado")
+                    window.location.href="/";
+                },1000)
+            })
+            .catch((error) => {
                 console.log(error)//LOG DE ERRO
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -893,6 +911,11 @@ class FormularioCadFunc extends React.Component {
                         Observacao={this.state.observations}
                     />
                     <br></br>
+                    {this.state.comprovante && (<ComprovanteLogin
+                        tabela={this.state.dadosComprovates}
+                        serviso="PASSAPORTE"
+                        teste={this.state.comprovante}
+                    />)}
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -39,8 +40,7 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Aniversário: </b></h5>
-                                    <p>{this.props.DateAni}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.DateAni).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
@@ -148,8 +148,7 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-3 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data da Emissão: </b></h5>
-                                    <p>{this.props.CTData}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.CTData).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className="col-md-3 col-sm-12">
@@ -173,8 +172,7 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data da Emissão: </b></h5>
-                                    <p>{this.props.RGData}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.RGData).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
@@ -270,15 +268,13 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Emissão: </b></h5>
-                                    <p>{this.props.PDataE}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.PDataE).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Validade: </b></h5>
-                                    <p>{this.props.PDataV}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.PDataV).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                         </div>
@@ -310,15 +306,13 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Emissão: </b></h5>
-                                    <p>{this.props.CNDataE}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.CNDataE).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Validade: </b></h5>
-                                    <p>{this.props.CNDataV}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.CNDataV).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                         </div>
@@ -344,8 +338,7 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Admissão: </b></h5>
-                                    <p>{this.props.FDA}</p>
-                                    <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                    <p>{moment(this.props.FDA).add(1,"days").format("DD/MM/YYYY")}</p>
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">

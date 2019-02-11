@@ -8,7 +8,7 @@ import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
 import moment from 'moment';
-
+import ComprovanteDesconto from '../Comprovante/comprovantedesconto.js';
 
 class Desconto extends Component {
 
@@ -16,6 +16,8 @@ class Desconto extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dadosComprovante:"",
+            comprovante:false,
             page: "Desconto",
             Name: "",
             Description: "",
@@ -167,7 +169,9 @@ class Desconto extends Component {
                     console.log(response.data)
                     this.setState({
                         list: response.data,
-                        page: "MostraDesconto"
+                        page: "MostraDesconto",
+                        dadosComprovante:response.data,
+                        
                     })
 
                 }).catch((error) => {
@@ -181,7 +185,9 @@ class Desconto extends Component {
     }
 
     Imprimir = () => {
-        window.print(this.state.list);
+       this.setState({
+        comprovante:true,
+       })
     }
     NovoDesconto = () => {
         this.setState({
@@ -300,6 +306,7 @@ class Desconto extends Component {
                                 </div>
                             </div>
                             <br></br>
+                           
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cancelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaTemporariedade}>Gerar</button>
@@ -346,7 +353,7 @@ class Desconto extends Component {
                                                     <td >{this.state.list.to} </td>
                                                     <td >{this.state.list.temporalityType} </td>
                                                     <td >{this.state.list.temporalityDate} </td>
-                                                    <td >{moment(this.state.list.validity).format("DD/MM/YYYY")} </td>
+                                                    <td >{moment(this.state.list.validity).add(1,"days").format("DD/MM/YYYY")} </td>
                                                 </tr>
                                             );
                                         })}
@@ -354,6 +361,11 @@ class Desconto extends Component {
                                 </table>
                             </div>
                             <br></br>
+                            {this.state.comprovante && (<ComprovanteDesconto
+                        tabela={this.state.dadosComprovante}
+                        serviso="PASSAPORTE"
+                        teste={this.state.comprovante}
+                    />)}
                             <div className="text-center">
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.Imprimir}>Imprimir</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.NovoDesconto}>Novo Desconto</button>
