@@ -269,6 +269,7 @@ class SaidaCrianca extends React.Component {
                 ProdutoCria: this.state.CriancasSelecionadas[0].service,
                 page: "MostraCrianca",
             })
+
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
             //if(this.state.indice === this.state.CriancasSelecionadas.length - 1){}
             /*var formData = new FormData();
@@ -281,6 +282,7 @@ class SaidaCrianca extends React.Component {
             axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + moment() + '/')
                 .then((response) => {
                     console.log(response);
+                    console.log(this.state.page)
                     this.setState({
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                         ValorCrianca: response.data.value,
