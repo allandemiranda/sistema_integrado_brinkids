@@ -300,6 +300,22 @@ class CadastroAdulto extends React.Component {
                 $("#estado").removeClass('errorBorder');
             }
 
+            if (neighborhood.state.length === 0) {
+                $("#estado").addClass('errorBorder');
+                erros.push("O bairro não pode estar em branco");
+            }
+            else {
+                $("#estado").removeClass('errorBorder');
+            }
+
+            if (city.state.length === 0) {
+                $("#estado").addClass('errorBorder');
+                erros.push("A cidade não pode estar em branco");
+            }
+            else {
+                $("#estado").removeClass('errorBorder');
+            }
+
             return erros;
 
         }
