@@ -274,7 +274,7 @@ class GerenciamentoFinanceiro extends React.Component {
     async grafico(event) {
         let listadedatas = [];
 
-        const lista = [];
+        var lista = [];
         for (var i = 0; i < 30; i++) {
             let hj = moment().format("MM/DD/YYYY");
             var novo = moment(hj).subtract(i, 'days');
@@ -301,7 +301,7 @@ class GerenciamentoFinanceiro extends React.Component {
         Promise.all(datas).then((listagraficos) => {
 
             listagraficos.map((date, indice) => {
-
+                console.log(date)
                 date.map((info, index) => {
                     if (info.activity === "Aniversario" && info.action === "Criação") {
                         aniversario = aniversario + info.price;

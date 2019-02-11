@@ -241,7 +241,10 @@ class SaidaCrianca extends React.Component {
 
     //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
     ProximaTela = (event) => {
-        event.preventDefault();
+        this.setState({
+            page: "MostraCrianca",
+        })
+       
         const b = jwt.verify(getToken(), config.secret_auth);
         console.log("aaaaaaa entrei")
 
@@ -267,7 +270,7 @@ class SaidaCrianca extends React.Component {
                 ObsCria: this.state.CriancasSelecionadas[0].children.observations,
                 RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
                 ProdutoCria: this.state.CriancasSelecionadas[0].service,
-                page: "MostraCrianca",
+                
             })
 
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
@@ -287,6 +290,8 @@ class SaidaCrianca extends React.Component {
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                         ValorCrianca: response.data.value,
                     })
+                }).then(()=>{
+                    
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
@@ -689,7 +694,7 @@ class SaidaCrianca extends React.Component {
                                     <div className="text-center">
                                         <a className="btn btn-md botao" href="/">Cancelar</a>
                                         <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarEscolhaAdulto}>Voltar</button>
-                                        <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela}>Proximo</button>
+                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Proximo"/>Proximo
                                     </div>
                                 </form>
                             </div>
