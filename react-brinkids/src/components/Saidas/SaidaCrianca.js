@@ -694,7 +694,7 @@ class SaidaCrianca extends React.Component {
                                     <div className="text-center">
                                         <a className="btn btn-md botao" href="/">Cancelar</a>
                                         <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarEscolhaAdulto}>Voltar</button>
-                                        <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela}>Proximo</button>
+                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Proximo"/>Proximo
                                     </div>
                                 </form>
                             </div>
