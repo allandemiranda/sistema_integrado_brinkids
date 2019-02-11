@@ -154,9 +154,11 @@ router.put('/:identifier', async (req, res) => {
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   let inicio = req.body.start;
   let inicio2 = inicio.split(":");
+  console.log(inicio2)
   let inicioFinal = moment().utc().hour(inicio2[0]).minute(inicio2[1]);
   let final = req.body.end;
   let final2 = final.split(":");
+  console.log(final2)
   let final3 = moment().utc().hour(final2[0]).minute(final2[1]);
   try {
     const service = await BirthdayParty.findByIdAndUpdate(
