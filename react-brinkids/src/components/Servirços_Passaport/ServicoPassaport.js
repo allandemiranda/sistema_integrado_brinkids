@@ -23,7 +23,6 @@ class ServicoPassaporte extends React.Component {
         super(props)
         this.state = {
             page: "TelaI",
-            Descricao: "",
             Nome: "",
             list: [],
             list2: { price: '0', time: '0' },
@@ -33,6 +32,7 @@ class ServicoPassaporte extends React.Component {
             QuebraTempo: 0,
             QuebraValor: 0,
             Price: "",
+            tudoOK: true,
         }
         this.changueNome = this.changueNome.bind(this);
         this.changueDescricao = this.changueDescricao.bind(this);
@@ -147,41 +147,80 @@ class ServicoPassaporte extends React.Component {
 
     }
     criar = (event) => {
-        console.log("Dados sendo retornado");
-        event.preventDefault();
+        if (this.state.Nome.length === 0) {
+            $("#name").addClass('errorBorder');
+            this.state.tudoOK = false;
+        }
+        else {
+            $("#name").removeClass('errorBorder');
+            this.state.tudoOK = true;
+        }
 
-        var formData = new FormData();
+        if (this.state.Descricao.length === 0) {
+            $("#desc").addClass('errorBorder');
+            this.state.tudoOK = false;
+        }
+        else {
+            $("#desc").removeClass('errorBorder');
+            this.state.tudoOK = true;
+        }
 
-        formData.append('name', String(this.state.Nome))
-        formData.append('description', String(this.state.Descricao))
-        formData.append('initialTime', String(this.state.list.initialTime))
-        formData.append('finalTime', String(this.state.TempoFinal))
-        formData.append('price', String(this.state.Price))
+        if (this.state.Price.length === 0) {
+            $("#valor").addClass('errorBorder');
+            this.state.tudoOK = false;
+        }
+        else {
+            $("#valor").removeClass('errorBorder');
+            this.state.tudoOK = true;
+        }
+
+        if(this.state.list.initialTime > this.state.TempoFinal){
+            $("#time").addClass('errorBorder');
+            this.state.tudoOK = false;
+        }
+        else{
+            $("#time").removeClass('errorBorder');
+            this.state.tudoOK = true; 
+        }
+
+    /* Caso tudo der certo manda as coisas para o back*/
+        if (this.state.tudoOK === true) {
+            console.log("Dados sendo retornado");
+            event.preventDefault();
+
+            var formData = new FormData();
+
+            formData.append('name', String(this.state.Nome))
+            formData.append('description', String(this.state.Descricao))
+            formData.append('initialTime', String(this.state.list.initialTime))
+            formData.append('finalTime', String(this.state.TempoFinal))
+            formData.append('price', String(this.state.Price))
 
 
-        axios.post('/passportServices', formData)
-            .then((response) => {
-                console.log(response)
-                axios.get('/passportServices')
-                    .then((response) => {
+            axios.post('/passportServices', formData)
+                .then((response) => {
+                    console.log(response)
+                    axios.get('/passportServices')
+                        .then((response) => {
 
 
-                        console.log(response.data);
-                        this.setState({
-                            list: response.data.services,
-                            list2: response.data.default,
-                            page: "TelaI"
-                        });
-                        this.requisicao();
-                    })
+                            console.log(response.data);
+                            this.setState({
+                                list: response.data.services,
+                                list2: response.data.default,
+                                page: "TelaI"
+                            });
+                            this.requisicao();
+                        })
 
-            }).catch((error) => {
-                console.log(error)//LOG DE ERRO
-                alert("Erro no Cadastro");
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            })
+                }).catch((error) => {
+                    console.log(error)//LOG DE ERRO
+                    alert("Erro no Cadastro");
+                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+        }
     }
 
     Salvar = (event) => {
@@ -320,7 +359,7 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Valor (R$): </b></h5>
-                                                <input type="number" id="" name="QuebraValor" className="form-QuebraValor" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
+                                                <input type="number" id="valor" name="QuebraValor" className="form-QuebraValor" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
                                             </div>
                                         </div>
                                     </div>
@@ -357,7 +396,7 @@ class ServicoPassaporte extends React.Component {
                                     <div className="row">
                                         <p className=" col-md-1">Nome:</p>
                                         <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" className="form-control " onChange={this.changueNome} value={this.state.Nome}></input>
+                                            <input type="text" id="name" className="form-control " onChange={this.changueNome} value={this.state.Nome}></input>
                                         </div>
                                         <br></br>
                                         <br></br>
@@ -365,7 +404,7 @@ class ServicoPassaporte extends React.Component {
                                         <br></br>
                                         <p className=" col-md-1">Descrição:</p>
                                         <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" className="form-control " onChange={this.changueDescricao} value={this.state.Descricao}></input>
+                                            <input type="text" id="desc"className="form-control " onChange={this.changueDescricao} value={this.state.Descricao}></input>
                                         </div>
                                     </div>
                                 </div>
@@ -382,7 +421,7 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Tempo Final: </b></h5>
-                                                <input type="time" className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
+                                                <input type="time" id="time" className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
                                             </div>
                                         </div>
                                         <div className="col-md-3 col-sm-12 col-xs-12 text-left">
@@ -391,7 +430,7 @@ class ServicoPassaporte extends React.Component {
                                             <br></br><br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }} >
                                                 <h5 className="ltTitulo"><b> Valor: </b></h5>
-                                                <input type="text" className="form-control text-center" onChange={this.changuePrice} value={this.state.Price} style={{ float: "none", margiTop: -30 + "px", }} placeholder={"R$"}></input>
+                                                <input type="text" id="valor"className="form-control text-center" onChange={this.changuePrice} value={this.state.Price} style={{ float: "none", margiTop: -30 + "px", }} placeholder={"R$"}></input>
                                             </div>
                                         </div>
                                     </div>
