@@ -331,7 +331,7 @@ class GerenciamentoFinanceiro extends React.Component {
             })
             console.log(listaparaostate)
             this.setState({
-                listagraficos: listaparaostate
+                listagraficos: listaparaostate.reverse()
             })
             console.log(this)
         });
