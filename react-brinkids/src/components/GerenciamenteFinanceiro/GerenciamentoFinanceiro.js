@@ -301,7 +301,7 @@ class GerenciamentoFinanceiro extends React.Component {
         Promise.all(datas).then((listagraficos) => {
 
             listagraficos.map((date, indice) => {
-
+                console.log(date)
                 date.map((info, index) => {
                     if (info.activity === "Aniversario" && info.action === "Criação") {
                         aniversario = aniversario + info.price;
