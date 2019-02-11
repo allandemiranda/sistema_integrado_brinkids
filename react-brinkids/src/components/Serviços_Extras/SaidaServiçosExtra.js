@@ -72,24 +72,38 @@ class SaidaServicosExtra extends React.Component {
                 })
             })
             .catch((err) => console.log(err));
-        $.ajax({
-            url: "/extraServices/search/" + this.state.selectedSearch,//
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-            },
-            success: function (response) {    //Salva os dados na variácel LIST
-                console.log(response.length)
-                if (response.length === 0) {
+
+
+        axios.get(`/extraServices/search/${this.state.selectedSearch}`)
+            .then((response) => {
+                console.log(response.data)
+                if (response.data.length === 0) {
                     alert("Nenhum Serviço Encontrado")
                     this.setState({ erro: "* Nenhum Serviço Encontrado." })
                 } else {
                     console.log("Olar")
-                    this.setState({ list: response });
+                    this.setState({ list: response.data });
                 }
-            }.bind(this)
-        });
+            })
+            .catch((err) => console.log(err));
+        // $.ajax({
+        //     url: "/extraServices/search/" + this.state.selectedSearch,//
+        //     dataType: 'json',
+        //     type: 'GET',
+        //     error: function (response) {
+        //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+        //     },
+        //     success: function (response) {    //Salva os dados na variácel LIST
+        //         console.log(response.length)
+        //         if (response.length === 0) {
+        //             alert("Nenhum Serviço Encontrado")
+        //             this.setState({ erro: "* Nenhum Serviço Encontrado." })
+        //         } else {
+        //             console.log("Olar")
+        //             this.setState({ list: response });
+        //         }
+        //     }.bind(this)
+        // });
     }
 
     // Salva AS informações dos serviços que apareceu na busca e foi selecionado.
@@ -156,16 +170,17 @@ class SaidaServicosExtra extends React.Component {
     Finalizar = (event) => {
         const dadosComprovante = {
 
-            carrinho:this.state.carrinho,
-            Total:this.state.Total,
-            metodo:this.state.FormaDePagamento,
+            carrinho: this.state.carrinho,
+            Total: this.state.Total,
+            metodo: this.state.FormaDePagamento,
+            name: this.state.name
             //ajeitar o comprovante
         }
-       
 
 
-       
-        
+
+
+
         const data = {
             activity: "Serviços",
             action: 'Saida',
@@ -183,13 +198,36 @@ class SaidaServicosExtra extends React.Component {
                 this.setState({
                     dadosComprovante: dadosComprovante
                 })
-                
-                setTimeout((event) => {
-                    this.setState({
-                        comprovante: true,
-                    })
-                }, 100);
-            }).catch((error) => {
+
+
+
+
+
+            }).then((event) => {
+                this.setState({
+                    comprovante: true,
+                });
+                alert("Pagamento Concluido");
+                setTimeout(()=> {
+                  this.setState({
+                    carrinho: [],
+                    list: [], // lista dos dados que retornam da pesquisa  
+                    listConfirm: [], // Dados do Serviço Selecionado na checkBox   
+                    quantidade: [],
+                    page: "TelaInicial",//"Detalhamento",//
+                    Total: 0,
+                    FormaDePagamento: "Dinheiro",
+                    valorTotal: [],
+                    selectedSearch: "",
+                    dadosComprovante: [],
+                    objetocomprovante: [],
+                    comprovante: false,
+                    dadosComprovante: [],
+                    name: ""
+                  })
+                },2000)
+            })
+            .catch((error) => {
                 console.log(error)//LOG DE ERRO
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -371,7 +409,7 @@ class SaidaServicosExtra extends React.Component {
                             </div >
                         </div>
                     </div>
-                    
+
 
                     {/* Responsável por fazer o comprovante aparecer */}
                     {this.state.comprovante && (<Comprovant

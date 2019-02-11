@@ -47,11 +47,11 @@ class MainLayout extends React.Component {
         const b = jwt.verify(a, config.secret_auth);
         const z = moment()
         const u = moment(b.exp*1000)
-       
-       
-        if(moment(u).isBefore(z)){
-            logout();
-            this.props.history.push("/Login");
+       console.log(moment(u).isBefore(z))
+       console.log(b)
+        if((moment(u).isBefore(z))){
+            this.deslogar();
+            
         }
             
             

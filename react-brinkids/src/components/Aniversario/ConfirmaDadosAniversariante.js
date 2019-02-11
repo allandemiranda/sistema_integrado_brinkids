@@ -44,11 +44,11 @@ class ConfirmaCrianca extends React.Component {
                             </div>
                             <div className="col-md-4 col-sm-4 col-xs-12">
                                 <h5 className = "ltTitulo"><b> Hora Inical: </b></h5>
-                                <p>{this.props.HI}</p>
-                            </div>
+                                <p>{moment(this.props.HI).format("HH:mm")}</p>
+                            </div>)
                             <div className="col-md-4 col-sm-4 col-xs-12">
                                 <h5 className = "ltTitulo"><b> Hora Final: </b></h5>
-                                <p>{this.props.HF}</p>
+                                <p>{moment(this.props.HF).format("HH:mm")}</p>
                             </div>
                         </div>
                         <br></br>
