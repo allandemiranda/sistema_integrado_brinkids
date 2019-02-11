@@ -163,7 +163,7 @@ class EntradaAniversario extends React.Component {
                     this.setState({
                         listaAdultosDentro: adulto,
                         listaCriancaDentro: crianca,
-                        aniversariante: response.data,
+                        aniversariante: temporario,
                         algo:true,
                     });
                 }
