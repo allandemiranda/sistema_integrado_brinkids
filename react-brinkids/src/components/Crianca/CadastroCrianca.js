@@ -165,11 +165,13 @@ class CadastroCrianca extends React.Component {
                 }
             }
             if (this.state.nomeValido === false) {
+                $("#nome").addClass('errorBorder');
                 alert("Carácter Invalido. No campo NOME não é permitido o uso de espaço");
                 this.state.nomeValido = true;
                 return;
             }
             else {
+                $("#nome").removeClass('errorBorder');
                 $("#alertDiv").addClass('displaynone');           
                 this.setState({
                 page: "ConfirmaCad"
