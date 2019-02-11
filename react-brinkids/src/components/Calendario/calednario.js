@@ -99,14 +99,15 @@ class Calendar extends React.Component {
             currentValue.start = new Date(currentValue.start);
             currentValue.end = new Date(currentValue.end);
           } else {
+            console.log(currentValue.start,currentValue.end)
             let dia = moment(currentValue.birthdayDate).add(1, "days");
             let hora = moment(dia).format("YYYY-MM-DD")
             let start = moment(hora + " " + currentValue.start).format("YYYY-MM-DD HH:mm")
             let end = moment(hora + " " + currentValue.end).format("YYYY-MM-DD HH:mm:ss")
-            console.log(start,end)
+           
             currentValue.start = new Date(start);
             currentValue.end = new Date(end);
-            console.log(currentValue.start,currentValue.end)
+            
           }
         })
 
