@@ -525,7 +525,7 @@ class SaidaCrianca extends React.Component {
         })
     }
     VoltarCrianca = (nomeCrianca) => {
-        if(nomeCrianca === this.state.this.state.CriancasSelecionadas[0].children.name){
+        if(nomeCrianca === this.state.CriancasSelecionadas[0].children.name){
             this.setState({
                 page: "UsuarioAdulto",
             })

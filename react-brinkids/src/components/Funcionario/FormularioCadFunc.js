@@ -628,7 +628,7 @@ class FormularioCadFunc extends React.Component {
         formData.append('observations', String(this.state.observations))
         console.log(this.props)
         const ba = this.state.email.split("@");
-        const login = ba+this.state.RegInterno;
+        const login = ba[0]+this.state.RegInterno;
         const dadosComprovates={
             login:login,
             nome:this.state.firstName +" "+this.state.surName,
