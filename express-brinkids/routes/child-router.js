@@ -36,7 +36,16 @@ function checkAge(actualDate, ChildDate) {
 
   return ChildDate > compareDate;
 }
+router.get('/', async (req, res) => {
+  try {
+    const parties = await  Child.find({});
 
+    return res.status(200).json(parties);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 // Resgata crianças de acordo com o parâmetro 'search' passado na URL
 router.get('/filter/:search', (req, res) => {
   const search = req.params.search.split(' ');

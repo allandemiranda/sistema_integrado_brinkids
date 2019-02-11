@@ -7,6 +7,9 @@ const birthday = require('../models/birthday-party-models');
 const config = require('../config');
 const adult = require('../models/adult-models');
 const Employees = require('../models/employees-models');
+var app = express();
+var bodyParser = require("body-parser");
+app.use(bodyParser.json({limit: '300kb'}));
 
 const Logs = require('../models/logs-models')
 const router = express.Router();
@@ -218,8 +221,8 @@ router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
   const adultExit = req.params.timeAdult; // pegando o tempo que o adulto tirou a criança/produto da loja
   const adultTime = ((adultExit / 60000) - (adultEntered.getTime() / 60000)); // tempo que a criança ficou na loja
 
-  const discountFinded = await discount.find({ 'name': req.params.codDesc }) //pesquisando desconto pelo código que recebe do front
-
+  const discountFinded = await discount.find({ 'codes': req.params.codDesc }) //pesquisando desconto pelo código que recebe do front
+console.log(discountFinded)
   const childName = await productFinded[0].children.name; // nome da criança pra salvar quem vai usar o desconto, já que essa rota é só de desconto para crianças
   console.log(productFinded[0].children.name)
   console.log(discountFinded)
@@ -261,7 +264,8 @@ router.get('/discount/:idCria/:codDesc/:valueChild/', async (req, res) => {
 
 router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
-  const discountFinded = await discount.find({ 'name': req.params.codDesc });
+  const discountFinded = await discount.find({ 'codes.numberCode': req.params.codDesc });
+  console.log(discountFinded)
   let finalPrice = req.params.value;
   console.log(req.params.codDesc)
   let valueDisc = discountFinded[0].value;
@@ -282,6 +286,8 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
     name: adultName,
     value: finalPrice, //valor que vai ficar no final para o cliente pagar
     discount: discountFinded[0].name,
+    tipo:discountFinded[0].type,
+    valueD:discountFinded[0].value,
   };
   try {
     return res.status(201).json(data);
@@ -299,7 +305,7 @@ router.post('/a', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
-  console.log( Stringify(req.body));
+  console.log( req.body);
   console.log('executed');
   const products = req.body.map(async (child) => {
    
@@ -334,7 +340,6 @@ router.post('/a', async (req, res) => {
   });
   const productFinded = await product.find({ 'children.id': req.body.idcria });
 
-  console.log(productFinded[0]._id);
 
  
 });

@@ -55,6 +55,8 @@ class PerfilAdulto extends React.Component {
             kinship: 'Outros',
             photo: '',
             pode: false,
+
+
         }
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -86,17 +88,104 @@ class PerfilAdulto extends React.Component {
         this.mudarfoto = this.mudarfoto.bind(this);
         this.excluir = this.excluir.bind(this);
     }
-    excluir(event,indice){
-        let temporario = this.state.list;
-        axios.delete(`adult/${event}`)
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
             .then((response) => {
-              
-                temporario.splice(indice,1);
-                this.setState({
-                    list:temporario
-                })
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(2);
+    }
+    excluir(event, indice) {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 3) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            let temporario = this.state.list;
+
+                            axios.delete(`adult/${event}`)
+                                .then((response) => {
+
+                                    temporario.splice(indice, 1);
+                                    this.setState({
+                                        list: temporario
+                                    })
+                                })
+
+                                .catch((err) => console.log(err));
+
+                        } else {
+
+
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -212,26 +301,71 @@ class PerfilAdulto extends React.Component {
     }
     //função que alterna as paginas
     async ChangePage(event) {
-        console.log("this is what i need now:: ",event, "\n" ,event.children[0]);
-        if(event.children[0] === null){
-            this.setState({
-                page: "Perfil",
-            })
-        }else{
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
 
-            const criancas = event.children.map(async (crianca, index) => {
-                const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-                return response.data;
-            });
-         
-            Promise.all(criancas).then((listaCriancas) => {
-                console.log(listaCriancas, "SOu um filho da puta")
-                this.setState({
-                    listaFuncionarios: listaCriancas,
-                    page: "Perfil",
-                })
-            });
-        }
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 1) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            if (event.children[0] === null) {
+                                this.setState({
+                                    page: "Perfil",
+                                })
+                            } else {
+
+                                const criancas = event.children.map(async (crianca, index) => {
+                                    const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                    return response.data;
+                                });
+
+                                Promise.all(criancas).then((listaCriancas) => {
+
+                                    this.setState({
+                                        listaFuncionarios: listaCriancas,
+                                        page: "Perfil",
+                                    })
+                                });
+                            }
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+
 
         // criancas.forEach(async (c, index) => {
         //     const crianca = await c;
@@ -411,7 +545,7 @@ class PerfilAdulto extends React.Component {
         }
         console.log(data);
 
-        
+
 
         axios.post('/adult/appendChild', data)
             .then((response) => {
@@ -487,7 +621,7 @@ class PerfilAdulto extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.cpf} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id,indice)}><span className="glyphicon">&#xe014;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id, indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
@@ -754,14 +888,14 @@ class PerfilAdulto extends React.Component {
                                                             return (
                                                                 <tr style={{ textAlign: 'justify' }} key={events._id}>
                                                                     <td>{index + 1}</td>
-                                                                    <td>{this.state.listaFuncionarios[index].name.firstName+" "+this.state.listaFuncionarios[index].name.surName}</td>
-                                                                   {events.kinship === undefined &&( <td>Outros</td>)}
-                                                                   {events.kinship === "others" &&( <td>Outros</td>)}
-                                                                   {events.kinship === "grandchildren"&&(<td>Neto(a)</td>)}
-                                                                   {events.kinship === "Brother"&&(<td>Irmão/Irmã</td>)}
-                                                                  {events.kinship === "nephews"&&( <td>Sobrinho(a)</td>)}
-                                                                  {events.kinship === "children"&&( <td>Filho(a)</td>)}
-                                                                  {events.kinship === "Stepson"&&( <td>Enteado(a)</td>)}
+                                                                    <td>{this.state.listaFuncionarios[index].name.firstName + " " + this.state.listaFuncionarios[index].name.surName}</td>
+                                                                    {events.kinship === undefined && (<td>Outros</td>)}
+                                                                    {events.kinship === "others" && (<td>Outros</td>)}
+                                                                    {events.kinship === "grandchildren" && (<td>Neto(a)</td>)}
+                                                                    {events.kinship === "Brother" && (<td>Irmão/Irmã</td>)}
+                                                                    {events.kinship === "nephews" && (<td>Sobrinho(a)</td>)}
+                                                                    {events.kinship === "children" && (<td>Filho(a)</td>)}
+                                                                    {events.kinship === "Stepson" && (<td>Enteado(a)</td>)}
                                                                 </tr>
                                                             )
                                                         })}

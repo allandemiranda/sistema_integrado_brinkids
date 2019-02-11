@@ -37,28 +37,31 @@ class MainLayout extends React.Component {
         this.requisicao = this.requisicao.bind(this);
         this.deslogar = this.deslogar.bind(this);
     }
-    deslogar=()=>{
+    deslogar = () => {
         logout();
         this.props.history.push("/Login");
     }
+   
     requisicao() {
         const a = getToken();
-       
+
         const b = jwt.verify(a, config.secret_auth);
         const z = moment()
-        const u = moment(b.exp*1000)
-       console.log(moment(u).isBefore(z))
-       console.log(b)
-        if((moment(u).isBefore(z))){
+        const u = moment(b.exp * 1000)
+        console.log(moment(u).isBefore(z))
+        console.log(b)
+        if ((moment(u).isBefore(z))) {
             this.deslogar();
-            
+
         }
-            
-            
-    
+
+
+
         if (!b.admin) {
+            console.log(b.id)
             axios.get(`/employees/${b.id}`)
                 .then((response) => {
+                    console.log(response.data)
                     let id = response.data[0].identifierEmployee.employeeData.officialPosition;
                     console.log(response.data);
                     this.setState({
@@ -79,7 +82,11 @@ class MainLayout extends React.Component {
                         })
                         .catch((err) => console.log(err));
                 })
-                .catch((err) => console.log(err));
+                .catch((err) =>{ 
+                    console.log(err)
+                    alert("login experida: Por Favor faça login novamente")
+                   window.location.href ="/Login"
+                })
         } else {
             this.setState({
                 page: "carregado",
@@ -152,16 +159,16 @@ class MainLayout extends React.Component {
                             <button className="sidebar-icon styleButaoMenu" onClick={this.DiminueMenu}>
                                 < span className="fa fa-bars" > </span>
                             </button>
-                           
-                              < span id="logo" ><img style={{ maxWidth: 139 + "px" }} className="logo_1" alt="logo" src={logo}></img></span>
-                             
-                            
+
+                            < span id="logo" ><img style={{ maxWidth: 139 + "px" }} className="logo_1" alt="logo" src={logo}></img></span>
+
+
                         </header>
                         <div className="bordaDaDiv"> </div>
                         <div className="down" style={{ paddingBottom: 15 + 'px' }}>
                             {this.state.name !== "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={this.state.FuncionarioLogado.photo} /></a>)}
                             {this.state.name === "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={logo} /></a>)}
-                            
+
                             {this.state.name !== "admins" && (<a ><span className=" name-caret">{this.state.FuncionarioLogado.name.firstName + " " + this.state.FuncionarioLogado.name.surName}</span></a>)}
                             {this.state.name === "admins" && (<a ><span className=" name-caret">{this.state.name}</span></a>)}
                             <p>{this.state.cargo}</p>

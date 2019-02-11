@@ -37,7 +37,7 @@ class Servico extends React.Component {
         this.Salvar2 = this.Salvar2.bind(this);
 
     }
-    
+
 
     changueTipo(event) {
         this.setState({
@@ -90,24 +90,59 @@ class Servico extends React.Component {
 
         this.setState({
             lista: listaTemporaria,
-            page:"Lista",
+            page: "Lista",
             Nome: '',
             Tipo: 'Serviço',
             Text: '',
             Quant: '',
         });
     }
-    componentWillMount() {
-     
-        axios.get('/extraServices')
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
             .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
 
 
-                console.log(response.data);
-                this.setState({ lista: response.data, })
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            axios.get('/extraServices')
+                                .then((response) => {
+
+
+                                    console.log(response.data);
+                                    this.setState({ lista: response.data, })
+                                })
+                                .catch((err) => console.log(err));
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
+
     }
+    componentWillMount() {
+        this.Funcionario(25);
+    }
+
     Salvar2(event) {
         let listaTemporaria = this.state.lista;
         listaTemporaria[this.state.indice].name = this.state.Nome;
@@ -137,35 +172,124 @@ class Servico extends React.Component {
         })
     }
     excluir(event, indice) {
-        let listaTemporaria = this.state.lista;
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
 
-
-        axios.delete(`/extraServices/${listaTemporaria[event]._id}`)
             .then((response) => {
 
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
 
-                console.log(response.data);
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
 
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 26) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            let listaTemporaria = this.state.lista;
+
+
+                            axios.delete(`/extraServices/${listaTemporaria[event]._id}`)
+                                .then((response) => {
+
+
+                                    console.log(response.data);
+
+                                })
+                                .catch((err) => console.log(err));
+                            listaTemporaria.splice(event, 1);
+                            this.setState({
+                                lista: listaTemporaria,
+                            })
+                            console.log(event);
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
-        listaTemporaria.splice(event, 1);
-        this.setState({
-            lista: listaTemporaria,
-        })
-        console.log(event);
+
+
 
     }
     editar(event) {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
 
-        console.log(this.state.lista[event].preco);
-        this.setState({
-            Nome: this.state.lista[event].name,
-            Tipo: this.state.lista[event].type,
-            Text: this.state.lista[event].value,
-            Quant: this.state.lista[event].unity,
-            page: 'Editar',
-            indice: event,
-        })
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 26) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            console.log(this.state.lista[event].preco);
+                            this.setState({
+                                Nome: this.state.lista[event].name,
+                                Tipo: this.state.lista[event].type,
+                                Text: this.state.lista[event].value,
+                                Quant: this.state.lista[event].unity,
+                                page: 'Editar',
+                                indice: event,
+                            })
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+
     }
     Cancelar(event) {
         this.setState({
@@ -176,6 +300,52 @@ class Servico extends React.Component {
             Text: 0,
             Quant: '',
         })
+    }
+    novo=(event)=>{
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 24) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            this.setState({ page: 'Novo' })
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
     }
     render() {
 
@@ -223,7 +393,7 @@ class Servico extends React.Component {
 
                     </div>
                     <div className="text-center">
-                        <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'Novo' })}>
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.novo}>
                             Adicionar Novo Serviço/Produto
                                 </button>
                     </div>

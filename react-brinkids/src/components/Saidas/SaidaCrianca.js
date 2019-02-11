@@ -71,64 +71,104 @@ class SaidaCrianca extends React.Component {
 
         this.ChangeValue = this.ChangeValue.bind(this);
 
+        
+    }
+    requisicao=()=>{
         axios.get('/product')
-            .then((response) => {
-                console.log("Dentro do axios: " + this)
-                console.log(response.data);
-                this.setState({
-                    listAdultos: response.data,
-                    verified: true,
-                });
-                // console.log("adultos", this.state.listAdultos)
-            }).catch((error) => {
-                console.log("Não deu certo");
-                console.log(error)//LOG DE ERRO
-                alert("Nenhum Adulto está com criança na loja");
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-            })
-        console.log(this.state.listAdultos)
+        .then((response) => {
+            console.log("Dentro do axios: " + this)
+            console.log(response.data);
+            this.setState({
+                listAdultos: response.data,
+                verified: true,
+            });
+            // console.log("adultos", this.state.listAdultos)
+        }).catch((error) => {
+            console.log("Não deu certo");
+            console.log(error)//LOG DE ERRO
+            alert("Nenhum Adulto está com criança na loja");
+            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+        })
+    console.log(this.state.listAdultos)
 
-        ///Função que limpa a lista de duplicatas.
-        function noRepeat(arr) {
-            var cleaned = [];
-            arr.forEach(function (item) {
-                var unique = true;
-                cleaned.forEach(function (item2) {
-                    console.log("item: ", item.adult.id);
-                    console.log("item2: ", item2.adult.id)
-                    if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
-                        unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
-                    };
-                });
-                if (unique) {  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
-                    cleaned.push(item)
+    ///Função que limpa a lista de duplicatas.
+    function noRepeat(arr) {
+        var cleaned = [];
+        arr.forEach(function (item) {
+            var unique = true;
+            cleaned.forEach(function (item2) {
+                console.log("item: ", item.adult.id);
+                console.log("item2: ", item2.adult.id)
+                if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
+                    unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
                 };
             });
-            return cleaned;
-        }
-
-        setTimeout(_ => {
-
-            if (this.state.verified === true) {
-
-                var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
-                console.log("unificado: ", noRepeatedList)
-
-                for (var i = 0; i < noRepeatedList.length; i++) {
-                    this.setState({
-                        listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, { $push: [noRepeatedList[i]] })//salavdno no this.state
-                    })
-                }
-
-            }
-            this.setState({
-                verified: false,
-            })
-        }, 500)
+            if (unique) {  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
+                cleaned.push(item)
+            };
+        });
+        return cleaned;
     }
 
+    setTimeout(_ => {
+
+        if (this.state.verified === true) {
+
+            var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
+            console.log("unificado: ", noRepeatedList)
+
+            for (var i = 0; i < noRepeatedList.length; i++) {
+                this.setState({
+                    listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, { $push: [noRepeatedList[i]] })//salavdno no this.state
+                })
+            }
+
+        }
+        this.setState({
+            verified: false,
+        })
+    }, 500)
+    }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+    
+        axios.get(`/employees/${b.id}`)
+          .then((response) => {
+            let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+    
+    
+    
+            axios.get(`/professionalPosition/indentifier/${id}`)
+              .then((response) => {
+                let functions;
+                return response.data.functions;
+              }).then((event) => {
+                let podeentrar = false;
+                event.map((map) => {
+                  if (map.id === number) {
+                    podeentrar = true;
+                  }
+                })
+                return podeentrar;
+              }).then((event) => {
+                if (event) {
+                 this.requisicao();
+                } else {
+                  this.props.history.push("/");
+                  alert("você nao tem permissao para entrar aki")
+                }
+              })
+              .catch((err) => console.log(err));
+          })
+          .catch((err) => console.log(err));
+    
+      }
+      componentWillMount() {
+        this.Funcionario(20);
+      }
     //Bloco que muda o status para o atual do formulario.
     ChangeValue(event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -428,14 +468,16 @@ class SaidaCrianca extends React.Component {
 
     //Função que finaliza tudo
     Finalizar = (event) => {
-
+        console.log(this.state.ValorCriaDesc)
         console.log(this.state.CriancasSelecionadas, "dddddd")
         event.preventDefault();
         console.log("Entrei Aqui");
         if (this.state.FormPag !== "") {
             let temporario = [];
-            console.log("Número de delete que devem aparecer: ", this.state.CriancasSelecionadas.length)
+            console.log("Número de delete que devem aparecer: ", this.state.ValorCria)
             for (var i = 0; i < this.state.CriancasSelecionadas.length; i++) {
+                let entradas = this.state.listCrianca[i];
+                delete entradas.photo;
                 const comprovante = {
 
                     valor: String(this.state.FinalValor),
@@ -443,13 +485,16 @@ class SaidaCrianca extends React.Component {
                     idpai: String(this.state.IDAdult),
                     Form: String(this.state.FormPag),
                     idcria: String(this.state.CriancasSelecionadas[i].children.id),
-                    entrada: String(this.state.listCrianca[i]),
+                    entrada: entradas,
                     funcionario: String(this.state.nomeFuncionario),
+                    valor3:this.state.ValorCria,
+                    desconto:this.state.ValorCriaDesc,
                 }
                 temporario.push(comprovante);
                 console.log(temporario)
 
             }
+            
             axios.post(`/passport/a/`, temporario)
                 .then((response) => {
 
@@ -462,6 +507,8 @@ class SaidaCrianca extends React.Component {
                     this.setState({
                         comprovante: true,
                     });
+                }).then(()=>{
+                    this.props.history.push("/");
                 }).catch((err) => console.log(err));
 
         } else {

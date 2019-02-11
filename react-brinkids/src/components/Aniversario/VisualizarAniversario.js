@@ -57,6 +57,7 @@ class VisualizarAniversario extends React.Component {
         this.listaC = this.listaC.bind(this);
 
     }
+
     getFuncionario = () => {
 
 
@@ -195,9 +196,53 @@ class VisualizarAniversario extends React.Component {
         // })
     }
     editar(event) {
-        this.setState({
-            Page: "FormularioCad"
-        })
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 13) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            this.setState({
+                                Page: "FormularioCad"
+                            })
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+       
     }
     voltar(event) {
         this.setState({
@@ -208,33 +253,77 @@ class VisualizarAniversario extends React.Component {
 
     }
     excluir(event) {
-        let listaTemporaria = this.state.list;
-        axios.delete(`/birthday/${listaTemporaria[event]._id}`)
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
             .then((response) => {
 
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
 
-                console.log(response.data);
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
 
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 15) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            let listaTemporaria = this.state.list;
+                            axios.delete(`/birthday/${listaTemporaria[event]._id}`)
+                                .then((response) => {
+
+
+                                    console.log(response.data);
+
+                                })
+                                .catch((err) => console.log(err));
+                            listaTemporaria.splice(event, 1);
+                            this.setState({
+                                list: listaTemporaria,
+                            })
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
-        listaTemporaria.splice(event, 1);
-        this.setState({
-            list: listaTemporaria,
-        })
+
     }
     excluir2(event, type) {
         if (type === "adulto") {
-            let listaTemporaria = this.state.ListaAdul; 
-            listaTemporaria.splice(event,1);
+            let listaTemporaria = this.state.ListaAdul;
+            listaTemporaria.splice(event, 1);
             this.setState({
-                ListaAdul:listaTemporaria,
+                ListaAdul: listaTemporaria,
             })
         }
         if (type === "crianca") {
             let listaTemporaria = this.state.ListaCria;
-            listaTemporaria.splice(event,1);
+            listaTemporaria.splice(event, 1);
             this.setState({
-                ListaCria:listaTemporaria,
+                ListaCria: listaTemporaria,
             })
         }
     }
@@ -279,13 +368,44 @@ class VisualizarAniversario extends React.Component {
             })
             .catch((err) => console.log(err));
     }
-    componentWillMount() {
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
 
-        this.requisicao();
-        this.inteval = setInterval(this.requisicao, 60000);
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            this.requisicao();
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
 
     }
-
+    componentWillMount() {
+        this.Funcionario(14);
+    }
     render() {
         if (this.state.Page === "Lista") {
             return (

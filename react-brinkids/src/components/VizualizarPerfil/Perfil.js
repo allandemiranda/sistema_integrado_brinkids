@@ -70,17 +70,99 @@ class Perfil extends React.Component {
         this.changueSenhaAtual = this.changueSenhaAtual.bind(this);
         this.excluir = this.excluir.bind(this);
     }
-    excluir(event,indice){
-        let temporario = this.state.list;
-        axios.delete(`adult/${event}`)
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
             .then((response) => {
-               
-                temporario.splice(indice,1);
-                this.setState({
-                    list:temporario
-                })
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(10);
+    }
+    excluir(event,indice){
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 11) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            let temporario = this.state.list;
+                            axios.delete(`adult/${event}`)
+                                .then((response) => {
+                                   
+                                    temporario.splice(indice,1);
+                                    this.setState({
+                                        list:temporario
+                                    })
+                                })
+                                .catch((err) => console.log(err));
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        
     }
     changuePassword(event) {
         this.setState({
@@ -120,21 +202,65 @@ class Perfil extends React.Component {
     }
     //função que alterna as paginas
     ChangePage(event) {
-        axios.get(`/authentication/mostra_usuarios/${event._id}`)
-        .then((response) => {
-            console.log(response.data)
-            this.setState(
-                {   user:response.data[0].user,
-                    perfilEdicao: event,
-                    perfilAtual: event,
-                    reserva: event,
-                    page: 'Perfil'
-                })
-    
-            
-        }).catch((err) => {
-            console.log(err);
-        });
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 9) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            axios.get(`/authentication/mostra_usuarios/${event._id}`)
+                            .then((response) => {
+                                console.log(response.data)
+                                this.setState(
+                                    {   user:response.data[0].user,
+                                        perfilEdicao: event,
+                                        perfilAtual: event,
+                                        reserva: event,
+                                        page: 'Perfil'
+                                    })
+                        
+                                
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+      
 
         
 

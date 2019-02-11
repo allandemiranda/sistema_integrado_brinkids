@@ -9,7 +9,9 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 class VisualizaDesconto extends React.Component {
 
@@ -21,19 +23,56 @@ class VisualizaDesconto extends React.Component {
             Nome: "",
             list_descontos: [],
         }
-        axios.get(`/discount`)
-        .then((response) => {
-            console.log("Dentro do axios: " + this)
-            this.setState({ list_descontos: response.data });
-        }).catch((error) => {
-            console.log("Não deu certo");
-            console.log(error)//LOG DE ERRO
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-        })
-    }
 
+    }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            axios.get(`/discount`)
+                                .then((response) => {
+                                    console.log("Dentro do axios: " + this)
+                                    this.setState({ list_descontos: response.data });
+                                }).catch((error) => {
+                                    console.log("Não deu certo");
+                                    console.log(error)//LOG DE ERRO
+                                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                                    // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                                })
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(28);
+    }
     VerDesconto = (name) => {
         this.setState({
             page: "VerDesconto",
@@ -43,16 +82,16 @@ class VisualizaDesconto extends React.Component {
     ExcluirDesconto = (name) => {
         console.log("Fui Clicado");
         axios.delete(`/discount/filter/${name}`)
-        .then((response) => {
-            this.setState({
-                page: "VisualizarDesconto",
+            .then((response) => {
+                this.setState({
+                    page: "VisualizarDesconto",
+                })
+                console.log(response);
+                alert("Desconto Excluido!");
+            }).catch((error) => {
+                console.log(error);
+                alert("Erro encontrado: " + error);
             })
-            console.log(response);
-            alert("Desconto Excluido!");
-        }).catch((error) => {
-            console.log(error);
-            alert("Erro encontrado: " + error);
-        })
     }
     GeraDesconto = () => {
         this.setState({
@@ -96,9 +135,9 @@ class VisualizaDesconto extends React.Component {
                                                     <td id="paddingNome" >{desconto.to} </td>
                                                     <td id="paddingNome" >{desconto.type} </td>
                                                     <td id="paddingNome" >{desconto.value} </td>
-                                                    <td id="paddingNome" >{moment(desconto.validity).add(1,"days").format("DD/MM/YYYY")} </td>
+                                                    <td id="paddingNome" >{moment(desconto.validity).add(1, "days").format("DD/MM/YYYY")} </td>
                                                     <td >
-                                                        <button className="btn botao btn-xs" onClick={()  => this.VerDesconto(desconto.name)}><i className="fa fa-eye"></i></button>
+                                                        <button className="btn botao btn-xs" onClick={() => this.VerDesconto(desconto.name)}><i className="fa fa-eye"></i></button>
                                                         <button className="btn botao btn-xs" onClick={() => this.ExcluirDesconto(desconto.name)}><i className="fa fa-trash-o"></i></button>
                                                     </td>
                                                 </tr>
@@ -124,7 +163,7 @@ class VisualizaDesconto extends React.Component {
         }
         else if (this.state.page === "VerDesconto") {
             return (
-                <VerDesconto Nome = {this.state.Nome} />
+                <VerDesconto Nome={this.state.Nome} />
             )
         }
     }

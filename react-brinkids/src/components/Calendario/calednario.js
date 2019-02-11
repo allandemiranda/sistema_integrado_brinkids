@@ -132,16 +132,91 @@ class Calendar extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+  Funcionario = (number) => {
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
 
-  componentDidMount() {
-    this.interval = setInterval(this.requisicao, 10000);
-    this.requisicao();
+    axios.get(`/employees/${b.id}`)
+      .then((response) => {
+        let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+        axios.get(`/professionalPosition/indentifier/${id}`)
+          .then((response) => {
+            let functions;
+            return response.data.functions;
+          }).then((event) => {
+            let podeentrar = false;
+            event.map((map) => {
+              if (map.id === number) {
+                podeentrar = true;
+              }
+            })
+            return podeentrar;
+          }).then((event) => {
+            if (event) {
+              this.interval = setInterval(this.requisicao, 10000);
+              this.requisicao();
+            } else {
+              this.props.history.push("/");
+              alert("você nao tem permissao para entrar aki")
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
 
   }
-
+  componentWillMount() {
+    this.Funcionario(16);
+  }
 
   openModal() {
-    this.setState({ page: "Novo" });
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
+    axios.get(`/employees/${b.id}`)
+
+      .then((response) => {
+
+        let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+        axios.get(`/professionalPosition/indentifier/${id}`)
+          .then((response) => {
+
+            let functions;
+
+            return response.data.functions;
+
+          }).then((event) => {
+
+            let podeentrar = false;
+
+            event.map((map) => {
+
+              if (map.id === 17) {
+
+                podeentrar = true;
+
+              }
+
+            })
+
+            return podeentrar;
+
+          }).then((eventu) => {
+            if (eventu) {
+              this.setState({ page: "Novo" });
+            } else {
+
+              alert("você nao tem permissao para entrar aki")
+
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+
   }
 
 
@@ -194,22 +269,65 @@ class Calendar extends React.Component {
 
   }
   editar(event) {
-  
-    if (event.color) {
-      this.setState({
-        page: "Novo",
-        Titulo: event.title,
-        DateTimeBegin: event.start,
-        DateImeEnd: event.end,
-        Color: event.color,
-        editar: true,
-        identifier: event._id,
-        Description: event.description,
-        Location: event.address,
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
+    axios.get(`/employees/${b.id}`)
+
+      .then((response) => {
+
+        let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+        axios.get(`/professionalPosition/indentifier/${id}`)
+          .then((response) => {
+
+            let functions;
+
+            return response.data.functions;
+
+          }).then((event) => {
+
+            let podeentrar = false;
+
+            event.map((map) => {
+
+              if (map.id === 22) {
+
+                podeentrar = true;
+
+              }
+
+            })
+
+            return podeentrar;
+
+          }).then((eventu) => {
+            if (eventu) {
+              if (event.color) {
+                this.setState({
+                  page: "Novo",
+                  Titulo: event.title,
+                  DateTimeBegin: event.start,
+                  DateImeEnd: event.end,
+                  Color: event.color,
+                  editar: true,
+                  identifier: event._id,
+                  Description: event.description,
+                  Location: event.address,
+                })
+              } else {
+                alert("Você Não Pode Editar Esse Evento")
+              }
+
+            } else {
+
+              alert("você nao tem permissao para entrar aki")
+
+            }
+          })
+          .catch((err) => console.log(err));
       })
-    } else {
-      alert("Você Não Pode Editar Esse Evento")
-    }
+      .catch((err) => console.log(err));
+
 
   }
   mod2(event) {
@@ -250,9 +368,6 @@ class Calendar extends React.Component {
       .catch((err) => console.log(err)); // (Gabriel): Caso tenha dado errado, exiba uma mensagem de erro
   }
 
-
-
-
   ExcluirEvento(event) {
 
     axios.delete(`/calendar/${this.state.identifier}`) // (Gabriel): Requisição para deletar a data na url '/calendar/<identifier>' utilizando o método HTTP 'DELETE'
@@ -283,10 +398,6 @@ class Calendar extends React.Component {
   }
 
   render() {
-
-
-
-
 
     if (this.state.page === "Calendario") {
       return (

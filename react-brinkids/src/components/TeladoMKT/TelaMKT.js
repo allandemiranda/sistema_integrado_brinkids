@@ -25,6 +25,10 @@ import {
 	Bar,
 	ReferenceLine,
 } from 'recharts';
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+
 
 const dados1 = [];
 var dados2 = [];
@@ -90,12 +94,75 @@ class DashBoard extends React.Component {
 		this.mudarCampoMes = this.mudarCampoMes.bind(this);
 
 	}
+	Funcionario = async (number) => {
+		const a = getToken();
+		const b = jwt.verify(a, config.secret_auth);
+
+		axios.get(`/employees/${b.id}`)
+			.then((response) => {
+				let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+				axios.get(`/professionalPosition/indentifier/${id}`)
+					.then((response) => {
+						let functions;
+						return response.data.functions;
+					}).then((event) => {
+						let podeentrar = false;
+						event.map((map) => {
+							if (map.id === number) {
+								podeentrar = true;
+							}
+						})
+						return podeentrar;
+					}).then(async (event) => {
+						if (event) {
+							const response = await axios.post(`/tela-mkt/mkt/busca`);
+							console.log(response.data)
+							let temporario = [];
+							response.data.map((event) => {
+								event.children.map((mape) => {
+									if (mape.kinship === "children" && mape.identifier !== null) {
+										temporario.push({
+											name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
+											idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
+											sexo: mape.identifier.sexuality,
+											aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
+											cidade: event.address.city,
+											foto: mape.identifier.photo,
+											visita: "nao da",
+											responsavel: event.name.firstName + " " + event.name.surName,
+											email: event.email,
+
+										})
+										let temporarioss =moment(mape.identifier.birthday).format("DD/MM/YYYY");
+										console.log(moment(temporarioss).format("DD"),"===",temporarioss)
+									}
+								})
+							})
+							this.setState({
+								listaBusca: temporario
+							})
+						} else {
+							this.props.history.push("/");
+							alert("você nao tem permissao para entrar aki")
+						}
+					})
+					.catch((err) => console.log(err));
+			})
+			.catch((err) => console.log(err));
+
+	}
+	componentWillMount() {
+		this.Funcionario(31);
+	}
 	componentDidMount() {
 
 		this.grafico();
 		this.grafico1();
 
-    }
+	}
 	mudarCampoNome(event) {
 		this.setState({ campoNome: event.target.value });
 	}
@@ -110,6 +177,7 @@ class DashBoard extends React.Component {
 	}
 	mudarCampoMes(event) {
 		this.setState({ campoMes: event.target.value });
+		console.log(typeof(event.target.value))
 	}
 	selectCrianca(event) {
 		this.setState({
@@ -157,7 +225,7 @@ class DashBoard extends React.Component {
 	}
 	grafico(event) {
 		let listadedatas = [];
-		
+
 		const lista = [];
 		for (var i = 0; i < 15; i++) {
 			let hj = moment().format("MM/DD/YYYY");
@@ -263,12 +331,12 @@ class DashBoard extends React.Component {
 			return envio;
 
 		}).then((file) => {
-			console.log(file )
+
 			Promise.all(file).then((god) => {
 
-				const lista = [];
+				let lista = [];
 				god.map((event, indice) => {
-					console.log(event)
+
 					var menino = 0;
 					var menina = 0;
 
@@ -283,10 +351,15 @@ class DashBoard extends React.Component {
 				})
 
 				for (var p = 0; p < lista.length; p++) {
-					for (var y = 0; y < lista.length; y++) {
+					for (var y = 1; y <= lista.length - 1; y++) {
+
 						if (lista[p].name === lista[y].name) {
 
+							lista[p].Meninos = lista[p].Meninos + lista[y].Meninos;
+							lista[p].Meninas = lista[p].Meninas + lista[y].Meninas;
+							lista[p].Total = lista[p].Total + lista[y].Total
 							lista.splice(y, 1)
+
 						}
 					}
 				}
@@ -300,55 +373,124 @@ class DashBoard extends React.Component {
 		});
 	}
 
-	grafico1(event) {
-		axios.get(`/tela-mkt`)
-			.then((response) => {
-				let lista = [];
-				const mapa = response.data.map((event, indice) => {
-					const temporario = { aniver: moment(event.birthday).format("DD/MM"), sexo: event.sexuality }
-					lista.push({ aniver: moment(event.birthday).format("DD/MM"), sexo: event.sexuality });
-					return temporario;
-				});
+	async grafico1(event) {
+		let menino1 = 0;
+		let menina1 = 0;
+		let menino2 = 0;
+		let menina2 = 0;
+		let menino3 = 0;
+		let menina3 = 0;
+		let menino4 = 0;
+		let menina4 = 0;
+		let menino5 = 0;
+		let menina5 = 0;
+		let menino6 = 0;
+		let menina6 = 0;
+		let menino7 = 0;
+		let menina7 = 0;
+		let menino8 = 0;
+		let menina8 = 0;
 
+		let menino9 = 0;
+		let menina9 = 0;
+		let temporario = [];
+		const response = await axios.get(`/child`);
+		response.data.map((event) => {
 
-				let lista2 = lista;
-
-				for (var t = 0; t < lista.length; t++) {
-					for (var p = 0; p < lista.length; p++) {
-						if (lista[t].aniver === lista[p].aniver && p !== t) {
-							lista2.splice(p, 1);
-						}
-					}
+			var age = Math.floor(moment(new Date()).diff(moment(event.birthday), 'years', true));
+			if (age >= 0 && age <= 2) {
+				if (event.sexuality === "Masculino") {
+					menino1++;
+				} else if (event.sexuality === "Femenino") {
+					menina1++;
 				}
 
-				const lista3 = [];
 
-				lista2.map((event, indice) => {
-					var menina = 0;
-					var menino = 0;
-					mapa.map((min, index) => {
-						if (event.aniver === min.aniver) {
-							if (min.sexo === "Feminino") {
-								menina = menina + 1;
-							} else if (min.sexo === "Masculino") {
+			} else if (age >= 3 && age <= 4) {
+				if (event.sexuality === "Masculino") {
+					menino2++;
+				} else if (event.sexuality === "Femenino") {
+					menina2++;
+				}
 
-								menino = menino + 1;
-							}
-						}
 
-					})
-					lista3.push({ name: event.aniver, Meninas: menina, Meninos: menino });
-				})
-				this.setState({
-					listaGraf2: lista3,
-				})
+			} else if (age >= 5 && age <= 6) {
+				if (event.sexuality === "Masculino") {
+					menino3++;
+				} else if (event.sexuality === "Femenino") {
+					menina3++;
+				}
 
-			})
-			.catch((err) => console.log(err));
+
+			} else if (age >= 7 && age <= 8) {
+				if (event.sexuality === "Masculino") {
+					menino4++;
+				} else if (event.sexuality === "Femenino") {
+					menina4++;
+				}
+
+
+			} else if (age >= 9 && age <= 10) {
+				if (event.sexuality === "Masculino") {
+					menino5++;
+				} else if (event.sexuality === "Femenino") {
+					menina5++;
+				}
+
+
+			} else if (age >= 11 && age <= 12) {
+				if (event.sexuality === "Masculino") {
+					menino6++;
+				} else if (event.sexuality === "Femenino") {
+					menina6++;
+				}
+
+
+			} else if (age >= 13 && age <= 14) {
+				if (event.sexuality === "Masculino") {
+					menino7++;
+				} else if (event.sexuality === "Femenino") {
+					menina7++;
+				}
+
+
+			} else if (age >= 15 && age <= 16) {
+				if (event.sexuality === "Masculino") {
+					menino8++;
+				} else if (event.sexuality === "Femenino") {
+					menina8++;
+				}
+
+
+			} else if (age >= 17 && age <= 18) {
+				if (event.sexuality === "Masculino") {
+					menino9++;
+				} else if (event.sexuality === "Femenino") {
+					menina9++;
+				}
+
+
+			}
+		})
+		temporario.push(
+			{ name: "0 á 2", Meninos: menino1, Meninas: menina1 },
+			{ name: "3 á 4", Meninos: menino2, Meninas: menina2 },
+			{ name: "5 á 6", Meninos: menino3, Meninas: menina3 },
+			{ name: "7 á 8", Meninos: menino4, Meninas: menina4 },
+			{ name: "9 á 10", Meninos: menino5, Meninas: menina5 },
+			{ name: "11 á 12", Meninos: menino6, Meninas: menina6 },
+			{ name: "13 á 14", Meninos: menino7, Meninas: menina7 },
+			{ name: "15 á 16", Meninos: menino8, Meninas: menina8 },
+			{ name: "17 á 18", Meninos: menino9, Meninas: menina9 },
+		)
+		this.setState({
+			listaGraf2: temporario
+		})
 	}
 
 	CampNome = (event) => {
 		event.preventDefault();
+	
 		if (this.state.nomeC === true) {
 			$("#Nome").addClass('displaynone');
 			this.setState({
@@ -455,53 +597,208 @@ class DashBoard extends React.Component {
 		}
 	}
 
-	BuscarFinal = (event) => {
-		event.preventDefault();
+	BuscarFinal = async (event) => {
+		if (this.state.campoNome !== "") {
 
-		console.log(this.state);
+			if (this.state.campoSexo !== "") {
 
-		var erros = [];
+				if (this.state.campoCidade !== "") {
 
-		if (this.state.campoNome === "" && this.state.campoSexo === "" && this.state.campoCidade === "" && this.state.campoIdade === "" && this.state.campoMes === "") {
-			$("#Nome").addClass('errorBorder');
-			$("#Sexo").addClass('errorBorder');
-			$("#Cidade").addClass('errorBorder');
-			$("#Idade").addClass('errorBorder');
-			$("#Mes").addClass('errorBorder');
-			erros.push("Busca não pode ser em branco");
+					if (this.state.campoMes !== "") {
+						let temporario = [];
+						this.state.listaBusca.map((event) => {
+							if (event.name === this.state.campoNome && event.sexo === this.state.campoSexo && event.cidade === this.state.campoCidade && moment(event.aniversario).format("DD") === this.state.campoMes) {
+								temporario.push(event);
+							}
+						})
+						this.setState({
+							listaBusca: temporario,
+						})
+					} else {
+						let temporario = [];
+						this.state.listaBusca.map((event) => {
+							if (event.name === this.state.campoNome && event.sexo === this.state.campoSexo && event.cidade === this.state.campoCidade) {
+								temporario.push(event);
+							}
+						})
+						this.setState({
+							listaBusca: temporario,
+						})
+					}
+				} else if (this.state.campoMes !== "") {
+					let temporario = [];
+					this.state.listaBusca.map((event) => {
+						if (event.name === this.state.campoNome && event.sexo === this.state.campoSexo && moment(event.aniversario).format("DD") === this.state.campoMes) {
+							temporario.push(event);
+						}
+					})
+					this.setState({
+						listaBusca: temporario,
+					})
+				}
+			} else if (this.state.campoCidade !== "") {
+
+				if (this.state.campoMes !== "") {
+					let temporario = [];
+					this.state.listaBusca.map((event) => {
+						if (event.name === this.state.campoNome && event.cidade === this.state.campoCidade && moment(event.aniversario).format("DD") === this.state.campoMes) {
+							temporario.push(event);
+						}
+					})
+					this.setState({
+						listaBusca: temporario,
+					})
+				} else {
+					let temporario = [];
+					this.state.listaBusca.map((event) => {
+						if (event.name === this.state.campoNome && event.cidade === this.state.campoCidade) {
+							temporario.push(event);
+						}
+					})
+					this.setState({
+						listaBusca: temporario,
+					})
+				}
+			} else if (this.state.campoMes !== "") {
+				let temporario = [];
+				this.state.listaBusca.map((event) => {
+					if (event.name === this.state.campoNome && moment(event.aniversario).format("DD") === this.state.campoMes) {
+						temporario.push(event);
+					}
+				})
+				this.setState({
+					listaBusca: temporario,
+				})
+			} else {
+				let temporario = [];
+				this.state.listaBusca.map((event) => {
+					if (event.name === this.state.campoNome) {
+						temporario.push(event);
+					}
+				})
+				this.setState({
+					listaBusca: temporario,
+				})
+			}
+
+
+		} else if (this.state.campoCidade !== "") {
+			if (this.state.campoSexo !== "") {
+
+				if (this.state.campoMes !== "") {
+					let temporario = [];
+					this.state.listaBusca.map((event) => {
+						if (event.sexo === this.state.campoSexo && moment(event.aniversario).format("DD") === this.state.campoMes) {
+							temporario.push(event);
+						}
+					})
+					this.setState({
+						listaBusca: temporario,
+					})
+
+				} else {
+					let temporario = [];
+					this.state.listaBusca.map((event) => {
+						if (event.sexo === this.state.campoSexo && event.cidade === this.state.campoCidade) {
+							temporario.push(event);
+						}
+					})
+					this.setState({
+						listaBusca: temporario,
+					})
+				}
+			} else if (this.state.campoMes !== "") {
+				let temporario = [];
+				this.state.listaBusca.map((event) => {
+					if (moment(event.aniversario).format("DD") === this.state.campoMes ) {
+						temporario.push(event);
+					}
+				})
+				this.setState({
+					listaBusca: temporario,
+				})
+
+			} else {
+				let temporario = [];
+				this.state.listaBusca.map((event) => {
+					if (event.cidade === this.state.campoCidade) {
+						temporario.push(event);
+					}
+				})
+				this.setState({
+					listaBusca: temporario,
+				})
+			}
+
+
+		} else if (this.state.campoSexo !== "") {
+
+			if (this.state.campoMes !== "") {
+				let temporario = [];
+				this.state.listaBusca.map((event) => {
+					if (event.sexo === this.state.campoSexo && moment(event.aniversario).format("DD") === this.state.campoMes) {
+						temporario.push(event);
+					}
+				})
+				this.setState({
+					listaBusca: temporario,
+				})
+
+			} else {
+				let temporario = [];
+				this.state.listaBusca.map((event) => {
+					if (event.sexo === this.state.campoSexo) {
+						temporario.push(event);
+					}
+				})
+				this.setState({
+					listaBusca: temporario,
+				})
+
+
+			}
+
+
+		} else if (this.state.campoMes !== "") {
+			console.log(moment(event.aniversario).format("DD"))
+			let temporario = [];
+			this.state.listaBusca.map((event) => {
+				if (moment(event.aniversario).format("DD") === this.state.campoMes) {
+					temporario.push(event);
+				}
+			})
+			this.setState({
+				listaBusca: temporario,
+			})
+		} else {
+			const response = await axios.post(`/tela-mkt/mkt/busca`);
+			console.log(response.data)
+			let temporario = [];
+			response.data.map((event) => {
+				event.children.map((mape) => {
+					if (mape.kinship === "children" && mape.identifier !== null) {
+						temporario.push({
+							name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
+							idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
+							sexo: mape.identifier.sexuality,
+							aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
+							cidade: event.address.city,
+							foto: mape.identifier.photo,
+							visita: "nao da",
+							responsavel: event.name.firstName + " " + event.name.surName,
+							email: event.email,
+
+						})
+						console.log(moment(mape.identifier.birthday).format("M"))
+					}
+				})
+			})
+			this.setState({
+				listaBusca: temporario
+			})
 		}
-		else {
-			$("#Nome").removeClass('errorBorder');
-			$("#Sexo").removeClass('errorBorder');
-			$("#Cidade").removeClass('errorBorder');
-			$("#Idade").removeClass('errorBorder');
-			$("#Mes").removeClass('errorBorder');
-		}
-		if (erros.length > 0) {
-			$("#alertDiv").addClass('alert-danger').removeClass('displaynone');
-			$("#SucessDiv").addClass('displaynone').removeClass('alert-success');
-			return;
-		}
-		else {
-			$("#alertDiv").addClass('displaynone').removeClass('alert-danger');
-			$("#SucessDiv").addClass('alert-success').removeClass('displaynone');
 
-			// axios.get()
-			//     .then(function (response) {
-			//         this.setState({ Lista: response.data });
-			//         console.log(response);
-			//         $("#SucessDiv").addClass('alert-success').removeClass('displaynone');
-			//     }).catch(function (error) {
-			//         console.log(error)//LOG DE ERRO
-			//         $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
-			//         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-			//         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-			//         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-			//     })
-
-		}
 	}
-
 	render() {
 		return (
 			<div className="container-fluid" >
@@ -620,7 +917,7 @@ class DashBoard extends React.Component {
 											</div>
 											<br></br>
 											<div className="text-right">
-												<button className="btn botaoAvancar " onClick={this.BuscarFinal}>Buscar</button>
+												<input type="button" className="btn botaoAvancar " value="Busca" onClick={this.BuscarFinal} />
 											</div>
 										</form>
 									</div>
@@ -641,25 +938,22 @@ class DashBoard extends React.Component {
 												</tr>
 											</thead>
 											<tbody>
-												{/* {this.state.Lista.map((fluxo, indice) => {
-                                                    return (
-                                                        <tr key={fluxo._id}>
-                                                            <th scope="row">{(indice + 1)}</th>
-                                                            <td > {fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                            <td >{fluxo.} </td>
-                                                        </tr>
-                                                    );
-                                                })}  */}
+												{this.state.listaBusca.map((fluxo, indice) => {
+													return (
+														<tr key={fluxo._id}>
+															<th scope="row">{(indice + 1)}</th>
+															<td > {fluxo.name} </td>
+															<td >{fluxo.idade} </td>
+															<td >{fluxo.sexo} </td>
+															<td >{fluxo.aniversario} </td>
+															<td >{fluxo.cidade} </td>
+															<td >foto</td>
+															<td >{fluxo.visita} </td>
+															<td >{fluxo.responsavel} </td>
+															<td >{fluxo.email} </td>
+														</tr>
+													);
+												})}
 											</tbody>
 										</table>
 									</div>

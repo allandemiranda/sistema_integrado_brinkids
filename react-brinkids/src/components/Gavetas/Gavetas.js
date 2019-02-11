@@ -3,6 +3,9 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import axios from 'axios';
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 
 class Gaveta extends React.Component {
@@ -29,15 +32,50 @@ class Gaveta extends React.Component {
             [event.target.name]: event.target.value,
         })
     }
-    componentWillMount() {
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
 
-        axios.get('/belongings')
+        axios.get(`/employees/${b.id}`)
             .then((response) => {
-                console.log(response.data)
-                this.setState({ Ngavetas: response.data.number });
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            axios.get('/belongings')
+                            .then((response) => {
+                                console.log(response.data)
+                                this.setState({ Ngavetas: response.data.number });
+                            })
+                            .catch((err) => console.log(err));
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
+
     }
+    componentWillMount() {
+        this.Funcionario(29);
+    }
+    
     render() {
         return (
             <div className="container-fluid" >

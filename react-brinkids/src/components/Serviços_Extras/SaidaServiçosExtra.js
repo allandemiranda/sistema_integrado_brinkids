@@ -48,6 +48,45 @@ class SaidaServicosExtra extends React.Component {
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.excluir = this.excluir.bind(this);
     }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(21);
+    }
+
     excluir(event) {
         const temporario = this.state.carrinho;
         temporario.splice(event, 1);
@@ -208,24 +247,24 @@ class SaidaServicosExtra extends React.Component {
                     comprovante: true,
                 });
                 alert("Pagamento Concluido");
-                setTimeout(()=> {
-                  this.setState({
-                    carrinho: [],
-                    list: [], // lista dos dados que retornam da pesquisa  
-                    listConfirm: [], // Dados do Serviço Selecionado na checkBox   
-                    quantidade: [],
-                    page: "TelaInicial",//"Detalhamento",//
-                    Total: 0,
-                    FormaDePagamento: "Dinheiro",
-                    valorTotal: [],
-                    selectedSearch: "",
-                    dadosComprovante: [],
-                    objetocomprovante: [],
-                    comprovante: false,
-                    dadosComprovante: [],
-                    name: ""
-                  })
-                },2000)
+                setTimeout(() => {
+                    this.setState({
+                        carrinho: [],
+                        list: [], // lista dos dados que retornam da pesquisa  
+                        listConfirm: [], // Dados do Serviço Selecionado na checkBox   
+                        quantidade: [],
+                        page: "TelaInicial",//"Detalhamento",//
+                        Total: 0,
+                        FormaDePagamento: "Dinheiro",
+                        valorTotal: [],
+                        selectedSearch: "",
+                        dadosComprovante: [],
+                        objetocomprovante: [],
+                        comprovante: false,
+                        dadosComprovante: [],
+                        name: ""
+                    })
+                }, 2000)
             })
             .catch((error) => {
                 console.log(error)//LOG DE ERRO

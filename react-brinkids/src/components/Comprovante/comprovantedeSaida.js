@@ -14,13 +14,13 @@ class Comprovantesaida extends React.Component {
 
     componentDidMount() {
         conteudo = document.getElementById('print').innerHTML;
-        console.log(conteudo)
+
         this.rederizar();
     }
     rederizar = () => {
-        console.log(conteudo)
+
         const tela_impressao = window.open('about:blank');
-        tela_impressao.document.write('<html><head>');
+        tela_impressao.document.write('<!DOCTYPE html><html><head>');
         tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
         tela_impressao.document.write(('</head><style>html {background:transparent !important; color:#000 !important; text-shadow:none !important; filter:none !important; -ms-filter:none !important; width: 77mm; font-family: Consolas, monaco, monospace; font-style: normal; font-variant: normal; justify-content: center; align-items: center; } html body {width: 80mm; height: auto; } .trilha {width: 100%; font-size: 3.5mm; word-wrap: break-word; } .naoFiscal {width: 100%; font-size: 3.5mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .textos {width: 100%; font-size: 3.3mm; word-wrap: break-word; } .titulo7 {width: 100%; font-size: 3.6mm; font-weight: bolder; word-wrap: break-word; justify-content: center; align-items: center; display: flex; margin-bottom: 2mm; } .espacoTitulo {margin-right: 1mm; } .textos .direita {float: right; padding-right: 2mm; } .criancas {margin-bottom: 2mm; } .atendente {margin-bottom: 2mm; } .rodape {width: 100%; font-size: 3.3mm; word-wrap: break-word; justify-content: center; align-items: center; display: flex; } table, th, td {border: 0px solid black; } th, td {padding: 0px; text-align: left; }</style><body>'));
         tela_impressao.document.write(conteudo);
@@ -35,6 +35,13 @@ class Comprovantesaida extends React.Component {
         }, 200);
 
     }
+    total = (event) => {
+        let n =0;
+        event.map((aaa)=>{
+            n=n+aaa.value;
+        })
+        return n;
+    }
     render() {
 
 
@@ -45,14 +52,14 @@ class Comprovantesaida extends React.Component {
 
 
         const byChild = function (events) {
-            console.log(events);
+
             function Idade(aniversario) {
                 const hoje = new Date;
                 const nascimento = moment(aniversario).format('YYYYMMDD');
                 console.log(nascimento);
                 const a = moment(nascimento, "YYYYMMDD").fromNow();
                 a.split(' ');
-                console.log(a);
+
                 return moment(nascimento, "YYYYMMDD").fromNow();
             }
 
@@ -105,7 +112,7 @@ class Comprovantesaida extends React.Component {
 
 
         if (this.props.teste) {
-            console.log(this.props.tabela)
+
             return (
 
                 <div style={{ display: 'none' }} id='print' className='conteudo' >
@@ -144,77 +151,66 @@ class Comprovantesaida extends React.Component {
                             <a id="gaveta"> {this.props.tabela[0].entrada.belongings + 1}</a>
                         </div>
                     </div>
-                    <div id="datalhamento" class="textos">
+                    <div id="datalhamento" className="textos">
                         <a>Detalhamento</a>
-                        <table style={{width:100+'%'}}>
+                        <table style={{ width: 100 + '%' }}>
                             <thead>
                                 <tr>
                                     <td>Serviço</td>
-                                    <td>ID</td>
+
                                     <td>Quant.</td>
                                     <td>Valor</td>
                                 </tr>
                             </thead>
                             <tbody id="servicos">
-                                <tr>
-                                    <td><a>PASSAPORTE</a></td>
-                                    <td><a id="id">C01</a></td>
-                                    <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
-                                    <td><a class="espacoTitulo">R$</a><a id="valor">50,00</a></td>
-                                </tr>
-                                <tr>
-                                    <td><a>ANIVERSÁRIO</a></td>
-                                    <td><a id="id">C02</a></td>
-                                    <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
-                                    <td><a class="espacoTitulo">R$</a><a id="valor">0,00</a></td>
-                                </tr>
-                                <tr>
-                                    <td><a>12345678911234567</a></td>
-                                    <td><a id="id">123</a></td>
-                                    <td><a id="tempo" class="espacoTitulo">123</a><a>min</a></td>
-                                    <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
-                                </tr>
+                                {this.props.tabela[0].valor3.map((event) => {
+                                    return (
+                                        <tr>
+                                            <td><a>{event.service}</a></td>
+
+                                            <td><a id="tempo" className="espacoTitulo">{event.time}</a><a>min</a></td>
+                                            <td><a className="espacoTitulo">R$</a><a id="valor">{event.value}</a></td>
+                                        </tr>
+                                    );
+                                })}
+
                             </tbody>
                         </table>
-                        <div class="direita" style={{marginBottom: 2+'mm'}}>
+                        <div className="direita" style={{ marginBottom: 2 + 'mm' }}>
                             <a>Total:  R$</a>
-                            <a id="valorServicos">0000,00</a>
+                            <a id="valorServicos">{this.props.tabela[0].valor2}</a>
                         </div>
-                        <table style="width:100%">
+                        <table style={{ width: 100 + '%' }}>
                             <thead>
                                 <tr>
                                     <td>Desconto</td>
-                                    <td>ID</td>
+
                                     <td>Valor</td>
                                 </tr>
                             </thead>
                             <tbody id="descontos">
-                                <tr>
-                                    <td><a>ANIVERSÁRIO 10%</a></td>
-                                    <td><a id="id">C01</a></td>
-                                    <td><a class="espacoTitulo">R$</a><a id="valor">10,00</a></td>
-                                </tr>
-                                <tr>
-                                    <td><a>LOGISTA 10%</a></td>
-                                    <td><a id="id">C02</a></td>
-                                    <td><a class="espacoTitulo">R$</a><a id="valor">20,00</a></td>
-                                </tr>
-                                <tr>
-                                    <td><a>12345678911234567892123</a></td>
-                                    <td><a id="id">123</a></td>
-                                    <td><a class="espacoTitulo">R$</a><a id="valor">1234,12</a></td>
-                                </tr>
+                                {this.props.tabela[0].desconto.map((event) => {
+                                    return (
+                                        <tr>
+                                            {event.tipo === "Porcentagem" && (<td><a>{event.discount + " " + event.valueD + " %"}</a></td>)}
+                                            {event.tipo === "Fixo" && (<td><a>{event.discount + " " + event.valueD}</a></td>)}
+
+                                            <td><a className="espacoTitulo">R$</a><a id="valor"> {event.value}</a></td>
+                                        </tr>
+                                    );
+                                })}
+
                             </tbody>
                         </table>
-                        <div class="direita">
+                        <div className="direita">
                             <a>Total:  R$</a>
-                            <a id="valorDescontos">0000,00</a>
+                            <a id="valorDescontos">{this.total(this.props.tabela[0].desconto)}</a>
                         </div>
-                        <div style={{marginTop: 6+'mm'}}>
-                            <a>Valor pago: R$</a>
-                            <a id="valor">1234,00</a>
+                        <div style={{ marginTop: 6 + 'mm' }}>
+                            <a>Valor pago: R$ </a>
+                            <a id="valor"> {this.props.tabela[0].valor} </a>
                             <a>em</a>
-                            <a id="metodo">1234567891123</a>
+                            <a id="metodo">{this.props.tabela[0].Form}</a>
                         </div>
                     </div>
                     <div id="atendente" className="atendente textos">

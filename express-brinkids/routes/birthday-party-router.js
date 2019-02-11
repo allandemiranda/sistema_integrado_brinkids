@@ -5,6 +5,8 @@ const router = express.Router();
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const adult = require('../models/adult-models');
+
+const moment = require('moment');
 router.get('/', async (req, res) => {
   try {
     const parties = await BirthdayParty.find({});
@@ -15,7 +17,24 @@ router.get('/', async (req, res) => {
     return res.sendStatus(500);
   }
 });
+router.get('/a', async (req, res) => {
+  // const hj = moment().format("YYYY-MM-DD")
+  // let p = "08:30"
+  // let h = p.split(":");
+  // let i =moment().hour(h[0]).minute(h[1]);
+  // console.log(i)
+  // const hora1 = moment().endOf('day').format("HH:MM")
+  // console.log(moment().format("YYYY-MM-DD HH:MM"),moment().endOf('day').format("YYYY-MM-DD HH:MM"))
 
+  try {
+    const parties = await BirthdayParty.find({ 'birthdayDate': hj });
+    console.log(parties)
+    return res.status(200).json(parties);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 router.post('/', async (req, res) => {
 
   const a = req.cookies.TOKEN_KEY;
@@ -37,6 +56,14 @@ router.post('/', async (req, res) => {
   // for (var i = 0; i < oldArray.length - 1; i+=8) {
   //   array.push(String(oldArray[i+1] + oldArray[i+2] + oldArray[i+3] + oldArray[i+4] + oldArray[i+5] + oldArray[i+6] + oldArray[i+7])); //essa foi a melhor forma que consegui salvar os dados sem um monte de "//" no meio da string
   // }
+
+  let inicio = req.body.start;
+  let inicio2 = inicio.split(":");
+  let inicioFinal = moment().utc().hour(inicio2[0]).minute(inicio2[1]);
+  let final = req.body.end;
+  let final2 = final.split(":");
+  let final3 = moment().utc().hour(final2[0]).minute(final2[1]);
+  console.log(final3, inicioFinal)
   const birthday = new BirthdayParty({
     title: req.body.title,
     birthdayPerson: {
@@ -44,8 +71,8 @@ router.post('/', async (req, res) => {
       age: parseInt(req.body.age, 10)
     },
     birthdayDate: req.body.birthdayDate,
-    start: req.body.start,//falta ter a data só tem a hora
-    end: req.body.end,//aqui tbm
+    start: inicioFinal,//falta ter a data só tem a hora
+    end: final3,//aqui tbm
     description: req.body.description,
     observations: req.body.observations,
     payment: {
@@ -97,8 +124,8 @@ router.delete('/:identifier', async (req, res) => {
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const deletedService = await BirthdayParty.findOneAndDelete(req.params.identifier);
-    const changuePrice =  await Logs.update({'to': req.params.identifier},{$set: { "price" : 0}})
-    
+    const changuePrice = await Logs.update({ 'to': req.params.identifier }, { $set: { "price": 0 } })
+
 
     const log = new Logs({
       activity: 'Aniversario',
@@ -154,7 +181,7 @@ router.put('/:identifier', async (req, res) => {
         },
       }
     );
-    const changuePrice =  await Logs.update({'to': req.params.identifier},{$set: { "price" : parseInt(req.body.value, 10)}})
+    const changuePrice = await Logs.update({ 'to': req.params.identifier }, { $set: { "price": parseInt(req.body.value, 10) } })
     console.log(changuePrice)
     const log = new Logs({
       activity: 'Aniversario',
@@ -244,17 +271,17 @@ router.put('/partyFeather/:identifier', async (req, res) => {
     }
   }
   if (req.body.childExtra) {
-   
+
     try {
-      
+
       const birthday = await BirthdayParty.findById(req.params.identifier);
       birthday.guestList.push(req.body.childExtra);
-     
+
 
       birthday.save()
 
       if (!birthday) {
-       
+
         return res.sendStauts(404);
       }
 
@@ -270,7 +297,7 @@ router.put('/partyFeather/:identifier', async (req, res) => {
     dateOperation: new Date(),
     from: funcionario, //ajsuta o id dps de fazer o login funcionar
     to: req.params.identifier,
-    
+
   })
 });
 

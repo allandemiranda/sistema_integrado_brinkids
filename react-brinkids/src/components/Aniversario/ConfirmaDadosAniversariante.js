@@ -40,7 +40,7 @@ class ConfirmaCrianca extends React.Component {
                         <div className="row graph">
                             <div className="col-md-4 col-sm-4 col-xs-12">
                                 <h5 className = "ltTitulo"><b> Data do Aniversário: </b></h5>
-                                <p>{moment(this.props.Date).add(1,"days").format("DD/MM/YYYY")}</p>
+                                <p>{moment(this.props.Date).format("DD/MM/YYYY")}</p>
                             </div>
                             <div className="col-md-4 col-sm-4 col-xs-12">
                                 <h5 className = "ltTitulo"><b> Hora Inical: </b></h5>

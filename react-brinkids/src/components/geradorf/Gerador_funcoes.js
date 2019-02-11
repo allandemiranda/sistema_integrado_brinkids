@@ -69,7 +69,12 @@ class Gerador extends React.Component {
             class: this.state.class,
             funcions: this.state.funcoescheck,
         }
-
+        const data = {
+            name: this.state.Name,
+            description: this.state.Description,
+            classes: this.state.class,
+            functions: this.state.funcoescheck,
+        }
 
         var formData = new FormData();
         formData.append('name', this.state.Name);
@@ -77,7 +82,7 @@ class Gerador extends React.Component {
         formData.append('classes', this.state.class);
         formData.append('functions', this.state.funcoescheck);
 
-        axios.put(`professionalPosition/${identifier}`, formData)
+        axios.put(`professionalPosition/${identifier}`, data)
             .then((response) => {
                 console.log(response.data);
 
@@ -435,7 +440,7 @@ class Gerador extends React.Component {
                             <div className="text-center">
                                 <Link className="btn btn-md botao" to="/">Cancelar</Link>
                                 {!this.state.editar && (<input type="button" value="Salvar" className="btn btn-md botao botaoAvançar" onClick={this.Salvar}/>)}
-                                {this.state.editar && (<input type="button" value="Salvar"  className="btn btn-md botao botaoAvançar" onClick={this.salvar2}/>)}
+                                {this.state.editar && (<input type="button" value="Salvar"  className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}/>)}
                             </div>
                             <div>
                                 <ul id="mensagens-erro" style={{ color: "red" }}></ul>

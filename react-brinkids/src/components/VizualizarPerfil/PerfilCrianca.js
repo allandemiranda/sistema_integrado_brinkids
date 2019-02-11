@@ -61,17 +61,100 @@ class PerfilCrianca extends React.Component {
         this.excluir = this.excluir.bind(this);
 
     }
-    excluir(event,indice){
-        let temporario = this.state.list;
-        axios.delete(`child/${event}`)
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
             .then((response) => {
-               
-                temporario.splice(indice,1);
-                this.setState({
-                    list:temporario,
-                })
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(6);
+    }
+    excluir(event,indice){
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 7) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            let temporario = this.state.list;
+                            axios.delete(`child/${event}`)
+                                .then((response) => {
+                                   
+                                    temporario.splice(indice,1);
+                                    this.setState({
+                                        list:temporario,
+                                    })
+                                })
+                                .catch((err) => console.log(err));
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -141,13 +224,58 @@ class PerfilCrianca extends React.Component {
     }
     //função que alterna as paginas
     ChangePage(event) {
-        this.setState(
-            {
-                perfilEdicao: event,
-                perfilAtual: event,
-                reserva: event,
-                page: 'Perfil'
-            });
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 5) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            this.setState(
+                                {
+                                    perfilEdicao: event,
+                                    perfilAtual: event,
+                                    reserva: event,
+                                    page: 'Perfil'
+                                });
+
+                        } else {
+
+                            alert("você nao tem permissao para entrar aki")
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+      
             
 
 

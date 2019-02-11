@@ -15,19 +15,29 @@ export default [
     { id: 13, funcao: "Editar Aniversário" },
     { id: 14, funcao: "Visualizar Aniversário" },
     { id: 15, funcao: "Excluir Aniversário" },
+    //fazer botao excluir evento
+    
     { id: 16, funcao: "Visualizar Agenda" },
     { id: 17, funcao: "Criar Evento" },
     { id: 18, funcao: "Entrada Aniversário" },
     { id: 19, funcao: "Entrada Passaporte" },
+
     { id: 20, funcao: "Saída Criança" },
+    
     { id: 21, funcao: "Saída Produtos/Serviços" },
+
     { id: 22, funcao: "Editar Evento" },
+
     { id: 23, funcao: "Excluir Evento" },
+
     { id: 24, funcao: "Criar Produto/Serviço" },
     { id: 25, funcao: "Visualizar Produto/Serviço" },
     { id: 26, funcao: "Editar Produto/Serviço" },
+    
     { id: 27, funcao: "Configurações Passaporte" },
+    
     { id: 28, funcao: "Configurações Desconto" },
+    
     { id: 29, funcao: "Configurações Gaveta" },
     { id: 30, funcao: "Configurações Financeiro" },
     { id: 31, funcao: "Configurações Marketing" },

@@ -22,6 +22,7 @@ class EntradaAniversario extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            algo:false,
             FullName: "",
             //Responsável por saber qual página vai renderizar:
             aniversariante: [], // dados do evento atual
@@ -50,6 +51,45 @@ class EntradaAniversario extends React.Component {
         this.requisicao = this.requisicao.bind(this);
         this.criancaExtra = this.criancaExtra.bind(this);
     }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            this.requisicao();
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(18);
+    }
+
     getFuncionario = () => {
 
 
@@ -67,45 +107,52 @@ class EntradaAniversario extends React.Component {
             .catch((err) => console.log(err));
 
     }
-    criancaExtra(event){
-        let crianca ={ type: "children", id: "", name:"Criança Extra" }
+    criancaExtra(event) {
+        let crianca = { type: "children", id: "", name: "Criança Extra" }
         const data = {
             childExtra: crianca,
             identifier: this.state.aniversariante[0]._id,
             id: this.state.adultoSelecionado._id,
         }
         axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
-                    .then((response) => {
-                        console.log(response)
-                        this.setState({
-                            page: "EntradaCrianca"
-                        })
-                        this.requisicao();
+            .then((response) => {
+                console.log(response)
+                this.setState({
+                    page: "EntradaCrianca"
+                })
+                this.requisicao();
 
-                    }).catch((error) => {
-                        console.log(error)//LOG DE ERRO
-                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                    })
+            }).catch((error) => {
+                console.log(error)//LOG DE ERRO
+                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            })
     }
     requisicao(event) {
-        $.ajax({
-            url: "/birthday",
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-            },
-            success: function (response) {
-                console.log(response.length)
-                if (response.length === 0) {
+        axios.get(`/birthday/a`)
+            .then((response) => {
+
+                if (response.data.length === 0) {
                     alert("Nenhum aniversário encontrado")
-                    this.setState({ erro: "* Nenhum Evento Encontrado." })
+                    this.setState({ erro: "* Nenhum Evento Encontrado.",algo:false })
                 } else {
                     let adulto = [];
                     let crianca = [];
-                    response[0].partyFeather.map((pessoa, indice) => {
+                    let temporario = [];
+                   response.data.map((event)=>{
+                       let hj =moment().format("DD/MM/YYYY HH:MM");
+                       let inicio = moment(event.start).utc().format("DD/MM/YYYY HH:MM");
+                       let fim = moment(event.end).utc().format("DD/MM/YYYY HH:MM");
+                     
+                       console.log(moment(hj).isBefore(fim),moment(hj).isAfter(inicio))
+                       if(moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)){
+                        temporario.push(event);
+                       }
+                        
+                   })
+                   console.log(temporario)
+                   temporario[0].partyFeather.map((pessoa, indice) => {
                         if (pessoa.type === "adult") {
                             adulto.push(pessoa)
                         } else {
@@ -116,15 +163,46 @@ class EntradaAniversario extends React.Component {
                     this.setState({
                         listaAdultosDentro: adulto,
                         listaCriancaDentro: crianca,
-                        aniversariante: response
+                        aniversariante: response.data,
+                        algo:true,
                     });
                 }
-            }.bind(this)
-        });
+
+            })
+            .catch((err) => console.log(err));
+        // $.ajax({
+        //     url: "/birthday",
+        //     dataType: 'json',
+        //     type: 'GET',
+        //     error: function (response) {
+        //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+        //     },
+        //     success: function (response) {
+        //         console.log(response.length)
+        //         if (response.length === 0) {
+        //             alert("Nenhum aniversário encontrado")
+        //             this.setState({ erro: "* Nenhum Evento Encontrado." })
+        //         } else {
+        //             let adulto = [];
+        //             let crianca = [];
+        //             response[0].partyFeather.map((pessoa, indice) => {
+        //                 if (pessoa.type === "adult") {
+        //                     adulto.push(pessoa)
+        //                 } else {
+        //                     crianca.push(pessoa)
+        //                 }
+        //             })
+        //             console.log("Olar")
+        //             this.setState({
+        //                 listaAdultosDentro: adulto,
+        //                 listaCriancaDentro: crianca,
+        //                 aniversariante: response
+        //             });
+        //         }
+        //     }.bind(this)
+        // });
     }
-    componentWillMount() {
-        this.requisicao();
-    }
+
 
     //Relacionado a atualização dos valores Funções
     AdicinarFullNome(event) {
@@ -482,14 +560,14 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-6 col-sm-6 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Início: </b></h5>
-                                            <p>{this.state.aniversariante[0].start}</p>
+                                            <p>{moment(this.state.aniversariante[0].start).utc().format("HH:MM")}</p>
                                         </div>
                                         <br></br>
                                     </div>
                                     <div className="col-md-6 col-sm-6 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Fim: </b></h5>
-                                            <p>{this.state.aniversariante[0].end}</p>
+                                            <p>{moment(this.state.aniversariante[0].end).utc().format("HH:MM")}</p>
                                         </div>
                                         <br></br>
                                     </div>
@@ -528,10 +606,10 @@ class EntradaAniversario extends React.Component {
                     <br></br>
                     <br></br>
                     <div className="graph" >
-                        <div className="text-center">
+                       {this.state.algo  &&( <div className="text-center">
                             <button className="btn btn-md botao" onClick={this.SelecionarCrianca}> Criança</button>
                             <button className="btn btn-md botao" onClick={this.SelecionarAdulto}> Adulto </button>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
             )
@@ -672,10 +750,10 @@ class EntradaAniversario extends React.Component {
 
 
                                             this.state.aniversariante[0].guestList.map((event, indice) => {
-                                                
-                                               
+
+
                                                 if (event.type === "children" && event.nameChild === undefined) {
-                                                  
+
 
                                                     return (
                                                         <tr key={indice} >

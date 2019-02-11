@@ -99,21 +99,55 @@ class GerenciamentoFinanceiro extends React.Component {
 
     }
     requisicao(event) {
-        
+
         axios.get('/log')
             .then((response) => {
                 this.setState({ ListaFluxo: response.data });
-                
+
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
     }
-    componentWillMount() {
-        this.grafico();
-        this.requisicao();
-       
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            this.grafico();
+                            this.requisicao();
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
 
     }
+    componentWillMount() {
+        this.Funcionario(30);
+    }
+   
     componentWillUnmount() {
         clearInterval(this.inteval);
     }
@@ -239,21 +273,21 @@ class GerenciamentoFinanceiro extends React.Component {
 
     async grafico(event) {
         let listadedatas = [];
-      
+
         const lista = [];
         for (var i = 0; i < 30; i++) {
             let hj = moment().format("MM/DD/YYYY");
             var novo = moment(hj).subtract(i, 'days');
 
             const a = moment(novo).format("MM/DD/YYYY")
-            
+
             lista.push(a);
 
         }
         const datas = lista.map(async (crianca, index) => {
 
             const a = moment(crianca).startOf('day').toDate();
-         
+
 
             const response = await axios.get(`/tela-mkt/${moment(a)}`);
             return response.data;
@@ -265,29 +299,29 @@ class GerenciamentoFinanceiro extends React.Component {
         var total = 0;
         var nome = '';
         Promise.all(datas).then((listagraficos) => {
-           
+
             listagraficos.map((date, indice) => {
 
                 date.map((info, index) => {
-                    if (info.activity === "Aniversario" && info.action ==="Criação") {
+                    if (info.activity === "Aniversario" && info.action === "Criação") {
                         aniversario = aniversario + info.price;
                     }
-                    if (info.activity === "Passaporte" && info.action ==="Saida") {
+                    if (info.activity === "Passaporte" && info.action === "Saida") {
                         passaporte = passaporte + info.price;
                     }
-                    if (info.activity === "Serviços"  && info.action ==="Saida") {
+                    if (info.activity === "Serviços" && info.action === "Saida") {
                         servicoproduto = servicoproduto + info.price;
                     }
                     nome = moment(date[0].dateOperation).format("DD/MM")
                     console.log(nome)
                 })
-                
-                    const temporario = {
-                        name: nome, Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
-                    }
-                    
-                    listaparaostate.push(temporario);
-                
+
+                const temporario = {
+                    name: nome, Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
+                }
+
+                listaparaostate.push(temporario);
+
 
                 passaporte = 0;
                 aniversario = 0;
@@ -296,9 +330,9 @@ class GerenciamentoFinanceiro extends React.Component {
                 nome = '';
             })
             console.log(listaparaostate)
-           this.setState({
-               listagraficos:listaparaostate
-           })
+            this.setState({
+                listagraficos: listaparaostate
+            })
             console.log(this)
         });
 
