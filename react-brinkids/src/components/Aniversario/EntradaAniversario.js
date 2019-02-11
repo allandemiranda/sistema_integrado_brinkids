@@ -144,7 +144,7 @@ class EntradaAniversario extends React.Component {
                        let hj =moment().format("DD/MM/YYYY HH:MM");
                        let inicio = moment(event.start).utc().format("DD/MM/YYYY HH:MM");
                        let fim = moment(event.end).utc().format("DD/MM/YYYY HH:MM");
-                     
+                     console.log(hj,fim,inicio)
                        console.log(moment(hj).isBefore(fim),moment(hj).isAfter(inicio))
                        if(moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)){
                         temporario.push(event);
