@@ -640,11 +640,10 @@ class FormularioCadFunc extends React.Component {
                     dadosComprovates:dadosComprovates,
                     comprovante:true,
                 })
-               
-               
+                alert("Cadastro realizado com sucesso!"); 
             }).then(()=>{
                 setTimeout(()=>{
-                    alert("cadastrado")
+                    alert("Cadastro realizado com sucesso!")
                     window.location.href="/";
                 },1000)
             })
