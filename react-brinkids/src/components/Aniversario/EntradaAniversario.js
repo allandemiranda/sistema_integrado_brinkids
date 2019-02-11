@@ -141,9 +141,9 @@ class EntradaAniversario extends React.Component {
                     let crianca = [];
                     let temporario = [];
                    response.data.map((event)=>{
-                       let hj =moment().format("DD/MM/YYYY HH:MM");
-                       let inicio = moment(event.start).utc().format("DD/MM/YYYY HH:MM");
-                       let fim = moment(event.end).utc().format("DD/MM/YYYY HH:MM");
+                       let hj =moment().format("DD/MM/YYYY HH:mm");
+                       let inicio = moment(event.start).utc().format("DD/MM/YYYY HH:mm");
+                       let fim = moment(event.end).utc().format("DD/MM/YYYY HH:mm");
                      console.log(hj,fim,inicio)
                        console.log(moment(hj).isBefore(fim),moment(hj).isAfter(inicio))
                        if(moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)){
