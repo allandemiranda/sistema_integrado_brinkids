@@ -267,7 +267,7 @@ class SaidaCrianca extends React.Component {
                 ObsCria: this.state.CriancasSelecionadas[0].children.observations,
                 RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
                 ProdutoCria: this.state.CriancasSelecionadas[0].service,
-                page: "MostraCrianca",
+                
             })
 
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
@@ -286,6 +286,10 @@ class SaidaCrianca extends React.Component {
                     this.setState({
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                         ValorCrianca: response.data.value,
+                    })
+                }).then(()=>{
+                    this.setState({
+                        page: "MostraCrianca",
                     })
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
