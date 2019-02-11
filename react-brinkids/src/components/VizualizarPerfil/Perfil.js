@@ -184,21 +184,47 @@ class Perfil extends React.Component {
     changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-        this.state.perfilAtual.observations = this.state.obs
-        this.state.perfilAtual.address.number = this.state.numero
-        this.state.perfilAtual.address.state = this.state.estado
-        this.state.perfilAtual.address.district = this.state.bairro
-        this.state.perfilAtual.phone = this.state.phone
-        this.state.perfilAtual.address.city = this.state.cidade
-        this.state.perfilAtual.address.cep = this.state.cep
-        this.state.perfilAtual.email = this.state.email
-        this.state.perfilAtual.address.street = this.state.endereco
-        this.state.perfilAtual.address.country = this.state.pais
+        let listatemporaria = this.state.perfilAtual;
+
+        var formData = new FormData();
+
+        formData.append('observations', this.state.obs);
+        formData.append('phone', this.state.phone);
+        if (foto) {
+            formData.append('photo', this._dataURItoBlob(foto));
+        }
+        formData.append('number', this.state.numero);
+        formData.append('state', this.state.estado);
+        formData.append('district', this.state.bairro);
+        formData.append('city', this.state.cidade);
+        formData.append('cep', this.state.cep);
+        formData.append('street', this.state.endereco);
+        formData.append('country', this.state.pais);
+        formData.append('email', this.state.email);
+        console.log("form: ", formData);
+
+
+        axios.put(`adult/${this.state.perfilAtual._id}`, formData)
+            .then((response) => {
+
+            })
+            .catch((err) => console.log(err));
+        listatemporaria.address.number = this.state.numero;
+        listatemporaria.address.state = this.state.estado;
+        listatemporaria.address.district = this.state.bairro;
+        listatemporaria.phone = this.state.phone;
+        listatemporaria.address.city = this.state.cidade;
+        listatemporaria.address.cep = this.state.cep;
+        listatemporaria.observations = this.state.obs;
+        listatemporaria.email = this.state.email;
+        listatemporaria.address.street = this.state.endereco;
+        listatemporaria.address.country = this.state.pais;
         this.setState({
-
+            perfilAtual: listatemporaria,
             editar: false,
-
-        })
+        });
+      
+      
     }
     //função que alterna as paginas
     ChangePage(event) {

@@ -258,6 +258,7 @@ router.put('/:identifier', async (req, res) => {
         errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),
       );
     }
+    return res.sendStatus(201);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
