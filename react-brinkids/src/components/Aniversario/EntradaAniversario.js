@@ -560,14 +560,14 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-6 col-sm-6 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Início: </b></h5>
-                                            <p>{moment(this.state.aniversariante[0].start).utc().format("HH:MM")}</p>
+                                            <p>{moment(this.state.aniversariante[0].start).utc().format("HH:mm")}</p>
                                         </div>
                                         <br></br>
                                     </div>
                                     <div className="col-md-6 col-sm-6 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Fim: </b></h5>
-                                            <p>{moment(this.state.aniversariante[0].end).utc().format("HH:MM")}</p>
+                                            <p>{moment(this.state.aniversariante[0].end).utc().format("HH:mm")}</p>
                                         </div>
                                         <br></br>
                                     </div>
