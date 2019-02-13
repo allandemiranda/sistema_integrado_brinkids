@@ -165,7 +165,7 @@ router.post('/', async (req, res) => {
       action: 'Criação',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultFound.name.firstName+" "+adultFound.name.surName,
+      to: adultResult.name.firstName+" "+adultResult.name.surName,
 
 
     })
@@ -214,7 +214,7 @@ router.put('/exchange-data', async (req, res) => {
         action: 'Edição',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: adultFound.name.firstName+" "+adultFound.name.surName,
+        to: adultChange.name.firstName+" "+adultChange.name.surName,
 
 
       })

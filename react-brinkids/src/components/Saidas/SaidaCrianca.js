@@ -396,9 +396,10 @@ class SaidaCrianca extends React.Component {
         setTimeout(_ => {
             console.log(this.state.verified);
             if (this.state.verified == true) {
-                console.log(this.state.indice)
+                console.log(this.state.ValorCriaDesc)
                 axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[this.state.indice - 1].children.id + '/' + this.state.CodDes + `/` + this.state.ValorCrianca + `/` + this.state.IDAdult)
                     .then((response) => {
+                        
                         if (response.data === 1) {
                             alert("Desconto Diario ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
                         } else if (response.data === 2) {
@@ -412,6 +413,7 @@ class SaidaCrianca extends React.Component {
                         } else if (response.data === 6) {
                             alert("Codigo do Desconto Não Encontrado")
                         } else if (response.data === 7) {
+
                             alert("Desconto Fora da Validade")
                         } else {
                             console.log(response.data)
@@ -420,10 +422,11 @@ class SaidaCrianca extends React.Component {
                                 //CodDes: "",
                             })
                             alert("Desconto Concluído")
+                            console.log(this.state.ValorCriaDesc)
                         }
 
 
-
+                        console.log(this.state.ValorCriaDesc)
 
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
