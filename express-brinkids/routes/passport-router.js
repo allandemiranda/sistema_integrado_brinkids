@@ -228,6 +228,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
   console.log(productFinded[0].children.name)
   console.log(discountFinded)
 
+  if(discountFinded[0].temporalityType ==="Geral"){
   discountFinded[0].codes.forEach((elemente, indice, array) => {
     if (elemente.numberCode === req.params.codDesc) {
 
@@ -496,39 +497,11 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
     }
   })
+}else if(discountFinded[0].temporalityType ==="Unico"){
+  
+}
 
-
-  // if (discountFinded[0].type === 'Fixo') {
-
-  //   price = parseFloat(discountFinded[0].value).toFixed(2);
-
-  //   if (req.params.valueChild <= discountFinded[0].value) {
-  //     price = parseFloat(req.params.valueChild).toFixed(2);
-  //   }
-
-  //   console.log("valor do desconto:", price);
-
-  // } else {
-
-  //   price = req.params.valueChild;
-  //   price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-  //   console.log("valor do desconto:", price);
-
-  // }
-
-  // const data = {
-  //   name: childName,
-  //   time: adultTime,
-  //   value: price,
-  //   discount: discountFinded[0].name,
-
-  // };
-  // try {
-  //   return res.status(201).json(data);
-  // } catch (err) {
-  //   return res.sendStatus(500);
-  // }
-
+  
 
 });
 
