@@ -147,7 +147,7 @@ class GerenciamentoFinanceiro extends React.Component {
     componentWillMount() {
         this.Funcionario(30);
     }
-   
+
     componentWillUnmount() {
         clearInterval(this.inteval);
     }
@@ -284,6 +284,7 @@ class GerenciamentoFinanceiro extends React.Component {
             lista.push(a);
 
         }
+       
         const datas = lista.map(async (crianca, index) => {
 
             const a = moment(crianca).startOf('day').toDate();
@@ -301,7 +302,7 @@ class GerenciamentoFinanceiro extends React.Component {
         Promise.all(datas).then((listagraficos) => {
 
             listagraficos.map((date, indice) => {
-                console.log(date)
+              
                 date.map((info, index) => {
                     if (info.activity === "Aniversario" && info.action === "Criação") {
                         aniversario = aniversario + info.price;
@@ -313,17 +314,18 @@ class GerenciamentoFinanceiro extends React.Component {
                         servicoproduto = servicoproduto + info.price;
                     }
                     nome = moment(date[0].dateOperation).format("DD/MM")
-                    console.log(nome)
-                   
-                })
-                const temporario = {
-                    name: nome, Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
-                }
-                lista.map((indi)=>{
-                    const ime = moment(indi).format("DD/MM");
+                    
+                    if(nome === ""){
+                       
+                    }
 
                 })
-               
+                
+                const temporario = {
+                    name:  nome= moment(lista[total]).format("DD/MM"), Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
+                }
+
+                total++;
 
                 listaparaostate.push(temporario);
 
@@ -331,21 +333,39 @@ class GerenciamentoFinanceiro extends React.Component {
                 passaporte = 0;
                 aniversario = 0;
                 servicoproduto = 0;
-                total = 0;
+                
                 nome = '';
             })
-            console.log(listaparaostate)
+
+            
+
+
             this.setState({
                 listagraficos: listaparaostate.reverse()
             })
-            console.log(this)
+
         });
 
-        console.log(this)
+
 
 
     }
+    // lista.map((indi) => {
+    //     listaparaostate.forEach((event, index, array) => {
 
+    //         let ime = moment(indi).format("DD/MM");
+    //         console.log(event.name,"===",ime)
+    //         if (event.name === "") {
+    //             array[index] = {
+    //                 name: ime, Passaporte: 0, Aniversario: 0, ServiçoProduto: 0, Total: 0
+    //             }
+    //             temporario2.push({
+    //                 name: ime, Passaporte: 0, Aniversario: 0, ServiçoProduto: 0, Total: 0
+    //             })
+    //         }
+
+    //     })
+    // })
 
     render() {
         return (

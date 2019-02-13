@@ -165,7 +165,7 @@ router.post('/', async (req, res) => {
       action: 'Criação',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultResult.name.firstName+" "+adultResult.name.surName,
+      to: adultFound.name.firstName+" "+adultFound.name.surName,
 
 
     })
@@ -214,7 +214,7 @@ router.put('/exchange-data', async (req, res) => {
         action: 'Edição',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: adultResult.name.firstName+" "+adultResult.name.surName,
+        to: adultFound.name.firstName+" "+adultFound.name.surName,
 
 
       })
@@ -245,7 +245,7 @@ router.put('/reset-password', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultResult.name.firstName+" "+adultResult.name.surName,
+      to:adultFound.name.firstName+" "+adultFound.name.surName,
 
 
     })
@@ -273,20 +273,11 @@ router.put('/rota', async (req, res) => {
    
     try {
       const adultChange = await Employees.findById(req.body.identifier);
-
+     
       adultChange.employeeData.officialPosition = req.body.officialPosition;
 
       adultChange.save();
-      const log = new Logs({
-        activity: 'Funcionario',
-        action: 'Edição',
-        dateOperation: new Date(),
-        from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: adultResult.name.firstName+" "+adultResult.name.surName,
-
-
-      })
-      const newLog = await log.save();
+     
       if (!adultChange) {
         return res.sendStauts(404);
       }
@@ -313,7 +304,7 @@ router.put('/password', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultResult.name.firstName+" "+adultResult.name.surName,
+      to: adultFound.name.firstName+" "+adultFound.name.surName,
 
 
     })

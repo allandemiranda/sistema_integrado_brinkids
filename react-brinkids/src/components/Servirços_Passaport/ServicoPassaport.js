@@ -237,11 +237,11 @@ class ServicoPassaporte extends React.Component {
 
 
         axios.put('/passportServices/', formData)
-            .then(function (response) {
+            .then( (response)=>{
                 console.log(response)
                 this.requisicao();
                 //window.location.href = '/ServicoPassaporte';
-            }).catch(function (error) {
+            }).catch( (error)=> {
                 console.log(error)//LOG DE ERRO
                 alert("Erro no Cadastro");
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -257,7 +257,7 @@ class ServicoPassaporte extends React.Component {
                 axios.get('/passportServices')
                     .then((response) => {
 
-                        this.setState({ list: response.data, });
+                        
                         this.requisicao();
                     })
             });

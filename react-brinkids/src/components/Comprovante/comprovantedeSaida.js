@@ -57,10 +57,10 @@ class Comprovantesaida extends React.Component {
                 const hoje = new Date;
                 const nascimento = moment(aniversario).format('YYYYMMDD');
                 console.log(nascimento);
-                const a = moment(nascimento, "YYYYMMDD").fromNow();
+                const a = moment(nascimento, "YYYYMMDD").toNow(true);
                 a.split(' ');
 
-                return moment(nascimento, "YYYYMMDD").fromNow();
+                return moment(nascimento, "YYYYMMDD").toNow(true);
             }
 
 

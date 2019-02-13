@@ -374,12 +374,17 @@ class SaidaCrianca extends React.Component {
 
     //FUNÇÃO QUE VERIFICA O DESCONTO PARA CRIANÇA E FAZ O DESCONTO CASO EXISTA!
     VerificaDescontoFilhos = (Codigo) => {
-        axios.get(`/discount/filter/${Codigo}`)
+        axios.get(`/discount/filter/${Codigo}/Child`)
             .then((response) => {
-                alert("Desconto Validado")
-                this.setState({
-                    verified: true,
-                })
+                if(response.data.length>0){
+
+                    alert("Desconto Validado")
+                        this.setState({
+                            verified: true,
+                        })
+                    }else{
+                        alert("Desconto não encontrado")
+                    }
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -394,6 +399,7 @@ class SaidaCrianca extends React.Component {
                 console.log(this.state.indice)
                 axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[this.state.indice - 1].children.id + '/' + this.state.CodDes + `/` + this.state.ValorCrianca)
                     .then((response) => {
+                        console.log(response.data)
                         this.setState({
                             ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
                             //CodDes: "",
@@ -415,12 +421,18 @@ class SaidaCrianca extends React.Component {
     //FUNÇÃO QUE VERIFICA O DESCONTO PARA ADULTO E FAZ O DESCONTO CASO EXISTA!
     VerificaDescontoPAi = (Codigo) => {
         console.log(this.state.verified);
-        axios.get(`/discount/filter/${Codigo}`)
+        axios.get(`/discount/filter/${Codigo}/Adult`)
             .then((response) => {
+                if(response.data.length>0){
+
                 alert("Desconto Validado")
-                this.setState({
-                    verified: true,
-                })
+                    this.setState({
+                        verified: true,
+                    })
+                }else{
+                    alert("Desconto não encontrado")
+                }
+                
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -540,6 +552,7 @@ class SaidaCrianca extends React.Component {
         if(nomeCrianca === this.state.Aux && check === true){
             this.setState({
                 page: "UsuarioAdulto",
+              
             })
         }
         else if(nomeCrianca === this.state.Aux && check === false){
@@ -551,10 +564,11 @@ class SaidaCrianca extends React.Component {
                 TimeCria: this.state.CriancasSelecionadas[0].time,
                 ObsCria: this.state.CriancasSelecionadas[0].children.observations,
                 RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[0].service,                
+                ProdutoCria: this.state.CriancasSelecionadas[0].service,   
+                            
             })
 
-            console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
+            console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length, this.state.CriancasSelecionadas)
             axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + moment() + '/')
                 .then((response) => {
                     console.log(response);
@@ -731,7 +745,7 @@ class SaidaCrianca extends React.Component {
                                     <div className="text-center">
                                         <a className="btn btn-md botao" href="/">Cancelar</a>
                                         <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarEscolhaAdulto}>Voltar</button>
-                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Proximo"/>Proximo
+                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Proximo"/>
                                     </div>
                                 </form>
                             </div>
@@ -770,7 +784,7 @@ class SaidaCrianca extends React.Component {
                                         <div className="col-md-12 col-sm-12 com-xs-12">
                                             <div className="graph">
                                                 <h5 className="ltTitulo"><b>Idade:</b></h5>
-                                                <p>{this.state.IdadeCria}</p>
+                                                <p>{moment(this.state.IdadeCria).toNow(true)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -825,7 +839,7 @@ class SaidaCrianca extends React.Component {
                         <br></br>
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao botaoAvançar" onClick={()=>this.VoltarCrianca(this.state.NameCria)}>{this.state.namebutton}</button>
+                            <button className="btn btn-md botao botaoAvançar" onClick={()=>this.VoltarCrianca(this.state.NameCria)}>Voltar</button>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaCria}>{this.state.namebutton}</button>
                         </div>
                     </div>

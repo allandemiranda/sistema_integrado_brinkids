@@ -13,7 +13,7 @@ const numberCode = async (i) => {
 
   const totalDiscountsToday = await Discount.discountsGenerateToday();
 
-  const stringCode = `BRK${actualDate.getDate()}${actualDate.getMonth() + 1}${actualDate.getFullYear() % 100}${totalDiscountsToday + i}`;
+  const stringCode = `BRK${actualDate.getDate()}${actualDate.getMonth() + 1}${actualDate.getFullYear() % 100}${actualDate.getHours()}${actualDate.getMinutes()}${actualDate.getSeconds()}${totalDiscountsToday + i}`;
 
   return stringCode;
 };
@@ -29,9 +29,9 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/filter/:code', async (req, res) => {
+router.get('/filter/:code/:type', async (req, res) => {
   try {
-    const discounts = await Discount.find({});
+    const discounts = await Discount.find({ 'codes.numberCode': req.params.code,'to':req.params.type });
 
     return res.json(discounts);
   } catch (err) {

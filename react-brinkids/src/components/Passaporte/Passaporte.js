@@ -233,6 +233,8 @@ class Passport extends React.Component {
         this.setState({
             listConfirmAdult: adult,
             page: "ConfirmAdult",
+            phone:adult.phone,
+            obs:adult.observations
         })
 
 

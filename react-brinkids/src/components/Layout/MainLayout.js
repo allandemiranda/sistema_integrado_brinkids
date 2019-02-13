@@ -73,11 +73,17 @@ class MainLayout extends React.Component {
                         .then((response) => {
 
                             console.log(response.data);
-                            this.setState({
-                                cargo: response.data.name,
-                                page: "carregado"
-                            })
-
+                            if(response.data!== null){
+                                this.setState({
+                                    cargo: response.data.name,
+                                    page: "carregado"
+                                })
+    
+                            }else{
+                                alert("Funcionario sem cargo")
+                                window.location.href ="/Login"
+                            }
+                            
 
                         })
                         .catch((err) => console.log(err));
