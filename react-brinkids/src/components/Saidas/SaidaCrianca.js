@@ -244,20 +244,7 @@ class SaidaCrianca extends React.Component {
     ProximaTela(event) {
 
 
-        const b = jwt.verify(getToken(), config.secret_auth);
-        console.log("aaaaaaa entrei")
-
-        axios.get(`/adult/${b.id}`)
-            .then((response) => {
-
-                const name = response.data.name.firstName + " " + response.data.name.surName;
-                this.setState({
-                    nomeFuncionario: response.data.name.firstName + " " + response.data.name.surName
-                })
-                console.log(name)
-            }).catch((err) => {
-                console.log(err);
-            });
+        
 
         if (this.state.CriancasSelecionadas.length > 0) {
             console.log("entrei no if");
@@ -311,7 +298,8 @@ class SaidaCrianca extends React.Component {
     //FUNÇÃO QUE FAZ PASSAR AS CRIANÇAS 
     ProximaCria = () => {
         if (this.state.indice < this.state.CriancasSelecionadas.length) {
-            axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
+
+            if(this.state.CriancasSelecionadas.length!==this.state.ValorCria.length){axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
                 .then((response) => {
                     this.setState({
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
@@ -333,11 +321,9 @@ class SaidaCrianca extends React.Component {
                 ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
                 RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
                 ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].service,
-                indice: (this.state.indice),
-            })
-        }
-        console.log("pc ", this.state.indice, "/", this.state.CriancasSelecionadas.length)
-        if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)) {
+                indice: (this.state.indice+1),
+            })}
+        }else if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)) {
             this.setState({
                 namebutton: "Finalizar",
             })
@@ -367,9 +353,7 @@ class SaidaCrianca extends React.Component {
             })
         }
         console.log("oregairu")
-        this.setState({
-            indice: (this.state.indice + 1),
-        })
+       
     }
 
     //FUNÇÃO QUE VERIFICA O DESCONTO PARA CRIANÇA E FAZ O DESCONTO CASO EXISTA!
@@ -589,7 +573,7 @@ class SaidaCrianca extends React.Component {
         })
     }
     VoltarCrianca = (nomeCrianca, check) => {
-        if (nomeCrianca === this.state.Aux && check === true) {
+        if (nomeCrianca === this.state.Aux && check === true||this.state.indice===0) {
             this.setState({
                 page: "UsuarioAdulto",
 
@@ -608,57 +592,24 @@ class SaidaCrianca extends React.Component {
 
             })
 
-            console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length, this.state.CriancasSelecionadas)
-            axios.get(`/passport/` + this.state.CriancasSelecionadas[0].children.id + `/` + moment() + '/')
-                .then((response) => {
-                    console.log(response);
-                    console.log(this.state.page)
-                    this.setState({
-                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
-                        ValorCrianca: response.data.value,
-                    })
-                }).then(() => {
-
-                }).catch((error) => {
-                    console.log(error)//LOG DE ERRO
-                    alert("Erro no Cadastro");
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                })
             this.setState({
                 page: "MostraCrianca",
             })
         }
-        else {
-            console.log(this.state.indice);
+        else{
+
+
+            console.log(this.state.CriancasSelecionadas[this.state.indice-1])
             this.setState({
-                indice: (this.state.indice - 1),
-            })
-            console.log(this.state.indice);
-            axios.get(`/passport/` + this.state.CriancasSelecionadas[this.state.indice].children.id + `/` + moment() + '/')
-                .then((response) => {
-                    this.setState({
-                        ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
-                        ValorCrianca: response.data.value,
-                    })
-                }).catch((error) => {
-                    console.log(error)//LOG DE ERRO
-                    alert("Erro no Cadastro");
-                    // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                    // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                    // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                })
-            console.log(this.state.CriancasSelecionadas[this.state.indice])
-            this.setState({
-                NameCria: this.state.CriancasSelecionadas[this.state.indice].children.name,
-                PhotoCria: this.state.CriancasSelecionadas[this.state.indice].photo,
-                IdadeCria: this.state.CriancasSelecionadas[this.state.indice].children.birthday,
-                TimeCria: this.state.CriancasSelecionadas[this.state.indice].time,
-                ObsCria: this.state.CriancasSelecionadas[this.state.indice].children.observations,
-                RetCria: this.state.CriancasSelecionadas[this.state.indice].children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice].service,
-                indice: (this.state.indice),
+                NameCria: this.state.CriancasSelecionadas[this.state.indice-1].children.name,
+                PhotoCria: this.state.CriancasSelecionadas[this.state.indice-1].photo,
+                IdadeCria: this.state.CriancasSelecionadas[this.state.indice-1].children.birthday,
+                TimeCria: this.state.CriancasSelecionadas[this.state.indice-1].time,
+                ObsCria: this.state.CriancasSelecionadas[this.state.indice-1].children.observations,
+                RetCria: this.state.CriancasSelecionadas[this.state.indice-1].children.restrictions,
+                ProdutoCria: this.state.CriancasSelecionadas[this.state.indice-1].service,
+                indice: (this.state.indice-1),
+                page: "MostraCrianca",
             })
         }
     }
@@ -989,7 +940,7 @@ class SaidaCrianca extends React.Component {
 
                                 <div className="text-center">
                                     <a className="btn btn-md botao" href="/">Cancelar</a>
-                                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria, false)}>Voltar</button>
+                                    <input className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria, false) } value="Voltar"/>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}>Finalizar</button>
                                 </div>
                             </form>

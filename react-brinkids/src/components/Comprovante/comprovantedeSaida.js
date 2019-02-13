@@ -118,7 +118,7 @@ class Comprovantesaida extends React.Component {
                 <div style={{ display: 'none' }} id='print' className='conteudo' >
 
 
-                    <a className="trilha" >﻿﻿--------------------------------------</a>
+                    <a className="trilha" >--------------------------------------</a>
                     <a className="naoFiscal">****** NÃO É DOCUMENTO FISCAL ******</a>
                     <div className="titulo7">
                         <a className="espacoTitulo">BRINKIDS</a>
@@ -228,7 +228,7 @@ class Comprovantesaida extends React.Component {
                             <a>Fone: (84) 3206-8293</a>
                         </div>
                     </div>
-                    <a className="trilha">﻿﻿--------------------------------------</a>
+                    <a className="trilha">--------------------------------------</a>
                 </div>
             );
         }

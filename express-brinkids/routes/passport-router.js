@@ -238,6 +238,8 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
     if (discountFinded[0].temporalityType === "Geral") {
 
       discountFinded[0].codes.forEach((elemente, indice, array) => {
+        console.log(discountFinded[0].codes)
+        console.log(elemente.numberCode,"========",req.params.codDesc)
         if (elemente.numberCode === req.params.codDesc) {
 
           if (elemente.statusBroadlUser.length > 0) {
@@ -276,9 +278,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     discountFinded[0].save();
 
                     const data = {
-                      idcria:req.params.idCria,
-                      idAdult:idAdult,
-                      code:req.params.codDesc,
+                      idcria: req.params.idCria,
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
                       name: childName,
                       time: adultTime,
                       value: price,
@@ -323,13 +325,12 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
+
 
                     const data = {
-                      idcria:req.params.idCria,
-                      idAdult:idAdult,
-                      code:req.params.codDesc,
+                      idcria: req.params.idCria,
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
                       name: childName,
                       time: adultTime,
                       value: price,
@@ -376,6 +377,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     discountFinded[0].save();
 
                     const data = {
+                      idcria: req.params.idCria,
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
                       name: childName,
                       time: adultTime,
                       value: price,
@@ -422,6 +426,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     discountFinded[0].save();
 
                     const data = {
+                      idcria: req.params.idCria,
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
                       name: childName,
                       time: adultTime,
                       value: price,
@@ -468,6 +475,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                   discountFinded[0].save();
 
                   const data = {
+                    idcria: req.params.idCria,
+                    idAdult: req.params.idAdult,
+                    code: req.params.codDesc,
                     name: childName,
                     time: adultTime,
                     value: price,
@@ -475,7 +485,6 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     Valorinicial: req.params.valueChild,
                     indicecodes: indice,
                     indiceBroad: index,
-
                   };
                   try {
                     return res.status(201).json(data);
@@ -508,10 +517,13 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
             }
-            
+
 
 
             const data = {
+              idcria: req.params.idCria,
+              idAdult: req.params.idAdult,
+              code: req.params.codDesc,
               name: childName,
               time: adultTime,
               value: price,
@@ -530,9 +542,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
 
-        } else {
-          return res.send("6");;
-        }
+        } 
       })
 
     } else if (discountFinded[0].temporalityType === "Unico") {
@@ -865,6 +875,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                       const data = {
+                        idcria: req.params.idCria,
+                        idAdult: req.params.idAdult,
+                        code: req.params.codDesc,
                         name: childName,
                         time: adultTime,
                         value: price,
@@ -910,6 +923,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                       const data = {
+                        idcria: req.params.idCria,
+                        idAdult: req.params.idAdult,
+                        code: req.params.codDesc,
                         name: childName,
                         time: adultTime,
                         value: price,
@@ -925,7 +941,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                         return res.sendStatus(500);
                       }
                     } else {
-                      return res.status(02);
+                      return res.status("2");
                     }
                   } else if (discountFinded[0].temporalityDate === "Mensal") {
                     let hj = moment().format();
@@ -955,6 +971,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                       const data = {
+                        idcria: req.params.idCria,
+                        idAdult: req.params.idAdult,
+                        code: req.params.codDesc,
                         name: childName,
                         time: adultTime,
                         value: price,
@@ -962,7 +981,6 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                         Valorinicial: req.params.valueChild,
                         indicecodes: indice,
                         indiceBroad: index,
-
                       };
                       try {
                         return res.status(201).json(data);
@@ -999,6 +1017,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                       }
 
                       const data = {
+                        idcria: req.params.idCria,
+                        idAdult: req.params.idAdult,
+                        code: req.params.codDesc,
                         name: childName,
                         time: adultTime,
                         value: price,
@@ -1044,6 +1065,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                     const data = {
+                      idcria: req.params.idCria,
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
                       name: childName,
                       time: adultTime,
                       value: price,
@@ -1085,6 +1109,9 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
               }
 
               const data = {
+                idcria: req.params.idCria,
+                idAdult: req.params.idAdult,
+                code: req.params.codDesc,
                 name: childName,
                 time: adultTime,
                 value: price,
@@ -1390,7 +1417,7 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
             }
-            
+
 
 
             const data = {
@@ -1966,7 +1993,7 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
               }
-              
+
               discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
               discountFinded[0].codes[indice].statusUniqueDate = new Date();
               discountFinded[0].save();
