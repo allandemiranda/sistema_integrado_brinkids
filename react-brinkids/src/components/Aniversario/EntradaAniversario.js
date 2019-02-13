@@ -229,9 +229,9 @@ class EntradaAniversario extends React.Component {
                     let crianca = [];
                     let temporario = [];
                     response.data.map((event) => {
-                        let hj = moment().format("DD/MM/YYYY HH:mm");
-                        let inicio = moment(event.start).format("DD/MM/YYYY HH:mm");
-                        let fim = moment(event.end).format("DD/MM/YYYY HH:mm");
+                        let hj = moment().format();
+                        let inicio = moment(event.start).format();
+                        let fim = moment(event.end).format();
                         console.log(hj, fim, inicio)
                         console.log(moment(hj).isBefore(fim), moment(hj).isAfter(inicio))
                         if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
@@ -1178,7 +1178,7 @@ class EntradaAniversario extends React.Component {
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <h5 className="ltTitulo"><b> Parentesco: </b></h5>
+                                                
                                                 <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
                                                     <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event)} >

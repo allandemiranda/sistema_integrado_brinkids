@@ -41,7 +41,7 @@ class ComprovanteParcial extends React.Component {
             setTimeout(function () {
                 rederizar();
 
-            }, 100);
+            }, 400);
         }
         const byChild = function (events) {
             console.log(events.name,'aksjna');

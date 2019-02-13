@@ -912,7 +912,7 @@ class DashBoard extends React.Component {
 												<div className="col-md-1 col-sm-1 col-xs-1">
 													<button className="btn botao tam" onClick={this.CampMes}><i class="fas fa-times"></i></button>
 												</div>
-												<TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Mes"} type={"test"} id={"Mes"} name={"Mes"} Class={"form-control"}
+												<TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Mês"} type={"test"} id={"Mes"} name={"Mes"} Class={"form-control"}
 													value={this.state.campoMes} onChange={this.mudarCampoMes} />
 											</div>
 											<br></br>
@@ -929,12 +929,12 @@ class DashBoard extends React.Component {
 													<th style={{ textAlign: "center" }}>Nome</th>
 													<th style={{ textAlign: "center" }}>idade</th>
 													<th style={{ textAlign: "center" }}>Sexo</th>
-													<th style={{ textAlign: "center" }}>Anivesario</th>
+													<th style={{ textAlign: "center" }}>Anivesário</th>
 													<th style={{ textAlign: "center" }}>Cidade</th>
 													<th style={{ textAlign: "center" }}>Foto</th>
-													<th style={{ textAlign: "center" }}>Ultima visita</th>
-													<th style={{ textAlign: "center" }}> Responsável</th>
-													<th style={{ textAlign: "center" }}> Email</th>
+													<th style={{ textAlign: "center" }}>Última visita</th>
+													<th style={{ textAlign: "center" }}>Responsável</th>
+													<th style={{ textAlign: "center" }}>Email</th>
 												</tr>
 											</thead>
 											<tbody>

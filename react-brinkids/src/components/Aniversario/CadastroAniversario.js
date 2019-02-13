@@ -440,13 +440,13 @@ class CadastroAniversario extends React.Component {
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className = "graph-visual" >
                         <h3 className = "inner-tittle" > Dados do Aniversariante </h3>
                         <div id="alertDiv" className = "alert displaynone" role = "alert">
-                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                            <b>ERRO!</b> Há algo de errado em seu formulário.
                         </div>
                         <form id="form-criança">
                             <div className = "graph" >
@@ -457,13 +457,13 @@ class CadastroAniversario extends React.Component {
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-10 col-sm-10 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome do Aniversáriante: "} type = {"text"} id = {"nome"} name= {"nome"} Class = {"form-control"} value = {this.state.NomeDoAni} onChange={this.ChangeName}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-10 col-sm-10 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome do Aniversariante: "} type = {"text"} id = {"nome"} name= {"nome"} Class = {"form-control"} value = {this.state.NomeDoAni} onChange={this.ChangeName}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-2 col-sm-2 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Idade: "} type = {"number"} id = {"idade"} name= {"idade"} Class = {"form-control"} value = {this.state.IdadeDoAni} onChange={this.ChangeIdade}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"Data"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.ChangeDate}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversário: "} type = {"date"} id = {"Data"} name= {"Data"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.ChangeDate}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora incial: "} type = {"time"} id = {"HI"} name= {"HI"} Class = {"form-control"} value = {this.state.HoraInicio} onChange={this.ChangeHInicial}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"HF"} name= {"HF"} Class = {"form-control"} value = {this.state.HoraFinal} onChange={this.ChangeHFinal}/>
                                     </div>
@@ -477,13 +477,13 @@ class CadastroAniversario extends React.Component {
                                 <div className = "form-group" >
                                     <div className = "row" >
                                         <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"} id = {"VP"} name= {"VP"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.ChangeValorPg}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Metodo de Pagamento: "} type = {"text"} id = {"MP"} name= {"MP"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Método de Pagamento: "} type = {"text"} id = {"MP"} name= {"MP"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <h3 className = "inner-tittle" > Descrição do Aniversario </h3>
+                                            <h3 className = "inner-tittle" > Descrição do Aniversário </h3>
                                             <br></br>
                                             <TypesInput cod = {2} Label = {0} cols = {"50"} rows = {"4"} id = {"Descricao"} name= {"Descricao"} Class = {"form-control"} value={this.state.DescriçãoDoAni} onChange={this.ChangeDescricao} />
                                         </div>
@@ -525,13 +525,13 @@ class CadastroAniversario extends React.Component {
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className = "graph-visual" >
                         <div className = "row">
                             <div id="alertDiv" className = "alert displaynone" role = "alert">
-                                <b>ERRO!</b> Ah algo de errado em seu formulario.
+                                <b>ERRO!</b> Há algo de errado em seu formulário.
                             </div>
                             <div className = "col-md-6 col-sm-12">
                                 <div className = "graph" >
@@ -639,7 +639,7 @@ class CadastroAniversario extends React.Component {
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className = "graph-visual" >

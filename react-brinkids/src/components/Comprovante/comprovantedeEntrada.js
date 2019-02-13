@@ -32,7 +32,7 @@ class Comprovante extends React.Component {
         setTimeout(function () {
             tela_impressao.print();
 
-        }, 200);
+        }, 400);
 
     }
     render  () {

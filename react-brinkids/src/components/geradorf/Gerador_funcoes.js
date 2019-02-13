@@ -262,7 +262,7 @@ class Gerador extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Funcionarios </h3>
+                        <h3 className="inner-tittle" > Funcionários </h3>
                         <div className="graph text-center" >
                             <table className="table">
                                 <thead>

@@ -204,7 +204,7 @@ class MainLayout extends React.Component {
                                         <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/TelaMKT">Marketing</Link></li>
                                     </ul>
                                 </li>
-                                <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuarios</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                                <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuários</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                     <ul id="menu-comunicacao-sub" >
                                         <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                             <ul id="menu-mensagens-sub" >
@@ -234,13 +234,13 @@ class MainLayout extends React.Component {
                                     </Link>
                                     <ul id="menu-comunicacao-sub" >
                                         <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversario </Link></li>
+                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversário </Link></li>
                                     </ul>
                                 </li>
                                 <li >
                                     <Link to="/SaidaCrianca" >
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        <span>Saida</span >
+                                        <span>Saída</span >
                                     </Link>
                                 </li>
 

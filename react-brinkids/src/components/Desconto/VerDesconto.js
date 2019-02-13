@@ -26,7 +26,7 @@ class VerDesconto extends React.Component {
             list: [],
             codigos: [],
         }
-        axios.get(`/discount/filter/${this.props.Nome}`)
+        axios.get(`/discount/verdesconto/${this.props.Nome}`)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
                 this.setState({
@@ -34,7 +34,7 @@ class VerDesconto extends React.Component {
                 });
                 this.setState({
                     Name: this.state.list[0].name,
-                    Description:this.state.list[0].description,
+                    Description: this.state.list[0].description,
                     TypePeople: this.state.list[0].to,
                     TypeValue: this.state.list[0].type,
                     Value: this.state.list[0].value,
@@ -52,9 +52,9 @@ class VerDesconto extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-        
+
     }
-    
+
     render() {
         return (
             <div className="container-fluid" >
@@ -112,7 +112,7 @@ class VerDesconto extends React.Component {
                                     </div>
                                     <div className="col-md-4 col-sm-4 col-xs-12">
                                         <label className="LetraFormulario">Validade:</label>
-                                        <p id="Validade" name="Validade">{moment(this.state.Date).add(1,"days").format("DD/MM/YYYY")}</p>
+                                        <p id="Validade" name="Validade">{moment(this.state.Date).add(1, "days").format("DD/MM/YYYY")}</p>
                                     </div>
                                 </div>
                             </div>
@@ -133,19 +133,27 @@ class VerDesconto extends React.Component {
                                 </thead>
                                 <tbody>
                                     {this.state.codigos.map((desconto, indice) => {
-                                            if(desconto.statusBroadlUser.length > 0){
-                                                console.log("entrei")
-                                                return (
-                                                    <tr key={desconto._id}>
-                                                        <th scope="row">{(indice + 1)}</th>
-                                                        <td >{desconto.numberCode} </td>                                                
-                                                        {desconto.statusBroadlUser.length > 0 && <td >{desconto.statusBroadlUser[0]} </td>}
-                                                        <td >{desconto.statusUniqueUse} </td>
+                                        console.log("oi")
+
+                                        
+                                            desconto.statusBroadlUser.map((mapa, indiceh) => {
+                                               if(desconto.statusBroadlUser.lenght>0){ return (
+                                                    <tr key={mapa._id}>
+                                                        <th scope="row">{(indiceh + 1)}</th>
+                                                        <td >{desconto.numberCode}11 </td>
+                                                        <td >{moment(mapa.dateUser).format("DD/MM/YYYY HH:mm")} </td>
+                                                        <td >{mapa.idUser} </td>
                                                         <td >{this.state.TypePeople} </td>
                                                     </tr>
                                                 );
-                                            }  
-                                        })}
+}
+
+
+                                            })
+                                        
+
+
+                                    })}
                                 </tbody>
                             </table>
                         </div>
@@ -164,15 +172,15 @@ class VerDesconto extends React.Component {
                                 </thead>
                                 <tbody>
                                     {this.state.codigos.map((desconto, indice) => {
-                                            return (
-                                                <tr key={desconto._id}>
-                                                    <th scope="row">{(indice + 1)}</th>
-                                                    <td >{desconto.numberCode} </td>
-                                                    <td >{this.state.TypePeople} </td>
-                                                    <td >{moment(this.state.Date).add(1,"days").format("DD/MM/YYYY")} </td>
-                                                </tr>
-                                            );
-                                        })}
+                                        return (
+                                            <tr key={desconto._id}>
+                                                <th scope="row">{(indice + 1)}</th>
+                                                <td >{desconto.numberCode} </td>
+                                                <td >{this.state.TypePeople} </td>
+                                                <td >{moment(this.state.Date).add(1, "days").format("DD/MM/YYYY")} </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>

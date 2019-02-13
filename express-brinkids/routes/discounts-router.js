@@ -28,6 +28,16 @@ router.get('/', async (req, res) => {
     return res.sendStatus(500);
   }
 });
+router.get('/verdesconto/:code', async (req, res) => {
+  try {
+    const discounts = await Discount.find({'_id': req.params.code});
+
+    return res.json(discounts);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 
 router.get('/filter/:code/:type', async (req, res) => {
   try {

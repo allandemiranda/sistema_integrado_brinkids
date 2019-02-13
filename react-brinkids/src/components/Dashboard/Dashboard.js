@@ -244,7 +244,7 @@ class DashBoard extends React.Component {
 									<ul>
 										<li id="ddd" name="crincaTab" onClick={this.selectCrianca} className={this.state.crincaTab}><a className="icon-shop"><span className="lnr lnr-user"></span> <span>Passaporte</span></a></li>
 
-										<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Aniversarios</span></a></li>
+										<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Aniversários</span></a></li>
 
 
 									</ul>
@@ -264,7 +264,7 @@ class DashBoard extends React.Component {
 															<th style={{ textAlign: "center" }}>Obs.</th>
 															<th style={{ textAlign: "center" }}>Entrada</th>
 															<th style={{ textAlign: "center" }}>Gaveta</th>
-															<th style={{ textAlign: "center" }}>Responsavel</th>
+															<th style={{ textAlign: "center" }}>Responsável</th>
 															<th style={{ textAlign: "center" }}>Parentesco</th>
 															<th style={{ textAlign: "center" }}>Telefone</th>
 															<th style={{ textAlign: "center" }}>Obs.</th>
@@ -318,7 +318,7 @@ class DashBoard extends React.Component {
 															<th style={{ textAlign: "center" }}>Obs.</th>
 															<th style={{ textAlign: "center" }}>Entrada</th>
 															<th style={{ textAlign: "center" }}>Gaveta</th>
-															<th style={{ textAlign: "center" }}>Responsavel</th>
+															<th style={{ textAlign: "center" }}>Responsável</th>
 															<th style={{ textAlign: "center" }}>Parentesco</th>
 															<th style={{ textAlign: "center" }}>Telefone</th>
 															<th style={{ textAlign: "center" }}>Obs.</th>
@@ -680,7 +680,7 @@ class DashBoard extends React.Component {
 
 							<div className="col-md-4 col-sm-6 col-xs-12" >
 								<div className="graph" style={{ padding: 10 + "px" }}>
-									<h5 className="ltTitulo"><b>  Numero de Registro: </b> </h5>
+									<h5 className="ltTitulo"><b>  Número de Registro: </b> </h5>
 									{!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
 									{this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="number" onChange={this.changue} value={this.state.number} />)}
 								</div>

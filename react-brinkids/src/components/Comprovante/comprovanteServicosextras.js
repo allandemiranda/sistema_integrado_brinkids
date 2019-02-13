@@ -52,7 +52,7 @@ class Comprovanteservico extends React.Component {
             setTimeout(function () {
                 rederizar();
 
-            }, 1000);
+            }, 400);
         }
 
         const produtos = () => {

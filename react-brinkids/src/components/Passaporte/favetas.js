@@ -5,7 +5,7 @@ export const Num = async () => {
     const lista = [];
     const numero = axios.get('/belongings')
         .then((response) => {
-            for (var a = 0; a < response.data.number; a++) {
+            for (var a = 1; a <= response.data.number; a++) {
                 lista.push(true)
             }
             return lista

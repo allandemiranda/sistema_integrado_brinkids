@@ -13,6 +13,7 @@ import './css/style.css';
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
+
 class VisualizarAniversario extends React.Component {
 
 
@@ -343,7 +344,7 @@ class VisualizarAniversario extends React.Component {
             TituloDoAni: aniversarioAtual.title,
             NomeDoAni: aniversarioAtual.birthdayPerson.name,
             IdadeDoAni: aniversarioAtual.birthdayPerson.age,
-            DataDoAni: moment(aniversarioAtual.birthdayDate).format("DD/MM/YYYY"),
+            DataDoAni: aniversarioAtual.birthdayDate,
             HoraInicio: aniversarioAtual.start,
             HoraFinal: aniversarioAtual.end,
             QuantCrianca: aniversarioAtual.amount.children,
@@ -458,7 +459,7 @@ class VisualizarAniversario extends React.Component {
             return (
                 <div>
                     <ConfDadosAni Titulo={this.state.TituloDoAni} Name={this.state.NomeDoAni} Idade={this.state.IdadeDoAni}
-                        Date={this.state.DataDoAni} HI={this.state.HoraInicio} HF={this.state.HoraFinal}
+                        Date={moment(this.state.DataDoAni).add(1,'days')} HI={moment(this.state.HoraInicio).format("HH:mm")} HF={moment(this.state.HoraFinal).format("HH:mm")}
                         CC={this.state.QuantCrianca} AC={this.state.QuantAdulto} Valor={this.state.ValorPg} Metodo={this.state.MetodoPg}
                         Descricao={this.state.DescriçãoDoAni} Obs={this.state.ObsDoAni} />
                     <div className="text-center">
@@ -518,7 +519,7 @@ class VisualizarAniversario extends React.Component {
                             <div className="form-group" >
                                 <div className="row">
                                     <div className="col-md-6 col-sm-6 col-xs-12">
-                                        <h3 className="inner-tittle" > Descrição do Aniversario </h3>
+                                        <h3 className="inner-tittle" > Descrição do Aniversário </h3>
                                         <br></br>
                                         <TypesInput cod={2} Label={0} cols={"50"} rows={"4"} id={"Descricao"} name={"DescriçãoDoAni"} Class={"form-control"} value={this.state.DescriçãoDoAni} onChange={this.changue} />
                                     </div>
@@ -547,13 +548,13 @@ class VisualizarAniversario extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
                         <div className="row">
                             <div id="alertDiv" className="alert displaynone" role="alert">
-                                <b>ERRO!</b> Ah algo de errado em seu formulario.
+                                <b>ERRO!</b> Há algo de errado em seu formulário.
                         </div>
                             <div className="col-md-6 col-sm-12">
                                 <div className="graph" >

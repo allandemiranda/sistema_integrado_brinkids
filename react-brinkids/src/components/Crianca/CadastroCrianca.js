@@ -346,14 +346,14 @@ class CadastroCrianca extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Usuario </li>
+                            <li > Usuário </li>
                             <li > Crianças </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Novo </h3>
                         <div id="alertDiv" className="alert displaynone" role="alert">
-                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                            <b>ERRO!</b> Há algo de errado em seu formulário.
                         </div>
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil </h3>

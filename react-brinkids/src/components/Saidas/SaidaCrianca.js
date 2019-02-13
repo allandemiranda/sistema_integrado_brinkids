@@ -72,104 +72,104 @@ class SaidaCrianca extends React.Component {
 
         this.ChangeValue = this.ChangeValue.bind(this);
         this.ProximaTela = this.ProximaTela.bind(this);
-        
-    }
-    requisicao=()=>{
-        axios.get('/product')
-        .then((response) => {
-            console.log("Dentro do axios: " + this)
-            console.log(response.data);
-            this.setState({
-                listAdultos: response.data,
-                verified: true,
-            });
-            // console.log("adultos", this.state.listAdultos)
-        }).catch((error) => {
-            console.log("Não deu certo");
-            console.log(error)//LOG DE ERRO
-            alert("Nenhum Adulto está com criança na loja");
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-        })
-    console.log(this.state.listAdultos)
 
-    ///Função que limpa a lista de duplicatas.
-    function noRepeat(arr) {
-        var cleaned = [];
-        arr.forEach(function (item) {
-            var unique = true;
-            cleaned.forEach(function (item2) {
-                console.log("item: ", item.adult.id);
-                console.log("item2: ", item2.adult.id)
-                if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
-                    unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
+    }
+    requisicao = () => {
+        axios.get('/product')
+            .then((response) => {
+                console.log("Dentro do axios: " + this)
+                console.log(response.data);
+                this.setState({
+                    listAdultos: response.data,
+                    verified: true,
+                });
+                // console.log("adultos", this.state.listAdultos)
+            }).catch((error) => {
+                console.log("Não deu certo");
+                console.log(error)//LOG DE ERRO
+                alert("Nenhum Adulto está com criança na loja");
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+            })
+        console.log(this.state.listAdultos)
+
+        ///Função que limpa a lista de duplicatas.
+        function noRepeat(arr) {
+            var cleaned = [];
+            arr.forEach(function (item) {
+                var unique = true;
+                cleaned.forEach(function (item2) {
+                    console.log("item: ", item.adult.id);
+                    console.log("item2: ", item2.adult.id)
+                    if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
+                        unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
+                    };
+                });
+                if (unique) {  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
+                    cleaned.push(item)
                 };
             });
-            if (unique) {  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
-                cleaned.push(item)
-            };
-        });
-        return cleaned;
-    }
-
-    setTimeout(_ => {
-
-        if (this.state.verified === true) {
-
-            var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
-            console.log("unificado: ", noRepeatedList)
-
-            for (var i = 0; i < noRepeatedList.length; i++) {
-                this.setState({
-                    listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, { $push: [noRepeatedList[i]] })//salavdno no this.state
-                })
-            }
-
+            return cleaned;
         }
-        this.setState({
-            verified: false,
-        })
-    }, 500)
+
+        setTimeout(_ => {
+
+            if (this.state.verified === true) {
+
+                var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
+                console.log("unificado: ", noRepeatedList)
+
+                for (var i = 0; i < noRepeatedList.length; i++) {
+                    this.setState({
+                        listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, { $push: [noRepeatedList[i]] })//salavdno no this.state
+                    })
+                }
+
+            }
+            this.setState({
+                verified: false,
+            })
+        }, 500)
     }
     Funcionario = (number) => {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
-    
+
         axios.get(`/employees/${b.id}`)
-          .then((response) => {
-            let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-    
-    
-    
-            axios.get(`/professionalPosition/indentifier/${id}`)
-              .then((response) => {
-                let functions;
-                return response.data.functions;
-              }).then((event) => {
-                let podeentrar = false;
-                event.map((map) => {
-                  if (map.id === number) {
-                    podeentrar = true;
-                  }
-                })
-                return podeentrar;
-              }).then((event) => {
-                if (event) {
-                 this.requisicao();
-                } else {
-                  this.props.history.push("/");
-                  alert("você nao tem permissao para entrar aki")
-                }
-              })
-              .catch((err) => console.log(err));
-          })
-          .catch((err) => console.log(err));
-    
-      }
-      componentWillMount() {
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            this.requisicao();
+                        } else {
+                            this.props.history.push("/");
+                            alert("você nao tem permissao para entrar aki")
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
         this.Funcionario(20);
-      }
+    }
     //Bloco que muda o status para o atual do formulario.
     ChangeValue(event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -241,9 +241,9 @@ class SaidaCrianca extends React.Component {
     }
 
     //FUNÇÃO QUE PASSAR PARA PROXIMA TELA APOS ESCOLHA DAS CRIANÇAS
-    ProximaTela (event){
-        
-       
+    ProximaTela(event) {
+
+
         const b = jwt.verify(getToken(), config.secret_auth);
         console.log("aaaaaaa entrei")
 
@@ -258,7 +258,7 @@ class SaidaCrianca extends React.Component {
             }).catch((err) => {
                 console.log(err);
             });
-       
+
         if (this.state.CriancasSelecionadas.length > 0) {
             console.log("entrei no if");
             this.setState({
@@ -269,7 +269,7 @@ class SaidaCrianca extends React.Component {
                 TimeCria: this.state.CriancasSelecionadas[0].time,
                 ObsCria: this.state.CriancasSelecionadas[0].children.observations,
                 RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[0].service,                
+                ProdutoCria: this.state.CriancasSelecionadas[0].service,
             })
 
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length)
@@ -290,8 +290,8 @@ class SaidaCrianca extends React.Component {
                         ValorCrianca: response.data.value,
                         page: "MostraCrianca",
                     })
-                }).then(()=>{
-                    
+                }).then(() => {
+
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
@@ -301,8 +301,8 @@ class SaidaCrianca extends React.Component {
                 })
             this.setState({
                 page: "MostraCrianca",
-            })    
-            }
+            })
+        }
         else {
             alert("Selecione Alguma Criança");
         }
@@ -376,15 +376,15 @@ class SaidaCrianca extends React.Component {
     VerificaDescontoFilhos = (Codigo) => {
         axios.get(`/discount/filter/${Codigo}/Child`)
             .then((response) => {
-                if(response.data.length>0){
+                if (response.data.length > 0) {
 
                     alert("Desconto Validado")
-                        this.setState({
-                            verified: true,
-                        })
-                    }else{
-                        alert("Desconto não encontrado")
-                    }
+                    this.setState({
+                        verified: true,
+                    })
+                } else {
+                    alert("Desconto não encontrado")
+                }
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -397,14 +397,34 @@ class SaidaCrianca extends React.Component {
             console.log(this.state.verified);
             if (this.state.verified == true) {
                 console.log(this.state.indice)
-                axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[this.state.indice - 1].children.id + '/' + this.state.CodDes + `/` + this.state.ValorCrianca)
+                axios.get(`/passport/discount/` + this.state.CriancasSelecionadas[this.state.indice - 1].children.id + '/' + this.state.CodDes + `/` + this.state.ValorCrianca + `/` + this.state.IDAdult)
                     .then((response) => {
-                        console.log(response.data)
-                        this.setState({
-                            ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                            //CodDes: "",
-                        })
-                        alert("Desconto Concluído")
+                        if (response.data === 1) {
+                            alert("Desconto Diario ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 2) {
+                            alert("Desconto Semanal ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 3) {
+                            alert("Desconto Mensal ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 4) {
+                            alert("Desconto Anual ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 5) {
+                            alert("Desconto Unico Não Pertence a Essa Pessoa")
+                        } else if (response.data === 6) {
+                            alert("Codigo do Desconto Não Encontrado")
+                        } else if (response.data === 7) {
+                            alert("Desconto Fora da Validade")
+                        } else {
+                            console.log(response.data)
+                            this.setState({
+                                ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
+                                //CodDes: "",
+                            })
+                            alert("Desconto Concluído")
+                        }
+
+
+
+
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
                         alert("Erro no Cadastro");
@@ -423,16 +443,16 @@ class SaidaCrianca extends React.Component {
         console.log(this.state.verified);
         axios.get(`/discount/filter/${Codigo}/Adult`)
             .then((response) => {
-                if(response.data.length>0){
+                if (response.data.length > 0) {
 
-                alert("Desconto Validado")
+                    alert("Desconto Validado")
                     this.setState({
                         verified: true,
                     })
-                }else{
+                } else {
                     alert("Desconto não encontrado")
                 }
-                
+
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -446,35 +466,52 @@ class SaidaCrianca extends React.Component {
             if (this.state.verified == true) {
                 axios.get(`/passport/discountAdult/` + this.state.IDAdult + `/` + this.state.FinalValor + `/` + this.state.CodDes)
                     .then((response) => {
-                        this.setState({
-                            //CodDes:"",
-                            ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                        })
-                        alert("Desconto Concluído");
-
-                        var j = 0.0;
-                        var k = 0.0;
-                        //AQUI É O VALOR FINAL
-                        this.state.ValorCria.map((resp, indice) => {
-                            j += parseFloat(resp.value);
-                        })
-                        //AQUI É O VALOR FINAL COM DESCONTO
-                        this.state.ValorCriaDesc.map((resp, indice) => {
-                            k += parseFloat(resp.value);
-                        })
-                        if (k > j) {
-                            this.setState({
-                                TotalValor: (j).toFixed(2),
-                                TotalValorDesc: (k).toFixed(2),
-                                FinalValor: (0).toFixed(2),
-                            })
+                        if (response.data === 1) {
+                            alert("Desconto Diario ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 2) {
+                            alert("Desconto Semanal ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 3) {
+                            alert("Desconto Mensal ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 4) {
+                            alert("Desconto Anual ja usado, Por Favor Espere o Tempo Para Poder Usar Novamente")
+                        } else if (response.data === 5) {
+                            alert("Desconto Unico Não Pertence a Essa Pessoa")
+                        } else if (response.data === 6) {
+                            alert("Codigo do Desconto Não Encontrado")
+                        } else if (response.data === 7) {
+                            alert("Desconto Fora da Validade")
                         } else {
                             this.setState({
-                                TotalValor: (j).toFixed(2),
-                                TotalValorDesc: (k).toFixed(2),
-                                FinalValor: (j - k).toFixed(2),
+                                //CodDes:"",
+                                ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
                             })
+                            alert("Desconto Concluído");
+
+                            var j = 0.0;
+                            var k = 0.0;
+                            //AQUI É O VALOR FINAL
+                            this.state.ValorCria.map((resp, indice) => {
+                                j += parseFloat(resp.value);
+                            })
+                            //AQUI É O VALOR FINAL COM DESCONTO
+                            this.state.ValorCriaDesc.map((resp, indice) => {
+                                k += parseFloat(resp.value);
+                            })
+                            if (k > j) {
+                                this.setState({
+                                    TotalValor: (j).toFixed(2),
+                                    TotalValorDesc: (k).toFixed(2),
+                                    FinalValor: (0).toFixed(2),
+                                })
+                            } else {
+                                this.setState({
+                                    TotalValor: (j).toFixed(2),
+                                    TotalValorDesc: (k).toFixed(2),
+                                    FinalValor: (j - k).toFixed(2),
+                                })
+                            }
                         }
+
 
                     }).catch((error) => {
                         console.log(error)//LOG DE ERRO
@@ -511,14 +548,14 @@ class SaidaCrianca extends React.Component {
                     idcria: String(this.state.CriancasSelecionadas[i].children.id),
                     entrada: entradas,
                     funcionario: String(this.state.nomeFuncionario),
-                    valor3:this.state.ValorCria,
-                    desconto:this.state.ValorCriaDesc,
+                    valor3: this.state.ValorCria,
+                    desconto: this.state.ValorCriaDesc,
                 }
                 temporario.push(comprovante);
                 console.log(temporario)
 
             }
-            
+
             axios.post(`/passport/a/`, temporario)
                 .then((response) => {
 
@@ -531,7 +568,7 @@ class SaidaCrianca extends React.Component {
                     this.setState({
                         comprovante: true,
                     });
-                }).then(()=>{
+                }).then(() => {
                     this.props.history.push("/");
                 }).catch((err) => console.log(err));
 
@@ -549,13 +586,13 @@ class SaidaCrianca extends React.Component {
         })
     }
     VoltarCrianca = (nomeCrianca, check) => {
-        if(nomeCrianca === this.state.Aux && check === true){
+        if (nomeCrianca === this.state.Aux && check === true) {
             this.setState({
                 page: "UsuarioAdulto",
-              
+
             })
         }
-        else if(nomeCrianca === this.state.Aux && check === false){
+        else if (nomeCrianca === this.state.Aux && check === false) {
             this.setState({
                 NameCria: this.state.CriancasSelecionadas[0].children.name,
                 Aux: this.state.CriancasSelecionadas[0].children.name,
@@ -564,8 +601,8 @@ class SaidaCrianca extends React.Component {
                 TimeCria: this.state.CriancasSelecionadas[0].time,
                 ObsCria: this.state.CriancasSelecionadas[0].children.observations,
                 RetCria: this.state.CriancasSelecionadas[0].children.restrictions,
-                ProdutoCria: this.state.CriancasSelecionadas[0].service,   
-                            
+                ProdutoCria: this.state.CriancasSelecionadas[0].service,
+
             })
 
             console.log(this.state.indice, "/", this.state.CriancasSelecionadas.length, this.state.CriancasSelecionadas)
@@ -577,8 +614,8 @@ class SaidaCrianca extends React.Component {
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
                         ValorCrianca: response.data.value,
                     })
-                }).then(()=>{
-                    
+                }).then(() => {
+
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
                     alert("Erro no Cadastro");
@@ -588,9 +625,9 @@ class SaidaCrianca extends React.Component {
                 })
             this.setState({
                 page: "MostraCrianca",
-            }) 
+            })
         }
-        else{
+        else {
             console.log(this.state.indice);
             this.setState({
                 indice: (this.state.indice - 1),
@@ -630,11 +667,11 @@ class SaidaCrianca extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Saida de Criança </li>
+                            <li > Saída de Criança </li>
                         </ol>
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle">Escolha o Responsavel</h3>
+                        <h3 className="inner-tittle">Escolha o Responsável</h3>
                         <div className="graph" >
                             <div className="tables table-responsive">
                                 <table className="table table-hover">
@@ -672,11 +709,11 @@ class SaidaCrianca extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Saida de Criança </li>
+                            <li > Saída de Criança </li>
                         </ol>
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle">Responsavel Selecionado</h3>
+                        <h3 className="inner-tittle">Responsável Selecionado</h3>
                         <div className="graph" >
                             <div className="row">
                                 <div className="col-md-4 col-sm-12 com-xs-12">
@@ -734,7 +771,7 @@ class SaidaCrianca extends React.Component {
                                                         <th scope="row">{(indice + 1)}</th>
                                                         <td className="text-center"> {resp.children.name} </td>
                                                         <td className="text-center">{resp.service}</td>
-                                                    <td className="text-center">{moment(resp.time).format("HH:mm")}</td>
+                                                        <td className="text-center">{moment(resp.time).format("HH:mm")}</td>
                                                         <td className="text-center"><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(resp.children.id)} /></td>
                                                     </tr>
                                                 );
@@ -745,7 +782,7 @@ class SaidaCrianca extends React.Component {
                                     <div className="text-center">
                                         <a className="btn btn-md botao" href="/">Cancelar</a>
                                         <button className="btn btn-md botao botaoAvançar" onClick={this.VoltarEscolhaAdulto}>Voltar</button>
-                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Proximo"/>
+                                        <input type="button" className="btn btn-md botao botaoAvançar" onClick={this.ProximaTela} value="Próximo" />
                                     </div>
                                 </form>
                             </div>
@@ -760,7 +797,7 @@ class SaidaCrianca extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Saida de Criança </li>
+                            <li > Saída de Criança </li>
                         </ol>
                     </div>
                     <div className="graph-visual" >
@@ -829,7 +866,7 @@ class SaidaCrianca extends React.Component {
                             <br></br>
                             <br></br>
                             <div className="graph">
-                                <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Codigo do Desconto: "} type={"text"} id={"CodDes"} name={"CodDes"} Class={"form-control"} onChange={this.ChangeValue} />
+                                <TypesInput cod={1} ClassDiv={"col-md-12 col-sm-12 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Código do Desconto: "} type={"text"} id={"CodDes"} name={"CodDes"} Class={"form-control"} onChange={this.ChangeValue} />
                                 <div className="text-center">
                                     <button className="btn btn-md botao botaoAvançar" onClick={() => this.VerificaDescontoFilhos(this.state.CodDes)}>Verificar Desconto</button>
                                 </div>
@@ -839,7 +876,7 @@ class SaidaCrianca extends React.Component {
                         <br></br>
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao botaoAvançar" onClick={()=>this.VoltarCrianca(this.state.NameCria)}>Voltar</button>
+                            <button className="btn btn-md botao botaoAvançar" onClick={() => this.VoltarCrianca(this.state.NameCria)}>Voltar</button>
                             <button className="btn btn-md botao botaoAvançar" onClick={this.ProximaCria}>{this.state.namebutton}</button>
                         </div>
                     </div>
@@ -852,7 +889,7 @@ class SaidaCrianca extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Saida de Criança </li>
+                            <li > Saída de Criança </li>
                         </ol>
                     </div>
                     <div className="graph-visual" >
@@ -931,7 +968,7 @@ class SaidaCrianca extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-6 col-sm-12 col-xs-12">
-                                                <label className="LetraFormulario brlabel">Forma de Pagamentro:</label>
+                                                <label className="LetraFormulario brlabel">Forma de Pagamento:</label>
                                                 <br></br>
                                                 <label className="radio-inline"><input type="radio" id="Dinheiro" name="FormPag" value="Dinheiro" onClick={this.ChangeValue} /><p className="LetraFormulario">  Dinheiro</p></label>
                                                 <label className="radio-inline"><input type="radio" id="Cartao" name="FormPag" value="Cartao" onClick={this.ChangeValue} /><p className="LetraFormulario">  Cartão</p></label>

@@ -313,11 +313,9 @@ class GerenciamentoFinanceiro extends React.Component {
                     if (info.activity === "Serviços" && info.action === "Saida") {
                         servicoproduto = servicoproduto + info.price;
                     }
-                    nome = moment(date[0].dateOperation).format("DD/MM")
+                  
                     
-                    if(nome === ""){
-                       
-                    }
+                   
 
                 })
                 
@@ -387,7 +385,7 @@ class GerenciamentoFinanceiro extends React.Component {
                     <div class="graph">
                         <nav>
                             <ul>
-                                <li id="GraficoTab" name="GraficoTab" onClick={this.selectGrafico} className={this.state.GraficoTab}><a><span class="far fa-chart-bar"></span> <span>Grafico</span></a></li>
+                                <li id="GraficoTab" name="GraficoTab" onClick={this.selectGrafico} className={this.state.GraficoTab}><a><span class="far fa-chart-bar"></span> <span>Gráfico</span></a></li>
 
                                 <li id="FluxoTab" name="FluxoTab" onClick={this.selectFluxo} className={this.state.FluxoTab}><a><span class="fas fa-chart-pie"></span> <span>Fluxo Operacional</span></a></li>
 
@@ -422,10 +420,10 @@ class GerenciamentoFinanceiro extends React.Component {
                                 <div class="graph graph-visual tables-main">
                                     <div className="graph-visual">
                                         <div id="alertDiv" className="alert displaynone" role="alert">
-                                            <b>ERRO!</b> Ah algo de errado em seu formulario ou busca.
+                                            <b>ERRO!</b> Há algo de errado em seu formulário ou busca.
                                         </div>
                                         <div id="SucessDiv" className="alert displaynone" role="alert">
-                                            <b>Sucesso!</b> Busca Concluida.
+                                            <b>Sucesso!</b> Busca Concluída.
                                         </div>
                                         <form id="busca-fluxo">
                                             <div className="row">
@@ -440,7 +438,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                                 <div className="col-md-1 col-sm-1 col-xs-1">
                                                     <button className="btn botao tam" onClick={this.RAtv}><i class="fas fa-times"></i></button>
                                                 </div>
-                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Ativdade: "} type={"test"} id={"Atividade"} name={"Atividade"} Class={"form-control"}
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Atividade: "} type={"test"} id={"Atividade"} name={"Atividade"} Class={"form-control"}
                                                     value={this.state.Atividade} onChange={this.ChangeValue} />
                                             </div>
                                             <div className="row">
@@ -450,7 +448,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                                 <TypesInput cod={1} ClassDiv={"col-md-5 col-sm-5 col-xs-5"} ClassLabel={"LetraFormulario"} NameLabel={"Data Entrada: "} type={"date"} id={"DataEntrada"} name={"DataEntrada"} Class={"form-control"}
                                                     value={this.state.DataEntrada} onChange={this.ChangeValue}
                                                 />
-                                                <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-6"} ClassLabel={"LetraFormulario"} NameLabel={"Data Saida: "} type={"date"} id={"DataSaida"} name={"DataSaida"} Class={"form-control"}
+                                                <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-6"} ClassLabel={"LetraFormulario"} NameLabel={"Data Saída: "} type={"date"} id={"DataSaida"} name={"DataSaida"} Class={"form-control"}
                                                     value={this.state.DataSaida} onChange={this.ChangeValue}
                                                 />
                                             </div>
@@ -472,11 +470,11 @@ class GerenciamentoFinanceiro extends React.Component {
                                                     <th style={{ textAlign: "center" }}>Operado</th>
                                                     <th style={{ textAlign: "center" }}>Operado Carbono</th>
                                                     <th style={{ textAlign: "center" }}>Valor</th>
-                                                    <th style={{ textAlign: "center" }}>Metodo de Pagamento</th>
+                                                    <th style={{ textAlign: "center" }}>Método de Pagamento</th>
                                                     <th style={{ textAlign: "center" }}>Data Entrada</th>
                                                     <th style={{ textAlign: "center" }}>Data Saída</th>
-                                                    <th style={{ textAlign: "center" }}>Disconto Codigo</th>
-                                                    <th style={{ textAlign: "center" }}>Disconto Tipo</th>
+                                                    <th style={{ textAlign: "center" }}>Desconto Código</th>
+                                                    <th style={{ textAlign: "center" }}>Desconto Tipo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

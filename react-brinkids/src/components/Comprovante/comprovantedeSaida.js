@@ -32,7 +32,7 @@ class Comprovantesaida extends React.Component {
         setTimeout(function () {
             tela_impressao.print();
 
-        }, 200);
+        }, 400);
 
     }
     total = (event) => {
