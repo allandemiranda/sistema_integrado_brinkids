@@ -68,7 +68,7 @@ class SaidaCrianca extends React.Component {
             TotalValorDesc: 0.00,
             FinalValor: 0.00,
             nomeFuncionario: "",
-
+            auxw: [],
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -476,15 +476,15 @@ class SaidaCrianca extends React.Component {
         if (codigonaousado) {
             axios.get(`/discount/filter/${Codigo}/Adult`)
                 .then((response) => {
+                    console.log(response.data)
                     if (response.data.length > 0) {
                         let temporario = this.state.CriancasSelecionadas;
                         tipo = response.data[0].type;
                         valued = response.data[0].value;
-
                         alert("Desconto Validado")
                         this.setState({
                             verified: true,
-                            CriancasSelecionadas: temporario
+                           
                         })
                     } else {
                         let temporario = this.state.CriancasSelecionadas;
@@ -535,7 +535,7 @@ class SaidaCrianca extends React.Component {
             alert("Codigo Ja Usado Para essa saida")
         }
         setTimeout(_ => {
-
+            console.log(this.state.FinalValor)
             if (this.state.verified == true) {
                 axios.get(`/passport/discountAdult/` + this.state.IDAdult + `/` + this.state.FinalValor + `/` + this.state.CodDes)
                     .then((response) => {
@@ -559,13 +559,15 @@ class SaidaCrianca extends React.Component {
                         } else {
 
                             let temporario = this.state.CriancasSelecionadas;
-
-                            temporario[0].adult = response.data;
-                            temporario[0].adult.type = tipo;
-                            temporario[0].adult.ValueD = valued;
+                            console.log(response.data)
+                           temporario[0].adult = response.data;
+                           temporario[0].adult.type = tipo;
+                           temporario[0].adult.ValueD = valued;
+                            console.log(temporario)
                             this.setState({
                                 //CodDes:"",
                                 ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
+                                CriancasSelecionadas:temporario,
                             })
                             alert("Desconto Concluído");
                             //AQUI É O VALOR FINAL
@@ -574,13 +576,21 @@ class SaidaCrianca extends React.Component {
                             var k = 0.0;
                             //AQUI É O VALOR FINAL
                             this.state.CriancasSelecionadas.map((resp, indice) => {
+
                                 j += parseFloat(resp.infocrianca.value);
                             })
                             //AQUI É O VALOR FINAL COM DESCONTO
                             this.state.CriancasSelecionadas.map((resp, indice) => {
-                                if (indice === 0 && resp.hasOwnProperty('codigos')) {
-                                    k += parseFloat(response.data.value);
-                                    k += parseFloat(resp.codigos.value);
+                                if (indice === 0 && resp.hasOwnProperty('adult')) {
+                                    if (resp.hasOwnProperty('codigos')) {
+                                        console.log(response.data[0], resp.codigos)
+                                        k += parseFloat(resp.adult.ValueD);
+                                        k += parseFloat(resp.codigos.Value);
+                                    } else {
+                                        k += parseFloat(resp.adult.ValueD);
+                                    }
+                                    
+                                    console.log(k)
                                 } else if (resp.hasOwnProperty('codigos')) {
                                     k += parseFloat(resp.codigos.value);
                                 }
@@ -600,7 +610,9 @@ class SaidaCrianca extends React.Component {
                                     FinalValor: (j - k).toFixed(2),
                                 })
                             }
-
+                            this.setState({
+                                CriancasSelecionadas: temporario
+                            })
                         }
 
 
@@ -612,7 +624,7 @@ class SaidaCrianca extends React.Component {
                         // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                     })
             }
-        }, 2000);
+        }, 1000);
         this.setState({
             verified: false,
         });
