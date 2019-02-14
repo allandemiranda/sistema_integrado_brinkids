@@ -245,7 +245,7 @@ router.put('/reset-password', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to:adultFound.name.firstName+" "+adultFound.name.surName,
+      to:adultFound[0].name.firstName+" "+adultFound[0].name.surName,
 
 
     })
@@ -254,7 +254,7 @@ router.put('/reset-password', async (req, res) => {
       return res.sendStatus(404);
     }
 
-    userFind.set({ password: 'senha1234' });
+    userFind.set({ password: 'senha123' });
     await userFind.save();
 
     return res.sendStatus(204);
@@ -304,7 +304,7 @@ router.put('/password', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultFound.name.firstName+" "+adultFound.name.surName,
+      to: adultFound[0].name.firstName+" "+adultFound[0].name.surName,
 
 
     })
