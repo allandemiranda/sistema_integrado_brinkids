@@ -10,16 +10,16 @@ router.post('/', (req, res) => {
   console.log(req.body)
   if (req.body.user && req.body.password) {
     let dados;
-    // if(req.body.user ==="admin"){
-    //   console.log("entrei")
+    if(req.body.user ==="admin"){
+      console.log("entrei")
       
-    //    dados = {
-    //     user: req.body.user,
-    //     password: req.body.password,
-    //     employees: true,
-    //     admin:true,
-    //   };
-    // }else{
+       dados = {
+        user: req.body.user,
+        password: req.body.password,
+        employees: true,
+        admin:true,
+      };
+    }else{
       dados = {
         user: req.body.user,
         password: req.body.password,
