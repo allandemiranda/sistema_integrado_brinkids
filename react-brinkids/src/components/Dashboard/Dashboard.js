@@ -63,6 +63,7 @@ class DashBoard extends React.Component {
 
 		this.selectAniversario = this.selectAniversario.bind(this);
 
+		this.selectBaby = this.selectBaby.bind(this);
 
 		this.cahnguePageA = this.cahnguePageA.bind(this);
 		this.changuePageC = this.changuePageC.bind(this);
