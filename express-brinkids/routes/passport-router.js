@@ -1469,7 +1469,6 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
                     Valorinicial: req.params.value,
                     indicecodes: indice,
                     indiceBroad: index,
-
                   };
                   try {
                     return res.status(201).json(data);
