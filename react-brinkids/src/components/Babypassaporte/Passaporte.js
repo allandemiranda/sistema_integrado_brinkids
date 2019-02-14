@@ -155,7 +155,7 @@ class Passport extends React.Component {
                     this.state.kinship[indice] = "Outros";
                 }
                 else if (event.target.value === "children") {
-                    this.state.kinship[indice] = "filho(a)";
+                    this.state.kinship[indice] = "Filho(a)";
                 }
                 else if (event.target.value === "Stepson") {
                     this.state.kinship[indice] = "Enteado(a)";
@@ -463,7 +463,7 @@ class Passport extends React.Component {
         };
 
         formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
-        formData.append('service', 'Passaporte')
+        formData.append('service', 'Babypassaporte')
         formData.append('time', moment().format())
         formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
@@ -590,7 +590,7 @@ class Passport extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Baby Passaporte </li>
                         </ol >
                     </div>
 

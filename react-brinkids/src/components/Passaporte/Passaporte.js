@@ -155,7 +155,7 @@ class Passport extends React.Component {
                     this.state.kinship[indice] = "Outros";
                 }
                 else if (event.target.value === "children") {
-                    this.state.kinship[indice] = "filho(a)";
+                    this.state.kinship[indice] = "Filho(a)";
                 }
                 else if (event.target.value === "Stepson") {
                     this.state.kinship[indice] = "Enteado(a)";
