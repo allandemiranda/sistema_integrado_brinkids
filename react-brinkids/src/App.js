@@ -121,6 +121,12 @@ class App extends React.Component {
             />
             <PrivateRoute
               exact
+              path="/Babypassport"
+              layout={MainLayout}
+              component={Babypassport}
+            />
+            <PrivateRoute
+              exact
               path="/Event"
               layout={MainLayout}
               component={CriaEvento}
