@@ -100,7 +100,7 @@ class Comprovantesaida extends React.Component {
                         <a id="pacote">Passaporte</a>
                         <div className="direita">
                             <a>Entrada:</a>
-                            <a id="hora">{moment(events.entrada.time).format("HH:MM")}</a>
+                            <a id="hora">{moment(events.entrada.time).format("HH:mm")}</a>
                             <a>h</a>
                         </div>
                     </div>

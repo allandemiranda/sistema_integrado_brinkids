@@ -454,7 +454,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                             </div>
                                             <br></br>
                                             <div className="text-right">
-                                                <input type="button" onClick={this.serch} />
+                                                <input type="button" className="btn botaoAvancar " value="Busca" onClick={this.serch} />
                                             </div>
                                         </form>
                                     </div>

@@ -70,7 +70,7 @@ class Comprovante extends React.Component {
                         <a id="pacote">Passaporte</a>
                         <div className="direita">
                             <a>Entrada:</a>
-                            <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
+                            <a id="hora">{moment().format("HH:mm")}</a>
                             <a>h</a>
                         </div>
                     </div>

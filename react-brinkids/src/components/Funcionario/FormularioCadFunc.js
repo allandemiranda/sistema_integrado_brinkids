@@ -571,7 +571,7 @@ class FormularioCadFunc extends React.Component {
 
         formData.append('identifier', String(this.state.identifier))
         console.log(this.state.identifier);
-        formData.append('gender', String(this.state.sexuality))
+        
         formData.append('education', String(this.state.scholl))
         formData.append('fatherName', String(this.state.dad))
         formData.append('motherName', String(this.state.mom))
@@ -917,7 +917,7 @@ class FormularioCadFunc extends React.Component {
                     />)}
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
+                        
                         <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarFunc.bind(this)}>Finalizar</button>
                     </div>
                 </div>

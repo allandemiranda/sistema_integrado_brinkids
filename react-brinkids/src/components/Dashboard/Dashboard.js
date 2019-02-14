@@ -199,21 +199,7 @@ class DashBoard extends React.Component {
 				<div className="container-fluid" >
 					<script src="js/jquery-1.10.2.min.js"></script>
 					<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
-					{this.state.popup &&
-
-						(<div className="alert alert-success" role="alert">
-							<strong>Tudo ok!</strong> O Limite De Crianças Não foi Atingido.
-					</div>)
-					}
-
-
-					{!this.state.popup &&
-
-						(<div className="alert alert-danger" role="alert">
-							<strong>Aviso!</strong> O Limite De Crinaças Foi Atingido.
-					</div>)
-
-					}
+					
 
 					<div className="sub-heard-part" >
 						<ol className="breadcrumb m-b-0" >

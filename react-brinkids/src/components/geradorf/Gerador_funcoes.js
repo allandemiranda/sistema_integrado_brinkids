@@ -439,6 +439,7 @@ class Gerador extends React.Component {
                             <br></br>
                             <div className="text-center">
                                 <Link className="btn btn-md botao" to="/">Cancelar</Link>
+                                <input type="button" value="Voltar" className="btn btn-md botao botaoAvançar" onClick={()=>this.setState({Page:'Cargos'})}/>
                                 {!this.state.editar && (<input type="button" value="Salvar" className="btn btn-md botao botaoAvançar" onClick={this.Salvar}/>)}
                                 {this.state.editar && (<input type="button" value="Salvar"  className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}/>)}
                             </div>
