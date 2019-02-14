@@ -26,8 +26,7 @@ router.post('/', (req, res) => {
         employees: true,
         admin:true,
       };
-    
-  
+    }
 
     userSystem.create(dados, (err, small) => {
       if (err) {
