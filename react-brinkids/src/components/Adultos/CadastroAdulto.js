@@ -300,6 +300,22 @@ class CadastroAdulto extends React.Component {
                 $("#estado").removeClass('errorBorder');
             }
 
+            if (adulto.city.length === 0) {
+                $("#cid").addClass('errorBorder');
+                erros.push("A cidade não pode estar em branco");
+            }
+            else {
+                $("#cid").removeClass('errorBorder');
+            }
+
+            if (adulto.neighborhood.length === 0) {
+                $("#bai ").addClass('errorBorder');
+                erros.push("O bairro não pode estar em branco");
+            }
+            else {
+                $("#bai").removeClass('errorBorder');
+            }
+
             return erros;
 
         }
@@ -663,7 +679,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className="col-md-3 col-sm-3 col-xs-3" >
                                             <label className="LetraFormulario" > Bairro: </label>
-                                            <input type="text" id="bairro" name="bairro" className="form-control" value={this.state.neighborhood} onChange={this.ChangeNeighborhood} />
+                                            <input type="text" id="bai" name="bairro" className="form-control" value={this.state.neighborhood} onChange={this.ChangeNeighborhood} />
                                         </div>
                                         <div className="col-md-2 col-sm-3 col-xs-2" >
                                             <label className="LetraFormulario" > Número: </label>
@@ -680,7 +696,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className="col-md-4 col-sm-6 col-xs-4" >
                                             <label className="LetraFormulario" > Cidade: </label>
-                                            <input type="text" id="cidade" name="cidade" className="form-control" value={this.state.city} onChange={this.ChangeCity} />
+                                            <input type="text" id="cid" name="cidade" className="form-control" value={this.state.city} onChange={this.ChangeCity} />
                                         </div>
                                         <div className="col-md-3 col-sm-6 col-xs-3" >
                                             <label className="LetraFormulario" > Estado: </label>
