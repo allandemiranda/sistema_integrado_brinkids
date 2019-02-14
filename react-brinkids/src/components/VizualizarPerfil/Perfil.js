@@ -265,7 +265,7 @@ class Perfil extends React.Component {
                         if (eventu) {
                             axios.get(`/authentication/mostra_usuarios/${event._id}`)
                             .then((response) => {
-                                console.log(response.data)
+                               
                                 this.setState(
                                     {   user:response.data[0].user,
                                         perfilEdicao: event,
