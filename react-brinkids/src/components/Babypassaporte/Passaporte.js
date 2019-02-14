@@ -834,7 +834,7 @@ class Passport extends React.Component {
                                                                 <option value="others" > Outros </option>
                                                                 <option value="children" > Filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
-                                                                <option value="grandchildren"  >Neto(a) </option>
+                                                                <option value="grandchildren"  > Neto(a) </option>
                                                                 <option value="nephews"  > Sobrinho(a) </option>
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >
