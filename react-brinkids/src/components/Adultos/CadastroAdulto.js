@@ -60,6 +60,8 @@ class CadastroAdulto extends React.Component {
             erro: '',
             achado: false,
             kinship: 'Outros',
+
+            cadastoOK:false,
         }
 
         this.ChangeName = this.ChangeName.bind(this);
@@ -178,7 +180,6 @@ class CadastroAdulto extends React.Component {
             }
             if (this.state.nomeValido === false) {
                 $("#nome").addClass('errorBorder');
-                alert("Carácter Invalido. No campo NOME não é permitido o uso de espaço");
                 this.state.nomeValido = true;
                 return;
             }
@@ -522,8 +523,7 @@ class CadastroAdulto extends React.Component {
         axios.post('/adult', formData)
             .then((response) => {
                 console.log(response)
-                alert("Cadastro Finalizado")
-                this.props.history.push("/");
+                this.state.cadastoOK = true;
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -572,6 +572,14 @@ class CadastroAdulto extends React.Component {
 
 
     render() {
+        // if (this.state.cadastroOK === true) {
+        //     <div className="container-fluid">
+        //         <div className="alert alert-success" role="alert">
+        //             <strong>Tudo ok!</strong> O Limite De Crianças Não foi Atingido.
+        //     </div>
+        //     </div>
+        //     this.props.history.push("/");
+        // }
         if (this.state.page === "FormularioCad") {
             return (
                 <div className="container-fluid" >

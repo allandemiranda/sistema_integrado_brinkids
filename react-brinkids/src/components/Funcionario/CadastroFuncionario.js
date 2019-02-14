@@ -150,11 +150,11 @@ class CadastroFuncionario extends React.Component {
                     $("#number").removeClass('errorBorder');
                     erros.push("A Busca não pode ser em branco");
                 }
-                if (busca.length < 8) {
-                    $("#name").addClass('errorBorder');
-                    $("#number").removeClass('errorBorder');
-                    erros.push("A Busca nao pode ter menos que 8 caracteres");
-                }
+                // if (busca.length < 8) {
+                //     $("#name").addClass('errorBorder');
+                //     $("#number").removeClass('errorBorder');
+                //     erros.push("A Busca nao pode ter menos que 8 caracteres");
+                // }
                 if (busca.length > 8) {
                     $("#name").removeClass('errorBorder');
                     $("#number").removeClass('errorBorder');
@@ -166,11 +166,11 @@ class CadastroFuncionario extends React.Component {
                     $("#name").removeClass('errorBorder');
                     erros.push("A Busca não pode ser em branco");
                 }
-                if (busca.length < 8) {
-                    $("#number").addClass('errorBorder');
-                    $("#name").removeClass('errorBorder');
-                    erros.push("A Busca nao pode ter menos que 8 caracteres");
-                }
+                // if (busca.length < 8) {
+                //     $("#number").addClass('errorBorder');
+                //     $("#name").removeClass('errorBorder');
+                //     erros.push("A Busca nao pode ter menos que 8 caracteres");
+                // }
                 if (busca.length > 8) {
                     $("#number").removeClass('errorBorder');
                     $("#name").removeClass('errorBorder');
