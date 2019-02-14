@@ -39,11 +39,13 @@ class DashBoard extends React.Component {
 			crincaTab: "tab-current",
 			adultoTab: "",
 			aniversarioTab: "",
+			babyTab: "",
 			noticiaTab: "",
 
 			sectionCrianca: "content-current",
 			sectionAdult: "",
 			sectionAniversario: "",
+			sectionBaby: "",
 			sectionNoticia: "",
 			listaFuncionarios: [],
 			perfilAtual: [],
@@ -151,11 +153,13 @@ class DashBoard extends React.Component {
 			crincaTab: "tab-current",
 			adultoTab: "",
 			aniversarioTab: "",
+			babyTab: "",
 			noticiaTab: "",
 
 			sectionCrianca: "content-current",
 			sectionAdult: "",
 			sectionAniversario: "",
+			sectionBaby: "",
 			sectionNoticia: "",
 		})
 	}
@@ -165,11 +169,29 @@ class DashBoard extends React.Component {
 			crincaTab: "",
 			adultoTab: "",
 			aniversarioTab: "tab-current",
+			babyTab: "",
 			noticiaTab: "",
 
 			sectionCrianca: "",
 			sectionAdult: "",
 			sectionAniversario: "content-current",
+			sectionBaby: "",
+			sectionNoticia: "",
+		})
+	}
+
+	selectBaby(event) {
+		this.setState({
+			crincaTab: "",
+			adultoTab: "",
+			aniversarioTab: "",
+			babyTab: "tab-current",
+			noticiaTab: "",
+
+			sectionCrianca: "",
+			sectionAdult: "",
+			sectionAniversario: "",
+			sectionBaby: "content-current",
 			sectionNoticia: "",
 		})
 	}
@@ -246,6 +268,7 @@ class DashBoard extends React.Component {
 
 										<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Aniversários</span></a></li>
 
+										<li name="babyTab" onClick={this.selectBaby} className={this.state.babyTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Baby Passaporte</span></a></li>
 
 									</ul>
 								</nav>
@@ -305,7 +328,7 @@ class DashBoard extends React.Component {
 											</div>
 										</div>
 									</section>
-									<section className={this.state.sectionAniversario}>
+									<section className={this.state.sectionBaby}>
 										<div className="graph graph-visual tables-main">
 											<div className="tables">
 												<table className="table table-hover">
