@@ -10,6 +10,7 @@ import DashBoard from './components/Dashboard/Dashboard.js';
 import Adult from './components/Adultos/CadastroAdulto.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
 import Passport from './components/Passaporte/Passaporte.js';
+import Babypassport from './components/Babypassaporte/Passaporte.js';
 import Aniversario from './components/Aniversario/CadastroAniversario.js';
 import CriaEvento from './components/Eventos/CadastroEvento.js';
 import Desconto from './components/Desconto/VisualizaDesconto.js';
@@ -123,7 +124,7 @@ class App extends React.Component {
               exact
               path="/Babypassport"
               layout={MainLayout}
-              component={Passport}
+              component={Babypassport}
             />
             <PrivateRoute
               exact
