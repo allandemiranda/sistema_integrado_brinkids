@@ -326,7 +326,7 @@ class DashBoard extends React.Component {
 													</thead>
 													<tbody>
 													{this.state.lista.map((event, index) => {
-														if(event.service==="Aniversario"){
+														if(event.service==="Babypassaporte"){
 															return (
 																<tr>
 																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
