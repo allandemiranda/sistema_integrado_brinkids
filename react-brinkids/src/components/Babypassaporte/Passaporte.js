@@ -411,7 +411,7 @@ class Passport extends React.Component {
             dadosComprovante: {
 
                 photo: String(this.state.listConfirmKids[0]._id),
-                service: "Passaporte",
+                service: "Baby Passaporte",
                 time: moment().format(),
                 belongings: await Num(),
                 children: listCria,
@@ -463,7 +463,7 @@ class Passport extends React.Component {
         };
 
         formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
-        formData.append('service', 'Babypassaporte')
+        formData.append('service', 'Baby Passaporte')
         formData.append('time', moment().format())
         formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
@@ -649,7 +649,7 @@ class Passport extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Baby Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual">
@@ -712,7 +712,7 @@ class Passport extends React.Component {
                         <div className="sub-heard-part" >
                             <ol className="breadcrumb m-b-0" >
                                 <li > < a href="/" > Home </a></li >
-                                <li > Passaporte</li>
+                                <li > Baby Passaporte</li>
                             </ol >
                         </div>
                         <div className="graph-visual" >
@@ -780,7 +780,7 @@ class Passport extends React.Component {
                     <div className="sub-heard-part">
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Baby Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual">
@@ -832,9 +832,9 @@ class Passport extends React.Component {
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
                                                             <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id, indice)} >
                                                                 <option value="others" > Outros </option>
-                                                                <option value="children" > filho(a) </option>
+                                                                <option value="children" > Filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
-                                                                <option value="grandchildren"  >Neto(a) </option>
+                                                                <option value="grandchildren"  > Neto(a) </option>
                                                                 <option value="nephews"  > Sobrinho(a) </option>
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >
@@ -900,7 +900,7 @@ class Passport extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Baby Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual">
@@ -1016,7 +1016,7 @@ class Passport extends React.Component {
                     </div>
                     {this.state.comprovante && (<Comprovant
                         tabela={this.state.dadosComprovante}
-                        serviso="PASSAPORTE"
+                        serviso="BABY PASSAPORTE"
                         teste={this.state.comprovante}
                     />)}
 
