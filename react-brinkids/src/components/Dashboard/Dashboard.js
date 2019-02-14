@@ -358,6 +358,59 @@ class DashBoard extends React.Component {
 											</div>
 										</div>
 									</section>
+									<section className={this.state.sectionAniversario}>
+										<div className="graph graph-visual tables-main">
+											<div className="tables">
+												<table className="table table-hover">
+													<thead>
+														<tr>
+															<th>#</th>
+															<th style={{ textAlign: "center" }}>Criança</th>
+															<th style={{ textAlign: "center" }}>Idade</th>
+															<th style={{ textAlign: "center" }}>Restrição</th>
+															<th style={{ textAlign: "center" }}>Obs.</th>
+															<th style={{ textAlign: "center" }}>Entrada</th>
+															<th style={{ textAlign: "center" }}>Gaveta</th>
+															<th style={{ textAlign: "center" }}>Responsável</th>
+															<th style={{ textAlign: "center" }}>Parentesco</th>
+															<th style={{ textAlign: "center" }}>Telefone</th>
+															<th style={{ textAlign: "center" }}>Obs.</th>
+														</tr>
+													</thead>
+													<tbody>
+													{this.state.lista.map((event, index) => {
+														if(event.service==="Aniversario"){
+															return (
+																<tr>
+																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
+																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
+																	<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+
+																	{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Restrições!\n\n'+event.children.restrictions)}><a>SIM</a></td>)}
+																	{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+
+																	{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.children.observations)}><a>SIM</a></td>)}
+																	{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+
+
+
+																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
+																	<td style={{ textAlign: "center" }}>{event.belongings}</td>
+																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
+																	<td style={{ textAlign: "center" }}>{event.kinship}</td>
+																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+
+																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
+																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																</tr>
+															);}
+														})}
+
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</section>
 								</div>
 							</div>
 						</div>)}
