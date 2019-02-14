@@ -1016,7 +1016,7 @@ class Passport extends React.Component {
                     </div>
                     {this.state.comprovante && (<Comprovant
                         tabela={this.state.dadosComprovante}
-                        serviso="PASSAPORTE"
+                        serviso="BABY PASSAPORTE"
                         teste={this.state.comprovante}
                     />)}
 

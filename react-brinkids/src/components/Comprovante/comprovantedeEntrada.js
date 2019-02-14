@@ -67,7 +67,7 @@ class Comprovante extends React.Component {
                     </div>
                     <div>
                         <a>Pacote:</a>
-                        <a id="pacote">Passaporte</a>
+                        <a id="pacote">{event.serviso}</a>
                         <div className="direita">
                             <a>Entrada:</a>
                             <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
