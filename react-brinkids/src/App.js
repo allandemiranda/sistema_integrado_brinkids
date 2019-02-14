@@ -123,7 +123,7 @@ class App extends React.Component {
               exact
               path="/Babypassport"
               layout={MainLayout}
-              component={Babypassport}
+              component={Passport}
             />
             <PrivateRoute
               exact
