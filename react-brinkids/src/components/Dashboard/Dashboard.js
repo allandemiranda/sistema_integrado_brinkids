@@ -269,7 +269,7 @@ class DashBoard extends React.Component {
 
 										<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Aniversários</span></a></li>
 
-										<li name="babyTab" onClick={this.selectBaby} className={this.state.babyTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Baby Passaporte</span></a></li>
+										<li name="babyTab" onClick={this.selectBaby} className={this.state.babyTab}><a className="icon-food"><span className="fas fa-baby"></span> <span>Baby Passaporte</span></a></li>
 
 									</ul>
 								</nav>
