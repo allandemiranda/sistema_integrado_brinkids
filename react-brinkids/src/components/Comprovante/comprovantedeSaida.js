@@ -36,11 +36,24 @@ class Comprovantesaida extends React.Component {
 
     }
     total = (event) => {
-        let n =0;
-        event.map((aaa)=>{
-            n=n+aaa.value;
+        let n = 0.0;
+        event.map((aaa, indice) => {
+            if (indice === 0 && aaa.hasOwnProperty('adult')) {
+                
+                if (aaa.hasOwnProperty('codigos')) {
+                     n = n + parseFloat(aaa.adult.value) + parseFloat(aaa.codigos.value);
+                } else {
+                   
+                    n = n + parseFloat(aaa.adult.value);
+                }
+
+            } else   if (aaa.hasOwnProperty('codigos')){
+                
+                n = n + parseFloat(aaa.codigos.value);
+            }
+
         })
-        return n;
+        return n.toFixed(2);
     }
     render() {
 
@@ -189,15 +202,36 @@ class Comprovantesaida extends React.Component {
                                 </tr>
                             </thead>
                             <tbody id="descontos">
-                                {this.props.tabela[0].desconto.map((event) => {
-                                    return (
-                                        <tr>
-                                            {event.tipo === "Porcentagem" && (<td><a>{event.discount + " " + event.valueD + " %"}</a></td>)}
-                                            {event.tipo === "Fixo" && (<td><a>{event.discount + " " + event.valueD}</a></td>)}
+                                {this.props.tabela[0].desconto.map((event, indice) => {
+                                    if (indice === 0 && event.hasOwnProperty('adult')) {
+                                        return (
+                                            <>
+                                                <tr>
+                                                    {event.adult.type === "Porcentagem" && (<td><a>{event.adult.discount + " " + event.adult.ValueD + " %"}</a></td>)}
+                                                    {event.adult.type === "Fixo" && (<td><a>{event.adult.discount + " " + event.adult.ValueD}</a></td>)}
 
-                                            <td><a className="espacoTitulo">R$</a><a id="valor"> {event.value}</a></td>
-                                        </tr>
-                                    );
+                                                    <td><a className="espacoTitulo">R$</a><a id="valor"> {event.adult.value}</a></td>
+                                                </tr>
+                                                {event.hasOwnProperty('codigos') && (
+                                                    <tr>
+                                                        {event.codigos.type === "Porcentagem" && (<td><a>{event.codigos.discount + " " + event.codigos.ValueD + " %"}</a></td>)}
+                                                        {event.codigos.type === "Fixo" && (<td><a>{event.codigos.discount + " " + event.codigos.ValueD}</a></td>)}
+
+                                                        <td><a className="espacoTitulo">R$</a><a id="valor"> {event.codigos.value}</a></td>
+                                                    </tr>
+                                                )}
+                                            </>
+                                        );
+                                    } else if (event.hasOwnProperty('codigos')) {
+                                        return (
+                                            <tr>
+                                                {event.codigos.type === "Porcentagem" && (<td><a>{event.codigos.discount + " " + event.codigos.valueD + " %"}</a></td>)}
+                                                {event.codigos.type === "Fixo" && (<td><a>{event.codigos.discount + " " + event.codigos.ValueD}</a></td>)}
+
+                                                <td><a className="espacoTitulo">R$</a><a id="valor"> {event.codigos.value}</a></td>
+                                            </tr>
+                                        );
+                                    }
                                 })}
 
                             </tbody>
@@ -210,7 +244,7 @@ class Comprovantesaida extends React.Component {
                             <a>Valor pago: R$ </a>
                             <a id="valor"> {this.props.tabela[0].valor} </a>
                             <a>em</a>
-                            <a id="metodo">{this.props.tabela[0].Form}</a>
+                            <a id="metodo"> {this.props.tabela[0].Form}</a>
                         </div>
                     </div>
                     <div id="atendente" className="atendente textos">
