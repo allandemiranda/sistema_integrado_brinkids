@@ -52,6 +52,7 @@ class Perfil extends React.Component {
         this.SearchFuncionario = this.SearchFuncionario.bind(this);
         this.ChangePage = this.ChangePage.bind(this);
         this.editavel = this.editavel.bind(this);
+        
         this.changueObs = this.changueObs.bind(this);
         this.changueCep = this.changueCep.bind(this);
         this.changueEndereco = this.changueEndereco.bind(this);
@@ -62,6 +63,7 @@ class Perfil extends React.Component {
         this.changueNumero = this.changueNumero.bind(this);
         this.changueEmail = this.changueEmail.bind(this);
         this.changuePhone = this.changuePhone.bind(this);
+        
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
