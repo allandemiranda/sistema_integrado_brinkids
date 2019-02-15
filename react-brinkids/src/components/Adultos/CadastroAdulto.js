@@ -530,6 +530,9 @@ class CadastroAdulto extends React.Component {
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 this.state.erroL = true;
+                if (error.response.status===409){
+                    alert('Conflito de informações: CPF já existe.' )
+                }
             })
     }
 
