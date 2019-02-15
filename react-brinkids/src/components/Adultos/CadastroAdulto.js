@@ -60,6 +60,8 @@ class CadastroAdulto extends React.Component {
             erro: '',
             achado: false,
             kinship: 'Outros',
+
+            erroL:false,
         }
 
         this.ChangeName = this.ChangeName.bind(this);
@@ -111,7 +113,7 @@ class CadastroAdulto extends React.Component {
                             this.requisicao();
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            //alert("Acesso Negado. Você não possui permisão para estar nessa área!")
                         }
                     })
                     .catch((err) => console.log(err));
@@ -178,7 +180,6 @@ class CadastroAdulto extends React.Component {
             }
             if (this.state.nomeValido === false) {
                 $("#nome").addClass('errorBorder');
-                alert("Carácter Invalido. No campo NOME não é permitido o uso de espaço");
                 this.state.nomeValido = true;
                 return;
             }
@@ -298,6 +299,22 @@ class CadastroAdulto extends React.Component {
             }
             else {
                 $("#estado").removeClass('errorBorder');
+            }
+
+            if (adulto.city.length === 0) {
+                $("#cid").addClass('errorBorder');
+                erros.push("A cidade não pode estar em branco");
+            }
+            else {
+                $("#cid").removeClass('errorBorder');
+            }
+
+            if (adulto.neighborhood.length === 0) {
+                $("#bai ").addClass('errorBorder');
+                erros.push("O bairro não pode estar em branco");
+            }
+            else {
+                $("#bai").removeClass('errorBorder');
             }
 
             return erros;
@@ -473,7 +490,7 @@ class CadastroAdulto extends React.Component {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
 
@@ -506,13 +523,14 @@ class CadastroAdulto extends React.Component {
         axios.post('/adult', formData)
             .then((response) => {
                 console.log(response)
-                alert("Cadastro Finalizado")
+                this.state.cadastoOK = true;
                 this.props.history.push("/");
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroL = true;
             })
     }
 
@@ -663,7 +681,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className="col-md-3 col-sm-3 col-xs-3" >
                                             <label className="LetraFormulario" > Bairro: </label>
-                                            <input type="text" id="bairro" name="bairro" className="form-control" value={this.state.neighborhood} onChange={this.ChangeNeighborhood} />
+                                            <input type="text" id="bai" name="bairro" className="form-control" value={this.state.neighborhood} onChange={this.ChangeNeighborhood} />
                                         </div>
                                         <div className="col-md-2 col-sm-3 col-xs-2" >
                                             <label className="LetraFormulario" > Número: </label>
@@ -680,7 +698,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className="col-md-4 col-sm-6 col-xs-4" >
                                             <label className="LetraFormulario" > Cidade: </label>
-                                            <input type="text" id="cidade" name="cidade" className="form-control" value={this.state.city} onChange={this.ChangeCity} />
+                                            <input type="text" id="cid" name="cidade" className="form-control" value={this.state.city} onChange={this.ChangeCity} />
                                         </div>
                                         <div className="col-md-3 col-sm-6 col-xs-3" >
                                             <label className="LetraFormulario" > Estado: </label>
@@ -742,6 +760,13 @@ class CadastroAdulto extends React.Component {
             var Nome = this.state.firstName + " " + this.state.surName;
             return (
                 <div className="container-fluid">
+                    <div className="container-fluid" >
+                        {this.state.erro &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                     <ConfirmaAdulto
                         Name={Nome}
                         Cpf={this.state.cpf}

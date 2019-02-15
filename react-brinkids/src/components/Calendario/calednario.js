@@ -163,7 +163,7 @@ class Calendar extends React.Component {
               this.requisicao();
             } else {
               this.props.history.push("/");
-              alert("você nao tem permissao para entrar aki")
+              alert("Acesso Negado. Você não possui permisão para estar nessa área!");
             }
           })
           .catch((err) => console.log(err));
@@ -212,7 +212,7 @@ class Calendar extends React.Component {
               this.setState({ page: "Novo" });
             } else {
 
-              alert("você nao tem permissao para entrar aki")
+              alert("Acesso Negado. Você não possui permisão para estar nessa área!");
 
             }
           })
@@ -323,7 +323,7 @@ class Calendar extends React.Component {
 
             } else {
 
-              alert("você nao tem permissao para entrar aki")
+              alert("Acesso Negado. Você não possui permisão para estar nessa área!");
 
             }
           })

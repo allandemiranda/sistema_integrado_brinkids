@@ -29,6 +29,7 @@ class Desconto extends Component {
             TypeTime: "",
             Date: "",
             list: [],
+            erroDesconto:false,
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -172,12 +173,13 @@ class Desconto extends Component {
                         list: response.data,
                         page: "MostraDesconto",
                         dadosComprovante:response.data,
-                        
+
                     })
 
                 }).catch((error) => {
+                    this.state.erroDesconto = true;
                     console.log(error)//LOG DE ERRO
-                    alert("Erro ao Gerar Desconto");
+                    //alert("Erro ao Gerar Desconto");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
@@ -320,6 +322,13 @@ class Desconto extends Component {
         else if (this.state.page === "MostraDesconto") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroDesconto &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro ao gerar o desconto</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >

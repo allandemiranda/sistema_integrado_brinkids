@@ -239,7 +239,7 @@ class FormularioCadFunc extends React.Component {
             .then((response) => {
                 console.log(response.data)
                 if (isEmpty(response.data)) {
-                    alert("Nenhum adulto foi encontrado com essa busca")
+                    //alert("Nenhum adulto foi encontrado com essa busca")
                 }
                 else {
                     const data = new Date(response.data[0].birthday).toISOString();
@@ -561,7 +561,7 @@ class FormularioCadFunc extends React.Component {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
 
@@ -640,10 +640,10 @@ class FormularioCadFunc extends React.Component {
                     dadosComprovates:dadosComprovates,
                     comprovante:true,
                 })
-                alert("Cadastro realizado com sucesso!"); 
+                //alert("Cadastro realizado com sucesso!"); 
             }).then(()=>{
                 setTimeout(()=>{
-                    alert("Cadastro realizado com sucesso!")
+                    //alert("Cadastro realizado com sucesso!")
                     window.location.href="/";
                 },1000)
             })

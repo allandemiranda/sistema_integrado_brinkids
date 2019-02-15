@@ -46,6 +46,7 @@ class EntradaAniversario extends React.Component {
             responsavel: [],
             criancaDentro: [],
             listacriancaCombinacao: [],//lista e crianças apos atribuir os ids do sistema
+            erroCadastro: false,
         }
 
         //Relacionado a atualização dos valores Caminho
@@ -166,7 +167,7 @@ class EntradaAniversario extends React.Component {
                             this.requisicao();
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
                         }
                     })
                     .catch((err) => console.log(err));
@@ -212,9 +213,10 @@ class EntradaAniversario extends React.Component {
 
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
-                console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroCadastro = true;
             })
     }
     requisicao(event) {
@@ -222,7 +224,7 @@ class EntradaAniversario extends React.Component {
             .then((response) => {
                 
                 if (response.data.length === 0) {
-                    alert("Nenhum aniversário encontrado")
+                    // alert("Nenhum aniversário encontrado")
                     this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
                 } else {
                     let adulto = [];
@@ -348,10 +350,9 @@ class EntradaAniversario extends React.Component {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroCadastro = true;
             })
-
-        alert("Cadastrado");
         this.requisicao();
     }
 
@@ -1101,6 +1102,13 @@ class EntradaAniversario extends React.Component {
         if (this.state.page === "TelaFinal") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >

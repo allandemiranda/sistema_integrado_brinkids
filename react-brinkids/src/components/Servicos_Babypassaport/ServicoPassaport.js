@@ -51,7 +51,7 @@ class ServicoPassaporte extends React.Component {
             page: "TelaI",
             list: [],
         })
-        axios.get('/passportServices')
+        axios.get('/babypassportServices')
             .then((response) => {
 
 
@@ -92,7 +92,7 @@ class ServicoPassaporte extends React.Component {
                             this.requisicao();
                         } else {
                             this.props.history.push("/");
-                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                            alert("você nao tem permissao para entrar aki")
                         }
                     })
                     .catch((err) => console.log(err));
@@ -102,7 +102,7 @@ class ServicoPassaporte extends React.Component {
     }
     requisicao(event) {
 
-        axios.get('/passportServices')
+        axios.get('/babypassportServices')
             .then((response) => {
 
 
@@ -197,10 +197,10 @@ class ServicoPassaporte extends React.Component {
             formData.append('price', String(this.state.Price))
 
 
-            axios.post('/passportServices', formData)
+            axios.post('/babypassportServices', formData)
                 .then((response) => {
                     console.log(response)
-                    axios.get('/passportServices')
+                    axios.get('/babypassportServices')
                         .then((response) => {
 
 
@@ -236,7 +236,7 @@ class ServicoPassaporte extends React.Component {
         formData.append('price', String(this.state.list2.price))
 
 
-        axios.put('/passportServices/', formData)
+        axios.put('/babypassportServices/', formData)
             .then( (response)=>{
                 console.log(response)
                 this.requisicao();
@@ -252,9 +252,9 @@ class ServicoPassaporte extends React.Component {
 
     Apagar = (event) => {
         const id = this.state.list[this.state.list.length - 1]._id;
-        axios.delete(`/passportServices/${id}`)
+        axios.delete(`/babypassportServices/${id}`)
             .then((response) => {
-                axios.get('/passportServices')
+                axios.get('/babypassportServices')
                     .then((response) => {
 
                         
@@ -265,7 +265,7 @@ class ServicoPassaporte extends React.Component {
 
     Adicionar = (event) => {
         $.ajax({
-            url: "/passportServices/initialTime",
+            url: "/babypassportServices/initialTime",
             dataType: 'json',
             type: 'GET',
 
@@ -295,7 +295,7 @@ class ServicoPassaporte extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home  </a></li >
-                            <li > Serviços Passaporte </li>
+                            <li > Serviços Baby Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -325,7 +325,7 @@ class ServicoPassaporte extends React.Component {
                                                         <td id="paddingNome" >{TempoServico.initialTime} </td>
                                                         <td id="paddingNome" >{TempoServico.finalTime}</td>
                                                         <td id="paddingNome" > {TempoServico.price}</td>
-                                                        {indice === (this.state.list.length - 1) && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
+                                                        {indice > 0 && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
                                                     </tr>
                                                 );
                                             })}
@@ -382,7 +382,7 @@ class ServicoPassaporte extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home  </a></li >
-                            <li > Serviços Passaporte </li>
+                            <li > Serviços Baby Passaporte </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
