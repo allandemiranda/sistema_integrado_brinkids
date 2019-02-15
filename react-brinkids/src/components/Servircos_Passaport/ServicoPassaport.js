@@ -33,6 +33,7 @@ class ServicoPassaporte extends React.Component {
             QuebraValor: 0,
             Price: "",
             tudoOK: true,
+            erroC: 0,
         }
         this.changueNome = this.changueNome.bind(this);
         this.changueDescricao = this.changueDescricao.bind(this);
@@ -150,37 +151,45 @@ class ServicoPassaporte extends React.Component {
         if (this.state.Nome.length === 0) {
             $("#name").addClass('errorBorder');
             this.state.tudoOK = false;
+            this.state.erroC = this.state.erroC + 1;
         }
         else {
             $("#name").removeClass('errorBorder');
             this.state.tudoOK = true;
+            this.state.erroC = this.state.erroC - 1;
         }
 
         if (this.state.Descricao.length === 0) {
             $("#desc").addClass('errorBorder');
             this.state.tudoOK = false;
+            this.state.erroC = this.state.erroC + 1;
         }
         else {
             $("#desc").removeClass('errorBorder');
             this.state.tudoOK = true;
+            this.state.erroC = this.state.erroC - 1;
         }
 
         if (this.state.Price.length === 0) {
             $("#valor").addClass('errorBorder');
             this.state.tudoOK = false;
+            this.state.erroC = this.state.erroC + 1;
         }
         else {
             $("#valor").removeClass('errorBorder');
             this.state.tudoOK = true;
+            this.state.erroC = this.state.erroC - 1;
         }
 
         if(this.state.list.initialTime > this.state.TempoFinal){
             $("#time").addClass('errorBorder');
             this.state.tudoOK = false;
+            this.state.erroC = this.state.erroC + 1;
         }
         else{
             $("#time").removeClass('errorBorder');
             this.state.tudoOK = true; 
+            this.state.erroC = this.state.erroC + 1;
         }
 
     /* Caso tudo der certo manda as coisas para o back*/
@@ -208,7 +217,10 @@ class ServicoPassaporte extends React.Component {
                             this.setState({
                                 list: response.data.services,
                                 list2: response.data.default,
-                                page: "TelaI"
+                                page: "TelaI",
+                                Nome: "",
+                                Descricao: "",
+                                TempoFinal: "",
                             });
                             this.requisicao();
                        // })
@@ -290,7 +302,6 @@ class ServicoPassaporte extends React.Component {
     render() {
         if (this.state.page === "TelaI") {
             return (
-
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
@@ -379,6 +390,13 @@ class ServicoPassaporte extends React.Component {
         else if (this.state.page === "TelaII") {
             return (
                 <div className="container-fluid" >
+                    <div >
+                        {this.state.tudoOK > 0 &&
+                            (<div className="alert lert-danger" role="alert"  style ={{ background: "#ff6347",width: 100 + '%' }}>
+                                <strong style ={{color: 'white'}}>Erro no preenchimento do formulário.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home  </a></li >
