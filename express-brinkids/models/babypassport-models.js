@@ -13,6 +13,6 @@ const babypassportSchema = new mongoose.Schema({
 	});
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const passport = mongoose.model('babypassport', babypassportSchema);
+const babypassport = mongoose.model('babypassport', babypassportSchema);
 
 module.exports = babypassport;
