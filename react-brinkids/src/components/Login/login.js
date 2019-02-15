@@ -104,7 +104,10 @@ class App extends Component {
           <source src={video} type="video/mp4" alt="video" />
         </video>
 
-        <form className="inner-container">        
+        <form className="inner-container">
+        <div className="container-fluid" >
+                        {this.state.erroCadastro}
+                    </div>
           <div className="box">
             <img className="logo_1" src={logo} alt="logo" />
             <input placeholder="Usuário" autoFocus type="text" value={this.state.user} onChange={this.textoUsuario} />
