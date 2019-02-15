@@ -80,7 +80,8 @@ class ComprovanteDesconto extends React.Component {
                                                     <td > {desconto.numberCode} </td>
                                                     <td >{this.props.tabela.type} </td>
                                                     <td >{this.props.tabela.value} </td>
-                                                    <td >{this.props.tabela.to} </td>
+                                                   {this.props.tabela.to ==="Child"&&( <td >Criança </td>)}
+                                                   {this.props.tabela.to ==="Adult"&&( <td >Adulto</td>)}
                                                     <td >{this.props.tabela.temporalityType} </td>
                                                     <td >{this.props.tabela.temporalityDate} </td>
                                                     <td >{moment(this.props.tabela.validity).add(1,"days").format("DD/MM/YYYY")} </td>

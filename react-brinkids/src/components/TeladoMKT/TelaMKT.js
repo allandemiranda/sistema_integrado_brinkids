@@ -226,7 +226,7 @@ class DashBoard extends React.Component {
 	grafico(event) {
 		let listadedatas = [];
 
-		const lista = [];
+		 var lista = [];
 		for (var i = 0; i < 15; i++) {
 			let hj = moment().format("MM/DD/YYYY");
 			var novo = moment(hj).subtract(i, 'days');
@@ -290,7 +290,7 @@ class DashBoard extends React.Component {
 		}).then((lista) => {
 
 			const tot = [];
-
+			var total = 0;
 			const datas = lista.aniversario.map(async (crianca, index) => {
 				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
 
@@ -314,7 +314,7 @@ class DashBoard extends React.Component {
 				var temporario = null;
 				if (axior.data !== null) {
 					temporario = {
-						dia: moment(crianca.dateOperation).format("DD/MM"),
+						dia: moment().format("DD/MM"),
 						sexo: axior.data.sexuality,
 					}
 				}
@@ -334,7 +334,7 @@ class DashBoard extends React.Component {
 
 			Promise.all(file).then((god) => {
 
-				let lista = [];
+				let lista2 = [];
 				god.map((event, indice) => {
 
 					var menino = 0;
@@ -346,7 +346,7 @@ class DashBoard extends React.Component {
 						} else if (event.child.sexuality === "Masculino") {
 							menino = menino + 1;
 						}
-						lista.push({ name: event.temporario.dia, Meninos: menino, Meninas: menina, Total: menino + menina })
+						lista2.push({ name: event.temporario.dia, Meninos: menino, Meninas: menina, Total: menino + menina })
 					}
 				})
 
@@ -355,16 +355,16 @@ class DashBoard extends React.Component {
 
 						if (lista[p].name === lista[y].name) {
 
-							lista[p].Meninos = lista[p].Meninos + lista[y].Meninos;
-							lista[p].Meninas = lista[p].Meninas + lista[y].Meninas;
-							lista[p].Total = lista[p].Total + lista[y].Total
-							lista.splice(y, 1)
+							lista2[p].Meninos = lista[p].Meninos + lista[y].Meninos;
+							lista2[p].Meninas = lista[p].Meninas + lista[y].Meninas;
+							lista2[p].Total = lista[p].Total + lista[y].Total
+							lista2.splice(y, 1)
 
 						}
 					}
 				}
 
-				return lista;
+				return lista2;
 			}).then((pilo) => {
 				this.setState({
 					listaGraf: pilo
@@ -398,10 +398,11 @@ class DashBoard extends React.Component {
 		response.data.map((event) => {
 
 			var age = Math.floor(moment(new Date()).diff(moment(event.birthday), 'years', true));
+				console.log(age,event.sexuality)
 			if (age >= 0 && age <= 2) {
 				if (event.sexuality === "Masculino") {
 					menino1++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina1++;
 				}
 
@@ -409,7 +410,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 3 && age <= 4) {
 				if (event.sexuality === "Masculino") {
 					menino2++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina2++;
 				}
 
@@ -417,7 +418,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 5 && age <= 6) {
 				if (event.sexuality === "Masculino") {
 					menino3++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina3++;
 				}
 
@@ -425,7 +426,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 7 && age <= 8) {
 				if (event.sexuality === "Masculino") {
 					menino4++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina4++;
 				}
 
@@ -433,7 +434,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 9 && age <= 10) {
 				if (event.sexuality === "Masculino") {
 					menino5++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina5++;
 				}
 
@@ -441,7 +442,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 11 && age <= 12) {
 				if (event.sexuality === "Masculino") {
 					menino6++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina6++;
 				}
 
@@ -449,7 +450,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 13 && age <= 14) {
 				if (event.sexuality === "Masculino") {
 					menino7++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina7++;
 				}
 
@@ -457,7 +458,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 15 && age <= 16) {
 				if (event.sexuality === "Masculino") {
 					menino8++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina8++;
 				}
 
@@ -465,7 +466,7 @@ class DashBoard extends React.Component {
 			} else if (age >= 17 && age <= 18) {
 				if (event.sexuality === "Masculino") {
 					menino9++;
-				} else if (event.sexuality === "Femenino") {
+				} else if (event.sexuality === "Feminino") {
 					menina9++;
 				}
 

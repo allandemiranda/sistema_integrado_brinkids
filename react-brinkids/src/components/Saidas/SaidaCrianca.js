@@ -484,7 +484,7 @@ class SaidaCrianca extends React.Component {
                         alert("Desconto Validado")
                         this.setState({
                             verified: true,
-                           
+
                         })
                     } else {
                         let temporario = this.state.CriancasSelecionadas;
@@ -560,14 +560,14 @@ class SaidaCrianca extends React.Component {
 
                             let temporario = this.state.CriancasSelecionadas;
                             console.log(response.data)
-                           temporario[0].adult = response.data;
-                           temporario[0].adult.type = tipo;
-                           temporario[0].adult.ValueD = valued;
+                            temporario[0].adult = response.data;
+                            temporario[0].adult.type = tipo;
+                            temporario[0].adult.ValueD = valued;
                             console.log(temporario)
                             this.setState({
                                 //CodDes:"",
                                 ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
-                                CriancasSelecionadas:temporario,
+                                CriancasSelecionadas: temporario,
                             })
                             alert("Desconto Concluído");
                             //AQUI É O VALOR FINAL
@@ -583,13 +583,13 @@ class SaidaCrianca extends React.Component {
                             this.state.CriancasSelecionadas.map((resp, indice) => {
                                 if (indice === 0 && resp.hasOwnProperty('adult')) {
                                     if (resp.hasOwnProperty('codigos')) {
-                                        console.log(response.data[0], resp.codigos)
+                                        console.log(response.data, resp.codigos,resp.adult)
                                         k += parseFloat(resp.adult.ValueD);
-                                        k += parseFloat(resp.codigos.Value);
+                                        k += parseFloat(resp.codigos.value);
                                     } else {
                                         k += parseFloat(resp.adult.ValueD);
                                     }
-                                    
+
                                     console.log(k)
                                 } else if (resp.hasOwnProperty('codigos')) {
                                     k += parseFloat(resp.codigos.value);
@@ -637,21 +637,46 @@ class SaidaCrianca extends React.Component {
 
         if (this.state.FormPag !== "") {
             let temporario = [];
+           
 
             for (var i = 0; i < this.state.CriancasSelecionadas.length; i++) {
-                let entradas = this.state.listCrianca[i];
-                delete entradas.photo;
-                const comprovante = {
+                var entradas = this.state.listCrianca[i];
+                var comprovante=[];
+                if (this.state.CriancasSelecionadas[i].hasOwnProperty('codigos')) {
+                    console.log(entradas)
+                    delete entradas.desconto.crianca.photo;
+                    delete entradas.photo;
+                    comprovante = {
+                        
+                        valor: String(this.state.FinalValor),
+                        valor2: String(this.state.TotalValor),
+                        idpai: String(this.state.IDAdult),
+                        Form: String(this.state.FormPag),
+                        idcria: String(this.state.CriancasSelecionadas[i].crianca.children.id),
+                        entrada: entradas,
+                        funcionario: String(this.state.nomeFuncionario),
+                        valor3: this.state.ValorCria,
+                        desconto: this.state.CriancasSelecionadas,
+                        valorcria: parseFloat(this.state.CriancasSelecionadas[i].codigos.ValueD)
+                    }
+                }
+                else {
+                    console.log(entradas)
+                   
+                    delete entradas.photo;
+                     comprovante = {
 
-                    valor: String(this.state.FinalValor),
-                    valor2: String(this.state.TotalValor),
-                    idpai: String(this.state.IDAdult),
-                    Form: String(this.state.FormPag),
-                    idcria: String(this.state.CriancasSelecionadas[i].crianca.children.id),
-                    entrada: entradas,
-                    funcionario: String(this.state.nomeFuncionario),
-                    valor3: this.state.ValorCria,
-                    desconto: this.state.CriancasSelecionadas,
+                        valor: String(this.state.FinalValor),
+                        valor2: String(this.state.TotalValor),
+                        idpai: String(this.state.IDAdult),
+                        Form: String(this.state.FormPag),
+                        idcria: String(this.state.CriancasSelecionadas[i].crianca.children.id),
+                        entrada: entradas,
+                        funcionario: String(this.state.nomeFuncionario),
+                        valor3: this.state.ValorCria,
+                        desconto: this.state.CriancasSelecionadas,
+                        valorcria: parseFloat(this.state.CriancasSelecionadas[i].infocrianca.value)
+                    }
                 }
                 console.log(this.state.ValorCriaDesc)
                 temporario.push(comprovante);

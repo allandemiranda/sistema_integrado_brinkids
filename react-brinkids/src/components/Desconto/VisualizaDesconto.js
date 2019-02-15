@@ -141,8 +141,9 @@ class VisualizaDesconto extends React.Component {
                                                 <tr key={desconto._id}>
                                                     <th id="paddingNome" scope="row">{(indice + 1)}</th>
                                                     <td id="paddingNome" >{desconto.name} </td>
-                                                    <td id="paddingNome" >{desconto.to} </td>
-                                                    <td id="paddingNome" >{desconto.type} </td>
+                                                   {desconto.to ==="Child" &&(<td id="paddingNome" >Criança </td>)}
+                                                   {desconto.to ==="Adult" &&(<td id="paddingNome" >Adulto </td>)}
+                                                    {<td id="paddingNome" >{desconto.type} </td>}
                                                     <td id="paddingNome" >{desconto.value} </td>
                                                     <td id="paddingNome" >{moment(desconto.validity).add(1, "days").format("DD/MM/YYYY")} </td>
                                                     <td >

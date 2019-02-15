@@ -569,7 +569,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
       })
 
     } else if (discountFinded[0].temporalityType === "Unico") {
-
+      discountFinded[0].codes.forEach((elemente, indice, array) => {
       if (discountFinded[0].codes[indice].hasOwnProperty('statusUniqueUser')) {
         if (discountFinded[0].codes[indice].statusUniqueUser === req.params.idAdult) {
           discountFinded[0].codes.forEach((elemente, indice, array) => {
@@ -858,7 +858,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
           })
         }
       } else {
-        discountFinded[0].codes.forEach((elemente, indice, array) => {
+        
           if (elemente.numberCode === req.params.codDesc) {
 
             if (elemente.statusBroadlUser.length > 0) {
@@ -1139,7 +1139,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                 discount: discountFinded[0].name,
                 Valorinicial: req.params.valueChild,
                 indicecodes: indice,
-                indiceBroad: index,
+                
 
               };
               try {
@@ -1152,8 +1152,8 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
           }
-        })
-      }
+        
+      }})
     }
   } else {
     return res.send("7");
@@ -1916,7 +1916,7 @@ router.post('/a', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
-  console.log(req.body);
+  
   console.log('executed');
   const products = req.body.map(async (child) => {
 
@@ -1929,7 +1929,7 @@ router.post('/a', async (req, res) => {
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
         to: child.entrada.adult.name,
-        price: child.valor2,
+        price: child.valorcria,
         cco: child.entrada.children.name,
         priceMethod: child.Form,
         timeLojaLast: new Date(),
