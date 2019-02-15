@@ -16,6 +16,6 @@ const babypassportServicesSchema = new mongoose.Schema({
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
-const passportServices = mongoose.model('babypassportServices', babypassportServicesSchema);
+const babypassportServices = mongoose.model('babypassportServices', babypassportServicesSchema);
 
 module.exports = babypassportServices;
