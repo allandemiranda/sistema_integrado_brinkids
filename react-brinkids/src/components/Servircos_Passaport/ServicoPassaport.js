@@ -34,6 +34,7 @@ class ServicoPassaporte extends React.Component {
             Price: "",
             tudoOK: true,
             erroC: 0,
+            mensApa:false,
         }
         this.changueNome = this.changueNome.bind(this);
         this.changueDescricao = this.changueDescricao.bind(this);
@@ -266,6 +267,7 @@ class ServicoPassaporte extends React.Component {
     }
 
     Apagar = (event) => {
+        this.state.mensApa = true;
         const id = this.state.list[this.state.list.length - 1]._id;
         axios.delete(`/passportServices/${id}`)
             .then((response) => {
@@ -277,7 +279,9 @@ class ServicoPassaporte extends React.Component {
                     })
             });
     }
-
+    xaubanner(){
+        this.state.mensApa = false;
+    }
     Adicionar = (event) => {
         $.ajax({
             url: "/passportServices/initialTime",
@@ -306,6 +310,13 @@ class ServicoPassaporte extends React.Component {
         if (this.state.page === "TelaI") {
             return (
                 <div className="container-fluid" >
+                    <div >
+                        {this.state.mensApa  &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Serviço apagado com sucesso.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home  </a></li >
