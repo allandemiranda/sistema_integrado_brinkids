@@ -23,6 +23,7 @@ class CadastroEvento extends React.Component {
             Description: "",
             Location: "",
             Color: "--",
+            erroCadastro: false,
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -61,12 +62,13 @@ class CadastroEvento extends React.Component {
             
             axios.post('/event', formData)
             .then(function (response) {
-                alert("Evento Criado Com Sucesso!");
+                //alert("Evento Criado Com Sucesso!");
                 console.log(response);
                 window.location.href = '/';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
-                alert("Erro ao Criar Evento");
+                this.state.erroCadastro = true;
+                //alert("Erro ao Criar Evento");
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
@@ -128,6 +130,13 @@ class CadastroEvento extends React.Component {
     render() {
         return (
             <div className = "container-fluid" >
+                <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                 <div className = "sub-heard-part" >
                     <ol className = "breadcrumb m-b-0" >
                         <li > < a href = "/" > Home </a></li >

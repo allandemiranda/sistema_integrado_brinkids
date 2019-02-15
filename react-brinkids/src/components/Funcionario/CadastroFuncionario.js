@@ -60,7 +60,7 @@ class CadastroFuncionario extends React.Component {
                             
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
                         }
                     })
                     .catch((err) => console.log(err));
@@ -99,7 +99,7 @@ class CadastroFuncionario extends React.Component {
                     .then((response) => {
 
                         if (isEmpty(response.data) || response.data.length === 0) {
-                            alert("Nenhum adulto foi encontrado com essa busca")
+                            //alert("Nenhum adulto foi encontrado com essa busca")
                         }
                         else {
                             this.setState({ list: response.data });
@@ -108,7 +108,7 @@ class CadastroFuncionario extends React.Component {
                         console.log(error)//LOG DE ERRO
                         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                        alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                        //alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                     })
             }
         }
@@ -133,7 +133,7 @@ class CadastroFuncionario extends React.Component {
                         console.log(error)//LOG DE ERRO
                         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                        alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                        //alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                     })
             }
         }

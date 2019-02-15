@@ -61,7 +61,7 @@ class CadastroAdulto extends React.Component {
             achado: false,
             kinship: 'Outros',
 
-            cadastoOK:false,
+            erroL:false,
         }
 
         this.ChangeName = this.ChangeName.bind(this);
@@ -113,7 +113,7 @@ class CadastroAdulto extends React.Component {
                             this.requisicao();
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            //alert("Acesso Negado. Você não possui permisão para estar nessa área!")
                         }
                     })
                     .catch((err) => console.log(err));
@@ -490,7 +490,7 @@ class CadastroAdulto extends React.Component {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
 
@@ -524,11 +524,13 @@ class CadastroAdulto extends React.Component {
             .then((response) => {
                 console.log(response)
                 this.state.cadastoOK = true;
+                this.props.history.push("/");
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroL = true;
             })
     }
 
@@ -572,14 +574,6 @@ class CadastroAdulto extends React.Component {
 
 
     render() {
-        // if (this.state.cadastroOK === true) {
-        //     <div className="container-fluid">
-        //         <div className="alert alert-success" role="alert">
-        //             <strong>Tudo ok!</strong> O Limite De Crianças Não foi Atingido.
-        //     </div>
-        //     </div>
-        //     this.props.history.push("/");
-        // }
         if (this.state.page === "FormularioCad") {
             return (
                 <div className="container-fluid" >
@@ -766,6 +760,13 @@ class CadastroAdulto extends React.Component {
             var Nome = this.state.firstName + " " + this.state.surName;
             return (
                 <div className="container-fluid">
+                    <div className="container-fluid" >
+                        {this.state.erro &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                     <ConfirmaAdulto
                         Name={Nome}
                         Cpf={this.state.cpf}

@@ -48,6 +48,7 @@ class CadastroAniversario extends React.Component {
             ListaCria: [],
             ListaAdul: [],
             //lista2: [{nome: '', idade: '', adulto: ''}, {}]
+            erroCadastro: false,
         }
 
         this.ChangeTitulo = this.ChangeTitulo.bind(this);
@@ -93,7 +94,7 @@ class CadastroAniversario extends React.Component {
 
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
                         }
                     })
                     .catch((err) => console.log(err));
@@ -396,10 +397,11 @@ class CadastroAniversario extends React.Component {
             
         }).catch( (error)=> {
             console.log(error)//LOG DE ERRO
-            alert("Erro no Cadastro");
+            // alert("Erro no Cadastro");
             // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            this.state.errocadastro = true;
         })
     }
    
@@ -426,10 +428,11 @@ class CadastroAniversario extends React.Component {
             window.location.href = '/aniversario';
         }).catch(function (error) {
             console.log(error)//LOG DE ERRO
-            alert("Erro no Cadastro");
+            // alert("Erro no Cadastro");
             // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            this.state.errocadastro = true;
         })
     }
 
@@ -636,6 +639,14 @@ class CadastroAniversario extends React.Component {
         else if(this.state.page === "ConfListConv"){
             return(
                 <div className = "container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
+
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >

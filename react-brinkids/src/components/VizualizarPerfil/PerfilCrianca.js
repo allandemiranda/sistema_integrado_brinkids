@@ -89,7 +89,7 @@ class PerfilCrianca extends React.Component {
 
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
                         }
                     })
                     .catch((err) => console.log(err));
@@ -148,7 +148,7 @@ class PerfilCrianca extends React.Component {
 
                         } else {
 
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
 
                         }
                     })
@@ -269,7 +269,7 @@ class PerfilCrianca extends React.Component {
 
                         } else {
 
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
 
                         }
                     })
