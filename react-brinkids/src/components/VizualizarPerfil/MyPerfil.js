@@ -327,7 +327,6 @@ class MeuPerfil extends React.Component {
                                                 </button><br /></div>)
                                         }
                                     </div>
-                                    <br></br>
                                 </div>
 
                                 <div className="col-md-4 col-sm-12 text-center">
@@ -521,7 +520,7 @@ class MeuPerfil extends React.Component {
 
             );
         } else if (this.state.page === "") {
-            return (<div>espere</div>);
+            return (<div>Página em carregamento...  </div>);
         }
         if (this.state.page === 'Senha') {
             return (
@@ -536,22 +535,21 @@ class MeuPerfil extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Vizualizar Perfil </h3>
-
                         <div className="graph" >
-                            <h3 className="inner-tittle" > Mudar Senha</h3>
-                            <div className="col-md-12 col-sm-12 text-center">
-                                <div className="col-md-6 col-sm-12 text-center" >
-                                    <h5 className="ltTitulo" style={{ color: '#00C6D7;' }}><b> DIGITE A SENHA ATUAL </b></h5>
-                                    <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>                                 
-                                </div>
-                                <div className="col-md-6 col-sm-12 text-center" >
-                                    <h5 className="ltTitulo" style={{ color: '#00C6D7;' }}><b> DIGITE A NOVA SENHA </b></h5>
-                                    <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
-                                </div>
-                                    <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar" style={{}}> Alterar Senha</button>
-                                    
+                            <h3 className="inner-tittle" > Mudar Senha</h3>                            
+                            <div className="col-md-6 col-sm-12 text-center" >
+                                <h5 className="ltTitulo" style={{ color: '#00C6D7' }}><b> DIGITE A SENHA ATUAL </b></h5>
+                                <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
                             </div>
-                        </div>
+                            <div className="col-md-6 col-sm-12 text-center" >
+                                <h5 className="ltTitulo" style={{ color: '#00C6D7' }}><b> DIGITE A NOVA SENHA </b></h5>
+                                <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
+                            </div>  
+                            <br></br><br></br>
+                            <div className="text-center" >
+                                <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Alterar Senha</button>                                      
+                            </div>                              
+                        </div>                    
                     </div>
                 </div>
             );

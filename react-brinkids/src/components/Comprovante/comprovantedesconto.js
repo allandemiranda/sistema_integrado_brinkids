@@ -42,7 +42,7 @@ class ComprovanteDesconto extends React.Component {
             return (
                 <div style={{ display: 'none' }} id='print' className='conteudo' >
                     <div>
-                        <a class="textoum">﻿﻿-----------------------------------------------------------------------------------------------</a>
+                        <a class="textoum">----------------------------------------------------------------------------------------</a>
                     </div>
                     <br />
                     <div>
@@ -91,7 +91,7 @@ class ComprovanteDesconto extends React.Component {
                             </tbody>
                         </table>
                         <br /><br/>
-                    <a class="textoum">﻿﻿-----------------------------------------------------------------------------------------------</a>
+                    <a class="textoum">----------------------------------------------------------------------------------------</a>
                 </div>
             );
         }
