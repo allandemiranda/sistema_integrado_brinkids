@@ -105,9 +105,13 @@ class App extends Component {
         </video>
 
         <form className="inner-container">
-        <div className="container-fluid" >
-                        {this.state.erroCadastro}
-                    </div>
+          <div className="container-fluid" >
+            {this.state.erroCadastro &&
+              (<div className="alert lert-danger" role="alert">
+                <strong>Ocorreu um erro no Cadastro</strong>
+              </div>)
+            }
+          </div>
           <div className="box">
             <img className="logo_1" src={logo} alt="logo" />
             <input placeholder="Usuário" autoFocus type="text" value={this.state.user} onChange={this.textoUsuario} />
