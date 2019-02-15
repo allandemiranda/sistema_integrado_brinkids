@@ -535,7 +535,7 @@ class MeuPerfil extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
+                        <h3 className="inner-tittle" > Vizualizar Perfil </h3>
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Mudar Senha</h3>
