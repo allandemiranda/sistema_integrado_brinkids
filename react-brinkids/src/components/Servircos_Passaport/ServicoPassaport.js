@@ -47,10 +47,13 @@ class ServicoPassaporte extends React.Component {
         this.voltar = this.voltar.bind(this);
     }
     voltar(event) {
-
         this.setState({
             page: "TelaI",
             list: [],
+            Nome: "",
+            Descricao: "",
+            TempoFinal: "",
+            erroC:0,        
         })
         axios.get('/passportServices')
             .then((response) => {
@@ -391,7 +394,7 @@ class ServicoPassaporte extends React.Component {
             return (
                 <div className="container-fluid" >
                     <div >
-                        {this.state.tudoOK > 0 &&
+                        {this.state.erroC != 0 &&
                             (<div className="alert lert-danger" role="alert"  style ={{ background: "#ff6347",width: 100 + '%' }}>
                                 <strong style ={{color: 'white'}}>Erro no preenchimento do formulário.</strong>
                             </div>)
