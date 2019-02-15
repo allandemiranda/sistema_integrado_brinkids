@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('../models/passport-models');
 const passportServices = require('../models/passport-services-models');
+
 const product = require('../models/product-models');
 const discount = require('../models/discounts-models');
 const birthday = require('../models/birthday-party-models');
@@ -88,6 +89,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   let lastPrice = psjson[psjson.length - 1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
   var price;
   var serviceName;
+
   if (productFinded[0].service === 'Passaporte') {
     serviceName = "Passaporte";
     console.log(serviceName)
@@ -108,93 +110,130 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
       }
     }
 
-  } else {
+  } 
+
+  if (productFinded[0].service === 'Aniversário'){
 
     let x = 0, saveTheDate = 0;
 
     const productFinded = await product.find({ 'children.id': req.params.idCria });
-    let birthdayFinded = await birthday.find({ 'guestList.name': new RegExp(productFinded[0].children.name) });
+    let birthdayFinded = await birthday.find({ 'guestList.id': req.params.idCria });
     console.log("convidado")
-    if (birthdayFinded.length === 0) {
-      birthdayFinded = await birthday.find({ 'birthdayPerson.name': new RegExp(productFinded[0].children.name) });
-      console.log("aniversariante")
       if (birthdayFinded.length === 0) {//esse if é só para testes
-        birthdayFinded = await birthday.find({});
-        console.log("desespero")
+        birthdayFinded = await birthday.find({ 'partyFeather.id': req.params.idCria});
+        console.log("convidado extra")
       }
-    }
 
-    let birthdayDate, birthdayStart, birthdayEnd, test;
+      let birthdayDate, birthdayStart, birthdayEnd, test;
 
-    for (i = 0; i < birthdayFinded.length; i++) {//for para calcular qual o ultimo aniversário que a criança estará, esses calculos estão meio sem nexo, mas ainda não entendi como ter ctz que a criança tá no aniversário certo, só quando ela é cadastrada no sistema e bate com as informaões da guestList
-      birthdayDate = birthdayFinded[i].birthdayDate.toISOString();
-      test = (birthdayDate + "@" + birthdayFinded[i].end).toDate().getTime() / 60000;
-      if (saveTheDate < test && ((birthdayDate + "@" + birthdayFinded[i].start).toDate().getTime() / 60000) - adultEntered < 120) {//aqui só é aceito como o aniversário certo quando o adulto deixa a criança pelo menos 2 horas antes, pra que não calcule com o valor do aniversário do dia que vem
-        console.log(((birthdayDate + "@" + birthdayFinded[i].start).toDate().getTime() / 60000 - adultEntered))
-        saveTheDate = test;
-        x = i;
-        console.log(new Date(saveTheDate), "new x: ", x)
+      for (i = 0; i < birthdayFinded.length; i++) {//for para calcular qual o ultimo aniversário que a criança estará, esses calculos estão meio sem nexo, mas ainda não entendi como ter ctz que a criança tá no aniversário certo, só quando ela é cadastrada no sistema e bate com as informaões da guestList
+        birthdayDate = birthdayFinded[i].birthdayDate.toISOString();
+        test = (birthdayDate + "@" + birthdayFinded[i].end).toDate().getTime() / 60000;
+        if (saveTheDate < test && ((birthdayDate + "@" + birthdayFinded[i].start).toDate().getTime() / 60000) - adultEntered < 120) {//aqui só é aceito como o aniversário certo quando o adulto deixa a criança pelo menos 2 horas antes, pra que não calcule com o valor do aniversário do dia que vem
+          console.log(((birthdayDate + "@" + birthdayFinded[i].start).toDate().getTime() / 60000 - adultEntered))
+          saveTheDate = test;
+          x = i;
+          console.log(new Date(saveTheDate), "new x: ", x)
+        }
       }
-    }
 
-    birthdayDate = birthdayFinded[x].birthdayDate.toISOString();
-    birthdayStart = (birthdayDate + "@" + birthdayFinded[x].start).toDate().getTime() / 60000;
-    birthdayEnd = (birthdayDate + "@" + birthdayFinded[x].end).toDate().getTime() / 60000;
+      birthdayDate = birthdayFinded[x].birthdayDate.toISOString();
+      birthdayStart = (birthdayDate + "@" + birthdayFinded[x].start).toDate().getTime() / 60000;
+      birthdayEnd = (birthdayDate + "@" + birthdayFinded[x].end).toDate().getTime() / 60000;
 
-    console.log("procurei", x);
-    console.log(new Date(), " ", new Date(birthdayEnd * 60000));
+      console.log("procurei", x);
+      console.log(new Date(), " ", new Date(birthdayEnd * 60000));
 
-    serviceName = "Aniversário";
-    console.log(serviceName)
-    var extraTime = 0;
-    price = parseInt(0, 10).toFixed(2);
-    console.log("entrada: ", new Date(adultEntered * 60000), "\nsaída: ", new Date(adultExit * 60000))
-    console.log("start: ", new Date(birthdayStart * 60000), "\nend: ", new Date(birthdayEnd * 60000))
-    if ((birthdayStart - adultEntered) > 15) {
-      if (adultExit <= birthdayStart) {
-        extraTime += (adultExit - adultEntered)
-        console.log("tempo corrido: ", extraTime)
-      } else {
-        extraTime += (birthdayStart - adultEntered);
-        console.log("tempo antecipado: ", extraTime)
+      serviceName = "Aniversário";
+      console.log(serviceName)
+      var extraTime = 0;
+      price = parseInt(0, 10).toFixed(2);
+      console.log("entrada: ", new Date(adultEntered * 60000), "\nsaída: ", new Date(adultExit * 60000))
+      console.log("start: ", new Date(birthdayStart * 60000), "\nend: ", new Date(birthdayEnd * 60000))
+      if ((birthdayStart - adultEntered) > 15) {
+        if (adultExit <= birthdayStart) {
+          extraTime += (adultExit - adultEntered)
+          console.log("tempo corrido: ", extraTime)
+        } else {
+          extraTime += (birthdayStart - adultEntered);
+          console.log("tempo antecipado: ", extraTime)
+        }
       }
-    }
 
-    if (adultExit > (birthdayEnd)) {
-      extraTime += (adultExit - birthdayEnd);
-      console.log("tempo atrasado: ", extraTime - (birthdayStart - adultEntered))
-      console.log("tempo extra: ", extraTime)
-    }
+      if (adultExit > (birthdayEnd)) {
+        extraTime += (adultExit - birthdayEnd);
+        console.log("tempo atrasado: ", extraTime - (birthdayStart - adultEntered))
+        console.log("tempo extra: ", extraTime)
+      }
 
-    if ((adultEntered >= (birthdayStart - 15)) && adultExit <= birthdayEnd) {
+      if ((adultEntered >= (birthdayStart - 15)) && adultExit <= birthdayEnd) {
 
-      price = 0.00;
-
-    } else {
-
-      adultTime = extraTime;
-      if (adultTime > (lastFinalTime.toSS() / 60)) {
-        let time = adultTime - (lastFinalTime.toSS() / 60);
-        console.log("time sem o ultimo tempo de serviço:", time);
-        price = parseFloat((1 + parseInt(time / parseFloat(pjson[0].time, 10))) * parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
-        console.log("preço:", price);
+        price = 0.00;
 
       } else {
 
-        for (i = 0; i < psjson.length; i++) {
+        const psjson = await passportServices.find({});
+        const pjson = await passport.find({});
 
-          if (adultTime <= (psjson[i].finalTime.toSS() / 60) && adultTime >= (psjson[i].initialTime.toSS() / 60)) {
-            price = psjson[i].price;
-            console.log("preço:", price);
+        let lastFinalTime = psjson[psjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (psjson)
+        let lastInitialTime = psjson[psjson.length - 1].initialTime;//último tempo inicial do passaporte service
+        let lastPrice = psjson[psjson.length - 1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
+        
+
+        adultTime = extraTime;
+        if (adultTime > (lastFinalTime.toSS() / 60)) {
+          let time = adultTime - (lastFinalTime.toSS() / 60);
+          console.log("time sem o ultimo tempo de serviço:", time);
+          price = parseFloat((1 + parseInt(time / parseFloat(pjson[0].time, 10))) * parseFloat(pjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+          console.log("preço:", price);
+
+        } else {
+
+          for (i = 0; i < psjson.length; i++) {
+
+            if (adultTime <= (psjson[i].finalTime.toSS() / 60) && adultTime >= (psjson[i].initialTime.toSS() / 60)) {
+              price = psjson[i].price;
+              console.log("preço:", price);
+            }
+
           }
 
         }
 
       }
+    
+    } 
+    /*
+    if(productFinded[0].service === 'Baby Passaporte'){
 
+    const bpsjson = await passportServices.find({});
+    const bpjson = await passport.find({});
+  
+    let lastFinalTime = bpsjson[bpsjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (bpsjson)
+    let lastInitialTime = bpsjson[bpsjson.length - 1].initialTime;//último tempo inicial do passaporte service
+    let lastPrice = bpsjson[bpsjson.length - 1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
+    var price;
+    var serviceName;
+
+    serviceName = "Baby Passaporte";
+    console.log(serviceName)
+
+    if (adultTime > (lastFinalTime.toSS() / 60)) {
+      let time = adultTime - (lastFinalTime.toSS() / 60);
+      console.log("time sem o ultimo tempo de serviço:", time);
+      price = parseFloat((1 + parseInt(time / parseFloat(bpjson[0].time, 10))) * parseFloat(bpjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+      console.log("preço:", price);
+
+    } else {
+
+      for (i = 0; i < bpsjson.length; i++) {
+        if (adultTime <= (bpsjson[i].finalTime.toSS() / 60) && adultTime >= (bpsjson[i].initialTime.toSS() / 60)) {
+          price = bpsjson[i].price;
+          console.log("preço:", price);
+        }
+      }
     }
-
-  }
+  }*/
 
   const data = {
     service: serviceName,

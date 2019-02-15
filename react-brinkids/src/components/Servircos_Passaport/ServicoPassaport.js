@@ -200,8 +200,8 @@ class ServicoPassaporte extends React.Component {
             axios.post('/passportServices', formData)
                 .then((response) => {
                     console.log(response)
-                    axios.get('/passportServices')
-                        .then((response) => {
+                    //axios.get('/passportServices')
+                       // .then((response) => {
 
 
                             console.log(response.data);
@@ -211,7 +211,7 @@ class ServicoPassaporte extends React.Component {
                                 page: "TelaI"
                             });
                             this.requisicao();
-                        })
+                       // })
 
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO

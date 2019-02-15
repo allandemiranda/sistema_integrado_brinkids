@@ -51,7 +51,7 @@ class ServicoPassaporte extends React.Component {
             page: "TelaI",
             list: [],
         })
-        axios.get('/babypassportServices')
+        axios.get('/babypassportServices/')
             .then((response) => {
 
 
@@ -102,7 +102,7 @@ class ServicoPassaporte extends React.Component {
     }
     requisicao(event) {
 
-        axios.get('/babypassportServices')
+        axios.get('/babypassportServices/')
             .then((response) => {
 
 
@@ -196,12 +196,11 @@ class ServicoPassaporte extends React.Component {
             formData.append('finalTime', String(this.state.TempoFinal))
             formData.append('price', String(this.state.Price))
 
-
             axios.post('/babypassportServices', formData)
                 .then((response) => {
                     console.log(response)
-                    axios.get('/babypassportServices')
-                        .then((response) => {
+                    //axios.get('/passportServices')
+                       // .then((response) => {
 
 
                             console.log(response.data);
@@ -211,7 +210,7 @@ class ServicoPassaporte extends React.Component {
                                 page: "TelaI"
                             });
                             this.requisicao();
-                        })
+                       // })
 
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
