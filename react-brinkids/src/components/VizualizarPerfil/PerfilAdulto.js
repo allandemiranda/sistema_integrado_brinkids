@@ -709,11 +709,11 @@ class PerfilAdulto extends React.Component {
                                         <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                         {this.state.editar && (
                                             <div>
-                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                    Trocar imagem <span className="glyphicon">&#xe065;</span>
-
-                                                    <input id="tipofile" type="file" name="foto" defaultValue="" />
-                                                </label>
+                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}>
+                                                    <label style={{ color: 'white' }}>
+                                                        Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                                        <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                    </label>
                                                 </button>
                                             </div>)
                                         }
@@ -907,7 +907,7 @@ class PerfilAdulto extends React.Component {
                                             </div>
 
                                         </div>
-                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
+                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar"   id="fontBranca" onClick={this.Adicionar}><label style={{ color: 'white' }}>
                                             Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
 
