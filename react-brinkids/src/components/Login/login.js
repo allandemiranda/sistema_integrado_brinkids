@@ -24,7 +24,6 @@ class App extends Component {
       password: '',
       erro: '',
       loading: false,
-      erroCadastro:false,
     };
 
     this.textoUsuario = this.textoUsuario.bind(this)
@@ -88,7 +87,6 @@ class App extends Component {
         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
         this.setState({ erro: "* Senho ou login Inválido!" })
-        this.state.erroCadastro = true;
       })
     }
     else {
@@ -105,13 +103,6 @@ class App extends Component {
         </video>
 
         <form className="inner-container">
-          <div className="container-fluid" >
-            {this.state.erroCadastro &&
-              (<div className="alert lert-danger" role="alert">
-                <strong>Ocorreu um erro no Cadastro</strong>
-              </div>)
-            }
-          </div>
           <div className="box">
             <img className="logo_1" src={logo} alt="logo" />
             <input placeholder="Usuário" autoFocus type="text" value={this.state.user} onChange={this.textoUsuario} />

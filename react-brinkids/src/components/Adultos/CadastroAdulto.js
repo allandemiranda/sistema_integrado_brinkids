@@ -746,7 +746,7 @@ class CadastroAdulto extends React.Component {
                                     </div>
                                 </div >
                                 <div className="text-center">
-                                    <Link className="btn btn-md botao" to="/">Cencelar</Link>
+                                    <Link className="btn btn-md botao" to="/">Cancelar</Link>
                                     <button className="btn btn-md botao botaoAvançar" onClick={this.ChildSearch}>Avançar</button>
                                 </div>
                             </form >
