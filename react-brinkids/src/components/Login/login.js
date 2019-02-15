@@ -114,9 +114,6 @@ class App extends Component {
             <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword} />
             <button type="button" onClick={this.loginSubmit} >Login</button>   
             <span id="menErro"> {this.state.erro} </span>
-            <div id="alertDiv" className = "alert displaynone" role = "alert">
-                            <b>ERRO!</b> Há algo de errado em seu formulário.
-                        </div>
           </div>
         </form>
       </div>
