@@ -325,7 +325,7 @@ class ServicoPassaporte extends React.Component {
                                                         <td id="paddingNome" >{TempoServico.initialTime} </td>
                                                         <td id="paddingNome" >{TempoServico.finalTime}</td>
                                                         <td id="paddingNome" > {TempoServico.price}</td>
-                                                        {indice > 0 && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
+                                                        {indice === (this.state.list.length - 1) && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
                                                     </tr>
                                                 );
                                             })}
