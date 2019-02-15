@@ -24,6 +24,7 @@ import EntradaAniversario from './components/Aniversario/EntradaAniversario.js';
 import Gerador from './components/geradorf/Gerador_funcoes.js';
 import SaidaServicosExtra from "./components/Servicos_Extras/SaidaServicosExtra";
 import ServicoPassaporte from "./components/Servircos_Passaport/ServicoPassaport";
+import ServicoBabypassaporte from "./components/Servircos_Passaport/ServicoPassaport";
 import gavetas from './components/Gavetas/Gavetas.js';
 import TelaMKT from './components/TeladoMKT/TelaMKT.js';
 import GFinanceiro from './components/GerenciamenteFinanceiro/GerenciamentoFinanceiro.js';
@@ -198,6 +199,12 @@ class App extends React.Component {
               path="/ServicoPassaporte"
               layout={MainLayout}
               component={ServicoPassaporte}
+            />
+            <PrivateRoute
+              exact
+              path="/ServicoBabypassaporte"
+              layout={MainLayout}
+              component={ServicoBabypassaporte}
             />
             <PrivateRoute
               exact

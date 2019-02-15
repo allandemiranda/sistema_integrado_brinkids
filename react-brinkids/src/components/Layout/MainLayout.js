@@ -197,6 +197,7 @@ class MainLayout extends React.Component {
                                     <ul>
 
                                         <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoPassaporte">Passaporte </Link></li>
+                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoBabypassaporte">Baby Passaporte </Link></li>
                                         <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>
                                         <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>
                                         <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>
