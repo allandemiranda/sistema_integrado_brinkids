@@ -19,6 +19,7 @@ import './css/style.css';
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
 import config from '../Login/service/config';
+import moment from 'moment';
 
 
 class CadastroAniversario extends React.Component {
@@ -369,7 +370,7 @@ class CadastroAniversario extends React.Component {
             children:String(this.state.QuantCrianca),
             adults: String(this.state.QuantAdulto),
             guestList: guestLista,
-            birthdayDate: String(this.state.DataDoAni),
+            birthdayDate: moment(this.state.DataDoAni).format(),
 
 
         }

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import listaa from './gato';
+import moment from 'moment';
 import axios from 'axios';
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
@@ -563,7 +564,7 @@ class PerfilAdulto extends React.Component {
                             return response.data;
                         });
                         Promise.all(criancas).then((listaCriancas) => {
-                            console.log(listaCriancas, "SOu um filho da puta")
+                           
                             this.setState({
                                 listaFuncionarios: listaCriancas,
                                 page: "Perfil",
@@ -1018,7 +1019,7 @@ class PerfilAdulto extends React.Component {
                                             <tr key={findChild._id}>
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findChild.name.firstName} </td>
-                                                <td >{findChild.birthday} </td>
+                                                <td >{moment(findChild.birthday, "YYYYMMDD").toNow(true)} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, findChild._id)} >

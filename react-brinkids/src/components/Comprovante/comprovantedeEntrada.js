@@ -11,10 +11,10 @@ var servico;
 var conteudo;
 class Comprovante extends React.Component {
     servico = this.props.serviso;
-
+    
     componentDidMount(){
         conteudo = document.getElementById('print').innerHTML;
-        console.log(conteudo)
+       
         this.rederizar();
     }
     rederizar = () => {

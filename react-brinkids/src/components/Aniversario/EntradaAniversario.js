@@ -220,7 +220,7 @@ class EntradaAniversario extends React.Component {
     requisicao(event) {
         axios.get(`/birthday/a`)
             .then((response) => {
-
+                
                 if (response.data.length === 0) {
                     alert("Nenhum aniversário encontrado")
                     this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
@@ -232,7 +232,7 @@ class EntradaAniversario extends React.Component {
                         let hj = moment().format();
                         let inicio = moment(event.start).format();
                         let fim = moment(event.end).format();
-                        console.log(hj, fim, inicio)
+                        console.log(hj, fim, inicio,event.start,event.end)
                         console.log(moment(hj).isBefore(fim), moment(hj).isAfter(inicio))
                         if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
                             temporario.push(event);

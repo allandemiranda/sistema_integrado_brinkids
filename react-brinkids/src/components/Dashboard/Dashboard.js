@@ -3,15 +3,17 @@ import '../../assets/style/fontawesome.css';
 import '../../assets/style/all.css';
 import '../../assets/sprints/solid.svg';
 import './css/Dashboard.css';
-import crianca from './tabelas/crianças';
-import adultos from './tabelas/adultos';
-import eventos from './tabelas/eventos';
-import noticias from './tabelas/noticias';
+
 import '../Comprovante/comprovante.css';
-import tabelinha from '../Comprovante/tabelinha';
+import { getToken } from "../Login/service/auth";
 import axios from 'axios';
 import moment from 'moment';
 import Modal from 'react-modal';
+import ComprovanteParcial from '../Comprovante/comprovanteParcial';
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+
+
 //import { Tabs, Tab } from 'react-bootstrap-tabs';
 
 const customStyles = {
@@ -31,7 +33,10 @@ class DashBoard extends React.Component {
 
 		this.state = {
 			Page: "Dash",
-
+			dadosComprovante:[],
+			comprovante1:false,
+			comprovante2:false,
+			comprovante3:false,
 			nome: [{}, {}],
 			lista: [],
 			popup: true,
@@ -51,7 +56,8 @@ class DashBoard extends React.Component {
 			perfilAtual: [],
 
 			modalIsOpen: false,
-			photo:'',
+			photo: '',
+			nomef:""
 
 
 		};
@@ -74,12 +80,32 @@ class DashBoard extends React.Component {
 
 		this.idade = this.idade.bind(this);
 	}
+	getFuncionario = () => {
+
+
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+
+                    console.log(response.data)
+                    this.setState({
+                        nomef:response.data[0].name.firstName + " " + response.data[0].name.surName
+                    })
+                   
+               
+
+            })
+            .catch((err) => console.log(err));
+
+    }
 	openModal(event) {
-		this.setState({ 
+		this.setState({
 			modalIsOpen: true,
-			photo: event.photo, 
+			photo: event.photo,
 		});
-		console.log(this.state.photo,"'''",event.photo)
+		console.log(this.state.photo, "'''", event.photo)
 	}
 
 	afterOpenModal(event) {
@@ -101,13 +127,13 @@ class DashBoard extends React.Component {
 	changuePageC(event) {
 		axios.get(`/child/indentifier/${event.children.id}`)
 			.then((response) => {
-				console.log(response.data);
+				
 				this.setState({
 					perfilAtual: response.data,
 					Page: "Pcrianca",
 				});
 			}).catch((err) => {
-				console.log(err);
+				
 			});
 	}
 	cahnguePageA(event) {
@@ -119,7 +145,7 @@ class DashBoard extends React.Component {
 				});
 
 				Promise.all(criancas).then((listaCriancas) => {
-					console.log(listaCriancas, "SOu um filho da puta")
+			
 					this.setState({
 						listaFuncionarios: listaCriancas,
 
@@ -128,17 +154,17 @@ class DashBoard extends React.Component {
 					})
 				});
 
-				console.log(response.data);
+			
 
 			}).catch((err) => {
-				console.log(err);
+			
 			});
 
 
 
 
 
-		console.log(this.state.listaFuncionarios);
+		
 	}
 	inteval(event) {
 
@@ -146,7 +172,7 @@ class DashBoard extends React.Component {
 	idade(event) {
 		var birthDay = event;
 		var age = Math.floor(moment(new Date()).diff(moment(birthDay), 'years', true));
-		console.log(age);
+		
 		return age;
 	}
 	selectCrianca(event) {
@@ -206,10 +232,55 @@ class DashBoard extends React.Component {
 			.catch((err) => console.log(err));
 	}
 	componentWillMount() {
-
+		this.getFuncionario();
 		this.requisicao();
 		this.inteval = setInterval(this.requisicao, 60000);
 
+	}
+	comprovanteParcial = (event) => {
+		axios.get(`/passport/` + event.children.id + `/` + moment() + '/')
+                .then((response) => {
+                   event.valores = response.data;
+                }).then(() => {
+					event.nomef = this.state.nomef
+					console.log(event)
+					if(event.service==="Passaporte"){
+						this.setState({
+							dadosComprovante:event,
+							comprovante1:true,
+						})
+						setTimeout(()=>{
+							this.setState({
+								comprovante1:false,
+							})
+						},200)
+					} else if(event.service ==="Aniversario"){
+						this.setState({
+							dadosComprovante:event,
+							comprovante2:true,
+						})
+						setTimeout(()=>{
+							this.setState({
+								comprovante2:false,
+							})
+						},200)
+					}else if(event.service==="Baby Passaporte"){
+						this.setState({
+							dadosComprovante:event,
+							comprovante3:true,
+						})
+						setTimeout(()=>{
+							this.setState({
+								comprovante3:false,
+							})
+						},200)
+					}
+                }).catch((error) => {
+                   
+                    alert("Erro no Cadastro");
+                   
+                })
+		
 	}
 	componentWillUnmount() {
 		clearInterval(this.inteval);
@@ -222,7 +293,7 @@ class DashBoard extends React.Component {
 				<div className="container-fluid" >
 					<script src="js/jquery-1.10.2.min.js"></script>
 					<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
-					
+
 
 					<div className="sub-heard-part" >
 						<ol className="breadcrumb m-b-0" >
@@ -278,41 +349,49 @@ class DashBoard extends React.Component {
 															<th style={{ textAlign: "center" }}>Parentesco</th>
 															<th style={{ textAlign: "center" }}>Telefone</th>
 															<th style={{ textAlign: "center" }}>Obs.</th>
+															<th style={{ textAlign: "center" }}></th>
 														</tr>
 													</thead>
 													<tbody>
 														{this.state.lista.map((event, index) => {
-															if(event.service === "Passaporte"){
+															if (event.service === "Passaporte") {
 																return (
-																<tr>
-																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
-																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
-																	<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+																	<tr>
+																		<th scope="row" onClick={() => this.openModal(event)}>{index + 1}</th>
+																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
+																		<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
 
-																	{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Restrições!\n\n'+event.children.restrictions)}><a>SIM</a></td>)}
-																	{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Restrições!\n\n' + event.children.restrictions)}><a>SIM</a></td>)}
+																		{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 
-																	{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.children.observations)}><a>SIM</a></td>)}
-																	{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Observações!\n\n' + event.children.observations)}><a>SIM</a></td>)}
+																		{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 
 
 
-																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
-																	<td style={{ textAlign: "center" }}>{event.belongings+1}</td>
-																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
-																	<td style={{ textAlign: "center" }}>{event.kinship}</td>
-																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+																		<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
+																		<td style={{ textAlign: "center" }}>{event.belongings + 1}</td>
+																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
+																		<td style={{ textAlign: "center" }}>{event.kinship}</td>
+																		<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
 
-																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
-																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
-																</tr>
-															);}
+																		{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Observações!\n\n' + event.adult.observations)}><a>SIM</a></td>)}
+																		{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		<td style={{ textAlign: "center" }}><button onClick={() => this.comprovanteParcial(event)}><span className="glyphicon">&#x270f;</span></button> </td>
+																	</tr>
+																);
+															}
 														})}
 
 
 													</tbody>
 												</table>
 											</div>
+											{this.state.comprovante1 && (<ComprovanteParcial
+												tabela={this.state.dadosComprovante}
+												serviso="PASSAPORTE"
+												teste={this.state.comprovante1}
+											/>)}
 										</div>
 									</section>
 									<section className={this.state.sectionBaby}>
@@ -332,40 +411,48 @@ class DashBoard extends React.Component {
 															<th style={{ textAlign: "center" }}>Parentesco</th>
 															<th style={{ textAlign: "center" }}>Telefone</th>
 															<th style={{ textAlign: "center" }}>Obs.</th>
+															<th style={{ textAlign: "center" }}></th>
 														</tr>
 													</thead>
 													<tbody>
-													{this.state.lista.map((event, index) => {
-														if(event.service==="Baby Passaporte"){
-															return (
-																<tr>
-																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
-																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
-																	<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+														{this.state.lista.map((event, index) => {
+															if (event.service === "Baby Passaporte") {
+																return (
+																	<tr>
+																		<th scope="row" onClick={() => this.openModal(event)}>{index + 1}</th>
+																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
+																		<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
 
-																	{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Restrições!\n\n'+event.children.restrictions)}><a>SIM</a></td>)}
-																	{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Restrições!\n\n' + event.children.restrictions)}><a>SIM</a></td>)}
+																		{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 
-																	{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.children.observations)}><a>SIM</a></td>)}
-																	{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Observações!\n\n' + event.children.observations)}><a>SIM</a></td>)}
+																		{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 
 
 
-																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
-																	<td style={{ textAlign: "center" }}>{event.belongings+1}</td>
-																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
-																	<td style={{ textAlign: "center" }}>{event.kinship}</td>
-																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+																		<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
+																		<td style={{ textAlign: "center" }}>{event.belongings + 1}</td>
+																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
+																		<td style={{ textAlign: "center" }}>{event.kinship}</td>
+																		<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
 
-																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
-																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
-																</tr>
-															);}
+																		{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Observações!\n\n' + event.adult.observations)}><a>SIM</a></td>)}
+																		{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		<td style={{ textAlign: "center" }}><button onClick={() => this.comprovanteParcial(event)}><span className="glyphicon">&#x270f;</span></button> </td>
+																	</tr>
+																);
+															}
 														})}
 
 													</tbody>
 												</table>
 											</div>
+											{this.state.comprovante2 && (<ComprovanteParcial
+												tabela={this.state.dadosComprovante}
+												serviso="PASSAPORTE"
+												teste={this.state.comprovante2}
+											/>)}
 										</div>
 									</section>
 									<section className={this.state.sectionAniversario}>
@@ -385,40 +472,48 @@ class DashBoard extends React.Component {
 															<th style={{ textAlign: "center" }}>Parentesco</th>
 															<th style={{ textAlign: "center" }}>Telefone</th>
 															<th style={{ textAlign: "center" }}>Obs.</th>
+															<th style={{ textAlign: "center" }}></th>
 														</tr>
 													</thead>
 													<tbody>
-													{this.state.lista.map((event, index) => {
-														if(event.service==="Aniversario"){
-															return (
-																<tr>
-																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
-																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
-																	<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+														{this.state.lista.map((event, index) => {
+															if (event.service === "Aniversario") {
+																return (
+																	<tr>
+																		<th scope="row" onClick={() => this.openModal(event)}>{index + 1}</th>
+																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
+																		<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
 
-																	{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Restrições!\n\n'+event.children.restrictions)}><a>SIM</a></td>)}
-																	{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Restrições!\n\n' + event.children.restrictions)}><a>SIM</a></td>)}
+																		{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 
-																	{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.children.observations)}><a>SIM</a></td>)}
-																	{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Observações!\n\n' + event.children.observations)}><a>SIM</a></td>)}
+																		{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
 
 
 
-																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
-																	<td style={{ textAlign: "center" }}>{event.belongings+1}</td>
-																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
-																	<td style={{ textAlign: "center" }}>{event.kinship}</td>
-																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+																		<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
+																		<td style={{ textAlign: "center" }}>{event.belongings + 1}</td>
+																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
+																		<td style={{ textAlign: "center" }}>{event.kinship}</td>
+																		<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
 
-																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
-																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
-																</tr>
-															);}
+																		{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={() => alert('Observações!\n\n' + event.adult.observations)}><a>SIM</a></td>)}
+																		{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																		<td style={{ textAlign: "center" }}><button onClick={() => this.comprovanteParcial(event)}><span className="glyphicon">&#x270f;</span></button> </td>
+																	</tr>
+																);
+															}
 														})}
 
 													</tbody>
 												</table>
 											</div>
+											{this.state.comprovante3 && (<ComprovanteParcial
+												tabela={this.state.dadosComprovante}
+												serviso="PASSAPORTE"
+												teste={this.state.comprovante3}
+											/>)}
 										</div>
 									</section>
 								</div>

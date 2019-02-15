@@ -1,6 +1,6 @@
 import React from 'react';
 import Webcam from 'react-webcam';
-import axios from 'axios';
+
 import ConfirmaAdulto from '../Adultos/ConfirmaAdulto.js';
 import TypesInput from '../TypesInput.js';
 
@@ -13,6 +13,10 @@ import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
+import axios from 'axios';
+
+import config from '../Login/service/config';
+
 import {
     BrowserRouter as Router,
     Route,
@@ -22,7 +26,7 @@ import {
 } from "react-router-dom";
 import { getToken } from "../Login/service/auth";
 import jwt from 'jsonwebtoken';
-import config from '../Login/service/config';
+
 import { Num } from './favetas';
 class Passport extends React.Component {
     constructor(props) {

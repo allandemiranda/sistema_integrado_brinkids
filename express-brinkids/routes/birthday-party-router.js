@@ -18,7 +18,10 @@ router.get('/', async (req, res) => {
   }
 });
 router.get('/a', async (req, res) => {
-  const hj = moment().format("YYYY-MM-DD")
+  const parties3 = await BirthdayParty.find({});
+  const hj = moment().startOf('day').subtract(1,"hours").format()
+  const final =  moment().endOf('day').format()
+  console.log(hj,final,parties3[0].birthdayDate    )
   // let p = "08:30"
   // let h = p.split(":");
   // let i =moment().hour(h[0]).minute(h[1]);
@@ -27,7 +30,7 @@ router.get('/a', async (req, res) => {
   // console.log(moment().format("YYYY-MM-DD HH:MM"),moment().endOf('day').format("YYYY-MM-DD HH:MM"))
 
   try {
-    const parties = await BirthdayParty.find({ 'birthdayDate': hj });
+    const parties = await BirthdayParty.find({ 'birthdayDate': { $gte: hj, $lte:final } });
     console.log(parties)
     return res.status(200).json(parties);
   } catch (err) {
@@ -165,6 +168,7 @@ router.put('/:identifier', async (req, res) => {
       req.params.identifier,
       {
         $set: {
+          birthdayDate: req.body.birthdayDate,
           title: req.body.title,
           birthdayPerson: {
             name: req.body.name,
