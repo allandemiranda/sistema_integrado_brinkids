@@ -47,7 +47,7 @@ const discountsSchema = new mongoose.Schema({
       type: String,
       require: true,
     },
-    statusUnique: String,
+    statusUnique: Boolean,
     statusUniqueDate: Date,
     statusUniqueUser: String,
     statusBroadlUser: [{

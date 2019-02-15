@@ -234,6 +234,7 @@ class MainLayout extends React.Component {
                                     </Link>
                                     <ul id="menu-comunicacao-sub" >
                                         <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
+                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Babypassport">Baby Passaporte </Link></li>
                                         <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversário </Link></li>
                                     </ul>
                                 </li>

@@ -1,6 +1,8 @@
 const express = require('express');
 const passport = require('../models/passport-models');
 const passportServices = require('../models/passport-services-models');
+const babypassportServices = require('../models/babypassport-services-models');
+const babypassport = require('../models/babypassport-models');
 const product = require('../models/product-models');
 const discount = require('../models/discounts-models');
 const birthday = require('../models/birthday-party-models');
@@ -226,27 +228,25 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
   const childName = await productFinded[0].children.name; // nome da criança pra salvar quem vai usar o desconto, já que essa rota é só de desconto para crianças
 
-  console.log(productFinded[0].children.name)
-  console.log(discountFinded)
-  console.log(moment(discountFinded[0].validity).utc().format("DD/MM/YYYY HH:mm"))
-  console.log(discountFinded[0].hasOwnProperty('statusUniqueUser'))
   const validade = moment(discountFinded[0].validity).utc()
   const from = moment(validade).endOf("days").format();
   const diaatual = moment().format();
-  console.log(from, diaatual, moment(diaatual).isBefore(from));
+
+
+
   if (moment(diaatual).isBefore(from)) {
     if (discountFinded[0].temporalityType === "Geral") {
 
       discountFinded[0].codes.forEach((elemente, indice, array) => {
         console.log(discountFinded[0].codes)
-        console.log(elemente.numberCode,"========",req.params.codDesc)
+        console.log(elemente.numberCode, "========", req.params.codDesc)
         if (elemente.numberCode === req.params.codDesc) {
 
           if (elemente.statusBroadlUser.length > 0) {
             elemente.statusBroadlUser.forEach((event, index, array2) => {
 
 
-              if (event.idUser === req.params.idAdult) {
+              if (event.idUser === req.params.idCria) {
 
                 if (discountFinded[0].temporalityDate === "Diario") {
 
@@ -274,8 +274,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
+
 
                     const data = {
                       idcria: req.params.idCria,
@@ -373,8 +372,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
+
 
                     const data = {
                       idcria: req.params.idCria,
@@ -422,8 +420,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
+
 
                     const data = {
                       idcria: req.params.idCria,
@@ -447,12 +444,10 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     return res.send("4");
                   }
                 } else if (discountFinded[0].temporalityDate === "Livre") {
-                  let hj = moment().format();
 
+                  let hj = moment().format();
                   let ultimadata = moment(event.dateUser).format();
                   let proximafata = moment(ultimadata).add(1, 'years').format();
-
-
 
                   if (discountFinded[0].type === 'Fixo') {
 
@@ -461,19 +456,11 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     if (req.params.valueChild <= discountFinded[0].value) {
                       price = parseFloat(req.params.valueChild).toFixed(2);
                     }
-
-
-
                   } else {
 
                     price = req.params.valueChild;
                     price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
                   }
-                  discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                  discountFinded[0].save();
-
                   const data = {
                     idcria: req.params.idCria,
                     idAdult: req.params.idAdult,
@@ -492,6 +479,44 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     return res.sendStatus(500);
                   }
 
+                } else if (discountFinded[0].temporalityDate === "Unico") {
+                  if (!(discountFinded[0].codes[indice].statusUnique)) {
+                    let hj = moment().format();
+                    let ultimadata = moment(event.dateUser).format();
+                    let proximafata = moment(ultimadata).add(1, 'years').format();
+
+                    if (discountFinded[0].type === 'Fixo') {
+
+                      price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                      if (req.params.valueChild <= discountFinded[0].value) {
+                        price = parseFloat(req.params.valueChild).toFixed(2);
+                      }
+                    } else {
+
+                      price = req.params.valueChild;
+                      price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+                    }
+                    const data = {
+                      idcria: req.params.idCria,
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
+                      name: childName,
+                      time: adultTime,
+                      value: price,
+                      discount: discountFinded[0].name,
+                      Valorinicial: req.params.valueChild,
+                      indicecodes: indice,
+                      indiceBroad: index,
+                    };
+                    try {
+                      return res.status(201).json(data);
+                    } catch (err) {
+                      return res.sendStatus(500);
+                    }
+                  } else {
+                    return res.send("9");
+                  }
                 }
               } else {
                 return res.send("5");
@@ -542,13 +567,13 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
 
-        } 
+        }
       })
 
     } else if (discountFinded[0].temporalityType === "Unico") {
 
-      if (discountFinded[0].hasOwnProperty('statusUniqueUser')) {
-        if (discountFinded[0].statusUniqueUser === req.params.idAdult) {
+      if (discountFinded[0].codes[indice].hasOwnProperty('statusUniqueUser')) {
+        if (discountFinded[0].codes[indice].statusUniqueUser === req.params.idAdult) {
           discountFinded[0].codes.forEach((elemente, indice, array) => {
             if (elemente.numberCode === req.params.codDesc) {
 
@@ -831,9 +856,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
 
-            } else {
-              return res.send("6");;
-            }
+            } el
           })
         }
       } else {
@@ -1130,8 +1153,6 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
 
-          } else {
-            return res.send("6");;
           }
         })
       }
@@ -1144,9 +1165,11 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
 
 
 
+
+
 });
 
-router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
+router.get('/discountAdult/:idAdult/:valueChild/:codDesc', async (req, res) => {
 
   const discountFinded = await discount.find({ 'codes.numberCode': req.params.codDesc, 'to': "Adult" });
 
@@ -1165,8 +1188,9 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
   const diaatual = moment().format();
 
   if (moment(diaatual).isBefore(from)) {
+    console.log("entre")
     if (discountFinded[0].temporalityType === "Geral") {
-
+      console.log("geral")
       discountFinded[0].codes.forEach((elemente, indice, array) => {
         if (elemente.numberCode === req.params.codDesc) {
 
@@ -1175,7 +1199,7 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
               if (event.idUser === req.params.idAdult) {
-
+                console.log("entrei 2")
                 if (discountFinded[0].temporalityDate === "Diario") {
 
                   let hj = moment().format();
@@ -1202,14 +1226,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
+
 
                     const data = {
-                      name: childName,
-                      time: adultTime,
+
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
+                      name: adultName,
                       value: price,
                       discount: discountFinded[0].name,
+                      Valorinicial: req.params.value,
+                      indicecodes: indice,
+                      indiceBroad: index,
 
                     };
                     try {
@@ -1247,14 +1275,17 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
 
                     const data = {
-                      name: childName,
-                      time: adultTime,
+
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
+                      name: adultName,
                       value: price,
                       discount: discountFinded[0].name,
+                      Valorinicial: req.params.value,
+                      indicecodes: indice,
+                      indiceBroad: index,
 
                     };
                     try {
@@ -1290,14 +1321,17 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
 
                     const data = {
-                      name: childName,
-                      time: adultTime,
+
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
+                      name: adultName,
                       value: price,
                       discount: discountFinded[0].name,
+                      Valorinicial: req.params.value,
+                      indicecodes: indice,
+                      indiceBroad: index,
 
                     };
                     try {
@@ -1333,14 +1367,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                     }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].save();
+
 
                     const data = {
-                      name: childName,
-                      time: adultTime,
+
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
+                      name: adultName,
                       value: price,
                       discount: discountFinded[0].name,
+                      Valorinicial: req.params.value,
+                      indicecodes: indice,
+                      indiceBroad: index,
 
                     };
                     try {
@@ -1376,14 +1414,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                   }
-                  discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                  discountFinded[0].save();
+
 
                   const data = {
-                    name: childName,
-                    time: adultTime,
+
+                    idAdult: req.params.idAdult,
+                    code: req.params.codDesc,
+                    name: adultName,
                     value: price,
                     discount: discountFinded[0].name,
+                    Valorinicial: req.params.value,
+                    indicecodes: indice,
+                    indiceBroad: index,
 
                   };
                   try {
@@ -1392,6 +1434,55 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
                     return res.sendStatus(500);
                   }
 
+                } else if (discountFinded[0].temporalityDate === "Unico") {
+                  if (!(discountFinded[0].codes[indice].statusUnique)) {
+                    console.log("=========coisa unica")
+                    let hj = moment().format();
+
+                    let ultimadata = moment(event.dateUser).format();
+                    let proximafata = moment(ultimadata).add(1, 'years').format();
+
+
+
+                    if (discountFinded[0].type === 'Fixo') {
+
+                      price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                      if (req.params.valueChild <= discountFinded[0].value) {
+                        price = parseFloat(req.params.valueChild).toFixed(2);
+                      }
+
+
+
+                    } else {
+
+                      price = req.params.valueChild;
+                      price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+
+
+                    }
+
+                    console.log(price)
+                    const data = {
+
+                      idAdult: req.params.idAdult,
+                      code: req.params.codDesc,
+                      name: adultName,
+                      value: price,
+                      discount: discountFinded[0].name,
+                      Valorinicial: req.params.value,
+                      indicecodes: indice,
+                      indiceBroad: index,
+                    };
+                    try {
+                      return res.status(201).json(data);
+                    } catch (err) {
+                      return res.send("9");
+                    }
+
+                  } else if (discountFinded[0].codes[indice].statusUnique) {
+                    return res.send("9")
+                  }
                 }
               } else {
                 return res.send("5");
@@ -1419,12 +1510,17 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
             }
 
 
-
+            console.log("entrei aki 89",price,req.params.valueChild)
             const data = {
-              name: childName,
-              time: adultTime,
+
+              idAdult: req.params.idAdult,
+              code: req.params.codDesc,
+              name: adultName,
               value: price,
               discount: discountFinded[0].name,
+              Valorinicial: req.params.value,
+              indicecodes: indice,
+
 
             };
             try {
@@ -1436,15 +1532,13 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
 
-        } else {
-          return res.send("6");;
         }
       })
 
     } else if (discountFinded[0].temporalityType === "Unico") {
 
-      if (discountFinded[0].hasOwnProperty('statusUniqueUser')) {
-        if (discountFinded[0].statusUniqueUser === req.params.idAdult) {
+      if (!(discountFinded[0].codes[indice].hasOwnProperty('statusUniqueUser'))) {
+        if (discountFinded[0].codes[indice].statusUniqueUser === req.params.idAdult) {
           discountFinded[0].codes.forEach((elemente, indice, array) => {
             if (elemente.numberCode === req.params.codDesc) {
 
@@ -1480,16 +1574,17 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                         }
-                        discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                        discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                        discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                        discountFinded[0].save();
 
                         const data = {
-                          name: childName,
-                          time: adultTime,
+
+                          idAdult: req.params.idAdult,
+                          code: req.params.codDesc,
+                          name: adultName,
                           value: price,
                           discount: discountFinded[0].name,
+                          Valorinicial: req.params.value,
+                          indicecodes: indice,
+                          indiceBroad: index,
 
                         };
                         try {
@@ -1529,16 +1624,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                         }
-                        discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                        discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                        discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                        discountFinded[0].save();
+
 
                         const data = {
-                          name: childName,
-                          time: adultTime,
+
+                          idAdult: req.params.idAdult,
+                          code: req.params.codDesc,
+                          name: adultName,
                           value: price,
                           discount: discountFinded[0].name,
+                          Valorinicial: req.params.value,
+                          indicecodes: indice,
+                          indiceBroad: index,
 
                         };
                         try {
@@ -1574,16 +1671,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                         }
-                        discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                        discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                        discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                        discountFinded[0].save();
+
 
                         const data = {
-                          name: childName,
-                          time: adultTime,
+
+                          idAdult: req.params.idAdult,
+                          code: req.params.codDesc,
+                          name: adultName,
                           value: price,
                           discount: discountFinded[0].name,
+                          Valorinicial: req.params.value,
+                          indicecodes: indice,
+                          indiceBroad: index,
 
                         };
                         try {
@@ -1619,16 +1718,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                         }
-                        discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                        discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                        discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                        discountFinded[0].save();
+
 
                         const data = {
-                          name: childName,
-                          time: adultTime,
+
+                          idAdult: req.params.idAdult,
+                          code: req.params.codDesc,
+                          name: adultName,
                           value: price,
                           discount: discountFinded[0].name,
+                          Valorinicial: req.params.value,
+                          indicecodes: indice,
+                          indiceBroad: index,
 
                         };
                         try {
@@ -1664,17 +1765,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                       }
-                      discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                      discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                      discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                      discountFinded[0].save();
+
 
                       const data = {
-                        name: childName,
-                        time: adultTime,
+
+                        idAdult: req.params.idAdult,
+                        code: req.params.codDesc,
+                        name: adultName,
                         value: price,
                         discount: discountFinded[0].name,
-
+                        Valorinicial: req.params.value,
+                        indicecodes: indice,
+                        indiceBroad: index,
                       };
                       try {
                         return res.status(201).json(data);
@@ -1682,6 +1784,53 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
                         return res.sendStatus(500);
                       }
 
+                    } else if (discountFinded[0].temporalityDate === "Unico") {
+                      if (!(discountFinded[0].codes[indice].statusUnique)) {
+                        console.log("=========coisa unica")
+                        let hj = moment().format();
+
+                        let ultimadata = moment(event.dateUser).format();
+                        let proximafata = moment(ultimadata).add(1, 'years').format();
+
+
+
+                        if (discountFinded[0].type === 'Fixo') {
+
+                          price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                          if (req.params.valueChild <= discountFinded[0].value) {
+                            price = parseFloat(req.params.valueChild).toFixed(2);
+                          }
+
+
+
+                        } else {
+
+                          price = req.params.valueChild;
+                          price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+
+
+                        }
+
+
+                        const data = {
+
+                          idAdult: req.params.idAdult,
+                          code: req.params.codDesc,
+                          name: adultName,
+                          value: price,
+                          discount: discountFinded[0].name,
+                          Valorinicial: req.params.value,
+                          indicecodes: indice,
+                          indiceBroad: index,
+                        };
+                        try {
+                          return res.status(201).json(data);
+                        } catch (err) {
+                          return res.send("9");
+                        }
+
+                      }
                     }
                   } else {
                     return res.send("5");
@@ -1707,16 +1856,18 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
                 }
-                discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                discountFinded[0].save();
 
+                console.log("isso q eu reotrno")
                 const data = {
-                  name: childName,
-                  time: adultTime,
+
+                  idAdult: req.params.idAdult,
+                  code: req.params.codDesc,
+                  name: adultName,
                   value: price,
                   discount: discountFinded[0].name,
+                  Valorinicial: req.params.value,
+                  indicecodes: indice,
+
 
                 };
                 try {
@@ -1728,296 +1879,9 @@ router.get('/discountAdult/:idAdult/:value/:codDesc', async (req, res) => {
 
 
 
-            } else {
-              return res.send("6");;
             }
           })
         }
-      } else {
-        discountFinded[0].codes.forEach((elemente, indice, array) => {
-          if (elemente.numberCode === req.params.codDesc) {
-
-            if (elemente.statusBroadlUser.length > 0) {
-              elemente.statusBroadlUser.forEach((event, index, array2) => {
-
-
-                if (event.idUser === req.params.idAdult) {
-
-                  if (discountFinded[0].temporalityDate === "Diario") {
-
-                    let hj = moment().format();
-
-                    let ultimadata = moment(event.dateUser).format();
-                    let proximafata = moment(ultimadata).add(1, "days").format();
-
-                    if (moment(hj).isAfter(proximafata)) {
-
-                      if (discountFinded[0].type === 'Fixo') {
-
-                        price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                        if (req.params.valueChild <= discountFinded[0].value) {
-                          price = parseFloat(req.params.valueChild).toFixed(2);
-                        }
-
-
-
-                      } else {
-
-                        price = req.params.valueChild;
-                        price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                      }
-                      discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                      discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                      discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                      discountFinded[0].save();
-
-                      const data = {
-                        name: childName,
-                        time: adultTime,
-                        value: price,
-                        discount: discountFinded[0].name,
-
-                      };
-                      try {
-                        return res.status(201).json(data);
-                      } catch (err) {
-                        return res.sendStatus(500);
-                      }
-                    } else {
-                      return res.status(01);
-                    }
-                  } else if (discountFinded[0].temporalityDate === "Semanal") {
-
-                    let hj = moment().format();
-
-                    let ultimadata = moment(event.dateUser).format();
-                    let proximafata = moment(ultimadata).add(7, "days").format();
-
-                    if (moment(hj).isAfter(proximafata)) {
-
-                      if (discountFinded[0].type === 'Fixo') {
-
-                        price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                        if (req.params.valueChild <= discountFinded[0].value) {
-                          price = parseFloat(req.params.valueChild).toFixed(2);
-                        }
-
-
-
-                      } else {
-
-                        price = req.params.valueChild;
-                        price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                      }
-                      discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                      discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                      discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                      discountFinded[0].save();
-
-                      const data = {
-                        name: childName,
-                        time: adultTime,
-                        value: price,
-                        discount: discountFinded[0].name,
-
-                      };
-                      try {
-                        return res.status(201).json(data);
-                      } catch (err) {
-                        return res.sendStatus(500);
-                      }
-                    } else {
-                      return res.status(02);
-                    }
-                  } else if (discountFinded[0].temporalityDate === "Mensal") {
-                    let hj = moment().format();
-
-                    let ultimadata = moment(event.dateUser).format();
-                    let proximafata = moment(ultimadata).add(1, 'month').format();
-
-                    if (moment(hj).isAfter(proximafata)) {
-
-                      if (discountFinded[0].type === 'Fixo') {
-
-                        price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                        if (req.params.valueChild <= discountFinded[0].value) {
-                          price = parseFloat(req.params.valueChild).toFixed(2);
-                        }
-
-
-
-                      } else {
-
-                        price = req.params.valueChild;
-                        price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                      }
-                      discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                      discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                      discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                      discountFinded[0].save();
-
-                      const data = {
-                        name: childName,
-                        time: adultTime,
-                        value: price,
-                        discount: discountFinded[0].name,
-
-                      };
-                      try {
-                        return res.status(201).json(data);
-                      } catch (err) {
-                        return res.sendStatus(500);
-                      }
-                    } else {
-                      return res.send("2");
-                    }
-                  } else if (discountFinded[0].temporalityDate === "Anual") {
-                    let hj = moment().format();
-
-                    let ultimadata = moment(event.dateUser).format();
-                    let proximafata = moment(ultimadata).add(1, 'years').format();
-
-                    if (moment(hj).isAfter(proximafata)) {
-
-                      if (discountFinded[0].type === 'Fixo') {
-
-                        price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                        if (req.params.valueChild <= discountFinded[0].value) {
-                          price = parseFloat(req.params.valueChild).toFixed(2);
-                        }
-
-
-
-                      } else {
-
-                        price = req.params.valueChild;
-                        price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                      }
-                      discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                      discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                      discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                      discountFinded[0].save();
-
-                      const data = {
-                        name: childName,
-                        time: adultTime,
-                        value: price,
-                        discount: discountFinded[0].name,
-
-                      };
-                      try {
-                        return res.status(201).json(data);
-                      } catch (err) {
-                        return res.sendStatus(500);
-                      }
-                    } else {
-                      return res.send("4");
-                    }
-                  } else if (discountFinded[0].temporalityDate === "Livre") {
-                    let hj = moment().format();
-
-                    let ultimadata = moment(event.dateUser).format();
-                    let proximafata = moment(ultimadata).add(1, 'years').format();
-
-
-
-                    if (discountFinded[0].type === 'Fixo') {
-
-                      price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                      if (req.params.valueChild <= discountFinded[0].value) {
-                        price = parseFloat(req.params.valueChild).toFixed(2);
-                      }
-
-
-
-                    } else {
-
-                      price = req.params.valueChild;
-                      price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                    }
-                    discountFinded[0].codes[index].statusBroadlUser.push({ idUser: req.params.idAdult, dateUser: new Date() })
-                    discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-                    discountFinded[0].codes[indice].statusUniqueDate = new Date();
-                    discountFinded[0].save();
-
-                    const data = {
-                      name: childName,
-                      time: adultTime,
-                      value: price,
-                      discount: discountFinded[0].name,
-
-                    };
-                    try {
-                      return res.status(201).json(data);
-                    } catch (err) {
-                      return res.sendStatus(500);
-                    }
-
-                  }
-                } else {
-                  return res.send("5");
-                }
-
-              })
-            } else {
-
-              if (discountFinded[0].type === 'Fixo') {
-
-                price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                if (req.params.valueChild <= discountFinded[0].value) {
-                  price = parseFloat(req.params.valueChild).toFixed(2);
-                }
-
-
-
-              } else {
-
-                price = req.params.valueChild;
-                price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-              }
-
-              discountFinded[0].codes[indice].statusUniqueUser = req.params.idAdult;
-              discountFinded[0].codes[indice].statusUniqueDate = new Date();
-              discountFinded[0].save();
-
-              const data = {
-                name: childName,
-                time: adultTime,
-                value: price,
-                discount: discountFinded[0].name,
-
-              };
-              try {
-                return res.status(201).json(data);
-              } catch (err) {
-                return res.sendStatus(500);
-              }
-            }
-
-
-
-          } else {
-            return res.send("6");;
-          }
-        })
       }
     }
   } else {
@@ -2086,11 +1950,46 @@ router.post('/a', async (req, res) => {
 
       return res.sendStatus(500);
     }
+    
   });
+
   const productFinded = await product.find({ 'children.id': req.body.idcria });
 
 
 
 });
+router.post('/discont/:id/:codDesc/:index', async (req, res) => {
+  const discountFinded = await discount.find({ 'codes.numberCode': req.params.codDesc });
+  console.log(discountFinded);
+  if (discountFinded[0].temporalityType === "Geral") {
 
+    if (discountFinded[0].temporalityDate === "Unico") {
+      discountFinded[0].codes[req.params.index].statusUnique = true;
+      discountFinded[0].codes[req.params.index].statusBroadlUser.push({ idUser: req.params.id, dateUser: new Date() })
+      discountFinded[0].save();
+    } else {
+      console.log("consefui")
+      discountFinded[0].codes[req.params.index].statusBroadlUser.push({
+        idUser: req.params.id, dateUser: new Date()
+      })
+      discountFinded[0].save();
+    }
+
+  } else if (discountFinded[0].temporalityType === "Unico") {
+    if (discountFinded[0].codes[req.params.index].hasOwnProperty('statusUniqueUser')) {
+      discountFinded[0].codes[req.params.index].statusUniqueDate = new Date();
+      discountFinded[0].save();
+    } else {
+      discountFinded[0].codes[req.params.index].statusUniqueUser = req.params.id;
+      discountFinded[0].codes[req.params.index].statusUniqueDate = new Date();
+      discountFinded[0].save();
+    }
+  }
+  console.log(discountFinded[0].codes)
+  try {
+    return res.status(201);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+});
 module.exports = router;

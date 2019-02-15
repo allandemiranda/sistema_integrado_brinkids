@@ -10,19 +10,20 @@ import DashBoard from './components/Dashboard/Dashboard.js';
 import Adult from './components/Adultos/CadastroAdulto.js';
 import CadastroFuncionario from './components/Funcionario/CadastroFuncionario.js';
 import Passport from './components/Passaporte/Passaporte.js';
+import Babypassport from './components/Babypassaporte/Passaporte.js';
 import Aniversario from './components/Aniversario/CadastroAniversario.js';
 import CriaEvento from './components/Eventos/CadastroEvento.js';
 import Desconto from './components/Desconto/VisualizaDesconto.js';
 import Perfil from './components/VizualizarPerfil/Perfil.js';
 import PerfilAdulto from './components/VizualizarPerfil/PerfilAdulto.js';
 import PerfilCrianca from './components/VizualizarPerfil/PerfilCrianca';
-import Servicos from './components/Serviços_Extras/Serviços';
+import Servicos from './components/Servicos_Extras/Servicos';
 import MeuPerfil from './components/VizualizarPerfil/MyPerfil.js';
 import SaidaCrianca from './components/Saidas/SaidaCrianca.js';
 import EntradaAniversario from './components/Aniversario/EntradaAniversario.js';
 import Gerador from './components/geradorf/Gerador_funcoes.js';
-import SaidaServicosExtra from "./components/Serviços_Extras/SaidaServiçosExtra";
-import ServicoPassaporte from "./components/Servirços_Passaport/ServicoPassaport";
+import SaidaServicosExtra from "./components/Servicos_Extras/SaidaServicosExtra";
+import ServicoPassaporte from "./components/Servircos_Passaport/ServicoPassaport";
 import gavetas from './components/Gavetas/Gavetas.js';
 import TelaMKT from './components/TeladoMKT/TelaMKT.js';
 import GFinanceiro from './components/GerenciamenteFinanceiro/GerenciamentoFinanceiro.js';
@@ -118,6 +119,12 @@ class App extends React.Component {
               path="/Passport"
               layout={MainLayout}
               component={Passport}
+            />
+            <PrivateRoute
+              exact
+              path="/Babypassport"
+              layout={MainLayout}
+              component={Babypassport}
             />
             <PrivateRoute
               exact

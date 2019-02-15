@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const config = require('../config');
 
 const employeesSchema = new mongoose.Schema({
-  gender: String,
+ 
   education: String,
   kinship: {
     fatherName: String,

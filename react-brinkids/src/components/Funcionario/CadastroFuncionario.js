@@ -120,7 +120,7 @@ class CadastroFuncionario extends React.Component {
             }
             else {
                 $("#alertDiv").addClass('displaynone');
-                axios.get(`/adult/filter/${this.state.CPF}/cpf`)
+                axios.get(`/adult/filter/${this.state.CPF}/CPF`)
                     .then((response) => {
                         if (isEmpty(response.data) || response.data.length === 0) {
                             alert("Nenhum adulto foi encontrado com essa busca")

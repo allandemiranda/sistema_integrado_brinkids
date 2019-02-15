@@ -40,7 +40,8 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Aniversário: </b></h5>
-                                    <p>{moment(this.props.DateAni).add(1,"days").format("DD/MM/YYYY")}</p>
+                                    {this.props.DateAni&&(<p>{moment(this.props.DateAni).format("DD/MM/YYYY")}</p>)}
+                                    {!this.props.DateAni&&(<p></p>)}
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
@@ -148,7 +149,8 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-3 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data da Emissão: </b></h5>
-                                    <p>{moment(this.props.CTData).add(1,"days").format("DD/MM/YYYY")}</p>
+                                    {this.props.CTData&&(<p>{moment(this.props.CTData).format("DD/MM/YYYY")}</p>)}
+                                    {!this.props.CTData&&(<p></p>)}
                                 </div>
                             </div>
                             <div className="col-md-3 col-sm-12">
@@ -172,7 +174,8 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data da Emissão: </b></h5>
-                                    <p>{moment(this.props.RGData).add(1,"days").format("DD/MM/YYYY")}</p>
+                                   {this.props.RGData &&( <p>{moment(this.props.RGData).format("DD/MM/YYYY")}</p>)}
+                                   {!this.props.RGData &&( <p></p>)}
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
@@ -268,13 +271,15 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Emissão: </b></h5>
-                                    <p>{moment(this.props.PDataE).add(1,"days").format("DD/MM/YYYY")}</p>
+                                   {this.props.PDataE &&( <p>{moment(this.props.PDataE).format("DD/MM/YYYY")}</p>)}
+                                   {!this.props.PDataE &&( <p></p>)}
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Validade: </b></h5>
-                                    <p>{moment(this.props.PDataV).add(1,"days").format("DD/MM/YYYY")}</p>
+                                   {this.props.PDataV &&( <p>{moment(this.props.PDataV).format("DD/MM/YYYY")}</p>)}
+                                   {!this.props.PDataV &&( <p></p>)}
                                 </div>
                             </div>
                         </div>
@@ -306,13 +311,15 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Emissão: </b></h5>
-                                    <p>{moment(this.props.CNDataE).add(1,"days").format("DD/MM/YYYY")}</p>
+                                   {this.props.CNDataE &&( <p>{moment(this.props.CNDataE).format("DD/MM/YYYY")}</p>)}
+                                   {!this.props.CNDataE &&( <p></p>)}
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Validade: </b></h5>
-                                    <p>{moment(this.props.CNDataV).add(1,"days").format("DD/MM/YYYY")}</p>
+                                   {this.props.CNDataV &&( <p>{moment(this.props.CNDataV).format("DD/MM/YYYY")}</p>)}
+                                   {!this.props.CNDataV &&( <p></p>)}
                                 </div>
                             </div>
                         </div>
@@ -338,7 +345,8 @@ class ConfirmaFuncionario extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
                                     <h5 className = "ltTitulo"><b> Data de Admissão: </b></h5>
-                                    <p>{moment(this.props.FDA).add(1,"days").format("DD/MM/YYYY")}</p>
+                                    {this.props.FDA &&<p>{moment(this.props.FDA).format("DD/MM/YYYY")}</p>}
+                                    {!this.props.FDA &&<p></p>}
                                 </div>
                             </div>
                             <div className="col-md-4 col-sm-12">

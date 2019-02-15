@@ -155,7 +155,7 @@ class Passport extends React.Component {
                     this.state.kinship[indice] = "Outros";
                 }
                 else if (event.target.value === "children") {
-                    this.state.kinship[indice] = "filho(a)";
+                    this.state.kinship[indice] = "Filho(a)";
                 }
                 else if (event.target.value === "Stepson") {
                     this.state.kinship[indice] = "Enteado(a)";
@@ -833,9 +833,9 @@ class Passport extends React.Component {
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
                                                             <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id, indice)} >
                                                                 <option value="others" > Outros </option>
-                                                                <option value="children" > filho(a) </option>
+                                                                <option value="children" > Filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
-                                                                <option value="grandchildren"  >Neto(a) </option>
+                                                                <option value="grandchildren"  > Neto(a) </option>
                                                                 <option value="nephews"  > Sobrinho(a) </option>
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >

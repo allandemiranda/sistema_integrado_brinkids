@@ -39,11 +39,13 @@ class DashBoard extends React.Component {
 			crincaTab: "tab-current",
 			adultoTab: "",
 			aniversarioTab: "",
+			babyTab: "",
 			noticiaTab: "",
 
 			sectionCrianca: "content-current",
 			sectionAdult: "",
 			sectionAniversario: "",
+			sectionBaby: "",
 			sectionNoticia: "",
 			listaFuncionarios: [],
 			perfilAtual: [],
@@ -61,6 +63,7 @@ class DashBoard extends React.Component {
 
 		this.selectAniversario = this.selectAniversario.bind(this);
 
+		this.selectBaby = this.selectBaby.bind(this);
 
 		this.cahnguePageA = this.cahnguePageA.bind(this);
 		this.changuePageC = this.changuePageC.bind(this);
@@ -151,11 +154,13 @@ class DashBoard extends React.Component {
 			crincaTab: "tab-current",
 			adultoTab: "",
 			aniversarioTab: "",
+			babyTab: "",
 			noticiaTab: "",
 
 			sectionCrianca: "content-current",
 			sectionAdult: "",
 			sectionAniversario: "",
+			sectionBaby: "",
 			sectionNoticia: "",
 		})
 	}
@@ -165,11 +170,29 @@ class DashBoard extends React.Component {
 			crincaTab: "",
 			adultoTab: "",
 			aniversarioTab: "tab-current",
+			babyTab: "",
 			noticiaTab: "",
 
 			sectionCrianca: "",
 			sectionAdult: "",
 			sectionAniversario: "content-current",
+			sectionBaby: "",
+			sectionNoticia: "",
+		})
+	}
+
+	selectBaby(event) {
+		this.setState({
+			crincaTab: "",
+			adultoTab: "",
+			aniversarioTab: "",
+			babyTab: "tab-current",
+			noticiaTab: "",
+
+			sectionCrianca: "",
+			sectionAdult: "",
+			sectionAniversario: "",
+			sectionBaby: "content-current",
 			sectionNoticia: "",
 		})
 	}
@@ -199,21 +222,7 @@ class DashBoard extends React.Component {
 				<div className="container-fluid" >
 					<script src="js/jquery-1.10.2.min.js"></script>
 					<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
-					{this.state.popup &&
-
-						(<div className="alert alert-success" role="alert">
-							<strong>Tudo ok!</strong> O Limite De Crianças Não foi Atingido.
-					</div>)
-					}
-
-
-					{!this.state.popup &&
-
-						(<div className="alert alert-danger" role="alert">
-							<strong>Aviso!</strong> O Limite De Crinaças Foi Atingido.
-					</div>)
-
-					}
+					
 
 					<div className="sub-heard-part" >
 						<ol className="breadcrumb m-b-0" >
@@ -246,6 +255,7 @@ class DashBoard extends React.Component {
 
 										<li name="aniversarioTab" onClick={this.selectAniversario} className={this.state.aniversarioTab}><a className="icon-food"><span className="lnr lnr-rocket"></span> <span>Aniversários</span></a></li>
 
+										<li name="babyTab" onClick={this.selectBaby} className={this.state.babyTab}><a className="icon-food"><span className="fas fa-baby"></span> <span>Baby Passaporte</span></a></li>
 
 									</ul>
 								</nav>
@@ -305,6 +315,59 @@ class DashBoard extends React.Component {
 											</div>
 										</div>
 									</section>
+									<section className={this.state.sectionBaby}>
+										<div className="graph graph-visual tables-main">
+											<div className="tables">
+												<table className="table table-hover">
+													<thead>
+														<tr>
+															<th>#</th>
+															<th style={{ textAlign: "center" }}>Criança</th>
+															<th style={{ textAlign: "center" }}>Idade</th>
+															<th style={{ textAlign: "center" }}>Restrição</th>
+															<th style={{ textAlign: "center" }}>Obs.</th>
+															<th style={{ textAlign: "center" }}>Entrada</th>
+															<th style={{ textAlign: "center" }}>Gaveta</th>
+															<th style={{ textAlign: "center" }}>Responsável</th>
+															<th style={{ textAlign: "center" }}>Parentesco</th>
+															<th style={{ textAlign: "center" }}>Telefone</th>
+															<th style={{ textAlign: "center" }}>Obs.</th>
+														</tr>
+													</thead>
+													<tbody>
+													{this.state.lista.map((event, index) => {
+														if(event.service==="Baby Passaporte"){
+															return (
+																<tr>
+																	<th scope="row" onClick={()=>this.openModal(event)}>{index + 1}</th>
+																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.changuePageC(event)}>{event.children.name}</a></td>
+																	<td style={{ textAlign: "center" }}>{this.idade(event.children.birthday)}</td>
+
+																	{event.children.restrictions !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Restrições!\n\n'+event.children.restrictions)}><a>SIM</a></td>)}
+																	{event.children.restrictions === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+
+																	{event.children.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.children.observations)}><a>SIM</a></td>)}
+																	{event.children.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+
+
+
+																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
+																	<td style={{ textAlign: "center" }}>{event.belongings+1}</td>
+																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
+																	<td style={{ textAlign: "center" }}>{event.kinship}</td>
+																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>
+
+																	{event.adult.observations !== "" && (<td style={{ textAlign: "center" }} onClick={()=>alert('Observações!\n\n'+event.adult.observations)}><a>SIM</a></td>)}
+																	{event.adult.observations === "" && (<td style={{ textAlign: "center" }} >NÃO</td>)}
+																</tr>
+															);}
+														})}
+
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</section>
 									<section className={this.state.sectionAniversario}>
 										<div className="graph graph-visual tables-main">
 											<div className="tables">
@@ -342,7 +405,7 @@ class DashBoard extends React.Component {
 
 
 																	<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
-																	<td style={{ textAlign: "center" }}>{event.belongings}</td>
+																	<td style={{ textAlign: "center" }}>{event.belongings+1}</td>
 																	<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
 																	<td style={{ textAlign: "center" }}>{event.kinship}</td>
 																	<td style={{ textAlign: "center" }}>{event.adult.phone}</td>

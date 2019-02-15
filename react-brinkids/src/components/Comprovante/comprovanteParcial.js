@@ -47,8 +47,7 @@ class ComprovanteParcial extends React.Component {
             console.log(events.name,'aksjna');
 
             if (events.name !== undefined) {
-                if (servico === "PASSAPORTE") {
-
+                if (servico === "BABY PASSAPORTE") {
                     return (
                         <div  id="crianca" key={events._id.toString()}>
                             <div id="dados">
@@ -86,61 +85,102 @@ class ComprovanteParcial extends React.Component {
                         </div>
 
                     );
-                } else {
-                    return (
-                        <div id="crianca" key={events._id.toString()}>
-                            <div id="dados">
-                                <a>Criança:</a>
-                                <a id="nome">{events.name.firstName}</a>
-                                <div className="direita">
+                    } else {
+                    if (servico === "PASSAPORTE") {
 
-                                </div>
-                            </div>
-                            <div id="info">
-                                <a>Parentesco:</a>
-                                <a id="parentesco">{events.kinship}</a>
-                                <div className="direita">
-                                    <a>Idade:</a>
-                                    <a id="idade">{events.years}</a>
-                                </div>
-                            </div>
-                            <div>
-                                <a>Pacote:</a>
-                                <a id="pacote">{events.service}</a>
-                                <div className="direita">
-                                    <a>Entrada:</a>
-                                    <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
-                                    <a>h</a>
-                                </div>
-                            </div>
-                            <div id="obs">
-                                <a>Observações:</a>
-                                <a id="obsTexto">{events.observation}</a>
-                            </div>
-                            <div id="restrioes">
-                                <a>Restrições:</a>
-                                <a id="restricoesTexto">{events.restrictions}</a>
-                            </div>
-                            <div id="aniversario">
-                                <div>
-                                    <a>Aniversariante:</a>
-                                    <a id="nome">{events.birthdays}</a>
-                                </div>
-                                <div>
-                                    <a>Início:</a>
-                                    <a id="horaInicio">{events.beginning}</a>
-                                    <a>h</a>
+                        return (
+                            <div  id="crianca" key={events._id.toString()}>
+                                <div id="dados">
+                                    <a>Criança:</a>
+                                    <a id="nome"> {events.name}</a>
                                     <div className="direita">
-                                        <a>Finaliza:</a>
-                                        <a id="horaFim">{events.end}</a>
+                                    </div>
+                                </div>
+                                <div id="info">
+                                    <a>Parentesco:</a>
+                                    <a id="parentesco">{events.kinship}</a>
+                                    <div className="direita">
+                                        <a>Idade:</a>
+                                        <a id="idade">{events.years}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a>Pacote:</a>
+                                    <a id="pacote">{events.service}</a>
+                                    <div className="direita">
+                                        <a>Entrada:</a>
+                                        <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
                                         <a>h</a>
                                     </div>
                                 </div>
+                                <div id="obs">
+                                    <a>Observações:</a>
+                                    <a id="obsTexto">{events.observation}</a>
+                                </div>
+                                <div id="restrioes">
+                                    <a>Restrições:</a>
+                                    <a id="restricoesTexto">{events.restrictions}</a>
+                                </div>
+                                <a>-</a>
                             </div>
-                            <a>-</a>
-                        </div>
 
-                    );
+                        );
+                    } else {
+                        return (
+                            <div id="crianca" key={events._id.toString()}>
+                                <div id="dados">
+                                    <a>Criança:</a>
+                                    <a id="nome">{events.name.firstName}</a>
+                                    <div className="direita">
+
+                                    </div>
+                                </div>
+                                <div id="info">
+                                    <a>Parentesco:</a>
+                                    <a id="parentesco">{events.kinship}</a>
+                                    <div className="direita">
+                                        <a>Idade:</a>
+                                        <a id="idade">{events.years}</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a>Pacote:</a>
+                                    <a id="pacote">{events.service}</a>
+                                    <div className="direita">
+                                        <a>Entrada:</a>
+                                        <a id="hora">{new Date().getHours() + ':' + new Date().getMinutes()}</a>
+                                        <a>h</a>
+                                    </div>
+                                </div>
+                                <div id="obs">
+                                    <a>Observações:</a>
+                                    <a id="obsTexto">{events.observation}</a>
+                                </div>
+                                <div id="restrioes">
+                                    <a>Restrições:</a>
+                                    <a id="restricoesTexto">{events.restrictions}</a>
+                                </div>
+                                <div id="aniversario">
+                                    <div>
+                                        <a>Aniversariante:</a>
+                                        <a id="nome">{events.birthdays}</a>
+                                    </div>
+                                    <div>
+                                        <a>Início:</a>
+                                        <a id="horaInicio">{events.beginning}</a>
+                                        <a>h</a>
+                                        <div className="direita">
+                                            <a>Finaliza:</a>
+                                            <a id="horaFim">{events.end}</a>
+                                            <a>h</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a>-</a>
+                            </div>
+
+                        );
+                    }
                 }
             }
 
