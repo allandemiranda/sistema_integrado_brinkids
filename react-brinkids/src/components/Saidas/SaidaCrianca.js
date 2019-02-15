@@ -583,7 +583,7 @@ class SaidaCrianca extends React.Component {
                             this.state.CriancasSelecionadas.map((resp, indice) => {
                                 if (indice === 0 && resp.hasOwnProperty('adult')) {
                                     if (resp.hasOwnProperty('codigos')) {
-                                        console.log(response.data, resp.codigos,resp.adult)
+                                        console.log(response.data, resp.codigos, resp.adult)
                                         k += parseFloat(resp.adult.ValueD);
                                         k += parseFloat(resp.codigos.value);
                                     } else {
@@ -637,17 +637,27 @@ class SaidaCrianca extends React.Component {
 
         if (this.state.FormPag !== "") {
             let temporario = [];
-           
+
 
             for (var i = 0; i < this.state.CriancasSelecionadas.length; i++) {
                 var entradas = this.state.listCrianca[i];
-                var comprovante=[];
-                if (this.state.CriancasSelecionadas[i].hasOwnProperty('codigos')) {
+                var temporarios = this.state.CriancasSelecionadas;
+                console.log(temporarios);
+                var comprovante = [];
+                if (temporarios.hasOwnProperty('codigos')) {
                     console.log(entradas)
-                    delete entradas.desconto.crianca.photo;
-                    delete entradas.photo;
+                    
+                        temporarios.forEach((event, indice, array) => {
+                            
+                            delete array[indice].crianca.photo 
+                         
+                        })
+                        delete temporarios.desconto.crianca.photo;
+                  
+
+                    delete temporarios.crianca.photo;
                     comprovante = {
-                        
+
                         valor: String(this.state.FinalValor),
                         valor2: String(this.state.TotalValor),
                         idpai: String(this.state.IDAdult),
@@ -656,15 +666,22 @@ class SaidaCrianca extends React.Component {
                         entrada: entradas,
                         funcionario: String(this.state.nomeFuncionario),
                         valor3: this.state.ValorCria,
-                        desconto: this.state.CriancasSelecionadas,
+                        desconto: temporarios,
                         valorcria: parseFloat(this.state.CriancasSelecionadas[i].codigos.ValueD)
                     }
                 }
                 else {
-                    console.log(entradas)
+                    temporarios.forEach((event, indice, array) => {
+                            
+                        delete array[indice].crianca.photo 
+                     
+                    })
+                   delete entradas.children.photo
+
+
                    
-                    delete entradas.photo;
-                     comprovante = {
+                    delete entradas.photo
+                    comprovante = {
 
                         valor: String(this.state.FinalValor),
                         valor2: String(this.state.TotalValor),
@@ -674,16 +691,16 @@ class SaidaCrianca extends React.Component {
                         entrada: entradas,
                         funcionario: String(this.state.nomeFuncionario),
                         valor3: this.state.ValorCria,
-                        desconto: this.state.CriancasSelecionadas,
+                        desconto: temporarios,
                         valorcria: parseFloat(this.state.CriancasSelecionadas[i].infocrianca.value)
                     }
                 }
-                console.log(this.state.ValorCriaDesc)
+                
                 temporario.push(comprovante);
-                console.log(temporario)
+                console.log(temporarios,temporario)
 
             }
-
+            console.log(temporarios,temporario)
             axios.post(`/passport/a/`, temporario)
                 .then((response) => {
 
