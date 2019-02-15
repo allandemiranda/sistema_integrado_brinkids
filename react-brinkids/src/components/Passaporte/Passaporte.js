@@ -101,7 +101,7 @@ class Passport extends React.Component {
                   
                 } else {
                   this.props.history.push("/");
-                  alert("você nao tem permissao para entrar aki")
+                  alert("Acesso Negado. Você não possui permisão para estar nessa área!");
                 }
               })
               .catch((err) => console.log(err));
@@ -186,11 +186,11 @@ class Passport extends React.Component {
         let erros = this.state.selectedSearch;
         console.log(await Num())
         if (erros.length === 0) {
-            alert("A Busca não pode ser em branco");
+            $("#selectAdult").addClass('errorBorder');
         }
-        else if (erros.length < 8) {
-            alert("A Busca nao pode ter menos que 8 caracteres");
-        }
+        // else if (erros.length < 8) {
+        //     alert("A Busca nao pode ter menos que 8 caracteres");
+        // }
         else {
             axios.get(`/adult/filter/${this.state.selectedSearch}/name`)
                 .then((response) => {
@@ -225,6 +225,7 @@ class Passport extends React.Component {
             // //         }
             // //     }.bind(this)
             // });
+            $("#selectAdult").removeClass('errorBorder');
         }
     }
 
@@ -269,11 +270,11 @@ class Passport extends React.Component {
         let erros = this.state.selectedSearch;
 
         if (erros.length === 0) {
-            alert("A Busca não pode ser em branco");
+            $("#selectKids").addClass('errorBorder');
         }
-        else if (erros.length < 8) {
-            alert("A Busca nao pode ter menos que 8 caracteres");
-        }
+        // else if (erros.length < 8) {
+        //     alert("A Busca nao pode ter menos que 8 caracteres");
+        // }
         else {
             axios.get(`/child/filter/${this.state.selectedSearch}`)
                 .then((response) => {
@@ -285,7 +286,7 @@ class Passport extends React.Component {
 
 
                 })
-
+            $("#selectKids").removeClass('errorBorder');
         }
     }
 

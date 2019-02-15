@@ -36,6 +36,7 @@ class CadastroCrianca extends React.Component {
             observations: "",
             file: "",
             nomeValido: true,
+            erroCadastro:false,
         }
         this.ChangeName = this.ChangeName.bind(this);
         this.ChangeSurname = this.ChangeSurname.bind(this);
@@ -71,7 +72,7 @@ class CadastroCrianca extends React.Component {
 
                         } else {
                             this.props.history.push("/");
-                            alert("você nao tem permissao para entrar aki")
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
                         }
                     })
                     .catch((err) => console.log(err));
@@ -289,7 +290,8 @@ class CadastroCrianca extends React.Component {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroCadastro = true;
             })
     }
 
@@ -311,11 +313,13 @@ class CadastroCrianca extends React.Component {
             .then((response) => {
                 console.log(response)
                 this.props.history.push("/");
+                this.state.erroCadastro = false;
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroCadastro = true;
             })
     }
 
@@ -343,6 +347,13 @@ class CadastroCrianca extends React.Component {
         if (this.state.page === "FormularioCad") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert">
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
