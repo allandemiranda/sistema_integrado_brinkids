@@ -184,7 +184,7 @@ class SaidaServicosExtra extends React.Component {
         let valorTemporario = this.state.valorTotal;
         let listatemporaria = this.state.quantidade;
         listatemporaria[event.target.name[2]] = event.target.value;
-        valorTemporario[event.target.name[2]] = (this.state.list[event.target.name[2]].value * listatemporaria[event.target.name[2]])
+        valorTemporario[event.target.name[2]] = (this.state.list[event.target.name[2]].value * listatemporaria[event.target.name[2]]).toFixed(2)
         console.log(listatemporaria[event.target.name[2]]);
 
         this.setState({ quantidade: listatemporaria, valorTotal: valorTemporario });
@@ -197,7 +197,7 @@ class SaidaServicosExtra extends React.Component {
 
         this.state.carrinho.map((valor, indice) => {
             console.log(valor);
-            valorTotalFinal = valorTotalFinal + valor.Total;
+            valorTotalFinal = parseFloat(valorTotalFinal + valor.Total);
             console.log(valor.Total);
         })
 

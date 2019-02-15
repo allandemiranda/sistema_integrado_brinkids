@@ -54,7 +54,7 @@ class Passport extends React.Component {
             file: '', // recebe a imagem 
             currentdate: [],
             horaEntradaCriança: '', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
-            kinshipConfirm: '',
+            kinshipConfirm: 'Outros(a)',
             comprovante: false,
             no: tabelinha,
             dadosComprovante: [],
@@ -454,15 +454,28 @@ class Passport extends React.Component {
         };
 
         for (var i = 0; i < this.state.listConfirmKids.length; i++) {
-            const crianca = {
-                _id: String(this.state.listConfirmKids[i]._id),
-                name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
-                birthday: new Date(this.state.listConfirmKids[i].birthday),
-                restrictions: this.state.listConfirmKids[i].restrictions,
-                observations: this.state.listConfirmKids[i].observations,
-                photo: this.state.listConfirmKids[i].fotoFamily,
-                kinship: this.state.kinship[i],
+            var crianca;
+            if(this.state.kinship[i] !==undefined){
+                 crianca = {
+                    _id: String(this.state.listConfirmKids[i]._id),
+                    name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                    birthday: new Date(this.state.listConfirmKids[i].birthday),
+                    restrictions: this.state.listConfirmKids[i].restrictions,
+                    observations: this.state.listConfirmKids[i].observations,
+                    photo: this.state.listConfirmKids[i].fotoFamily,
+                    kinship: this.state.kinship[i],
+                }
+            }else{
+                 crianca = {
+                    _id: String(this.state.listConfirmKids[i]._id),
+                    name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                    birthday: new Date(this.state.listConfirmKids[i].birthday),
+                    restrictions: this.state.listConfirmKids[i].restrictions,
+                    observations: this.state.listConfirmKids[i].observations,
+                    photo: this.state.listConfirmKids[i].fotoFamily,
+                    kinship: "Outros",
             }
+        }
             console.log(this.state.kinship[i])
             listCria.push(crianca);
         };
