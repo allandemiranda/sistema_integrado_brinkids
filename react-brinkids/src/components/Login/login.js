@@ -118,8 +118,7 @@ class App extends Component {
             <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword} />
             <button type="button" onClick={this.loginSubmit} >Login</button>
             
-            <input type="button" onClick={this.Criar}/>
-            {/*<!--p>Recuperar <span>Usuário</span> ou <span>Senha</span></p!-->*/}
+            
             <span id="menErro"> {this.state.erro} </span>
           </div>
         </form>
