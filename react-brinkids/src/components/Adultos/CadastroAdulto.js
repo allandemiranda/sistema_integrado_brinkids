@@ -316,7 +316,6 @@ class CadastroAdulto extends React.Component {
             else {
                 $("#bai").removeClass('errorBorder');
             }
-
             return erros;
 
         }
@@ -761,9 +760,9 @@ class CadastroAdulto extends React.Component {
             return (
                 <div className="container-fluid">
                     <div className="container-fluid" >
-                        {this.state.erro &&
-                            (<div className="alert lert-danger" role="alert">
-                                <strong>Ocorreu um erro no Cadastro</strong>
+                        {this.state.erroL &&
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
+                                <strong style ={{color: 'white'}}>Ocorreu um erro no Cadastro</strong>
                             </div>)
                         }
                     </div>

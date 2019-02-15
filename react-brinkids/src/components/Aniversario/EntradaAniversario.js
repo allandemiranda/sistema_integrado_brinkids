@@ -3,6 +3,7 @@ import update from 'react-addons-update';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
+import '../Dashboard/css/style.css';
 
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
@@ -634,6 +635,13 @@ class EntradaAniversario extends React.Component {
             {/* Imprime a tabela com a busca dos Adultos*/ }
             return (
                 <div className="container-fluid" >
+                    <div className="" >
+                        {!this.state.algo &&
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }} >
+                                <strong style ={{color: 'white'}}>Nenhum evento está ocorrendo no momento.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
@@ -1104,7 +1112,7 @@ class EntradaAniversario extends React.Component {
                 <div className="container-fluid" >
                     <div className="container-fluid" >
                         {this.state.erroCadastro &&
-                            (<div className="alert lert-danger" role="alert">
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
                                 <strong>Ocorreu um erro no Cadastro</strong>
                             </div>)
                         }
