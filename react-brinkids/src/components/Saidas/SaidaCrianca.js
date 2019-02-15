@@ -520,7 +520,7 @@ class SaidaCrianca extends React.Component {
                         this.setState({
                             CriancasSelecionadas: temporario,
                         })
-                        alert("Desconto não encontrado ou invalido")
+                        alert("Código informado inválido, verifique a validade do seu Desconto!")
                     }
 
                 }).catch((error) => {
