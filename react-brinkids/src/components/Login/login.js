@@ -104,21 +104,12 @@ class App extends Component {
           <source src={video} type="video/mp4" alt="video" />
         </video>
 
-        <form className="inner-container">
-        <div className="container-fluid" >
-                        {this.state.erroCadastro &&
-                            (<div className="alert lert-danger" role="alert">
-                                <strong>Ocorreu um erro no Cadastro</strong>
-                            </div>)
-                        }
-                    </div>
+        <form className="inner-container">        
           <div className="box">
             <img className="logo_1" src={logo} alt="logo" />
             <input placeholder="Usuário" autoFocus type="text" value={this.state.user} onChange={this.textoUsuario} />
             <input placeholder="Senha" type="password" value={this.state.password} onChange={this.textoPassword} />
-            <button type="button" onClick={this.loginSubmit} >Login</button>
-            
-            
+            <button type="button" onClick={this.loginSubmit} >Login</button>   
             <span id="menErro"> {this.state.erro} </span>
           </div>
         </form>
