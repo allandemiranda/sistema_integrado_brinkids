@@ -183,26 +183,27 @@ class SaidaServicosExtra extends React.Component {
     ChangeQuantidade(event) {
         let valorTemporario = this.state.valorTotal;
         let listatemporaria = this.state.quantidade;
-        listatemporaria[event.target.name[2]] = event.target.value;
-        valorTemporario[event.target.name[2]] = (this.state.list[event.target.name[2]].value * listatemporaria[event.target.name[2]]).toFixed(2)
+        console.log(typeof(event.target.value))
+        listatemporaria[event.target.name[2]] = parseFloat(event.target.value);
+        valorTemporario[event.target.name[2]] = (parseFloat(this.state.list[event.target.name[2]].value) * listatemporaria[event.target.name[2]]).toFixed(2)
         console.log(listatemporaria[event.target.name[2]]);
 
         this.setState({ quantidade: listatemporaria, valorTotal: valorTemporario });
-        console.log(this.state.valorTotal);
+        console.log(this.state.valorTotal,valorTemporario);
     }
 
     TelaII = (event) => {
         this.setState({ page: "Detalhamento" });
-        let valorTotalFinal = 0;
+        let valorTotalFinal = 0.0;
 
         this.state.carrinho.map((valor, indice) => {
             console.log(valor);
-            valorTotalFinal = parseFloat(valorTotalFinal + valor.Total);
+            valorTotalFinal = parseFloat(valorTotalFinal + parseFloat(valor.Total));
             console.log(valor.Total);
         })
 
         this.setState({
-            Total: valorTotalFinal,
+            Total: valorTotalFinal.toFixed(2),
         })
     }
 
@@ -227,6 +228,7 @@ class SaidaServicosExtra extends React.Component {
             from: this.state.name, //ajsuta o id dps de fazer o login funcionar
             price: this.state.Total,
             priceMethod: this.state.FormaDePagamento
+            
 
         }
 

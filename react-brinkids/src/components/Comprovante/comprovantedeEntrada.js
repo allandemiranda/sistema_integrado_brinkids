@@ -124,7 +124,7 @@ class Comprovante extends React.Component {
                         {this.props.tabela.i.map((evento) => byChild(evento))}
                         <div>
                             <a>Pertences: Gaveta</a>
-                            <a id="gaveta"> {this.props.tabela.i[0].belongings+1}</a>
+                            <a id="gaveta"> {this.props.tabela.i[0].belongings}</a>
                         </div>
                     </div>
                     <div id="atendente" className="atendente textos">

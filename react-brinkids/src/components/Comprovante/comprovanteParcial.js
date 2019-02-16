@@ -146,7 +146,7 @@ class ComprovanteParcial extends React.Component {
                     {this.byChild(this.props.tabela)}
                     <div>
                         <a>Pertences: Gaveta</a>
-                        <a id="gaveta"> {this.props.tabela.belongings + 1}</a>
+                        <a id="gaveta"> {this.props.tabela.belongings }</a>
                     </div>
                     <br/>
                     <div id="datalhamento" className="textos">

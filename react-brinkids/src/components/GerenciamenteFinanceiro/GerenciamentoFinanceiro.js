@@ -102,7 +102,7 @@ class GerenciamentoFinanceiro extends React.Component {
 
         axios.get('/log')
             .then((response) => {
-                this.setState({ ListaFluxo: response.data });
+                this.setState({ ListaFluxo: response.data.reverse() });
 
                 console.log(response.data);
             })

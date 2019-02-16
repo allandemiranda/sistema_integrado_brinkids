@@ -161,7 +161,7 @@ class Comprovantesaida extends React.Component {
                         {this.props.tabela.map((evento) => byChild(evento))}
                         <div>
                             <a>Pertences: Gaveta</a>
-                            <a id="gaveta"> {this.props.tabela[0].entrada.belongings + 1}</a>
+                            <a id="gaveta"> {this.props.tabela[0].entrada.belongings }</a>
                         </div>
                     </div>
                     <div id="datalhamento" className="textos">
@@ -203,7 +203,7 @@ class Comprovantesaida extends React.Component {
                             </thead>
                             <tbody id="descontos">
                                 {this.props.tabela[0].desconto.map((event, indice) => {
-                                    if (indice === 0 && event.hasOwnProperty('adult')) {
+                                    if (indice === 0 && event.adult !=undefined) {
                                         return (
                                             <>
                                                 <tr>

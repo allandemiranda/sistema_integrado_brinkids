@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
         action: 'Criação',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: newService._id,
+        to: newService.name,
 
 
       })
@@ -100,7 +100,7 @@ router.put('/:identifier', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
+      to: service.name,
 
     })
     const newLog = await log.save();

@@ -167,6 +167,7 @@ class Perfil extends React.Component {
         
     }
     changuePassword(event) {
+        
         this.setState({
             page: 'Senha',
         })

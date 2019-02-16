@@ -370,7 +370,7 @@ class DashBoard extends React.Component {
 
 
 																		<td style={{ textAlign: "center" }}>{moment(event.time).format("HH:mm")}</td>
-																		<td style={{ textAlign: "center" }}>{event.belongings + 1}</td>
+																		<td style={{ textAlign: "center" }}>{event.belongings }</td>
 																		<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(event)}>{event.adult.name}</a></td>
 																		<td style={{ textAlign: "center" }}>{event.kinship}</td>
 																		<td style={{ textAlign: "center" }}>{event.adult.phone}</td>

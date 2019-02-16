@@ -118,7 +118,7 @@ router.post('/', async (req, res) => {
         action: 'Criação',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: newDiscount._id,
+        to: req.body.name,
 
 
       })
@@ -143,7 +143,7 @@ router.delete('/filter/:identifier', async (req, res) => {
     const deletedService = await Discount.findByIdAndRemove(req.params.identifier);
     
     const log = new Logs({
-      activity: 'Descontos',
+      activity: 'Desconto',
       action: 'Delete',
       dateOperation: new Date(),
       from: funcionario,

@@ -75,6 +75,7 @@ class DashBoard extends React.Component {
 			menina: 0,
 			menino: 0,
 			listaBusca: [],
+			listapesq:[],
 			listaGraf2: [],
 			listaGraf: []
 		};
@@ -136,13 +137,14 @@ class DashBoard extends React.Component {
 											email: event.email,
 
 										})
-										let temporarioss =moment(mape.identifier.birthday).format("DD/MM/YYYY");
-										console.log(moment(temporarioss).format("DD"),"===",temporarioss)
+										let temporarioss = moment(mape.identifier.birthday).format("DD/MM/YYYY");
+										console.log(moment(temporarioss).format("DD"), "===", temporarioss)
 									}
 								})
 							})
 							this.setState({
-								listaBusca: temporario
+								listapesq: temporario,
+								listaBusca:temporario,
 							})
 						} else {
 							this.props.history.push("/");
@@ -177,7 +179,7 @@ class DashBoard extends React.Component {
 	}
 	mudarCampoMes(event) {
 		this.setState({ campoMes: event.target.value });
-		console.log(typeof(event.target.value))
+		console.log(typeof (event.target.value))
 	}
 	selectCrianca(event) {
 		this.setState({
@@ -226,17 +228,17 @@ class DashBoard extends React.Component {
 	grafico(event) {
 		let listadedatas = [];
 
-		 var lista = [];
+		var lista3 = [];
 		for (var i = 0; i < 15; i++) {
 			let hj = moment().format("MM/DD/YYYY");
 			var novo = moment(hj).subtract(i, 'days');
 
 			const a = moment(novo).format("MM/DD/YYYY")
 
-			lista.push(a);
+			lista3.push(a);
 
 		}
-		const datas = lista.map(async (crianca, index) => {
+		const datas = lista3.map(async (crianca, index) => {
 
 			const a = moment(crianca).startOf('day').toDate();
 
@@ -293,34 +295,57 @@ class DashBoard extends React.Component {
 			var total = 0;
 			const datas = lista.aniversario.map(async (crianca, index) => {
 				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
-
+				let retu;
 				var temporario = null;
+
 				if (axior.data !== null) {
 					temporario = {
-						dia: moment(crianca.dateOperation).format("DD/MM"),
+						dia: moment(lista3[index]).format("DD/MM"),
 						sexo: axior.data.sexuality,
 					}
+					retu = {
+						temporario, child: axior.data
+					}
+					console.log(temporario)
+				} else {
+					console.log(lista3[index])
+					temporario = {
+						dia: moment(lista3[index]).format("DD/MM"),
 
-				}
-				const retu = {
-					temporario, child: axior.data
+					}
+					retu = {
+						temporario,
+					}
 				}
 				return retu;
 			});
 
 			const datase = lista.passaporte.map(async (crianca, index) => {
 				const axior = await axios.get(`/child/indentifier/${crianca.id}`);
-
+				console.log(axior.data)
 				var temporario = null;
+				let retu;
 				if (axior.data !== null) {
 					temporario = {
-						dia: moment().format("DD/MM"),
+						dia: moment(lista3[index]).format("DD/MM"),
 						sexo: axior.data.sexuality,
 					}
+					retu = {
+						temporario, child: axior.data
+					}
+					console.log(temporario)
+				} else {
+					console.log(lista3[index])
+					temporario = {
+						dia: moment(lista3[index]).format("DD/MM"),
+
+					}
+					retu = {
+						temporario,
+					}
 				}
-				const retu = {
-					temporario, child: axior.data
-				}
+
+
 				return retu;
 
 
@@ -340,30 +365,35 @@ class DashBoard extends React.Component {
 					var menino = 0;
 					var menina = 0;
 
-					if (event.child !== null) {
+					if (event.child !== undefined) {
+						console.log(event.child)
 						if (event.child.sexuality === "Feminino") {
 							menina = menina + 1;
 						} else if (event.child.sexuality === "Masculino") {
 							menino = menino + 1;
 						}
 						lista2.push({ name: event.temporario.dia, Meninos: menino, Meninas: menina, Total: menino + menina })
+					} else {
+						lista2.push({ name: event.temporario.dia, Meninos: menino, Meninas: menina, Total: menino + menina })
 					}
 				})
 
-				for (var p = 0; p < lista.length; p++) {
-					for (var y = 1; y <= lista.length - 1; y++) {
+				for (var p = 0; p < lista2.length; p++) {
+					for (var y = 1; y <= lista2.length - 1; y++) {
+						console.log(lista2)
+						if(p ===  lista2.length-1){
 
-						if (lista[p].name === lista[y].name) {
+						}else if (lista2[p].name === lista2[y].name) {
 
-							lista2[p].Meninos = lista[p].Meninos + lista[y].Meninos;
-							lista2[p].Meninas = lista[p].Meninas + lista[y].Meninas;
-							lista2[p].Total = lista[p].Total + lista[y].Total
+							lista2[p].Meninos = lista2[p].Meninos + lista2[y].Meninos;
+							lista2[p].Meninas = lista2[p].Meninas + lista2[y].Meninas;
+							lista2[p].Total = lista2[p].Total + lista2[y].Total
 							lista2.splice(y, 1)
 
 						}
 					}
 				}
-
+				console.log(lista2)
 				return lista2;
 			}).then((pilo) => {
 				this.setState({
@@ -398,7 +428,7 @@ class DashBoard extends React.Component {
 		response.data.map((event) => {
 
 			var age = Math.floor(moment(new Date()).diff(moment(event.birthday), 'years', true));
-				console.log(age,event.sexuality)
+			console.log(age, event.sexuality)
 			if (age >= 0 && age <= 2) {
 				if (event.sexuality === "Masculino") {
 					menino1++;
@@ -491,7 +521,7 @@ class DashBoard extends React.Component {
 
 	CampNome = (event) => {
 		event.preventDefault();
-	
+
 		if (this.state.nomeC === true) {
 			$("#Nome").addClass('displaynone');
 			this.setState({
@@ -607,7 +637,7 @@ class DashBoard extends React.Component {
 
 					if (this.state.campoMes !== "") {
 						let temporario = [];
-						this.state.listaBusca.map((event) => {
+						this.state.listapesq.map((event) => {
 							if (event.name === this.state.campoNome && event.sexo === this.state.campoSexo && event.cidade === this.state.campoCidade && moment(event.aniversario).format("DD") === this.state.campoMes) {
 								temporario.push(event);
 							}
@@ -617,7 +647,7 @@ class DashBoard extends React.Component {
 						})
 					} else {
 						let temporario = [];
-						this.state.listaBusca.map((event) => {
+						this.state.listapesq.map((event) => {
 							if (event.name === this.state.campoNome && event.sexo === this.state.campoSexo && event.cidade === this.state.campoCidade) {
 								temporario.push(event);
 							}
@@ -628,7 +658,7 @@ class DashBoard extends React.Component {
 					}
 				} else if (this.state.campoMes !== "") {
 					let temporario = [];
-					this.state.listaBusca.map((event) => {
+					this.state.listapesq.map((event) => {
 						if (event.name === this.state.campoNome && event.sexo === this.state.campoSexo && moment(event.aniversario).format("DD") === this.state.campoMes) {
 							temporario.push(event);
 						}
@@ -641,7 +671,7 @@ class DashBoard extends React.Component {
 
 				if (this.state.campoMes !== "") {
 					let temporario = [];
-					this.state.listaBusca.map((event) => {
+					this.state.listapesq.map((event) => {
 						if (event.name === this.state.campoNome && event.cidade === this.state.campoCidade && moment(event.aniversario).format("DD") === this.state.campoMes) {
 							temporario.push(event);
 						}
@@ -651,7 +681,7 @@ class DashBoard extends React.Component {
 					})
 				} else {
 					let temporario = [];
-					this.state.listaBusca.map((event) => {
+					this.state.listapesq.map((event) => {
 						if (event.name === this.state.campoNome && event.cidade === this.state.campoCidade) {
 							temporario.push(event);
 						}
@@ -662,7 +692,7 @@ class DashBoard extends React.Component {
 				}
 			} else if (this.state.campoMes !== "") {
 				let temporario = [];
-				this.state.listaBusca.map((event) => {
+				this.state.listapesq.map((event) => {
 					if (event.name === this.state.campoNome && moment(event.aniversario).format("DD") === this.state.campoMes) {
 						temporario.push(event);
 					}
@@ -672,7 +702,7 @@ class DashBoard extends React.Component {
 				})
 			} else {
 				let temporario = [];
-				this.state.listaBusca.map((event) => {
+				this.state.listapesq.map((event) => {
 					if (event.name === this.state.campoNome) {
 						temporario.push(event);
 					}
@@ -688,7 +718,7 @@ class DashBoard extends React.Component {
 
 				if (this.state.campoMes !== "") {
 					let temporario = [];
-					this.state.listaBusca.map((event) => {
+					this.state.listapesq.map((event) => {
 						if (event.sexo === this.state.campoSexo && moment(event.aniversario).format("DD") === this.state.campoMes) {
 							temporario.push(event);
 						}
@@ -699,7 +729,7 @@ class DashBoard extends React.Component {
 
 				} else {
 					let temporario = [];
-					this.state.listaBusca.map((event) => {
+					this.state.listapesq.map((event) => {
 						if (event.sexo === this.state.campoSexo && event.cidade === this.state.campoCidade) {
 							temporario.push(event);
 						}
@@ -710,8 +740,8 @@ class DashBoard extends React.Component {
 				}
 			} else if (this.state.campoMes !== "") {
 				let temporario = [];
-				this.state.listaBusca.map((event) => {
-					if (moment(event.aniversario).format("DD") === this.state.campoMes ) {
+				this.state.listapesq.map((event) => {
+					if (moment(event.aniversario).format("DD") === this.state.campoMes) {
 						temporario.push(event);
 					}
 				})
@@ -721,7 +751,7 @@ class DashBoard extends React.Component {
 
 			} else {
 				let temporario = [];
-				this.state.listaBusca.map((event) => {
+				this.state.listapesq.map((event) => {
 					if (event.cidade === this.state.campoCidade) {
 						temporario.push(event);
 					}
@@ -736,7 +766,7 @@ class DashBoard extends React.Component {
 
 			if (this.state.campoMes !== "") {
 				let temporario = [];
-				this.state.listaBusca.map((event) => {
+				this.state.listapesq.map((event) => {
 					if (event.sexo === this.state.campoSexo && moment(event.aniversario).format("DD") === this.state.campoMes) {
 						temporario.push(event);
 					}
@@ -747,7 +777,7 @@ class DashBoard extends React.Component {
 
 			} else {
 				let temporario = [];
-				this.state.listaBusca.map((event) => {
+				this.state.listapesq.map((event) => {
 					if (event.sexo === this.state.campoSexo) {
 						temporario.push(event);
 					}
@@ -763,7 +793,7 @@ class DashBoard extends React.Component {
 		} else if (this.state.campoMes !== "") {
 			console.log(moment(event.aniversario).format("DD"))
 			let temporario = [];
-			this.state.listaBusca.map((event) => {
+			this.state.listapesq.map((event) => {
 				if (moment(event.aniversario).format("DD") === this.state.campoMes) {
 					temporario.push(event);
 				}
@@ -828,7 +858,20 @@ class DashBoard extends React.Component {
 							<section className={this.state.sectionCrianca} >
 								<div className="graph">
 									<h1 className="text-center"> Fluxo de Crianças na Loja</h1>
-									<LineChart width={810} height={500} data={this.state.listaGraf} margin={{ top: 10, right: 30, left: 0, bottom: 5 }}>
+									<BarChart width={810} height={500} data={this.state.listaGraf}
+										margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis dataKey="name" />
+										<YAxis />
+										<Tooltip />
+										<Legend />
+										<ReferenceLine y={0} stroke='#000' />
+										{/*<Tooltip content={<CustomTooltip />}/>*/}
+										<Bar dataKey="Meninos" fill="#8884d8" />
+										<Bar dataKey="Meninas" fill="#82ca9d" />
+										<Bar dataKey="Total" fill="#8A2BE2	" />
+									</BarChart>
+									{/* <LineChart width={810} height={500} data={this.state.listaGraf} margin={{ top: 10, right: 30, left: 0, bottom: 5 }}>
 										<XAxis dataKey="name" />
 										<YAxis />
 										<CartesianGrid stroke="#eee" strokeDasharray="5 5" />
@@ -841,7 +884,7 @@ class DashBoard extends React.Component {
 										<YAxis />
 										<XAxis dataKey='name' />
 										<Legend />
-									</LineChart>
+									</LineChart> */}
 								</div>
 								<br></br>
 								<div className="text-center">

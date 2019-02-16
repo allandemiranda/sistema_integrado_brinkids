@@ -34,7 +34,7 @@ router.get('/mkt/:date', async (req, res) => {
       $or: [{ 'activity': 'Passaporte', 'action': 'Entrada' }, { 'activity': 'Aniversario', 'action': 'Entrada' }],
 
     });
-
+console.log(childs)
     return res.json(childs);
   } catch (err) {
     console.log(err);

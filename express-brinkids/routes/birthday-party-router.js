@@ -104,7 +104,7 @@ router.post('/', async (req, res) => {
       action: 'Criação',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: newBirthday._id,
+      to: newBirthday.title,
       price: newBirthday.payment.value,
       priceMethod: newBirthday.payment.method,
 

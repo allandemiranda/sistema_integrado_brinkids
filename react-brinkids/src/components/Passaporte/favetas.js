@@ -6,7 +6,7 @@ export const Num = async () => {
     const numero = axios.get('/belongings')
         .then((response) => {
             for (var a = 1; a <= response.data.number; a++) {
-                lista.push(true)
+                lista.push({disp:true,N:a})
             }
             return lista
         }).then((event) => {
@@ -27,16 +27,16 @@ export const Num = async () => {
                     mip.Gavetasusadas.map((event, indice) => {
                         mip.Ngavetas.map((invent, index) => {
                            
-                            if (event === index) {
-                                temporario[index] = false;
+                            if (event === invent.N) {
+                                temporario[index].disp = false;
                             }
                             console.log(event,"==",index,":::",temporario[index])
                         })
                     })
                     for (var p = 0; p < temporario.length; p++) {
-                        if (temporario[p] === true) {
-                            numero = p;
-                            temporario[p] = false;
+                        if (temporario[p].disp === true) {
+                            numero = temporario[p].N;
+                            temporario[p].disp = false;
                             break;
                         }
                         numero = 0;
