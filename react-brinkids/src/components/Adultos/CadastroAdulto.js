@@ -35,7 +35,7 @@ class CadastroAdulto extends React.Component {
             nacionality: "",
             sexuality: "Masculino",
             phoneNumber: "",
-            maritalStatus: "",
+            maritalStatus: "Casado(a)",
             email: "",
             address: "",
             neighborhood: "",
@@ -386,8 +386,14 @@ class CadastroAdulto extends React.Component {
     ChangeNumber(event) {
         this.setState({ number: event.target.value });
     }
-    Changekinship(event) {
-        this.setState({ kinshipConfirm: event.target.value });
+    Changekinship(event,indice) {
+        let temporario = this.state.confirmaCrianca;
+        let indez = event.target.value.split(",")
+        console.log(indez,indez[0],indez[1])
+        
+        temporario[indez[1]].kinship = indez[0];
+        this.setState({ confirmaCrianca: temporario });
+        console.log(temporario)
     }
 
 
@@ -814,12 +820,12 @@ class CadastroAdulto extends React.Component {
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={this.Changekinship} >
-                                                        <option value="others" > Outros </option>
-                                                        <option value="children" > Filho(a) </option>
-                                                        <option value="Stepson" > Enteado(a) </option>
-                                                        <option value="grandchildren" > Neto(a) </option>
-                                                        <option value="nephews"  > Sobrinho(a) </option>
-                                                        <option value="Brother" > Irmão/Irmã </option>
+                                                        <option value={["others",indice]} > Outros </option>
+                                                        <option value={["children",indice]} > Filho(a) </option>
+                                                        <option value={["Stepson",indice]} > Enteado(a) </option>
+                                                        <option value={["grandchildren",indice]} > Neto(a) </option>
+                                                        <option value={["nephews",indice]}  > Sobrinho(a) </option>
+                                                        <option value={["Brother",indice]} > Irmão/Irmã </option>
                                                     </select >
                                                 </td>
                                             </tr>
@@ -879,7 +885,7 @@ class CadastroAdulto extends React.Component {
                                     {this.state.list.map((findChild, indice) => {
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indice}</th>
+                                                <th scope="row">{indice+1}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{moment(findChild.birthday, "YYYYMMDD").toNow(true)}</td>
                                                 <td >{findChild.number} </td>

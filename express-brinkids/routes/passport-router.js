@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
         action: 'Criação',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: newPassport._id,
+        
 
 
       })

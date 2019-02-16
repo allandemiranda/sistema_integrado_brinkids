@@ -66,7 +66,7 @@ class MainLayout extends React.Component {
                     console.log(response.data);
                     this.setState({
                         FuncionarioLogado: response.data[0],
-                        name: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                        name: response.data[0].name.firstName,
                     })
 
                     axios.get(`/professionalPosition/indentifier/${id}`)
@@ -105,11 +105,11 @@ class MainLayout extends React.Component {
     componentWillMount() {
 
         this.requisicao();
-        console.log(this.state.FuncionarioLogado)
+
 
     }
     DiminueMenu() {
-        console.log(this.state.FuncionarioLogado.name.surName)
+    
         if (toggle) {
             $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
             $("#menu span").css({ "position": "absolute" });
@@ -175,7 +175,7 @@ class MainLayout extends React.Component {
                             {this.state.name !== "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={this.state.FuncionarioLogado.photo} /></a>)}
                             {this.state.name === "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={logo} /></a>)}
 
-                            {this.state.name !== "admins" && (<a ><span className=" name-caret">{this.state.FuncionarioLogado.name.firstName + " " + this.state.FuncionarioLogado.name.surName}</span></a>)}
+                            {this.state.name !== "admins" && (<a ><span className=" name-caret">{this.state.FuncionarioLogado.name.firstName }</span></a>)}
                             {this.state.name === "admins" && (<a ><span className=" name-caret">{this.state.name}</span></a>)}
                             <p>{this.state.cargo}</p>
                             <ul>

@@ -1,5 +1,5 @@
 import React from 'react';
-import listaa from './gato';
+
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
@@ -16,11 +16,11 @@ class Perfil extends React.Component {
         this.state = {
             reserva: [],
             //lista de funcionarios recebida do banco de dados
-            listaFuncionarios: listaa,
+            listaFuncionarios: [],
             //lista de funcionarios apos a busca pelo nome
             list: [],
             //Funcionario selecionado para vizualizar o perfil
-            perfilAtual: listaa,
+            perfilAtual: [],
             //barra de busca
             selectedSearch: '',
             //tipo da pagina 'Busca' ou 'Perfil'
@@ -171,6 +171,22 @@ class Perfil extends React.Component {
         this.setState({
             page: 'Senha',
         })
+    }
+    mudarSenha = ()=>{
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.put(`/employees/reset-password`,{identifier:b._id})
+        .then((response) => {
+           
+            this.setState(
+                {   
+                    page: 'Perfil'
+                })
+                alert("Senha Alterada Para a Padrão")
+            
+        }).catch((err) => {
+            console.log(err);
+        });
     }
     //lembrar de terminar as funçoes changue
     changueObs(event) { this.setState({ obs: event.target.value }) }
@@ -782,41 +798,26 @@ class Perfil extends React.Component {
         if (this.state.page === 'Senha') {
             return (
                 <div className="container-fluid" >
-                    <div className="sub-heard-part" >
+                <div className="sub-heard-part" >
 
-                        <ol className="breadcrumb m-b-0" >
-                            <li > < a hre="/" > Home </a></li >
-                            <li > Vizualizar </li>
-                            <li > Perfil </li>
-                        </ol >
-                    </div>
-                    <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
-
-                        <div className="graph" >
-                            <h3 className="inner-tittle" > Mudar Senha</h3>
-                        </div>
-
-                    </div>
-                    <div className="col-md-12 col-sm-12 text-center">
-                        <div className="col-md-6 col-sm-12 text-center" >
-                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A SENHA ATUAL </b></h5>
-                                <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
-                            </div>
-                            <br></br>
-                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A NOVA SENHA </b></h5>
-                                <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
-
-                            </div>
-                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                <button onClick={() => this.setState({ page: 'Perfil', editar: false })} className="btn btn-md botao botaoAvançar" style={{}}> Alterar Senha</button>
-                            </div>
-                        </div>
-                    </div>
-
+                    <ol className="breadcrumb m-b-0" >
+                        <li > < a href="/" > Home </a></li >
+                        <li > Vizualizar </li>
+                        <li > Perfil </li>
+                    </ol >
                 </div>
+                <div className="graph-visual" >
+                    <h3 className="inner-tittle" > Vizualizar Perfil </h3>
+                    <div className="graph" >
+                        <h3 className="inner-tittle" style={{textAlign:"center"}} > Resetar Para Senha Padrão</h3>                            
+                        
+                        <br></br><br></br>
+                        <div className="text-center" >
+                            <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Resetar Senha</button>                                      
+                        </div>                              
+                    </div>                    
+                </div>
+            </div>
             );
         }
     }
