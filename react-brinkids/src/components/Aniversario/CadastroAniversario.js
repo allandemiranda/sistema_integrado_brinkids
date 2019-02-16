@@ -276,8 +276,8 @@ class CadastroAniversario extends React.Component {
     AddCrianca = (event) => {
         event.preventDefault();
         var erro = [];
-
-        if(this.state.NomeCrianca === ""){
+        var i = this.state.ListaCria.length;
+        if(this.state.NomeCrianca === "" && i <= this.QuantCrianca){
             $("#name").addClass('errorBorder');
             erro.push("Nome da criança não pode ser em branco.");
         }
@@ -308,9 +308,10 @@ class CadastroAniversario extends React.Component {
     AddAdulto = (event) => {
         event.preventDefault();
         var erro = [];
-        if(this.state.Adulto === ""){
+        var i = this.state.ListaAdul.length;
+        if(this.state.Adulto === "" && i <= this.state.QuantAdulto){
             $("#nameAdult").addClass('errorBorder');
-            erro.push("Nome do Adulto não pode ser em branco.");
+            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos excedida.");
         }
         else{
             $("#nameAdult").removeClass('errorBorder'); 
@@ -327,11 +328,88 @@ class CadastroAniversario extends React.Component {
             })
         }
     }
+
+    AddAdultoFinalizarLista = (event) => {
+        var erro = [];
+        var i = this.state.ListaAdul.length;
+        console.log(i);
+        if(this.state.Adulto === "" && i <= this.state.QuantAdulto){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos excedida.");
+        }
+        else{
+            $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
+                Adulto: "",
+            })
+        }
+    }
+    AddCriaFinalizarLista = (event) => {
+        var erro = [];
+
+        if(this.state.NomeCrianca === ""){
+            $("#name").addClass('errorBorder');
+            erro.push("Nome da criança não pode ser em branco.");
+        }
+        if(this.state.IdadeCrianca === ""){
+            $("#number").addClass('errorBorder');
+            erro.push("Idade da criança não pode ser em branco.");
+        }
+        //Remove Class
+        if(this.state.NomeCrianca != ""){
+            $("#name").removeClass('errorBorder');
+        }
+        if(this.state.IdadeCrianca != ""){
+            $("#number").removeClass('errorBorder');
+        }      
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca, type:"children",id:'"'}]}),
+                NomeCrianca: "",
+                IdadeCrianca: "",
+            })
+        }
+    }
+
+    CompletaListaCnv = (event) => {
+        console.log(this.state.QuantAdulto, this.state.ListaAdul.length);
+        var i = this.state.ListaAdul.length;
+        var j = this.state.ListaCria.length;
+        if(i < this.state.QuantAdulto || j < this.state.ListaCria){
+            this.setState({
+                Adulto: "LIVRE",
+                NomeCrianca: "LIVRE",
+                IdadeCrianca: "--",
+             });
+             this.AddAdultoFinalizarLista();
+             this.AddCriaFinalizarLista();             
+             setTimeout(_=>{
+                console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Adulto");
+                console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Crianca");
+                this.CompletaListaCnv();
+             },2000);
+        }
+    }
     VaiConfListCnv = (event) => {
         this.setState({
             page: "ConfListConv"
         })
+        this.CompletaListaCnv();
     }
+    
     VoltaFormList = () => {
         this.setState({
             page: "FormularioListaConv"
