@@ -354,8 +354,8 @@ class CadastroAniversario extends React.Component {
     }
     AddCriaFinalizarLista = (event) => {
         var erro = [];
-
-        if(this.state.NomeCrianca === ""){
+        var i = this.state.ListaCria.length;
+        if(this.state.NomeCrianca === "" && i <= this.state.QuantCrianca){
             $("#name").addClass('errorBorder');
             erro.push("Nome da criança não pode ser em branco.");
         }
@@ -385,7 +385,6 @@ class CadastroAniversario extends React.Component {
     }
 
     CompletaListaCnv = (event) => {
-        console.log(this.state.QuantAdulto, this.state.ListaAdul.length);
         var i = this.state.ListaAdul.length;
         var j = this.state.ListaCria.length;
         if(i < this.state.QuantAdulto || j < this.state.ListaCria){
@@ -393,23 +392,30 @@ class CadastroAniversario extends React.Component {
                 Adulto: "LIVRE",
                 NomeCrianca: "LIVRE",
                 IdadeCrianca: "--",
-             });
-             this.AddAdultoFinalizarLista();
-             this.AddCriaFinalizarLista();             
-             setTimeout(_=>{
+            });
+            if(i < this.state.QuantAdulto){
+                this.AddAdultoFinalizarLista();
+            }
+            if(j < this.state.QuantCrianca){
+                this.AddCriaFinalizarLista();  
+            }
+            setTimeout(_=>{
                 console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Adulto");
-                console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Crianca");
+                console.log(this.state.QuantAdulto, this.state.ListaCria.length, "Crianca");
                 this.CompletaListaCnv();
-             },2000);
+            },2000);
+        }
+        else {
+            this.CadAni();
         }
     }
+
     VaiConfListCnv = (event) => {
         this.setState({
             page: "ConfListConv"
         })
-        this.CompletaListaCnv();
     }
-    
+
     VoltaFormList = () => {
         this.setState({
             page: "FormularioListaConv"
@@ -434,6 +440,8 @@ class CadastroAniversario extends React.Component {
         formData.append('adults', String(this.state.QuantAdulto))
         
         let guestLista = this.state.ListaAdul.concat(this.state.ListaCria)
+        formData.append('guestList',guestLista)
+        formData.append('birthdayDate',moment(this.state.DataDoAni).format())
         
         const data={
             
@@ -454,7 +462,7 @@ class CadastroAniversario extends React.Component {
 
         }
         console.log(data)
-        console.log(this.state.DataDoAni)
+        console.log(formData);
         // Gabriel pegou as duas listas de adulto e criança, transformou numa lista só,
         // adicionou uma nova informação que vai precisar no banco de dados e enviou num único campo
         // chamado guestList
@@ -471,7 +479,8 @@ class CadastroAniversario extends React.Component {
         axios.post('/birthday', data)
         .then((response) =>{
             
-            console.log(response)
+            console.log(response);
+            this.props.history.push("/");
             
             
         }).catch( (error)=> {
@@ -484,36 +493,36 @@ class CadastroAniversario extends React.Component {
         })
     }
    
-    NovoCadAni = () => {
-        var formData = new FormData();
+    // NovoCadAni = () => {
+    //     var formData = new FormData();
 
-        formData.append('title', String(this.state.TituloDoAni))
-        formData.append('name', String(this.state.NomeDoAni))
-        formData.append('age', String(this.state.IdadeDoAni))
-        formData.append('start', String(this.state.HoraInicio))
-        formData.append('end', String(this.state.HoraFinal))
-        formData.append('description', String(this.state.DescriçãoDoAni))
-        formData.append('observations', String(this.state.ObsDoAni))
-        formData.append('value', String(this.state.ValorPg))
-        formData.append('method', String(this.state.MetodoPg))
-        formData.append('children', String(this.state.QuantCrianca))
-        formData.append('adults', String(this.state.QuantAdulto))
-        //--------Codigo Aqui------------
-        //formData.append('', String(this.state.UFLNasc))
+    //     formData.append('title', String(this.state.TituloDoAni))
+    //     formData.append('name', String(this.state.NomeDoAni))
+    //     formData.append('age', String(this.state.IdadeDoAni))
+    //     formData.append('start', String(this.state.HoraInicio))
+    //     formData.append('end', String(this.state.HoraFinal))
+    //     formData.append('description', String(this.state.DescriçãoDoAni))
+    //     formData.append('observations', String(this.state.ObsDoAni))
+    //     formData.append('value', String(this.state.ValorPg))
+    //     formData.append('method', String(this.state.MetodoPg))
+    //     formData.append('children', String(this.state.QuantCrianca))
+    //     formData.append('adults', String(this.state.QuantAdulto))
+    //     //--------Codigo Aqui------------
+    //     //formData.append('', String(this.state.UFLNasc))
     
-        axios.post('/birthdayParty', formData)
-        .then(function (response) {
-            console.log(response)
-            window.location.href = '/aniversario';
-        }).catch(function (error) {
-            console.log(error)//LOG DE ERRO
-            // alert("Erro no Cadastro");
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-            this.state.errocadastro = true;
-        })
-    }
+    //     axios.post('/birthdayParty', formData)
+    //     .then(function (response) {
+    //         console.log(response)
+    //         window.location.href = '/aniversario';
+    //     }).catch(function (error) {
+    //         console.log(error)//LOG DE ERRO
+    //         // alert("Erro no Cadastro");
+    //         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+    //         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+    //         //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+    //         this.state.errocadastro = true;
+    //     })
+    // }
 
     render() {
         if(this.state.page === "FormularioCad") {
@@ -785,8 +794,8 @@ class CadastroAniversario extends React.Component {
                         </div>
                         <div className="text-center">
                             <button className="btn btn-md botao botaoAvançar" onClick={this.VoltaFormList}>Voltar</button>
-                            <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadAni}>Novo Cadastro</button>
-                            <Link className="btn btn-md botao botaoAvançar" to="/" onClick={this.CadAni}>Finalizar</Link>
+                            {/* <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadAni}>Novo Cadastro</button> */}
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.CompletaListaCnv}>Finalizar</button>
                         </div> 
                     </div> 
                 </div>
