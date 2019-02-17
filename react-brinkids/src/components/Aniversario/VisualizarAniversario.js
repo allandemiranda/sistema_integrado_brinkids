@@ -345,7 +345,7 @@ class VisualizarAniversario extends React.Component {
             TituloDoAni: aniversarioAtual.title,
             NomeDoAni: aniversarioAtual.birthdayPerson.name,
             IdadeDoAni: aniversarioAtual.birthdayPerson.age,
-            DataDoAni: aniversarioAtual.birthdayDate,
+            DataDoAni: moment(aniversarioAtual.birthdayDate).format("YYYY-MM-DD"),
             HoraInicio: moment(aniversarioAtual.start).format("HH:mm"),
             HoraFinal: moment(aniversarioAtual.end).format("HH:mm"),
             QuantCrianca: aniversarioAtual.amount.children,
@@ -361,6 +361,7 @@ class VisualizarAniversario extends React.Component {
             ListaCria: listacria,
             ListaAdul: listaadult,
         })
+        console.log("Data do aniversario q devia aparecer: ",aniversarioAtual.birthdayDate )
     }
     requisicao(event) {
         axios.get('/birthday')
