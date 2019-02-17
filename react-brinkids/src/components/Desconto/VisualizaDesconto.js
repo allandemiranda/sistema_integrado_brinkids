@@ -22,6 +22,7 @@ class VisualizaDesconto extends React.Component {
             page: "VisualizarDesconto",
             Nome: "",
             list_descontos: [],
+            descontoExcluido:false,
         }
 
     }
@@ -78,6 +79,7 @@ class VisualizaDesconto extends React.Component {
             page: "VerDesconto",
             Nome: name,
         })
+        this.state.descontoExcluido = false;
     }
     ExcluirDesconto = (name) => {
         console.log("Fui Clicado");
@@ -95,7 +97,8 @@ class VisualizaDesconto extends React.Component {
                         // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                     })
 
-                alert("Desconto Excluido!");
+                //alert("Desconto Excluido!");
+                this.state.descontoExcluido = true;
             }).catch((error) => {
                 console.log(error);
                 alert("Erro encontrado: " + error);
@@ -105,12 +108,20 @@ class VisualizaDesconto extends React.Component {
         this.setState({
             page: "GeraDesconto"
         })
+        this.state.descontoExcluido = false;
     }
 
     render() {
         if (this.state.page === "VisualizarDesconto") {
             return (
                 <div className="container-fluid" >
+                    <div >
+                        {this.state.descontoExcluido  &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Desconto apagado com sucesso.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
