@@ -30,6 +30,7 @@ class Desconto extends Component {
             Date: "",
             list: [],
             erroDesconto:false,
+            descontoOK:false,
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -175,7 +176,7 @@ class Desconto extends Component {
                         dadosComprovante:response.data,
 
                     })
-
+                    this.state.descontoOK = true;
                 }).catch((error) => {
                     this.state.erroDesconto = true;
                     console.log(error)//LOG DE ERRO
@@ -243,7 +244,7 @@ class Desconto extends Component {
                                             <label className="radio-inline"><input type="radio" id="Fixo" name="TypeValue" value="Fixo" onClick={this.ChangeValue} /><p className="LetraFormulario">    Fixo</p></label>
                                             <br></br>
                                             <label className="LetraFormulario">Valor:</label>
-                                            <input className="form-control" type="number" id="Value" name="Value" value={this.state.Value} onChange={this.ChangeValue} />
+                                            <input className="form-control" type="number" min="0" id="Value" name="Value" value={this.state.Value} onChange={this.ChangeValue} />
                                         </div>
                                     </div>
                                 </div>
@@ -266,6 +267,13 @@ class Desconto extends Component {
         else if (this.state.page === "Temporaridade") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.descontoOK &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Desconto gerado com secesso.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
@@ -324,8 +332,8 @@ class Desconto extends Component {
                 <div className="container-fluid" >
                     <div className="container-fluid" >
                         {this.state.erroDesconto &&
-                            (<div className="alert lert-danger" role="alert">
-                                <strong>Ocorreu um erro ao gerar o desconto</strong>
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Ocorreu um erro ao gerar o desconto</strong>
                             </div>)
                         }
                     </div>
