@@ -42,7 +42,7 @@ class ComprovanteLogin extends React.Component {
             return (
                 <div style={{ display: 'none' }} id='print' className='conteudo' >
                 <div id="crianca" key={1}>
-                    <a class="trilha">--------------------------------------</a>
+                    <a class="trilha">-------------------------------------</a>
                     <a class="naoFiscal">***** NOVO FUNCIONÁRIO *****</a>
                     <div id="funcinário" className="textos">
                         <div>
@@ -63,7 +63,7 @@ class ComprovanteLogin extends React.Component {
                             <a id="hora">{moment().format("HH:mm")}</a>
                         </div>
                     </div>
-                    <a class="trilha">--------------------------------------</a>
+                    <a class="trilha">-------------------------------------</a>
                 </div>
                 </div>
             );
