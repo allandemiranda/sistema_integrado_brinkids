@@ -48,6 +48,9 @@ class EntradaAniversario extends React.Component {
             criancaDentro: [],
             listacriancaCombinacao: [],//lista e crianças apos atribuir os ids do sistema
             erroCadastro: false,
+            dadosComprovante:[],
+            comprovante:false,
+            nomeFunc:'',
         }
 
         //Relacionado a atualização dos valores Caminho
@@ -148,7 +151,9 @@ class EntradaAniversario extends React.Component {
         axios.get(`/employees/${b.id}`)
             .then((response) => {
                 let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-
+                this.setState({
+                    nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                })
 
 
                 axios.get(`/professionalPosition/indentifier/${id}`)
@@ -223,7 +228,7 @@ class EntradaAniversario extends React.Component {
     requisicao(event) {
         axios.get(`/birthday/a`)
             .then((response) => {
-                
+
                 if (response.data.length === 0) {
                     // alert("Nenhum aniversário encontrado")
                     this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
@@ -235,7 +240,7 @@ class EntradaAniversario extends React.Component {
                         let hj = moment().format();
                         let inicio = moment(event.start).format();
                         let fim = moment(event.end).format();
-                        console.log(hj, fim, inicio,event.start,event.end)
+                        console.log(hj, fim, inicio, event.start, event.end)
                         console.log(moment(hj).isBefore(fim), moment(hj).isAfter(inicio))
                         if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
                             temporario.push(event);
@@ -401,7 +406,7 @@ class EntradaAniversario extends React.Component {
 
         this.setState({
             listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "children", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name }] }),
-            comprovante: true,
+            
         })
 
         var listCria = [];
@@ -438,32 +443,47 @@ class EntradaAniversario extends React.Component {
         formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
+        formData.append('start', this.state.aniversariante[0].start)
+        formData.append('end', this.state.aniversariante[0].end)
+        formData.append('name', this.state.aniversariante[0].birthdayPerson.name)
 
         const data = {
             child: listaC,
             identifier: this.state.aniversariante[0]._id,
             id: this.state.adultoSelecionado._id,
         }
-        console.log(listaC)
+       
         axios.post('/product', formData)
             .then((response) => {
+                console.log(response.data)
+                this.setState({
+                    dadosComprovante: {
+                        i: response.data,
+                        funcionario: this.state.nomeFunc,
+                    }
+                })
+                
+               
 
-
+            }).then(()=>{
                 axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
-                    .then((response) => {
-                        console.log(response)
-                        this.setState({
-                            page: "SelecionarTipoDeEntrada"
-                        })
-                        this.requisicao();
-
-                    }).catch((error) => {
-                        console.log(error)//LOG DE ERRO
-                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                .then((response) => {
+                    
+                }).catch((error) => {
+                    console.log(error)//LOG DE ERRO
+                    console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                })
+               
+                
+            }).then(()=>{
+                setTimeout(()=>{
+                    this.setState({
+                        comprovante:true
                     })
-
+                   
+                },1000)
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -471,8 +491,8 @@ class EntradaAniversario extends React.Component {
                 alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
 
-        alert("Cadastrado");
-        this.requisicao();
+        // alert("Cadastrado");
+       
     }
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
 
@@ -637,8 +657,8 @@ class EntradaAniversario extends React.Component {
                 <div className="container-fluid" >
                     <div className="" >
                         {!this.state.algo &&
-                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }} >
-                                <strong style ={{color: 'white'}}>Nenhum evento está ocorrendo no momento.</strong>
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
+                                <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
                             </div>)
                         }
                     </div>
@@ -1112,7 +1132,7 @@ class EntradaAniversario extends React.Component {
                 <div className="container-fluid" >
                     <div className="container-fluid" >
                         {this.state.erroCadastro &&
-                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
                                 <strong>Ocorreu um erro no Cadastro</strong>
                             </div>)
                         }
@@ -1194,7 +1214,7 @@ class EntradaAniversario extends React.Component {
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
-                                                
+
                                                 <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
                                                     <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event)} >
@@ -1247,6 +1267,11 @@ class EntradaAniversario extends React.Component {
                         serviso="ANIVERSÁRIO"
 
                     /> */}
+                    {this.state.comprovante && (<Comprovant
+                        tabela={this.state.dadosComprovante}
+                        serviso="Aniversario"
+                        teste={this.state.comprovante}
+                    />)}
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.FinalizarCrianca}> Finalizar </button>

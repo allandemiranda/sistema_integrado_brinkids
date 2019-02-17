@@ -49,6 +49,9 @@ const productSchema = new mongoose.Schema({
   },
   belongings: Number,
   kinship:String,
+  birthdayStart:String,
+  birthdayEnd:String,
+  birthdayName:String,
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

@@ -83,6 +83,23 @@ class ComprovanteParcial extends React.Component {
                     <a>Restrições:</a>
                     <a id="restricoesTexto">{events.children.restrictions}</a>
                 </div>
+                {events.birthdayName != undefined && (<div id="aniversario">
+                    <br/>
+                        <div>
+                            <a>Aniversariante:</a>
+                            <a id="nome">{events.birthdayName}</a>
+                        </div>
+                        <div>
+                            <a>Início:</a>
+                            <a id="horaInicio">{moment(events.birthdayStart).format("HH:mm")} </a>
+                            <a> h</a>
+                            <div class="direita">
+                                <a>Finaliza:</a>
+                                <a id="horaFim">{moment(events.birthdayEnd).format("HH:mm")} </a>
+                                <a> h</a>
+                            </div>
+                        </div>
+                    </div>)}
                 <a>-</a>
             </div>
 

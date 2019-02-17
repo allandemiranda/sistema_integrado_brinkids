@@ -2,7 +2,7 @@ const express = require('express');
 const Discount = require('../models/discounts-models');
 const Logs = require('../models/logs-models')
 const config = require('../config');
-
+const Child = require('../models/child-models');
 const router = express.Router();
 
 const jwt = require('jsonwebtoken');
@@ -29,19 +29,96 @@ router.get('/', async (req, res) => {
   }
 });
 router.get('/verdesconto/:code', async (req, res) => {
-  try {
-    const discounts = await Discount.find({'_id': req.params.code});
+  let temporario = [];
+  const discounts = await Discount.findById({ '_id': req.params.code });
+  if (discounts.temporalityType === "Geral") {
+    if (discounts.to === "Child") {
+      discounts.codes.map((event, indice) => {
+        console.log(discounts.codes.length)
+        let child;
+        event.statusBroadlUser.map(async (mapa, index) => {
+          console.log(event.statusBroadlUser.length, "oiiiiii")
+          if (mapa.idUser != undefined) {
+            console.log("enteiiii")
+            child = await Child.findById({ '_id': mapa.idUser })
 
-    return res.json(discounts);
-  } catch (err) {
-    console.log(err);
-    return res.sendStatus(500);
+            temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: mapa.dateUser, to: discounts.to })
+
+          }
+
+        })
+      })
+
+    } else {
+      discounts.codes.map((event, indice) => {
+        console.log(discounts.codes.length)
+        let child;
+        event.statusBroadlUser.map(async (mapa, index) => {
+
+          if (mapa.idUser != undefined) {
+            console.log("enteiiii")
+            child = await adult.findById({ '_id': mapa.idUser })
+
+            temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: mapa.dateUser, to: discounts.to })
+
+          }
+
+        })
+      })
+    }
+  } else {
+    if (discounts.to === "Child") {
+      discounts.codes.map(async (event, indice) => {
+        console.log(discounts.codes.length)
+        let child;
+        
+          
+          if (event.statusUniqueUser != undefined) {
+            console.log("enteiiii")
+            child = await Child.findById({ '_id': event.statusUniqueUser })
+
+            temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: event.statusUniqueDate, to: discounts.to })
+
+          }
+
+        
+      })
+
+    } else {
+      discounts.codes.map(async (event, indice) => {
+        console.log(discounts.codes.length)
+        let child;
+        
+
+        if (event.statusUniqueUser != undefined) {
+          console.log("enteiiii")
+          child = await adult.findById({ '_id': event.statusUniqueUser })
+
+          temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: event.statusUniqueDate, to: discounts.to })
+
+        }
+
+        
+      })
+    }
   }
+  setTimeout(() => {
+    try {
+
+      console.log(temporario)
+      return res.json({ dados: temporario, desconto: discounts });
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
+  }, 200)
+
+
 });
 
 router.get('/filter/:code/:type', async (req, res) => {
   try {
-    const discounts = await Discount.find({ 'codes.numberCode': req.params.code,'to':req.params.type });
+    const discounts = await Discount.find({ 'codes.numberCode': req.params.code, 'to': req.params.type });
 
     return res.json(discounts);
   } catch (err) {
@@ -92,8 +169,8 @@ router.post('/', async (req, res) => {
         });
       } else {
         let temporario = []
-        for(var as = 1;as<=parseInt(req.body.amount, 10);as++){
-          temporario.push({numberCode: await numberCode(as),statusBroadlUser: []})
+        for (var as = 1; as <= parseInt(req.body.amount, 10); as++) {
+          temporario.push({ numberCode: await numberCode(as), statusBroadlUser: [] })
         }
         console.log(temporario)
         discount = new Discount({
@@ -106,9 +183,9 @@ router.post('/', async (req, res) => {
           value: parseInt(req.body.value, 10),
           temporalityType: req.body.temporalityType,
           validity: new Date(req.body.validity),
-          temporalityDate:req.body.temporalityDate,
-          
-          codes:temporario,
+          temporalityDate: req.body.temporalityDate,
+
+          codes: temporario,
         });
       }
 
@@ -139,16 +216,16 @@ router.delete('/filter/:identifier', async (req, res) => {
     const b = jwt.verify(a, config.secret_auth);
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
     const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-    
+
     const deletedService = await Discount.findByIdAndRemove(req.params.identifier);
-    
+
     const log = new Logs({
       activity: 'Desconto',
       action: 'Delete',
       dateOperation: new Date(),
       from: funcionario,
     })
-    
+
     const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);

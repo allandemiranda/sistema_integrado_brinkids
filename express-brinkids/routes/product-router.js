@@ -14,9 +14,9 @@ const router = express.Router();
 
 // Rota que devolve todos os produtos
 router.get('/', (req, res) => {
- 
- 
-//  console.log("Cookies: ", req.cookies.TOKEN_KEY) 
+
+
+  //  console.log("Cookies: ", req.cookies.TOKEN_KEY) 
   return Product.find(
     {}, // Como eu eu quero todos os dados, é necessário passar os parâmetros de busca em branco
     (err, productResult) => (err ? res.sendStatus(500) : res.status(200).json(productResult)),
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-console.log(req.body)
+  console.log(req.body)
   try {
     const adult = JSON.parse(req.body.adult);
 
@@ -49,50 +49,57 @@ console.log(req.body)
 
 
       const product = new Product({
-        children: {
-          id: child._id,
-          name: child.name,
-          birthday: new Date(child.birthday),
-          restrictions: child.restrictions,
-          observations: child.observations,
-        },
-        adult: {
-          id: adult._id,
-          name: adult.name,
-          phone: adult.phone,
-          observations: adult.observations,
-        },
-        photo: req.body.photo,
-        service: req.body.service,
-        time: new Date(req.body.time),
-        belongings: req.body.belongings,
-        kinship:child.kinship
+       
+        
+          children: {
+            id: child._id,
+            name: child.name,
+            birthday: new Date(child.birthday),
+            restrictions: child.restrictions,
+            observations: child.observations,
+          },
+          adult: {
+            id: adult._id,
+            name: adult.name,
+            phone: adult.phone,
+            observations: adult.observations,
+          },
+          photo: req.body.photo,
+          service: req.body.service,
+          time: new Date(req.body.time),
+          belongings: req.body.belongings,
+          kinship: child.kinship ,
+
+            birthdayStart:req.body.start,
+            birthdayEnd:req.body.end,
+            birthdayName:req.body.name,
+          
       });
       if (req.body.service === "Aniversario") {
-        
-        const log = new Logs({
-          activity: req.body.service,
-          action: 'Entrada',
-          dateOperation: new Date(),
-          from:funcionario, //ajsuta o id dps de fazer o login funcionar
-          to: adult.name,
-          cco:child.name,
-          timeLojaFirst: new Date(req.body.time),
-          id:child._id
 
-        })
-        const newLog = await log.save();
-      } else if (req.body.service === "Passaporte") {
-        
         const log = new Logs({
           activity: req.body.service,
           action: 'Entrada',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar
           to: adult.name,
-          cco:child.name,
+          cco: child.name,
           timeLojaFirst: new Date(req.body.time),
-          id:child._id,
+          id: child._id
+
+        })
+        const newLog = await log.save();
+      } else if (req.body.service === "Passaporte") {
+
+        const log = new Logs({
+          activity: req.body.service,
+          action: 'Entrada',
+          dateOperation: new Date(),
+          from: funcionario, //ajsuta o id dps de fazer o login funcionar
+          to: adult.name,
+          cco: child.name,
+          timeLojaFirst: new Date(req.body.time),
+          id: child._id,
 
 
         })
@@ -111,13 +118,13 @@ console.log(req.body)
           throw new Error(errFile);
         }
       });
-      
+
       return productSaved;
     });
 
     const productsSaved = await Promise.all(products);
 
-    console.log(productsSaved);
+   
 
     return res.status(201).json(productsSaved);
   } catch (err) {

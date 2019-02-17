@@ -277,7 +277,8 @@ class CadastroAniversario extends React.Component {
         event.preventDefault();
         var erro = [];
         var i = this.state.ListaCria.length;
-        if(this.state.NomeCrianca === "" && i <= this.QuantCrianca){
+        console.log(i < this.state.QuantCrianca);
+        if(this.state.NomeCrianca === ""){
             $("#name").addClass('errorBorder');
             erro.push("Nome da criança não pode ser em branco.");
         }
@@ -285,13 +286,20 @@ class CadastroAniversario extends React.Component {
             $("#number").addClass('errorBorder');
             erro.push("Idade da criança não pode ser em branco.");
         }
+        if((i+1) > this.state.QuantCrianca){
+            $("#name").addClass('errorBorder');
+            $("#number").addClass('errorBorder');
+            erro.push("Quantidade de Criança execidida.");
+            alert("Você já adicionou a quantidade maxima de pessoas na lista de criança");
+        }
         //Remove Class
-        if(this.state.NomeCrianca != ""){
+        if(this.state.NomeCrianca != "" && i < this.state.QuantCrianca){
             $("#name").removeClass('errorBorder');
         }
-        if(this.state.IdadeCrianca != ""){
+        if(this.state.IdadeCrianca != "" && i < this.state.QuantCrianca){
             $("#number").removeClass('errorBorder');
-        }      
+        }
+        console.log(erro.length);      
         if(erro.length > 0){
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
@@ -309,12 +317,18 @@ class CadastroAniversario extends React.Component {
         event.preventDefault();
         var erro = [];
         var i = this.state.ListaAdul.length;
-        if(this.state.Adulto === "" && i <= this.state.QuantAdulto){
+        console.log(i < this.state.QuantAdulto);
+        if(this.state.Adulto === ""){
             $("#nameAdult").addClass('errorBorder');
             erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos excedida.");
         }
         else{
             $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if((i+1) > this.state.QuantAdulto){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Quantidade de adultos excedida.");
+            alert("Você já adicionou a quantidade maxima de pessoas na lista de adulto");
         }
         if(erro.length > 0){
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
@@ -335,7 +349,7 @@ class CadastroAniversario extends React.Component {
         console.log(i);
         if(this.state.Adulto === "" && i <= this.state.QuantAdulto){
             $("#nameAdult").addClass('errorBorder');
-            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos excedida.");
+            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos na lista de convidados excedida.");
         }
         else{
             $("#nameAdult").removeClass('errorBorder'); 
@@ -357,7 +371,7 @@ class CadastroAniversario extends React.Component {
         var i = this.state.ListaCria.length;
         if(this.state.NomeCrianca === "" && i <= this.state.QuantCrianca){
             $("#name").addClass('errorBorder');
-            erro.push("Nome da criança não pode ser em branco.");
+            erro.push("Nome da criança não pode ser em branco ou Quantidade de crianças na lista de convidados foi excedida.");
         }
         if(this.state.IdadeCrianca === ""){
             $("#number").addClass('errorBorder');
@@ -391,7 +405,7 @@ class CadastroAniversario extends React.Component {
             this.setState({
                 Adulto: "LIVRE",
                 NomeCrianca: "LIVRE",
-                IdadeCrianca: "--",
+                IdadeCrianca: "0",
             });
             if(i < this.state.QuantAdulto){
                 this.AddAdultoFinalizarLista();

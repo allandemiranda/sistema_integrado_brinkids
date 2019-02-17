@@ -36,83 +36,25 @@ class VerDesconto extends React.Component {
         let temporario = [];
         axios.get(`/discount/verdesconto/${this.props.Nome}`)
             .then((response) => {
-                console.log("Dentro do axios: " + this, response.data)
-                console.log(response.data[0].codes.lenght)
-                const meme = response.data[0].codes.map(async(event, indice) => {
-
-                    if (response.data[0].temporalityType === "Geral") {
-                        event.statusBroadlUser.map(async (mapa, indez) => {
-                            let nome = '';
-                            console.log(event.idUser)
-                            if (event.idUser !== undefined) {
-                                if (response.data[0].to === "Child") {
-                                    console.log("entrei aki")
-                                    const listaCria = await axios.get(`child/indentifier/${mapa.idUser}`);
-                                    nome = listaCria.data.name.firstName + " " + listaCria.data.name.surName;
-                                    temporario.push({ numero: event.numberCode, name: nome, data: mapa.dateUser });
-                                    return nome
-                                } else {
-                                    const listaAdult = axios.get(`adult/${mapa.idUser}`);
-                                    nome = listaAdult.data.name.firstName + " " + listaAdult.data.name.surName;
-                                    temporario.push({ numero: event.numberCode, name: nome, data: mapa.dateUser });
-                                    return { numero: event.numberCode, name: nome, data: mapa.dateUser }
-                                }
-                            }
-
-                        })
-                    } else {
-                        let nome = "";
-                        if (response.data[0].to === "Child") {
-                            const listaCria = axios.get(`child/indentifier/${event.statusUniqueUser}`)
-                            nome = nome = listaCria.data.name.firstName + " " + listaCria.data.name.surName;
-                            temporario.push({
-                                numero: event.numberCode, name: nome, data: event.statusUniqueDate
-                            });
-
-                        } else {
-                            const listaAdult = axios.get(`adult/${event.statusUniqueUser}`)
-                            nome = listaAdult.data.name.firstName + " " + listaAdult.data.name.surName;
-                            temporario.push({
-                                numero: event.numberCode, name: nome, data: event.statusUniqueDate
-                            });
-
-                        }
-
-                    }
-
-
-                })
-                console.log(meme)
+               console.log(response.data);
 
                 this.setState({
 
-                    list: response.data,
-                    Name: response.data[0].name,
-                    Description: response.data[0].description,
-                    TypePeople: response.data[0].to,
-                    TypeValue: response.data[0].type,
-                    Value: response.data[0].value,
-                    Quant: response.data[0].amount,
-                    TypeCog: response.data[0].temporalityType,
-                    TypeTime: response.data[0].temporalityDate,
-                    Date: response.data[0].validity,
-                    codigos: response.data[0].codes
+                    list: response.data.dados,
+                    Name: response.data.desconto.name,
+                    Description: response.data.desconto.description,
+                    TypePeople: response.data.desconto.to,
+                    TypeValue: response.data.desconto.type,
+                    Value: response.data.desconto.value,
+                    Quant: response.data.desconto.amount,
+                    TypeCog: response.data.desconto.temporalityType,
+                    TypeTime: response.data.desconto.temporalityDate,
+                    Date: response.data.desconto.validity,
+                    codigos: response.data.desconto.codes
                 })
 
-                console.log(this.state.codigos)
-                return temporario
-            }).then((event) => {
-                console.log("entrep", event)
-                a = event
-                this.setState({
-                    stateuser: event,
-
-                })
-
-            }).then(() => {
-                this.setState({
-                    page: "Desconto"
-                })
+                
+            
             }).catch((error) => {
                 console.log("Não deu certo");
                 console.log(error)//LOG DE ERRO
@@ -123,7 +65,7 @@ class VerDesconto extends React.Component {
     }
 
     render() {
-        if (this.state.page === "Desconto") {
+        
             return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
@@ -200,16 +142,17 @@ class VerDesconto extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {a.map((desconto, indice) => {
-                                            console.log(desconto, a)
+                                        {this.state.list.map((desconto, indice) => {
+                                            
 
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td >{desconto.numero} </td>
-                                                    <td >{moment(desconto.dateUser).format("DD/MM/YYYY HH:mm")} </td>
-                                                    <td >{desconto.idUser} </td>
-                                                    <td >{this.state.TypePeople} </td>
+                                                    <td >{desconto.number} </td>
+                                                    <td >{moment(desconto.data).format("DD/MM/YYYY HH:mm")} </td>
+                                                    <td >{desconto.name} </td>
+                                                    {this.state.TypePeople === "Child" && (<td >Criança </td>)}
+                                                    {this.state.TypePeople === "Adultd" && (<td >Adulto </td>)}
                                                 </tr>
                                             );
                                         })}
@@ -252,11 +195,7 @@ class VerDesconto extends React.Component {
                     </div>
                 </div>
             )
-        } else {
-            return (
-                <div></div>
-            );
-        }
+        
     }
 }
 

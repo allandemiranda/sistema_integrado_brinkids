@@ -130,6 +130,7 @@ class VisualizaDesconto extends React.Component {
                                             <th>Para</th>
                                             <th>Tipo</th>
                                             <th>Valor</th>
+                                            <th>Intervalo</th>
                                             <th>Validade</th>
                                             <th></th>
                                         </tr>
@@ -145,6 +146,7 @@ class VisualizaDesconto extends React.Component {
                                                    {desconto.to ==="Adult" &&(<td id="paddingNome" >Adulto </td>)}
                                                     {<td id="paddingNome" >{desconto.type} </td>}
                                                     <td id="paddingNome" >{desconto.value} </td>
+                                                    <td id="paddingNome" >{desconto.temporalityDate} </td>
                                                     <td id="paddingNome" >{moment(desconto.validity).add(1, "days").format("DD/MM/YYYY")} </td>
                                                     <td >
                                                         <button className="btn botao btn-xs" onClick={() => this.VerDesconto(desconto._id)}><i className="fa fa-eye"></i></button>

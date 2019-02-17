@@ -79,20 +79,26 @@ class VisualizarAniversario extends React.Component {
     AddCrianca = (event) => {
         event.preventDefault();
         var erro = [];
-
+        var i = this.state.ListaCria.length;
         if (this.state.NomeCrianca === "") {
             $("#name").addClass('errorBorder');
-            erro.push("Nome da criança não pode ser em branco.");
+            erro.push("Nome da criança não pode ser em branco ou Quantidade de Crianças na lista de convidados foi excedida.");
         }
         if (this.state.IdadeCrianca === "") {
             $("#number").addClass('errorBorder');
             erro.push("Idade da criança não pode ser em branco.");
         }
+        if ((i + 1) > this.state.QuantCrianca) {
+            $("#name").addClass('errorBorder');
+            $("#number").addClass('errorBorder');
+            erro.push("Quantidade de Criança execidida.");
+            alert("Você já adicionou a quantidade maxima de pessoas na lista de criança");
+        }
         //Remove Class
-        if (this.state.NomeCrianca != "") {
+        if (this.state.NomeCrianca != "" && i < this.state.QuantCrianca) {
             $("#name").removeClass('errorBorder');
         }
-        if (this.state.IdadeCrianca != "") {
+        if (this.state.IdadeCrianca != "" && i < this.state.QuantCrianca) {
             $("#number").removeClass('errorBorder');
         }
         if (erro.length > 0) {
@@ -111,12 +117,18 @@ class VisualizarAniversario extends React.Component {
     AddAdulto = (event) => {
         event.preventDefault();
         var erro = [];
+        var i = this.state.ListaAdul.length;
         if (this.state.Adulto === "") {
             $("#nameAdult").addClass('errorBorder');
-            erro.push("Nome do Adulto não pode ser em branco.");
+            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos na lista de convidados excedida.");
         }
         else {
             $("#nameAdult").removeClass('errorBorder');
+        }
+        if ((i + 1) > this.state.QuantAdulto) {
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Quantidade de adultos excedida.");
+            alert("Você já adicionou a quantidade maxima de pessoas na lista de adulto");
         }
         if (erro.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
@@ -175,7 +187,7 @@ class VisualizarAniversario extends React.Component {
 
 
         }
-        console.log(data.start,typeof(data.start))
+        console.log(data.start, typeof (data.start))
         // let guestList = this.state.ListaAdul.concat(this.state.ListaCria)
         // this.state.ListaAdul.map((guest) => {
         //     guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
@@ -184,7 +196,7 @@ class VisualizarAniversario extends React.Component {
 
         // formData.append('guestList', JSON.stringify(guestList));
         console.log(data)
-        axios.put(`/birthday/${this.state.AniAtual._id}`,data)
+        axios.put(`/birthday/${this.state.AniAtual._id}`, data)
             .then((response) => {
 
 
@@ -244,7 +256,7 @@ class VisualizarAniversario extends React.Component {
                     .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
-       
+
     }
     voltar(event) {
         this.setState({
@@ -345,7 +357,7 @@ class VisualizarAniversario extends React.Component {
             TituloDoAni: aniversarioAtual.title,
             NomeDoAni: aniversarioAtual.birthdayPerson.name,
             IdadeDoAni: aniversarioAtual.birthdayPerson.age,
-            DataDoAni: moment(aniversarioAtual.birthdayDate).format("YYYY-MM-DD"),
+            DataDoAni: moment(aniversarioAtual.birthdayDate).format("MM/DD/YYYY"),
             HoraInicio: moment(aniversarioAtual.start).format("HH:mm"),
             HoraFinal: moment(aniversarioAtual.end).format("HH:mm"),
             QuantCrianca: aniversarioAtual.amount.children,
@@ -361,7 +373,7 @@ class VisualizarAniversario extends React.Component {
             ListaCria: listacria,
             ListaAdul: listaadult,
         })
-        console.log("Data do aniversario q devia aparecer: ",aniversarioAtual.birthdayDate )
+        console.log("Data do aniversario q devia aparecer: ", aniversarioAtual.birthdayDate)
     }
     requisicao(event) {
         axios.get('/birthday')
@@ -409,7 +421,7 @@ class VisualizarAniversario extends React.Component {
     componentWillMount() {
         this.Funcionario(14);
     }
-    changueHoraI=(event)=>{
+    changueHoraI = (event) => {
         this.setState({
 
         })
@@ -506,7 +518,7 @@ class VisualizarAniversario extends React.Component {
                             </div>
                             <div className="form-group" >
                                 <div className="row" >
-                                    <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Data do Aniversario: "} type={"date"} id={"Data"} name={"DataDoAni"} Class={"form-control"} value={this.state.DataDoAni} onChange={this.changue} />
+                                    <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Data do Aniversario: "} type={"date"} id={"Data"} name={"DataDoAni"} Class={"form-control"} value={moment(this.state.DataDoAni).format("YYYY-MM-DD")} onChange={this.changue} />
                                     <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Hora incial: "} type={"time"} id={"HI"} name={"HoraInicio"} Class={"form-control"} value={this.state.HoraInicio} onChange={this.changue} />
                                     <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Hora Final: "} type={"time"} id={"HF"} name={"HoraFinal"} Class={"form-control"} value={this.state.HoraFinal} onChange={this.changue} />
                                 </div>
