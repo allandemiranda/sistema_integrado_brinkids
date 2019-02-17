@@ -32,6 +32,7 @@ class Gerador extends React.Component {
             indice: '',
 
             listaeditave: [],
+            erroPrenchimento: false,
         }
         this.changueselect = this.changueselect.bind(this);
         this.selecionaFuncao = this.selecionaFuncao.bind(this);
@@ -60,45 +61,67 @@ class Gerador extends React.Component {
             
     }
     Salvar2(event) {
-        let temporario = this.state.listadecargos;
-        console.log(temporario[this.state.indice]);
-        let identifier = temporario[this.state.indice]._id;
-        temporario[this.state.indice] = {
-            name: this.state.Name,
-            description: this.state.Description,
-            class: this.state.class,
-            funcions: this.state.funcoescheck,
-        }
-        const data = {
-            name: this.state.Name,
-            description: this.state.Description,
-            classes: this.state.class,
-            functions: this.state.funcoescheck,
-        }
+        if (this.state.Name.length === 0 || this.state.Description.length === 0 ){
+            if (this.state.Name.length === 0){
+                if (this.state.Name.length === 0) {
+                    $("#Nome").addClass('errorBorder');
+                }
+                else {
+                    $("#Nome").removeClass('errorBorder');
+                }
+            }
+            if(this.state.Description.length === 0 ){
+                if (this.state.Description.length === 0) {
+                    $("#Description").addClass('errorBorder');
+                }
+                else {
+                    $("#Description").removeClass('errorBorder');
+                }
+            }
+            this.state.erroPrenchimento = true;
+        }else{
+            let temporario = this.state.listadecargos;
+            console.log(temporario[this.state.indice]);
+            let identifier = temporario[this.state.indice]._id;
+            temporario[this.state.indice] = {
+                name: this.state.Name,
+                description: this.state.Description,
+                class: this.state.class,
+                funcions: this.state.funcoescheck,
+            }
+            const data = {
+                name: this.state.Name,
+                description: this.state.Description,
+                classes: this.state.class,
+                functions: this.state.funcoescheck,
+            }
 
-        var formData = new FormData();
-        formData.append('name', this.state.Name);
-        formData.append('description', this.state.Description);
-        formData.append('classes', this.state.class);
-        formData.append('functions', this.state.funcoescheck);
+            var formData = new FormData();
+            formData.append('name', this.state.Name);
+            formData.append('description', this.state.Description);
+            formData.append('classes', this.state.class);
+            formData.append('functions', this.state.funcoescheck);
 
-        axios.put(`professionalPosition/${identifier}`, data)
-            .then((response) => {
-                console.log(response.data);
+            axios.put(`professionalPosition/${identifier}`, data)
+                .then((response) => {
+                    console.log(response.data);
 
+                })
+                .catch((err) => console.log(err));
+
+            this.setState({
+                editar: false,
+                Name: '',
+                Description: '',
+                Page: 'Lista',
+                class: 'Operacional',
+                listadecargos: temporario,
             })
-            .catch((err) => console.log(err));
-
-        this.setState({
-            editar: false,
-            Name: '',
-            Description: '',
-            Page: 'Lista',
-            class: 'Operacional',
-            listadecargos: temporario,
-        })
-        console.log(this.state.listadecargos);
+            console.log(this.state.listadecargos);
+            this.state.erroPrenchimento = false;
+        }
     }
+
     editar(event) {
         let temporario = this.state.listadecargos[event];
         console.log(temporario);
@@ -137,41 +160,61 @@ class Gerador extends React.Component {
 
     }
     Salvar(event) {
-        var formData = new FormData();
-        formData.append('name', this.state.Name);
-        formData.append('description', this.state.Description);
-        formData.append('classes', this.state.class);
-        formData.append('functions', this.state.funcoescheck);
-        const data = {
-            name: this.state.Name,
-            description: this.state.Description,
-            classes: this.state.class,
-            functions: this.state.funcoescheck,
+        if (this.state.Name.length === 0 || this.state.Description.length === 0 ){
+            if (this.state.Name.length === 0){
+                if (this.state.Name.length === 0) {
+                    $("#Nome").addClass('errorBorder');
+                }
+                else {
+                    $("#Nome").removeClass('errorBorder');
+                }
+            }
+            if(this.state.Description.length === 0 ){
+                if (this.state.Description.length === 0) {
+                    $("#Description").addClass('errorBorder');
+                }
+                else {
+                    $("#Description").removeClass('errorBorder');
+                }
+            }
+            this.state.erroPrenchimento = true;
+        }else{
+            var formData = new FormData();
+            formData.append('name', this.state.Name);
+            formData.append('description', this.state.Description);
+            formData.append('classes', this.state.class);
+            formData.append('functions', this.state.funcoescheck);
+            const data = {
+                name: this.state.Name,
+                description: this.state.Description,
+                classes: this.state.class,
+                functions: this.state.funcoescheck,
+            }
+            axios.post(`/professionalPosition`, data)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => console.log(err));
+    
+    
+            let listatemporaria = this.state.listadecargos;
+            listatemporaria.push({
+                class: this.state.class,
+                name: this.state.Name,
+                description: this.state.Description,
+                funcions: this.state.funcoescheck
+            });
+    
+            this.setState({
+                listadecargos: listatemporaria,
+                Name: '',
+                Description: '',
+                funcoescheck: [],
+                Page: 'Lista',
+                class: 'Operacional',
+            });
+            this.state.erroPrenchimento = false;
         }
-        axios.post(`/professionalPosition`, data)
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((err) => console.log(err));
-
-
-        let listatemporaria = this.state.listadecargos;
-        listatemporaria.push({
-            class: this.state.class,
-            name: this.state.Name,
-            description: this.state.Description,
-            funcions: this.state.funcoescheck
-        });
-
-        this.setState({
-            listadecargos: listatemporaria,
-            Name: '',
-            Description: '',
-            funcoescheck: [],
-            Page: 'Lista',
-            class: 'Operacional',
-        });
-
     }
     selecionaFuncao(event) {
         let achou = false;
