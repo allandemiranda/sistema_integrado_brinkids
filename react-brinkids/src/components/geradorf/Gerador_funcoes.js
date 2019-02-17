@@ -258,7 +258,7 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Gerenciador De Funções </li>
+                            <li > Gerenciador de Funcionários </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -324,7 +324,7 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Gerenciador De Funções </li>
+                            <li > Gerenciador de Funcionários </li>
                             <li > Lista De cargos </li>
                         </ol >
                     </div>
@@ -373,7 +373,7 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Gerenciador De Funções </li>
+                            <li > Gerenciador de Funcionários </li>
                             <li > Criar Novo Cargo</li>
                         </ol >
                     </div>
