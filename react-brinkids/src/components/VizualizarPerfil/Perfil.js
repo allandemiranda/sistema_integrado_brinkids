@@ -809,7 +809,7 @@ class Perfil extends React.Component {
                 <div className="graph-visual" >
                     <h3 className="inner-tittle" > Vizualizar Perfil </h3>
                     <div className="graph" >
-                        <h3 className="inner-tittle" style={{textAlign:"center"}} > Resetar Para Senha Padrão</h3>                            
+                        <h3 className="inner-tittle" style={{textAlign:"center"}} > Resetar para senha padrão (senha123)</h3>                            
                         
                         <br></br><br></br>
                         <div className="text-center" >
