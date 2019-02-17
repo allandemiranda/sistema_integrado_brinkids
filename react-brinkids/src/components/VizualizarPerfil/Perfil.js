@@ -182,7 +182,7 @@ class Perfil extends React.Component {
                 {   
                     page: 'Perfil'
                 })
-                alert("Senha Alterada Para a Padrão")
+                alert("Senha alterada para a padrão")
             
         }).catch((err) => {
             console.log(err);
