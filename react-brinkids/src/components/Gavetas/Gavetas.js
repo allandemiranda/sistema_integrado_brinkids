@@ -82,7 +82,7 @@ class Gaveta extends React.Component {
                 <div className="sub-heard-part" >
                     <ol className="breadcrumb m-b-0" >
                         <li > < a href="/" > Home </a></li >
-                        <li > gavetas </li>
+                        <li > Gavetas </li>
                     </ol >
                 </div>
                 <div className="graph-visual" >
