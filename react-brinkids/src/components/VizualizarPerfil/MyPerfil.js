@@ -85,7 +85,7 @@ class MeuPerfil extends React.Component {
                 identifier: b._id,
                 password: this.state.senhaNova,
             };
-            alert("Por Favor Faça Login Novamente")
+            alert("Por favor, é necessário fazer um novo Login no sistema.")
             axios.put(`/employees/password`, data)
                 .then((response) => {
                     logout()
@@ -302,11 +302,11 @@ class MeuPerfil extends React.Component {
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
                             <li > Vizualizar </li>
-                            <li > Perfil </li>
+                            <li > Meu Perfil </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil  </h3>
+                        <h3 className="inner-tittle" > Meu Perfil  </h3>
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
@@ -344,14 +344,14 @@ class MeuPerfil extends React.Component {
                                 </div>
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> LOGIN </b></h5>
+                                        <h5 className="ltTitulo" ><b> Login: </b></h5>
                                         <p>{this.state.user}</p>
                                     </div>
                                     <br></br>
 
 
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
+                                        <h5 className="ltTitulo" ><b> Status do Usuário:  </b></h5>
                                         <p>Ativo</p>
                                     </div><br />
                                 </div>
@@ -530,11 +530,11 @@ class MeuPerfil extends React.Component {
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
                             <li > Vizualizar </li>
-                            <li > Perfil </li>
+                            <li > Meu Perfil </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil </h3>
+                        <h3 className="inner-tittle" > Meu Perfil </h3>
                         <div className="graph" >
                             <h3 className="inner-tittle" > Mudar Senha</h3>                            
                             <div className="col-md-6 col-sm-12 text-center" >
