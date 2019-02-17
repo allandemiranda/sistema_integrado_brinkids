@@ -35,6 +35,7 @@ class ServicoPassaporte extends React.Component {
             tudoOK: true,
             erroC: 0,
             mensApa:false,
+            salvarCerto:false,
         }
         this.changueNome = this.changueNome.bind(this);
         this.changueDescricao = this.changueDescricao.bind(this);
@@ -257,17 +258,17 @@ class ServicoPassaporte extends React.Component {
                 console.log(response)
                 this.requisicao();
                 //window.location.href = '/ServicoPassaporte';
+                this.state.salvarCerto = true;
+                this.state.mensApa = false;
             }).catch( (error)=> {
                 console.log(error)//LOG DE ERRO
                 alert("Erro no Cadastro");
-                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
 
     Apagar = (event) => {
         this.state.mensApa = true;
+        this.state.salvarCerto = false;
         const id = this.state.list[this.state.list.length - 1]._id;
         axios.delete(`/passportServices/${id}`)
             .then((response) => {
@@ -312,8 +313,15 @@ class ServicoPassaporte extends React.Component {
                 <div className="container-fluid" >
                     <div >
                         {this.state.mensApa  &&
-                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
                                 <strong style={{ color: 'white' }}>Serviço apagado com sucesso.</strong>
+                            </div>)
+                        }
+                    </div>
+                    <div >
+                        {this.state.salvarCerto  &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Tempo excedente salvo com sucesso.</strong>
                             </div>)
                         }
                     </div>
