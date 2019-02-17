@@ -465,7 +465,7 @@ class Perfil extends React.Component {
 
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
+                        <h3 className="inner-tittle" >  </h3>
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil </h3>
@@ -504,14 +504,14 @@ class Perfil extends React.Component {
                                 </div>
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> LOGIN </b></h5>
+                                        <h5 className="ltTitulo" ><b> Login </b></h5>
                                         <p>{this.state.user}</p>
                                     </div>
                                     <br></br>
 
 
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
+                                        <h5 className="ltTitulo" ><b> Status no Sistema  </b></h5>
                                         <p>Ativo</p>
                                     </div><br />
                                 </div>

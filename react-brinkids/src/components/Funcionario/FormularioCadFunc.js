@@ -803,7 +803,7 @@ class FormularioCadFunc extends React.Component {
                             </div >
                             <br></br>
                             <div className="graph" >
-                                <h3 className="inner-tittle" > Funcionario </h3>
+                                <h3 className="inner-tittle" > Funcionário </h3>
                                 <div className="row">
                                     {/* <TypesInput cod={3} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Cargo Atual:"} id={"CargAtual"} name={"CargAtual"} Class={"form-control optionFomulario"} value={this.state.CargAtual} onChange={this.ChangeCargAtual}
                                         //VALORES QUE AS OPTIONS IRAM RECEBER, VAO DENTRO DO "valueOP" EM FORMA DE VETOR DE OBJETOS.

@@ -334,7 +334,7 @@ class ConfirmaFuncionario extends React.Component {
                         </div>
                     </div >
                     <div className = "graph" >
-                        <h3 className = "inner-tittle" > Funcionario </h3>
+                        <h3 className = "inner-tittle" > Funcionário </h3>
                         <div className="row">
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style = {{ padding:10 + "px"}}>
