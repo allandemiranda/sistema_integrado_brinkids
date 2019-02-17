@@ -357,7 +357,7 @@ class VisualizarAniversario extends React.Component {
             TituloDoAni: aniversarioAtual.title,
             NomeDoAni: aniversarioAtual.birthdayPerson.name,
             IdadeDoAni: aniversarioAtual.birthdayPerson.age,
-            DataDoAni: aniversarioAtual.birthdayDate,
+            DataDoAni: moment(aniversarioAtual.birthdayDate).format("MM/DD/YYYY"),
             HoraInicio: moment(aniversarioAtual.start).format("HH:mm"),
             HoraFinal: moment(aniversarioAtual.end).format("HH:mm"),
             QuantCrianca: aniversarioAtual.amount.children,
@@ -517,7 +517,7 @@ class VisualizarAniversario extends React.Component {
                             </div>
                             <div className="form-group" >
                                 <div className="row" >
-                                    <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Data do Aniversario: "} type={"date"} id={"Data"} name={"DataDoAni"} Class={"form-control"} value={this.state.DataDoAni} onChange={this.changue} />
+                                    <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"Data do Aniversario: "} type={"date"} id={"Data"} name={"DataDoAni"} Class={"form-control"} value={moment(this.state.DataDoAni).format("YYYY-MM-DD")} onChange={this.changue} />
                                     <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Hora incial: "} type={"time"} id={"HI"} name={"HoraInicio"} Class={"form-control"} value={this.state.HoraInicio} onChange={this.changue} />
                                     <TypesInput cod={1} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Hora Final: "} type={"time"} id={"HF"} name={"HoraFinal"} Class={"form-control"} value={this.state.HoraFinal} onChange={this.changue} />
                                 </div>
