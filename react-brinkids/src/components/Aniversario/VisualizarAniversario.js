@@ -43,6 +43,7 @@ class VisualizarAniversario extends React.Component {
             Adulto: "",
             ListaCria: [],
             ListaAdul: [],
+            
         }
         this.requisicao = this.requisicao.bind(this);
         this.editar = this.editar.bind(this);
