@@ -96,7 +96,7 @@ class MeuPerfil extends React.Component {
             const a = getToken();
             const b = jwt.verify(a, config.secret_auth);
             console.log(b);
-            alert("senhas diferentes, tente de novo")
+            alert("Senha atual incorreta, tente novamente.")
         }
     }
     sair=()=>{
