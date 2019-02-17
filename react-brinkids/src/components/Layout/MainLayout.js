@@ -296,7 +296,7 @@ class MainLayout extends React.Component {
                     <div className="clearfix" ></div>
                 </div>
             );
-        } else { return (<div>espere</div>); }
+        } else { return (<div>Carregando página...</div>); }
     }
 }
 
