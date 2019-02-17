@@ -468,7 +468,7 @@ class Perfil extends React.Component {
                         <h3 className="inner-tittle" >  </h3>
 
                         <div className="graph" >
-                            <h3 className="inner-tittle" > Perfil </h3>
+                            <h3 className="inner-tittle" > Perfil Funcionário</h3>
                             <div className="row">
 
 
