@@ -347,8 +347,6 @@ class PerfilCrianca extends React.Component {
 
         if (this.state.page === 'Busca') {
             return (
-
-                <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
@@ -444,7 +442,7 @@ class PerfilCrianca extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Criança </h3>
+                        <h3 className="inner-tittle" > Visualizar Perfil Criança </h3>
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
@@ -458,10 +456,10 @@ class PerfilCrianca extends React.Component {
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                     {this.state.editar && (
                                         <div>
-                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec', color: "white" }}><label>
+                                                <span style={{ color:'white' }} className="glyphicon">Trocar imagem &#xe065;</span>
 
-                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                <input id="tipofile" style={{ color:'white' }} type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button><br /></div>)
                                     }
@@ -484,7 +482,7 @@ class PerfilCrianca extends React.Component {
 
                             <div className="col-md-4 col-sm-6 col-xs-12" >
                                 <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo"><b>  Numero de Registro: </b> </h5>
+                                    <h5 className="ltTitulo"><b>  Número de Registro: </b> </h5>
                                     {!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
                                     {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="number" onChange={this.changue} value={this.state.number} />)}
                                 </div>

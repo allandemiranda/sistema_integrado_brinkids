@@ -13,19 +13,20 @@ class Gaveta extends React.Component {
         super(props)
         this.state = {
             Ngavetas: '',
+            cadastroOK:false,
         }
         this.Change = this.Change.bind(this);
         this.salvar = this.salvar.bind(this);
 
     }
     salvar(event){
-        
          axios.put('/belongings', {number: this.state.Ngavetas})
             .then((response) => {
 
                 this.setState({ Ngavetas: response.data[0].number });
             })
             .catch((err) => console.log(err));
+        this.state.cadastroOK = true;
     }
     Change(event) {
         this.setState({
@@ -75,10 +76,17 @@ class Gaveta extends React.Component {
     componentWillMount() {
         this.Funcionario(29);
     }
-    
+
     render() {
         return (
             <div className="container-fluid" >
+                <div className="" >
+                    {this.state.cadastroOK &&
+                        (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                            <strong style={{ color: 'white' }}>Salvo com sucesso.</strong>
+                        </div>)
+                    }
+                </div>
                 <div className="sub-heard-part" >
                     <ol className="breadcrumb m-b-0" >
                         <li > < a href="/" > Home </a></li >
@@ -92,7 +100,7 @@ class Gaveta extends React.Component {
                                 <h3 className="inner-tittle " >Nº.gavetas</h3>
                             </div>
                             <div className=" text-center">
-                                <input type="number" id="selectAdult" name="Ngavetas" className="form-control text-center" value={this.state.Ngavetas} onChange={this.Change} />
+                                <input type="number" id="selectAdult" min="0" name="Ngavetas" className="form-control text-center" value={this.state.Ngavetas} onChange={this.Change} />
                                 <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.salvar}> Salvar </button>
                             </div>
                         </div>

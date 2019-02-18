@@ -798,7 +798,7 @@ class DashBoard extends React.Component {
 						</ol >
 					</div>
 					<div className="graph-visual" >
-						<h3 className="inner-tittle" > Vizualizar Perfil Criança </h3>
+						<h3 className="inner-tittle" > Visualizar Perfil Criança </h3>
 
 						<div className="graph" >
 							<h3 className="inner-tittle" > Perfil

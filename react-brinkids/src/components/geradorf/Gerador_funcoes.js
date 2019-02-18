@@ -403,7 +403,7 @@ class Gerador extends React.Component {
                             </table>
                         </div>
                         <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Novo' })}>
-                            Criar Novo Cargo
+                            Editar Cargo
                                 </button>
                         <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Lista' })}>Voltar</button>
                     </div>
@@ -417,11 +417,11 @@ class Gerador extends React.Component {
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
                             <li > Gerenciador de Funcionários </li>
-                            <li > Criar Novo Cargo</li>
+                            <li > Editar Cargo</li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" >Novo Cargo</h3>
+                        <h3 className="inner-tittle" >Editar Cargo</h3>
                         <form>
                             <div className="graph" >
                                 <div className="form-group">

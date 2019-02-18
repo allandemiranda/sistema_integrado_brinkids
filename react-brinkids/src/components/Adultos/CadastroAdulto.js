@@ -768,7 +768,7 @@ class CadastroAdulto extends React.Component {
             var Nome = this.state.firstName + " " + this.state.surName;
             return (
                 <div className="container-fluid">
-                    <div className="container-fluid" >
+                    <div className="" >
                         {this.state.erroL &&
                             (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
                                 <strong style ={{color: 'white'}}>Ocorreu um erro no Cadastro</strong>
