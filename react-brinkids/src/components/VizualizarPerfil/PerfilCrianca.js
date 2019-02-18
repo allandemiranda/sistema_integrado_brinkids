@@ -347,6 +347,7 @@ class PerfilCrianca extends React.Component {
 
         if (this.state.page === 'Busca') {
             return (
+                <div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
