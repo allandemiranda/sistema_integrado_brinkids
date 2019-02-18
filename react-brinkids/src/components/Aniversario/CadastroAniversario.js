@@ -277,7 +277,6 @@ class CadastroAniversario extends React.Component {
         event.preventDefault();
         var erro = [];
         var i = this.state.ListaCria.length;
-        console.log(i < this.state.QuantCrianca);
         if(this.state.NomeCrianca === ""){
             $("#name").addClass('errorBorder');
             erro.push("Nome da criança não pode ser em branco.");
@@ -298,8 +297,7 @@ class CadastroAniversario extends React.Component {
         }
         if(this.state.IdadeCrianca != "" && i < this.state.QuantCrianca){
             $("#number").removeClass('errorBorder');
-        }
-        console.log(erro.length);      
+        }     
         if(erro.length > 0){
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
@@ -317,7 +315,6 @@ class CadastroAniversario extends React.Component {
         event.preventDefault();
         var erro = [];
         var i = this.state.ListaAdul.length;
-        console.log(i < this.state.QuantAdulto);
         if(this.state.Adulto === ""){
             $("#nameAdult").addClass('errorBorder');
             erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos excedida.");
@@ -401,7 +398,9 @@ class CadastroAniversario extends React.Component {
     CompletaListaCnv = (event) => {
         var i = this.state.ListaAdul.length;
         var j = this.state.ListaCria.length;
-        if(i < this.state.QuantAdulto || j < this.state.ListaCria){
+        console.log(i,this.state.QuantAdulto, "Adulto Começo");
+        console.log(j,)
+        if(i < this.state.QuantAdulto || j < this.state.QuantCrianca){
             this.setState({
                 Adulto: "LIVRE",
                 NomeCrianca: "LIVRE",
@@ -415,7 +414,7 @@ class CadastroAniversario extends React.Component {
             }
             setTimeout(_=>{
                 console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Adulto");
-                console.log(this.state.QuantAdulto, this.state.ListaCria.length, "Crianca");
+                console.log(this.state.QuantCrianca, this.state.ListaCria.length, "Crianca");
                 this.CompletaListaCnv();
             },2000);
         }
