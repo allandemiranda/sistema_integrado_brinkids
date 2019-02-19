@@ -401,7 +401,7 @@ class Calendar extends React.Component {
   }
 
   render() {
-
+    const localizer = BigCalendar.momentLocalizer(moment) // or globalizeLocalizer
     if (this.state.page === "Calendario") {
       return (
         /*  COMPONENTE CALENDARIO DO REACT */
@@ -415,8 +415,11 @@ class Calendar extends React.Component {
 
           {this.state.calendario &&
             (<BigCalendar
+            
+              localizer={localizer}
               selectable
               events={this.state.datasRequisicao}
+              
               defaultView={BigCalendar.Views.WEEK}
               scrollToTime={new Date(1970, 1, 1, 6)}
               defaultDate={new Date()}

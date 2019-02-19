@@ -326,7 +326,7 @@ class SaidaCrianca extends React.Component {
 
     //FUNÇÃO QUE FAZ PASSAR AS CRIANÇAS 
     ProximaCria = () => {
-
+        console.log(this.state.CriancasSelecionadas)
         if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)) {
 
             //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
@@ -343,17 +343,28 @@ class SaidaCrianca extends React.Component {
                 }
 
             })
-            this.setState({
-                TotalValor: (j).toFixed(2),
-                TotalValorDesc: (k).toFixed(2),
-                FinalValor: (j - k).toFixed(2),
-                page: "FinalizarSaida",
-                CodDes: "",
-            })
+            if (k > j) {
+                this.setState({
+                    TotalValor: (j).toFixed(2),
+                    TotalValorDesc: (k).toFixed(2),
+                    FinalValor: (0).toFixed(2),
+                    page: "FinalizarSaida",
+                    CodDes: "",
+                })
+            } else {
+                this.setState({
+                    TotalValor: (j).toFixed(2),
+                    TotalValorDesc: (k).toFixed(2),
+                    FinalValor: (j - k).toFixed(2),
+                    page: "FinalizarSaida",
+                    CodDes: "",
+                })
+            }
 
         } else {
             this.setState({
                 indice: this.state.indice + 1,
+                CodDes: "",
             })
         }
 
@@ -646,14 +657,14 @@ class SaidaCrianca extends React.Component {
                 var comprovante = [];
                 if (temporarios.hasOwnProperty('codigos')) {
                     console.log(entradas)
-                    
-                        temporarios.forEach((event, indice, array) => {
-                            
-                            delete array[indice].crianca.photo 
-                         
-                        })
-                        delete temporarios.desconto.crianca.photo;
-                  
+
+                    temporarios.forEach((event, indice, array) => {
+
+                        delete array[indice].crianca.photo
+
+                    })
+                    delete temporarios.desconto.crianca.photo;
+
 
                     delete temporarios.crianca.photo;
                     comprovante = {
@@ -672,14 +683,14 @@ class SaidaCrianca extends React.Component {
                 }
                 else {
                     temporarios.forEach((event, indice, array) => {
-                            
-                        delete array[indice].crianca.photo 
-                     
+
+                        delete array[indice].crianca.photo
+
                     })
-                   delete entradas.children.photo
+                    delete entradas.children.photo
 
 
-                   
+
                     delete entradas.photo
                     comprovante = {
 
@@ -695,12 +706,12 @@ class SaidaCrianca extends React.Component {
                         valorcria: parseFloat(this.state.CriancasSelecionadas[i].infocrianca.value)
                     }
                 }
-                
+
                 temporario.push(comprovante);
-                console.log(temporarios,temporario)
+                console.log(temporarios, temporario)
 
             }
-            console.log(temporarios,temporario)
+            console.log(temporarios, temporario)
             axios.post(`/passport/a/`, temporario)
                 .then((response) => {
 
