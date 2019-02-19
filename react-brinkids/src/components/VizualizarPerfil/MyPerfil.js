@@ -175,7 +175,7 @@ class MeuPerfil extends React.Component {
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
-
+                console.log(response.data)
             })
             .catch((err) => console.log(err));
         listatemporaria.address.number = this.state.numero;
@@ -284,6 +284,7 @@ class MeuPerfil extends React.Component {
 
                             reader.onload = function (e) {
                                 fotopreview.src = e.target.result;
+                                foto = e.target.result;
                             }
 
                             reader.readAsDataURL(files[0]);

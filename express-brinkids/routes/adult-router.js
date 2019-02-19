@@ -256,6 +256,7 @@ router.put('/:identifier', async (req, res) => {
     }
 
     if (req.files) {
+      console.log("mudar foto",req.files)
       return req.files.photo.mv(
         config.pathPublic() + adultModified.photo, // Nome do arquivo
         errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),

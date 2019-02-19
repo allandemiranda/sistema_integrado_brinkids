@@ -9,7 +9,7 @@ const adult = require('../models/adult-models');
 const moment = require('moment');
 router.get('/', async (req, res) => {
   try {
-    const parties = await BirthdayParty.find({});
+    const parties = await BirthdayParty.find({}).sort({birthdayDate:-1});
 
     return res.status(200).json(parties);
   } catch (err) {

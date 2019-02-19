@@ -320,7 +320,7 @@ class GerenciamentoFinanceiro extends React.Component {
                 })
                 
                 const temporario = {
-                    name:  nome= moment(lista[total]).format("DD/MM"), Passaporte: passaporte, Aniversario: aniversario, ServiçoProduto: servicoproduto, Total: passaporte + aniversario + servicoproduto
+                    name:  nome= moment(lista[total]).format("DD/MM"), Passaporte: passaporte.toFixed(2), Aniversario: aniversario.toFixed(2), ServiçoProduto: servicoproduto.toFixed(2), Total: (passaporte + aniversario + servicoproduto).toFixed(2)
                 }
 
                 total++;

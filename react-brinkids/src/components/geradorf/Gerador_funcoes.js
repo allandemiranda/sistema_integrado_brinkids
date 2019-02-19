@@ -199,7 +199,7 @@ class Gerador extends React.Component {
     
             let listatemporaria = this.state.listadecargos;
             listatemporaria.push({
-                class: this.state.class,
+                classes: this.state.class,
                 name: this.state.Name,
                 description: this.state.Description,
                 funcions: this.state.funcoescheck
@@ -255,7 +255,7 @@ class Gerador extends React.Component {
 
         axios.put('/employees/rota', formData)
             .then(function (response) {
-                console.log(response.data)
+               
                 // window.location.href = '/funcionario';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
@@ -268,7 +268,7 @@ class Gerador extends React.Component {
         
         if(this.state.clikado){
            
-            console.log("entrei no habilitando todos")
+            
             this.setState({
                 funcoescheck:this.state.listafuncoes,
                 clikado:false,
@@ -278,7 +278,7 @@ class Gerador extends React.Component {
                 funcoescheck:[],
                 clikado:true,
             })
-            console.log("entrei no desahabilitando todos")
+            
             
         }
         $(document).on('change', '.checkDoc', function () {
@@ -403,13 +403,14 @@ class Gerador extends React.Component {
                             </table>
                         </div>
                         <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Novo' })}>
-                            Editar Cargo
+                            Criar Novo Cargo
                                 </button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Lista' })}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Lista', Name: '',Description: '',funcoescheck: [], class: 'Operacional', })}>Voltar</button>
                     </div>
                 </div>
             );
         }
+        
         if (this.state.Page === 'Novo') {
             return (
                 <div className="container-fluid" >
@@ -441,7 +442,7 @@ class Gerador extends React.Component {
                                             <select type="select" name="class" className=" form-control col-md-4 col-sm-8 col-xs-12 " value={this.state.class} onChange={this.changue} style={{ height: 47 + 'px' }}>
                                                 <option value="Operacional">Operacional</option>
                                                 <option value="Administrativo">Adminitrativo</option>
-                                                <option value="Estrategico">Estrategico</option>
+                                                <option value="Estrategico">Estratégico</option>
                                             </select>
                                         </div>
                                     </div>
@@ -481,8 +482,8 @@ class Gerador extends React.Component {
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <Link className="btn btn-md botao" to="/">Cancelar</Link>
-                                <input type="button" value="Voltar" className="btn btn-md botao botaoAvançar" onClick={()=>this.setState({Page:'Cargos'})}/>
+                                
+                                <input type="button" value="Voltar" className="btn btn-md botao botaoAvançar" onClick={()=>this.setState({Page:'Cargos', Name: '',Description: '',funcoescheck: [], class: 'Operacional',editar:false})}/>
                                 {!this.state.editar && (<input type="button" value="Salvar" className="btn btn-md botao botaoAvançar" onClick={this.Salvar}/>)}
                                 {this.state.editar && (<input type="button" value="Salvar"  className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}/>)}
                             </div>

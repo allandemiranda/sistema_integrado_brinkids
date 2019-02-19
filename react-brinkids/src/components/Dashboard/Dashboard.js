@@ -291,8 +291,7 @@ class DashBoard extends React.Component {
 			return (
 
 				<div className="container-fluid" >
-					<script src="js/jquery-1.10.2.min.js"></script>
-					<script type="text/javascript" src="js/modernizr.custom.04022.js"></script>
+					
 
 
 					<div className="sub-heard-part" >
@@ -331,7 +330,7 @@ class DashBoard extends React.Component {
 									</ul>
 								</nav>
 								<div className="content tab">
-									<section className={this.state.sectionCrianca}  >
+									<section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionCrianca}  >
 
 										<div className="graph graph-visual tables-main">
 											<div className="tables">
@@ -394,7 +393,7 @@ class DashBoard extends React.Component {
 											/>)}
 										</div>
 									</section>
-									<section className={this.state.sectionBaby}>
+									<section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionBaby}>
 										<div className="graph graph-visual tables-main">
 											<div className="tables">
 												<table className="table table-hover">
@@ -455,7 +454,7 @@ class DashBoard extends React.Component {
 											/>)}
 										</div>
 									</section>
-									<section className={this.state.sectionAniversario}>
+									<section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionAniversario}>
 										<div className="graph graph-visual tables-main">
 											<div className="tables">
 												<table className="table table-hover">

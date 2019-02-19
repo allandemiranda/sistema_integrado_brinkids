@@ -347,11 +347,22 @@ class Perfil extends React.Component {
 
     }
     SearchFuncionario(event) {
-       
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        
         axios.get(`/employees/search/${this.state.selectedSearch}`)
             .then((response) => {
+                let temporario = response.data;
+                temporario.map((event,indice)=>{
+                  
+                    if(event._id===b.id){
+                       temporario.splice(indice,1)
+                    }
+                })
                 
-                this.setState({ list: response.data });
+                return temporario;
+            }).then((event)=>{
+                this.setState({ list: event });
             }).catch((err) => {
                 console.log(err);
             });
