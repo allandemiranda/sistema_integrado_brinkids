@@ -113,7 +113,7 @@ class EntradaAniversario extends React.Component {
         }
         else if (event.target.value === "children") {
             this.setState({
-                kinship: "filho(a)"
+                kinship: "Filho(a)"
             })
 
         }
@@ -601,7 +601,6 @@ class EntradaAniversario extends React.Component {
 
     // Faz a busca do responsável:
     SearchAdult(nomeadult, event) {
-        if (nomeadult.length >= 7) {
             $.ajax({
                 url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
                 dataType: 'json',
@@ -620,10 +619,6 @@ class EntradaAniversario extends React.Component {
                     }
                 }.bind(this)
             });
-        }
-        else {
-            console.log("Número de caracteres menor do que 7!")
-        }
     }
 
     //Bloco que muda o status para o atual do formulario.

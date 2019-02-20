@@ -408,7 +408,7 @@ class Calendar extends React.Component {
 
         <div>
 
-          <button className="modal1" type="button" onClick={this.openModal} >adicionar evento</button>
+          <button className="modal1" type="button" onClick={this.openModal} >Adicionar evento</button>
 
 
 
@@ -484,13 +484,13 @@ class Calendar extends React.Component {
                       <label className="LetraFormulario brlabel">Cor</label>
                       <select id="Color" name="Color" className="form-control optionFomulario" value={this.state.Color} onChange={this.ChangeValue}>
                         <option value="">--</option>
-                        <option value="blue" className="opt1">Azul</option>
-                        <option value="violet" className="opt2">Violeta</option>
-                        <option value="green" className="opt3">Verde</option>
-                        <option value="orange" className="opt4">Laranja</option>
-                        <option value="yellow" className="opt5">Amarelo</option>
-                        <option value="red" className="opt6">Vermelho</option>
-                        <option value="aqua" className="opt7">Azul claro</option>
+                        <option value="#009eac" className="opt1"></option>
+                        <option value="#16b4c2 " className="opt2"></option>
+                        <option value="#00c6d7" className="opt3"></option>
+                        <option value="#00ced1" className="opt4"></option>
+                        <option value="#20b2aa" className="opt5"></option>
+                        <option value="#3cb7c4" className="opt6"></option>
+                        <option value="#19a2af" className="opt7"></option>
                       </select>
                     </div>
                   </div>

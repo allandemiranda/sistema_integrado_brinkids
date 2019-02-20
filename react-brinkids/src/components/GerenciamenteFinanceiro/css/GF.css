@@ -34,34 +34,33 @@
 .botaoAvancar:hover {
     background: #052963 !important;
     color: #fff;
-}
-.opt1 {
-    background-color: blue !important;
+}.opt1 {
+    background-color: #009eac !important;
     color: #fff;
 }
 .opt2 {
-    background-color: violet !important;
+    background-color: #16b4c2 !important;
     color: #fff;
 }
 .opt3 {
-    background-color: green !important;
+    background-color: #00c6d7 !important;
     color: #fff;
 }
 .opt4 {
-    background-color: orange !important;
+    background-color: #00ced1 !important;
     color: #fff;
 }
 .opt5 {
-    background-color: yellow !important;
-    color: #000000;
+    background-color: #20b2aa !important;
+    color: #fff;
 }
 .opt6 {
-    background-color: red !important;
+    background-color: #3cb7c4 !important;
     color: #fff;
 }
 .opt7 {
-    background-color: aqua !important;
-    color: #000000;
+    background-color: #19a2af !important;
+    color: #fff;
 }
 #paddingNome{
   padding-top: 37px !important;  
