@@ -55,14 +55,16 @@ router.post('/', async (req, res) => {
   }
 });
 
-String.prototype.toDate = function () {
-  let str = this.split('T');
-  let date = str[0];
-  let str2 = this.split("@");
-  let dateHour = new Date(date + "T" + str2[1]);
-  console.log("toDate: ", dateHour);
-  return dateHour;
-}
+// String.prototype.toDate = function () {
+//   let str = this.split('T');
+//   let date = str[0];
+
+//   let str2 = this.split("@");
+
+//   let dateHour = new Date(date + "T" + str2[1]);
+//   console.log("toDate: ", dateHour);
+//   return dateHour;
+// }
 
 router.get('/:idCria/:timeAdult', async (req, res) => {
 
@@ -112,13 +114,16 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
   }
 
-  if (productFinded[0].service === 'Aniversário') {
+  if (productFinded[0].service === 'Aniversario') {
+    serviceName = "Aniversario";
+    console.log(serviceName)
 
     let x = 0, saveTheDate = 0;
 
     const productFinded = await product.find({ 'children.id': req.params.idCria });
     let birthdayFinded = await birthday.find({ 'guestList.id': req.params.idCria });
     console.log("convidado")
+
     if (birthdayFinded.length === 0) {//esse if é só para testes
       birthdayFinded = await birthday.find({ 'partyFeather.id': req.params.idCria });
       console.log("convidado extra")
@@ -127,25 +132,26 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     let birthdayDate, birthdayStart, birthdayEnd, test;
 
     for (i = 0; i < birthdayFinded.length; i++) {//for para calcular qual o ultimo aniversário que a criança estará, esses calculos estão meio sem nexo, mas ainda não entendi como ter ctz que a criança tá no aniversário certo, só quando ela é cadastrada no sistema e bate com as informaões da guestList
-      birthdayDate = birthdayFinded[i].birthdayDate.toISOString();
-      test = (birthdayDate + "@" + birthdayFinded[i].end).toDate().getTime() / 60000;
-      if (saveTheDate < test && ((birthdayDate + "@" + birthdayFinded[i].start).toDate().getTime() / 60000) - adultEntered < 120) {//aqui só é aceito como o aniversário certo quando o adulto deixa a criança pelo menos 2 horas antes, pra que não calcule com o valor do aniversário do dia que vem
-        console.log(((birthdayDate + "@" + birthdayFinded[i].start).toDate().getTime() / 60000 - adultEntered))
+      birthdayDate = birthdayFinded[i].birthdayDate;
+      test = birthdayFinded[i].end.getTime() / 60000;
+      if (saveTheDate < test && (birthdayFinded[i].start.getTime() / 60000) - adultEntered < 120) {//aqui só é aceito como o aniversário certo quando o adulto deixa a criança pelo menos 2 horas antes, pra que não calcule com o valor do aniversário do dia que vem
+        console.log((birthdayDate + "@" + birthdayFinded[i].start.getTime() / 60000 - adultEntered))
         saveTheDate = test;
         x = i;
         console.log(new Date(saveTheDate), "new x: ", x)
       }
     }
 
-    birthdayDate = birthdayFinded[x].birthdayDate.toISOString();
-    birthdayStart = (birthdayDate + "@" + birthdayFinded[x].start).toDate().getTime() / 60000;
-    birthdayEnd = (birthdayDate + "@" + birthdayFinded[x].end).toDate().getTime() / 60000;
+    birthdayDate = birthdayFinded[x].birthdayDate;
+    birthdayStart = birthdayFinded[x].start.getTime() / 60000;
+    birthdayEnd = birthdayFinded[x].end.getTime() / 60000;
+
+    console.log(birthdayDate, " ", birthdayFinded[x].start, " ", birthdayFinded[x].end);
 
     console.log("procurei", x);
     console.log(new Date(), " ", new Date(birthdayEnd * 60000));
 
-    serviceName = "Aniversário";
-    console.log(serviceName)
+    
     var extraTime = 0;
     price = parseInt(0, 10).toFixed(2);
     console.log("entrada: ", new Date(adultEntered * 60000), "\nsaída: ", new Date(adultExit * 60000))
@@ -155,14 +161,14 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
         extraTime += (adultExit - adultEntered)
         console.log("tempo corrido: ", extraTime)
       } else {
-        extraTime += (birthdayStart - adultEntered);
+        extraTime += (birthdayStart - adultEntered - 15);
         console.log("tempo antecipado: ", extraTime)
       }
     }
 
     if (adultExit > (birthdayEnd)) {
       extraTime += (adultExit - birthdayEnd);
-      console.log("tempo atrasado: ", extraTime - (birthdayStart - adultEntered))
+      console.log("tempo atrasado: ", extraTime - (birthdayStart - adultEntered - 15))
       console.log("tempo extra: ", extraTime)
     }
 

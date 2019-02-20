@@ -4,12 +4,11 @@ const babypassportServices = require('../models/babypassport-services-models');
 const config = require('../config');
 const adult = require('../models/adult-models');
 
-
+const router = express.Router();
 const moment = require('moment');
 
 
-const Logs = require('../models/logs-models')
-const router = express.Router();
+const Logs = require('../models/logs-models');
 
 const jwt = require('jsonwebtoken');
 
@@ -49,3 +48,5 @@ router.post('/', async (req, res) => {
     }
   }
 });
+
+module.exports = router;

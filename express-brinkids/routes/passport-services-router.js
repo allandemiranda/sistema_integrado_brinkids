@@ -39,20 +39,20 @@ router.post('/', async (req, res) => {
 
 String.prototype.toMMSS = function () {//convertendo de segundos para o formato mm:ss
     let sec_num = parseInt(this, 10);
-    let minutes = Math.floor(sec_num / 60);
-    let seconds = sec_num - (minutes * 60);
+    let hours = Math.floor(sec_num / 60);
+    let minutes = sec_num - (hours * 60);
 
+    if (hours < 10) {hours = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    return minutes+':'+seconds;
+    return hours+':'+minutes;
 }
 
 String.prototype.toSS = function () {//convertendo de mm:ss para segundos
     let nums = this.split(':');
     let mins = parseInt(nums[1], 10);
-    let secs = mins+parseInt(nums[0],10)*60;
+    let hours = mins+parseInt(nums[0],10)*60;
 
-    return secs;
+    return mins;
 }
 
 router.get('/', async (req, res) => {
