@@ -5,7 +5,7 @@
 
   */
 
-
+ import $ from "jquery";
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
@@ -53,6 +53,7 @@ class Calendar extends React.Component {
       Description: '',
       Location: '',
       Color: '',
+      ErroPreenchimento: 0,
 
     };
     this.interval = this.interval.bind(this);
@@ -124,6 +125,7 @@ class Calendar extends React.Component {
     this.setState({
       page: "Calendario",
       Titulo: '',
+      ErroPreenchimento:0,
 
     })
   }
@@ -224,52 +226,98 @@ class Calendar extends React.Component {
 
 
   mod() {
-    const titulo = this.state.Titulo;
-
-
-    const HoraI = new Date(this.state.DateTimeBegin);
-    const HoraF = new Date(this.state.DateImeEnd);
-
-
-    console.log(HoraI);
-
-    // (Gabriel): Requisição para salvar as datas no servidor.
-    // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
-    // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
-    const data = {
-      title: titulo,
-      start: HoraI.toString(), // (Gabriel): Necessário enviar as data no formato de texto
-      end: HoraF.toString(),
-      color: this.state.Color,
-      description: this.state.Description,
-      address: this.state.Location,
-      associated: "Usuario"
+    if (this.state.Titulo.length === 0) {
+      $("#Titulo").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#Titulo").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
     }
 
-    // Aqui está um exemplo da requisição e da resposta
-    axios.post('/calendar', data)
-      .then((response) => {
-        response.data.start = new Date(response.data.start); // (Gabriel): Necessário modificar as datas para criar um objeto 'Date' já que vem do servidor como string
-        response.data.end = new Date(response.data.end);
-        this.state.datasRequisicao.push(response.data)
-        this.setState({
-          datasRequisicao: this.state.datasRequisicao,
-          page: "Calendario",
-          DateTimeBegin: '',
-          DateImeEnd: '',
-          Description: '',
-          Location: '',
-          Color: '',
+    if (this.state.DateTimeBegin.length === 0) {
+      $("#DateTimeBegin").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#DateTimeBegin").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.Location.length === 0) {
+      $("#Location").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#Location").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.Description.length === 0) {
+      $("#Description").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#Description").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.DateImeEnd.length === 0) {
+      $("#DateTimeEnd").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#DateTimeEnd").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.ErroPreenchimento === 0) {
+      const titulo = this.state.Titulo;
+
+
+      const HoraI = new Date(this.state.DateTimeBegin);
+      const HoraF = new Date(this.state.DateImeEnd);
+
+
+      console.log(HoraI);
+
+      // (Gabriel): Requisição para salvar as datas no servidor.
+      // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
+      // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
+      const data = {
+        title: titulo,
+        start: HoraI.toString(), // (Gabriel): Necessário enviar as data no formato de texto
+        end: HoraF.toString(),
+        color: this.state.Color,
+        description: this.state.Description,
+        address: this.state.Location,
+        associated: "Usuario"
+      }
+
+      // Aqui está um exemplo da requisição e da resposta
+      axios.post('/calendar', data)
+        .then((response) => {
+          response.data.start = new Date(response.data.start); // (Gabriel): Necessário modificar as datas para criar um objeto 'Date' já que vem do servidor como string
+          response.data.end = new Date(response.data.end);
+          this.state.datasRequisicao.push(response.data)
+          this.setState({
+            datasRequisicao: this.state.datasRequisicao,
+            page: "Calendario",
+            DateTimeBegin: '',
+            DateImeEnd: '',
+            Description: '',
+            Location: '',
+            Color: '',
+          })
         })
-      })
-      .catch((err) => console.log(err))
+        .catch((err) => console.log(err))
 
-    // console.log({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),desc:'blabla bla'})
+      // console.log({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),desc:'blabla bla'})
 
-    // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
-
-
-
+      // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
+    }else{
+      this.state.erros = this.state.ErroPreenchimento;
+    }
   }
   editar(event) {
     const a = getToken();
@@ -446,6 +494,11 @@ class Calendar extends React.Component {
     if (this.state.page === "Novo") {
       return (
         <div className="container-fluid" >
+          {this.state.ErroPreenchimento != 0 &&
+            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+              <strong style={{ color: 'white' }}>Preencha os campos abaixo.</strong>
+            </div>)
+          }
           <div className="sub-heard-part" >
             <ol className="breadcrumb m-b-0" >
               <li > < a href="/" > Home </a></li >

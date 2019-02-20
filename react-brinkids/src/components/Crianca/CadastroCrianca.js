@@ -347,7 +347,7 @@ class CadastroCrianca extends React.Component {
         if (this.state.page === "FormularioCad") {
             return (
                 <div className="container-fluid" >
-                    <div className="container-fluid" >
+                    <div className="" >
                         {this.state.erroCadastro &&
                             (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
                                 <strong style ={{color: 'white'}}>Ocorreu um erro no Cadastro</strong>
