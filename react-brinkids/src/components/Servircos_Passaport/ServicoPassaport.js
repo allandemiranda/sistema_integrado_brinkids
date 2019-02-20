@@ -49,26 +49,9 @@ class ServicoPassaporte extends React.Component {
         this.voltar = this.voltar.bind(this);
     }
     voltar(event) {
-        this.setState({
-            page: "TelaI",
-            list: [],
-            Nome: "",
-            Descricao: "",
-            TempoFinal: "",
-            erroC:0,        
-        })
-        axios.get('/passportServices')
-            .then((response) => {
-
-
-                console.log(response.data);
-                this.setState({
-                    list: response.data.services,
-                    list2: response.data.default,
-                });
+       
                 this.requisicao();
-            })
-            .catch((err) => console.log(err));
+          
     }
     interval(event) { }
     Funcionario = (number) => {
@@ -111,11 +94,17 @@ class ServicoPassaporte extends React.Component {
         axios.get('/passportServices')
             .then((response) => {
 
-
+                console.log("ente aki", response.data.services)
                 this.setState({
                     list: response.data.services,
                     list2: response.data.default,
+                    page: "TelaI",
+                    Nome: "",
+                    Descricao: "",
+                    TempoFinal: "",
+                    Price: "",
                 });
+                
             })
 
     }
@@ -219,14 +208,7 @@ class ServicoPassaporte extends React.Component {
 
 
                             console.log(response.data);
-                            this.setState({
-                                list: response.data.services,
-                                list2: response.data.default,
-                                page: "TelaI",
-                                Nome: "",
-                                Descricao: "",
-                                TempoFinal: "",
-                            });
+                            
                             this.requisicao();
                        // })
 
@@ -386,13 +368,13 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Quebra (min): </b></h5>
-                                                <input type="number" id="" name="QuebraTempo" className="form-QuebraTempo" className="text-center" placeholder="Tempo" value={this.state.list2.time} onChange={this.ChangeQuebraTempo} />
+                                                <input type="number" id="" name="QuebraTempo" className="form-QuebraTempo" min="1" className="text-center" placeholder="Tempo" value={this.state.list2.time} onChange={this.ChangeQuebraTempo} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Valor (R$): </b></h5>
-                                                <input type="number" id="valor" name="QuebraValor" className="form-QuebraValor" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
+                                                <input type="number" id="valor" name="QuebraValor" className="form-QuebraValor" min="0.00" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
                                             </div>
                                         </div>
                                     </div>

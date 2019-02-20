@@ -1024,7 +1024,7 @@ class PerfilAdulto extends React.Component {
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, findChild._id)} >
                                                         <option value="others" > Outros </option>
-                                                        <option value="children" > filho(a) </option>
+                                                        <option value="children" > Filho(a) </option>
                                                         <option value="Stepson" > Enteado(a) </option>
                                                         <option value="grandchildren"  > Neto(a) </option>
                                                         <option value="nephews"  > Sobrinho(a) </option>

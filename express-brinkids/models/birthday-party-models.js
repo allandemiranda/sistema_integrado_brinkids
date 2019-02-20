@@ -67,6 +67,7 @@ const birthdayPartySchema = mongoose.Schema({
     id: String,
     name: String,
     nameChild:String,
+    id:String,
   }],
 });
 

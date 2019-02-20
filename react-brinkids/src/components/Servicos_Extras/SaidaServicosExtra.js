@@ -183,13 +183,13 @@ class SaidaServicosExtra extends React.Component {
     ChangeQuantidade(event) {
         let valorTemporario = this.state.valorTotal;
         let listatemporaria = this.state.quantidade;
-        console.log(typeof(event.target.value))
+        console.log(typeof (event.target.value))
         listatemporaria[event.target.name[2]] = parseFloat(event.target.value);
         valorTemporario[event.target.name[2]] = (parseFloat(this.state.list[event.target.name[2]].value) * listatemporaria[event.target.name[2]]).toFixed(2)
         console.log(listatemporaria[event.target.name[2]]);
 
         this.setState({ quantidade: listatemporaria, valorTotal: valorTemporario });
-        console.log(this.state.valorTotal,valorTemporario);
+        console.log(this.state.valorTotal, valorTemporario);
     }
 
     TelaII = (event) => {
@@ -228,7 +228,7 @@ class SaidaServicosExtra extends React.Component {
             from: this.state.name, //ajsuta o id dps de fazer o login funcionar
             price: this.state.Total,
             priceMethod: this.state.FormaDePagamento
-            
+
 
         }
 
@@ -284,7 +284,16 @@ class SaidaServicosExtra extends React.Component {
 
         if (this.state.page === "carrinho") {
             return (
+                <>  
+                <div className="sub-heard-part" >
+                    <ol className="breadcrumb m-b-0" >
+                        <li > < a href="/" > Home  </a></li >
+                        <li > Serviços Extras </li>
+                        <li > Carrinho </li>
+                    </ol >
+                </div>
                 <div className="graph" >
+
                     <table className="table">
                         <thead>
                             <tr>
@@ -315,9 +324,9 @@ class SaidaServicosExtra extends React.Component {
                             })}
                         </tbody>
                     </table>
-                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: "TelaInicial" })}> Carrinho </button>
+                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: "TelaInicial" })}> voltar </button>
                 </div>
-
+    </>
             );
         }
         if (this.state.page === "TelaInicial") {

@@ -76,6 +76,24 @@ class MeuPerfil extends React.Component {
         this.salvar = this.salvar.bind(this);
         this.mudarSenha = this.mudarSenha.bind(this);
     }
+    _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
+        // convert base64/URLEncoded data component to raw binary data held in a string
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        // write the bytes of the string to a typed array
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ia], { type: mimeString })};
     mudarSenha(event) {
         if (this.state.senhaAtual === this.state.password) {
             const a = getToken();
@@ -173,7 +191,7 @@ class MeuPerfil extends React.Component {
         console.log("form: ", formData);
 
 
-        axios.put(`adult/${this.state.perfilAtual._id}`, formData)
+        axios.put(`/employees/exchange-data/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
                 console.log(response.data)
             })
