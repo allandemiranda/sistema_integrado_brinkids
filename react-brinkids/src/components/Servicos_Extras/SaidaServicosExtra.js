@@ -248,7 +248,7 @@ class SaidaServicosExtra extends React.Component {
                 this.setState({
                     comprovante: true,
                 });
-                alert("Pagamento Concluido");
+                //alert("Pagamento Concluido");
                 setTimeout(() => {
                     this.setState({
                         carrinho: [],
