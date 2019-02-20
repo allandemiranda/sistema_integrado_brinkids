@@ -81,42 +81,42 @@ class Passport extends React.Component {
     Funcionario = (number) => {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
-    
+
         axios.get(`/employees/${b.id}`)
-          .then((response) => {
-            let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-    
-    
-    
-            axios.get(`/professionalPosition/indentifier/${id}`)
-              .then((response) => {
-                let functions;
-                return response.data.functions;
-              }).then((event) => {
-                let podeentrar = false;
-                event.map((map) => {
-                  if (map.id === number) {
-                    podeentrar = true;
-                  }
-                })
-                return podeentrar;
-              }).then((event) => {
-                if (event) {
-                  
-                } else {
-                  this.props.history.push("/");
-                  alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-                }
-              })
-              .catch((err) => console.log(err));
-          })
-          .catch((err) => console.log(err));
-    
-      }
-      componentWillMount() {
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
         this.Funcionario(19);
-      }
-    
+    }
+
 
     //Relacionado a atualização dos valores Funções
     ChangeObs(event) {
@@ -238,8 +238,8 @@ class Passport extends React.Component {
         this.setState({
             listConfirmAdult: adult,
             page: "ConfirmAdult",
-            phone:adult.phone,
-            obs:adult.observations
+            phone: adult.phone,
+            obs: adult.observations
         })
 
 
@@ -455,8 +455,8 @@ class Passport extends React.Component {
 
         for (var i = 0; i < this.state.listConfirmKids.length; i++) {
             var crianca;
-            if(this.state.kinship[i] !==undefined){
-                 crianca = {
+            if (this.state.kinship[i] !== undefined) {
+                crianca = {
                     _id: String(this.state.listConfirmKids[i]._id),
                     name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
                     birthday: new Date(this.state.listConfirmKids[i].birthday),
@@ -465,8 +465,8 @@ class Passport extends React.Component {
                     photo: this.state.listConfirmKids[i].fotoFamily,
                     kinship: this.state.kinship[i],
                 }
-            }else{
-                 crianca = {
+            } else {
+                crianca = {
                     _id: String(this.state.listConfirmKids[i]._id),
                     name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
                     birthday: new Date(this.state.listConfirmKids[i].birthday),
@@ -474,8 +474,8 @@ class Passport extends React.Component {
                     observations: this.state.listConfirmKids[i].observations,
                     photo: this.state.listConfirmKids[i].fotoFamily,
                     kinship: "Outros",
+                }
             }
-        }
             console.log(this.state.kinship[i])
             listCria.push(crianca);
         };
@@ -513,10 +513,10 @@ class Passport extends React.Component {
                 })
 
             }).then(() => {
-               
+
                 setTimeout((event) => {
                     this.props.history.push("/");
-                    
+
                 }, 100);
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
@@ -762,7 +762,7 @@ class Passport extends React.Component {
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
-                                                    <td >{moment(findKids.birthday).add(1,"days").format('DD/MM/YYYY')} </td>
+                                                    <td >{moment(findKids.birthday).add(1, "days").format('DD/MM/YYYY')} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
                                                 </tr>
                                             );
@@ -1014,16 +1014,25 @@ class Passport extends React.Component {
                                                 </div>
                                             </div>
                                             <br></br>
-                                            <div className="graph" style={{ padding: 10 + "px" }} >
-                                                <div className="row">
-                                                    <div className="col-md-12 col-sm-12 col-xs-12">
-                                                        <h3 className="inner-tittle" > Observações </h3>
-                                                        <br></br>
-                                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                            
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                    <div className="row">
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <h3 className="inner-tittle" > Observações </h3>
+                                                            <br></br>
+                                                            <div className="graph" style={{ padding: 10 + "px" }} >
                                                             <p>{Criançasqueentrarao.observations}</p>
-                                                        </div> </div>
-                                                </div>
-                                            </div >
+                                                        </div>
+                                                        </div>
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <h3 className="inner-tittle" > Restrições </h3>
+                                                            <br></br>
+                                                            <div className="graph" style={{ padding: 10 + "px" }} >
+                                                            <p>{Criançasqueentrarao.restrictions}</p>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div >
                                             <div><br></br></div>
                                         </div>
                                     )

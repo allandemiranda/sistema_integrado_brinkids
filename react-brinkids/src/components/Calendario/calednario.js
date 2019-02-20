@@ -366,7 +366,7 @@ class Calendar extends React.Component {
                   Location: event.address,
                 })
               } else {
-                alert("Você Não Pode Editar Esse Evento")
+                // alert("Você Não Pode Editar Esse Evento")
               }
 
             } else {

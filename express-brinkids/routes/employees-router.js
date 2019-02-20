@@ -178,7 +178,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/exchange-data', async (req, res) => {
+router.put('/exchange-data/:identifier', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
@@ -208,7 +208,7 @@ router.put('/exchange-data', async (req, res) => {
     };
 
     try {
-      const adultChange = await adult.findByIdAndUpdate(req.body.identifier, exchangeData);
+      const adultChange = await adult.findByIdAndUpdate(req.params.identifier, exchangeData);
       const log = new Logs({
         activity: 'Funcionario',
         action: 'Edição',
@@ -219,6 +219,13 @@ router.put('/exchange-data', async (req, res) => {
 
       })
       const newLog = await log.save();
+      if (req.files) {
+        console.log("filesss")
+        return req.files.photo.mv(
+          config.pathPublic() + adultChange.photo,
+          errMvFile => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
+        );
+      }
       if (!adultChange) {
         return res.sendStauts(404);
       }

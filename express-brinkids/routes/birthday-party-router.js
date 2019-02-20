@@ -79,7 +79,7 @@ router.post('/', async (req, res) => {
     description: req.body.description,
     observations: req.body.observations,
     payment: {
-      value: parseInt(req.body.value, 10),
+      value: parseFloat(req.body.value),
       method: req.body.method
     },
     amount: {
@@ -107,6 +107,7 @@ router.post('/', async (req, res) => {
       to: newBirthday.title,
       price: newBirthday.payment.value,
       priceMethod: newBirthday.payment.method,
+      id:newBirthday._id,
 
 
     })
@@ -127,14 +128,16 @@ router.delete('/:identifier', async (req, res) => {
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const deletedService = await BirthdayParty.findOneAndDelete(req.params.identifier);
-    const changuePrice = await Logs.update({ 'to': req.params.identifier }, { $set: { "price": 0 } })
+    const changuePrice = await Logs.update({ 'id': req.params.identifier }, { $set: { "price": 0 } })
 
 
     const log = new Logs({
       activity: 'Aniversario',
-      action: 'Delete',
+      action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to:deletedService.title,
+      id:req.params.identifier
 
     })
     const newLog = await log.save();
@@ -179,7 +182,7 @@ router.put('/:identifier', async (req, res) => {
           description: req.body.description,
           observations: req.body.observations,
           payment: {
-            value: parseInt(req.body.value, 10),
+            value: parseFloat(req.body.value),
             method: req.body.method
           },
           amount: {
@@ -193,7 +196,7 @@ router.put('/:identifier', async (req, res) => {
         },
       }
     );
-    const changuePrice = await Logs.update({ 'to': req.params.identifier }, { $set: { "price": parseInt(req.body.value, 10) } })
+    const changuePrice = await Logs.update({ 'id': req.params.identifier }, { $set: { "price": parseFloat(req.body.value) } })
     console.log(changuePrice)
     const log = new Logs({
       activity: 'Aniversario',
@@ -201,8 +204,9 @@ router.put('/:identifier', async (req, res) => {
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: req.body.title,
-      price: parseInt(req.body.value, 10),
+      price: parseFloat(req.body.value),
       priceMethod: req.body.method,
+      id:req.params.identifier
     })
     const newLog = await log.save();
     if (!service) {
@@ -308,7 +312,8 @@ router.put('/partyFeather/:identifier', async (req, res) => {
     action: 'Edição',
     dateOperation: new Date(),
     from: funcionario, //ajsuta o id dps de fazer o login funcionar
-    to: req.params.identifier,
+    to: birthday.title,
+    id:birthday._id
 
   })
 });

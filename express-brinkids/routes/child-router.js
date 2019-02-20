@@ -250,7 +250,7 @@ router.delete('/:identifier', async (req, res) => {
     
     const log = new Logs({
       activity: 'Perfil Criança',
-      action: 'Delete',
+      action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
       id:req.params.identifier,
