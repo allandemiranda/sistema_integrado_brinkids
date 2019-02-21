@@ -30,7 +30,20 @@ import config from '../Login/service/config';
 
 
 /*   */
-
+const messages = {
+  allDay: 'journée',
+  previous: 'Anterior',
+  next: 'Próximo',
+  today: 'Hoje',
+  month: 'Mês',
+  week: 'Semana',
+  day: 'Dia',
+  agenda: 'Agenda',
+  date: 'Data',
+  time: 'Tempo',
+  event: 'Evento', // Or anything you want
+  showMore: total => `+ ${total} événement(s) supplémentaire(s)`
+}
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 var excluirInicial, excluirFinal;
 
@@ -130,6 +143,7 @@ class Calendar extends React.Component {
     })
   }
   ChangeValue(event) {
+   
     this.setState({
       [event.target.name]: event.target.value,
     })
@@ -161,7 +175,7 @@ class Calendar extends React.Component {
             return podeentrar;
           }).then((event) => {
             if (event) {
-              this.interval = setInterval(this.requisicao, 10000);
+              this.interval = setInterval(this.requisicao, 100000);
               this.requisicao();
             } else {
               this.props.history.push("/");
@@ -271,7 +285,7 @@ class Calendar extends React.Component {
       this.state.ErroPreenchimento-=1;
     }
 
-    if (this.state.ErroPreenchimento === 0) {
+    if (this.state.ErroPreenchimento === -5) {
       const titulo = this.state.Titulo;
 
 
@@ -279,7 +293,7 @@ class Calendar extends React.Component {
       const HoraF = new Date(this.state.DateImeEnd);
 
 
-      console.log(HoraI);
+      
 
       // (Gabriel): Requisição para salvar as datas no servidor.
       // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
@@ -316,7 +330,10 @@ class Calendar extends React.Component {
 
       // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
     }else{
-      this.state.erros = this.state.ErroPreenchimento;
+      this.setState({
+        erros:this.state.ErroPreenchimento
+      })
+      
     }
   }
   editar(event) {
@@ -354,11 +371,12 @@ class Calendar extends React.Component {
           }).then((eventu) => {
             if (eventu) {
               if (event.color) {
+               
                 this.setState({
                   page: "Novo",
                   Titulo: event.title,
-                  DateTimeBegin: event.start,
-                  DateImeEnd: event.end,
+                  DateTimeBegin:moment( event.start).format("YYYY-MM-DDTHH:mm"),
+                  DateImeEnd: moment(event.end).format("YYYY-MM-DDTHH:mm"),
                   Color: event.color,
                   editar: true,
                   identifier: event._id,
@@ -392,12 +410,17 @@ class Calendar extends React.Component {
       title: this.state.Titulo,
       start: new Date(this.state.DateTimeBegin).toString(), // (Gabriel): Necessário enviar as data no formato de texto
       end: new Date(this.state.DateImeEnd).toString(),
+      color: this.state.Color,
+        description: this.state.Description,
+        address: this.state.Location,
+        associated: "Usuario"
 
     }
 
     // (Gabriel): Requisição para alterar a data na url '/calendar/<identifier>' utilizando o método HTTP 'PUT'
     axios.put(`calendar/${this.state.identifier}`, modifiedDate)
       .then((response) => {
+        
         this.state.datasRequisicao.forEach((currentValue) => { // (Gabriel): Vai varrer atrás da data com o identificador para alterar seus valores
           if (currentValue._id === this.state.identifier) { // (Gabriel): Se encontrar, altere o título, por exemplo
             currentValue.title = this.state.Titulo;
@@ -463,7 +486,7 @@ class Calendar extends React.Component {
 
           {this.state.calendario &&
             (<BigCalendar
-            
+              messages={messages}
               localizer={localizer}
               selectable
               events={this.state.datasRequisicao}

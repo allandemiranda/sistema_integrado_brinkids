@@ -48,9 +48,15 @@ class MainLayout extends React.Component {
         const b = jwt.verify(a, config.secret_auth);
         const z = moment()
         const u = moment(b.exp * 1000)
-        console.log(moment(u).isBefore(z))
-        console.log(b)
-        if ((moment(u).isBefore(z))) {
+        
+        var cookies = document.cookie;
+        cookies = cookies.substr(cookies.indexOf("TOKEN_KEY"), cookies.length);
+        if (cookies.indexOf(';') != -1) {
+            cookies = cookies.substr(0, cookies.indexOf(';'));
+        }
+        cookies = cookies.split('=')[1];
+       
+        if ((moment(u).isBefore(z))&& cookies !== a) {
             this.deslogar();
 
         }
@@ -58,12 +64,12 @@ class MainLayout extends React.Component {
 
 
         if (!b.admin) {
-            console.log(b.id)
+          
             axios.get(`/employees/${b.id}`)
                 .then((response) => {
-                    console.log(response.data)
+                    
                     let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-                    console.log(response.data);
+                   
                     this.setState({
                         FuncionarioLogado: response.data[0],
                         name: response.data[0].name.firstName,
@@ -72,7 +78,7 @@ class MainLayout extends React.Component {
                     axios.get(`/professionalPosition/indentifier/${id}`)
                         .then((response) => {
 
-                            console.log(response.data);
+                           
                             if(response.data!== null){
                                 this.setState({
                                     cargo: response.data.name,

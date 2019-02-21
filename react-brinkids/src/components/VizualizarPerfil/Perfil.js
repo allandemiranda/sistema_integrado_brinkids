@@ -238,7 +238,7 @@ class Perfil extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-        console.log("form: ", formData);
+        
 
 
         axios.put(`/employees/exchange-data/${this.state.perfilAtual._id}`, formData)
@@ -843,6 +843,7 @@ class Perfil extends React.Component {
                         
                         <br></br><br></br>
                         <div className="text-center" >
+                        <button onClick={()=>this.setState({page:"Perfil"})} className="btn btn-md botao botaoAvançar text-center" style={{}}> voltar</button>
                             <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Resetar Senha</button>                                      
                         </div>                              
                     </div>                    
