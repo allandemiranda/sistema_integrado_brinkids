@@ -519,7 +519,7 @@ class MeuPerfil extends React.Component {
                                 {!this.state.editar && (
                                     <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.editavel} className="btn btn-md botao botaoAvançar" > Editar</button>
-                                        <button onClick={this.voltar} className="btn btn-md botao botaoAvançar" > Voltar</button>
+                                        
                                         <button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>
 
                                     </div>
@@ -566,6 +566,7 @@ class MeuPerfil extends React.Component {
                             </div>  
                             <br></br><br></br>
                             <div className="text-center" >
+                            <button onClick={()=>this.setState({page:"Perfil",senhaAtual:"",senhaNova:""})} className="btn btn-md botao botaoAvançar text-center" style={{}}>voltar</button>    
                                 <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Alterar Senha</button>                                      
                             </div>                              
                         </div>                    

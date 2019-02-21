@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
         action: 'Criação',
         dateOperation: moment().format(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: newCalendar._id,
+        to: newCalendar.title,
        
 
       })
@@ -86,6 +86,9 @@ router.put('/:id', async (req, res) => {
           title: req.body.title,
           start: new Date(req.body.start),
           end: new Date(req.body.end),
+          description: req.body.description,
+          address: req.body.address,
+          associated: req.body.associated,
         },
       );
       const log = new Logs({
@@ -93,7 +96,7 @@ router.put('/:id', async (req, res) => {
         action: 'Edição',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: req.params.id,
+        to: calendar.title,
       })
       const newLog = await log.save();
 
@@ -122,7 +125,7 @@ router.delete('/:id', async (req, res) => {
       action: 'Delete',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.params.id,
+      to: calendar.title,
     })
     const newLog = await log.save();
 
