@@ -213,7 +213,7 @@ class CadastroAdulto extends React.Component {
                 $("#Sbnome").removeClass('errorBorder');
             }
 
-            if (adulto.cpf.length === 0|| $.isNumeric(adulto.cpf) === false) {
+            if (adulto.cpf.length === 0 || $.isNumeric(adulto.cpf) === false) {
                 $("#numberCPF").addClass('errorBorder');
                 erros.push("O CPF não pode estar em branco");
             }
@@ -315,6 +315,14 @@ class CadastroAdulto extends React.Component {
             }
             else {
                 $("#bai").removeClass('errorBorder');
+            }
+
+            if ($.isNumeric(adulto.rg) === false) {
+                $("#numberRG").addClass('errorBorder');
+                erros.push("O CPF não pode estar em branco");
+            }
+            else {
+                $("#numberRG").removeClass('errorBorder');
             }
             return erros;
 

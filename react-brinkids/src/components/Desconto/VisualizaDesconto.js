@@ -23,6 +23,7 @@ class VisualizaDesconto extends React.Component {
             Nome: "",
             list_descontos: [],
             descontoExcluido:false,
+            descontoGerado:false,
         }
 
     }
@@ -98,7 +99,8 @@ class VisualizaDesconto extends React.Component {
                     })
 
                 //alert("Desconto Excluido!");
-                this.state.descontoExcluido = true;
+                this.setState({ descontoExcluido: true });
+                
             }).catch((error) => {
                 console.log(error);
                 alert("Erro encontrado: " + error);
@@ -108,7 +110,8 @@ class VisualizaDesconto extends React.Component {
         this.setState({
             page: "GeraDesconto"
         })
-        this.state.descontoExcluido = false;
+        this.setState({ descontoGerado: true });
+        
     }
 
     render() {
@@ -119,6 +122,11 @@ class VisualizaDesconto extends React.Component {
                         {this.state.descontoExcluido  &&
                             (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
                                 <strong style={{ color: 'white' }}>Desconto apagado com sucesso.</strong>
+                            </div>)
+                        }
+                        {this.state.descontoGerado  &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Desconto gerado com sucesso.</strong>
                             </div>)
                         }
                     </div>

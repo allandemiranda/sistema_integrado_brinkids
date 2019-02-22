@@ -228,7 +228,7 @@ class EntradaAniversario extends React.Component {
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                this.state.erroCadastro = true;
+                this.setState({erroCadastro: true})
             })
     }
     requisicao(event) {

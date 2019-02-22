@@ -500,8 +500,6 @@ class Perfil extends React.Component {
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil Funcionário</h3>
                             <div className="row">
-
-
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <br></br>
@@ -525,30 +523,24 @@ class Perfil extends React.Component {
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
                                         <p>{this.state.perfilAtual.name.firstName}</p>
                                     </div>
-                                    <br></br>
+                                </div>
+                                <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sobrenome: </b></h5>
                                         <p>{this.state.perfilAtual.name.surName}</p>
                                     </div>
 
                                 </div>
+                            </div>
+                            <br></br>
+                            <div className="row">
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo" ><b> Login </b></h5>
                                         <p>{this.state.user}</p>
                                     </div>
                                     <br></br>
-
-
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> Status no Sistema  </b></h5>
-                                        <p>Ativo</p>
-                                    </div><br />
                                 </div>
-
-
-
-
                                 <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  CPF: </b> </h5>
@@ -563,7 +555,6 @@ class Perfil extends React.Component {
                                 </div>
                             </div>
                             <br></br>
-
                             <div className="row" >
                                 <div className="col-md-4 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>

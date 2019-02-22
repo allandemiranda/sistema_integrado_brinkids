@@ -67,7 +67,7 @@ class CadastroEvento extends React.Component {
                 window.location.href = '/';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
-                this.state.erroCadastro = true;
+                this.setState({erroCadastro: true})
                 //alert("Erro ao Criar Evento");
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
