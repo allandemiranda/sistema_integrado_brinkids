@@ -45,6 +45,7 @@ class Perfil extends React.Component {
             numero: '',
             endereco: '',
             user:"",
+            naoEncontrada:false,
 
         }
         //funçoes para mudar os values e afins
@@ -129,60 +130,63 @@ class Perfil extends React.Component {
         this.Funcionario(10);
     }
     excluir(event,indice){
-        const a = getToken();
-        const b = jwt.verify(a, config.secret_auth);
-        axios.get(`/employees/${b.id}`)
+        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
 
-            .then((response) => {
-
-                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-
-                axios.get(`/professionalPosition/indentifier/${id}`)
-                    .then((response) => {
-
-                        let functions;
-
-                        return response.data.functions;
-
-                    }).then((event) => {
-
-                        let podeentrar = false;
-
-                        event.map((map) => {
-
-                            if (map.id === 11) {
-
-                                podeentrar = true;
-
-                            }
-
-                        })
-
-                        return podeentrar;
-
-                    }).then((eventu) => {
-                        if (eventu) {
-                            let temporario = this.state.list;
-                            axios.delete(`adult/${event}`)
-                                .then((response) => {
-                                   
-                                    temporario.splice(indice,1);
-                                    this.setState({
-                                        list:temporario
+        if(confirmacao === true){            
+            const a = getToken();
+            const b = jwt.verify(a, config.secret_auth);
+            axios.get(`/employees/${b.id}`)
+    
+                .then((response) => {
+    
+                    let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+    
+                    axios.get(`/professionalPosition/indentifier/${id}`)
+                        .then((response) => {
+    
+                            let functions;
+    
+                            return response.data.functions;
+    
+                        }).then((event) => {
+    
+                            let podeentrar = false;
+    
+                            event.map((map) => {
+    
+                                if (map.id === 11) {
+    
+                                    podeentrar = true;
+    
+                                }
+    
+                            })
+    
+                            return podeentrar;
+    
+                        }).then((eventu) => {
+                            if (eventu) {
+                                let temporario = this.state.list;
+                                axios.delete(`adult/${event}`)
+                                    .then((response) => {
+                                       
+                                        temporario.splice(indice,1);
+                                        this.setState({
+                                            list:temporario
+                                        })
                                     })
-                                })
-                                .catch((err) => console.log(err));
-
-                        } else {
-
-                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-
-                        }
-                    })
-                    .catch((err) => console.log(err));
-            })
-            .catch((err) => console.log(err));
-        
+                                    .catch((err) => console.log(err));
+    
+                            } else {
+    
+                                alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+    
+                            }
+                        })
+                        .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+        }        
     }
     changuePassword(event) {
 
@@ -380,22 +384,24 @@ class Perfil extends React.Component {
                 
                 return temporario;
             }).then((event)=>{
-                this.setState({ list: event });
+                this.setState({ list: event, naoEncontrada:false, });
             }).catch((err) => {
                 console.log(err);
+                this.setState({naoEncontrada:true,})
             });
     }
     ChangeSearch(event) {
         this.setState({ selectedSearch: event.target.value });
     }
     render() {
-
-
-
         if (this.state.page === 'Busca') {
             return (
-
                 <div className="container-fluid" >
+                    {this.state.naoEncontrada&&
+                        (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                            <strong style={{ color: 'white' }}>Nenhum funcionario encontrda com esse nome. </strong>
+                        </div>)
+                    }
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >

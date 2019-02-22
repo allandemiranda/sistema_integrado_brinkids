@@ -212,68 +212,69 @@ class Servico extends React.Component {
         })
     }
     excluir(event, indice) {
-        const a = getToken();
-        const b = jwt.verify(a, config.secret_auth);
-        axios.get(`/employees/${b.id}`)
+        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
 
-            .then((response) => {
-
-                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-
-                axios.get(`/professionalPosition/indentifier/${id}`)
-                    .then((response) => {
-
-                        let functions;
-
-                        return response.data.functions;
-
-                    }).then((event) => {
-
-                        let podeentrar = false;
-
-                        event.map((map) => {
-
-                            if (map.id === 26) {
-
-                                podeentrar = true;
-
-                            }
-
-                        })
-
-                        return podeentrar;
-
-                    }).then((eventu) => {
-                        if (eventu) {
-                            let listaTemporaria = this.state.lista;
-
-
-                            axios.delete(`/extraServices/${listaTemporaria[event]._id}`)
-                                .then((response) => {
-
-
-                                    console.log(response.data);
-
-                                })
-                                .catch((err) => console.log(err));
-                            listaTemporaria.splice(event, 1);
-                            this.setState({
-                                lista: listaTemporaria,
+        if(confirmacao === true){            
+            const a = getToken();
+            const b = jwt.verify(a, config.secret_auth);
+            axios.get(`/employees/${b.id}`)
+    
+                .then((response) => {
+    
+                    let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+    
+                    axios.get(`/professionalPosition/indentifier/${id}`)
+                        .then((response) => {
+    
+                            let functions;
+    
+                            return response.data.functions;
+    
+                        }).then((event) => {
+    
+                            let podeentrar = false;
+    
+                            event.map((map) => {
+    
+                                if (map.id === 26) {
+    
+                                    podeentrar = true;
+    
+                                }
+    
                             })
-                            console.log(event);
-
-                        } else {
-
-                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-
-                        }
-                    })
-                    .catch((err) => console.log(err));
-            })
-            .catch((err) => console.log(err));
-
-
-
+    
+                            return podeentrar;
+    
+                        }).then((eventu) => {
+                            if (eventu) {
+                                let listaTemporaria = this.state.lista;
+    
+    
+                                axios.delete(`/extraServices/${listaTemporaria[event]._id}`)
+                                    .then((response) => {
+    
+    
+                                        console.log(response.data);
+    
+                                    })
+                                    .catch((err) => console.log(err));
+                                listaTemporaria.splice(event, 1);
+                                this.setState({
+                                    lista: listaTemporaria,
+                                })
+                                console.log(event);
+    
+                            } else {
+    
+                                alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+    
+                            }
+                        })
+                        .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+        }        
     }
     editar(event) {
         const a = getToken();
