@@ -97,7 +97,7 @@ router.get('/initialTime', async (req, res) => {
   let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json
   if(psjson.length===1){//teste pra saber se só tem o json inicial
     const data = {
-      initialTime: '00:00', 
+      initialTime: '00:01', 
       default: pjson[0],
     };
     try {

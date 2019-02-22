@@ -13,6 +13,7 @@ import $ from "jquery";
 import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
+import { timingSafeEqual } from 'crypto';
 
 
 class EntradaAniversario extends React.Component {
@@ -35,6 +36,7 @@ class EntradaAniversario extends React.Component {
             //Pesquisa Responsável
             responsavel: [],
             criancaDentro: [],
+            listacriancaCombinacao: [],//lista e crianças apos atribuir os ids do sistema
         }
 
         //Relacionado a atualização dos valores Caminho
@@ -136,8 +138,13 @@ class EntradaAniversario extends React.Component {
     }
 
     ConfirmarResp = (event) => {
+        let temporario = [];
+        this.state.adultoSelecionado.map((event, indice) => {
+            event.id = this.state.criancaSelecionada[indice]._id;
+        })
         this.setState({
             page: "ConfirmarResp",
+            listacriancaCombinacao: temporario,
         })
 
     }
@@ -155,21 +162,49 @@ class EntradaAniversario extends React.Component {
     }
 
     FinalizarCrianca = (event) => {
+
         this.setState({
             listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada[0]._id }] }),
             comprovante: true,
         })
 
+        var listCria = [];
+
+        const adulto = {
+            _id: this.state.responsavel[0]._id,
+            name: this.state.responsavel[0].name.firstName + ' ' + this.state.responsavel[0].name.surName,
+            phone: this.state.responsavel[0].phone,
+            observations: this.state.responsavel[0].obs,
+        }
+        
+        for (var i = 0; i < this.state.criancaSelecionada.length; i++) {
+            const crianca = {
+                _id: String(this.state.criancaSelecionada[i]._id),
+                name: this.state.criancaSelecionada[i].name.firstName + ' ' + this.state.criancaSelecionada[i].name.surName,
+                birthday: new Date(this.state.criancaSelecionada[i].birthday),
+                restrictions: this.state.criancaSelecionada[i].restrictions,
+                observations: this.state.criancaSelecionada[i].observations,
+                photo: this.state.file,
+            }
+
+            listCria.push(crianca);
+        };
         var formData = new FormData();
 
-        formData.append('name', String(this.state.criancaSelecionada[0]._id))
-        formData.append('type', String(this.state.aniversariante[0].type))
+       
 
-        axios.post('/birthdayParty', formData)
-            .then(function (response) {
-                console.log(response)
-                window.location.href = '/birthdayParty';
-            }).catch(function (error) {
+        formData.append('photo', this.state.file)
+        formData.append('service', 'Aniversario')
+        formData.append('time', moment().format())
+        formData.append('belongings', '0')
+        formData.append('children', JSON.stringify(listCria))
+        formData.append('adult', JSON.stringify(adulto));
+       
+        axios.post('/product', formData)
+            .then( (response)=> {
+                console.log(response.data)
+                // window.location.href = '/birthdayParty';
+            }).catch( (error)=> {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
@@ -202,16 +237,16 @@ class EntradaAniversario extends React.Component {
     selectedAdultLista(identifier) {
         let achou = false;
         //Desmarca A checkBox
-        this.state.aniversariante[0].guestList.forEach((adultos, indice, array) => {
-            if (adultos._id === identifier) {
-                delete array[indice];
+        this.state.adultoSelecionado.forEach((adultos, indice, array) => {
+            if (adultos.name === identifier) {
+                array.splice(indice, 1);
                 achou = true;
             }
         });
 
         if (!(achou)) {
             this.state.aniversariante[0].guestList.forEach((adultos) => {
-                if (adultos._id === identifier) {
+                if (adultos.name === identifier) {
                     this.state.adultoSelecionado.push(adultos);
                 }
             });
@@ -225,7 +260,7 @@ class EntradaAniversario extends React.Component {
     selectedAdult(identifier) {
         let achou = false;
         //Desmarca A checkBox
-        this.state.list.forEach((adultos, indice, array) => {
+        this.state.responsavel.forEach((adultos, indice, array) => {
             if (adultos._id === identifier) {
                 delete array[indice];
                 achou = true;
@@ -248,17 +283,27 @@ class EntradaAniversario extends React.Component {
     selectedKids(identifier) {
         let achou = false;
         //Desmarca A checkBox
-        this.state.aniversariante[0].guestList.forEach((kids, indice, array) => {
+        this.state.criancaSelecionada.forEach((kids, indice, array) => {
             if (kids._id === identifier) {
-                delete array[indice];
+                array.splice(indice, 1);
                 achou = true;
             }
         });
 
         if (!(achou)) {
-            this.state.aniversariante[0].guestList.forEach((kids) => {
+
+
+            this.state.list.forEach((kids, indice) => {
+
+                console.log(kids)
                 if (kids._id === identifier) {
-                    this.state.criancaSelecionada.push(kids);
+                    if (this.state.criancaSelecionada.length < this.state.adultoSelecionado.length) {
+                        this.state.criancaSelecionada.push(kids);
+                    } else {
+                        alert("limite de crianças atingido")
+                    }
+
+
                 }
             });
         }
@@ -430,16 +475,16 @@ class EntradaAniversario extends React.Component {
                                         {
 
 
-                                            JSON.parse(this.state.aniversariante[0].guestList[0]).map((event, indice) => {
+                                            this.state.aniversariante[0].guestList.map((event, indice) => {
                                                 console.log(event.type)
-                                                if (event.type !== undefined) {
+                                                if (event.type === "adult") {
 
-                                                    console.log(event.nome)
+
                                                     return (
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
-                                                            <td > {event.nome} </td>
-                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event._id)} /> </td>
+                                                            <td > {event.name} </td>
+                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)} /> </td>
                                                         </tr>
                                                     );
                                                 }
@@ -536,16 +581,16 @@ class EntradaAniversario extends React.Component {
                                         {
 
 
-                                            JSON.parse(this.state.aniversariante[0].guestList[0]).map((event, indice) => {
+                                            this.state.aniversariante[0].guestList.map((event, indice) => {
                                                 console.log(event.type)
-                                                if (event.type === undefined) {
+                                                if (event.type === "children") {
 
-                                                    console.log(event.nome)
+
                                                     return (
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
-                                                            <td > {event.nome} </td>
-                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event._id)} /> </td>
+                                                            <td > {event.name} </td>
+                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)} /> </td>
                                                         </tr>
                                                     );
                                                 }
@@ -644,7 +689,7 @@ class EntradaAniversario extends React.Component {
                             </div>
                             <div className=" text-center">
                                 <input type="search" id="selectAdult" name="selectAdult" className="form-control text-center" value={this.state.selectedSearch} onChange={this.ChangeSearch} placeholder="Pesquisar Responsável" />
-                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.SearchAdult(this.state.selectedSearch)}> Pesquisar </button>
+                                <button type="button" className="btn btn-md botao botaoAvançar" onClick={() => this.SearchAdult(this.state.selectedSearch)}> Pesquisar </button>
                             </div>
                         </div>
                         <br></br>
@@ -661,6 +706,7 @@ class EntradaAniversario extends React.Component {
                                 </thead>
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {
+                                        console.log(findAdult)
                                         return (
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice + 1}</th>
@@ -701,7 +747,7 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={"http://localhost:3000/img-users/" + this.state.responsavel[0].photo} />
+                                            <img src={this.state.responsavel[0].photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
@@ -785,7 +831,7 @@ class EntradaAniversario extends React.Component {
         }
 
         //TELA VI - Confirmação Final 
-        if (this.setState.page === "TelaFinal") {
+        if (this.state.page === "TelaFinal") {
             return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
@@ -805,7 +851,7 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={"http://localhost:3000/img-users/" + this.state.responsavel[0].photo} />
+                                                <img src={this.state.responsavel[0].photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -860,7 +906,7 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={"http://localhost:3000/img-users/" + this.state.criancaSelecionada[0].photo} />
+                                                <img src={this.state.criancaSelecionada[0].photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -902,12 +948,12 @@ class EntradaAniversario extends React.Component {
                             </div>
                         </div>
                     </div>
-                    <Comprovant
+                    {/* <Comprovant
                         teste={this.state.comprovante}
                         tabela={this.state.arrayfinal}
                         serviso="ANIVERSÁRIO"
 
-                    />
+                    /> */}
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.FinalizarCrianca}> Finalizar </button>

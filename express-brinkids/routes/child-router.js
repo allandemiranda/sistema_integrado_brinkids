@@ -5,7 +5,7 @@
 const express = require('express');
 const Child = require('../models/child-models');
 const config = require('../config');
-
+const Logs = require('../models/logs-models')
 const router = express.Router();
 
 function teste(json, res) {
@@ -72,10 +72,10 @@ router.get('/indentifier/:id_Child', async (req, res) => {
  * @param callback Função a ser executada
  * @return código de status HTTP
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const actualDate = new Date()/**< Data atual do sistema */
   const ChildDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
-
+  
   /**
    * Checa se a criança possui menos de 14 anos ou não
    * Se possuir menos de 14 anos, ela é adicionada ao sistema
@@ -125,6 +125,7 @@ router.post('/', (req, res) => {
             }
 
             const fileName = `${config.pathChild}${ChildCreateResult._id}.png`; /**< url completa da localização do arquivo no computador */
+           
             ChildCreateResult.photo = fileName /** Atualiza o nome do arquivo */
             ChildCreateResult.save((errSaveChildResult) => { /** Atualiza no banco a nova informação */
               if (errSaveChildResult) {
@@ -144,11 +145,25 @@ router.post('/', (req, res) => {
                 });
               }
             });
+            const log = {
+              activity: 'Perfil Criança',
+              action: 'Criação',
+              dateOperation: new Date(),
+              from: 'f', //ajsuta o id dps de fazer o login funcionar
+              to: ChildCreateResult._id,
+            }
+            Logs.create(log,(errLog, logchil)=>{
+
+            })
+
           });
         } else {
           return res.sendStatus(409);
         }
       });
+      
+      //LOG sssssssssssssssssssssssss
+   
     } else {
       return res.sendStatus(400);
     }
@@ -181,7 +196,16 @@ router.put('/:identifier', async (req, res) =>  {
         restrictions: req.body.restrictions,
       },
     );
+    const log = new Logs({
+      activity: 'Pefil Criança',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: 'f', //ajsuta o id dps de fazer o login funcionar
+      to: req.params.identifier,
+     
 
+    })
+    const newLog = await log.save();
     if (req.files) {
       return req.files.photo.mv(
         config.pathPublic() + child.photo,

@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
           phone: adult.phone,
           observations: adult.observations,
         },
-        photo: '/123.png',
+        photo: req.body.photo,
         service: req.body.service,
         time: new Date(req.body.time),
         belongings: req.body.belongings,

@@ -1,6 +1,7 @@
 import React from 'react';
 import update from 'react-addons-update';
 import axios from 'axios';
+import moment from 'moment';
 import $ from 'jquery';
 import TypesInput from '../TypesInput.js';
 import ConfDadosAni from './ConfirmaDadosAniversariante.js'
@@ -53,6 +54,60 @@ class VisualizarAniversario extends React.Component {
         this.listaC = this.listaC.bind(this);
 
     }
+    AddCrianca = (event) => {
+        event.preventDefault();
+        var erro = [];
+
+        if(this.state.NomeCrianca === ""){
+            $("#name").addClass('errorBorder');
+            erro.push("Nome da criança não pode ser em branco.");
+        }
+        if(this.state.IdadeCrianca === ""){
+            $("#number").addClass('errorBorder');
+            erro.push("Idade da criança não pode ser em branco.");
+        }
+        //Remove Class
+        if(this.state.NomeCrianca != ""){
+            $("#name").removeClass('errorBorder');
+        }
+        if(this.state.IdadeCrianca != ""){
+            $("#number").removeClass('errorBorder');
+        }      
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca, type:"children",id:'"'}]}),
+                NomeCrianca: "",
+                IdadeCrianca: "",
+            })
+        }
+    }
+    AddAdulto = (event) => {
+        event.preventDefault();
+        var erro = [];
+        if(this.state.Adulto === ""){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Nome do Adulto não pode ser em branco.");
+        }
+        else{
+            $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
+                Adulto: "",
+            })
+        }
+    }
     listaC(event){
         this.setState({
             Page: "ListaC",
@@ -78,8 +133,26 @@ class VisualizarAniversario extends React.Component {
         formData.append('method', String(this.state.MetodoPg))
         formData.append('children', String(this.state.QuantCrianca))
         formData.append('adults', String(this.state.QuantAdulto))
+        let guestLista = this.state.ListaAdul.concat(this.state.ListaCria)
+        
+        const data={
+            
+            title: String(this.state.TituloDoAni),
+            name:String(this.state.NomeDoAni),
+            age:String(this.state.IdadeDoAni),
+            start:String(this.state.HoraInicio),
+            end:String(this.state.HoraFinal),
+            description:String(this.state.DescriçãoDoAni),
+            observations:String(this.state.ObsDoAni),
+            value:String(this.state.ValorPg),
+            method:String(this.state.MetodoPg),
+            children:String(this.state.QuantCrianca),
+            adults: String(this.state.QuantAdulto),
+            guestList: guestLista,
+            birthdayDate: this.state.DataDoAni,
 
 
+        }
         // let guestList = this.state.ListaAdul.concat(this.state.ListaCria)
         // this.state.ListaAdul.map((guest) => {
         //     guest.type = guest.hasOwnProperty('idade') ? 'child' : 'adult';
@@ -87,8 +160,8 @@ class VisualizarAniversario extends React.Component {
         // })
 
         // formData.append('guestList', JSON.stringify(guestList));
-        console.log(this.state.AniAtual)
-        axios.put(`/birthday/${this.state.AniAtual._id}`,formData)
+        console.log(data)
+        axios.put(`/birthday/${this.state.AniAtual._id}`,data)
         .then((response) => {
 
 
@@ -131,13 +204,22 @@ class VisualizarAniversario extends React.Component {
     }
     selecionar(event) {
         let aniversarioAtual = this.state.list[event];
+        let listacria = [];
+        let listaadult= [];
+        aniversarioAtual.guestList.map((pessoa,indice)=>{
+            if(pessoa.type==="adult"){
+               listaadult.push(pessoa);
+            }else{
+                listacria.push(pessoa);
+            }
+        })
         this.setState({
             TituloDoAni: aniversarioAtual.title,
             NomeDoAni: aniversarioAtual.birthdayPerson.name,
             IdadeDoAni: aniversarioAtual.birthdayPerson.age,
-            DataDoAni: aniversarioAtual.start,
-            HoraInicio: "13:00",
-            HoraFinal: "14:00",
+            DataDoAni: moment(aniversarioAtual.birthdayDate).format("DD/MM/YYYY"),
+            HoraInicio:aniversarioAtual.start ,
+            HoraFinal: aniversarioAtual.end,
             QuantCrianca: aniversarioAtual.amount.children,
             QuantAdulto: aniversarioAtual.amount.adults,
             DescriçãoDoAni: aniversarioAtual.description,
@@ -148,6 +230,8 @@ class VisualizarAniversario extends React.Component {
             Page:"ConfDadosAni",
 
             AniAtual:aniversarioAtual,
+            ListaCria:listacria,
+            ListaAdul:listaadult,
         })
     }
     requisicao(event) {
@@ -184,7 +268,7 @@ class VisualizarAniversario extends React.Component {
                                         <th>#</th>
                                         <th>Titulo</th>
                                         <th >Aniversariante</th>
-                                        <th >Responsavel</th>
+                                       
                                         <th> Data </th>
                                         <th></th>
                                     </tr>
@@ -199,8 +283,8 @@ class VisualizarAniversario extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.title} </td>
                                                 <td > {findAdult.birthdayPerson.name} </td>
-                                                <td > {findAdult.cpf} </td>
-                                                <td > {findAdult.start} </td>
+                                               
+                                                <td > {moment(findAdult.birthdayDate).format("DD/MM/YYYY")} </td>
                                                 <td><button onClick={() => this.selecionar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
@@ -257,7 +341,7 @@ class VisualizarAniversario extends React.Component {
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"DataDoAni"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.changue}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"DataDoAni"} Class = {"form-control"} value = {moment(this.state.DataDoAni).format("YYYY-MM-DD")} onChange={this.changue}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora incial: "} type = {"time"} id = {"HI"} name= {"HoraInicio"} Class = {"form-control"} value = {this.state.HoraInicio} onChange={this.changue}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"HF"} name= {"HoraFinal"} Class = {"form-control"} value = {this.state.HoraFinal} onChange={this.changue}/>
                                     </div>
@@ -321,11 +405,11 @@ class VisualizarAniversario extends React.Component {
                                 <form id="form-busca">
                                     <div className = "form-group" >
                                         <div className = "row" >
-                                            <TypesInput cod = {1} ClassDiv = {"col-md-8 col-sm-8 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"name"} Class = {"form-control"} value = {this.state.NomeCrianca} 
-                                                onChange = {this.ChangeNameCrianca}
+                                            <TypesInput cod = {1} ClassDiv = {"col-md-8 col-sm-8 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"name"} name= {"NomeCrianca"} Class = {"form-control"} value = {this.state.NomeCrianca} 
+                                                onChange = {this.changue}
                                             />
-                                            <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Idade: "} type = {"number"} id = {"number"} name= {"number"} Class = {"form-control"} value = {this.state.IdadeCrianca}
-                                                onChange = {this.ChangeIdadeCrianca}
+                                            <TypesInput cod = {1} ClassDiv = {"col-md-3 col-sm-3 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Idade: "} type = {"number"} id = {"number"} name= {"IdadeCrianca"} Class = {"form-control"} value = {this.state.IdadeCrianca}
+                                                onChange = {this.changue}
                                             />
                                             <br></br>
                                             <button className="btn botao" type = "submit" onClick = {this.AddCrianca}>Adicionar</button>
@@ -348,11 +432,12 @@ class VisualizarAniversario extends React.Component {
                                             </thead> 
                                             <tbody>
                                                 {this.state.ListaCria.map((crianca, indice) => {
+                                                    console.log(this.state.ListaCria)
                                                     return (
                                                         <tr>
                                                             <th scope="row">{(indice + 1)}</th>
-                                                            <td > {crianca.nome} </td>
-                                                            <td > {crianca.idade} </td>
+                                                            <td > {crianca.name} </td>
+                                                            <td > {crianca.age} </td>
                                                         </tr>
                                                     );
                                                 })}
@@ -369,8 +454,8 @@ class VisualizarAniversario extends React.Component {
                                     <form id="form-busca">
                                         <div className = "form-group" >
                                             <div className = "row" >
-                                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"nameAdult"} name= {"nameAdult"} Class = {"form-control"} 
-                                                    value = {this.state.Adulto} onChange = {this.ChangeNameAdulto}
+                                                <TypesInput cod = {1} ClassDiv = {"col-md-12 col-sm-12 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome Completo: "} type = {"text"} id = {"nameAdult"} name= {"Adulto"} Class = {"form-control"} 
+                                                    value = {this.state.Adulto} onChange = {this.changue}
                                                 />
                                                 <br></br>
                                                 <button className="btn botao" type = "submit" onClick = {this.AddAdulto}>Adicionar</button>
@@ -395,7 +480,7 @@ class VisualizarAniversario extends React.Component {
                                                     return (
                                                         <tr>
                                                             <th scope="row">{(indice + 1)}</th>
-                                                            <td > {adulto.nome} </td>
+                                                            <td > {adulto.name} </td>
                                                         </tr>
                                                     );
                                                 })}
@@ -407,8 +492,8 @@ class VisualizarAniversario extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className= "btn btn-md botao" href="\">Cancelar</a>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.VaiConfListCnv}>Avançar</button>
+                        
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.editar}>Voltar</button>
                     </div> 
                 </div> 
             </div>

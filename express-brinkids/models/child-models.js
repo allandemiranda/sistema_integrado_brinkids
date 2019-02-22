@@ -35,5 +35,4 @@ const ChildSchema = new mongoose.Schema({
 
 mongoose.connect(`mongodb://localhost/${config.database}`);
 const Child = mongoose.model('Child', ChildSchema);
-
 module.exports = Child;
