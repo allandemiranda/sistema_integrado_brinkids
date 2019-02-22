@@ -43,7 +43,8 @@ class PerfilCrianca extends React.Component {
             sexualidade:'',
             nacionalidade:'',
             restricao:'',
-
+            naoEncontrada:false,
+            deletado:false,
         }
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -100,62 +101,67 @@ class PerfilCrianca extends React.Component {
     componentWillMount() {
         this.Funcionario(6);
     }
-    excluir(event,indice){
-        const a = getToken();
-        const b = jwt.verify(a, config.secret_auth);
-        axios.get(`/employees/${b.id}`)
 
-            .then((response) => {
+    excluir(event, indice) {
+        const confirmacao = window.confirm("Deseja mesmo excluir o perfil dessa criança do sistema?");
 
-                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+        if (confirmacao) {
+            const a = getToken();
+            const b = jwt.verify(a, config.secret_auth);
+            axios.get(`/employees/${b.id}`)
 
-                axios.get(`/professionalPosition/indentifier/${id}`)
-                    .then((response) => {
+                .then((response) => {
 
-                        let functions;
+                    let id = response.data[0].identifierEmployee.employeeData.officialPosition;
 
-                        return response.data.functions;
+                    axios.get(`/professionalPosition/indentifier/${id}`)
+                        .then((response) => {
 
-                    }).then((event) => {
+                            let functions;
 
-                        let podeentrar = false;
+                            return response.data.functions;
 
-                        event.map((map) => {
+                        }).then((event) => {
 
-                            if (map.id === 7) {
+                            let podeentrar = false;
 
-                                podeentrar = true;
+                            event.map((map) => {
+
+                                if (map.id === 7) {
+
+                                    podeentrar = true;
+
+                                }
+
+                            })
+
+                            return podeentrar;
+
+                        }).then((eventu) => {
+                            if (eventu) {
+
+                                let temporario = this.state.list;
+                                axios.delete(`child/${event}`)
+                                    .then((response) => {
+
+                                        temporario.splice(indice, 1);
+                                        this.setState({
+                                            list: temporario,
+                                            deletado:true,
+                                        })
+                                    })
+                                    .catch((err) => console.log(err));
+
+                            } else {
+
+                                alert("Acesso Negado. Você não possui permisão para estar nessa área!");
 
                             }
-
                         })
-
-                        return podeentrar;
-
-                    }).then((eventu) => {
-                        if (eventu) {
-
-                            let temporario = this.state.list;
-                            axios.delete(`child/${event}`)
-                                .then((response) => {
-                                   
-                                    temporario.splice(indice,1);
-                                    this.setState({
-                                        list:temporario,
-                                    })
-                                })
-                                .catch((err) => console.log(err));
-
-                        } else {
-
-                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-
-                        }
-                    })
-                    .catch((err) => console.log(err));
-            })
-            .catch((err) => console.log(err));
-        
+                        .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+        }
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -335,6 +341,9 @@ class PerfilCrianca extends React.Component {
                 this.setState({ list: response.data });
             }).catch((err) => {
                 console.log(err);
+                this.setState({
+                    naoEncontrada:true,
+                })
             });
 
     }
@@ -348,6 +357,11 @@ class PerfilCrianca extends React.Component {
         if (this.state.page === 'Busca') {
             return (
                 <div>
+                    {this.state.naoEncontrada&&
+                        (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                            <strong style={{ color: 'white' }}>Nenhuma criança encontrda com esse nome. </strong>
+                        </div>)
+                    }
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
@@ -434,8 +448,12 @@ class PerfilCrianca extends React.Component {
 
             return (
                 <div className="container-fluid" >
+                        {this.state.deletado > 0 &&
+                            (<div className="alert lert-danger" role="alert"  style ={{ background: "#00FF7F",width: 100 + '%' }}>
+                                <strong style ={{color: 'white'}}>Criança deletada com sucesso.</strong>
+                            </div>)
+                        }
                     <div className="sub-heard-part" >
-
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
                             <li > Vizualizar </li>
