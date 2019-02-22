@@ -249,10 +249,8 @@ class ServicoPassaporte extends React.Component {
     }
 
     Apagar = (event) => {
-        this.setState({
-            mensApa:true,
-            salvarCerto:true,
-        })
+        this.state.mensApa = true;
+        this.state.salvarCerto = false;
         const id = this.state.list[this.state.list.length - 1]._id;
         axios.delete(`/passportServices/${id}`)
             .then((response) => {
@@ -445,7 +443,7 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Tempo Final: </b></h5>
-                                                <input type="time" id="time" step='1' min="00:00:00 className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
+                                                <input type="time" id="time" step='1' min="00:00:00" className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
                                             </div>
                                         </div>
                                         <div className="col-md-3 col-sm-12 col-xs-12 text-left">
