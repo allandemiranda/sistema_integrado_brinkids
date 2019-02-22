@@ -3,14 +3,17 @@
 const express = require('express');
 const adult = require('../models/adult-models');
 const Employees = require('../models/employees-models');
-const userSystem = require('../models/userSystem-models');
+
 const Logs = require('../models/logs-models')
 const router = express.Router();
+const userSystem = require('../models/userSystem-models');
+const config = require('../config');
+const jwt = require('jsonwebtoken');
 
 
 router.get('/', async (req, res) => {
   try {
-    const employees = await adult.find({isEmployee: true }).populate('identifierEmployee');
+    const employees = await adult.find({ isEmployee: true }).populate('identifierEmployee');
 
     return res.status(200).json(employees);
   } catch (err) {
@@ -21,7 +24,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:identifier', async (req, res) => {
   try {
-    const adultFound = await adult.find({ _id: req.params.identifier, isEmployee: true });
+    const adultFound = await adult.find({ _id: req.params.identifier, isEmployee: true }).populate('identifierEmployee');
 
     if (!adultFound) {
       return res.sendStatus(404);
@@ -57,6 +60,18 @@ router.get('/search/:search', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+ var funcionario='oi';
+  console.log(b)
+  if (b.id) {
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  } 
+  if(!b.id) {
+    console.log("========ola")
+     funcionario = "admin"
+  }
   try {
     const adultResult = await adult.findByIdAndUpdate(
       req.body.identifier,
@@ -71,7 +86,7 @@ router.post('/', async (req, res) => {
     }
 
     const employee = new Employees({
-      gender: req.body.gender,
+     
       education: req.body.education,
       kinship: {
         fatherName: req.body.fatherName,
@@ -86,13 +101,13 @@ router.post('/', async (req, res) => {
         series: req.body.WPSeries,
         state: req.body.WPState,
         PIS_PASEP: req.body.WPPIS_PASEP,
-        dateIssue: new Date(req.body.WPDateIssue),
+        dateIssue: req.body.WPDateIssue,
         placeIssue: req.body.WPPlaceIssue,
       },
       rg: {
         issuingBody: req.body.RgIssuingBody,
         state: req.body.RgState,
-        dateIssue: new Date(req.body.RgDateIssue),
+        dateIssue: req.body.RgDateIssue,
       },
       electionTitle: {
         number: req.body.ETnumber,
@@ -109,20 +124,20 @@ router.post('/', async (req, res) => {
         number: req.body.PPNumber,
         typeFormat: req.body.PPType,
         issuingCountry: req.body.PPIssuingCountry,
-        dateIssue: new Date(req.body.PPDateIssue),
-        expirationDate: new Date(req.body.PPExpirationDate),
+        dateIssue: req.body.PPDateIssue,
+        expirationDate: req.body.PPExpirationDate,
       },
       cnh: {
         record: req.body.CNHRecord,
         category: req.body.CNHCategory,
-        expirationDate: new Date(req.body.CNHExpirationDate),
+        expirationDate:req.body.CNHExpirationDate,
         comments: req.body.CNHComments,
         placeIssue: req.body.CNHPlaceIssue,
-        dateIssue: new Date(req.body.CNHDateIssue),
+        dateIssue: req.body.CNHDateIssue,
       },
       employeeData: {
         officialPosition: req.body.EDOfficialPosition,
-        admissionDate: new Date(req.body.EDAdmissionDate),
+        admissionDate:req.body.EDAdmissionDate,
         resignationDate: '12/12/1970',
         reasonResignation: req.body.EDReasonResignation,
         record: req.body.EDRecord,
@@ -130,20 +145,28 @@ router.post('/', async (req, res) => {
       },
       observations: req.body.observations,
     });
+    const usuario = adultResult.email.split("@");
 
+    const Login = new userSystem({
+      user: usuario[0] + req.body.EDRecord,
+      password: 'senha123',
+      id: req.body.identifier,
+      employees: adultResult.isEmployee,
+    })
+    const newLogin = await Login.save();
     const newEmployee = await employee.save();
 
     adultResult.identifierEmployee = newEmployee;
 
     adultResult.save();
-    
+
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Criação',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
-      to: req.body.identifier,
-     
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: adultResult.name.firstName+" "+adultResult.name.surName,
+
 
     })
     const newLog = await log.save();
@@ -155,7 +178,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/exchange-data', async (req, res) => {
+router.put('/exchange-data/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   if (req.body.phone
     && req.body.email
     && req.body.street
@@ -181,17 +208,24 @@ router.put('/exchange-data', async (req, res) => {
     };
 
     try {
-      const adultChange = await adult.findByIdAndUpdate(req.body.identifier, exchangeData);
+      const adultChange = await adult.findByIdAndUpdate(req.params.identifier, exchangeData);
       const log = new Logs({
         activity: 'Funcionario',
         action: 'Edição',
         dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
-        to: req.body.identifier,
-       
-  
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: adultChange.name.firstName+" "+adultChange.name.surName,
+
+
       })
       const newLog = await log.save();
+      if (req.files) {
+        console.log("filesss")
+        return req.files.photo.mv(
+          config.pathPublic() + adultChange.photo,
+          errMvFile => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
+        );
+      }
       if (!adultChange) {
         return res.sendStauts(404);
       }
@@ -207,15 +241,19 @@ router.put('/exchange-data', async (req, res) => {
 });
 
 router.put('/reset-password', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const userFind = await userSystem.findById(req.body.identifier);
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
-      to: req.body.identifier,
-     
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to:adultFound[0].name.firstName+" "+adultFound[0].name.surName,
+
 
     })
     const newLog = await log.save();
@@ -233,14 +271,20 @@ router.put('/reset-password', async (req, res) => {
   }
 });
 router.put('/rota', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   if (req.body.officialPosition) {
+   
     try {
       const adultChange = await Employees.findById(req.body.identifier);
-
+     
       adultChange.employeeData.officialPosition = req.body.officialPosition;
 
       adultChange.save();
-
+     
       if (!adultChange) {
         return res.sendStauts(404);
       }
@@ -252,6 +296,37 @@ router.put('/rota', async (req, res) => {
     }
   } else {
     return res.sendStatus(400);
+  }
+});
+
+router.put('/password', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  try {
+    const userFind = await userSystem.findById(req.body.identifier);
+    const log = new Logs({
+      activity: 'Funcionario',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: adultFound[0].name.firstName+" "+adultFound[0].name.surName,
+
+
+    })
+    const newLog = await log.save();
+    if (!userFind) {
+      return res.sendStatus(404);
+    }
+
+    userFind.set({ password: req.body.password });
+    await userFind.save();
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
   }
 });
 

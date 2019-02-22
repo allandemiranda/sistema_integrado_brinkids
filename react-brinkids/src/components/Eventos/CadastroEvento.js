@@ -8,7 +8,9 @@ import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Evento.css';
 import './css/style.css';
 
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 class CadastroEvento extends React.Component {
     
     
@@ -21,6 +23,7 @@ class CadastroEvento extends React.Component {
             Description: "",
             Location: "",
             Color: "--",
+            erroCadastro: false,
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -59,12 +62,13 @@ class CadastroEvento extends React.Component {
             
             axios.post('/event', formData)
             .then(function (response) {
-                alert("Evento Criado Com Sucesso!");
+                //alert("Evento Criado Com Sucesso!");
                 console.log(response);
                 window.location.href = '/';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
-                alert("Erro ao Criar Evento");
+                this.state.erroCadastro = true;
+                //alert("Erro ao Criar Evento");
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
@@ -126,6 +130,13 @@ class CadastroEvento extends React.Component {
     render() {
         return (
             <div className = "container-fluid" >
+                <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
+                                <strong style ={{color: 'white'}}>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                 <div className = "sub-heard-part" >
                     <ol className = "breadcrumb m-b-0" >
                         <li > < a href = "/" > Home </a></li >
@@ -167,13 +178,13 @@ class CadastroEvento extends React.Component {
                                         <label className="LetraFormulario brlabel">Cor</label>
                                         <select id ="Color" name="Color" className ="form-control optionFomulario" value = {this.state.Color} onChange = {this.ChangeValue}>
                                             <option value = "">--</option>
-                                            <option value = "blue" className = "opt1">Azul</option>
-                                            <option value = "violet" className = "opt2">Violeta</option>
-                                            <option value = "green" className = "opt3">Verde</option>
-                                            <option value = "orange" className = "opt4">Laranja</option>
-                                            <option value = "yellow" className = "opt5">Amarelo</option>
-                                            <option value = "red" className = "opt6">Vermelho</option>
-                                            <option value = "aqua" className = "opt7">Azul claro</option>
+                                            <option value = "#009eac" className = "opt1"></option>
+                                            <option value = "#16b4c2 " className = "opt2"></option>
+                                            <option value = "#00c6d7" className = "opt3"></option>
+                                            <option value = "#00ced1" className = "opt4"></option>
+                                            <option value = "#20b2aa" className = "opt5"></option>
+                                            <option value = "#3cb7c4" className = "opt6"></option>
+                                            <option value = "#19a2af" className = "opt7"></option>
                                         </select>
                                     </div>
                                 </div>

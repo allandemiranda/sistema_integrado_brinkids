@@ -1,8 +1,11 @@
 import React from 'react';
 
 import listaa from './gato';
+import moment from 'moment';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -53,6 +56,8 @@ class PerfilAdulto extends React.Component {
             kinship: 'Outros',
             photo: '',
             pode: false,
+
+
         }
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -82,6 +87,106 @@ class PerfilAdulto extends React.Component {
         this.TheEnd = this.TheEnd.bind(this);
         this.Adicionar = this.Adicionar.bind(this);
         this.mudarfoto = this.mudarfoto.bind(this);
+        this.excluir = this.excluir.bind(this);
+    }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(2);
+    }
+    excluir(event, indice) {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 3) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            let temporario = this.state.list;
+
+                            axios.delete(`adult/${event}`)
+                                .then((response) => {
+
+                                    temporario.splice(indice, 1);
+                                    this.setState({
+                                        list: temporario
+                                    })
+                                })
+
+                                .catch((err) => console.log(err));
+
+                        } else {
+
+
+
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -169,7 +274,7 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-        console.log(formData);
+        console.log("form: ", formData);
 
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
@@ -197,18 +302,71 @@ class PerfilAdulto extends React.Component {
     }
     //função que alterna as paginas
     async ChangePage(event) {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
 
-        const criancas = event.children.map(async (crianca, index) => {
-            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-            return response.data;
-        });
-        Promise.all(criancas).then((listaCriancas) => {
-            console.log(listaCriancas, "SOu um filho da puta")
-            this.setState({
-                listaFuncionarios: listaCriancas,
-                page: "Perfil",
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 1) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            if (event.children[0] === null) {
+                                this.setState({
+                                    page: "Perfil",
+                                })
+                            } else {
+
+                                const criancas = event.children.map(async (crianca, index) => {
+                                    const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                    return response.data;
+                                });
+
+                                Promise.all(criancas).then((listaCriancas) => {
+
+                                    this.setState({
+                                        listaFuncionarios: listaCriancas,
+                                        page: "Perfil",
+                                    })
+                                });
+                            }
+
+                        } else {
+
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
             })
-        });
+            .catch((err) => console.log(err));
+
+
 
         // criancas.forEach(async (c, index) => {
         //     const crianca = await c;
@@ -406,7 +564,7 @@ class PerfilAdulto extends React.Component {
                             return response.data;
                         });
                         Promise.all(criancas).then((listaCriancas) => {
-                            console.log(listaCriancas, "SOu um filho da puta")
+                           
                             this.setState({
                                 listaFuncionarios: listaCriancas,
                                 page: "Perfil",
@@ -464,7 +622,7 @@ class PerfilAdulto extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.cpf} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id, indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
@@ -551,11 +709,11 @@ class PerfilAdulto extends React.Component {
                                         <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                         {this.state.editar && (
                                             <div>
-                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                    Trocar imagem <span className="glyphicon">&#xe065;</span>
-
-                                                    <input id="tipofile" type="file" name="foto" defaultValue="" />
-                                                </label>
+                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}>
+                                                    <label style={{ color: 'white' }}>
+                                                        Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                                        <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                    </label>
                                                 </button>
                                             </div>)
                                         }
@@ -731,14 +889,14 @@ class PerfilAdulto extends React.Component {
                                                             return (
                                                                 <tr style={{ textAlign: 'justify' }} key={events._id}>
                                                                     <td>{index + 1}</td>
-                                                                    <td>{this.state.listaFuncionarios[index].name.firstName+" "+this.state.listaFuncionarios[index].name.surName}</td>
-                                                                   {events.kinship === undefined &&( <td>Outros</td>)}
-                                                                   {events.kinship === "others" &&( <td>Outros</td>)}
-                                                                   {events.kinship === "grandchildren"&&(<td>Neto(a)</td>)}
-                                                                   {events.kinship === "Brother"&&(<td>Irmão/Irmã</td>)}
-                                                                  {events.kinship === "nephews"&&( <td>Sobrinho(a)</td>)}
-                                                                  {events.kinship === "children"&&( <td>Filho(a)</td>)}
-                                                                  {events.kinship === "Stepson"&&( <td>Enteado(a)</td>)}
+                                                                    <td>{this.state.listaFuncionarios[index].name.firstName + " " + this.state.listaFuncionarios[index].name.surName}</td>
+                                                                    {events.kinship === undefined && (<td>Outros</td>)}
+                                                                    {events.kinship === "others" && (<td>Outros</td>)}
+                                                                    {events.kinship === "grandchildren" && (<td>Neto(a)</td>)}
+                                                                    {events.kinship === "Brother" && (<td>Irmão/Irmã</td>)}
+                                                                    {events.kinship === "nephews" && (<td>Sobrinho(a)</td>)}
+                                                                    {events.kinship === "children" && (<td>Filho(a)</td>)}
+                                                                    {events.kinship === "Stepson" && (<td>Enteado(a)</td>)}
                                                                 </tr>
                                                             )
                                                         })}
@@ -749,7 +907,7 @@ class PerfilAdulto extends React.Component {
                                             </div>
 
                                         </div>
-                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Adicionar}><label>
+                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar"   id="fontBranca" onClick={this.Adicionar}><label style={{ color: 'white' }}>
                                             Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
 
@@ -861,12 +1019,12 @@ class PerfilAdulto extends React.Component {
                                             <tr key={findChild._id}>
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findChild.name.firstName} </td>
-                                                <td >{findChild.birthday} </td>
+                                                <td >{moment(findChild.birthday, "YYYYMMDD").toNow(true)} </td>
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, findChild._id)} >
                                                         <option value="others" > Outros </option>
-                                                        <option value="children" > filho(a) </option>
+                                                        <option value="children" > Filho(a) </option>
                                                         <option value="Stepson" > Enteado(a) </option>
                                                         <option value="grandchildren"  > Neto(a) </option>
                                                         <option value="nephews"  > Sobrinho(a) </option>

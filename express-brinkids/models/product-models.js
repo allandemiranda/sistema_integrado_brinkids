@@ -48,6 +48,10 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   belongings: Number,
+  kinship:String,
+  birthdayStart:String,
+  birthdayEnd:String,
+  birthdayName:String,
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`);

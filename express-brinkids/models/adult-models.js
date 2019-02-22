@@ -5,7 +5,7 @@ const config = require('../config');
 
 
 const childSchema = new mongoose.Schema({
-  identifier: String,
+  identifier:{ type: mongoose.Schema.Types.ObjectId, ref: 'Child' },
   kinship: String,
 });
 
@@ -80,7 +80,7 @@ const userAdultSchema = new mongoose.Schema({
   },
   maritalStatus: String,
   children: [{
-    identifier: String,
+    identifier: { type: mongoose.Schema.Types.ObjectId, ref: 'Child' },
     kinship: String,
   }],
   observations: String,

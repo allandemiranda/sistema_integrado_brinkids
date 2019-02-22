@@ -3,13 +3,23 @@ import update from 'react-addons-update';
 import axios from 'axios';
 import $ from 'jquery';
 import TypesInput from '../TypesInput.js';
-import ConfDadosAni from './ConfirmaDadosAniversariante.js'
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+  } from "react-router-dom";
+import ConfDadosAni from './ConfirmaDadosAniversariante.js';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Aniversario.css';
 import './css/style.css';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+import moment from 'moment';
 
 
 class CadastroAniversario extends React.Component {
@@ -39,6 +49,7 @@ class CadastroAniversario extends React.Component {
             ListaCria: [],
             ListaAdul: [],
             //lista2: [{nome: '', idade: '', adulto: ''}, {}]
+            erroCadastro: false,
         }
 
         this.ChangeTitulo = this.ChangeTitulo.bind(this);
@@ -57,7 +68,61 @@ class CadastroAniversario extends React.Component {
         this.ChangeNameAdulto = this.ChangeNameAdulto.bind(this);
         this.ChangeIdadeCrianca = this.ChangeIdadeCrianca.bind(this);
     }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
 
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(12);
+    }
+    getFuncionario = () => {
+
+
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+
+                this.setState({
+                    nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                })
+
+            })
+            .catch((err) => console.log(err));
+
+    }
     //Bloco que muda o status para o atual do formulario.
     ChangeTitulo(event){this.setState({TituloDoAni: event.target.value});}
 
@@ -65,7 +130,7 @@ class CadastroAniversario extends React.Component {
 
     ChangeIdade(event){this.setState({IdadeDoAni: event.target.value});}
 
-    ChangeDate(event){this.setState({DataDoAni: event.target.value});}
+    ChangeDate(event){this.setState({DataDoAni: event.target.value});console.log(event.target.value)}
 
     ChangeHInicial(event){this.setState({HoraInicio: event.target.value});}
 
@@ -211,10 +276,99 @@ class CadastroAniversario extends React.Component {
     AddCrianca = (event) => {
         event.preventDefault();
         var erro = [];
-
+        var i = this.state.ListaCria.length;
         if(this.state.NomeCrianca === ""){
             $("#name").addClass('errorBorder');
             erro.push("Nome da criança não pode ser em branco.");
+        }
+        if(this.state.IdadeCrianca === ""){
+            $("#number").addClass('errorBorder');
+            erro.push("Idade da criança não pode ser em branco.");
+        }
+        if((i+1) > this.state.QuantCrianca){
+            $("#name").addClass('errorBorder');
+            $("#number").addClass('errorBorder');
+            erro.push("Quantidade de Criança execidida.");
+            alert("Você já adicionou a quantidade maxima de pessoas na lista de criança");
+        }
+        //Remove Class
+        if(this.state.NomeCrianca != "" && i < this.state.QuantCrianca){
+            $("#name").removeClass('errorBorder');
+        }
+        if(this.state.IdadeCrianca != "" && i < this.state.QuantCrianca){
+            $("#number").removeClass('errorBorder');
+        }     
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaCria: update(this.state.ListaCria, {$push: [{name: this.state.NomeCrianca, age: this.state.IdadeCrianca, type:"children",id:'"'}]}),
+                NomeCrianca: "",
+                IdadeCrianca: "",
+            })
+        }
+    }
+    AddAdulto = (event) => {
+        event.preventDefault();
+        var erro = [];
+        var i = this.state.ListaAdul.length;
+        if(this.state.Adulto === ""){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos excedida.");
+        }
+        else{
+            $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if((i+1) > this.state.QuantAdulto){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Quantidade de adultos excedida.");
+            alert("Você já adicionou a quantidade maxima de pessoas na lista de adulto");
+        }
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
+                Adulto: "",
+            })
+        }
+    }
+
+    AddAdultoFinalizarLista = (event) => {
+        var erro = [];
+        var i = this.state.ListaAdul.length;
+        console.log(i);
+        if(this.state.Adulto === "" && i <= this.state.QuantAdulto){
+            $("#nameAdult").addClass('errorBorder');
+            erro.push("Nome do Adulto não pode ser em branco ou Quantidade de adultos na lista de convidados excedida.");
+        }
+        else{
+            $("#nameAdult").removeClass('errorBorder'); 
+        }
+        if(erro.length > 0){
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
+            return;
+        }
+        else {
+            $("#alertDiv").addClass('displaynone');
+            this.setState({
+                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
+                Adulto: "",
+            })
+        }
+    }
+    AddCriaFinalizarLista = (event) => {
+        var erro = [];
+        var i = this.state.ListaCria.length;
+        if(this.state.NomeCrianca === "" && i <= this.state.QuantCrianca){
+            $("#name").addClass('errorBorder');
+            erro.push("Nome da criança não pode ser em branco ou Quantidade de crianças na lista de convidados foi excedida.");
         }
         if(this.state.IdadeCrianca === ""){
             $("#number").addClass('errorBorder');
@@ -240,33 +394,41 @@ class CadastroAniversario extends React.Component {
             })
         }
     }
-    AddAdulto = (event) => {
-        event.preventDefault();
-        var erro = [];
-        if(this.state.Adulto === ""){
-            $("#nameAdult").addClass('errorBorder');
-            erro.push("Nome do Adulto não pode ser em branco.");
-        }
-        else{
-            $("#nameAdult").removeClass('errorBorder'); 
-        }
-        if(erro.length > 0){
-            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
-            return;
+
+    CompletaListaCnv = (event) => {
+        var i = this.state.ListaAdul.length;
+        var j = this.state.ListaCria.length;
+        console.log(i,this.state.QuantAdulto, "Adulto Começo");
+        console.log(j,)
+        if(i < this.state.QuantAdulto || j < this.state.QuantCrianca){
+            this.setState({
+                Adulto: "LIVRE",
+                NomeCrianca: "LIVRE",
+                IdadeCrianca: "0",
+            });
+            if(i < this.state.QuantAdulto){
+                this.AddAdultoFinalizarLista();
+            }
+            if(j < this.state.QuantCrianca){
+                this.AddCriaFinalizarLista();  
+            }
+            setTimeout(_=>{
+                console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Adulto");
+                console.log(this.state.QuantCrianca, this.state.ListaCria.length, "Crianca");
+                this.CompletaListaCnv();
+            },2000);
         }
         else {
-            $("#alertDiv").addClass('displaynone');
-            this.setState({
-                ListaAdul: update(this.state.ListaAdul, {$push: [{name: this.state.Adulto,type:'adult',id:'"'}]}),
-                Adulto: "",
-            })
+            this.CadAni();
         }
     }
+
     VaiConfListCnv = (event) => {
         this.setState({
             page: "ConfListConv"
         })
     }
+
     VoltaFormList = () => {
         this.setState({
             page: "FormularioListaConv"
@@ -291,6 +453,8 @@ class CadastroAniversario extends React.Component {
         formData.append('adults', String(this.state.QuantAdulto))
         
         let guestLista = this.state.ListaAdul.concat(this.state.ListaCria)
+        formData.append('guestList',guestLista)
+        formData.append('birthdayDate',moment(this.state.DataDoAni).format())
         
         const data={
             
@@ -306,11 +470,12 @@ class CadastroAniversario extends React.Component {
             children:String(this.state.QuantCrianca),
             adults: String(this.state.QuantAdulto),
             guestList: guestLista,
-            birthdayDate: this.state.DataDoAni,
+            birthdayDate: moment(this.state.DataDoAni).format(),
 
 
         }
-        console.log(this.state.DataDoAni)
+        console.log(data)
+        console.log(formData);
         // Gabriel pegou as duas listas de adulto e criança, transformou numa lista só,
         // adicionou uma nova informação que vai precisar no banco de dados e enviou num único campo
         // chamado guestList
@@ -325,46 +490,52 @@ class CadastroAniversario extends React.Component {
         //formData.append('', String(this.state.UFLNasc))
     
         axios.post('/birthday', data)
-        .then(function (response) {
-            console.log(response)
-            //window.location.href = '/';
-        }).catch(function (error) {
+        .then((response) =>{
+            
+            console.log(response);
+            this.props.history.push("/");
+            
+            
+        }).catch( (error)=> {
             console.log(error)//LOG DE ERRO
-            alert("Erro no Cadastro");
+            // alert("Erro no Cadastro");
             // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
             // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+            this.state.errocadastro = true;
         })
     }
-    NovoCadAni = () => {
-        var formData = new FormData();
+   
+    // NovoCadAni = () => {
+    //     var formData = new FormData();
 
-        formData.append('title', String(this.state.TituloDoAni))
-        formData.append('name', String(this.state.NomeDoAni))
-        formData.append('age', String(this.state.IdadeDoAni))
-        formData.append('start', String(this.state.HoraInicio))
-        formData.append('end', String(this.state.HoraFinal))
-        formData.append('description', String(this.state.DescriçãoDoAni))
-        formData.append('observations', String(this.state.ObsDoAni))
-        formData.append('value', String(this.state.ValorPg))
-        formData.append('method', String(this.state.MetodoPg))
-        formData.append('children', String(this.state.QuantCrianca))
-        formData.append('adults', String(this.state.QuantAdulto))
-        //--------Codigo Aqui------------
-        //formData.append('', String(this.state.UFLNasc))
+    //     formData.append('title', String(this.state.TituloDoAni))
+    //     formData.append('name', String(this.state.NomeDoAni))
+    //     formData.append('age', String(this.state.IdadeDoAni))
+    //     formData.append('start', String(this.state.HoraInicio))
+    //     formData.append('end', String(this.state.HoraFinal))
+    //     formData.append('description', String(this.state.DescriçãoDoAni))
+    //     formData.append('observations', String(this.state.ObsDoAni))
+    //     formData.append('value', String(this.state.ValorPg))
+    //     formData.append('method', String(this.state.MetodoPg))
+    //     formData.append('children', String(this.state.QuantCrianca))
+    //     formData.append('adults', String(this.state.QuantAdulto))
+    //     //--------Codigo Aqui------------
+    //     //formData.append('', String(this.state.UFLNasc))
     
-        axios.post('/birthdayParty', formData)
-        .then(function (response) {
-            console.log(response)
-            window.location.href = '/aniversario';
-        }).catch(function (error) {
-            console.log(error)//LOG DE ERRO
-            alert("Erro no Cadastro");
-            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-            // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-        })
-    }
+    //     axios.post('/birthdayParty', formData)
+    //     .then(function (response) {
+    //         console.log(response)
+    //         window.location.href = '/aniversario';
+    //     }).catch(function (error) {
+    //         console.log(error)//LOG DE ERRO
+    //         // alert("Erro no Cadastro");
+    //         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+    //         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+    //         //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+    //         this.state.errocadastro = true;
+    //     })
+    // }
 
     render() {
         if(this.state.page === "FormularioCad") {
@@ -373,13 +544,13 @@ class CadastroAniversario extends React.Component {
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className = "graph-visual" >
                         <h3 className = "inner-tittle" > Dados do Aniversariante </h3>
                         <div id="alertDiv" className = "alert displaynone" role = "alert">
-                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                            <b>ERRO!</b> Há algo de errado em seu formulário.
                         </div>
                         <form id="form-criança">
                             <div className = "graph" >
@@ -390,33 +561,33 @@ class CadastroAniversario extends React.Component {
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-10 col-sm-10 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome do Aniversáriante: "} type = {"text"} id = {"nome"} name= {"nome"} Class = {"form-control"} value = {this.state.NomeDoAni} onChange={this.ChangeName}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-2 col-sm-2 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Idade: "} type = {"number"} id = {"idade"} name= {"idade"} Class = {"form-control"} value = {this.state.IdadeDoAni} onChange={this.ChangeIdade}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-10 col-sm-10 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Nome do Aniversariante: "} type = {"text"} id = {"nome"} name= {"nome"} Class = {"form-control"} value = {this.state.NomeDoAni} onChange={this.ChangeName}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-2 col-sm-2 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Idade: "} type = {"number"}  min = {"0"} id = {"idade"} name= {"idade"} Class = {"form-control"} value = {this.state.IdadeDoAni} onChange={this.ChangeIdade}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversario: "} type = {"date"} id = {"Data"} name= {"Data"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.ChangeDate}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Data do Aniversário: "} type = {"date"} id = {"Data"} name= {"Data"} Class = {"form-control"} value = {this.state.DataDoAni} onChange={this.ChangeDate}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora incial: "} type = {"time"} id = {"HI"} name= {"HI"} Class = {"form-control"} value = {this.state.HoraInicio} onChange={this.ChangeHInicial}/>
                                         <TypesInput cod = {1} ClassDiv = {"col-md-4 col-sm-4 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Hora Final: "} type = {"time"} id = {"HF"} name= {"HF"} Class = {"form-control"} value = {this.state.HoraFinal} onChange={this.ChangeHFinal}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Quantidade de Convidados Crianças: "} type = {"number"} id = {"QCC"} name= {"QCC"} Class = {"form-control"} value = {this.state.QuantCrianca} onChange={this.ChangeQCria}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Quantidade de Convidados Adultos: "} type = {"number"} id = {"QCA"} name= {"QCA"} Class = {"form-control"} value = {this.state.QuantAdulto} onChange={this.ChangeQAdul}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Quantidade de Convidados Crianças: "} type = {"number"}  min = {"0"} id = {"QCC"} name= {"QCC"} Class = {"form-control"} value = {this.state.QuantCrianca} onChange={this.ChangeQCria}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Quantidade de Convidados Adultos: "} type = {"number"}  min = {"0"} id = {"QCA"} name= {"QCA"} Class = {"form-control"} value = {this.state.QuantAdulto} onChange={this.ChangeQAdul}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className = "row" >
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"} id = {"VP"} name= {"VP"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.ChangeValorPg}/>
-                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Metodo de Pagamento: "} type = {"text"} id = {"MP"} name= {"MP"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario"} NameLabel = {"Valor Pago: "} type = {"number"}  min = {"0"}  id = {"VP"} name= {"VP"} Class = {"form-control"} placeholder = {"R$"} value = {this.state.ValorPg} onChange={this.ChangeValorPg}/>
+                                        <TypesInput cod = {1} ClassDiv = {"col-md-6 col-sm-6 col-xs-12"} ClassLabel = {"LetraFormulario brlabel"} NameLabel = {"Método de Pagamento: "} type = {"text"} id = {"MP"} name= {"MP"} Class = {"form-control"} value = {this.state.MetodoPg} onChange={this.ChangeMetodoPg}/>
                                     </div>
                                 </div>
                                 <div className = "form-group" >
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <h3 className = "inner-tittle" > Descrição do Aniversario </h3>
+                                            <h3 className = "inner-tittle" > Descrição do Aniversário </h3>
                                             <br></br>
                                             <TypesInput cod = {2} Label = {0} cols = {"50"} rows = {"4"} id = {"Descricao"} name= {"Descricao"} Class = {"form-control"} value={this.state.DescriçãoDoAni} onChange={this.ChangeDescricao} />
                                         </div>
@@ -458,13 +629,13 @@ class CadastroAniversario extends React.Component {
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className = "graph-visual" >
                         <div className = "row">
                             <div id="alertDiv" className = "alert displaynone" role = "alert">
-                                <b>ERRO!</b> Ah algo de errado em seu formulario.
+                                <b>ERRO!</b> Há algo de errado em seu formulário.
                             </div>
                             <div className = "col-md-6 col-sm-12">
                                 <div className = "graph" >
@@ -569,10 +740,18 @@ class CadastroAniversario extends React.Component {
         else if(this.state.page === "ConfListConv"){
             return(
                 <div className = "container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
+                                <strong style ={{color: 'white'}}>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
+
                     <div className = "sub-heard-part" >
                         <ol className = "breadcrumb m-b-0" >
                             <li > < a href = "/" > Home </a></li >
-                            <li > Aniversario </li>
+                            <li > Aniversário </li>
                         </ol >
                     </div>
                     <div className = "graph-visual" >
@@ -628,8 +807,8 @@ class CadastroAniversario extends React.Component {
                         </div>
                         <div className="text-center">
                             <button className="btn btn-md botao botaoAvançar" onClick={this.VoltaFormList}>Voltar</button>
-                            <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadAni}>Novo Cadastro</button>
-                            <button className="btn btn-md botao botaoAvançar" onClick={this.CadAni}>Finalizar</button>
+                            {/* <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadAni}>Novo Cadastro</button> */}
+                            <button className="btn btn-md botao botaoAvançar" onClick={this.CompletaListaCnv}>Finalizar</button>
                         </div> 
                     </div> 
                 </div>

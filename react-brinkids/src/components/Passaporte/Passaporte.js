@@ -1,6 +1,6 @@
 import React from 'react';
 import Webcam from 'react-webcam';
-import axios from 'axios';
+
 import ConfirmaAdulto from '../Adultos/ConfirmaAdulto.js';
 import TypesInput from '../TypesInput.js';
 
@@ -13,6 +13,10 @@ import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import $ from "jquery";
+import axios from 'axios';
+
+import config from '../Login/service/config';
+
 import {
     BrowserRouter as Router,
     Route,
@@ -20,8 +24,10 @@ import {
     Redirect,
     withRouter
 } from "react-router-dom";
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
 
-
+import { Num } from './favetas';
 class Passport extends React.Component {
     constructor(props) {
         super(props)
@@ -31,7 +37,7 @@ class Passport extends React.Component {
             page: "SelectAdult",//ConfirmAdult SelectAdult Finalize
             selectedSearch: '', // Salva o nome que é colocado na barra de busca
             list: [], //recebe do banco os dados da pessoa que foi buscada
-            listConect: [], // recebe os dados das crianças ligadas aos adultos [Passaporte]
+            listConnect: [], // recebe os dados das crianças ligadas aos adultos [Passaporte]
             //Tela I:
             listConfirmAdult: [], // Dados do Responsável Selecionado na checkBox
             erro: '',
@@ -48,11 +54,12 @@ class Passport extends React.Component {
             file: '', // recebe a imagem 
             currentdate: [],
             horaEntradaCriança: '', // Váriável que recebe a hora que a crianaça da entrada na loja. Aparece na telaIV
-            kinshipConfirm: '',
+            kinshipConfirm: 'Outros(a)',
             comprovante: false,
             no: tabelinha,
             dadosComprovante: [],
             kinship: [],
+            nomeFuncionario: "",
 
         }
 
@@ -71,6 +78,45 @@ class Passport extends React.Component {
 
         this.TelaIII = this.TelaIII.bind(this);
     }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(19);
+    }
+
 
     //Relacionado a atualização dos valores Funções
     ChangeObs(event) {
@@ -113,7 +159,7 @@ class Passport extends React.Component {
                     this.state.kinship[indice] = "Outros";
                 }
                 else if (event.target.value === "children") {
-                    this.state.kinship[indice] = "filho(a)";
+                    this.state.kinship[indice] = "Filho(a)";
                 }
                 else if (event.target.value === "Stepson") {
                     this.state.kinship[indice] = "Enteado(a)";
@@ -140,52 +186,86 @@ class Passport extends React.Component {
 
 
     // Faz a busca do responsável:
-    SearchAdult(event) {
+    async  SearchAdult(event) {
         let erros = this.state.selectedSearch;
-
+        console.log(await Num())
         if (erros.length === 0) {
-            alert("A Busca não pode ser em branco");
+            $("#selectAdult").addClass('errorBorder');
         }
-        else if (erros.length < 8) {
-            alert("A Busca nao pode ter menos que 8 caracteres");
-        }
+        // else if (erros.length < 8) {
+        //     alert("A Busca nao pode ter menos que 8 caracteres");
+        // }
         else {
-            $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
-                dataType: 'json',
-                type: 'GET',
-                error: function (response) {
-                    if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-                },
-                success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response.length)
-                    if (response.length === 0) {
+            axios.get(`/adult/filter/${this.state.selectedSearch}/name`)
+                .then((response) => {
+
+                    if (response.data.length === 0) {
                         alert("Erro: Nenhum Responsável Encontrado")
                         this.setState({ erro: "* Nenhum Responásel Encontrado." })
                     } else {
                         console.log("Olar")
-                        this.setState({ list: response });
+                        this.setState({ list: response.data });
                     }
-                }.bind(this)
-            });
+                    // window.location.href = '/';
+                }).catch((error) => {
+
+
+                })
+            // // $.ajax({
+            // //     url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
+            // //     dataType: 'json',
+            // //     type: 'GET',
+            // //     error: function (response) {
+            // //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+            // //     },
+            // //     success: function (response) {    //Salva os dados do responsável na variácel LIST
+            // //         console.log(response.length)
+            // //         if (response.length === 0) {
+            // //             alert("Erro: Nenhum Responsável Encontrado")
+            // //             this.setState({ erro: "* Nenhum Responásel Encontrado." })
+            // //         } else {
+            // //             console.log("Olar")
+            // //             this.setState({ list: response });
+            // //         }
+            // //     }.bind(this)
+            // });
+            $("#selectAdult").removeClass('errorBorder');
         }
     }
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
     selectedAdult(adult) {
-        const adultFind = this.state.listConfirmAdult.findIndex((adults) => adults._id === adult._id);
+        this.setState({
+            listConfirmAdult: adult,
+            page: "ConfirmAdult",
+            phone: adult.phone,
+            obs: adult.observations
+        })
 
-        if (adultFind === -1) {
-            this.state.listConfirmAdult.push(adult);
-        } else {
-            this.state.listConfirmAdult.splice(adultFind, 1);
-        }
+
     }
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL- Fim
 
     // FUNCOES RELACIONADAS A BUSCA DAS CRIANÇAS - Inicio 
     //Bloco que muda o status para o atual do formulario.
     ChangeSearch(event) {
+
+        const b = jwt.verify(getToken(), config.secret_auth);
+
+
+        axios.get(`/adult/${b.id}`)
+            .then((response) => {
+
+                const name = response.data.name.firstName + " " + response.data.name.surName;
+                this.setState({
+                    nomeFuncionario: response.data.name.firstName + " " + response.data.name.surName
+                })
+                console.log(name)
+            }).catch((err) => {
+                console.log(err);
+            });
+
+
         this.setState({ selectedSearch: event.target.value });
     }
 
@@ -194,25 +274,23 @@ class Passport extends React.Component {
         let erros = this.state.selectedSearch;
 
         if (erros.length === 0) {
-            alert("A Busca não pode ser em branco");
+            $("#selectKids").addClass('errorBorder');
         }
-        else if (erros.length < 8) {
-            alert("A Busca nao pode ter menos que 8 caracteres");
-        }
+        // else if (erros.length < 8) {
+        //     alert("A Busca nao pode ter menos que 8 caracteres");
+        // }
         else {
-            $.ajax({
-                url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
-                dataType: 'json',
-                type: 'GET',
-                error: function (response) {
-                    if (response.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) }
-                },
-                success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response);
-                    //this.setState({ achado: true });
-                    this.setState({ list: response });
-                }.bind(this)
-            });
+            axios.get(`/child/filter/${this.state.selectedSearch}`)
+                .then((response) => {
+                    if (response.data.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) } else {
+                        this.setState({ list: response.data });
+                    }
+                    // window.location.href = '/';
+                }).catch((error) => {
+
+
+                })
+            $("#selectKids").removeClass('errorBorder');
         }
     }
 
@@ -236,8 +314,8 @@ class Passport extends React.Component {
         if (this.state.listConfirmAdult.length != 0) {
             this.setState({
                 page: "ConfirmAdult",
-                obs: this.state.listConfirmAdult[0].observations,
-                phone: this.state.listConfirmAdult[0].phone,
+                obs: this.state.listConfirmAdult.observations,
+                phone: this.state.listConfirmAdult.phone,
             })
         }
         else {
@@ -252,18 +330,23 @@ class Passport extends React.Component {
     TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
-        const criancas = this.state.listConfirmAdult[0].children.map(async (crianca) => {
-            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-            return response.data;
-        });
+        console.log(this.state.listConfirmAdult.children[0])
+        if (this.state.listConfirmAdult.children[0] === null) {
 
-        criancas.forEach(async (c) => {
-            const crianca = await c;
-            this.setState({
-                listConect: [...this.state.listConect, crianca]
+        } else {
+
+            const criancas = this.state.listConfirmAdult.children.map(async (crianca) => {
+                const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                return response.data;
+            });
+
+            criancas.forEach(async (c) => {
+                const crianca = await c;
+                this.setState({
+                    listConnect: [...this.state.listConnect, crianca]
+                })
             })
-        })
-
+        }
         this.setState({
             page: "SelectKids",
             selectedSearch: '',
@@ -273,7 +356,7 @@ class Passport extends React.Component {
 
         // Função responsável por pegar o identificador que está relacionado ao adulto e fazer uma requisição dos dados das crianças 
         // $.ajax({
-        //     url: "http://localhost:3001/adult/filter/" + this.state.listConfirmAdult[0].children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
+        //     url: "/adult/filter/" + this.state.listConfirmAdult.children.identifier + "/name",// url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",
         //     dataType: 'json',
         //     type: 'GET',
         //     error: function (response) {
@@ -281,7 +364,7 @@ class Passport extends React.Component {
         //     },
         //     success: function (response) {    //Salva os dados do responsável na variácel LIST
         //         console.log("Olar2")
-        //         this.setState({ listConect: response });
+        //         this.setState({ listConnect: response });
         //     }.bind(this)
         // });
     }
@@ -304,29 +387,30 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela V
-    TelaV = (event) => {
+    TelaV = async (event) => {
 
 
         var formData = new FormData();
-        var listAdult = new Array();
-        var listCria = new Array();
+        var listCria = [];
+
+        const adulto = {
+            _id: this.state.listConfirmAdult._id,
+            name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
+            phone: this.state.listConfirmAdult.phone,
+            observations: this.state.obs,
+        };
         var i;
         for (i = 0; i < this.state.listConfirmKids.length; i++) {
-            formData.append('photo', String(this.state.listConfirmKids[0]._id))
-            formData.append('service', 'Passaporte')
-            formData.append('time', moment().format())
-            formData.append('belongings', '0')
-            listCria.push(String(this.state.listConfirmKids[i]._id))
-            listCria.push(this.state.listConfirmKids[i].name.firstName + this.state.listConfirmKids[i].name.surName)
-            listCria.push(this.state.listConfirmKids[i].birthday)
-            listCria.push(this.state.listConfirmKids[i].restrictions)
-            listCria.push(this.state.listConfirmKids[i].observations)
-            listAdult.push(this.state.listConfirmAdult[0]._id)
-            listAdult.push(this.state.listConfirmAdult[0].name.firstName + this.state.listConfirmAdult[0].name.surName)
-            listAdult.push(this.state.listConfirmAdult[0].phone)
-            listAdult.push(this.state.obs)
-            formData.append('children', listCria)
-            formData.append('adult', listAdult)
+            const crianca = {
+                _id: String(this.state.listConfirmKids[i]._id),
+                name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                birthday: new Date(this.state.listConfirmKids[i].birthday),
+                restrictions: this.state.listConfirmKids[i].restrictions,
+                observations: this.state.listConfirmKids[i].observations,
+                photo: this.state.listConfirmKids[i].fotoFamily
+            }
+
+            listCria.push(crianca);
         };
         this.setState({
             dadosComprovante: {
@@ -334,9 +418,10 @@ class Passport extends React.Component {
                 photo: String(this.state.listConfirmKids[0]._id),
                 service: "Passaporte",
                 time: moment().format(),
-                belongings: 0,
+                belongings: await Num(),
                 children: listCria,
-                adult: listAdult
+                adult: adulto,
+                funcionario: this.state.nomeFuncionario
                 //ajeitar o comprovante
             }
         })
@@ -357,55 +442,82 @@ class Passport extends React.Component {
     //O new Date().getTime() recebe o valor em milisegundos, por isso, dividindo por 60000 converto em minutos.
     //Começando o formulário para enviar no JSON:
     /*FUNCAO CADASTRA ADULTO*/
-    TheEnd = (event) => {
+    TheEnd = async (event) => {
         var formData = new FormData();
         var listCria = [];
 
         const adulto = {
-            _id: this.state.listConfirmAdult[0]._id,
-            name: this.state.listConfirmAdult[0].name.firstName + ' ' + this.state.listConfirmAdult[0].name.surName,
-            phone: this.state.listConfirmAdult[0].phone,
+            _id: this.state.listConfirmAdult._id,
+            name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
+            phone: this.state.phone,
             observations: this.state.obs,
         };
 
         for (var i = 0; i < this.state.listConfirmKids.length; i++) {
-            const crianca = {
-                _id: String(this.state.listConfirmKids[i]._id),
-                name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
-                birthday: new Date(this.state.listConfirmKids[i].birthday),
-                restrictions: this.state.listConfirmKids[i].restrictions,
-                observations: this.state.listConfirmKids[i].observations,
-                photo: this.state.listConfirmKids[i].fotoFamily
+            var crianca;
+            if (this.state.kinship[i] !== undefined) {
+                crianca = {
+                    _id: String(this.state.listConfirmKids[i]._id),
+                    name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                    birthday: new Date(this.state.listConfirmKids[i].birthday),
+                    restrictions: this.state.listConfirmKids[i].restrictions,
+                    observations: this.state.listConfirmKids[i].observations,
+                    photo: this.state.listConfirmKids[i].fotoFamily,
+                    kinship: this.state.kinship[i],
+                }
+            } else {
+                crianca = {
+                    _id: String(this.state.listConfirmKids[i]._id),
+                    name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                    birthday: new Date(this.state.listConfirmKids[i].birthday),
+                    restrictions: this.state.listConfirmKids[i].restrictions,
+                    observations: this.state.listConfirmKids[i].observations,
+                    photo: this.state.listConfirmKids[i].fotoFamily,
+                    kinship: "Outros",
+                }
             }
-
+            console.log(this.state.kinship[i])
             listCria.push(crianca);
         };
 
-        formData.append('photo', this.state.file)
+        formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
         formData.append('service', 'Passaporte')
         formData.append('time', moment().format())
-        formData.append('belongings', '0')
+        formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
+        formData.append('funcionario', this.state.nomeFuncionario);
 
-        console.log(this.state.file);
+
         //Fim do formulário;
 
         axios.post('/product', formData)
             .then((response) => {
                 console.log(response.data, "olaa");
                 this.setState({
-
-                    dadosComprovante: response.data
+                    dadosComprovante: {
+                        i: response.data,
+                        funcionario: this.state.nomeFuncionario
+                    }
                 })
-                setTimeout((event) => {
-                    this.setState({
-                        comprovante: true,
-                    })
-                }, 100);
+
 
 
                 // window.location.href = '/';
+            }).then(() => {
+
+
+                this.setState({
+
+                    comprovante: true,
+                })
+
+            }).then(() => {
+
+                setTimeout((event) => {
+                    this.props.history.push("/");
+
+                }, 100);
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
 
@@ -425,7 +537,8 @@ class Passport extends React.Component {
     // Voltar par Tela II
     VoltarTelaII = (event) => {
         this.setState({
-            page: "ConfirmAdult"
+            page: "ConfirmAdult",
+            listConnect: [],
         })
     }
 
@@ -528,7 +641,7 @@ class Passport extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + " " + findAdult.name.surName} </td>
                                                 <td >{findAdult.phone} </td>
-                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult)} /> </td>
+                                                <td className="text-center">    <button name="selectchild" onClick={() => this.selectedAdult(findAdult)}><span className="glyphicon">&#xe065;</span></button> </td>
                                             </tr>
                                         );
                                     })}
@@ -536,8 +649,8 @@ class Passport extends React.Component {
                             </table>
 
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
-                                <button className="btn btn-md botao botaoAvançar" onClick={this.TelaII}> Avançar </button>
+                                <Link className="btn btn-md botao" to="/">Cancelar</Link>
+
                             </div>
                         </div>
                     </div>
@@ -565,13 +678,13 @@ class Passport extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
+                                            <img src={this.state.listConfirmAdult.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                            <p>{this.state.listConfirmAdult.name.firstName + " " + this.state.listConfirmAdult.name.surName}</p>
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 25 + "px", paddingTop: -13 + "px" }}>
@@ -581,7 +694,7 @@ class Passport extends React.Component {
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                            <p>{moment(this.state.listConfirmAdult[0].birthday).toNow(true)}</p>
+                                            <p>{moment(this.state.listConfirmAdult.birthday).toNow(true)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -601,7 +714,7 @@ class Passport extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaI}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIII}> Avançar </button>
                     </div>
@@ -643,12 +756,13 @@ class Passport extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody> {/* LISTA DE CRIANÇAS QUE JA FORAM CADASTRADAS - Falta modificar para aparecer o nome*/}
-                                        {this.state.listConect.map((findKids, indice) => {
+                                        {this.state.listConnect.map((findKids, indice) => {
+
                                             return (
                                                 <tr key={findKids._id}>
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
-                                                    <td >{moment(findKids.birthday).format('DD/MM/YYYY')} </td>
+                                                    <td >{moment(findKids.birthday).add(1, "days").format('DD/MM/YYYY')} </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
                                                 </tr>
                                             );
@@ -656,7 +770,7 @@ class Passport extends React.Component {
                                         {this.state.list.map((findKids, indice) => {
                                             return (
                                                 <tr key={findKids._id}>
-                                                    <th scope="row">{indice + 1}</th>
+                                                    <th scope="row">{this.state.listConnect.length + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{moment(findKids.birthday).format('DD/MM/YYYY')}  </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>
@@ -669,7 +783,7 @@ class Passport extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaIV}> Avançar </button>
                     </div>
@@ -714,12 +828,12 @@ class Passport extends React.Component {
                                                     <div className="col-md-8 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Nome Responsável: </b></h5>
-                                                            <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p></div>
+                                                            <p>{this.state.listConfirmAdult.name.firstName + " " + this.state.listConfirmAdult.name.surName}</p></div>
                                                     </div>
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{moment(this.state.listConfirmAdult[0].birthday).format('DD/MM/YYYY')} </p>
+                                                            <p>{moment(this.state.listConfirmAdult.birthday).format('DD/MM/YYYY')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -736,9 +850,9 @@ class Passport extends React.Component {
                                                             <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
                                                             <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event, Criançasqueentrarao._id, indice)} >
                                                                 <option value="others" > Outros </option>
-                                                                <option value="children" > filho(a) </option>
+                                                                <option value="children" > Filho(a) </option>
                                                                 <option value="Stepson" > Enteado(a) </option>
-                                                                <option value="grandchildren"  >Neto(a) </option>
+                                                                <option value="grandchildren"  > Neto(a) </option>
                                                                 <option value="nephews"  > Sobrinho(a) </option>
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >
@@ -788,7 +902,7 @@ class Passport extends React.Component {
                         </div>
                     </div>
                     <div className="text-center">
-                        <a className="btn btn-md botao" href="/">Cancelar</a>
+                        <Link className="btn btn-md botao" to="/">Cancelar</Link>
                         <button className="btn btn-md botao" onClick={this.VoltarTelaIII}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TelaV}> Avançar </button>
                     </div>
@@ -818,13 +932,13 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={"http://localhost:3000/img-users/" + this.state.listConfirmAdult[0].photo} />
+                                                <img src={this.state.listConfirmAdult.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                <p>{this.state.listConfirmAdult[0].name.firstName + " " + this.state.listConfirmAdult[0].name.surName}</p>
+                                                <p>{this.state.listConfirmAdult.name.firstName + " " + this.state.listConfirmAdult.name.surName}</p>
                                             </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
@@ -834,7 +948,7 @@ class Passport extends React.Component {
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                <p>{moment(this.state.listConfirmAdult[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                <p>{moment(this.state.listConfirmAdult.birthday, "YYYYMMDD").toNow(true)}</p>
 
                                             </div>
                                         </div>
@@ -874,7 +988,7 @@ class Passport extends React.Component {
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                        <img src={"http://localhost:3000/img-users/" + Criançasqueentrarao.photo} />
+                                                        <img src={Criançasqueentrarao.photo} />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">
@@ -900,16 +1014,25 @@ class Passport extends React.Component {
                                                 </div>
                                             </div>
                                             <br></br>
-                                            <div className="graph" style={{ padding: 10 + "px" }} >
-                                                <div className="row">
-                                                    <div className="col-md-12 col-sm-12 col-xs-12">
-                                                        <h3 className="inner-tittle" > Observações </h3>
-                                                        <br></br>
-                                                        <div className="graph" style={{ padding: 10 + "px" }} >
+                                            
+                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                    <div className="row">
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <h3 className="inner-tittle" > Observações </h3>
+                                                            <br></br>
+                                                            <div className="graph" style={{ padding: 10 + "px" }} >
                                                             <p>{Criançasqueentrarao.observations}</p>
-                                                        </div> </div>
-                                                </div>
-                                            </div >
+                                                        </div>
+                                                        </div>
+                                                        <div className="col-md-6 col-sm-12 col-xs-12">
+                                                            <h3 className="inner-tittle" > Restrições </h3>
+                                                            <br></br>
+                                                            <div className="graph" style={{ padding: 10 + "px" }} >
+                                                            <p>{Criançasqueentrarao.restrictions}</p>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div >
                                             <div><br></br></div>
                                         </div>
                                     )

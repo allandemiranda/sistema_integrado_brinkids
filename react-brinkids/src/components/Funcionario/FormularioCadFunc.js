@@ -3,18 +3,32 @@ import axios from 'axios';
 import TypesInput from '../TypesInput.js';
 import ConfirmaFunc from './ConfirmaFunc.js'
 import $ from "jquery";
-
+import CadastrarFun from './CadastroFuncionario.js';
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Funcionario.css';
 import './css/style.css';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
+import ComprovanteLogin from '../Comprovante/comprovanteLogin.js';
 
 class FormularioCadFunc extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            comprovante:false,
+            dadosComprovates:"",
+            cargoName:"",
             cargos: [],
             page: "FormularioCad",
             //PARTE PESSOAL
@@ -118,7 +132,7 @@ class FormularioCadFunc extends React.Component {
         this.ChangeCargAtual = this.ChangeCargAtual.bind(this);
         this.ChangeDataAdmisao = this.ChangeDataAdmisao.bind(this);
         this.ChangeRegInterno = this.ChangeRegInterno.bind(this);
-
+       
         this.ChangeObs = this.ChangeObs.bind(this);
 
     }
@@ -188,7 +202,7 @@ class FormularioCadFunc extends React.Component {
 
     ChangeCNHDemissao(event) { this.setState({ CNHDemissao: event.target.value }); }
 
-    ChangeCargAtual(event) {console.log(event.target.value); this.setState({ CargAtual: event.target.value }); }
+
 
     ChangeDataAdmisao(event) { this.setState({ DataAdmisao: event.target.value }); }
 
@@ -225,7 +239,7 @@ class FormularioCadFunc extends React.Component {
             .then((response) => {
                 console.log(response.data)
                 if (isEmpty(response.data)) {
-                    alert("Nenhum adulto foi encontrado com essa busca")
+                    //alert("Nenhum adulto foi encontrado com essa busca")
                 }
                 else {
                     const data = new Date(response.data[0].birthday).toISOString();
@@ -255,9 +269,11 @@ class FormularioCadFunc extends React.Component {
 
     //Função que Valida o Funcionario
     ValidaFuncionario = (event) => {
-         event.preventDefault();
-         var erros = ValidaErros(this.state);
-         if(erros.length > 0){
+        event.preventDefault();
+        var erros = [];
+        //voltar as coisas normais dps
+        //  ValidaErros(this.state)
+        if (erros.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
@@ -267,146 +283,146 @@ class FormularioCadFunc extends React.Component {
                 page: "ConfirmaCad"
             })
         }
-         function ValidaErros(funcio) {
+        //  function ValidaErros(funcio) {
 
-             var erros = [];
+        //      var erros = [];
 
-             if (funcio.scholl.length === 0) {
-                $("#scholl").addClass('errorBorder');
-                erros.push("A Escola não pode ser em branco");
-             }
-             else{
-                $("#scholl").removeClass('errorBorder'); 
-             }
-             if (funcio.dad.length === 0) {
-                $("#dad").addClass('errorBorder');
-                erros.push("O nome do Pai não pode ser em branco");
-             }
-             else{
-                $("#dad").removeClass('errorBorder'); 
-             }
-             if (funcio.mom.length === 0) {
-                $("#mom").addClass('errorBorder');
-                erros.push("O nome do Mae não pode ser em branco");
-             }
-             else{
-                $("#mom").removeClass('errorBorder'); 
-             }
-             if (funcio.cidadeNasc.length === 0) {
-                $("#LN").addClass('errorBorder');
-                erros.push("A Cidade de Nascimento não pode ser em branco");
-             }
-             else{
-                $("#LN").removeClass('errorBorder'); 
-             }
-             if (funcio.UFLNasc.length === 0) {
-                $("#UFN").addClass('errorBorder');
-                erros.push("A UF de Nascimento não pode ser em branco");
-             }
-             else{
-                $("#UFN").removeClass('errorBorder'); 
-             }
-            
-             // Carteira de Trabalho
-             if (funcio.numberCT.length === 0) {
-                $("#NumberCT").addClass('errorBorder');
-                erros.push("A Numero da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#NumberCT").removeClass('errorBorder'); 
-             }
-             if (funcio.serieCT.length === 0) {
-                $("#SerieCT").addClass('errorBorder');
-                erros.push("A Serie da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#SerieCT").removeClass('errorBorder'); 
-             }
-             if (funcio.UFCT.length === 0) {
-                $("#Se").addClass('errorBorder');
-                erros.push("A UF da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#Se").removeClass('errorBorder'); 
-             }
-             if (funcio.PIS.length === 0) {
-                $("#PIS").addClass('errorBorder');
-                erros.push("O PIS/PASEP da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#PIS").removeClass('errorBorder'); 
-             }
-             if (funcio.DataEmissaoCT.length === 0) {
-                $("#CTDE").addClass('errorBorder');
-                erros.push("A Data de Emissão da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#CTDE").removeClass('errorBorder'); 
-             }
-             if (funcio.LocalEmissaoCT.length === 0) {
-                $("#CTLE").addClass('errorBorder');
-                erros.push("O Local de Emissão da Carteira de Trabalho não pode ser em branco");
-             }
-             else{
-                $("#CTLE").removeClass('errorBorder'); 
-             }
-   
-             //RG
-             if (funcio.RGLEmissao.length === 0) {
-                $("#RGLE").addClass('errorBorder');
-                erros.push("O Local de Emissão do RG não pode ser em branco");
-             }
-             else{
-                $("#RGLE").removeClass('errorBorder'); 
-             }
-             if (funcio.RGUF.length === 0) {
-                $("#RGUF").addClass('errorBorder');
-                erros.push("O UF do RG não pode ser em branco");
-             }
-             else{
-                $("#RGUF").removeClass('errorBorder'); 
-             }
-             if (funcio.RGDateEmissao.length === 0) {
-                $("#RGDE").addClass('errorBorder');
-                erros.push("A Data de Emissão do RG não pode ser em branco");
-             }
-             else{
-                $("#RGDE").removeClass('errorBorder'); 
-             }
-            
-             //Titulo Eleitoral
-             if (funcio.TNumero.length === 0) {
-                $("#TLNumero").addClass('errorBorder');
-                erros.push("O Numero do Titulo de Eleitor não pode ser em branco");
-             }
-             else{
-                $("#TLNumero").removeClass('errorBorder'); 
-             }
-             if (funcio.TZona.length === 0) {
-                $("#TLLE").addClass('errorBorder');
-                erros.push("A Zona Eleitoral não pode ser em branco");
-             }
-             else{
-                $("#TLLE").removeClass('errorBorder'); 
-             }
-             if (funcio.TSecao.length === 0) {
-                $("#TLUF").addClass('errorBorder');
-                erros.push("A Seção Eleitoral não pode ser em branco");
-             }
-             else{
-                $("#TLUF").removeClass('errorBorder'); 
-             }
-            
-             // Funcionario
-             if (funcio.DataAdmisao.length === 0) {
-                $("#DataAdmisao").addClass('errorBorder');
-                erros.push("A Data de Admissão do Funcionario não pode ser em branco");
-             }
-             else{
-                $("#DataAdmisao").removeClass('errorBorder'); 
-             }
-             return erros;
-         }
+        //      if (funcio.scholl.length === 0) {
+        //         $("#scholl").addClass('errorBorder');
+        //         erros.push("A Escola não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#scholl").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.dad.length === 0) {
+        //         $("#dad").addClass('errorBorder');
+        //         erros.push("O nome do Pai não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#dad").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.mom.length === 0) {
+        //         $("#mom").addClass('errorBorder');
+        //         erros.push("O nome do Mae não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#mom").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.cidadeNasc.length === 0) {
+        //         $("#LN").addClass('errorBorder');
+        //         erros.push("A Cidade de Nascimento não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#LN").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.UFLNasc.length === 0) {
+        //         $("#UFN").addClass('errorBorder');
+        //         erros.push("A UF de Nascimento não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#UFN").removeClass('errorBorder'); 
+        //      }
+
+        //      // Carteira de Trabalho
+        //      if (funcio.numberCT.length === 0) {
+        //         $("#NumberCT").addClass('errorBorder');
+        //         erros.push("A Numero da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#NumberCT").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.serieCT.length === 0) {
+        //         $("#SerieCT").addClass('errorBorder');
+        //         erros.push("A Serie da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#SerieCT").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.UFCT.length === 0) {
+        //         $("#Se").addClass('errorBorder');
+        //         erros.push("A UF da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#Se").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.PIS.length === 0) {
+        //         $("#PIS").addClass('errorBorder');
+        //         erros.push("O PIS/PASEP da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#PIS").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.DataEmissaoCT.length === 0) {
+        //         $("#CTDE").addClass('errorBorder');
+        //         erros.push("A Data de Emissão da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#CTDE").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.LocalEmissaoCT.length === 0) {
+        //         $("#CTLE").addClass('errorBorder');
+        //         erros.push("O Local de Emissão da Carteira de Trabalho não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#CTLE").removeClass('errorBorder'); 
+        //      }
+
+        //      //RG
+        //      if (funcio.RGLEmissao.length === 0) {
+        //         $("#RGLE").addClass('errorBorder');
+        //         erros.push("O Local de Emissão do RG não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#RGLE").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.RGUF.length === 0) {
+        //         $("#RGUF").addClass('errorBorder');
+        //         erros.push("O UF do RG não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#RGUF").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.RGDateEmissao.length === 0) {
+        //         $("#RGDE").addClass('errorBorder');
+        //         erros.push("A Data de Emissão do RG não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#RGDE").removeClass('errorBorder'); 
+        //      }
+
+        //      //Titulo Eleitoral
+        //      if (funcio.TNumero.length === 0) {
+        //         $("#TLNumero").addClass('errorBorder');
+        //         erros.push("O Numero do Titulo de Eleitor não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#TLNumero").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.TZona.length === 0) {
+        //         $("#TLLE").addClass('errorBorder');
+        //         erros.push("A Zona Eleitoral não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#TLLE").removeClass('errorBorder'); 
+        //      }
+        //      if (funcio.TSecao.length === 0) {
+        //         $("#TLUF").addClass('errorBorder');
+        //         erros.push("A Seção Eleitoral não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#TLUF").removeClass('errorBorder'); 
+        //      }
+
+        //      // Funcionario
+        //      if (funcio.DataAdmisao.length === 0) {
+        //         $("#DataAdmisao").addClass('errorBorder');
+        //         erros.push("A Data de Admissão do Funcionario não pode ser em branco");
+        //      }
+        //      else{
+        //         $("#DataAdmisao").removeClass('errorBorder'); 
+        //      }
+        //      return erros;
+        //  }
 
     }
 
@@ -478,30 +494,90 @@ class FormularioCadFunc extends React.Component {
         formData.append('observations', String(this.state.observations))
 
         axios.post('/employees', formData)
-            .then(function (response) {
-                console.log(response)
-                // window.location.href = '/funcionario';
-            }).catch(function (error) {
+            .then((response) => {
+
+                this.setState({
+
+                    page: "FormularioCad",
+                    //PARTE PESSOAL
+                    identifier: "",
+                    firstName: "",
+                    surName: "",
+                    cpf: "",
+                    birthday: "",
+                    nacionality: "",
+                    maritalStatus: "",
+                    phoneNumber: "",
+                    email: "",
+                    sexuality: "",
+                    scholl: "",
+                    dad: "",
+                    mom: "",
+                    //Local de Nascimento
+                    cidadeNasc: "",
+                    UFLNasc: "",
+                    //Carteira de trabalho
+                    numberCT: "",
+                    serieCT: "",
+                    UFCT: "",
+                    PIS: "",
+                    DataEmissaoCT: "",
+                    LocalEmissaoCT: "",
+                    //RG
+                    RGLEmissao: "",
+                    RGUF: "",
+                    RGDateEmissao: "",
+                    //Titulo Eleitoral
+                    TNumero: "",
+                    TZona: "",
+                    TSecao: "",
+                    TUF: "",
+                    //Carteira de Rezevista
+                    CRNumero: "",
+                    CRSerie: "",
+                    CRCat: "",
+                    //Passaporte
+                    PNumero: "",
+                    PTipo: "",
+                    PPemissor: "",
+                    PDemissao: "",
+                    PDvalidade: "",
+                    //CNH:
+                    CNHReg: "",
+                    CNHCat: "",
+                    CNHDval: "",
+                    CNHObs: "",
+                    CNHLocal: "",
+                    CNHDemissao: "",
+                    //Funcionario
+                    CargAtual: "",
+                    DataAdmisao: "",
+                    RegInterno: "",
+                    //OBS
+                    observations: "",
+                })
+
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
 
     /*FUNCAO CADASTRA CRIANÇA*/
-    CadastrarFunc = (event) => {
+    CadastrarFunc=(event)=>{
         var formData = new FormData();
 
         formData.append('identifier', String(this.state.identifier))
         console.log(this.state.identifier);
-        formData.append('gender', String(this.state.sexuality))
+        
         formData.append('education', String(this.state.scholl))
         formData.append('fatherName', String(this.state.dad))
         formData.append('motherName', String(this.state.mom))
         formData.append('birthplaceCity', String(this.state.cidadeNasc))
         formData.append('birthplaceState', String(this.state.UFLNasc))
-        console.log(this.state.CargAtual,"cargo atual");
+        console.log(this.state.CargAtual, "cargo atual");
         //Carteira de TRabalho
         formData.append('WPNumber', String(this.state.numberCT))
         formData.append('WPSeries', String(this.state.serieCT))
@@ -550,19 +626,42 @@ class FormularioCadFunc extends React.Component {
 
         //OBS
         formData.append('observations', String(this.state.observations))
-
+        console.log(this.props)
+        const ba = this.state.email.split("@");
+        const login = ba[0]+this.state.RegInterno;
+        const dadosComprovates={
+            login:login,
+            nome:this.state.firstName +" "+this.state.surName,
+        }
         axios.post('/employees', formData)
-            .then(function (response) {
+            .then((response) => {
                 console.log(response.data)
-                // window.location.href = '/funcionario';
-            }).catch(function (error) {
+                this.setState({
+                    dadosComprovates:dadosComprovates,
+                    comprovante:true,
+                })
+                //alert("Cadastro realizado com sucesso!"); 
+            }).then(()=>{
+                setTimeout(()=>{
+                    //alert("Cadastro realizado com sucesso!")
+                    window.location.href="/";
+                },1000)
+            })
+            .catch((error) => {
                 console.log(error)//LOG DE ERRO
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
-
+    ChangeCargAtual(event) {
+        const ba = event.target.value.split(",")
+        
+        this.setState({ 
+            CargAtual: ba[1],
+            cargoName:ba[0]
+         });
+    }
     render() {
         if (this.state.page === "FormularioCad") {
             return (
@@ -575,7 +674,7 @@ class FormularioCadFunc extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Ah algo de errado em seu formulario.
                         </div>
                         <h3 className="inner-tittle" > Perfil </h3>
@@ -704,7 +803,7 @@ class FormularioCadFunc extends React.Component {
                             </div >
                             <br></br>
                             <div className="graph" >
-                                <h3 className="inner-tittle" > Funcionario </h3>
+                                <h3 className="inner-tittle" > Funcionário </h3>
                                 <div className="row">
                                     {/* <TypesInput cod={3} ClassDiv={"col-md-4 col-sm-4 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Cargo Atual:"} id={"CargAtual"} name={"CargAtual"} Class={"form-control optionFomulario"} value={this.state.CargAtual} onChange={this.ChangeCargAtual}
                                         //VALORES QUE AS OPTIONS IRAM RECEBER, VAO DENTRO DO "valueOP" EM FORMA DE VETOR DE OBJETOS.
@@ -717,13 +816,13 @@ class FormularioCadFunc extends React.Component {
                                     {/* foi preciso alterar para alinhar com o back devido ao tempo   */}
                                     <div className="col-md-4 col-sm-4 col-xs-12">
                                         <label className="LetraFormulario brlabel" > Cargo Atual:</label>
-                                        <select id="CargAtual" name="CargAtual" required  className="form-control optionFomulario" onChange={this.ChangeCargAtual}>
-                                        <option disabled selected hidden defaultValue >Selecionar</option>
-                                            {this.state.cargos.map((cargo,indice)=>{
-                                                
-                                                    return(<option value={cargo._id}>{cargo.name}</option>);
-                                           
-                                            
+                                        <select id="CargAtual" name="CargAtual" required className="form-control optionFomulario" onChange={this.ChangeCargAtual}>
+                                            <option disabled selected hidden defaultValue >Selecionar</option>
+                                            {this.state.cargos.map((cargo, indice) => {
+
+                                                return (<option value={[cargo.name,cargo._id]}>{cargo.name}</option>);
+
+
                                             })}
                                         </select>
                                     </div>
@@ -804,17 +903,22 @@ class FormularioCadFunc extends React.Component {
                         CNDataV={this.state.CNHDval}
                         CNObs={this.state.CNHObs}
                         //Funci
-                        FCA={this.state.CargAtual}
+                        FCA={this.state.cargoName}
                         FDA={this.state.DataAdmisao}
                         FRI={this.state.RegInterno}
 
                         Observacao={this.state.observations}
                     />
                     <br></br>
+                    {this.state.comprovante && (<ComprovanteLogin
+                        tabela={this.state.dadosComprovates}
+                        serviso="PASSAPORTE"
+                        teste={this.state.comprovante}
+                    />)}
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.NovoCadastro}>Novo Cadastro</button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarFunc}>Finalizar</button>
+                        
+                        <button className="btn btn-md botao botaoAvançar" onClick={this.CadastrarFunc.bind(this)}>Finalizar</button>
                     </div>
                 </div>
             )

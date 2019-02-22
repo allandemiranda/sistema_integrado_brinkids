@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { Component } from 'react';
 import axios from 'axios';
 import $ from 'jquery'
 import TypesInput from '../TypesInput.js';
@@ -7,14 +7,17 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import './css/Cadastro_Desconto.css';
 import './css/style.css';
+import moment from 'moment';
+import ComprovanteDesconto from '../Comprovante/comprovantedesconto.js';
 
-
-class Desconto extends React.Component {
+class Desconto extends Component {
 
 
     constructor(props) {
         super(props);
         this.state = {
+            dadosComprovante:"",
+            comprovante:false,
             page: "Desconto",
             Name: "",
             Description: "",
@@ -26,12 +29,20 @@ class Desconto extends React.Component {
             TypeTime: "",
             Date: "",
             list: [],
+            erroDesconto:false,
+            descontoOK:false,
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
-
+       
+        this.cancelar = this.cancelar.bind(this);
     }
-
+    sair=()=>{
+        this.props.history.push("/");
+    }
+    cancelar(evente) {
+        this.sair();
+    }
     //Bloco que muda o status para o atual do formulario.
     ChangeValue(event) {
         this.setState({ [event.target.name]: event.target.value });
@@ -44,13 +55,13 @@ class Desconto extends React.Component {
         event.preventDefault();
 
         var erros = ValidaErros(this.state);
-        if(erros.length > 0){
+        if (erros.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             $("#alertDiv").textContent = "<b>ERRO!<b> Ah algo de errado no seu formulário";
             return;
         }
         else {
-            $("#alertDiv").addClass('displaynone');           
+            $("#alertDiv").addClass('displaynone');
             this.setState({
                 page: "Temporaridade"
             })
@@ -71,6 +82,7 @@ class Desconto extends React.Component {
                 $("#TP").addClass('errorBorder');
                 erros.push("O Para Quem não pode ser em branco");
             }
+            
             if (desc.TypeValue.length === 0) {
                 $("#TV").addClass('errorBorder');
                 erros.push("O Tipo não pode ser em branco");
@@ -83,7 +95,7 @@ class Desconto extends React.Component {
                 $("#Quant").addClass('errorBorder');
                 erros.push("A Quantidade não pode ser em branco");
             }
-            
+
             //Removendo Class
             if (desc.Name.length != 0) {
                 $("#Nome").removeClass('errorBorder');
@@ -98,7 +110,7 @@ class Desconto extends React.Component {
                 $("#TV").removeClass('errorBorder');
             }
             if (desc.Value.length != 0) {
-                $("#Value").removeClass('errorBorder'); 
+                $("#Value").removeClass('errorBorder');
             }
             if (desc.Quant.length != 0) {
                 $("#Quant").removeClass('errorBorder');
@@ -137,12 +149,12 @@ class Desconto extends React.Component {
             $("#Date").removeClass('errorBorder');
         }
         //Valida erros
-        if(erros.length > 0){
+        if (erros.length > 0) {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
         else {
-            $("#alertDiv").addClass('displaynone'); 
+            $("#alertDiv").addClass('displaynone');
             var formData = new FormData();
 
             formData.append('name', String(this.state.Name))
@@ -156,17 +168,19 @@ class Desconto extends React.Component {
             formData.append('validity', String(this.state.Date))
 
             axios.post('/discount', formData)
-                .then(function (response) {
-                    this.setState({ list: response.data });
-                    console.log(response);
-                    if (this.state.list.length > 0) {
-                        this.setState({
-                            page: "MostraDesconto"
-                        })
-                    }
-                }).catch(function (error) {
+                .then((response) => {
+                    console.log(response.data)
+                    this.setState({
+                        list: response.data,
+                        page: "MostraDesconto",
+                        dadosComprovante:response.data,
+
+                    })
+                    this.state.descontoOK = true;
+                }).catch((error) => {
+                    this.state.erroDesconto = true;
                     console.log(error)//LOG DE ERRO
-                    alert("Erro ao Gerar Desconto");
+                    //alert("Erro ao Gerar Desconto");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
@@ -175,7 +189,9 @@ class Desconto extends React.Component {
     }
 
     Imprimir = () => {
-        window.print(this.state.list);
+       this.setState({
+        comprovante:true,
+       })
     }
     NovoDesconto = () => {
         this.setState({
@@ -195,7 +211,7 @@ class Desconto extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Novo Desconto</h3>
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Ah algo de errado em seu formulario.
                         </div>
                         <form>
@@ -219,7 +235,7 @@ class Desconto extends React.Component {
                                             <label className="radio-inline"><input type="radio" id="Adulto" name="TypePeople" value="Adult" onClick={this.ChangeValue} /><p className="LetraFormulario">  Adulto</p></label>
                                             <br></br>
                                             <label className="LetraFormulario">Quantidade:</label>
-                                            <input className="form-control" type="number" id="Quant" name="Quant" value={this.state.Quant} onChange={this.ChangeValue} />
+                                            <input className="form-control" type="number" id="Quant" min="1" name="Quant" value={this.state.Quant} onChange={this.ChangeValue} />
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <label className="LetraFormulario" id="TV">Tipo:</label>
@@ -228,14 +244,15 @@ class Desconto extends React.Component {
                                             <label className="radio-inline"><input type="radio" id="Fixo" name="TypeValue" value="Fixo" onClick={this.ChangeValue} /><p className="LetraFormulario">    Fixo</p></label>
                                             <br></br>
                                             <label className="LetraFormulario">Valor:</label>
-                                            <input className="form-control" type="number" id="Value" name="Value" value={this.state.Value} onChange={this.ChangeValue} />
+                                            <input className="form-control" type="number" min="0" id="Value" name="Value" value={this.state.Value} onChange={this.ChangeValue} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <a className="btn btn-md botao" href="/">Cancelar</a>
+                               <a href="/Desconto"><button type="button"className="btn btn-md botao" >Cancelar</button></a>
+
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Proximo</button>
                             </div>
                             <div>
@@ -250,6 +267,13 @@ class Desconto extends React.Component {
         else if (this.state.page === "Temporaridade") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.descontoOK &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Desconto gerado com secesso.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
@@ -258,7 +282,7 @@ class Desconto extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Temporaridade</h3>
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Ah algo de errado em seu formulario.
                         </div>
                         <form>
@@ -293,6 +317,7 @@ class Desconto extends React.Component {
                                 </div>
                             </div>
                             <br></br>
+                           
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cancelar</a>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaTemporariedade}>Gerar</button>
@@ -305,6 +330,13 @@ class Desconto extends React.Component {
         else if (this.state.page === "MostraDesconto") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroDesconto &&
+                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Ocorreu um erro ao gerar o desconto</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
@@ -329,17 +361,17 @@ class Desconto extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.state.list.map((desconto, indice) => {
+                                        {this.state.list.codes.map((desconto, indice) => {
                                             return (
                                                 <tr key={desconto._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td > {desconto.codes.numberCode} </td>
-                                                    <td >{desconto.type} </td>
-                                                    <td >{desconto.value} </td>
-                                                    <td >{desconto.to} </td>
-                                                    <td >{desconto.temporalityType} </td>
-                                                    <td >{desconto.temporalityDate} </td>
-                                                    <td >{desconto.validity} </td>
+                                                    <td > {desconto.numberCode} </td>
+                                                    <td >{this.state.list.type} </td>
+                                                    <td >{this.state.list.value} </td>
+                                                    <td >{this.state.list.to} </td>
+                                                    <td >{this.state.list.temporalityType} </td>
+                                                    <td >{this.state.list.temporalityDate} </td>
+                                                    <td >{moment(this.state.list.validity).add(1,"days").format("DD/MM/YYYY")} </td>
                                                 </tr>
                                             );
                                         })}
@@ -347,6 +379,11 @@ class Desconto extends React.Component {
                                 </table>
                             </div>
                             <br></br>
+                            {this.state.comprovante && (<ComprovanteDesconto
+                        tabela={this.state.dadosComprovante}
+                        serviso="PASSAPORTE"
+                        teste={this.state.comprovante}
+                    />)}
                             <div className="text-center">
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.Imprimir}>Imprimir</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={this.NovoDesconto}>Novo Desconto</button>

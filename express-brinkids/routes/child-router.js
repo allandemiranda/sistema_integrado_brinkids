@@ -4,9 +4,13 @@
 
 const express = require('express');
 const Child = require('../models/child-models');
-const config = require('../config');
+
 const Logs = require('../models/logs-models')
 const router = express.Router();
+
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 
 function teste(json, res) {
   console.log(json);
@@ -32,7 +36,16 @@ function checkAge(actualDate, ChildDate) {
 
   return ChildDate > compareDate;
 }
+router.get('/', async (req, res) => {
+  try {
+    const parties = await  Child.find({});
 
+    return res.status(200).json(parties);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+});
 // Resgata crianças de acordo com o parâmetro 'search' passado na URL
 router.get('/filter/:search', (req, res) => {
   const search = req.params.search.split(' ');
@@ -73,6 +86,11 @@ router.get('/indentifier/:id_Child', async (req, res) => {
  * @return código de status HTTP
  */
 router.post('/', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   const actualDate = new Date()/**< Data atual do sistema */
   const ChildDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
   
@@ -80,7 +98,7 @@ router.post('/', async (req, res) => {
    * Checa se a criança possui menos de 14 anos ou não
    * Se possuir menos de 14 anos, ela é adicionada ao sistema
    */
-  if (checkAge(actualDate, ChildDate)) {
+ 
     /**
      * Checa se todos os dados obrigatórios da criança foram enviados na requisição
      */
@@ -149,8 +167,9 @@ router.post('/', async (req, res) => {
               activity: 'Perfil Criança',
               action: 'Criação',
               dateOperation: new Date(),
-              from: 'f', //ajsuta o id dps de fazer o login funcionar
-              to: ChildCreateResult._id,
+              from: funcionario, //ajsuta o id dps de fazer o login funcionar
+              to: req.body.firstName+" "+req.body.surName,
+              id:ChildCreateResult._id
             }
             Logs.create(log,(errLog, logchil)=>{
 
@@ -167,12 +186,15 @@ router.post('/', async (req, res) => {
     } else {
       return res.sendStatus(400);
     }
-  } else {
-    return res.sendStatus(400);
-  }
+  
 });
 
 router.put('/:identifier', async (req, res) =>  {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  
   if (req.body.observations
       && req.body.restrictions
       && req.body.firstName
@@ -200,8 +222,9 @@ router.put('/:identifier', async (req, res) =>  {
       activity: 'Pefil Criança',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: req.body.firstName+" "+req.body.lastName,
+      id:req.params.identifier,
      
 
     })
@@ -215,6 +238,35 @@ router.put('/:identifier', async (req, res) =>  {
   }
 
   return res.sendStatus(400);
+});
+router.delete('/:identifier', async (req, res) => {
+  try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
+    const deletedService = await Child.findByIdAndRemove(req.params.identifier);
+    
+    const log = new Logs({
+      activity: 'Perfil Criança',
+      action: 'Excluir',
+      dateOperation: new Date(),
+      from: funcionario,
+      id:req.params.identifier,
+    })
+    
+    const newLog = await log.save();
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
+    return res.sendStatus(500);
+  }
 });
 
 module.exports = router;

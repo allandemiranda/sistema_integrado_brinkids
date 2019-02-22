@@ -10,7 +10,9 @@ import '../../assets/style/all.css';
 import './css/GF.css';
 import TypesInput from '../TypesInput.js';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 //import { Tabs, Tab } from 'react-bootstrap-tabs';
 import {
     LineChart,
@@ -53,7 +55,7 @@ class GerenciamentoFinanceiro extends React.Component {
 
         this.state = {
 
-            ListaGrafico: [],
+            ListaGrafico: dados,
             ListaFluxo: [],
             ROpr: "true",
             RAtv: "true",
@@ -74,24 +76,78 @@ class GerenciamentoFinanceiro extends React.Component {
         this.ChangeValue = this.ChangeValue.bind(this);
         this.requisicao = this.requisicao.bind(this);
         this.inteval = this.inteval.bind(this);
+        this.serch = this.serch.bind(this);
+        this.grafico = this.grafico.bind(this);
     }
-    inteval(event) {
-
-    }
-    requisicao(event) {
-        axios.get('/log')
+    serch(event) {
+        const data = {
+            operador: this.state.Operador,
+            atividade: this.state.Atividade,
+            start: this.state.DataEntrada,
+            end: this.state.DataSaida,
+        }
+        console.log(data);
+        axios.put('/log/filter', data)
             .then((response) => {
                 this.setState({ ListaFluxo: response.data });
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
+
+    }
+    inteval(event) {
+
+    }
+    requisicao(event) {
+
+        axios.get('/log')
+            .then((response) => {
+                this.setState({ ListaFluxo: response.data.reverse() });
+
+                console.log(response.data);
+            })
+            .catch((err) => console.log(err));
+    }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            this.grafico();
+                            this.requisicao();
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
     }
     componentWillMount() {
-
-        this.requisicao();
-        this.inteval = setInterval(this.requisicao, 60000);
-
+        this.Funcionario(30);
     }
+
     componentWillUnmount() {
         clearInterval(this.inteval);
     }
@@ -215,22 +271,99 @@ class GerenciamentoFinanceiro extends React.Component {
         }
     }
 
-    grafico(event) {
-        event.preventDefault();
-        for (var i = 1; i <= 30; i++) {
+    async grafico(event) {
+        let listadedatas = [];
+
+        var lista = [];
+        for (var i = 0; i < 30; i++) {
             let hj = moment().format("MM/DD/YYYY");
-            var novo = moment(hj).subtract(i, 'days').calendar();
-            console.log(novo);
+            var novo = moment(hj).subtract(i, 'days');
 
-            axios.get('http://localhost:3001/TelaMKT' + novo)
-                .then((response) => {
-                    console.log(response.data);
-                    this.setState.ListaGrafico.pop(response.data);
-                })
-                .catch((err) => console.log(err));
+            const a = moment(novo).format("MM/DD/YYYY")
+
+            lista.push(a);
+
         }
-    }
+       
+        const datas = lista.map(async (crianca, index) => {
 
+            const a = moment(crianca).startOf('day').toDate();
+
+
+            const response = await axios.get(`/tela-mkt/${moment(a)}`);
+            return response.data;
+        });
+        let listaparaostate = [];
+        var passaporte = 0;
+        var aniversario = 0;
+        var servicoproduto = 0;
+        var total = 0;
+        var nome = '';
+        Promise.all(datas).then((listagraficos) => {
+
+            listagraficos.map((date, indice) => {
+              
+                date.map((info, index) => {
+                    if (info.activity === "Aniversario" && info.action === "Criação") {
+                        aniversario = aniversario + info.price;
+                    }
+                    if (info.activity === "Passaporte" && info.action === "Saida") {
+                        passaporte = passaporte + info.price;
+                    }
+                    if (info.activity === "Serviços" && info.action === "Saida") {
+                        servicoproduto = servicoproduto + info.price;
+                    }
+                  
+                    
+                   
+
+                })
+                
+                const temporario = {
+                    name:  nome= moment(lista[total]).format("DD/MM"), Passaporte: passaporte.toFixed(2), Aniversario: aniversario.toFixed(2), ServiçoProduto: servicoproduto.toFixed(2), Total: (passaporte + aniversario + servicoproduto).toFixed(2)
+                }
+
+                total++;
+
+                listaparaostate.push(temporario);
+
+
+                passaporte = 0;
+                aniversario = 0;
+                servicoproduto = 0;
+                
+                nome = '';
+            })
+
+            
+
+
+            this.setState({
+                listagraficos: listaparaostate.reverse()
+            })
+
+        });
+
+
+
+
+    }
+    // lista.map((indi) => {
+    //     listaparaostate.forEach((event, index, array) => {
+
+    //         let ime = moment(indi).format("DD/MM");
+    //         console.log(event.name,"===",ime)
+    //         if (event.name === "") {
+    //             array[index] = {
+    //                 name: ime, Passaporte: 0, Aniversario: 0, ServiçoProduto: 0, Total: 0
+    //             }
+    //             temporario2.push({
+    //                 name: ime, Passaporte: 0, Aniversario: 0, ServiçoProduto: 0, Total: 0
+    //             })
+    //         }
+
+    //     })
+    // })
 
     render() {
         return (
@@ -252,7 +385,7 @@ class GerenciamentoFinanceiro extends React.Component {
                     <div class="graph">
                         <nav>
                             <ul>
-                                <li id="GraficoTab" name="GraficoTab" onClick={this.selectGrafico} className={this.state.GraficoTab}><a><span class="far fa-chart-bar"></span> <span>Grafico</span></a></li>
+                                <li id="GraficoTab" name="GraficoTab" onClick={this.selectGrafico} className={this.state.GraficoTab}><a><span class="far fa-chart-bar"></span> <span>Gráfico</span></a></li>
 
                                 <li id="FluxoTab" name="FluxoTab" onClick={this.selectFluxo} className={this.state.FluxoTab}><a><span class="fas fa-chart-pie"></span> <span>Fluxo Operacional</span></a></li>
 
@@ -264,7 +397,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                 <br></br>
                                 <div class="graph graph-visual text-center">
                                     <h5>Janeiro/2012</h5>
-                                    <LineChart className="grafico" width={800} height={600} data={dados} margin={{ top: 5, right: 30, bottom: 5 }}>
+                                    <LineChart className="grafico" width={800} height={600} data={this.state.listagraficos} margin={{ top: 5, right: 30, bottom: 5 }}>
                                         <XAxis dataKey="name" />
                                         <YAxis />
                                         <CartesianGrid strokeDasharray="3 3" />
@@ -272,7 +405,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                         <Legend />
                                         <Line type="monotone" dataKey="Passaporte" stroke="rgb(5, 41, 99)" />
                                         <Line type="monotone" dataKey="Aniversario" stroke="rgb(0, 198, 215)" />
-                                        <Line type="monotone" dataKey="ServicoProduto" stroke="rgb(234, 76, 137)" />
+                                        <Line type="monotone" dataKey="ServiçoProduto" stroke="rgb(234, 76, 137)" />
                                         <Line type="monotone" dataKey="Total" stroke="#82ca98" />
                                     </LineChart>
                                     <br></br>
@@ -287,10 +420,10 @@ class GerenciamentoFinanceiro extends React.Component {
                                 <div class="graph graph-visual tables-main">
                                     <div className="graph-visual">
                                         <div id="alertDiv" className="alert displaynone" role="alert">
-                                            <b>ERRO!</b> Ah algo de errado em seu formulario ou busca.
+                                            <b>ERRO!</b> Há algo de errado em seu formulário ou busca.
                                         </div>
                                         <div id="SucessDiv" className="alert displaynone" role="alert">
-                                            <b>Sucesso!</b> Busca Concluida.
+                                            <b>Sucesso!</b> Busca Concluída.
                                         </div>
                                         <form id="busca-fluxo">
                                             <div className="row">
@@ -305,7 +438,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                                 <div className="col-md-1 col-sm-1 col-xs-1">
                                                     <button className="btn botao tam" onClick={this.RAtv}><i class="fas fa-times"></i></button>
                                                 </div>
-                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Ativdade: "} type={"test"} id={"Atividade"} name={"Atividade"} Class={"form-control"}
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Atividade: "} type={"test"} id={"Atividade"} name={"Atividade"} Class={"form-control"}
                                                     value={this.state.Atividade} onChange={this.ChangeValue} />
                                             </div>
                                             <div className="row">
@@ -315,13 +448,13 @@ class GerenciamentoFinanceiro extends React.Component {
                                                 <TypesInput cod={1} ClassDiv={"col-md-5 col-sm-5 col-xs-5"} ClassLabel={"LetraFormulario"} NameLabel={"Data Entrada: "} type={"date"} id={"DataEntrada"} name={"DataEntrada"} Class={"form-control"}
                                                     value={this.state.DataEntrada} onChange={this.ChangeValue}
                                                 />
-                                                <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-6"} ClassLabel={"LetraFormulario"} NameLabel={"Data Saida: "} type={"date"} id={"DataSaida"} name={"DataSaida"} Class={"form-control"}
+                                                <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-6"} ClassLabel={"LetraFormulario"} NameLabel={"Data Saída: "} type={"date"} id={"DataSaida"} name={"DataSaida"} Class={"form-control"}
                                                     value={this.state.DataSaida} onChange={this.ChangeValue}
                                                 />
                                             </div>
                                             <br></br>
                                             <div className="text-right">
-                                                <button className="btn botaoAvancar " onClick={this.BuscarFluxo}>Buscar</button>
+                                                <input type="button" className="btn botaoAvancar " value="Busca" onClick={this.serch} />
                                             </div>
                                         </form>
                                     </div>
@@ -337,11 +470,11 @@ class GerenciamentoFinanceiro extends React.Component {
                                                     <th style={{ textAlign: "center" }}>Operado</th>
                                                     <th style={{ textAlign: "center" }}>Operado Carbono</th>
                                                     <th style={{ textAlign: "center" }}>Valor</th>
-                                                    <th style={{ textAlign: "center" }}>Metodo de Pagamento</th>
+                                                    <th style={{ textAlign: "center" }}>Método de Pagamento</th>
                                                     <th style={{ textAlign: "center" }}>Data Entrada</th>
                                                     <th style={{ textAlign: "center" }}>Data Saída</th>
-                                                    <th style={{ textAlign: "center" }}>Disconto Codigo</th>
-                                                    <th style={{ textAlign: "center" }}>Disconto Tipo</th>
+                                                    <th style={{ textAlign: "center" }}>Desconto Código</th>
+                                                    <th style={{ textAlign: "center" }}>Desconto Tipo</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -366,10 +499,10 @@ class GerenciamentoFinanceiro extends React.Component {
                                                             {fluxo.priceMethod !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.priceMethod}</td>)}
                                                             {fluxo.priceMethod === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
-                                                            {fluxo.timeLojaFirst !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.timeLojaFirst}</td>)}
+                                                            {fluxo.timeLojaFirst !== undefined && (<td style={{ textAlign: "center" }}><a>{moment(fluxo.timeLojaFirst).format("DD/MM/YYYY HH:mm")}</a></td>)}
                                                             {fluxo.timeLojaFirst === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
-                                                            {fluxo.timeLojaLast !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.timeLojaLast}</td>)}
+                                                            {fluxo.timeLojaLast !== undefined && (<td style={{ textAlign: "center" }}><a>{moment(fluxo.timeLojaLast).format("DD/MM/YYYY HH:mm")}</a></td>)}
                                                             {fluxo.timeLojaLast === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
 

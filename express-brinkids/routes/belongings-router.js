@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   try {
     const belongingsJson = await Belongings.find({});
 
-    return res.status(200).json(belongingsJson);
+    return res.status(200).json(belongingsJson[0]);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
@@ -16,9 +16,14 @@ router.get('/', async (req, res) => {
 });
 
 router.put('/', async (req, res) => {
+  console.log(req.body.number)
   try {
     if (req.body.number === undefined || isNaN(parseInt(req.body.number, 10))) {
-      console.log(req.body.number);
+      const belongings = new Belongings({
+            number: 0,
+      })
+      belongings.save();
+      console.log(belongings);
       return res.sendStatus(400);
     }
     const belongings = await Belongings.find({});

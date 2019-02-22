@@ -1,6 +1,7 @@
 /** Arquivo responsável por carregar as configurações do que foi desenvolvido na aplicação */
 
 // Módulos
+var bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const createError = require('http-errors');
@@ -24,6 +25,8 @@ const product = require('./routes/product-router');
 const extraServices = require('./routes/extra-services-router');
 const passport = require('./routes/passport-router');
 const passportServices = require('./routes/passport-services-router');
+const babypassportServices = require('./routes/babypassport-services-router');
+const babypassport = require('./routes/babypassport-router');
 const belongings = require('./routes/belongings-router');
 const professionalPosition = require('./routes/professional-position-router');
 const telaMkt = require('./routes/tela-mkt-router');
@@ -44,7 +47,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 app.use(cors());
-
+app.use(bodyParser.json({limit: '10mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 // Middleware para checar se o token foi enviado
 // app.use(function (req, res, next) {
 //   const token = req.body.token || req.query.token || req.headers['x-access-token']
@@ -79,6 +83,8 @@ app.use('/product', product);
 app.use('/extraServices', extraServices);
 app.use('/passport', passport);
 app.use('/passportServices', passportServices);
+app.use('/babypassportServices', babypassportServices);
+app.use('/babypassport', babypassport);
 app.use('/belongings', belongings);
 app.use('/professionalPosition', professionalPosition);
 app.use('/tela-mkt', telaMkt);

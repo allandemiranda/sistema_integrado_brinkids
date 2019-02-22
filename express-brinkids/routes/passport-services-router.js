@@ -3,6 +3,9 @@ const passportServices = require('../models/passport-services-models');
 const passport = require('../models/passport-models');
 
 const router = express.Router();
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 
 router.post('/', async (req, res) => {
 
@@ -36,20 +39,20 @@ router.post('/', async (req, res) => {
 
 String.prototype.toMMSS = function () {//convertendo de segundos para o formato mm:ss
     let sec_num = parseInt(this, 10);
-    let minutes = Math.floor(sec_num / 60);
-    let seconds = sec_num - (minutes * 60);
+    let hours = Math.floor(sec_num / 60);
+    let minutes = sec_num - (hours * 60);
 
+    if (hours < 10) {hours = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    return minutes+':'+seconds;
+    return hours+':'+minutes;
 }
 
 String.prototype.toSS = function () {//convertendo de mm:ss para segundos
     let nums = this.split(':');
     let mins = parseInt(nums[1], 10);
-    let secs = mins+parseInt(nums[0],10)*60;
+    let hours = mins+parseInt(nums[0],10)*60;
 
-    return secs;
+    return mins;
 }
 
 router.get('/', async (req, res) => {
@@ -97,7 +100,7 @@ router.get('/initialTime', async (req, res) => {
   let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json
   if(psjson.length===1){//teste pra saber se só tem o json inicial
     const data = {
-      initialTime: '00:01', 
+      initialTime: '00:00', 
       default: pjson[0],
     };
     try {

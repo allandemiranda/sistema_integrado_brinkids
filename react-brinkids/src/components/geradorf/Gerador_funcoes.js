@@ -13,7 +13,8 @@ import {
     Link,
     Redirect,
     withRouter
-  } from "react-router-dom";
+} from "react-router-dom";
+import $ from 'jquery';
 class Gerador extends React.Component {
     constructor(props) {
         super(props)
@@ -22,6 +23,7 @@ class Gerador extends React.Component {
             list: [],
             listadecargos: [],
             Name: '',
+            clikado:true,
             Description: '',
             editar: false,
             listafuncoes: funcoes,
@@ -30,6 +32,7 @@ class Gerador extends React.Component {
             indice: '',
 
             listaeditave: [],
+            erroPrenchimento: false,
         }
         this.changueselect = this.changueselect.bind(this);
         this.selecionaFuncao = this.selecionaFuncao.bind(this);
@@ -54,43 +57,71 @@ class Gerador extends React.Component {
                 this.setState({ list: response.data });
             })
             .catch((err) => console.log(err));
-
+           
+            
     }
     Salvar2(event) {
-        let temporario = this.state.listadecargos;
-        console.log(temporario[this.state.indice]);
-        let identifier = temporario[this.state.indice]._id;
-        temporario[this.state.indice] = {
-            name: this.state.Name,
-            description: this.state.Description,
-            class: this.state.class,
-            funcions: this.state.funcoescheck,
-        }
+        if (this.state.Name.length === 0 || this.state.Description.length === 0 ){
+            if (this.state.Name.length === 0){
+                if (this.state.Name.length === 0) {
+                    $("#Nome").addClass('errorBorder');
+                }
+                else {
+                    $("#Nome").removeClass('errorBorder');
+                }
+            }
+            if(this.state.Description.length === 0 ){
+                if (this.state.Description.length === 0) {
+                    $("#Description").addClass('errorBorder');
+                }
+                else {
+                    $("#Description").removeClass('errorBorder');
+                }
+            }
+            this.state.erroPrenchimento = true;
+        }else{
+            let temporario = this.state.listadecargos;
+            console.log(temporario[this.state.indice]);
+            let identifier = temporario[this.state.indice]._id;
+            temporario[this.state.indice] = {
+                name: this.state.Name,
+                description: this.state.Description,
+                class: this.state.class,
+                funcions: this.state.funcoescheck,
+            }
+            const data = {
+                name: this.state.Name,
+                description: this.state.Description,
+                classes: this.state.class,
+                functions: this.state.funcoescheck,
+            }
 
+            var formData = new FormData();
+            formData.append('name', this.state.Name);
+            formData.append('description', this.state.Description);
+            formData.append('classes', this.state.class);
+            formData.append('functions', this.state.funcoescheck);
 
-        var formData = new FormData();
-        formData.append('name', this.state.Name);
-        formData.append('description', this.state.Description);
-        formData.append('classes', this.state.class);
-        formData.append('functions', this.state.funcoescheck);
+            axios.put(`professionalPosition/${identifier}`, data)
+                .then((response) => {
+                    console.log(response.data);
 
-        axios.put(`professionalPosition/${identifier}`, formData)
-            .then((response) => {
-                console.log(response.data);
+                })
+                .catch((err) => console.log(err));
 
+            this.setState({
+                editar: false,
+                Name: '',
+                Description: '',
+                Page: 'Lista',
+                class: 'Operacional',
+                listadecargos: temporario,
             })
-            .catch((err) => console.log(err));
-
-        this.setState({
-            editar: false,
-            Name: '',
-            Description: '',
-            Page: 'Lista',
-            class: 'Operacional',
-            listadecargos: temporario,
-        })
-        console.log(this.state.listadecargos);
+            console.log(this.state.listadecargos);
+            this.state.erroPrenchimento = false;
+        }
     }
+
     editar(event) {
         let temporario = this.state.listadecargos[event];
         console.log(temporario);
@@ -129,61 +160,84 @@ class Gerador extends React.Component {
 
     }
     Salvar(event) {
-        var formData = new FormData();
-        formData.append('name', this.state.Name);
-        formData.append('description', this.state.Description);
-        formData.append('classes', this.state.class);
-        formData.append('functions', this.state.funcoescheck);
-        const data = {
-            name: this.state.Name,
-            description: this.state.Description,
-            classes: this.state.class,
-            functions: this.state.funcoescheck,
+        if (this.state.Name.length === 0 || this.state.Description.length === 0 ){
+            if (this.state.Name.length === 0){
+                if (this.state.Name.length === 0) {
+                    $("#Nome").addClass('errorBorder');
+                }
+                else {
+                    $("#Nome").removeClass('errorBorder');
+                }
+            }
+            if(this.state.Description.length === 0 ){
+                if (this.state.Description.length === 0) {
+                    $("#Description").addClass('errorBorder');
+                }
+                else {
+                    $("#Description").removeClass('errorBorder');
+                }
+            }
+            this.state.erroPrenchimento = true;
+        }else{
+            var formData = new FormData();
+            formData.append('name', this.state.Name);
+            formData.append('description', this.state.Description);
+            formData.append('classes', this.state.class);
+            formData.append('functions', this.state.funcoescheck);
+            const data = {
+                name: this.state.Name,
+                description: this.state.Description,
+                classes: this.state.class,
+                functions: this.state.funcoescheck,
+            }
+            axios.post(`/professionalPosition`, data)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => console.log(err));
+    
+    
+            let listatemporaria = this.state.listadecargos;
+            listatemporaria.push({
+                classes: this.state.class,
+                name: this.state.Name,
+                description: this.state.Description,
+                funcions: this.state.funcoescheck
+            });
+    
+            this.setState({
+                listadecargos: listatemporaria,
+                Name: '',
+                Description: '',
+                funcoescheck: [],
+                Page: 'Lista',
+                class: 'Operacional',
+            });
+            this.state.erroPrenchimento = false;
         }
-        axios.post(`/professionalPosition`, data)
-            .then((response) => {
-                console.log(response.data);
-            })
-            .catch((err) => console.log(err));
-
-
-        let listatemporaria = this.state.listadecargos;
-        listatemporaria.push({
-            class: this.state.class,
-            name: this.state.Name,
-            description: this.state.Description,
-            funcions: this.state.funcoescheck
-        });
-
-        this.setState({
-            listadecargos: listatemporaria,
-            Name: '',
-            Description: '',
-            funcoescheck: [],
-            Page: 'Lista',
-            class: 'Operacional',
-        });
-
     }
     selecionaFuncao(event) {
         let achou = false;
-
-        this.state.funcoescheck.forEach((funcao, indice, array) => {
-            if (funcao._id === event) {
-                delete array[indice];
+       
+        this.state.funcoescheck.map((funcao, indice) => {
+            console.log(this.state.funcoescheck);
+            console.log(funcao)
+            if (funcao.id === event) {
+                this.state.funcoescheck.splice(indice,1);
                 achou = true;
             }
         });
 
         if (!(achou)) {
-            this.state.listafuncoes.forEach((funcao) => {
-                if (funcao._id === event) {
+            this.state.listafuncoes.map((funcao) => {
+                if (funcao.id === event) {
                     this.state.funcoescheck.push(funcao);
+                   
                 }
             });
         }
-
-        this.setState({ funcoescheck: this.state.funcoescheck });
+       
+       
 
     }
     changueselect(event) {
@@ -201,7 +255,7 @@ class Gerador extends React.Component {
 
         axios.put('/employees/rota', formData)
             .then(function (response) {
-                console.log(response.data)
+               
                 // window.location.href = '/funcionario';
             }).catch(function (error) {
                 console.log(error)//LOG DE ERRO
@@ -210,7 +264,36 @@ class Gerador extends React.Component {
                 alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
     }
+    verificaStatus=(nome)=> {
+        
+        if(this.state.clikado){
+           
+            
+            this.setState({
+                funcoescheck:this.state.listafuncoes,
+                clikado:false,
+            })
+        }else{
+            this.setState({
+                funcoescheck:[],
+                clikado:true,
+            })
+            
+            
+        }
+        $(document).on('change', '.checkDoc', function () {
+            $("input[name=docTipo]").prop({
+                checked: this.checked,
+
+            });
+        });
+    }
     render() {
+
+       
+
+
+
         if (this.state.Page === 'Lista') {
             return (
 
@@ -218,11 +301,11 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Gerenciador De Funções </li>
+                            <li > Gerenciador de Funcionários </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Funcionarios </h3>
+                        <h3 className="inner-tittle" > Funcionários </h3>
                         <div className="graph text-center" >
                             <table className="table">
                                 <thead>
@@ -284,7 +367,7 @@ class Gerador extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Gerenciador De Funções </li>
+                            <li > Gerenciador de Funcionários </li>
                             <li > Lista De cargos </li>
                         </ol >
                     </div>
@@ -294,21 +377,22 @@ class Gerador extends React.Component {
                             <table className="table table-hover">
                                 <thead className="text-center">
                                     <tr>
-                                        <th style={{textAlign:'center'}}>#</th>
-                                        <th style={{textAlign:'center'}}>Nome</th>
-                                        <th style={{textAlign:'center'}}>Classe</th>
+                                        <th style={{ textAlign: 'center' }}>#</th>
+                                        <th style={{ textAlign: 'center' }}>Nome</th>
+                                        <th style={{ textAlign: 'center' }}>Classe</th>
 
-                                        <th style={{textAlign:'center'}}> </th>
+                                        <th style={{ textAlign: 'center' }}> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {this.state.listadecargos.map((servico, indice) => {
+                                        console.log(servico)
                                         return (
                                             <tr key={indice}>
-                                                <th scope="row" style={{textAlign:'center'}}>{(indice + 1)}</th>
+                                                <th scope="row" style={{ textAlign: 'center' }}>{(indice + 1)}</th>
                                                 <td>{servico.name}</td>
 
-                                                <td>{servico.class}</td>
+                                                <td>{servico.classes}</td>
 
                                                 <td><button onClick={() => this.editar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
 
@@ -321,23 +405,24 @@ class Gerador extends React.Component {
                         <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Novo' })}>
                             Criar Novo Cargo
                                 </button>
-                        <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Lista' })}>Voltar</button>
+                        <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ Page: 'Lista', Name: '',Description: '',funcoescheck: [], class: 'Operacional', })}>Voltar</button>
                     </div>
                 </div>
             );
         }
+        
         if (this.state.Page === 'Novo') {
             return (
                 <div className="container-fluid" >
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Gerenciador De Funções </li>
-                            <li > Criar Novo Cargo</li>
+                            <li > Gerenciador de Funcionários </li>
+                            <li > Editar Cargo</li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" >Novo Cargo</h3>
+                        <h3 className="inner-tittle" >Editar Cargo</h3>
                         <form>
                             <div className="graph" >
                                 <div className="form-group">
@@ -357,7 +442,7 @@ class Gerador extends React.Component {
                                             <select type="select" name="class" className=" form-control col-md-4 col-sm-8 col-xs-12 " value={this.state.class} onChange={this.changue} style={{ height: 47 + 'px' }}>
                                                 <option value="Operacional">Operacional</option>
                                                 <option value="Administrativo">Adminitrativo</option>
-                                                <option value="Estrategico">Estrategico</option>
+                                                <option value="Estrategico">Estratégico</option>
                                             </select>
                                         </div>
                                     </div>
@@ -366,39 +451,41 @@ class Gerador extends React.Component {
                                     <div className="row">
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <h3 className="inner-tittle" >Funçoes</h3>
-                                            <table className="table table-hover">
-                                                <thead className="text-center">
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Nome</th>
+                                            <form name="form1">
+                                                <table className="table table-hover">
+                                                    <thead className="text-center">
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Nome</th>
 
 
-                                                        <th> </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {this.state.listafuncoes.map((servico, indice) => {
-                                                        return (
-                                                            <tr key={indice}>
-                                                                <th scope="row">{(indice + 1)}</th>
-                                                                <td>{servico.funcao}</td>
-                                                                <td><input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaFuncao(servico._id)} /></td>
+                                                            <th><input type="checkbox" name="docTipo" class="checkDoc" value="false" onClick={ this.verificaStatus} /> </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {funcoes.map((servico, indice) => {
+                                                            return (
+                                                                <tr key={indice}>
+                                                                    <th scope="row">{(indice + 1)}</th>
+                                                                    <td>{servico.funcao}</td>
+                                                                    <td><input type="checkbox" name="docTipo" value="true" onClick={()=>this.selecionaFuncao(indice)} /></td>
 
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                </tbody>
-                                            </table>
-
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br></br>
                             <div className="text-center">
-                                <Link className="btn btn-md botao" to="/">Cancelar</Link>
-                                {!this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Salvar}>Salvar</button>)}
-                                {this.state.editar && (<button className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}>Salvar</button>)}
+                                
+                                <input type="button" value="Voltar" className="btn btn-md botao botaoAvançar" onClick={()=>this.setState({Page:'Cargos', Name: '',Description: '',funcoescheck: [], class: 'Operacional',editar:false})}/>
+                                {!this.state.editar && (<input type="button" value="Salvar" className="btn btn-md botao botaoAvançar" onClick={this.Salvar}/>)}
+                                {this.state.editar && (<input type="button" value="Salvar"  className="btn btn-md botao botaoAvançar" onClick={this.Salvar2}/>)}
                             </div>
                             <div>
                                 <ul id="mensagens-erro" style={{ color: "red" }}></ul>

@@ -5,8 +5,10 @@
 const express = require('express');
 const Logs = require('../models/logs-models')
 const userAdult = require('../models/adult-models');
+const moment = require('moment');
 const config = require('../config');
-
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
 const router = express.Router();
 
 
@@ -17,6 +19,7 @@ function teste(err, res) {
 
 // Rota responsável por realizar a pesquisa dos adultos no sistema
 router.get('/filter/:search/:type', (req, res) => {
+
   // 'search': Contém a pesquisa da página. Pode ser o CPF ou o nome
   // 'type': Indica se é desejado pesquisar por CPF ou por nome
   // Inicia a variável que vai receber a consulta
@@ -71,7 +74,17 @@ router.get('/:identifier', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
- 
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  var funcionario='oi';
+  console.log(b)
+  if (!b.admin) {
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+     funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  } else {
+     funcionario = "admin"
+  }
+
   if (req.files
     && req.body.firstName
     && req.body.surName
@@ -89,6 +102,7 @@ router.post('/', async (req, res) => {
     && req.body.cpf
     && req.body.email
     && req.body.maritalStatus) {
+      
     userAdult.findOne({ cpf: req.body.cpf }, (err, adultFound) => {
       if (err) {
         return res.sendStatus(500);
@@ -102,7 +116,7 @@ router.post('/', async (req, res) => {
             firstName: req.body.firstName,
             surName: req.body.surName,
           },
-          birthday: new Date(req.body.birthday),
+          birthday:req.body.birthday,
           phone: [req.body.phone],
           address: {
             street: req.body.street,
@@ -134,7 +148,7 @@ router.post('/', async (req, res) => {
           const fileName = `${config.pathAdult}${adultResult._id}.png`; /**< url completa da localização do arquivo no computador */
           id = adultResult._id
           adultResult.photo = fileName; /** Atualiza o nome do arquivo */
-          adultResult.save((errAdultSave) => { 
+          adultResult.save((errAdultSave) => {
             /** Atualiza no banco a nova informação */
 
             if (errAdultSave) {
@@ -151,11 +165,12 @@ router.post('/', async (req, res) => {
             activity: 'Perfil Adulto',
             action: 'Criação',
             dateOperation: new Date(),
-            from: 'f', //ajsuta o id dps de fazer o login funcionar
-            to: adultResult._id,
+            from: funcionario, //ajsuta o id dps de fazer o login funcionar
+            to: adultResult.name.firstName+" "+adultResult.name.surName,
+            id: adultResult._id,
           }
-          Logs.create(log,(errLog, logchil)=>{
-            
+          Logs.create(log, (errLog, logchil) => {
+
           })
         });
 
@@ -163,13 +178,17 @@ router.post('/', async (req, res) => {
         return res.sendStatus(409);
       }
     });
-  
+
   } else {
     return res.sendStatus(400);
   }
 });
 
 router.post('/appendChild', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   if (req.body.listChildren
     && req.body.identifierParent) {
     try {
@@ -181,8 +200,9 @@ router.post('/appendChild', async (req, res) => {
         activity: 'Perfil Adulto',
         action: 'Edição',
         dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
-        to: req.body.identifierParent,
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: adult.name.firstName+" "+adult.name.surName,
+        id: req.body.identifierParent,
       })
       const newLog = await log.save();
       if (!adult) {
@@ -200,6 +220,10 @@ router.post('/appendChild', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
       $set: {
@@ -222,8 +246,9 @@ router.put('/:identifier', async (req, res) => {
       activity: 'Perfil Adulto',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: adultModified.name.firstName+" "+adultModified.name.surName,
+      id:req.params.identifier,
     })
     const newLog = await log.save();
     if (!adultModified) {
@@ -231,13 +256,45 @@ router.put('/:identifier', async (req, res) => {
     }
 
     if (req.files) {
+      console.log("mudar foto",req.files)
       return req.files.photo.mv(
         config.pathPublic() + adultModified.photo, // Nome do arquivo
         errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),
       );
     }
+    return res.sendStatus(201);
   } catch (err) {
     console.log(err);
+    return res.sendStatus(500);
+  }
+});
+router.delete('/:identifier', async (req, res) => {
+  try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
+    const deletedService = await userAdult.findByIdAndRemove(req.params.identifier);
+   
+    const log = new Logs({
+      activity: 'Perfil Adulto',
+      action: 'Delete',
+      dateOperation: new Date(),
+      from: funcionario,
+      to:deletedService.name.firstName+" "+deletedService.name.surName,
+      id:req.params.identifier,
+    })
+    
+    const newLog = await log.save();
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
     return res.sendStatus(500);
   }
 });

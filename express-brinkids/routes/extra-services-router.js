@@ -1,7 +1,19 @@
+
 const express = require('express');
 const ExtraServices = require('../models/extra-services-models');
 const Logs = require('../models/logs-models')
 const router = express.Router();
+
+const userSystem = require('../models/userSystem-models');
+const Employees = require('../models/employees-models');
+
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+const adult = require('../models/adult-models');
+
+// const dados = jwt.verify(tokken, config.secret_auth);
+
+
 
 router.get('/', async (req, res) => {
   try {
@@ -31,6 +43,12 @@ router.get('/search/:name', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+
   if (req.body.name
     && req.body.type
     && req.body.unity
@@ -41,18 +59,19 @@ router.post('/', async (req, res) => {
       unity: req.body.unity,
       value: req.body.value,
     });
-
+    console.log(req.body.employeer)
     try {
       const newService = await extraServices.save();
       const log = new Logs({
         activity: 'Serviços',
         action: 'Criação',
         dateOperation: new Date(),
-        from: 'f', //ajsuta o id dps de fazer o login funcionar
-        to: newService._id,
-       
-  
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: newService.name,
+
+
       })
+
       const newLog = await log.save();
       return res.status(201).json(newService);
     } catch (err) {
@@ -62,6 +81,10 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:identifier', async (req, res) => {
+  const a = req.cookies.TOKEN_KEY;
+  const b = jwt.verify(a, config.secret_auth);
+  const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+  const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
     const service = await ExtraServices.findByIdAndUpdate(
       req.params.identifier,
@@ -76,9 +99,9 @@ router.put('/:identifier', async (req, res) => {
       activity: 'Serviços',
       action: 'Edição',
       dateOperation: new Date(),
-      from: 'f', //ajsuta o id dps de fazer o login funcionar
-      to: req.params.identifier,
-     
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: service.name,
+
     })
     const newLog = await log.save();
     if (!service) {
@@ -95,13 +118,20 @@ router.put('/:identifier', async (req, res) => {
 
 router.delete('/:identifier', async (req, res) => {
   try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
     const deletedService = await ExtraServices.findByIdAndRemove(req.params.identifier);
+    
     const log = new Logs({
       activity: 'Serviços',
       action: 'Delete',
       dateOperation: new Date(),
-     
+      from: funcionario,
     })
+    
     const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);

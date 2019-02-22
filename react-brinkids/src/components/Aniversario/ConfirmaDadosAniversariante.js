@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -12,7 +13,7 @@ class ConfirmaCrianca extends React.Component {
                 <div className = "sub-heard-part" >
                     <ol className = "breadcrumb m-b-0" >
                         <li > < a href = "/" > Home </a></li >
-                        <li > Aniversario </li>
+                        <li > Aniversário </li>
                     </ol >
                 </div>
                 <div className = "graph-visual" >
@@ -20,7 +21,7 @@ class ConfirmaCrianca extends React.Component {
                     <div className = "graph" >
                         <div className="row graph">
                             <div className="col-md-12 col-sm-12 col-xs-12">
-                                <h5 className = "ltTitulo"><b> Titulo do Aniversario: </b></h5>
+                                <h5 className = "ltTitulo"><b> Título do Aniversário: </b></h5>
                                 <p>{this.props.Titulo}</p>
                             </div>
                         </div>
@@ -39,8 +40,7 @@ class ConfirmaCrianca extends React.Component {
                         <div className="row graph">
                             <div className="col-md-4 col-sm-4 col-xs-12">
                                 <h5 className = "ltTitulo"><b> Data do Aniversário: </b></h5>
-                                <p>{this.props.Date}</p>
-                                <p style ={{fontSize: 10 + "px"}}>OBS: A data está em formato americano, ler-se aaaa/dd/mm</p>
+                                <p>{moment(this.props.Date).format("DD/MM/YYYY")}</p>
                             </div>
                             <div className="col-md-4 col-sm-4 col-xs-12">
                                 <h5 className = "ltTitulo"><b> Hora Inical: </b></h5>

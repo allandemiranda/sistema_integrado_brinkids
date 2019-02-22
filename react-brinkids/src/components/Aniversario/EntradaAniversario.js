@@ -3,7 +3,14 @@ import update from 'react-addons-update';
 import Webcam from 'react-webcam';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
-
+import '../Dashboard/css/style.css';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link,
+    Redirect,
+    withRouter
+} from "react-router-dom";
 // CSS Layout
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
@@ -14,12 +21,20 @@ import Comprovant from '../Comprovante/comprovantedeEntrada';
 import '../Comprovante/comprovante.css';
 import tabelinha from '../Comprovante/tabelinha';
 import { timingSafeEqual } from 'crypto';
-
-
+import { Num } from '../Passaporte/favetas';
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 class EntradaAniversario extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            obs: '',
+            obsCrianca: '',
+            rest: '',
+            phone: '',
+            algo: false,
+            FullName: "",
             //Responsável por saber qual página vai renderizar:
             aniversariante: [], // dados do evento atual
             page: "SelecionarTipoDeEntrada", //Responsável pela tela que esta.
@@ -31,12 +46,17 @@ class EntradaAniversario extends React.Component {
             //Lista Adultos
             name: "",
             type: "",
+            kinship: "Outros",
             //Pesquisa Criança
             selectedSearch: "",// Salva o nome que é colocado na barra de busca
             //Pesquisa Responsável
             responsavel: [],
             criancaDentro: [],
             listacriancaCombinacao: [],//lista e crianças apos atribuir os ids do sistema
+            erroCadastro: false,
+            dadosComprovante: [],
+            comprovante: false,
+            nomeFunc: '',
         }
 
         //Relacionado a atualização dos valores Caminho
@@ -44,39 +64,257 @@ class EntradaAniversario extends React.Component {
         //Relacionado a Atualização do esta sendo digitado na busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
+        this.requisicao = this.requisicao.bind(this);
+        this.criancaExtra = this.criancaExtra.bind(this);
+
+        this.ChangeObs = this.ChangeObs.bind(this); //apontador 
+        this.ChangeObsCrianca = this.ChangeObsCrianca.bind(this);
+        this.ChangeRest = this.ChangeRest.bind(this);
+        this.ChangePhone = this.ChangePhone.bind(this);
+    }
+    ChangeObs(event) {
+        this.setState({ obs: event.target.value });
+    }
+    ChangeObsCrianca(event, identifier, indice) {
+        console.log(event.target.value);
+        let listatemporaria = this.state.listConfirmKids;
+        listatemporaria.forEach((crianca, indice) => {
+            if (crianca._id === identifier) {
+                crianca.observations = event.target.value;
+            }
+        });
+        this.setState({
+            listConfirmKids: listatemporaria,
+        })
+    }
+    ChangeRest(event, identifier, indice) {
+        console.log(event.target.value);
+        let listatemporaria = this.state.listConfirmKids;
+        listatemporaria.forEach((crianca, indice) => {
+            if (crianca._id === identifier) {
+                crianca.restrictions = event.target.value;
+            }
+        });
+        this.setState({
+            listConfirmKids: listatemporaria,
+        })
+    }
+    ChangePhone(event) {
+        this.setState({ phone: event.target.value });
+    }
+    Changekinship(event, identifier, indice) {
+        this.setState({
+            kinship: event.target.value
+        })
+        console.log(event.target.value);
+
+
+
+
+        if (event.target.value === "others") {
+            this.setState({
+                kinship: "Outros"
+            })
+
+        }
+        else if (event.target.value === "children") {
+            this.setState({
+                kinship: "Filho(a)"
+            })
+
+        }
+        else if (event.target.value === "Stepson") {
+            this.setState({
+                kinship: "Enteado(a)"
+            })
+
+        }
+        else if (event.target.value === "grandchildren") {
+            this.setState({
+                kinship: "Neto(a)"
+            })
+
+        }
+        else if (event.target.value === "nephews") {
+            this.setState({
+                kinship: "Sobrinho(a)"
+            })
+
+        }
+        else if (event.target.value === "Brother") {
+            this.setState({
+                kinship: "Irmã(o)"
+            })
+
+        }
+
+
+    }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+                this.setState({
+                    nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                })
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+                            this.requisicao();
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(18);
     }
 
-    componentWillMount() {
-        $.ajax({
-            url: "http://localhost:3001/birthday",
-            dataType: 'json',
-            type: 'GET',
-            error: function (response) {
-                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-            },
-            success: function (response) {
-                console.log(response.length)
-                if (response.length === 0) {
-                    alert("Nenhum aniversário encontrado")
-                    this.setState({ erro: "* Nenhum Evento Encontrado." })
+    getFuncionario = () => {
+
+
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+
+                this.setState({
+                    nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+                })
+
+            })
+            .catch((err) => console.log(err));
+
+    }
+    criancaExtra(event) {
+        let crianca = { type: "children", id: "", name: "Criança Extra" }
+        const data = {
+            childExtra: crianca,
+            identifier: this.state.aniversariante[0]._id,
+            id: this.state.adultoSelecionado._id,
+        }
+        axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+            .then((response) => {
+                console.log(response)
+                this.setState({
+                    page: "EntradaCrianca"
+                })
+                this.requisicao();
+
+            }).catch((error) => {
+                console.log(error)//LOG DE ERRO
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroCadastro = true;
+            })
+    }
+    requisicao(event) {
+        axios.get(`/birthday/a`)
+            .then((response) => {
+
+                if (response.data.length === 0) {
+                    // alert("Nenhum aniversário encontrado")
+                    this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
                 } else {
+                    let adulto = [];
+                    let crianca = [];
+                    let temporario = [];
+                    response.data.map((event) => {
+                        let hj = moment().format();
+                        let inicio = moment(event.start).format();
+                        let fim = moment(event.end).format();
+                        console.log(hj, fim, inicio, event.start, event.end)
+                        console.log(moment(hj).isBefore(fim), moment(hj).isAfter(inicio))
+                        if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
+                            temporario.push(event);
+                        }
+
+                    })
+                    console.log(temporario)
+                    temporario[0].partyFeather.map((pessoa, indice) => {
+                        if (pessoa.type === "adult") {
+                            adulto.push(pessoa)
+                        } else {
+                            crianca.push(pessoa)
+                        }
+                    })
                     console.log("Olar")
                     this.setState({
-                        aniversariante: response
+                        listaAdultosDentro: adulto,
+                        listaCriancaDentro: crianca,
+                        aniversariante: temporario,
+                        algo: true,
                     });
                 }
-            }.bind(this)
-        });
-    }
 
+            })
+            .catch((err) => console.log(err));
+        // $.ajax({
+        //     url: "/birthday",
+        //     dataType: 'json',
+        //     type: 'GET',
+        //     error: function (response) {
+        //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+        //     },
+        //     success: function (response) {
+        //         console.log(response.length)
+        //         if (response.length === 0) {
+        //             alert("Nenhum aniversário encontrado")
+        //             this.setState({ erro: "* Nenhum Evento Encontrado." })
+        //         } else {
+        //             let adulto = [];
+        //             let crianca = [];
+        //             response[0].partyFeather.map((pessoa, indice) => {
+        //                 if (pessoa.type === "adult") {
+        //                     adulto.push(pessoa)
+        //                 } else {
+        //                     crianca.push(pessoa)
+        //                 }
+        //             })
+        //             console.log("Olar")
+        //             this.setState({
+        //                 listaAdultosDentro: adulto,
+        //                 listaCriancaDentro: crianca,
+        //                 aniversariante: response
+        //             });
+        //         }
+        //     }.bind(this)
+        // });
+    }
     //Relacionado a atualização dos valores Funções
     AdicinarFullNome(event) {
-        this.setState({ firstName: event.target.value });
+        this.setState({ FullName: event.target.value });
     }
 
 
     // FUNÇOES RELACIONADAS A BOTÕES - INICIO     
     SelecionarCrianca = (event) => {
+
+
+
         this.setState({
             page: "EntradaCrianca",
         })
@@ -90,36 +328,44 @@ class EntradaAniversario extends React.Component {
 
     AvancarConfAdulto = (event) => {
         this.setState({
+            FullName: this.state.adultoSelecionado.name,
             page: "ConfirmaAdulto",
         })
     }
 
     FinalizarAdulto = (event) => {
+        let listaAdultosDentros = this.state.listaAdultosDentro;
+        console.log(this.state.FullName)
+        listaAdultosDentros = { type: "adult", name: this.state.FullName };
         this.setState({
-            listaAdultosDentro: update(this.state.listaAdultosDentro, { $push: [{ type: "adult", name: this.state.adultoSelecionado[0].name }] }),
+
             type: "",
             name: "",
             page: "SelecionarTipoDeEntrada",
             comprovante: true,
         })
 
-        var formData = new FormData();
 
-        formData.append('name', String(this.state.adultoSelecionado[0].name))
-        formData.append('type', String(this.state.aniversariante[0].type))
+        const data = {
+            adult: listaAdultosDentros,
+            identifier: this.state.aniversariante[0]._id,
+        }
 
-        axios.post('/birthdayParty', formData)
-            .then(function (response) {
+        axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+            .then((response) => {
                 console.log(response)
-                window.location.href = '/birthdayParty';
-            }).catch(function (error) {
+                this.setState({
+                    page: "SelecionarTipoDeEntrada"
+                })
+                this.requisicao();
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.state.erroCadastro = true;
             })
-
-        alert("Cadastrado");
+        this.requisicao();
     }
 
     AvancarCombinarCrianca = (event) => {
@@ -139,12 +385,12 @@ class EntradaAniversario extends React.Component {
 
     ConfirmarResp = (event) => {
         let temporario = [];
-        this.state.adultoSelecionado.map((event, indice) => {
-            event.id = this.state.criancaSelecionada[indice]._id;
-        })
+
+        this.state.adultoSelecionado.id = this.state.criancaSelecionada._id
         this.setState({
             page: "ConfirmarResp",
             listacriancaCombinacao: temporario,
+
         })
 
     }
@@ -161,34 +407,36 @@ class EntradaAniversario extends React.Component {
         })
     }
 
-    FinalizarCrianca = (event) => {
+    FinalizarCrianca = async (event) => {
+        let listaC = [];
 
         this.setState({
-            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "child", id: this.state.criancaSelecionada[0]._id }] }),
-            comprovante: true,
+            listaCriancaDentro: update(this.state.listaCriancaDentro, { $push: [{ type: "children", id: this.state.criancaSelecionada._id, name: this.state.criancaSelecionada.name }] }),
+
         })
 
         var listCria = [];
 
         const adulto = {
-            _id: this.state.responsavel[0]._id,
-            name: this.state.responsavel[0].name.firstName + ' ' + this.state.responsavel[0].name.surName,
-            phone: this.state.responsavel[0].phone,
-            observations: this.state.responsavel[0].obs,
+            _id: this.state.responsavel._id,
+            name: this.state.responsavel.name.firstName + ' ' + this.state.responsavel.name.surName,
+            phone: this.state.phone,
+            observations: this.state.obs,
         }
-        
-        for (var i = 0; i < this.state.criancaSelecionada.length; i++) {
-            const crianca = {
-                _id: String(this.state.criancaSelecionada[i]._id),
-                name: this.state.criancaSelecionada[i].name.firstName + ' ' + this.state.criancaSelecionada[i].name.surName,
-                birthday: new Date(this.state.criancaSelecionada[i].birthday),
-                restrictions: this.state.criancaSelecionada[i].restrictions,
-                observations: this.state.criancaSelecionada[i].observations,
-                photo: this.state.file,
-            }
+        const crianca = {
+            _id: String(this.state.criancaSelecionada._id),
+            name: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName,
+            birthday: new Date(this.state.criancaSelecionada.birthday),
+            restrictions: this.state.criancaSelecionada.restrictions,
+            observations: this.state.criancaSelecionada.observations,
+            photo: this.state.file,
+            kinship: this.state.kinship,
+        }
 
-            listCria.push(crianca);
-        };
+
+        listaC = { type: "children", id: this.state.criancaSelecionada._id, nameChild: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName, name: this.state.adultoSelecionado.name, age: this.state.adultoSelecionado.age }
+        listCria.push(crianca);
+       
         var formData = new FormData();
 
        
@@ -196,22 +444,59 @@ class EntradaAniversario extends React.Component {
         formData.append('photo', this.state.file)
         formData.append('service', 'Aniversario')
         formData.append('time', moment().format())
-        formData.append('belongings', '0')
+        formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
-       
+        formData.append('start', this.state.aniversariante[0].start)
+        formData.append('end', this.state.aniversariante[0].end)
+        formData.append('name', this.state.aniversariante[0].birthdayPerson.name)
+
+        const data = {
+            child: listaC,
+            identifier: this.state.aniversariante[0]._id,
+            id: this.state.adultoSelecionado._id,
+        }
+
         axios.post('/product', formData)
-            .then( (response)=> {
-                console.log(response.data)
-                // window.location.href = '/birthdayParty';
-            }).catch( (error)=> {
+            .then((response) => {
+                
+                this.setState({
+                    dadosComprovante: {
+                        i: response.data,
+                        funcionario: this.state.nomeFunc,
+                    }
+                })
+
+
+
+            }).then(() => {
+                axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+                    .then((response) => {
+
+                    }).catch((error) => {
+                        console.log(error)//LOG DE ERRO
+                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    })
+
+
+            }).then(() => {
+                setTimeout(() => {
+                    this.setState({
+                        comprovante: true
+                    })
+
+                }, 1000)
+            }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
             })
 
-        alert("Cadastrado");
+        // alert("Cadastrado");
+
     }
     // FUNÇOES RELACIONADAS A BOTÕES - FIM
 
@@ -234,109 +519,87 @@ class EntradaAniversario extends React.Component {
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
 
     // Salva AS informações dos ADULTOS que apareceram na lista e foi selecionado.
-    selectedAdultLista(identifier) {
-        let achou = false;
-        //Desmarca A checkBox
-        this.state.adultoSelecionado.forEach((adultos, indice, array) => {
-            if (adultos.name === identifier) {
-                array.splice(indice, 1);
-                achou = true;
-            }
-        });
-
-        if (!(achou)) {
-            this.state.aniversariante[0].guestList.forEach((adultos) => {
-                if (adultos.name === identifier) {
-                    this.state.adultoSelecionado.push(adultos);
-                }
+    selectedAdultLista(identifier, indice) {
+        if (this.state.aniversariante[0].guestList[indice].type === "adult") {
+            this.setState({
+                adultoSelecionado: this.state.aniversariante[0].guestList[indice],
+                page: "ConfirmaAdulto",
+            });
+        } else {
+            this.setState({
+                adultoSelecionado: this.state.aniversariante[0].guestList[indice],
+                page: "CombinarCrianca",
             });
         }
 
-        this.setState({ adultoSelecionado: this.state.adultoSelecionado });
-        console.log(this.state.adultoSelecionado)
+
+
+
+
     }
 
     // Salva AS informações dos ADULTOS que apareceram na lista e foi selecionado.
-    selectedAdult(identifier) {
-        let achou = false;
-        //Desmarca A checkBox
-        this.state.responsavel.forEach((adultos, indice, array) => {
-            if (adultos._id === identifier) {
-                delete array[indice];
-                achou = true;
-            }
-        });
+    selectedAdult(identifier, indice) {
+        let temporario = [];
 
-        if (!(achou)) {
-            this.state.list.forEach((adultos) => {
-                if (adultos._id === identifier) {
-                    this.state.responsavel.push(adultos);
-                }
-            });
-        }
+        this.state.adultoSelecionado.id = this.state.criancaSelecionada._id
+        this.setState({
+            page: "ConfirmarResp",
+            listacriancaCombinacao: temporario,
+            responsavel: this.state.list[indice],
+            phone: this.state.list[indice].phone,
+            obs: this.state.list[indice].observations,
+        })
 
-        this.setState({ responsavel: this.state.responsavel });
-        console.log(this.state.responsavel)
     }
 
     // Salva AS informações das CRIANÇAS que apareceram na lista e foi selecionado.
     selectedKids(identifier) {
-        let achou = false;
-        //Desmarca A checkBox
-        this.state.criancaSelecionada.forEach((kids, indice, array) => {
+
+
+
+        this.state.list.forEach((kids, indice) => {
+
+
             if (kids._id === identifier) {
-                array.splice(indice, 1);
-                achou = true;
+                this.setState({
+                    criancaSelecionada: kids,
+                    page: "SelecionarResponsavel",
+                    selectedSearch: "",
+                    list: []
+                });
+
+
+
+
             }
         });
 
-        if (!(achou)) {
 
 
-            this.state.list.forEach((kids, indice) => {
 
-                console.log(kids)
-                if (kids._id === identifier) {
-                    if (this.state.criancaSelecionada.length < this.state.adultoSelecionado.length) {
-                        this.state.criancaSelecionada.push(kids);
-                    } else {
-                        alert("limite de crianças atingido")
-                    }
-
-
-                }
-            });
-        }
-
-        this.setState({ criancaSelecionada: this.state.criancaSelecionada });
-        console.log(this.state.criancaSelecionada)
     }
 
     // Faz a busca do responsável:
     SearchAdult(nomeadult, event) {
-        if (nomeadult.length >= 7) {
-            $.ajax({
-                url: "http://localhost:3001/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
-                dataType: 'json',
-                type: 'GET',
-                error: function (response) {
-                    if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-                },
-                success: function (response) {    //Salva os dados do responsável na variácel LIST
-                    console.log(response.length)
-                    if (response.length === 0) {
-                        alert("Erro esc")
-                        this.setState({ erro: "* Nenhum Responásel Encontrado." })
-                    } else {
-                        console.log("Olar")
-                        this.setState({ list: response });
-                    }
-                }.bind(this)
-            });
-        }
-        else {
-            console.log("Número de caracteres menor do que 7!")
-        }
+        $.ajax({
+            url: "/adult/filter/" + this.state.selectedSearch + "/name",//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte", //
+            dataType: 'json',
+            type: 'GET',
+            error: function (response) {
+                if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
+            },
+            success: function (response) {    //Salva os dados do responsável na variácel LIST
+
+                if (response.length === 0) {
+                    alert("Erro esc")
+                    this.setState({ erro: "* Nenhum Responásel Encontrado." })
+                } else {
+
+                    this.setState({ list: response });
+                }
+            }.bind(this)
+        });
     }
 
     //Bloco que muda o status para o atual do formulario.
@@ -347,18 +610,19 @@ class EntradaAniversario extends React.Component {
     // Faz a busca das Crianças:
     SearchChild(event) {
         $.ajax({
-            url: "http://localhost:3001/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
+            url: "/child/filter/" + this.state.selectedSearch,//url: "https://ab64b737-4df4-4a30-88df-793c88b5a8d7.mock.pstmn.io/passaporte",//
             dataType: 'json',
             type: 'GET',
             error: function (response) {
                 if (response.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) }
             },
             success: function (response) {    //Salva os dados do responsável na variácel LIST
-                console.log(response);
+
                 //this.setState({ achado: true });
                 this.setState({ list: response });
             }.bind(this)
         });
+
     }
 
     render() {
@@ -367,6 +631,13 @@ class EntradaAniversario extends React.Component {
             {/* Imprime a tabela com a busca dos Adultos*/ }
             return (
                 <div className="container-fluid" >
+                    <div className="" >
+                        {!this.state.algo &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
+                                <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
@@ -392,14 +663,14 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-6 col-sm-6 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Início: </b></h5>
-                                            <p>{this.state.aniversariante[0].start}</p>
+                                            <p>{moment(this.state.aniversariante[0].start).format("HH:mm")}</p>
                                         </div>
                                         <br></br>
                                     </div>
                                     <div className="col-md-6 col-sm-6 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Fim: </b></h5>
-                                            <p>{this.state.aniversariante[0].end}</p>
+                                            <p>{moment(this.state.aniversariante[0].end).format("HH:mm")}</p>
                                         </div>
                                         <br></br>
                                     </div>
@@ -414,7 +685,7 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-4 col-sm-4">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Já Entraram: </b></h5>
-                                            <p>{this.state.criancaDentro.length}</p>
+                                            <p>{this.state.listaCriancaDentro.length}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -438,10 +709,10 @@ class EntradaAniversario extends React.Component {
                     <br></br>
                     <br></br>
                     <div className="graph" >
-                        <div className="text-center">
+                        {this.state.algo && (<div className="text-center">
                             <button className="btn btn-md botao" onClick={this.SelecionarCrianca}> Criança</button>
                             <button className="btn btn-md botao" onClick={this.SelecionarAdulto}> Adulto </button>
-                        </div>
+                        </div>)}
                     </div>
                 </div>
             )
@@ -476,7 +747,7 @@ class EntradaAniversario extends React.Component {
 
 
                                             this.state.aniversariante[0].guestList.map((event, indice) => {
-                                                console.log(event.type)
+
                                                 if (event.type === "adult") {
 
 
@@ -484,7 +755,7 @@ class EntradaAniversario extends React.Component {
                                                         <tr >
                                                             <th scope="row">{indice + 1}</th>
                                                             <td > {event.name} </td>
-                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)} /> </td>
+                                                            <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                         </tr>
                                                     );
                                                 }
@@ -501,8 +772,8 @@ class EntradaAniversario extends React.Component {
                     <br></br>
                     <div className="graph" >
                         <div className="text-center">
-                            <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao" onClick={this.AvancarConfAdulto}> Avançar </button>
+                            <Link className="btn btn-md botao" to="/">Cancelar</Link>
+                            <button className="btn btn-md botao" onClick={()=>this.setState({page:"SelecionarTipoDeEntrada"})}>voltar</button>
                         </div>
                     </div>
                 </div>
@@ -528,7 +799,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                        <p>{this.state.adultoSelecionado[0].name}</p>
+                                        <p>{this.state.adultoSelecionado.name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -536,7 +807,7 @@ class EntradaAniversario extends React.Component {
                                 <div className="col-md-12 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome Completo: </b></h5>
-                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.adultoSelecionado[0].name} onChange={this.AdicinarFullNome} />
+                                        <input type="text" id="FullName" name="FullName" className="form-control" className="text-center" placeholder="Seu Nome " value={this.state.FullName} onChange={this.AdicinarFullNome} />
                                     </div>
                                 </div>
                             </div>
@@ -582,15 +853,16 @@ class EntradaAniversario extends React.Component {
 
 
                                             this.state.aniversariante[0].guestList.map((event, indice) => {
-                                                console.log(event.type)
-                                                if (event.type === "children") {
+
+
+                                                if (event.type === "children" && event.nameChild === undefined) {
 
 
                                                     return (
-                                                        <tr >
-                                                            <th scope="row">{indice + 1}</th>
+                                                        <tr key={indice} >
+                                                            <th scope="row">{indice}</th>
                                                             <td > {event.name} </td>
-                                                            <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name)} /> </td>
+                                                            <td className="text-center">   <button type="button" name="selectchild" onClick={() => this.selectedAdultLista(event.name, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                         </tr>
                                                     );
                                                 }
@@ -608,7 +880,7 @@ class EntradaAniversario extends React.Component {
                     <div className="graph" >
                         <div className="text-center">
                             <a className="btn btn-md botao" href="/">Cancelar</a>
-                            <button className="btn btn-md botao" onClick={this.AvancarCombinarCrianca}> Avançar </button>
+                            <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
                         </div>
                     </div>
                 </div>
@@ -655,7 +927,7 @@ class EntradaAniversario extends React.Component {
                                                     <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{findKids.phone} </td>
-                                                    <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)} /> </td>
+                                                    <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids._id)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button> </td>
                                                 </tr>
                                             );
                                         })}
@@ -706,13 +978,13 @@ class EntradaAniversario extends React.Component {
                                 </thead>
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {
-                                        console.log(findAdult)
+
                                         return (
                                             <tr key={findAdult._id}>
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + " " + findAdult.name.surName} </td>
                                                 <td >{findAdult.phone} </td>
-                                                <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdult(findAdult._id)} /> </td>
+                                                <td className="text-center">  <button type="button" name="selectchild" onClick={() => this.selectedAdult(findAdult._id, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button> </td>
                                             </tr>
                                         );
                                     })}
@@ -747,23 +1019,23 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={this.state.responsavel[0].photo} />
+                                            <img src={this.state.responsavel.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                            <p>{this.state.responsavel[0].name.firstName + " " + this.state.responsavel[0].name.surName}</p>
+                                            <p>{this.state.responsavel.name.firstName + " " + this.state.responsavel.name.surName}</p>
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px", paddingBottom: 25 + "px", paddingTop: -13 + "px" }}>
                                             <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                            <p> {this.state.responsavel[0].phone}</p>
+                                            <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" className="text-center" placeholder="(00) 99999-9999" value={this.state.phone} onChange={this.ChangePhone} />
                                         </div>
                                         <br></br>
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                            <p>{moment(this.state.responsavel[0].birthday).toNow(true)}</p>
+                                            <p>{moment(this.state.responsavel.birthday).toNow(true)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -776,7 +1048,7 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-12 col-sm-12 col-xs-12">
                                         <h3 className="inner-tittle" > Observações </h3>
                                         <br></br>
-                                        <p>{this.state.responsavel[0].observations}</p>
+                                        <textarea className="form-control" rows="4" cols="50" id="Observacoes" name="Observacoes" value={this.state.obs} onChange={this.ChangeObs}></textarea>
                                     </div>
                                 </div>
                             </div >
@@ -834,6 +1106,13 @@ class EntradaAniversario extends React.Component {
         if (this.state.page === "TelaFinal") {
             return (
                 <div className="container-fluid" >
+                    <div className="container-fluid" >
+                        {this.state.erroCadastro &&
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                                <strong>Ocorreu um erro no Cadastro</strong>
+                            </div>)
+                        }
+                    </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
@@ -851,23 +1130,23 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.responsavel[0].photo} />
+                                                <img src={this.state.responsavel.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                <p>{this.state.responsavel[0].name.firstName + " " + this.state.responsavel[0].name.surName}</p>
+                                                <p>{this.state.responsavel.name.firstName + " " + this.state.responsavel.name.surName}</p>
                                             </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Telefone: </b></h5>
-                                                <p> {this.state.responsavel[0].phone}</p>
+                                                <p> {this.state.phone}</p>
                                             </div>
                                             <br></br>
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                <p>{moment(this.state.responsavel[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                <p>{moment(this.state.responsavel.birthday, "YYYYMMDD").toNow(true)}</p>
 
                                             </div>
                                         </div>
@@ -880,7 +1159,7 @@ class EntradaAniversario extends React.Component {
                                                     <h3 className="inner-tittle" > Observações </h3>
                                                     <br></br>
                                                     <div className="graph" style={{ padding: 10 + "px" }} >
-                                                        <p>{this.state.responsavel[0].observations}</p>
+                                                        <p>{this.state.obs}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -897,7 +1176,7 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-12 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Nome: </b></h5>
-                                                <p>{this.state.criancaSelecionada[0].name.firstName + " " + this.state.criancaSelecionada[0].name.surName}</p>
+                                                <p>{this.state.criancaSelecionada.name.firstName + " " + this.state.criancaSelecionada.name.surName}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -906,26 +1185,36 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.criancaSelecionada[0].photo} />
+                                                <img src={this.state.criancaSelecionada.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
-                                                <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                <p>{this.state.criancaSelecionada[0].kinship}</p>
+
+                                                <div className="graph" style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
+                                                    <h5 className="ltTitulo text-center"><b> Parentesco: </b></h5>
+                                                    <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={(event) => this.Changekinship(event)} >
+                                                        <option value="others" > Outros </option>
+                                                        <option value="children" > filho(a) </option>
+                                                        <option value="Stepson" > Enteado(a) </option>
+                                                        <option value="grandchildren"  >Neto(a) </option>
+                                                        <option value="nephews"  > Sobrinho(a) </option>
+                                                        <option value="Brother" > Irmão/Irmã </option>
+                                                    </select >
+                                                </div>
                                             </div>
                                             <br></br>
                                             <div className="row">
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sexo: </b></h5>
-                                                        <p>{this.state.criancaSelecionada[0].sexuality}</p>
+                                                        <p>{this.state.criancaSelecionada.sexuality}</p>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Idade: </b></h5>
-                                                        <p>{moment(this.state.criancaSelecionada[0].birthday, "YYYYMMDD").toNow(true)}</p>
+                                                        <p>{moment(this.state.criancaSelecionada.birthday, "YYYYMMDD").toNow(true)}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -938,7 +1227,7 @@ class EntradaAniversario extends React.Component {
                                                 <h3 className="inner-tittle" > Observações </h3>
                                                 <br></br>
                                                 <div className="graph" style={{ padding: 10 + "px" }} >
-                                                    <p>{this.state.criancaSelecionada[0].observations}</p>
+                                                    <p>{this.state.criancaSelecionada.observations}</p>
                                                 </div> </div>
                                         </div>
                                     </div >
@@ -954,6 +1243,11 @@ class EntradaAniversario extends React.Component {
                         serviso="ANIVERSÁRIO"
 
                     /> */}
+                    {this.state.comprovante && (<Comprovant
+                        tabela={this.state.dadosComprovante}
+                        serviso="Aniversario"
+                        teste={this.state.comprovante}
+                    />)}
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.FinalizarCrianca}> Finalizar </button>

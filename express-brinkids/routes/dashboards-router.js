@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const dashboards = await Dashboard.find({});
-
+    console.log(foo,"s=========")
     return res.status(200).json(dashboards);
   } catch (err) {
     console.log(err);

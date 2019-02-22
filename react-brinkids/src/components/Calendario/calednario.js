@@ -5,7 +5,7 @@
 
   */
 
-
+import $ from "jquery";
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
@@ -24,11 +24,26 @@ import '../../assets/style/font-awesome.css';
 import estilo from './styles/react-big-calendar.css';
 import axios from 'axios';
 import TypesInput from '../TypesInput.js';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 
 
 /*   */
-
+const messages = {
+  allDay: 'journée',
+  previous: 'Anterior',
+  next: 'Próximo',
+  today: 'Hoje',
+  month: 'Mês',
+  week: 'Semana',
+  day: 'Dia',
+  agenda: 'Agenda',
+  date: 'Data',
+  time: 'Tempo',
+  event: 'Evento', // Or anything you want
+  showMore: total => `+ ${total} événement(s) supplémentaire(s)`
+}
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 var excluirInicial, excluirFinal;
 
@@ -51,6 +66,7 @@ class Calendar extends React.Component {
       Description: '',
       Location: '',
       Color: '',
+      ErroPreenchimento: 0,
 
     };
     this.interval = this.interval.bind(this);
@@ -67,15 +83,47 @@ class Calendar extends React.Component {
     this.cancelar = this.cancelar.bind(this);
     this.requisicao = this.requisicao.bind(this);
   }
+  getFuncionario = () => {
+
+
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
+
+    axios.get(`/employees/${b.id}`)
+      .then((response) => {
+
+        this.setState({
+          nomeFunc: response.data[0].name.firstName + " " + response.data[0].name.surName,
+        })
+
+      })
+      .catch((err) => console.log(err));
+
+  }
   requisicao(event) {
     axios.get('/calendar')
       .then((response) => {
         // (Gabriel): response é um objeto com todos os dados da requisição.
         // Vem desde os dados das datas até status HTTP e por aí vai.
-        // O que deve ser renderizado é 'response.data'
+        // O que deve ser renderizadonsole.log(r é 'response.data'
+
         response.data.map((currentValue) => {
-          currentValue.start = new Date(currentValue.start);
-          currentValue.end = new Date(currentValue.end);
+          console.log(response.data)
+          if (currentValue.color !== undefined) {
+            currentValue.start = new Date(currentValue.start);
+            currentValue.end = new Date(currentValue.end);
+          } else {
+            console.log(currentValue.start,currentValue.end)
+            let dia = moment(currentValue.birthdayDate);
+            let hora = moment(dia).format("YYYY-MM-DD")
+           
+            let start = moment(hora + " " +  moment(currentValue.start).format("HH:mm")).format("YYYY-MM-DD HH:mm")
+            let end = moment(hora + " " +  moment(currentValue.end).format("HH:mm")).format("YYYY-MM-DD HH:mm:ss")
+           console.log(start,end)
+            currentValue.start = new Date(start);
+            currentValue.end = new Date(end);
+            
+          }
         })
 
         this.setState({ datasRequisicao: response.data });
@@ -90,10 +138,12 @@ class Calendar extends React.Component {
     this.setState({
       page: "Calendario",
       Titulo: '',
+      ErroPreenchimento:0,
 
     })
   }
   ChangeValue(event) {
+   
     this.setState({
       [event.target.name]: event.target.value,
     })
@@ -101,79 +151,252 @@ class Calendar extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
+  Funcionario = (number) => {
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
 
-  componentDidMount() {
-    this.interval = setInterval(this.requisicao, 5000);
-    this.requisicao();
+    axios.get(`/employees/${b.id}`)
+      .then((response) => {
+        let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+        axios.get(`/professionalPosition/indentifier/${id}`)
+          .then((response) => {
+            let functions;
+            return response.data.functions;
+          }).then((event) => {
+            let podeentrar = false;
+            event.map((map) => {
+              if (map.id === number) {
+                podeentrar = true;
+              }
+            })
+            return podeentrar;
+          }).then((event) => {
+            if (event) {
+              this.interval = setInterval(this.requisicao, 100000);
+              this.requisicao();
+            } else {
+              this.props.history.push("/");
+              alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
 
   }
-
+  componentWillMount() {
+    this.Funcionario(16);
+  }
 
   openModal() {
-    this.setState({ page: "Novo" });
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
+    axios.get(`/employees/${b.id}`)
+
+      .then((response) => {
+
+        let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+        axios.get(`/professionalPosition/indentifier/${id}`)
+          .then((response) => {
+
+            let functions;
+
+            return response.data.functions;
+
+          }).then((event) => {
+
+            let podeentrar = false;
+
+            event.map((map) => {
+
+              if (map.id === 17) {
+
+                podeentrar = true;
+
+              }
+
+            })
+
+            return podeentrar;
+
+          }).then((eventu) => {
+            if (eventu) {
+              this.setState({ page: "Novo" });
+            } else {
+
+              alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+
   }
 
 
   mod() {
-    const titulo = this.state.Titulo;
-
-
-    const HoraI = new Date(this.state.DateTimeBegin);
-    const HoraF = new Date(this.state.DateImeEnd);
-
-
-    console.log(HoraI);
-
-    // (Gabriel): Requisição para salvar as datas no servidor.
-    // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
-    // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
-    const data = {
-      title: titulo,
-      start: HoraI.toString(), // (Gabriel): Necessário enviar as data no formato de texto
-      end: HoraF.toString(),
-      color: this.state.Color,
-      description: this.state.Description,
-      address: this.state.Location,
-      associated: "Usuario"
+    if (this.state.Titulo.length === 0) {
+      $("#Titulo").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#Titulo").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
     }
 
-    // Aqui está um exemplo da requisição e da resposta
-    axios.post('/calendar', data)
-      .then((response) => {
-        response.data.start = new Date(response.data.start); // (Gabriel): Necessário modificar as datas para criar um objeto 'Date' já que vem do servidor como string
-        response.data.end = new Date(response.data.end);
-        this.state.datasRequisicao.push(response.data)
-        this.setState({
-          datasRequisicao: this.state.datasRequisicao,
-          page: "Calendario",
-          DateTimeBegin: '',
-          DateImeEnd: '',
-          Description: '',
-          Location: '',
-          Color: '',
+    if (this.state.DateTimeBegin.length === 0) {
+      $("#DateTimeBegin").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#DateTimeBegin").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.Location.length === 0) {
+      $("#Location").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#Location").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.Description.length === 0) {
+      $("#Description").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#Description").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.DateImeEnd.length === 0) {
+      $("#DateTimeEnd").addClass('errorBorder');
+      this.state.ErroPreenchimento+=1;
+    }
+    else {
+      $("#DateTimeEnd").removeClass('errorBorder');
+      this.state.ErroPreenchimento-=1;
+    }
+
+    if (this.state.ErroPreenchimento === -5) {
+      const titulo = this.state.Titulo;
+
+
+      const HoraI = new Date(this.state.DateTimeBegin);
+      const HoraF = new Date(this.state.DateImeEnd);
+
+
+      
+
+      // (Gabriel): Requisição para salvar as datas no servidor.
+      // Caso queira montar, mantenha essa estrutura do objeto data e altere apenas o título, 'start' e 'end'.
+      // Os outros valores vc ainda n precisa mexer, pode deixar esses padrões mesmo.
+      const data = {
+        title: titulo,
+        start: HoraI.toString(), // (Gabriel): Necessário enviar as data no formato de texto
+        end: HoraF.toString(),
+        color: this.state.Color,
+        description: this.state.Description,
+        address: this.state.Location,
+        associated: "Usuario"
+      }
+
+      // Aqui está um exemplo da requisição e da resposta
+      axios.post('/calendar', data)
+        .then((response) => {
+          response.data.start = new Date(response.data.start); // (Gabriel): Necessário modificar as datas para criar um objeto 'Date' já que vem do servidor como string
+          response.data.end = new Date(response.data.end);
+          this.state.datasRequisicao.push(response.data)
+          this.setState({
+            datasRequisicao: this.state.datasRequisicao,
+            page: "Calendario",
+            DateTimeBegin: '',
+            DateImeEnd: '',
+            Description: '',
+            Location: '',
+            Color: '',
+          })
         })
+        .catch((err) => console.log(err))
+
+      // console.log({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),desc:'blabla bla'})
+
+      // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
+    }else{
+      this.setState({
+        erros:this.state.ErroPreenchimento
       })
-      .catch((err) => console.log(err))
-
-    // console.log({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0).toString(),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0).toString(),desc:'blabla bla'})
-
-    // events.push({title:titulo,start:new Date(Anoinicial,MesInicial, Diainicial, match[0], match[1], 0),end:new Date(Anofinal,Mesfinal, Diaifinal, match2[0], match2[1], 0),desc:'blabla bla'});
-
-
-
+      
+    }
   }
   editar(event) {
-    this.setState({
-      page: "Novo",
-      Titulo: event.title,
-      DateTimeBegin: event.start,
-      DateImeEnd: event.end,
-      Color: event.color,
-      editar: true,
-      identifier: event._id,
-      Description: event.description,
-      Location: event.address,
-    })
+    const a = getToken();
+    const b = jwt.verify(a, config.secret_auth);
+    axios.get(`/employees/${b.id}`)
+
+      .then((response) => {
+
+        let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+        axios.get(`/professionalPosition/indentifier/${id}`)
+          .then((response) => {
+
+            let functions;
+
+            return response.data.functions;
+
+          }).then((event) => {
+
+            let podeentrar = false;
+
+            event.map((map) => {
+
+              if (map.id === 22) {
+
+                podeentrar = true;
+
+              }
+
+            })
+
+            return podeentrar;
+
+          }).then((eventu) => {
+            if (eventu) {
+              if (event.color) {
+               
+                this.setState({
+                  page: "Novo",
+                  Titulo: event.title,
+                  DateTimeBegin:moment( event.start).format("YYYY-MM-DDTHH:mm"),
+                  DateImeEnd: moment(event.end).format("YYYY-MM-DDTHH:mm"),
+                  Color: event.color,
+                  editar: true,
+                  identifier: event._id,
+                  Description: event.description,
+                  Location: event.address,
+                })
+              } else {
+                // alert("Você Não Pode Editar Esse Evento")
+              }
+
+            } else {
+
+              alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+            }
+          })
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+
 
   }
   mod2(event) {
@@ -187,12 +410,17 @@ class Calendar extends React.Component {
       title: this.state.Titulo,
       start: new Date(this.state.DateTimeBegin).toString(), // (Gabriel): Necessário enviar as data no formato de texto
       end: new Date(this.state.DateImeEnd).toString(),
+      color: this.state.Color,
+        description: this.state.Description,
+        address: this.state.Location,
+        associated: "Usuario"
 
     }
 
     // (Gabriel): Requisição para alterar a data na url '/calendar/<identifier>' utilizando o método HTTP 'PUT'
     axios.put(`calendar/${this.state.identifier}`, modifiedDate)
       .then((response) => {
+        
         this.state.datasRequisicao.forEach((currentValue) => { // (Gabriel): Vai varrer atrás da data com o identificador para alterar seus valores
           if (currentValue._id === this.state.identifier) { // (Gabriel): Se encontrar, altere o título, por exemplo
             currentValue.title = this.state.Titulo;
@@ -213,9 +441,6 @@ class Calendar extends React.Component {
       })
       .catch((err) => console.log(err)); // (Gabriel): Caso tenha dado errado, exiba uma mensagem de erro
   }
-
-
-
 
   ExcluirEvento(event) {
 
@@ -247,26 +472,25 @@ class Calendar extends React.Component {
   }
 
   render() {
-
-
-
-
-
+    const localizer = BigCalendar.momentLocalizer(moment) // or globalizeLocalizer
     if (this.state.page === "Calendario") {
       return (
         /*  COMPONENTE CALENDARIO DO REACT */
 
         <div>
 
-          <button className="modal1" type="button" onClick={this.openModal} >adicionar evento</button>
+          <button className="modal1" type="button" onClick={this.openModal} >Adicionar evento</button>
 
 
 
 
           {this.state.calendario &&
             (<BigCalendar
+              messages={messages}
+              localizer={localizer}
               selectable
               events={this.state.datasRequisicao}
+              
               defaultView={BigCalendar.Views.WEEK}
               scrollToTime={new Date(1970, 1, 1, 6)}
               defaultDate={new Date()}
@@ -293,6 +517,11 @@ class Calendar extends React.Component {
     if (this.state.page === "Novo") {
       return (
         <div className="container-fluid" >
+          {this.state.ErroPreenchimento != 0 &&
+            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+              <strong style={{ color: 'white' }}>Preencha os campos abaixo.</strong>
+            </div>)
+          }
           <div className="sub-heard-part" >
             <ol className="breadcrumb m-b-0" >
               <li > < a href="/" > Home </a></li >
@@ -331,13 +560,13 @@ class Calendar extends React.Component {
                       <label className="LetraFormulario brlabel">Cor</label>
                       <select id="Color" name="Color" className="form-control optionFomulario" value={this.state.Color} onChange={this.ChangeValue}>
                         <option value="">--</option>
-                        <option value="blue" className="opt1">Azul</option>
-                        <option value="violet" className="opt2">Violeta</option>
-                        <option value="green" className="opt3">Verde</option>
-                        <option value="orange" className="opt4">Laranja</option>
-                        <option value="yellow" className="opt5">Amarelo</option>
-                        <option value="red" className="opt6">Vermelho</option>
-                        <option value="aqua" className="opt7">Azul claro</option>
+                        <option value="#009eac" className="opt1"></option>
+                        <option value="#16b4c2 " className="opt2"></option>
+                        <option value="#00c6d7" className="opt3"></option>
+                        <option value="#00ced1" className="opt4"></option>
+                        <option value="#20b2aa" className="opt5"></option>
+                        <option value="#3cb7c4" className="opt6"></option>
+                        <option value="#19a2af" className="opt7"></option>
                       </select>
                     </div>
                   </div>

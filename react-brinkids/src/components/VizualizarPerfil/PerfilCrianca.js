@@ -5,7 +5,10 @@ import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
+import moment from 'moment';
 var foto;
 class PerfilCrianca extends React.Component {
     constructor(props) {
@@ -56,8 +59,103 @@ class PerfilCrianca extends React.Component {
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
+        this.excluir = this.excluir.bind(this);
+
+    }
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
 
 
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(6);
+    }
+    excluir(event,indice){
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 7) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            let temporario = this.state.list;
+                            axios.delete(`child/${event}`)
+                                .then((response) => {
+                                   
+                                    temporario.splice(indice,1);
+                                    this.setState({
+                                        list:temporario,
+                                    })
+                                })
+                                .catch((err) => console.log(err));
+
+                        } else {
+
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -127,13 +225,58 @@ class PerfilCrianca extends React.Component {
     }
     //função que alterna as paginas
     ChangePage(event) {
-        this.setState(
-            {
-                perfilEdicao: event,
-                perfilAtual: event,
-                reserva: event,
-                page: 'Perfil'
-            });
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 5) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+
+                            this.setState(
+                                {
+                                    perfilEdicao: event,
+                                    perfilAtual: event,
+                                    reserva: event,
+                                    page: 'Perfil'
+                                });
+
+                        } else {
+
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+      
             
 
 
@@ -204,8 +347,7 @@ class PerfilCrianca extends React.Component {
 
         if (this.state.page === 'Busca') {
             return (
-
-                <div className="container-fluid" >
+                <div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
@@ -243,7 +385,7 @@ class PerfilCrianca extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.number} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id,indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
@@ -301,7 +443,7 @@ class PerfilCrianca extends React.Component {
                         </ol >
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Criança </h3>
+                        <h3 className="inner-tittle" > Visualizar Perfil Criança </h3>
 
                         <div className="graph" >
                             <h3 className="inner-tittle" > Perfil
@@ -315,10 +457,10 @@ class PerfilCrianca extends React.Component {
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                     {this.state.editar && (
                                         <div>
-                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec', color: "white" }}><label>
+                                                <span style={{ color:'white' }} className="glyphicon">Trocar imagem &#xe065;</span>
 
-                                                <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                <input id="tipofile" style={{ color:'white' }} type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button><br /></div>)
                                     }
@@ -341,7 +483,7 @@ class PerfilCrianca extends React.Component {
 
                             <div className="col-md-4 col-sm-6 col-xs-12" >
                                 <div className="graph" style={{ padding: 10 + "px" }}>
-                                    <h5 className="ltTitulo"><b>  Numero de Registro: </b> </h5>
+                                    <h5 className="ltTitulo"><b>  Número de Registro: </b> </h5>
                                     {!this.state.editar && (<p>{this.state.perfilAtual.number} </p>)}
                                     {this.state.editar && (<input style={{ float: 'none' }} type="text" className="form-control" name="number" onChange={this.changue} value={this.state.number} />)}
                                 </div>
@@ -351,7 +493,7 @@ class PerfilCrianca extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                    {!this.state.editar && (<p>{converter(this.state.perfilAtual.birthday)}</p>)}
+                                    {!this.state.editar && (<p>{moment(this.state.perfilAtual.birthday).format("DD/MM/YYYY")}</p>)}
                                     {this.state.editar && (<input style={{ float: 'none' }} type="date" className="form-control" name="aniversario" onChange={this.changue} value={this.state.aniversario} />
                                     )}
                                 </div>

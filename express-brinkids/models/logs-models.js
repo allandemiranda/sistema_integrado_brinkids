@@ -32,6 +32,7 @@ const logsSchema = new mongoose.Schema({
 	to: String,
 	cco: String,
 	price: Number,
+	id:String,
 	priceMethod: String,
 	timeLojaFirst: String,
 	timeLojaLast: String,

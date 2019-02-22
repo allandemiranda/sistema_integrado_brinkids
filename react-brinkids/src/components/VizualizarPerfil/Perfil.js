@@ -1,23 +1,26 @@
 import React from 'react';
-import listaa from './gato';
+
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
 import axios from 'axios';
-
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 import Moment from 'moment';
+var foto;
 class Perfil extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             reserva: [],
             //lista de funcionarios recebida do banco de dados
-            listaFuncionarios: listaa,
+            listaFuncionarios: [],
             //lista de funcionarios apos a busca pelo nome
             list: [],
             //Funcionario selecionado para vizualizar o perfil
-            perfilAtual: listaa,
+            perfilAtual: [],
             //barra de busca
             selectedSearch: '',
             //tipo da pagina 'Busca' ou 'Perfil'
@@ -41,6 +44,7 @@ class Perfil extends React.Component {
             cidade: '',
             numero: '',
             endereco: '',
+            user:"",
 
         }
         //funçoes para mudar os values e afins
@@ -48,6 +52,7 @@ class Perfil extends React.Component {
         this.SearchFuncionario = this.SearchFuncionario.bind(this);
         this.ChangePage = this.ChangePage.bind(this);
         this.editavel = this.editavel.bind(this);
+        
         this.changueObs = this.changueObs.bind(this);
         this.changueCep = this.changueCep.bind(this);
         this.changueEndereco = this.changueEndereco.bind(this);
@@ -58,17 +63,148 @@ class Perfil extends React.Component {
         this.changueNumero = this.changueNumero.bind(this);
         this.changueEmail = this.changueEmail.bind(this);
         this.changuePhone = this.changuePhone.bind(this);
+        
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
         this.changuePassword = this.changuePassword.bind(this);
         this.changueSenha = this.changueSenha.bind(this);
         this.changueSenhaAtual = this.changueSenhaAtual.bind(this);
+        this.excluir = this.excluir.bind(this);
+    }
+    _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
+        // convert base64/URLEncoded data component to raw binary data held in a string
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        // write the bytes of the string to a typed array
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ia], { type: mimeString })};
+    Funcionario = (number) => {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+
+        axios.get(`/employees/${b.id}`)
+            .then((response) => {
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+                        let functions;
+                        return response.data.functions;
+                    }).then((event) => {
+                        let podeentrar = false;
+                        event.map((map) => {
+                            if (map.id === number) {
+                                podeentrar = true;
+                            }
+                        })
+                        return podeentrar;
+                    }).then((event) => {
+                        if (event) {
+
+                        } else {
+                            this.props.history.push("/");
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+
+    }
+    componentWillMount() {
+        this.Funcionario(10);
+    }
+    excluir(event,indice){
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
+
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 11) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            let temporario = this.state.list;
+                            axios.delete(`adult/${event}`)
+                                .then((response) => {
+                                   
+                                    temporario.splice(indice,1);
+                                    this.setState({
+                                        list:temporario
+                                    })
+                                })
+                                .catch((err) => console.log(err));
+
+                        } else {
+
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        
     }
     changuePassword(event) {
+
         this.setState({
             page: 'Senha',
         })
+    }
+    mudarSenha = ()=>{
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.put(`/employees/reset-password`,{identifier:b._id})
+        .then((response) => {
+           
+            this.setState(
+                {   
+                    page: 'Perfil'
+                })
+                alert("Senha alterada para a padrão")
+            
+        }).catch((err) => {
+            console.log(err);
+        });
     }
     //lembrar de terminar as funçoes changue
     changueObs(event) { this.setState({ obs: event.target.value }) }
@@ -85,32 +221,111 @@ class Perfil extends React.Component {
     changueSenhaAtual(event) { this.setState({ senhaAtual: event.target.value }) }
     //funçao que salva apos o editar
     salvar(event) {
-        this.state.perfilAtual.observations = this.state.obs
-        this.state.perfilAtual.address.number = this.state.numero
-        this.state.perfilAtual.address.state = this.state.estado
-        this.state.perfilAtual.address.district = this.state.bairro
-        this.state.perfilAtual.phone = this.state.phone
-        this.state.perfilAtual.address.city = this.state.cidade
-        this.state.perfilAtual.address.cep = this.state.cep
-        this.state.perfilAtual.email = this.state.email
-        this.state.perfilAtual.address.street = this.state.endereco
-        this.state.perfilAtual.address.country = this.state.pais
+        let listatemporaria = this.state.perfilAtual;
+
+        var formData = new FormData();
+
+        formData.append('observations', this.state.obs);
+        formData.append('phone', this.state.phone);
+        if (foto) {
+            formData.append('photo', this._dataURItoBlob(foto));
+        }
+        formData.append('number', this.state.numero);
+        formData.append('state', this.state.estado);
+        formData.append('district', this.state.bairro);
+        formData.append('city', this.state.cidade);
+        formData.append('cep', this.state.cep);
+        formData.append('street', this.state.endereco);
+        formData.append('country', this.state.pais);
+        formData.append('email', this.state.email);
+        
+
+
+        axios.put(`/employees/exchange-data/${this.state.perfilAtual._id}`, formData)
+            .then((response) => {
+
+            })
+            .catch((err) => console.log(err));
+        listatemporaria.address.number = this.state.numero;
+        listatemporaria.address.state = this.state.estado;
+        listatemporaria.address.district = this.state.bairro;
+        listatemporaria.phone = this.state.phone;
+        listatemporaria.address.city = this.state.cidade;
+        listatemporaria.address.cep = this.state.cep;
+        listatemporaria.observations = this.state.obs;
+        listatemporaria.email = this.state.email;
+        listatemporaria.address.street = this.state.endereco;
+        listatemporaria.address.country = this.state.pais;
         this.setState({
-
+            perfilAtual: listatemporaria,
             editar: false,
-
-        })
+        });
+      
+      
     }
     //função que alterna as paginas
     ChangePage(event) {
-        this.setState(
-            {
-                perfilEdicao: event,
-                perfilAtual: event,
-                reserva: event,
-                page: 'Perfil'
-            })
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        axios.get(`/employees/${b.id}`)
 
+            .then((response) => {
+
+                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+
+                axios.get(`/professionalPosition/indentifier/${id}`)
+                    .then((response) => {
+
+                        let functions;
+
+                        return response.data.functions;
+
+                    }).then((event) => {
+
+                        let podeentrar = false;
+
+                        event.map((map) => {
+
+                            if (map.id === 9) {
+
+                                podeentrar = true;
+
+                            }
+
+                        })
+
+                        return podeentrar;
+
+                    }).then((eventu) => {
+                        if (eventu) {
+                            axios.get(`/authentication/mostra_usuarios/${event._id}`)
+                            .then((response) => {
+                               
+                                this.setState(
+                                    {   user:response.data[0].user,
+                                        perfilEdicao: event,
+                                        perfilAtual: event,
+                                        reserva: event,
+                                        page: 'Perfil'
+                                    })
+                        
+                                
+                            }).catch((err) => {
+                                console.log(err);
+                            });
+
+                        } else {
+
+                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+      
+
+        
 
     }
     voltar(event) {
@@ -150,21 +365,22 @@ class Perfil extends React.Component {
 
     }
     SearchFuncionario(event) {
-        /*const lista = [];
-        this.setState({ list: [] });
-        this.state.listaFuncionarios.forEach(element => {
-
-            if (element.name.firstName == this.state.selectedSearch) {
-
-                lista.push(element);
-                this.setState({ list: lista });
-            }
-        });*/
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
+        
         axios.get(`/employees/search/${this.state.selectedSearch}`)
             .then((response) => {
-                console.log(this.state.selectedSearch);
-                console.log(response.data);
-                this.setState({ list: response.data });
+                let temporario = response.data;
+                temporario.map((event,indice)=>{
+                  
+                    if(event._id===b.id){
+                       temporario.splice(indice,1)
+                    }
+                })
+                
+                return temporario;
+            }).then((event)=>{
+                this.setState({ list: event });
             }).catch((err) => {
                 console.log(err);
             });
@@ -217,7 +433,7 @@ class Perfil extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.cpf} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id,indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
@@ -255,6 +471,7 @@ class Perfil extends React.Component {
 
                             reader.onload = function (e) {
                                 fotopreview.src = e.target.result;
+                                foto = e.target.result;
                             }
 
                             reader.readAsDataURL(files[0]);
@@ -278,10 +495,10 @@ class Perfil extends React.Component {
 
                     </div>
                     <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
+                        <h3 className="inner-tittle" >  </h3>
 
                         <div className="graph" >
-                            <h3 className="inner-tittle" > Perfil </h3>
+                            <h3 className="inner-tittle" > Perfil Funcionário</h3>
                             <div className="row">
 
 
@@ -317,15 +534,15 @@ class Perfil extends React.Component {
                                 </div>
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> LOGIN </b></h5>
-                                        <p>ffffffff</p>
+                                        <h5 className="ltTitulo" ><b> Login </b></h5>
+                                        <p>{this.state.user}</p>
                                     </div>
                                     <br></br>
 
 
                                     <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> STATUS DE EMPREGO  </b></h5>
-                                        <p>ffffffff</p>
+                                        <h5 className="ltTitulo" ><b> Status no Sistema  </b></h5>
+                                        <p>Ativo</p>
                                     </div><br />
                                 </div>
 
@@ -375,7 +592,7 @@ class Perfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.phone}</p>)}
-                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.email} onChange={this.changueEmail} />)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.phone} onChange={this.changuePhone} />)}
 
                                     </div>
                                 </div>
@@ -611,41 +828,27 @@ class Perfil extends React.Component {
         if (this.state.page === 'Senha') {
             return (
                 <div className="container-fluid" >
-                    <div className="sub-heard-part" >
+                <div className="sub-heard-part" >
 
-                        <ol className="breadcrumb m-b-0" >
-                            <li > < a hre="/" > Home </a></li >
-                            <li > Vizualizar </li>
-                            <li > Perfil </li>
-                        </ol >
-                    </div>
-                    <div className="graph-visual" >
-                        <h3 className="inner-tittle" > Vizualizar Perfil Funcionario </h3>
-
-                        <div className="graph" >
-                            <h3 className="inner-tittle" > Mudar Senha</h3>
-                        </div>
-
-                    </div>
-                    <div className="col-md-12 col-sm-12 text-center">
-                        <div className="col-md-6 col-sm-12 text-center" >
-                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A SENHA ATUAL </b></h5>
-                                <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
-                            </div>
-                            <br></br>
-                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                <h5 className="ltTitulo" style={{ color: 'red' }}><b> DIGITE A NOVA SENHA </b></h5>
-                                <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 125 + '%' }} /></p>
-
-                            </div>
-                            <div className="graph" style={{ padding: 10 + "px" }}>
-                                <button onClick={() => this.setState({ page: 'Perfil', editar: false })} className="btn btn-md botao botaoAvançar" style={{}}> Alterar Senha</button>
-                            </div>
-                        </div>
-                    </div>
-
+                    <ol className="breadcrumb m-b-0" >
+                        <li > < a href="/" > Home </a></li >
+                        <li > Vizualizar </li>
+                        <li > Perfil </li>
+                    </ol >
                 </div>
+                <div className="graph-visual" >
+                    <h3 className="inner-tittle" > Vizualizar Perfil </h3>
+                    <div className="graph" >
+                        <h3 className="inner-tittle" style={{textAlign:"center"}} > Resetar para senha padrão (senha123)</h3>                            
+                        
+                        <br></br><br></br>
+                        <div className="text-center" >
+                        <button onClick={()=>this.setState({page:"Perfil"})} className="btn btn-md botao botaoAvançar text-center" style={{}}> voltar</button>
+                            <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Resetar Senha</button>                                      
+                        </div>                              
+                    </div>                    
+                </div>
+            </div>
             );
         }
     }
