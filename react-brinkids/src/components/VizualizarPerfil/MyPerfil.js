@@ -4,6 +4,7 @@ import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
 import './icones.css';
+import './css/My_Perfil.css';
 import jwt from 'jsonwebtoken';
 import { Route, Redirect } from 'react-router'
 import { getToken } from "../Login/service/auth";
@@ -338,11 +339,12 @@ class MeuPerfil extends React.Component {
                                         <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                         {this.state.editar && (
                                             <div>
-                                                <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}><label>
-                                                    Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                                <button className="btn btn-md botao botaoAvançar">
+                                                    <label className="corbotao">
+                                                        Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                    <input id="tipofile" type="file" name="foto" value="" />
-                                                </label>
+                                                        <input id="tipofile" type="file" name="foto" value="" />
+                                                    </label>
                                                 </button><br /></div>)
                                         }
                                     </div>
