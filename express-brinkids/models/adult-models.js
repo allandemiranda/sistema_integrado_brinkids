@@ -1,4 +1,4 @@
-/** Schema para usuarios do sistema */
+/** Schema para usuarios do sistema **/
 
 const mongoose = require('mongoose');
 const config = require('../config');
