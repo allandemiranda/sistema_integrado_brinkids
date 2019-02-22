@@ -56,8 +56,8 @@ class PerfilAdulto extends React.Component {
             kinship: 'Outros',
             photo: '',
             pode: false,
-
-
+            deletado:false,
+            naoEncontrada:false,
         }
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -127,66 +127,71 @@ class PerfilAdulto extends React.Component {
     componentWillMount() {
         this.Funcionario(2);
     }
+
     excluir(event, indice) {
-        const a = getToken();
-        const b = jwt.verify(a, config.secret_auth);
-        axios.get(`/employees/${b.id}`)
+        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
 
-            .then((response) => {
+        if (confirmacao === true) {
+            const a = getToken();
+            const b = jwt.verify(a, config.secret_auth);
+            axios.get(`/employees/${b.id}`)
 
-                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+                .then((response) => {
 
-                axios.get(`/professionalPosition/indentifier/${id}`)
-                    .then((response) => {
+                    let id = response.data[0].identifierEmployee.employeeData.officialPosition;
 
-                        let functions;
+                    axios.get(`/professionalPosition/indentifier/${id}`)
+                        .then((response) => {
 
-                        return response.data.functions;
+                            let functions;
 
-                    }).then((event) => {
+                            return response.data.functions;
 
-                        let podeentrar = false;
+                        }).then((event) => {
 
-                        event.map((map) => {
+                            let podeentrar = false;
 
-                            if (map.id === 3) {
+                            event.map((map) => {
 
-                                podeentrar = true;
+                                if (map.id === 3) {
+
+                                    podeentrar = true;
+
+                                }
+
+                            })
+
+                            return podeentrar;
+
+                        }).then((eventu) => {
+                            if (eventu) {
+
+                                let temporario = this.state.list;
+
+                                axios.delete(`adult/${event}`)
+                                    .then((response) => {
+
+                                        temporario.splice(indice, 1);
+                                        this.setState({
+                                            list: temporario,
+                                            deletado:true,
+                                        })
+                                    })
+
+                                    .catch((err) => console.log(err));
+
+                            } else {
+
+
+
+                                alert("Acesso Negado. Você não possui permisão para estar nessa área!");
 
                             }
-
                         })
-
-                        return podeentrar;
-
-                    }).then((eventu) => {
-                        if (eventu) {
-
-                            let temporario = this.state.list;
-
-                            axios.delete(`adult/${event}`)
-                                .then((response) => {
-
-                                    temporario.splice(indice, 1);
-                                    this.setState({
-                                        list: temporario
-                                    })
-                                })
-
-                                .catch((err) => console.log(err));
-
-                        } else {
-
-
-
-                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-
-                        }
-                    })
-                    .catch((err) => console.log(err));
-            })
-            .catch((err) => console.log(err));
-
+                        .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+        }
     }
     _dataURItoBlob(dataURI) { //Pega a foto e converte num formato específico para enviar ao servidor
         // convert base64/URLEncoded data component to raw binary data held in a string
@@ -466,9 +471,10 @@ class PerfilAdulto extends React.Component {
         axios.get(`/adult/filter/${this.state.selectedSearch}/nome`)
             .then((response) => {
                 console.log(response.data);
-                this.setState({ list: response.data });
+                this.setState({ list: response.data, naoEncontrada:false });
             }).catch((err) => {
                 console.log(err);
+                this.setState({ naoEncontrada:true });
             });
 
 
@@ -584,8 +590,17 @@ class PerfilAdulto extends React.Component {
     render() {
         if (this.state.page === 'Busca') {
             return (
-
                 <div className="container-fluid" >
+                    {this.state.naoEncontrada&&
+                        (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                            <strong style={{ color: 'white' }}>Nenhum adulto encontrda com esse nome. </strong>
+                        </div>)
+                    }
+                    {this.state.deletado&&
+                        (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
+                            <strong style={{ color: 'white' }}>Adulto deletado com sucesso do sistema. </strong>
+                        </div>)
+                    }
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
