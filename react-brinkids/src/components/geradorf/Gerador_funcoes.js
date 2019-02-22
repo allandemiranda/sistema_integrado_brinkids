@@ -133,19 +133,22 @@ class Gerador extends React.Component {
     }
     excluir(event) {
 
-        let listaTemporaria = this.state.listadecargos;
-        let identifier = listaTemporaria[event]._id;
-
-        axios.delete(`/professionalPosition/${identifier}`)
-            .then((response) => {
-                console.log(response.data);
+        var r = window.confirm("Deseja mesmo excluir esse cargo ?");
+        if(r === true){
+            let listaTemporaria = this.state.listadecargos;
+            let identifier = listaTemporaria[event]._id;
+    
+            axios.delete(`/professionalPosition/${identifier}`)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => console.log(err));
+    
+            listaTemporaria.splice(event, 1);
+            this.setState({
+                listadecargos: listaTemporaria,
             })
-            .catch((err) => console.log(err));
-
-        listaTemporaria.splice(event, 1);
-        this.setState({
-            listadecargos: listaTemporaria,
-        })
+        }
     }
     changue(event) {
 
