@@ -355,37 +355,28 @@ class MeuPerfil extends React.Component {
                                 </div>
 
                                 <div className="col-md-4 col-sm-12 text-center">
-
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Nome: </b></h5>
                                         <p>{this.state.perfilAtual.name.firstName}</p>
                                     </div>
-                                    <br></br>
+                                </div>
+                                <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sobrenome: </b></h5>
                                         <p>{this.state.perfilAtual.name.surName}</p>
                                     </div>
-
                                 </div>
+                            </div>
+
+                            <br></br>
+                            <div className="row">
                                 <div className="col-md-4 col-sm-12 text-center">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo" ><b> Login: </b></h5>
                                         <p>{this.state.user}</p>
                                     </div>
                                     <br></br>
-
-
-                                    <div className="graph" style={{ padding: 10 + "px" }}>
-                                        <h5 className="ltTitulo" ><b> Status do Usuário:  </b></h5>
-                                        <p>Ativo</p>
-                                    </div><br />
                                 </div>
-
-
-
-
-
-
                                 <div className="col-md-4 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b>  CPF: </b> </h5>
@@ -398,11 +389,8 @@ class MeuPerfil extends React.Component {
                                         <p> {this.state.perfilAtual.rg} </p>
                                     </div>
                                 </div>
-
                             </div>
-
                             <br></br>
-
                             <div className="row" >
 
                                 <div className="col-md-4 col-sm-12">
