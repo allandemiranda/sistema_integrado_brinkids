@@ -2,6 +2,7 @@ import React from 'react'
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
+import './css/GerenciadorFuncionario.css'
 import lista from './lista';
 import Cargo from './cargos';
 import TypesInput from '../TypesInput';
@@ -63,23 +64,17 @@ class Gerador extends React.Component {
     Salvar2(event) {
         if (this.state.Name.length === 0 || this.state.Description.length === 0 ){
             if (this.state.Name.length === 0){
-                if (this.state.Name.length === 0) {
-                    $("#Nome").addClass('errorBorder');
-                }
-                else {
-                    $("#Nome").removeClass('errorBorder');
-                }
+                 $("#Nome").addClass('errorBorder');
             }
             if(this.state.Description.length === 0 ){
-                if (this.state.Description.length === 0) {
-                    $("#Description").addClass('errorBorder');
-                }
-                else {
-                    $("#Description").removeClass('errorBorder');
-                }
+                $("#Description").addClass('errorBorder');
             }
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             this.state.erroPrenchimento = true;
         }else{
+            $("#Nome").removeClass('errorBorder');
+            $("#Description").removeClass('errorBorder');
+            $("#alertDiv").addClass('displaynone');
             let temporario = this.state.listadecargos;
             console.log(temporario[this.state.indice]);
             let identifier = temporario[this.state.indice]._id;
@@ -138,19 +133,22 @@ class Gerador extends React.Component {
     }
     excluir(event) {
 
-        let listaTemporaria = this.state.listadecargos;
-        let identifier = listaTemporaria[event]._id;
-
-        axios.delete(`/professionalPosition/${identifier}`)
-            .then((response) => {
-                console.log(response.data);
+        var r = window.confirm("Deseja mesmo excluir esse cargo ?");
+        if(r === true){
+            let listaTemporaria = this.state.listadecargos;
+            let identifier = listaTemporaria[event]._id;
+    
+            axios.delete(`/professionalPosition/${identifier}`)
+                .then((response) => {
+                    console.log(response.data);
+                })
+                .catch((err) => console.log(err));
+    
+            listaTemporaria.splice(event, 1);
+            this.setState({
+                listadecargos: listaTemporaria,
             })
-            .catch((err) => console.log(err));
-
-        listaTemporaria.splice(event, 1);
-        this.setState({
-            listadecargos: listaTemporaria,
-        })
+        }
     }
     changue(event) {
 
@@ -162,23 +160,17 @@ class Gerador extends React.Component {
     Salvar(event) {
         if (this.state.Name.length === 0 || this.state.Description.length === 0 ){
             if (this.state.Name.length === 0){
-                if (this.state.Name.length === 0) {
-                    $("#Nome").addClass('errorBorder');
-                }
-                else {
-                    $("#Nome").removeClass('errorBorder');
-                }
+                $("#Nome").addClass('errorBorder');
             }
             if(this.state.Description.length === 0 ){
-                if (this.state.Description.length === 0) {
-                    $("#Description").addClass('errorBorder');
-                }
-                else {
-                    $("#Description").removeClass('errorBorder');
-                }
+                $("#Description").addClass('errorBorder');
             }
             this.state.erroPrenchimento = true;
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
         }else{
+            $("#alertDiv").addClass('displaynone');
+            $("#Description").removeClass('errorBorder');
+            $("#Nome").removeClass('errorBorder');
             var formData = new FormData();
             formData.append('name', this.state.Name);
             formData.append('description', this.state.Description);
@@ -423,6 +415,9 @@ class Gerador extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" >Editar Cargo</h3>
+                        <div id="alertDiv" className="alert displaynone" role="alert">
+                            <b>ERRO!</b> Ah algo de errado em seu formulario.
+                        </div>
                         <form>
                             <div className="graph" >
                                 <div className="form-group">
