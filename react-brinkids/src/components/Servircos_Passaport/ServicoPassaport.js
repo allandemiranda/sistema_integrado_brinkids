@@ -49,9 +49,8 @@ class ServicoPassaporte extends React.Component {
         this.voltar = this.voltar.bind(this);
     }
     voltar(event) {
-       
-                this.requisicao();
-          
+        this.requisicao();
+        this.setState({erroC: 0})
     }
     interval(event) { }
     Funcionario = (number) => {
@@ -144,50 +143,62 @@ class ServicoPassaporte extends React.Component {
     criar = (event) => {
         if (this.state.Nome.length === 0) {
             $("#name").addClass('errorBorder');
-            this.state.tudoOK = false;
-            this.state.erroC = this.state.erroC + 1;
+            this.setState({
+                erroC: this.state.erroC + 1,
+            })
+          
         }
         else {
             $("#name").removeClass('errorBorder');
-            this.state.tudoOK = true;
-            this.state.erroC = this.state.erroC - 1;
+            this.setState({
+                erroC:  this.state.erroC - 1,
+            })
         }
 
         if (this.state.Descricao.length === 0) {
             $("#desc").addClass('errorBorder');
-            this.state.tudoOK = false;
-            this.state.erroC = this.state.erroC + 1;
+            this.setState({
+                erroC:  this.state.erroC + 1,
+            })
         }
         else {
             $("#desc").removeClass('errorBorder');
-            this.state.tudoOK = true;
-            this.state.erroC = this.state.erroC - 1;
+            this.setState({
+                erroC:  this.state.erroC - 1,
+            })
         }
 
         if (this.state.Price.length === 0) {
             $("#valor").addClass('errorBorder');
-            this.state.tudoOK = false;
-            this.state.erroC = this.state.erroC + 1;
+            this.setState({
+                erroC:  this.state.erroC + 1,
+            })
         }
         else {
             $("#valor").removeClass('errorBorder');
-            this.state.tudoOK = true;
-            this.state.erroC = this.state.erroC - 1;
+            this.setState({
+                erroC:  this.state.erroC - 1,
+            })
         }
 
         if(this.state.list.initialTime > this.state.TempoFinal){
             $("#time").addClass('errorBorder');
-            this.state.tudoOK = false;
-            this.state.erroC = this.state.erroC + 1;
+            this.setState({
+                erroC:  this.state.erroC + 1,
+            })
         }
         else{
             $("#time").removeClass('errorBorder');
-            this.state.tudoOK = true; 
-            this.state.erroC = this.state.erroC + 1;
+            this.setState({
+                erroC:  this.state.erroC - 1,
+            })
         }
 
+        var finalizar = this.state.erroC;
+        //console.log(finalizar)
     /* Caso tudo der certo manda as coisas para o back*/
-        if (this.state.tudoOK === true) {
+        if (finalizar <= 0) {
+            //alert("entrou");
             console.log("Dados sendo retornado");
             event.preventDefault();
 
@@ -205,16 +216,13 @@ class ServicoPassaporte extends React.Component {
                     console.log(response)
                     //axios.get('/passportServices')
                        // .then((response) => {
-
-
                             console.log(response.data);
-                            
                             this.requisicao();
                        // })
 
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
-                    alert("Erro no Cadastro");
+                   //alert("Erro no Cadastro");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
@@ -240,8 +248,10 @@ class ServicoPassaporte extends React.Component {
                 console.log(response)
                 this.requisicao();
                 //window.location.href = '/ServicoPassaporte';
-                this.state.salvarCerto = true;
-                this.state.mensApa = false;
+                this.setState({
+                    salvarCerto:true,
+                    mensApa:false,
+                })
             }).catch( (error)=> {
                 console.log(error)//LOG DE ERRO
                 alert("Erro no Cadastro");
@@ -249,20 +259,21 @@ class ServicoPassaporte extends React.Component {
     }
 
     Apagar = (event) => {
-        this.setState({
-            mensApa:true,
-            salvarCerto:true,
-        })
-        const id = this.state.list[this.state.list.length - 1]._id;
-        axios.delete(`/passportServices/${id}`)
-            .then((response) => {
-                axios.get('/passportServices')
-                    .then((response) => {
-
-                        
-                        this.requisicao();
-                    })
-            });
+        const confirmacao = window.confirm("Deseja mesmo excluir esse serviço?");
+        if (confirmacao === true) {
+            this.setState({
+                mensApa: true,
+                salvarCerto:false,
+            })
+            const id = this.state.list[this.state.list.length - 1]._id;
+            axios.delete(`/passportServices/${id}`)
+                .then((response) => {
+                    axios.get('/passportServices')
+                        .then((response) => {
+                            this.requisicao();
+                        })
+                });
+        }
     }
     xaubanner(){
         this.state.mensApa = false;
@@ -397,7 +408,7 @@ class ServicoPassaporte extends React.Component {
             return (
                 <div className="container-fluid" >
                     <div >
-                        {this.state.erroC != 0 &&
+                        {this.state.erroC > 0 &&
                             (<div className="alert lert-danger" role="alert"  style ={{ background: "#ff6347",width: 100 + '%' }}>
                                 <strong style ={{color: 'white'}}>Erro no preenchimento do formulário.</strong>
                             </div>)
