@@ -744,7 +744,7 @@ class SaidaCrianca extends React.Component {
 
                     });
                 }).then(() => {
-                    this.props.history.push("/");
+                    // this.props.history.push("/");
                 }).catch((err) => console.log(err));
 
         } else {

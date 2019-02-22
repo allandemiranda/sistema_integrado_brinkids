@@ -13,7 +13,7 @@
     "capture": "^0.1.0",
     "chalk": "^2.4.1",
     "jquery": "^3.3.1",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^8.5.0",
     "moment": "^2.22.2",
     "nanomatch": "^1.2.13",
     "parser": "^0.1.4",
