@@ -212,7 +212,7 @@ class Servico extends React.Component {
         })
     }
     excluir(event, indice) {
-        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
+        const confirmacao = window.confirm("Deseja mesmo excluir esse serviço do sistema?");
 
         if(confirmacao === true){            
             const a = getToken();

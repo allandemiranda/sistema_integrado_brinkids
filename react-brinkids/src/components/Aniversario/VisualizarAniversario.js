@@ -268,63 +268,66 @@ class VisualizarAniversario extends React.Component {
 
     }
     excluir(event) {
-        const a = getToken();
-        const b = jwt.verify(a, config.secret_auth);
-        axios.get(`/employees/${b.id}`)
+        const confirmacao = window.confirm("Deseja mesmo excluir esse Aniversário do sistema?");
 
-            .then((response) => {
-
-                let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-
-                axios.get(`/professionalPosition/indentifier/${id}`)
-                    .then((response) => {
-
-                        let functions;
-
-                        return response.data.functions;
-
-                    }).then((event) => {
-
-                        let podeentrar = false;
-
-                        event.map((map) => {
-
-                            if (map.id === 15) {
-
-                                podeentrar = true;
-
-                            }
-
-                        })
-
-                        return podeentrar;
-
-                    }).then((eventu) => {
-                        if (eventu) {
-                            let listaTemporaria = this.state.list;
-                            axios.delete(`/birthday/${listaTemporaria[event]._id}`)
-                                .then((response) => {
-
-
-                                    console.log(response.data);
-
-                                })
-                                .catch((err) => console.log(err));
-                            listaTemporaria.splice(event, 1);
-                            this.setState({
-                                list: listaTemporaria,
+        if(confirmacao === true){            
+            const a = getToken();
+            const b = jwt.verify(a, config.secret_auth);
+            axios.get(`/employees/${b.id}`)
+    
+                .then((response) => {
+    
+                    let id = response.data[0].identifierEmployee.employeeData.officialPosition;
+    
+                    axios.get(`/professionalPosition/indentifier/${id}`)
+                        .then((response) => {
+    
+                            let functions;
+    
+                            return response.data.functions;
+    
+                        }).then((event) => {
+    
+                            let podeentrar = false;
+    
+                            event.map((map) => {
+    
+                                if (map.id === 15) {
+    
+                                    podeentrar = true;
+    
+                                }
+    
                             })
-
-                        } else {
-
-                            alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-
-                        }
-                    })
-                    .catch((err) => console.log(err));
-            })
-            .catch((err) => console.log(err));
-
+    
+                            return podeentrar;
+    
+                        }).then((eventu) => {
+                            if (eventu) {
+                                let listaTemporaria = this.state.list;
+                                axios.delete(`/birthday/${listaTemporaria[event]._id}`)
+                                    .then((response) => {
+    
+    
+                                        console.log(response.data);
+    
+                                    })
+                                    .catch((err) => console.log(err));
+                                listaTemporaria.splice(event, 1);
+                                this.setState({
+                                    list: listaTemporaria,
+                                })
+    
+                            } else {
+    
+                                alert("Acesso Negado. Você não possui permisão para estar nessa área!");
+    
+                            }
+                        })
+                        .catch((err) => console.log(err));
+                })
+                .catch((err) => console.log(err));
+        }
     }
     excluir2(event, type) {
         if (type === "adulto") {
