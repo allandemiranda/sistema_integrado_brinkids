@@ -13,6 +13,7 @@ import { getFuncionario } from "../Login/service/auth";
 import axios from 'axios';
 import config from '../Login/service/config';
 import moment from 'moment'
+import $ from 'jquery'
 var foto;
 class MeuPerfil extends React.Component {
     constructor(props) {
@@ -100,6 +101,8 @@ class MeuPerfil extends React.Component {
             const a = getToken();
             const b = jwt.verify(a, config.secret_auth);
             console.log(b);
+            $("#alertDiv").removeClass('displaynone');
+            $("#senhaantiga").removeClass('errorBorder');
             const data = {
                 identifier: b._id,
                 password: this.state.senhaNova,
@@ -115,7 +118,8 @@ class MeuPerfil extends React.Component {
             const a = getToken();
             const b = jwt.verify(a, config.secret_auth);
             console.log(b);
-            alert("Senha atual incorreta, tente novamente.")
+            $("#senhaantiga").addClass('errorBorder');
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
         }
     }
     sair=()=>{
@@ -556,19 +560,22 @@ class MeuPerfil extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Meu Perfil </h3>
+                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                            <b>ERRO!</b> Há algo de errado em seu formulário.
+                        </div>
                         <div className="graph" >
                             <h3 className="inner-tittle" > Mudar Senha</h3>                            
                             <div className="col-md-6 col-sm-12 text-center" >
                                 <h5 className="ltTitulo" style={{ color: '#00C6D7' }}><b> DIGITE A SENHA ATUAL </b></h5>
-                                <p><input type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
+                                <p><input id="senhaantiga" type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
                             </div>
                             <div className="col-md-6 col-sm-12 text-center" >
                                 <h5 className="ltTitulo" style={{ color: '#00C6D7' }}><b> DIGITE A NOVA SENHA </b></h5>
-                                <p><input type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
+                                <p><input id="senhaanova" type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
                             </div>  
                             <br></br><br></br>
                             <div className="text-center" >
-                            <button onClick={()=>this.setState({page:"Perfil",senhaAtual:"",senhaNova:""})} className="btn btn-md botao botaoAvançar text-center" style={{}}>voltar</button>    
+                                <button onClick={()=>this.setState({page:"Perfil",senhaAtual:"",senhaNova:""})} className="btn btn-md botao botaoAvançar text-center" style={{}}>voltar</button>    
                                 <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Alterar Senha</button>                                      
                             </div>                              
                         </div>                    

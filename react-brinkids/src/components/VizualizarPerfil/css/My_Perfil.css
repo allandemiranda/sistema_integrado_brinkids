@@ -6,6 +6,12 @@
         margin-top: 7px;
     }
 }
+.errorBorder {
+    border: 1px solid red !important;
+}
+.displaynone {
+    display: none;
+}
 .corbotao {
     color:#fff;
 }
