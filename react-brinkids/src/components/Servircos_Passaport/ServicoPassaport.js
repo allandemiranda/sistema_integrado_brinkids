@@ -249,8 +249,10 @@ class ServicoPassaporte extends React.Component {
     }
 
     Apagar = (event) => {
-        this.state.mensApa = true;
-        this.state.salvarCerto = false;
+        this.setState({
+            mensApa:true,
+            salvarCerto:true,
+        })
         const id = this.state.list[this.state.list.length - 1]._id;
         axios.delete(`/passportServices/${id}`)
             .then((response) => {

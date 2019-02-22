@@ -26,7 +26,7 @@ class Gaveta extends React.Component {
                 this.setState({ Ngavetas: response.data[0].number });
             })
             .catch((err) => console.log(err));
-        this.state.cadastroOK = true;
+        this.setState({cadastroOK: true})
     }
     Change(event) {
         this.setState({
