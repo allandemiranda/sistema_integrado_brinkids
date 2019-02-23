@@ -127,9 +127,10 @@ router.delete('/:identifier', async (req, res) => {
     
     const log = new Logs({
       activity: 'Serviços',
-      action: 'Delete',
+      action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
+      to:deletedService.name
     })
     
     const newLog = await log.save();

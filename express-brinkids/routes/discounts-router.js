@@ -91,7 +91,7 @@ router.get('/verdesconto/:code', async (req, res) => {
 
 
         if (event.statusUniqueUser != undefined) {
-          console.log("enteiiii")
+          
           child = await adult.findById({ '_id': event.statusUniqueUser })
 
           temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: event.statusUniqueDate, to: discounts.to })
@@ -221,9 +221,10 @@ router.delete('/filter/:identifier', async (req, res) => {
 
     const log = new Logs({
       activity: 'Desconto',
-      action: 'Delete',
+      action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
+      to:deletedService.name
     })
 
     const newLog = await log.save();

@@ -284,7 +284,7 @@ class PerfilAdulto extends React.Component {
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
-                window.location.reload(false);
+                
             })
             .catch((err) => console.log(err));
         listatemporaria.address.number = this.state.numero;
@@ -373,32 +373,7 @@ class PerfilAdulto extends React.Component {
 
 
 
-        // criancas.forEach(async (c, index) => {
-        //     const crianca = await c;
-
-        //     if (index >= criancas.length -1) {
-        //         console.log(index);
-        //         this.setState(prevState => {
-        //             return {
-        //                 listaFuncionarios: [...prevState.listaFuncionarios, crianca],
-        //                 pode:true,
-
-        //             }
-        //         })
-
-        //     } else {
-        //         console.log(criancas.length);
-        //         this.setState(prevState => {
-        //             return {
-        //                 listaFuncionarios: [...prevState.listaFuncionarios, crianca]
-
-        //             }
-
-        //         })
-        //         console.log(this.state.listaFuncionarios);
-        //     }
-
-        // })
+        
 
         this.setState(
             {
@@ -408,14 +383,9 @@ class PerfilAdulto extends React.Component {
 
             });
 
-        console.log(this.state.listaFuncionarios);
+       
 
 
-        // const dadosCriancas = event.children.map(async (child) => {
-        //     const childResponse = await axios.get(`/child/identifier/${child._id}`);
-        //     console.log(childResponse);
-        //     return childResponse;
-        // });
 
 
 
@@ -651,7 +621,7 @@ class PerfilAdulto extends React.Component {
             );
         }
         if (this.state.page === 'Perfil') {
-            if (this.state.editar && this.state.pode) {
+            if (this.state.editar ) {
                 setTimeout(function () {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
@@ -732,7 +702,7 @@ class PerfilAdulto extends React.Component {
                                                 <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec' }}>
                                                     <label style={{ color: 'white' }}>
                                                         Trocar imagem <span className="glyphicon">&#xe065;</span>
-                                                        <input id="tipofile" type="file" name="foto" defaultValue="" />
+                                                        <input id="tipofile" accept="image/*" type="file" name="foto" defaultValue="" />
                                                     </label>
                                                 </button>
                                             </div>)
