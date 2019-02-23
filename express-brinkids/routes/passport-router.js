@@ -2186,7 +2186,6 @@ router.post('/a', async (req, res) => {
           to: child.entrada.adult.name,
           price: child.valor,
           priceMethod: child.Form,
-          
 
         })
         const newLog = await log.save();
