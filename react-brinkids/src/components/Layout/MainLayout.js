@@ -96,7 +96,7 @@ class MainLayout extends React.Component {
                 })
                 .catch((err) =>{ 
                     console.log(err)
-                    alert("login experida: Por Favor faça login novamente")
+                    alert("Login experido")
                    window.location.href ="/Login"
                 })
         } else {
