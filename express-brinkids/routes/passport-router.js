@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
         action: 'Criação',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        
+
 
 
       })
@@ -151,7 +151,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     console.log("procurei", x);
     console.log(new Date(), " ", new Date(birthdayEnd * 60000));
 
-    
+
     var extraTime = 0;
     price = parseInt(0, 10).toFixed(2);
     console.log("entrada: ", new Date(adultEntered * 60000), "\nsaída: ", new Date(adultExit * 60000))
@@ -615,205 +615,24 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
       discountFinded[0].codes.forEach((elemente, indice, array) => {
         if (elemente.statusUniqueUser != undefined) {
           console.log("entreiri")
-          if (elemente.statusUniqueUser === req.params.idCria) {
-            discountFinded[0].codes.forEach((elemente, indice, array) => {
-              if (elemente.numberCode === req.params.codDesc) {
+          if (elemente.numberCode === req.params.codDesc) {
+            if (elemente.statusUniqueUser === req.params.idCria) {
+              console.log("entreii")
+              discountFinded[0].codes.forEach((elemente, indice, array) => {
+                if (elemente.numberCode === req.params.codDesc) {
 
 
 
-                    if (elemente.statusUniqueUser === req.params.idCria) {
+                  if (elemente.statusUniqueUser === req.params.idCria) {
 
-                      if (discountFinded[0].temporalityDate === "Diario") {
+                    if (discountFinded[0].temporalityDate === "Diario") {
 
-                        let hj = moment().format();
+                      let hj = moment().format();
 
-                        let ultimadata = moment(elemente.statusUniqueDate).format();
-                        let proximafata = moment(ultimadata).add(1, "days").format();
+                      let ultimadata = moment(elemente.statusUniqueDate).format();
+                      let proximafata = moment(ultimadata).add(1, "days").format();
 
-                        if (moment(hj).isAfter(proximafata)) {
-
-                          if (discountFinded[0].type === 'Fixo') {
-
-                            price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                            if (req.params.valueChild <= discountFinded[0].value) {
-                              price = parseFloat(req.params.valueChild).toFixed(2);
-                            }
-
-
-
-                          } else {
-
-                            price = req.params.valueChild;
-                            price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                          }
-
-
-                          const data = {
-                            name: childName,
-                            time: adultTime,
-                            value: price,
-                            discount: discountFinded[0].name,
-                            Valorinicial: req.params.valueChild,
-                            indicecodes: indice,
-                           
-
-                          };
-                          try {
-                            return res.status(201).json(data);
-                          } catch (err) {
-                            return res.sendStatus(500);
-                          }
-                        } else {
-
-
-                          return res.send("1");
-
-                        }
-                      } else if (discountFinded[0].temporalityDate === "Semanal") {
-
-                        let hj = moment().format();
-
-                        let ultimadata = moment(elemente.statusUniqueDate).format();
-                        let proximafata = moment(ultimadata).add(7, "days").format();
-
-                        if (moment(hj).isAfter(proximafata)) {
-
-                          if (discountFinded[0].type === 'Fixo') {
-
-                            price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                            if (req.params.valueChild <= discountFinded[0].value) {
-                              price = parseFloat(req.params.valueChild).toFixed(2);
-                            }
-
-
-
-                          } else {
-
-                            price = req.params.valueChild;
-                            price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                          }
-
-
-                          const data = {
-                            name: childName,
-                            time: adultTime,
-                            value: price,
-                            discount: discountFinded[0].name,
-                            Valorinicial: req.params.valueChild,
-                            indicecodes: indice,
-                            
-                          };
-                          try {
-                            return res.status(201).json(data);
-                          } catch (err) {
-                            return res.sendStatus(500);
-                          }
-                        } else {
-                          return res.send("2");
-                        }
-                      } else if (discountFinded[0].temporalityDate === "Mensal") {
-                        let hj = moment().format();
-
-                        let ultimadata = moment(elemente.statusUniqueDate).format();
-                        let proximafata = moment(ultimadata).add(1, 'month').format();
-
-                        if (moment(hj).isAfter(proximafata)) {
-
-                          if (discountFinded[0].type === 'Fixo') {
-
-                            price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                            if (req.params.valueChild <= discountFinded[0].value) {
-                              price = parseFloat(req.params.valueChild).toFixed(2);
-                            }
-
-
-
-                          } else {
-
-                            price = req.params.valueChild;
-                            price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                          }
-
-
-                          const data = {
-                            name: childName,
-                            time: adultTime,
-                            value: price,
-                            discount: discountFinded[0].name,
-                            Valorinicial: req.params.valueChild,
-                            indicecodes: indice,
-                            
-
-                          };
-                          try {
-                            return res.status(201).json(data);
-                          } catch (err) {
-                            return res.sendStatus(500);
-                          }
-                        } else {
-                          return res.send("3");
-                        }
-                      } else if (discountFinded[0].temporalityDate === "Anual") {
-                        let hj = moment().format();
-
-                        let ultimadata = moment(elemente.statusUniqueDate).format();
-                        let proximafata = moment(ultimadata).add(1, 'years').format();
-
-                        if (moment(hj).isAfter(proximafata)) {
-
-                          if (discountFinded[0].type === 'Fixo') {
-
-                            price = parseFloat(discountFinded[0].value).toFixed(2);
-
-                            if (req.params.valueChild <= discountFinded[0].value) {
-                              price = parseFloat(req.params.valueChild).toFixed(2);
-                            }
-
-
-
-                          } else {
-
-                            price = req.params.valueChild;
-                            price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
-
-
-                          }
-
-
-                          const data = {
-                            name: childName,
-                            time: adultTime,
-                            value: price,
-                            discount: discountFinded[0].name,
-                            Valorinicial: req.params.valueChild,
-                            indicecodes: indice,
-                            
-
-                          };
-                          try {
-                            return res.status(201).json(data);
-                          } catch (err) {
-                            return res.sendStatus(500);
-                          }
-                        } else {
-                          return res.send("4");
-                        }
-                      } else if (discountFinded[0].temporalityDate === "Livre") {
-                        let hj = moment().format();
-
-                        let ultimadata = moment(elemente.statusUniqueDate).format();
-                        let proximafata = moment(ultimadata).add(1, 'years').format();
-
-
+                      if (moment(hj).isAfter(proximafata)) {
 
                         if (discountFinded[0].type === 'Fixo') {
 
@@ -841,7 +660,7 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                           discount: discountFinded[0].name,
                           Valorinicial: req.params.valueChild,
                           indicecodes: indice,
-                         
+
 
                         };
                         try {
@@ -849,13 +668,200 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                         } catch (err) {
                           return res.sendStatus(500);
                         }
+                      } else {
+
+
+                        return res.send("1");
 
                       }
-                    } else {
-                      return res.send("5");
+                    } else if (discountFinded[0].temporalityDate === "Semanal") {
+
+                      let hj = moment().format();
+
+                      let ultimadata = moment(elemente.statusUniqueDate).format();
+                      let proximafata = moment(ultimadata).add(7, "days").format();
+
+                      if (moment(hj).isAfter(proximafata)) {
+
+                        if (discountFinded[0].type === 'Fixo') {
+
+                          price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                          if (req.params.valueChild <= discountFinded[0].value) {
+                            price = parseFloat(req.params.valueChild).toFixed(2);
+                          }
+
+
+
+                        } else {
+
+                          price = req.params.valueChild;
+                          price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+
+
+                        }
+
+
+                        const data = {
+                          name: childName,
+                          time: adultTime,
+                          value: price,
+                          discount: discountFinded[0].name,
+                          Valorinicial: req.params.valueChild,
+                          indicecodes: indice,
+
+                        };
+                        try {
+                          return res.status(201).json(data);
+                        } catch (err) {
+                          return res.sendStatus(500);
+                        }
+                      } else {
+                        return res.send("2");
+                      }
+                    } else if (discountFinded[0].temporalityDate === "Mensal") {
+                      let hj = moment().format();
+
+                      let ultimadata = moment(elemente.statusUniqueDate).format();
+                      let proximafata = moment(ultimadata).add(1, 'month').format();
+
+                      if (moment(hj).isAfter(proximafata)) {
+
+                        if (discountFinded[0].type === 'Fixo') {
+
+                          price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                          if (req.params.valueChild <= discountFinded[0].value) {
+                            price = parseFloat(req.params.valueChild).toFixed(2);
+                          }
+
+
+
+                        } else {
+
+                          price = req.params.valueChild;
+                          price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+
+
+                        }
+
+
+                        const data = {
+                          name: childName,
+                          time: adultTime,
+                          value: price,
+                          discount: discountFinded[0].name,
+                          Valorinicial: req.params.valueChild,
+                          indicecodes: indice,
+
+
+                        };
+                        try {
+                          return res.status(201).json(data);
+                        } catch (err) {
+                          return res.sendStatus(500);
+                        }
+                      } else {
+                        return res.send("3");
+                      }
+                    } else if (discountFinded[0].temporalityDate === "Anual") {
+                      let hj = moment().format();
+
+                      let ultimadata = moment(elemente.statusUniqueDate).format();
+                      let proximafata = moment(ultimadata).add(1, 'years').format();
+
+                      if (moment(hj).isAfter(proximafata)) {
+
+                        if (discountFinded[0].type === 'Fixo') {
+
+                          price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                          if (req.params.valueChild <= discountFinded[0].value) {
+                            price = parseFloat(req.params.valueChild).toFixed(2);
+                          }
+
+
+
+                        } else {
+
+                          price = req.params.valueChild;
+                          price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+
+
+                        }
+
+
+                        const data = {
+                          name: childName,
+                          time: adultTime,
+                          value: price,
+                          discount: discountFinded[0].name,
+                          Valorinicial: req.params.valueChild,
+                          indicecodes: indice,
+
+
+                        };
+                        try {
+                          return res.status(201).json(data);
+                        } catch (err) {
+                          return res.sendStatus(500);
+                        }
+                      } else {
+                        return res.send("4");
+                      }
+                    } else if (discountFinded[0].temporalityDate === "Livre") {
+                      let hj = moment().format();
+
+                      let ultimadata = moment(elemente.statusUniqueDate).format();
+                      let proximafata = moment(ultimadata).add(1, 'years').format();
+
+
+
+                      if (discountFinded[0].type === 'Fixo') {
+
+                        price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                        if (req.params.valueChild <= discountFinded[0].value) {
+                          price = parseFloat(req.params.valueChild).toFixed(2);
+                        }
+
+
+
+                      } else {
+
+                        price = req.params.valueChild;
+                        price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+
+
+                      }
+
+
+                      const data = {
+                        name: childName,
+                        time: adultTime,
+                        value: price,
+                        discount: discountFinded[0].name,
+                        Valorinicial: req.params.valueChild,
+                        indicecodes: indice,
+
+
+                      };
+                      try {
+                        return res.status(201).json(data);
+                      } catch (err) {
+                        return res.sendStatus(500);
+                      }
+
                     }
-              }
-            })
+                  } else {
+                    return res.send("5");
+                  }
+                }
+              })
+            } else {
+
+              return res.send("5");
+            }
           }
         } else {
 
@@ -2166,25 +2172,55 @@ router.post('/a', async (req, res) => {
 
 
   console.log('executed');
-  const products = req.body.map(async (child) => {
+  const products = req.body.map(async (child, indice) => {
 
     try {
       const deletedService = await product.findByIdAndRemove(child.entrada._id);
+      console.log(child)
+      if (indice === req.body.length - 1) {
+        const log = new Logs({
+          activity: 'Passaporte',
+          action: 'Saida Adulto',
+          dateOperation: new Date(),
+          from: funcionario, //ajsuta o id dps de fazer o login funcionar
+          to: child.entrada.adult.name,
+          price: child.valor,
+          priceMethod: child.Form,
+          
 
-      const log = new Logs({
-        activity: 'Passaporte',
-        action: 'Saida',
-        dateOperation: new Date(),
-        from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: child.entrada.adult.name,
-        price: child.valorcria,
-        cco: child.entrada.children.name,
-        priceMethod: child.Form,
-        timeLojaLast: new Date(),
-        timeLojaFirst: child.entrada.time,
+        })
+        const newLog = await log.save();
+        const logs = new Logs({
+          activity: 'Passaporte',
+          action: 'Saida',
+          dateOperation: new Date(),
+          from: funcionario, //ajsuta o id dps de fazer o login funcionar
+          to: child.entrada.adult.name,
+          price: child.valor3[indice].valueF,
+          cco: child.entrada.children.name,
+          priceMethod: child.Form,
+          timeLojaLast: new Date(),
+          timeLojaFirst: child.entrada.time,
 
-      })
-      const newLog = await log.save()
+        })
+        const newLogs = await logs.save()
+      }
+      else {
+        const log = new Logs({
+          activity: 'Passaporte',
+          action: 'Saida',
+          dateOperation: new Date(),
+          from: funcionario, //ajsuta o id dps de fazer o login funcionar
+          to: child.entrada.adult.name,
+          price: child.valor3[indice].valueF,
+          cco: child.entrada.children.name,
+          priceMethod: child.Form,
+          timeLojaLast: new Date(),
+          timeLojaFirst: child.entrada.time,
+
+        })
+        const newLog = await log.save()
+      }
 
       if (!deletedService) {
         return res.sendStatus(404);
@@ -2198,7 +2234,7 @@ router.post('/a', async (req, res) => {
     }
 
   });
-
+  console.log("conseguiiii")
   const productFinded = await product.find({ 'children.id': req.body.idcria });
 
 

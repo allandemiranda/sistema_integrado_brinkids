@@ -297,9 +297,10 @@ class SaidaCrianca extends React.Component {
         this.state.CriancasSelecionadas.map((event, indice) => {
             axios.get(`/passport/` + this.state.CriancasSelecionadas[indice].children.id + `/` + moment() + '/')
                 .then((response) => {
-                    console.log(response);
+                    console.log(response.data);
                     console.log(this.state.page)
                     temporario.push({ crianca: event, infocrianca: response.data })
+                    temporario[indice].infocrianca.valueF =  temporario[indice].infocrianca.value;
                     this.setState({
 
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
@@ -327,8 +328,12 @@ class SaidaCrianca extends React.Component {
     //FUNÇÃO QUE FAZ PASSAR AS CRIANÇAS 
     ProximaCria = () => {
         console.log(this.state.CriancasSelecionadas)
+        
         if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)) {
-
+            
+           
+         
+                           
             //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
             var j = 0.0;
             var k = 0.0;
@@ -345,6 +350,7 @@ class SaidaCrianca extends React.Component {
             })
             if (k > j) {
                 this.setState({
+                   
                     TotalValor: (j).toFixed(2),
                     TotalValorDesc: (k).toFixed(2),
                     FinalValor: (0).toFixed(2),
@@ -353,6 +359,7 @@ class SaidaCrianca extends React.Component {
                 })
             } else {
                 this.setState({
+                 
                     TotalValor: (j).toFixed(2),
                     TotalValorDesc: (k).toFixed(2),
                     FinalValor: (j - k).toFixed(2),
@@ -365,6 +372,7 @@ class SaidaCrianca extends React.Component {
             this.setState({
                 indice: this.state.indice + 1,
                 CodDes: "",
+               
             })
         }
 
@@ -448,6 +456,8 @@ class SaidaCrianca extends React.Component {
                             temporario[this.state.indice].codigos = response.data;
                             temporario[this.state.indice].codigos.type = tipo;
                             temporario[this.state.indice].codigos.ValueD = valued;
+                            temporario[this.state.indice].infocrianca.valueF = temporario[this.state.indice].infocrianca.value -temporario[this.state.indice].codigos.value
+                            console.log(temporario[this.state.indice])
                             this.setState({
                                 ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
                                 CriancasSelecionadas: temporario
@@ -676,10 +686,11 @@ class SaidaCrianca extends React.Component {
                         idcria: String(this.state.CriancasSelecionadas[i].crianca.children.id),
                         entrada: entradas,
                         funcionario: String(this.state.nomeFuncionario),
-                        valor3: this.state.ValorCria,
+                        valor3: this.state.ValorCria[i],
                         desconto: temporarios,
                         valorcria: parseFloat(this.state.CriancasSelecionadas[i].codigos.ValueD)
                     }
+                    console.log(this.state.ValorCria[i])
                 }
                 else {
                     temporarios.forEach((event, indice, array) => {
@@ -956,7 +967,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Tempo:</b></h5>
-                                        <p>{moment(this.state.CriancasSelecionadas[this.state.indice].crianca.time).format("HH:mm")}</p>
+                                        <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.time}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
