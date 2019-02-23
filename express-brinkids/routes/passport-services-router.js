@@ -47,15 +47,15 @@ String.prototype.toHHMMSS = function () {//convertendo de segundos para o format
     if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
     var time = hours+':'+minutes;
-    return "ola";
+    return time;
 }
 
 String.prototype.toSS = function () {//convertendo de mm:ss para segundos
-    // let nums = this.split(':');
-    // let mins = parseInt(nums[1], 10)*60;
-    // let time = parseInt(nums[0], 10)*3600 + mins;
+    let nums = this.split(':');
+    let mins = parseInt(nums[1], 10)*60;
+    let time = parseInt(nums[0], 10)*3600 + mins;
 
-    return "ola";
+    return time;
 }
 
 router.get('/', async (req, res) => {

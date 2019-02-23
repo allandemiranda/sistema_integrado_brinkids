@@ -71,24 +71,24 @@ router.get('/verdesconto/:code', async (req, res) => {
       discounts.codes.map(async (event, indice) => {
         console.log(discounts.codes.length)
         let child;
-        
-          
-          if (event.statusUniqueUser != undefined) {
-            console.log("enteiiii")
-            child = await Child.findById({ '_id': event.statusUniqueUser })
 
-            temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: event.statusUniqueDate, to: discounts.to })
 
-          }
+        if (event.statusUniqueUser != undefined) {
+          console.log("enteiiii")
+          child = await Child.findById({ '_id': event.statusUniqueUser })
 
-        
+          temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: event.statusUniqueDate, to: discounts.to })
+
+        }
+
+
       })
 
     } else {
       discounts.codes.map(async (event, indice) => {
         console.log(discounts.codes.length)
         let child;
-        
+
 
         if (event.statusUniqueUser != undefined) {
           console.log("enteiiii")
@@ -98,7 +98,7 @@ router.get('/verdesconto/:code', async (req, res) => {
 
         }
 
-        
+
       })
     }
   }

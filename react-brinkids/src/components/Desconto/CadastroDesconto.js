@@ -368,7 +368,8 @@ class Desconto extends Component {
                                                     <td > {desconto.numberCode} </td>
                                                     <td >{this.state.list.type} </td>
                                                     <td >{this.state.list.value} </td>
-                                                    <td >{this.state.list.to} </td>
+                                                   {this.state.list.to==="Child"( <td >Criança </td>)}
+                                                   {this.state.list.to==="Adult"( <td >Adulto </td>)}
                                                     <td >{this.state.list.temporalityType} </td>
                                                     <td >{this.state.list.temporalityDate} </td>
                                                     <td >{moment(this.state.list.validity).add(1,"days").format("DD/MM/YYYY")} </td>
