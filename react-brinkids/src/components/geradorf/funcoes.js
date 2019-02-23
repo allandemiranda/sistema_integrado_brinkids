@@ -30,15 +30,15 @@ export default [
 
     { id: 23, funcao: "Excluir Evento" },
 
-    { id: 24, funcao: "Criar Produto/Serviço" },
-    { id: 25, funcao: "Visualizar Produto/Serviço" },
-    { id: 26, funcao: "Editar Produto/Serviço" },
+    { id: 24, funcao: "Criar Produtos/Serviços" },
+    { id: 25, funcao: "Visualizar Produtos/Serviços" },
+    { id: 26, funcao: "Editar Produtos/Serviços" },
     
     { id: 27, funcao: "Configurações Passaporte" },
     
-    { id: 28, funcao: "Configurações Desconto" },
+    { id: 28, funcao: "Configurações Descontos" },
     
-    { id: 29, funcao: "Configurações Gaveta" },
+    { id: 29, funcao: "Configurações Gavetas" },
     { id: 30, funcao: "Configurações Financeiro" },
     { id: 31, funcao: "Configurações Marketing" },
 ]

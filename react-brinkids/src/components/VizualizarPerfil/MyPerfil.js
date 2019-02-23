@@ -596,7 +596,7 @@ class MeuPerfil extends React.Component {
                             </div>  
                             <br></br><br></br>
                             <div className="text-center" >
-                                <button onClick={()=>this.setState({page:"Perfil",senhaAtual:"",senhaNova:""})} className="btn btn-md botao botaoAvançar text-center" style={{}}>voltar</button>    
+                                <button onClick={()=>this.setState({page:"Perfil",senhaAtual:"",senhaNova:""})} className="btn btn-md botao botaoAvançar text-center" style={{}}>Voltar</button>    
                                 <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Alterar Senha</button>                                      
                             </div>                              
                         </div>                    

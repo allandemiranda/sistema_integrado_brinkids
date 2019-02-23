@@ -232,8 +232,8 @@ class CadastroFuncionario extends React.Component {
                                         <thead className="text-center">
                                             <tr>
                                                 <th>#</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
+                                                <th>Nome </th>
+                                                <th>Sobre nome</th>
                                                 <th>CPF</th>
                                                 <th>Selecionar</th>
                                             </tr>

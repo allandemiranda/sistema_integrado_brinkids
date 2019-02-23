@@ -840,7 +840,7 @@ class Perfil extends React.Component {
                         
                         <br></br><br></br>
                         <div className="text-center" >
-                        <button onClick={()=>this.setState({page:"Perfil"})} className="btn btn-md botao botaoAvançar text-center" style={{}}> voltar</button>
+                        <button onClick={()=>this.setState({page:"Perfil"})} className="btn btn-md botao botaoAvançar text-center" style={{}}> Voltar</button>
                             <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Resetar Senha</button>                                      
                         </div>                              
                     </div>                    
