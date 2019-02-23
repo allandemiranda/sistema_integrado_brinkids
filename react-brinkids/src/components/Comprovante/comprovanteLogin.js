@@ -56,6 +56,8 @@ class ComprovanteLogin extends React.Component {
                         <div>
                             <a>Senha:</a>
                             <a id="senha">senha123</a>
+                        </div>
+                        <div>
                             <a> Edite sua senha assim que possível ! </a>
                         </div>
                         <div>
