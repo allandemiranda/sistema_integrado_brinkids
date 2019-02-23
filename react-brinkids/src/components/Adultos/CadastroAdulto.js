@@ -317,13 +317,13 @@ class CadastroAdulto extends React.Component {
                 $("#bai").removeClass('errorBorder');
             }
 
-            if ($.isNumeric(adulto.rg) === false) {
-                $("#numberRG").addClass('errorBorder');
-                erros.push("O CPF não pode estar em branco");
-            }
-            else {
-                $("#numberRG").removeClass('errorBorder');
-            }
+        //    if ($.isNumeric(adulto.rg) === false) {
+        //        $("#numberRG").addClass('errorBorder');
+        //        erros.push("O CPF não pode estar em branco");
+        //    }
+        //    else {
+        //        $("#numberRG").removeClass('errorBorder');
+        //    }
             return erros;
 
         }

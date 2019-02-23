@@ -27,7 +27,7 @@ class ServicoPassaporte extends React.Component {
             list: [],
             list2: { price: '0', time: '0' },
             Nome: "",
-            Descricao: "",
+            //Descricao: "",
             TempoFinal: "",
             QuebraTempo: 0,
             QuebraValor: 0,
@@ -38,7 +38,7 @@ class ServicoPassaporte extends React.Component {
             salvarCerto:false,
         }
         this.changueNome = this.changueNome.bind(this);
-        this.changueDescricao = this.changueDescricao.bind(this);
+        //this.changueDescricao = this.changueDescricao.bind(this);
         this.changueTempoFinal = this.changueTempoFinal.bind(this);
         this.changueTempoInicial = this.changueTempoInicial.bind(this);
         this.changuePrice = this.changuePrice.bind(this);
@@ -99,7 +99,7 @@ class ServicoPassaporte extends React.Component {
                     list2: response.data.default,
                     page: "TelaI",
                     Nome: "",
-                    Descricao: "",
+                    //Descricao: "",
                     TempoFinal: "",
                     Price: "",
                 });
@@ -114,9 +114,9 @@ class ServicoPassaporte extends React.Component {
         this.setState({ Nome: event.target.value });
     }
 
-    changueDescricao(event) {
-        this.setState({ Descricao: event.target.value });
-    }
+    //changueDescricao(event) {
+    //    this.setState({ Descricao: event.target.value });
+    //}
 
     changueTempoInicial(event) {
         this.setState({ TempoInicial: event.target.value });
@@ -158,20 +158,20 @@ class ServicoPassaporte extends React.Component {
             })
         }
 
-        if (this.state.Descricao.length === 0) {
-            $("#desc").addClass('errorBorder');
-            this.setState({
-                erroC:  this.state.erroC + 1,
-            })
-            erro++;
-        }
-        else {
-            $("#desc").removeClass('errorBorder');
-            this.setState({
-                erroC:  this.state.erroC - 1,
-            })
-            erro--;
-        }
+        //if (this.state.Descricao.length === 0) {
+        //    $("#desc").addClass('errorBorder');
+        //    this.setState({
+        //        erroC:  this.state.erroC + 1,
+        //    })
+        //    erro++;
+        //}
+        //else {
+        //    $("#desc").removeClass('errorBorder');
+        //    this.setState({
+        //        erroC:  this.state.erroC - 1,
+        //    })
+        //    erro--;
+        //}
 
         if (this.state.Price.length === 0) {
             $("#valor").addClass('errorBorder');
@@ -216,7 +216,7 @@ class ServicoPassaporte extends React.Component {
             var formData = new FormData();
 
             formData.append('name', String(this.state.Nome))
-            formData.append('description', String(this.state.Descricao))
+            //formData.append('description', String(this.state.Descricao))
             formData.append('initialTime', String(this.state.list.initialTime))
             formData.append('finalTime', String(this.state.TempoFinal))
             formData.append('price', String(this.state.Price))
@@ -396,13 +396,13 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Quebra (min): </b></h5>
-                                                <input type="number" id="" name="QuebraTempo" className="form-QuebraTempo" min="1" className="text-center" placeholder="Tempo" value={this.state.list2.time} onChange={this.ChangeQuebraTempo} />
+                                                <input type="number" min={"0"} id="" name="QuebraTempo" className="form-QuebraTempo" min="1" className="text-center" placeholder="Tempo" value={this.state.list2.time} onChange={this.ChangeQuebraTempo} />
                                             </div>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Valor (R$): </b></h5>
-                                                <input type="number" id="valor" name="QuebraValor" className="form-QuebraValor" min="0.00" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
+                                                <input type="number" min={"0"} id="valor" name="QuebraValor" className="form-QuebraValor" min="0.00" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
                                             </div>
                                         </div>
                                     </div>
@@ -447,14 +447,6 @@ class ServicoPassaporte extends React.Component {
                                         <p className=" col-md-1">Nome:</p>
                                         <div className="col-md-12 col-sm-12 col-xs-12">
                                             <input type="text" id="name" className="form-control " onChange={this.changueNome} value={this.state.Nome}></input>
-                                        </div>
-                                        <br></br>
-                                        <br></br>
-                                        <br></br>
-                                        <br></br>
-                                        <p className=" col-md-1">Descrição:</p>
-                                        <div className="col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" id="desc"className="form-control " onChange={this.changueDescricao} value={this.state.Descricao}></input>
                                         </div>
                                     </div>
                                 </div>

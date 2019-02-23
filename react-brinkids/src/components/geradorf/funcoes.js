@@ -36,9 +36,9 @@ export default [
     { id: 32, funcao: "Excluir Produtos/Serviços" },
     { id: 27, funcao: "Configurações Passaporte" },
     
-    { id: 28, funcao: "Configurações Desconto" },
+    { id: 28, funcao: "Configurações Descontos" },
     
-    { id: 29, funcao: "Configurações Gaveta" },
+    { id: 29, funcao: "Configurações Gavetas" },
     { id: 30, funcao: "Configurações Financeiro" },
     { id: 31, funcao: "Configurações Marketing" },
 ]

@@ -83,28 +83,32 @@ class VisualizaDesconto extends React.Component {
         this.state.descontoExcluido = false;
     }
     ExcluirDesconto = (name) => {
-        console.log("Fui Clicado");
-        axios.delete(`/discount/filter/${name}`)
-            .then((response) => {
-                axios.get(`/discount`)
-                    .then((response) => {
-                        console.log("Dentro do axios: " + this)
-                        this.setState({ list_descontos: response.data, page: "VisualizarDesconto", });
-                    }).catch((error) => {
-                        console.log("Não deu certo");
-                        console.log(error)//LOG DE ERRO
-                        // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                        // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                        // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
-                    })
+        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
 
-                //alert("Desconto Excluido!");
-                this.setState({ descontoExcluido: true });
-                
-            }).catch((error) => {
-                console.log(error);
-                alert("Erro encontrado: " + error);
-            })
+        if(confirmacao === true){            
+            console.log("Fui Clicado");
+            axios.delete(`/discount/filter/${name}`)
+                .then((response) => {
+                    axios.get(`/discount`)
+                        .then((response) => {
+                            console.log("Dentro do axios: " + this)
+                            this.setState({ list_descontos: response.data, page: "VisualizarDesconto", });
+                        }).catch((error) => {
+                            console.log("Não deu certo");
+                            console.log(error)//LOG DE ERRO
+                            // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                            // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                            // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
+                        })
+
+                    //alert("Desconto Excluido!");
+                    this.setState({ descontoExcluido: true });
+
+                }).catch((error) => {
+                    console.log(error);
+                    alert("Erro encontrado: " + error);
+                })
+        }
     }
     GeraDesconto = () => {
         this.setState({
