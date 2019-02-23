@@ -37,22 +37,24 @@ router.post('/', async (req, res) => {
   return res.sendStatus(400);
 });
 
-String.prototype.toMMSS = function () {//convertendo de segundos para o formato mm:ss
-    let sec_num = parseInt(this, 10);
-    let minutes = Math.floor(sec_num / 60);
-    let seconds = sec_num - (minutes * 60);
+String.prototype.toHHMMSS = function () => {//convertendo de segundos para o formato HH:mm
+    var seconds = parseInt(this, 10);
+    var hours   = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    seconds = seconds - (hours * 3600) - (minutes * 60);
 
+    if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    return minutes+':'+seconds;
+    var time = hours+':'+minutes;
+    return time;
 }
 
-String.prototype.toSS = function () {//convertendo de mm:ss para segundos
+String.prototype.toSS = function () {//convertendo de HH:mm para segundos
     let nums = this.split(':');
-    let mins = parseInt(nums[1], 10);
-    let secs = mins+parseInt(nums[0],10)*60;
+    let mins = parseInt(nums[1], 10)*60;
+    let time = parseInt(nums[0], 10)*3600 + mins;
 
-    return secs;
+    return time;
 }
 
 router.get('/', async (req, res) => {
@@ -109,7 +111,7 @@ router.get('/initialTime', async (req, res) => {
       return res.sendStatus(500);
     }
   }else{
-    let newInitialTime = String(lastFinalTime.toSS()+1).toMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
+    let newInitialTime = String(lastFinalTime.toSS()+1).toHHMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
     console.log(newInitialTime);
     const data = {
       initialTime: newInitialTime,

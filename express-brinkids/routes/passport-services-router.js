@@ -37,22 +37,24 @@ router.post('/', async (req, res) => {
   return res.sendStatus(400);
 });
 
-String.prototype.toMMSS = function () {//convertendo de segundos para o formato mm:ss
-    let sec_num = parseInt(this, 10);
-    let hours = Math.floor(sec_num / 60);
-    let minutes = sec_num - (hours * 60);
+String.prototype.toHHMMSS = function () => {//convertendo de segundos para o formato mm:ss
+    var seconds = parseInt(this, 10);
+    var hours   = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    seconds = seconds - (hours * 3600) - (minutes * 60);
 
-    if (hours < 10) {hours = "0"+hours;}
+    if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
-    return hours+':'+minutes;
+    var time = hours+':'+minutes;
+    return time;
 }
 
 String.prototype.toSS = function () {//convertendo de mm:ss para segundos
     let nums = this.split(':');
-    let mins = parseInt(nums[1], 10);
-    let hours = mins+parseInt(nums[0],10)*60;
+    let mins = parseInt(nums[1], 10)*60;
+    let time = parseInt(nums[0], 10)*3600 + mins;
 
-    return mins;
+    return time;
 }
 
 router.get('/', async (req, res) => {
@@ -100,7 +102,7 @@ router.get('/initialTime', async (req, res) => {
   let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json
   if(psjson.length===1){//teste pra saber se só tem o json inicial
     const data = {
-      initialTime: '00:00', 
+      initialTime: "00:00", 
       default: pjson[0],
     };
     try {
@@ -109,7 +111,7 @@ router.get('/initialTime', async (req, res) => {
       return res.sendStatus(500);
     }
   }else{
-    let newInitialTime = String(lastFinalTime.toSS()+1).toMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
+    let newInitialTime = String(lastFinalTime.toSS()+1).toHHMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
     console.log(newInitialTime);
     const data = {
       initialTime: newInitialTime,
