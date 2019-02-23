@@ -30,10 +30,10 @@ export default [
 
     { id: 23, funcao: "Excluir Evento" },
 
-    { id: 24, funcao: "Criar Produto/Serviço" },
-    { id: 25, funcao: "Visualizar Produto/Serviço" },
-    { id: 26, funcao: "Editar Produto/Serviço" },
-    
+    { id: 24, funcao: "Criar Produtos/Serviços" },
+    { id: 25, funcao: "Visualizar Produtos/Serviços" },
+    { id: 26, funcao: "Editar Produtos/Serviços" },
+    { id: 32, funcao: "Excluir Produtos/Serviços" },
     { id: 27, funcao: "Configurações Passaporte" },
     
     { id: 28, funcao: "Configurações Desconto" },

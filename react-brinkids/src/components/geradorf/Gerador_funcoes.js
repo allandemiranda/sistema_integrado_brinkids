@@ -111,6 +111,7 @@ class Gerador extends React.Component {
                 Page: 'Lista',
                 class: 'Operacional',
                 listadecargos: temporario,
+                listafuncoes: funcoes,
             })
             console.log(this.state.listadecargos);
             this.state.erroPrenchimento = false;
@@ -204,6 +205,7 @@ class Gerador extends React.Component {
                 funcoescheck: [],
                 Page: 'Lista',
                 class: 'Operacional',
+                listafuncoes: funcoes,
             });
             this.state.erroPrenchimento = false;
         }

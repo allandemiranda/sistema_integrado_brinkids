@@ -95,7 +95,8 @@ class MeuPerfil extends React.Component {
             ia[i] = byteString.charCodeAt(i);
         }
 
-        return new Blob([ia], { type: mimeString })};
+        return new Blob([ia], { type: mimeString })
+    };
     mudarSenha(event) {
         if (this.state.senhaAtual === this.state.password) {
             const a = getToken();
@@ -122,16 +123,16 @@ class MeuPerfil extends React.Component {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
         }
     }
-    sair=()=>{
+    sair = () => {
         this.props.history.push("login"); //lembrar q é assim q se redireciona com react
     }
-    funcionarios=()=>{
+    funcionarios = () => {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
         console.log(b)
         axios.get(`/employees/${b.id}`)
             .then((response) => {
-               
+
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
@@ -178,32 +179,33 @@ class MeuPerfil extends React.Component {
                 country: this.state.pais,
             }
         };
-        if($.isNumeric(this.state.numero) === false || this.state.numero.length === 0){
+        if ($.isNumeric(this.state.numero) === false || this.state.numero.length === 0) {
             $("#Numero").addClass('errorBorder');
             error.push("Numero so aceita numero ou esta em branco");
         }
-        else{
+        else {
             $("#Numero").removeClass('errorBorder');
         }
-        if($.isNumeric(this.state.phone) === false || this.state.numero.phone === 0){
+        if ( this.state.phone.length === 0) {
+            console.log($.isNumeric(this.state.phone),this.state.phone.length)
             $("#Telefone").addClass('errorBorder');
             error.push("Telefone so aceita numero ou esta em branco");
         }
-        else{
+        else {
             $("#Telefone").removeClass('errorBorder');
         }
-        if($.isNumeric(this.state.cep) === false || this.state.cep.length === 0){
+        if ($.isNumeric(this.state.cep) === false || this.state.cep.length === 0) {
             $("#CEP").addClass('errorBorder');
             error.push("CEP so aceita numero ou esta em branco");
         }
-        else{
+        else {
             $("#CEP").removeClass('errorBorder');
         }
-        if(error.length > 0 ){
-            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');  
+        if (error.length > 0) {
+            $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
         }
         else {
-            $("#alertDiv").addClass('displaynone'); 
+            $("#alertDiv").addClass('displaynone');
             var formData = new FormData();
 
             formData.append('observations', this.state.obs);
@@ -220,11 +222,12 @@ class MeuPerfil extends React.Component {
             formData.append('country', this.state.pais);
             formData.append('email', this.state.email);
             console.log("form: ", formData);
-    
-    
+
+
             axios.put(`/employees/exchange-data/${this.state.perfilAtual._id}`, formData)
                 .then((response) => {
                     console.log(response.data)
+                    window.location.reload(false);
                 })
                 .catch((err) => console.log(err));
             listatemporaria.address.number = this.state.numero;
@@ -243,7 +246,7 @@ class MeuPerfil extends React.Component {
             });
         }
 
-        
+
 
 
 
@@ -322,29 +325,41 @@ class MeuPerfil extends React.Component {
 
 
         if (this.state.page === 'Perfil') {
+            
+
+
             if (this.state.editar) {
                 setTimeout(function () {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
+                    uploadfoto.onchange = function () {
+                        console.log(this.files[0].size)
+                        if (this.files[0].size > 307200) {
+                            alert("Tamanho da Foto Muito Grande");
+                            this.value = "";
+                        } else {
+                            uploadfoto.addEventListener('change', function (e) {
+                                showThumbnail(this.files);
+                            });
+                            function showThumbnail(files) {
 
-                    uploadfoto.addEventListener('change', function (e) {
-                        showThumbnail(this.files);
-                    });
-                    function showThumbnail(files) {
 
+                                if (files && files[0]) {
+                                    const reader = new FileReader();
 
-                        if (files && files[0]) {
-                            const reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        fotopreview.src = e.target.result;
+                                        foto = e.target.result;
+                                    }
 
-                            reader.onload = function (e) {
-                                fotopreview.src = e.target.result;
-                                foto = e.target.result;
+                                    reader.readAsDataURL(files[0]);
+                                }
+
                             }
-
-                            reader.readAsDataURL(files[0]);
                         }
+                    };
 
-                    }
+
                 }, 100);
             }
 
@@ -362,7 +377,7 @@ class MeuPerfil extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Meu Perfil  </h3>
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Há algo de errado em seu formulário.
                         </div>
                         <div className="graph" >
@@ -380,7 +395,7 @@ class MeuPerfil extends React.Component {
                                                     <label className="corbotao">
                                                         Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                        <input id="tipofile" type="file" name="foto" value="" />
+                                                        <input id="tipofile" type="file" name="foto" accept="image/*" value="" />
                                                     </label>
                                                 </button><br /></div>)
                                         }
@@ -429,7 +444,7 @@ class MeuPerfil extends React.Component {
                                 <div className="col-md-4 col-sm-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                        <p>{moment(this.state.perfilAtual.birthday).add(1,"days").format("DD/MM/YYYY")}</p>
+                                        <p>{moment(this.state.perfilAtual.birthday).add(1, "days").format("DD/MM/YYYY")}</p>
                                     </div>
                                 </div>
 
@@ -455,7 +470,7 @@ class MeuPerfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Telefone: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.phone}</p>)}
-                                        {this.state.editar && (<input id="Telefone" min = {0} type="text" className="form-control" style={{ float: 'none' }} value={this.state.phone} onChange={this.changuePhone} />)}
+                                        {this.state.editar && (<input id="Telefone" min={0} type="text" className="form-control" style={{ float: 'none' }} value={this.state.phone} onChange={this.changuePhone} />)}
                                     </div>
                                 </div>
 
@@ -500,7 +515,7 @@ class MeuPerfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Número: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.number}</p>)}
-                                        {this.state.editar && (<input id="Numero" min = {0} className="form-control" style={{ float: 'none' }} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
+                                        {this.state.editar && (<input id="Numero" min={0} className="form-control" style={{ float: 'none' }} type="text" value={this.state.numero} onChange={this.changueNumero} />)}
                                     </div>
                                 </div>
                             </div>
@@ -512,7 +527,7 @@ class MeuPerfil extends React.Component {
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> CEP: </b></h5>
                                         {!this.state.editar && (<p>{this.state.perfilAtual.address.cep}</p>)}
-                                        {this.state.editar && (<input id="CEP" min = {0} type="text" style={{ float: 'none' }} className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
+                                        {this.state.editar && (<input id="CEP" min={0} type="text" style={{ float: 'none' }} className="form-control" value={this.state.cep} onChange={this.changueCep} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-3 col-sm-12">
@@ -546,7 +561,7 @@ class MeuPerfil extends React.Component {
                                 {!this.state.editar && (
                                     <div style={{ textAlign: 'center' }}>
                                         <button onClick={this.editavel} className="btn btn-md botao botaoAvançar" > Editar</button>
-                                        
+
                                         <button onClick={this.changuePassword} className="btn btn-md botao botaoAvançar" > Alterar Senha</button>
 
                                     </div>
@@ -581,11 +596,11 @@ class MeuPerfil extends React.Component {
                     </div>
                     <div className="graph-visual" >
                         <h3 className="inner-tittle" > Meu Perfil </h3>
-                        <div id="alertDiv" className = "alert displaynone" role = "alert">
+                        <div id="alertDiv" className="alert displaynone" role="alert">
                             <b>ERRO!</b> Há algo de errado em seu formulário.
                         </div>
                         <div className="graph" >
-                            <h3 className="inner-tittle" > Mudar Senha</h3>                            
+                            <h3 className="inner-tittle" > Mudar Senha</h3>
                             <div className="col-md-6 col-sm-12 text-center" >
                                 <h5 className="ltTitulo" style={{ color: '#00C6D7' }}><b> DIGITE A SENHA ATUAL </b></h5>
                                 <p><input id="senhaantiga" type="password" value={this.state.senhaAtual} onChange={this.changueSenhaAtual} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
@@ -593,13 +608,13 @@ class MeuPerfil extends React.Component {
                             <div className="col-md-6 col-sm-12 text-center" >
                                 <h5 className="ltTitulo" style={{ color: '#00C6D7' }}><b> DIGITE A NOVA SENHA </b></h5>
                                 <p><input id="senhaanova" type="password" value={this.state.senhaNova} onChange={this.changueSenha} style={{ background: 'white', textAlign: 'center', fontSize: 130 + '%' }} /></p>
-                            </div>  
+                            </div>
                             <br></br><br></br>
                             <div className="text-center" >
-                                <button onClick={()=>this.setState({page:"Perfil",senhaAtual:"",senhaNova:""})} className="btn btn-md botao botaoAvançar text-center" style={{}}>voltar</button>    
-                                <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Alterar Senha</button>                                      
-                            </div>                              
-                        </div>                    
+                                <button onClick={() => this.setState({ page: "Perfil", senhaAtual: "", senhaNova: "" })} className="btn btn-md botao botaoAvançar text-center" style={{}}>Voltar</button>
+                                <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Alterar Senha</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             );

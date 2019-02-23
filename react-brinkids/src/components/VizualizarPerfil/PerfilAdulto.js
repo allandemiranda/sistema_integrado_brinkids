@@ -284,7 +284,7 @@ class PerfilAdulto extends React.Component {
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
-
+                window.location.reload(false);
             })
             .catch((err) => console.log(err));
         listatemporaria.address.number = this.state.numero;
@@ -655,30 +655,35 @@ class PerfilAdulto extends React.Component {
                 setTimeout(function () {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
+                    uploadfoto.onchange = function () {
+                        console.log(this.files[0].size)
+                        if (this.files[0].size > 307200) {
+                            alert("Tamanho da Foto Muito Grande");
+                            this.value = "";
+                        } else {
+                            uploadfoto.addEventListener('change', function (e) {
+                                showThumbnail(this.files);
+                            });
+                            function showThumbnail(files) {
 
-                    uploadfoto.addEventListener('change', function (e) {
-                        showThumbnail(this.files);
-                    });
-                    function showThumbnail(files) {
 
+                                if (files && files[0]) {
+                                    const reader = new FileReader();
 
-                        if (files && files[0]) {
-                            const reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        fotopreview.src = e.target.result;
+                                        foto = e.target.result;
+                                    }
 
-                            reader.onload = function (e) {
-
-                                fotopreview.src = e.target.result;
-                                foto = e.target.result;
-
+                                    reader.readAsDataURL(files[0]);
+                                }
 
                             }
-
-                            reader.readAsDataURL(files[0]);
                         }
+                    };
 
-                    }
 
-                }, 150);
+                }, 100);
             };
             const byCrianca = function (events, index) {
                 return (
