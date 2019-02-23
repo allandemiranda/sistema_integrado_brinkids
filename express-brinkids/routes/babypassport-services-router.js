@@ -111,7 +111,7 @@ router.get('/initialTime', async (req, res) => {
       return res.sendStatus(500);
     }
   }else{
-    let newInitialTime = String(lastFinalTime.toSS()+1).toHHMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
+    let newInitialTime = lastFinalTime;//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
     console.log(newInitialTime);
     const data = {
       initialTime: newInitialTime,

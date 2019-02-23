@@ -115,7 +115,7 @@ router.post('/', async (req, res) => {
 
       fs.writeFile(`${config.pathPublic()}${config.pathProduct}${productSaved._id}.png`, photoBase64Data, 'base64', function (errFile) {
         if (errFile) {
-          throw new Error(errFile);
+        
         }
       });
 

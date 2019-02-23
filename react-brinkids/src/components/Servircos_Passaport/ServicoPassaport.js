@@ -353,8 +353,8 @@ class ServicoPassaporte extends React.Component {
                                             <tr>
                                                 <th>#</th>
                                                 <th >Nome</th>
-                                                <th >Inicial (Min)</th>
-                                                <th> Final (Min)</th>
+                                                <th >Inicial (HH:MM)</th>
+                                                <th> Final (HH:MM)</th>
                                                 <th> Valor </th>
                                                 <th></th>
                                             </tr>
