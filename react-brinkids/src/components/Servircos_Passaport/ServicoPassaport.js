@@ -208,7 +208,7 @@ class ServicoPassaporte extends React.Component {
         console.log(erro)
         //console.log(finalizar)
     /* Caso tudo der certo manda as coisas para o back*/
-        if (erro <= -4) {
+        if (erro <= -3) {
             //alert("entrou");
             console.log("Dados sendo retornado");
             event.preventDefault();
