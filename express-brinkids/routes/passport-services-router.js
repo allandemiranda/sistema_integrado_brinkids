@@ -13,14 +13,14 @@ router.post('/', async (req, res) => {
   console.log(req.body);
 
   if(req.body.name 
-    && req.body.description
+    
     && req.body.initialTime
     && req.body.finalTime
     && req.body.price){
 
     const data = new passportServices({
       name: req.body.name,
-      description: req.body.description,
+     
       initialTime: req.body.initialTime,
       finalTime: req.body.finalTime,
       price: req.body.price,

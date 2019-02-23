@@ -8,7 +8,7 @@ const passportServicesSchema = new mongoose.Schema({
 	},
 	description: {
 		type: String,
-		required: true,
+		
 	},
 	initialTime: String,
 	finalTime: String,
