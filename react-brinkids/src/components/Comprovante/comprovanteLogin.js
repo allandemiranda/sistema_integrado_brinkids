@@ -43,7 +43,7 @@ class ComprovanteLogin extends React.Component {
                 <div style={{ display: 'none' }} id='print' className='conteudo' >
                 <div id="crianca" key={1}>
                     <a class="trilha">-------------------------------------</a>
-                    <a class="naoFiscal">***** NOVO FUNCIONÁRIO *****</a>
+                    <a class="naoFiscal">**** NOVO(A) FUNCIONÁRIO(A) ****</a>
                     <div id="funcinário" className="textos">
                         <div>
                             <a>Nome:</a>
@@ -56,6 +56,7 @@ class ComprovanteLogin extends React.Component {
                         <div>
                             <a>Senha:</a>
                             <a id="senha">senha123</a>
+                            <a> Edite sua senha assim que possível ! </a>
                         </div>
                         <div>
                             <a id="dia">{new Date().getDate() + '/' + (new Date().getMonth() + 1) + '/' + new Date().getFullYear()}</a>
