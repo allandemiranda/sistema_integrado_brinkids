@@ -37,24 +37,25 @@ router.post('/', async (req, res) => {
   return res.sendStatus(400);
 });
 
-String.prototype.toHHMMSS = function () => {//convertendo de segundos para o formato mm:ss
+String.prototype.toHHMMSS = function () {//convertendo de segundos para o formato mm:ss
     var seconds = parseInt(this, 10);
+
     var hours   = Math.floor(seconds / 3600);
     var minutes = Math.floor((seconds - (hours * 3600)) / 60);
-    seconds = seconds - (hours * 3600) - (minutes * 60);
-
+   
+    console.log(seconds,hours,minutes)
     if (hours   < 10) {hours   = "0"+hours;}
     if (minutes < 10) {minutes = "0"+minutes;}
     var time = hours+':'+minutes;
-    return time;
+    return "ola";
 }
 
 String.prototype.toSS = function () {//convertendo de mm:ss para segundos
-    let nums = this.split(':');
-    let mins = parseInt(nums[1], 10)*60;
-    let time = parseInt(nums[0], 10)*3600 + mins;
+    // let nums = this.split(':');
+    // let mins = parseInt(nums[1], 10)*60;
+    // let time = parseInt(nums[0], 10)*3600 + mins;
 
-    return time;
+    return "ola";
 }
 
 router.get('/', async (req, res) => {
@@ -100,6 +101,7 @@ router.get('/initialTime', async (req, res) => {
   const psjson = await passportServices.find({});
   const pjson = await passport.find({});
   let lastFinalTime = psjson[psjson.length-1].finalTime;//ultimo finalTime do json
+  console.log(lastFinalTime)
   if(psjson.length===1){//teste pra saber se só tem o json inicial
     const data = {
       initialTime: "00:00", 
@@ -111,10 +113,11 @@ router.get('/initialTime', async (req, res) => {
       return res.sendStatus(500);
     }
   }else{
-    let newInitialTime = String(lastFinalTime.toSS()+1).toHHMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
-    console.log(newInitialTime);
+    let newInitialTime = "125".toHHMMSS();//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
+    let temporario =  String(lastFinalTime)
+    console.log(newInitialTime,temporario,"dsddd");
     const data = {
-      initialTime: newInitialTime,
+      initialTime: lastFinalTime,
       default: pjson,
       services: psjson[0],
     };

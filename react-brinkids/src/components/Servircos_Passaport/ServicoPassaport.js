@@ -141,14 +141,17 @@ class ServicoPassaporte extends React.Component {
 
     }
     criar = (event) => {
+        let erro=0;
         if (this.state.Nome.length === 0) {
             $("#name").addClass('errorBorder');
+            erro++;
             this.setState({
                 erroC: this.state.erroC + 1,
             })
           
         }
         else {
+            erro--;
             $("#name").removeClass('errorBorder');
             this.setState({
                 erroC:  this.state.erroC - 1,
@@ -160,12 +163,14 @@ class ServicoPassaporte extends React.Component {
             this.setState({
                 erroC:  this.state.erroC + 1,
             })
+            erro++;
         }
         else {
             $("#desc").removeClass('errorBorder');
             this.setState({
                 erroC:  this.state.erroC - 1,
             })
+            erro--;
         }
 
         if (this.state.Price.length === 0) {
@@ -173,31 +178,37 @@ class ServicoPassaporte extends React.Component {
             this.setState({
                 erroC:  this.state.erroC + 1,
             })
+            erro++;
         }
         else {
             $("#valor").removeClass('errorBorder');
             this.setState({
                 erroC:  this.state.erroC - 1,
             })
+            erro--;
         }
 
         if(this.state.list.initialTime > this.state.TempoFinal){
+            console.log(this.state.list.initialTime,this.state.TempoFinal)
             $("#time").addClass('errorBorder');
             this.setState({
                 erroC:  this.state.erroC + 1,
             })
+            erro++;
         }
         else{
             $("#time").removeClass('errorBorder');
             this.setState({
                 erroC:  this.state.erroC - 1,
             })
+            erro--;
         }
 
         var finalizar = this.state.erroC;
+        console.log(erro)
         //console.log(finalizar)
     /* Caso tudo der certo manda as coisas para o back*/
-        if (finalizar <= 0) {
+        if (erro <= -4) {
             //alert("entrou");
             console.log("Dados sendo retornado");
             event.preventDefault();
@@ -227,6 +238,10 @@ class ServicoPassaporte extends React.Component {
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 })
+        }else{
+            this.setState({
+                erroC: 0,
+            })
         }
     }
 
@@ -293,7 +308,7 @@ class ServicoPassaporte extends React.Component {
                     alert("Nada Encontrado")
                     this.setState({ erro: "*Nada Encontrado." })
                 } else {
-                    console.log("Olar")
+                    console.log("Olar",response)
                     this.setState({ list: response });
                 }
             }.bind(this)
@@ -456,7 +471,7 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Tempo Final: </b></h5>
-                                                <input type="time" id="time" step='1' min="00:00" className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
+                                                <input type="time" id="time"  className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
                                             </div>
                                         </div>
                                         <div className="col-md-3 col-sm-12 col-xs-12 text-left">

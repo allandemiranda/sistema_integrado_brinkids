@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
   return res.sendStatus(400);
 });
 
-String.prototype.toHHMMSS = function () => {//convertendo de segundos para o formato HH:mm
+String.prototype.toHHMMSS =  () => {//convertendo de segundos para o formato HH:mm
     var seconds = parseInt(this, 10);
     var hours   = Math.floor(seconds / 3600);
     var minutes = Math.floor((seconds - (hours * 3600)) / 60);
