@@ -678,7 +678,7 @@ class Passport extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={this.state.listConfirmAdult.photo} />
+                                            <img style={{maxWidth:300+'px'}} src={this.state.listConfirmAdult.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
@@ -932,7 +932,7 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.listConfirmAdult.photo} />
+                                                <img style={{maxWidth:300+'px'}} src={this.state.listConfirmAdult.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -988,7 +988,7 @@ class Passport extends React.Component {
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                        <img src={Criançasqueentrarao.photo} />
+                                                        <img style={{maxWidth:300+'px'}} src={Criançasqueentrarao.photo} />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">

@@ -30,15 +30,15 @@ function checkAge(actualDate, ChildDate) {
     actualDate.getDate(), 0, 0, 0, 0,
   );
 
-    /** < Date. Pegará a data atual e subtrairá 14 anos
-     * para fazer a checagem com a idade da criança
-    */
+  /** < Date. Pegará a data atual e subtrairá 14 anos
+   * para fazer a checagem com a idade da criança
+  */
 
   return ChildDate > compareDate;
 }
 router.get('/', async (req, res) => {
   try {
-    const parties = await  Child.find({});
+    const parties = await Child.find({});
 
     return res.status(200).json(parties);
   } catch (err) {
@@ -90,154 +90,157 @@ router.post('/', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  
+
   const actualDate = new Date()/**< Data atual do sistema */
   const ChildDate = new Date(req.body.birthday) /**< Data de nascimento da criança */
-  
+
   /**
    * Checa se a criança possui menos de 14 anos ou não
    * Se possuir menos de 14 anos, ela é adicionada ao sistema
    */
- 
+
+  /**
+   * Checa se todos os dados obrigatórios da criança foram enviados na requisição
+   */
+
+  if (req.files
+    && req.body.number
+    && req.body.firstName
+    && req.body.surName
+    && req.body.birthday
+    && req.body.sexuality) {
     /**
-     * Checa se todos os dados obrigatórios da criança foram enviados na requisição
+     * Checa se já existe uma criança no sistema.
+     * Se não existe, então uma nova é cadastrada com as informações enviadas
      */
+    Child.findOne({ number: req.body.number }, (err, ChildResult) => {
+     
+      if (err) {
+        console.log("foi akii3")
+        return res.sendStatus(500);
+      }
 
-    if (req.files
-        && req.body.number
-        && req.body.firstName
-        && req.body.surName
-        && req.body.birthday
-        && req.body.sexuality) {
-      /**
-       * Checa se já existe uma criança no sistema.
-       * Se não existe, então uma nova é cadastrada com as informações enviadas
-       */
-      Child.findOne({ number: req.body.number }, (err, ChildResult) => {
-        if (err) {
-          return res.sendStatus(500);
-        }
+      /** Checa se não existe uma criança no sistema */
+      if (ChildResult === null) {
+        const photoFile = req.files.file; /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
 
-        /** Checa se não existe uma criança no sistema */
-        if (ChildResult === null) {
-          const photoFile = req.files.file; /**< fileUpload.UploadedFile. Representa o arquivo de foto da criança  */
+        const dados = {
+          number: req.body.number,
+          nacionality: req.body.nacionality,
+          name: {
+            firstName: req.body.firstName,
+            surName: req.body.surName,
+          },
+          birthday: ChildDate,
+          sexuality: req.body.sexuality,
+          restrictions: req.body.restrictions,
+          observations: req.body.observations,
+          photo: '/',
+        }; /**< Objeto. Contém os dados da criança para inserção no banco */
 
-          const dados = {
-            number: req.body.number,
-            nacionality: req.body.nacionality,
-            name: {
-              firstName: req.body.firstName,
-              surName: req.body.surName,
-            },
-            birthday: ChildDate,
-            sexuality: req.body.sexuality,
-            restrictions: req.body.restrictions,
-            observations: req.body.observations,
-            photo: '/',
-          }; /**< Objeto. Contém os dados da criança para inserção no banco */
+        /** Salva a criança no banco */
+        Child.create(dados, (errChild, ChildCreateResult) => {
+          if (errChild) {
+            console.log("foi akii")
+            return res.sendStatus(500);
+          }
 
-          /** Salva a criança no banco */
-          Child.create(dados, (errChild, ChildCreateResult) => {
-            if (errChild) {
-              return res.sendStatus(500);
+          const fileName = `${config.pathChild}${ChildCreateResult._id}.png`; /**< url completa da localização do arquivo no computador */
+
+          ChildCreateResult.photo = fileName /** Atualiza o nome do arquivo */
+          ChildCreateResult.save((errSaveChildResult) => { /** Atualiza no banco a nova informação */
+            if (errSaveChildResult) {
+              Child.findOneAndRemove({ number: req.body.number }, (err) => {
+                console.log("foi akii")
+                return res.sendStatus(500);
+              })
+            } else {
+              /** Pega o arquivo e salva no servidor */
+              photoFile.mv(config.pathPublic() + fileName, (errMvFile) => {
+                if (errMvFile) {
+                  Child.findOneAndDelete({ number: req.body.number }, (err) => {
+                    console.log("foi akii")
+                    return res.sendStatus(500);
+                  });
+                } else {
+                  return res.sendStatus(201);
+                }
+              });
             }
-
-            const fileName = `${config.pathChild}${ChildCreateResult._id}.png`; /**< url completa da localização do arquivo no computador */
-           
-            ChildCreateResult.photo = fileName /** Atualiza o nome do arquivo */
-            ChildCreateResult.save((errSaveChildResult) => { /** Atualiza no banco a nova informação */
-              if (errSaveChildResult) {
-                Child.findOneAndRemove({ number: req.body.number }, (err) => {
-                  return res.sendStatus(500);
-                })
-              } else {
-                /** Pega o arquivo e salva no servidor */
-                photoFile.mv(config.pathPublic() + fileName, (errMvFile) => {
-                  if (errMvFile) {
-                    Child.findOneAndRemove({ number: req.body.number }, (err) => {
-                      return res.sendStatus(500);
-                    });
-                  } else {
-                    return res.sendStatus(201);
-                  }
-                });
-              }
-            });
-            const log = {
-              activity: 'Perfil Criança',
-              action: 'Criação',
-              dateOperation: new Date(),
-              from: funcionario, //ajsuta o id dps de fazer o login funcionar
-              to: req.body.firstName+" "+req.body.surName,
-              id:ChildCreateResult._id
-            }
-            Logs.create(log,(errLog, logchil)=>{
-
-            })
-
           });
-        } else {
-          return res.sendStatus(409);
-        }
-      });
-      
-      //LOG sssssssssssssssssssssssss
-   
-    } else {
-      return res.sendStatus(400);
-    }
-  
+          const log = {
+            activity: 'Perfil Criança',
+            action: 'Criação',
+            dateOperation: new Date(),
+            from: funcionario, //ajsuta o id dps de fazer o login funcionar
+            to: req.body.firstName + " " + req.body.surName,
+            id: ChildCreateResult._id
+          }
+          Logs.create(log, (errLog, logchil) => {
+
+          })
+
+        });
+      } else {
+        return res.sendStatus(409);
+      }
+    });
+
+    //LOG sssssssssssssssssssssssss
+
+  } else {
+    return res.sendStatus(400);
+  }
+
 });
 
-router.put('/:identifier', async (req, res) =>  {
+router.put('/:identifier', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  
-  if (req.body.observations
-      && req.body.restrictions
-      && req.body.firstName
-      && req.body.lastName
-      && req.body.number
-      && req.body.birthday
-      && req.body.nacionality
-      && req.body.sexuality) {
-    const child = await Child.findByIdAndUpdate(
-      req.params.identifier,
-      {
-        name: {
-          firstName: req.body.firstName,
-          surName: req.body.lastName,
-        },
-        number: req.body.number,
-        birthday: new Date(req.body.birthday),
-        nacionality: req.body.nacionality,
-        sexuality: req.body.sexuality,
-        observations: req.body.observations,
-        restrictions: req.body.restrictions,
-      },
-    );
-    const log = new Logs({
-      activity: 'Pefil Criança',
-      action: 'Edição',
-      dateOperation: new Date(),
-      from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: req.body.firstName+" "+req.body.lastName,
-      id:req.params.identifier,
-     
 
-    })
-    const newLog = await log.save();
-    if (req.files) {
-      return req.files.photo.mv(
-        config.pathPublic() + child.photo,
-        errMvFile => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
+  try {
+   
+      const child = await Child.findByIdAndUpdate(
+        req.params.identifier,
+       {
+        $set:{name: {
+            firstName: req.body.firstName,
+            surName: req.body.lastName,
+          },
+          number: req.body.number,
+          birthday: new Date(req.body.birthday),
+          nacionality: req.body.nacionality,
+          sexuality: req.body.sexuality,
+          observations: req.body.observations,
+          restrictions: req.body.restrictions,}
+        },
       );
-    }
+      const log = new Logs({
+        activity: 'Pefil Criança',
+        action: 'Edição',
+        dateOperation: new Date(),
+        from: funcionario, //ajsuta o id dps de fazer o login funcionar
+        to: req.body.firstName + " " + req.body.lastName,
+        id: req.params.identifier,
+
+
+      })
+      const newLog = await log.save();
+      if (req.files) {
+        return req.files.photo.mv(
+          config.pathPublic() + child.photo,
+          // errMvFile  => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
+        );
+      }
+    
+    return res.sendStatus(201);
+  }catch(err){
+    return res.sendStatus(400);
   }
 
-  return res.sendStatus(400);
+ 
 });
 router.delete('/:identifier', async (req, res) => {
   try {
@@ -245,17 +248,17 @@ router.delete('/:identifier', async (req, res) => {
     const b = jwt.verify(a, config.secret_auth);
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
     const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-    
+
     const deletedService = await Child.findByIdAndRemove(req.params.identifier);
-    
+
     const log = new Logs({
       activity: 'Perfil Criança',
       action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
-      id:req.params.identifier,
+      id: req.params.identifier,
     })
-    
+
     const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);

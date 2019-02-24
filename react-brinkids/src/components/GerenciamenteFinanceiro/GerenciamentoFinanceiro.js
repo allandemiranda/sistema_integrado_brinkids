@@ -307,7 +307,7 @@ class GerenciamentoFinanceiro extends React.Component {
                     if (info.activity === "Aniversario" && info.action === "Criação") {
                         aniversario = aniversario + info.price;
                     }
-                    if (info.activity === "Passaporte" && info.action === "Saida") {
+                    if (info.activity === "Passaporte" && info.action === "Saida Adulto") {
                         passaporte = passaporte + info.price;
                     }
                     if (info.activity === "Serviços" && info.action === "Saida") {
@@ -337,7 +337,7 @@ class GerenciamentoFinanceiro extends React.Component {
 
             
 
-
+           
             this.setState({
                 listagraficos: listaparaostate.reverse()
             })

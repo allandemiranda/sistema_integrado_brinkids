@@ -438,8 +438,8 @@ class Gerador extends React.Component {
                                         <div className="col-md-4 col-sm-8 col-xs-12">
                                             <select type="select" name="class" className=" form-control col-md-4 col-sm-8 col-xs-12 " value={this.state.class} onChange={this.changue} style={{ height: 47 + 'px' }}>
                                                 <option value="Operacional">Operacional</option>
-                                                <option value="Administrativo">Adminitrativo</option>
-                                                <option value="Estrategico">Estratégico</option>
+                                                <option value="Administrativo">Administrativo</option>
+                                                <option value="Estratégico">Estratégico</option>
                                             </select>
                                         </div>
                                     </div>

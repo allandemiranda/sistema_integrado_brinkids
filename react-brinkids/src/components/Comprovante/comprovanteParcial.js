@@ -184,7 +184,7 @@ class ComprovanteParcial extends React.Component {
                                 <tr>
                                     <td><a>{this.props.tabela.service}</a></td>
 
-                                    <td><a id="tempo" className="espacoTitulo">{this.props.tabela.valores.time}</a><a>min</a></td>
+                                    <td><a id="tempo" className="espacoTitulo">{this.props.tabela.valores.time+1}</a><a>min</a></td>
                                     <td><a className="espacoTitulo">R$</a><a id="valor">{this.props.tabela.valores.value}</a></td>
                                 </tr>
                             </tbody>

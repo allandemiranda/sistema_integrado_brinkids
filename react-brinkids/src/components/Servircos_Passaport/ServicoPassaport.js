@@ -402,7 +402,7 @@ class ServicoPassaporte extends React.Component {
                                         <div className="col-md-6 col-sm-12 col-xs-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
                                                 <h5 className="ltTitulo"><b> Valor (R$): </b></h5>
-                                                <input type="number" min={"0"} id="valor" name="QuebraValor" className="form-QuebraValor" min="0.00" className="text-center" placeholder="R$" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
+                                                <input type="number"  id="valor" name="QuebraValor" className="form-QuebraValor" min="0.00" className="text-center" placeholder="R$" step=".01" value={this.state.list2.price} onChange={this.ChangeQuebraValor} />
                                             </div>
                                         </div>
                                     </div>

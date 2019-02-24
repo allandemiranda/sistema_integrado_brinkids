@@ -755,7 +755,7 @@ class SaidaCrianca extends React.Component {
 
                     });
                 }).then(() => {
-                    // this.props.history.push("/");
+                    this.props.history.push("/");
                 }).catch((err) => console.log(err));
 
         } else {
@@ -875,7 +875,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-6 col-sm-12 col-xs-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                        <img src={this.state.PhotoAdult} />
+                                        <img style={{maxWidth:300+'px'}} src={this.state.PhotoAdult} />
                                     </div>
                                 </div>
                             </div>
@@ -967,7 +967,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Tempo:</b></h5>
-                                        <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.time}</p>
+                                        <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.time+1}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
@@ -1042,7 +1042,7 @@ class SaidaCrianca extends React.Component {
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td className="text-center"> {resp.infocrianca.service} </td>
                                                     <td className="text-center"> {resp.infocrianca.name} </td>
-                                                    <td className="text-center"> {resp.infocrianca.time} </td>
+                                                    <td className="text-center"> {resp.infocrianca.time+1} </td>
                                                     <td className="text-center"> {resp.infocrianca.value} </td>
                                                 </tr>
                                             );

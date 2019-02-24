@@ -13,7 +13,7 @@ router.get('/:date', async (req, res) => {
 
     const childs = await Logs.find({
       'dateOperation': { $gte: req.params.date, $lte: moment(todayd) },
-      $or: [{ 'activity': 'Passaporte', 'action': 'Saida' }, { 'activity': 'Serviços', 'action': 'Saida' }, { 'activity': 'Aniversario', 'action': 'Edição' }, { 'activity': 'Aniversario', 'action': 'Criação' }],
+      $or: [{ 'activity': 'Passaporte', 'action': 'Saida Adulto' }, { 'activity': 'Serviços', 'action': 'Saida' }, { 'activity': 'Aniversario', 'action': 'Edição' }, { 'activity': 'Aniversario', 'action': 'Criação' }],
     });
 
     return res.json(childs);

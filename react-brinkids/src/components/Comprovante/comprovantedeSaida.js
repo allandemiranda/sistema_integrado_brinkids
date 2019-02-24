@@ -198,7 +198,7 @@ class Comprovantesaida extends React.Component {
                                         <tr>
                                             <td><a>{event.service}</a></td>
 
-                                            <td><a id="tempo" className="espacoTitulo">{event.time}</a><a>min</a></td>
+                                            <td><a id="tempo" className="espacoTitulo">{event.time+1}</a><a>min</a></td>
                                             <td><a className="espacoTitulo">R$</a><a id="valor">{event.value}</a></td>
                                         </tr>
                                     );
