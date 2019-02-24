@@ -4,3 +4,4 @@ mkdir $diretorio
 cd $diretorio
 mongodump
 cp -r $HOME/sistema_integrado_brinkids/express-brinkids/public $diretorio
+echo "senha123" | sudo -S shutdown now
