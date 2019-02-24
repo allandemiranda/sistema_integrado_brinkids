@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --exec PORT=3001 node ./bin/www",
-    "start-dev": "nodemon --exec PORT=3001 npm start",
-    "start-men": "set PORT=3001 && npm start"
+    "start": "nodemon --exec PORT=80 node ./bin/www",
+    "start-dev": "npm start",
+    "start-men": "set PORT=80 && npm start"
   },
   "dependencies": {
     "acorn": "^6.1.0",
