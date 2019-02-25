@@ -64,7 +64,7 @@ const employeesSchema = new mongoose.Schema({
   observations: String,
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const employees = mongoose.model('Employee', employeesSchema);
 
 module.exports = employees;

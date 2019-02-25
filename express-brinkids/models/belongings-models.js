@@ -8,7 +8,7 @@ const belongingsSchema = new mongoose.Schema({
   },
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const belongings = mongoose.model('Belongings', belongingsSchema);
 
 module.exports = belongings;

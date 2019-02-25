@@ -39,7 +39,7 @@ const logsSchema = new mongoose.Schema({
 	priceDiscount: { priceDiscountSchema },
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const logs = mongoose.model('Logs', logsSchema);
 
 module.exports = logs;

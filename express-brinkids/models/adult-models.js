@@ -92,7 +92,7 @@ const userAdultSchema = new mongoose.Schema({
   identifierEmployee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const userAdult = mongoose.model('UserAdult', userAdultSchema);
 
 module.exports = userAdult;

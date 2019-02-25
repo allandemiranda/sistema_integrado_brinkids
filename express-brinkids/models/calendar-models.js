@@ -37,7 +37,7 @@ calendarSchema.statics.all = async function all() {
   return birthdays;
 };
 
-mongoose.connect(`mongodb://localhost/'${config.database}`);
+mongoose.connect(`mongodb://localhost/'${config.database}`, { useNewUrlParser: true });
 const calendar = mongoose.model('Calendar', calendarSchema);
 
 module.exports = calendar;

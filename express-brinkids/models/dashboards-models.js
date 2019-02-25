@@ -49,7 +49,7 @@ const dashboardSchema = mongoose.Schema({
   birthdayParty: String,
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const dashboard = mongoose.model('Dashboard', dashboardSchema);
 
 module.exports = dashboard;

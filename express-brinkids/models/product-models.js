@@ -54,7 +54,7 @@ const productSchema = new mongoose.Schema({
   birthdayName:String,
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const product = mongoose.model('Product', productSchema);
 
 module.exports = product;

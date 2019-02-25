@@ -28,7 +28,7 @@ UserSchema.pre('save', function (next) {
   })
 }) */
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const userSystem = mongoose.model('User', UserSchema);
 
 /**

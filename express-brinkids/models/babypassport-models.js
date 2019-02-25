@@ -12,7 +12,7 @@ const babypassportSchema = new mongoose.Schema({
 	}
 	});
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const babypassport = mongoose.model('babypassport', babypassportSchema);
 
 module.exports = babypassport;

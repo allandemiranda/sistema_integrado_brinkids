@@ -33,6 +33,6 @@ const ChildSchema = new mongoose.Schema({
   },
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const Child = mongoose.model('Child', ChildSchema);
 module.exports = Child;

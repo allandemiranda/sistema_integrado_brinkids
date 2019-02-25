@@ -770,7 +770,7 @@ class Passport extends React.Component {
                                         {this.state.list.map((findKids, indice) => {
                                             return (
                                                 <tr key={findKids._id}>
-                                                    <th scope="row">{this.state.listConnect.length + 1}</th>
+                                                    <th scope="row">{indice + 1}</th>
                                                     <td > {findKids.name.firstName + " " + findKids.name.surName} </td>
                                                     <td >{moment(findKids.birthday).format('DD/MM/YYYY')}  </td>
                                                     <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selectedKids(findKids)} /> </td>

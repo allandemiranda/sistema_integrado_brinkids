@@ -68,7 +68,7 @@ discountsSchema.statics.discountsGenerateToday = function (cb) {
   }, cb);
 };
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const Discount = mongoose.model('Discount', discountsSchema);
 
 module.exports = Discount;

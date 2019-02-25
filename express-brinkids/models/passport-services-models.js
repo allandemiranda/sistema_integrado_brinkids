@@ -15,7 +15,7 @@ const passportServicesSchema = new mongoose.Schema({
   	price: String,
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const passportServices = mongoose.model('passportServices', passportServicesSchema);
 
 module.exports = passportServices;

@@ -283,9 +283,10 @@ class DashBoard extends React.Component {
 			const response = await axios.get(`/tela-mkt/mkt/${moment(a)}`);
 			return response.data;
 		});
+		console.log(lista3)
 		var listafinal = [];
 		Promise.all(datas).then((listagraficos) => {
-
+			console.log(listagraficos)
 			const mala = [];
 			const mip = "olaaa";
 			listagraficos.map((event, indice) => {
@@ -298,70 +299,32 @@ class DashBoard extends React.Component {
 			return mala
 		}).then((credo) => {
 
-			const passaport = [];
+			const lista = [];
 			const aniversario = [];
-
+			console.log(credo)
 			credo.map((live, index) => {
 
 				live.map((dado, indez) => {
 
-					if (dado.activity === "Passaporte") {
+					lista.push(dado);
 
-						passaport.push(dado);
 
-					} else if (dado.activity === "Aniversario") {
-
-						aniversario.push(dado);
-
-					}
 				})
 			})
 
-			const passe = {
 
-				passaporte: passaport,
-				aniversario: aniversario,
 
-			}
-
-			return passe;
+			return lista;
 
 		}).then((lista) => {
-
+			console.log(lista)
 			const tot = [];
 			var total = 0;
-			const datas = lista.aniversario.map(async (crianca, index) => {
-				const axior = await axios.get(`/child/indentifier/${crianca.to}`);
-				let retu;
-				var temporario = null;
-
-				if (axior.data !== null) {
-					temporario = {
-						dia: moment(lista3[index]).format("DD/MM"),
-						sexo: axior.data.sexuality,
-					}
-					retu = {
-						temporario, child: axior.data
-					}
-
-				} else {
-
-					temporario = {
-						dia: moment(lista3[index]).format("DD/MM"),
-
-					}
-					retu = {
-						temporario,
-					}
-				}
-				return retu;
-			});
-
-			const datase = lista.passaporte.map(async (crianca, index) => {
+			const datas = lista.map(async (crianca, index) => {
 				const axior = await axios.get(`/child/indentifier/${crianca.id}`);
-
-				var temporario = null;
 				let retu;
+				var temporario = null;
+
 				if (axior.data !== null) {
 					temporario = {
 						dia: moment(lista3[index]).format("DD/MM"),
@@ -381,21 +344,15 @@ class DashBoard extends React.Component {
 						temporario,
 					}
 				}
-
-
 				return retu;
-
-
-
 			});
-			const envio = datas.concat(datase)
-
-			return envio;
+			console.log(datas)
+			return datas;
 
 		}).then((file) => {
 
 			Promise.all(file).then((god) => {
-
+				console.log(god)
 				let lista2 = [];
 				god.map((event, indice) => {
 
@@ -414,7 +371,8 @@ class DashBoard extends React.Component {
 						lista2.push({ name: event.temporario.dia, Meninos: menino, Meninas: menina, Total: menino + menina })
 					}
 				})
-
+				console.log(lista2)
+				var lista4 = lista2
 				for (var p = 0; p < lista2.length; p++) {
 					for (var y = 1; y <= lista2.length - 1; y++) {
 
@@ -820,7 +778,7 @@ class DashBoard extends React.Component {
 			} else if (this.state.campoMes !== "") {
 				let temporario = [];
 				this.state.listapesq.map((event) => {
-					if (moment(event.aniversario).format("DD") === this.state.campoMes &&event.cidade === this.state.campoCidade) {
+					if (moment(event.aniversario).format("DD") === this.state.campoMes && event.cidade === this.state.campoCidade) {
 						temporario.push(event);
 					}
 				})

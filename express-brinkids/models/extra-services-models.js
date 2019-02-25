@@ -14,7 +14,7 @@ const extraServicesSchema = new mongoose.Schema({
   value: String,
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const extraServices = mongoose.model('ExtraServices', extraServicesSchema);
 
 module.exports = extraServices;

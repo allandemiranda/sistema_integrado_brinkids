@@ -228,7 +228,7 @@ class EntradaAniversario extends React.Component {
                 // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-                this.setState({erroCadastro: true})
+                this.setState({ erroCadastro: true })
             })
     }
     requisicao(event) {
@@ -436,10 +436,10 @@ class EntradaAniversario extends React.Component {
 
         listaC = { type: "children", id: this.state.criancaSelecionada._id, nameChild: this.state.criancaSelecionada.name.firstName + ' ' + this.state.criancaSelecionada.name.surName, name: this.state.adultoSelecionado.name, age: this.state.adultoSelecionado.age }
         listCria.push(crianca);
-       
+
         var formData = new FormData();
 
-       
+
 
         formData.append('photo', this.state.file)
         formData.append('service', 'Aniversario')
@@ -459,7 +459,7 @@ class EntradaAniversario extends React.Component {
 
         axios.post('/product', formData)
             .then((response) => {
-                
+
                 this.setState({
                     dadosComprovante: {
                         i: response.data,
@@ -482,12 +482,17 @@ class EntradaAniversario extends React.Component {
 
 
             }).then(() => {
-                setTimeout(() => {
-                    this.setState({
-                        comprovante: true
-                    })
 
-                }, 1000)
+                this.setState({
+                    comprovante: true
+                })
+
+
+            }).then(() => {
+                setTimeout((event) => {
+                    this.props.history.push("/");
+
+                }, 100);
             }).catch((error) => {
                 console.log(error)//LOG DE ERRO
                 console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -773,7 +778,7 @@ class EntradaAniversario extends React.Component {
                     <div className="graph" >
                         <div className="text-center">
                             <Link className="btn btn-md botao" to="/">Cancelar</Link>
-                            <button className="btn btn-md botao" onClick={()=>this.setState({page:"SelecionarTipoDeEntrada"})}>voltar</button>
+                            <button className="btn btn-md botao" onClick={() => this.setState({ page: "SelecionarTipoDeEntrada" })}>voltar</button>
                         </div>
                     </div>
                 </div>
@@ -938,7 +943,7 @@ class EntradaAniversario extends React.Component {
                     </div>
                     <div className="text-center">
                         <a className="btn btn-md botao" href="/">Cancelar</a>
-                        <button className="btn btn-md botao botaoAvançar" onClick={this.FinalizarCombinacao}> Avançar </button>
+
                     </div>
                 </div>
             )
@@ -993,7 +998,7 @@ class EntradaAniversario extends React.Component {
 
                             <div className="text-center">
                                 <a className="btn btn-md botao" href="/">Cancelar</a>
-                                <button className="btn btn-md botao botaoAvançar" onClick={this.ConfirmarResp}> Avançar </button>
+
                             </div>
                         </div>
                     </div>
@@ -1019,7 +1024,7 @@ class EntradaAniversario extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={this.state.responsavel.photo} />
+                                            <img style={{ maxWidth: 300 + 'px' }} src={this.state.responsavel.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
@@ -1130,7 +1135,7 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.responsavel.photo} />
+                                                <img style={{ maxWidth: 300 + 'px' }} src={this.state.responsavel.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -1185,7 +1190,7 @@ class EntradaAniversario extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.criancaSelecionada.photo} />
+                                                <img style={{ maxWidth: 300 + 'px' }} src={this.state.criancaSelecionada.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">

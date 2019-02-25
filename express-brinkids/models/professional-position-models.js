@@ -22,7 +22,7 @@ const professionalPositionSchema = new mongoose.Schema({
   }],
 });
 
-mongoose.connect(`mongodb://localhost/${config.database}`);
+mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });
 const professionalPosition = mongoose.model('ProfessionalPosition', professionalPositionSchema);
 
 module.exports = professionalPosition;
