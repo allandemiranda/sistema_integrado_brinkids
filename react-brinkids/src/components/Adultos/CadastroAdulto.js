@@ -317,13 +317,15 @@ class CadastroAdulto extends React.Component {
                 $("#bai").removeClass('errorBorder');
             }
 
-        //    if ($.isNumeric(adulto.rg) === false) {
-        //        $("#numberRG").addClass('errorBorder');
-        //        erros.push("O CPF não pode estar em branco");
-        //    }
-        //    else {
-        //        $("#numberRG").removeClass('errorBorder');
-        //    }
+            if ($.isNumeric(adulto.rg) === false) {
+               $("#numberRG").addClass('errorBorder');
+            }
+            else {
+               $("#numberRG").removeClass('errorBorder');
+            }
+            if (adulto.rg.length ==0) {
+                $("#numberRG").removeClass('errorBorder');
+             }
             return erros;
 
         }
@@ -633,11 +635,11 @@ class CadastroAdulto extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-xs-12" >
                                             <label className="LetraFormulario" > CPF: </label>
-                                            <input type="text" id="numberCPF" name="number" className="form-control" value={this.state.cpf} onChange={this.ChangeCpf} />
+                                            <input type="number" id="numberCPF" name="number" className="form-control" value={this.state.cpf} onChange={this.ChangeCpf} />
                                         </div>
                                         <div className="col-md-6 col-sm-6 col-xs-12" >
                                             <label className="LetraFormulario" > RG: </label>
-                                            <input type="text" id="numberRG" name="number" className="form-control" value={this.state.rg} onChange={this.ChangeRg} />
+                                            <input type="number" id="numberRG" name="number" className="form-control" value={this.state.rg} onChange={this.ChangeRg} />
                                         </div>
                                     </div>
                                 </div >
@@ -666,7 +668,7 @@ class CadastroAdulto extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-xs-12" >
                                             <label className="LetraFormulario" > Telefone: </label>
-                                            <input type="text" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phoneNumber} onChange={this.ChangePhone} />
+                                            <input type="number" id="phoneNumber" name="phoneNumber" className="form-control" placeholder="(00) 99999-9999" value={this.state.phoneNumber} onChange={this.ChangePhone} />
                                         </div>
                                         <div className="col-md-6 col-sm-6 col-xs-12" >
                                             <label className="LetraFormulario" > Estado Civil: </label>
@@ -701,7 +703,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className="col-md-2 col-sm-3 col-xs-2" >
                                             <label className="LetraFormulario" > Número: </label>
-                                            <input type="text" id="num" name="cep" className="form-control" value={this.state.number} onChange={this.ChangeNumber} />
+                                            <input type="number" id="num" name="cep" className="form-control" value={this.state.number} onChange={this.ChangeNumber} />
                                         </div>
                                     </div>
                                 </div >
@@ -710,7 +712,7 @@ class CadastroAdulto extends React.Component {
                                     <div className="row">
                                         <div className="col-md-2 col-sm-6 col-xs-2" >
                                             <label className="LetraFormulario" > CEP: </label>
-                                            <input type="text" id="cep" name="cep" className="form-control" value={this.state.cep} onChange={this.ChangeCep} />
+                                            <input type="number" id="cep" name="cep" className="form-control" value={this.state.cep} onChange={this.ChangeCep} />
                                         </div>
                                         <div className="col-md-4 col-sm-6 col-xs-4" >
                                             <label className="LetraFormulario" > Cidade: </label>
