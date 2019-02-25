@@ -409,7 +409,7 @@ class CadastroCrianca extends React.Component {
                                 </div >
                                 <div className="form-group" >
                                     <div className="row">
-                                        <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"RG/CPF/Passaporte: "} type={"text"} id={"number"} name={"number"} Class={"form-control"} value={this.state.number} onChange={this.ChangeNumber} />
+                                        <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"RG/CPF/Passaporte: "} type={"number"} id={"number"} name={"number"} Class={"form-control"} value={this.state.number} onChange={this.ChangeNumber} />
                                         <TypesInput cod={1} ClassDiv={"col-md-6 col-sm-6 col-xs-12"} ClassLabel={"LetraFormulario brlabel"} NameLabel={"Nacionalidade: "} type={"text"} id={"Nacionalidade"} name={"Nacionalidade"} Class={"form-control"} value={this.state.nacionality} onChange={this.ChangeNacio} />
                                     </div>
                                 </div >

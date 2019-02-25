@@ -214,7 +214,7 @@ class CadastroFuncionario extends React.Component {
                                             <div className="col-md-1 col-sm-1 col-xs-12 text-center">
                                                 <label className="LetraFormulario brlabel">Ou</label>
                                             </div>
-                                            <TypesInput cod={1} ClassDiv={"col-md-3 col-sm-3 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"CPF: "} type={"text"} id={"number"} name={"number"} Class={"form-control"}
+                                            <TypesInput cod={1} ClassDiv={"col-md-3 col-sm-3 col-xs-12"} ClassLabel={"LetraFormulario"} NameLabel={"CPF: "} type={"number"} id={"number"} name={"number"} Class={"form-control"}
                                                 onChange={this.ChangeCPF}
                                             />
                                             <br></br>

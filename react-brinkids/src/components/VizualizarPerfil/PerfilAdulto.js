@@ -681,8 +681,8 @@ class PerfilAdulto extends React.Component {
 
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
-                            <li > Vizualizar </li>
                             <li > Perfil </li>
+                            <li > Vizualizar </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -934,8 +934,8 @@ class PerfilAdulto extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a hre="/" > Home </a></li >
-                            <li > Cadastro </li>
-                            <li >Adulto </li>
+                            <li > Adulto </li>
+                            <li >Adicionar novas crianças </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -976,7 +976,6 @@ class PerfilAdulto extends React.Component {
                             </table>
 
                             <div className="text-center">
-                                <a className="btn btn-md botao" hre="/">Cancelar</a>
                                 <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Perfil' })}>Voltar</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'ConfirmarCriança' })}> Adicinar Criança </button>
                             </div>

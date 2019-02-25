@@ -484,10 +484,10 @@ class PerfilCrianca extends React.Component {
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                     {this.state.editar && (
                                         <div>
-                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec', color: "white" }}><label>
-                                                <span style={{ color:'white' }} className="glyphicon">Trocar imagem &#xe065;</span>
-
-                                                <input id="tipofile" style={{ color:'white' }} type="file" name="foto" defaultValue="" />
+                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec', color: "white" }}>
+                                            <label style={{ color: 'white' }}>
+                                                        Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                                        <input id="tipofile" accept="image/*" type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button><br /></div>)
                                     }
@@ -520,7 +520,7 @@ class PerfilCrianca extends React.Component {
                             <div className="col-md-4 col-sm-12">
                                 <div className="graph" style={{ padding: 10 + "px" }}>
                                     <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                    {!this.state.editar && (<p>{moment(this.state.perfilAtual.birthday).format("DD/MM/YYYY")}</p>)}
+                                    {!this.state.editar && (<p>{moment(this.state.perfilAtual.birthday).add(1,"days").format("DD/MM/YYYY")}</p>)}
                                     {this.state.editar && (<input style={{ float: 'none' }} type="date" className="form-control" name="aniversario" onChange={this.changue} value={this.state.aniversario} />
                                     )}
                                 </div>
