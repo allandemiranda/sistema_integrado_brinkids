@@ -311,6 +311,10 @@ class VisualizarAniversario extends React.Component {
     
     
                                         console.log(response.data);
+                                        this.setState({
+                                            list:[],
+                                            NomeCrianca:"1"
+                                        })
     
                                     })
                                     .catch((err) => console.log(err));

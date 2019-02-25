@@ -811,7 +811,7 @@ class Perfil extends React.Component {
 
                                         </p>
                                         <p><b>Lugar de Emissão:</b>
-                                            {!this.state.editar &&(this.state.perfilAtual.identifierEmployee.workPortifolio.placeIssued)}
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.placeIssued)}
                                             {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="LocalEmissaoCT" value={this.state.LocalEmissaoCT} onChange={this.changue} />)}
                                         </p>
                                     </div>
@@ -821,10 +821,23 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" ><b>Título de Eleitor:</b>  </h5>
 
-                                        <p><b>Numero:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.number}</p>
-                                        <p><b>Zona:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.zone}</p>
-                                        <p><b>Seção:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.section}</p>
-                                        <p><b>Estado:</b> {this.state.perfilAtual.identifierEmployee.electionTitle.state}</p>
+                                        <p><b>Numero:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.electionTitle.number)}
+                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="TNumero" value={this.state.TNumero} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Zona:</b>
+                                            {!this.state.editar &&(this.state.perfilAtual.identifierEmployee.electionTitle.zone)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="TZona" value={this.state.TZona} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Seção:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.electionTitle.section)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="TZona" value={this.state.TZona} onChange={this.changue} />)}
+                                        </p>
+                                        <p><b>Estado:</b>
+                                            {this.state.perfilAtual.identifierEmployee.electionTitle.state}
+                                        </p>
 
                                     </div>
                                 </div>
