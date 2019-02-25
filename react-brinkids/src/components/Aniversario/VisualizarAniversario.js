@@ -304,8 +304,8 @@ class VisualizarAniversario extends React.Component {
     
                         }).then((eventu) => {
                             if (eventu) {
-                                let listaTemporaria = this.state.list;
-                                axios.delete(`/birthday/${listaTemporaria[event]._id}`)
+                               
+                                axios.delete(`/birthday/${event}`)
                                     .then((response) => {
     
     
@@ -313,16 +313,18 @@ class VisualizarAniversario extends React.Component {
     
                                     })
                                     .catch((err) => console.log(err));
-                                listaTemporaria.splice(event, 1);
-                                this.setState({
-                                    list: listaTemporaria,
-                                })
-    
+                              
+                               
                             } else {
     
                                 alert("Acesso Negado. Você não possui permisão para estar nessa área!");
     
                             }
+                        }).then(()=>{
+                            this.requisicao();
+                            this.setState({
+                                NomeCrianca: "",
+                            })
                         })
                         .catch((err) => console.log(err));
                 })
@@ -466,7 +468,7 @@ class VisualizarAniversario extends React.Component {
                                                 <td > {findAdult.birthdayPerson.name} </td>
 
                                                 <td > {moment(findAdult.birthdayDate).format("DD/MM/YYYY")} </td>
-                                                <td><button onClick={() => this.selecionar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
+                                                <td><button onClick={() => this.selecionar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(findAdult._id)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
