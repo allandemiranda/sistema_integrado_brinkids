@@ -468,7 +468,7 @@ class VisualizarAniversario extends React.Component {
                                                 <td > {findAdult.birthdayPerson.name} </td>
 
                                                 <td > {moment(findAdult.birthdayDate).format("DD/MM/YYYY")} </td>
-                                                <td><button onClick={() => this.selecionar(findAdult._id)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
+                                                <td><button onClick={() => this.selecionar(indice)}><span className="glyphicon">&#x270f;</span></button> <button onClick={() => this.excluir(findAdult._id)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
