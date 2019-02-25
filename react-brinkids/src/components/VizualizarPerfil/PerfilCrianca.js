@@ -484,10 +484,10 @@ class PerfilCrianca extends React.Component {
                                     <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                     {this.state.editar && (
                                         <div>
-                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec', color: "white" }}><label>
-                                                <span style={{ color:'white' }} className="glyphicon">Trocar imagem &#xe065;</span>
-
-                                                <input id="tipofile" style={{ color:'white' }} type="file" name="foto" defaultValue="" />
+                                            <button className="btn btn-md botao botaoAvançar" style={{ background: ' #2ab7ec', color: "white" }}>
+                                            <label style={{ color: 'white' }}>
+                                                        Trocar imagem <span className="glyphicon">&#xe065;</span>
+                                                        <input id="tipofile" accept="image/*" type="file" name="foto" defaultValue="" />
                                             </label>
                                             </button><br /></div>)
                                     }
