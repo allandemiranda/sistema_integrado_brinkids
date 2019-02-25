@@ -127,7 +127,7 @@ router.delete('/:identifier', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
-    const deletedService = await BirthdayParty.findOneAndDelete(req.params.identifier);
+    const deletedService = await BirthdayParty.findByIdAndDelete(req.params.identifier);
     const changuePrice = await Logs.update({ 'id': req.params.identifier }, { $set: { "price": 0 } })
 
 

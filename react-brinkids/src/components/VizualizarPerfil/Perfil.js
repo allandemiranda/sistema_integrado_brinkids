@@ -790,7 +790,7 @@ class Perfil extends React.Component {
 
                                         <p><b>Numero:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.number)}
-                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="numberCT" value={this.state.numberCT} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="numberCT" value={this.state.numberCT} onChange={this.changue} />)}
                                         </p>
                                         <p><b>Series:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.series)}
@@ -802,7 +802,7 @@ class Perfil extends React.Component {
                                         </p>
                                         <p><b>PISPASEP:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.PIS_PASEP)}
-                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="PIS" value={this.state.PIS} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="PIS" value={this.state.PIS} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Data de Emissão:</b>
@@ -811,7 +811,8 @@ class Perfil extends React.Component {
 
                                         </p>
                                         <p><b>Lugar de Emissão:</b>
-                                            {this.state.perfilAtual.identifierEmployee.workPortifolio.placeIssued}
+                                            {!this.state.editar &&(this.state.perfilAtual.identifierEmployee.workPortifolio.placeIssued)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="LocalEmissaoCT" value={this.state.LocalEmissaoCT} onChange={this.changue} />)}
                                         </p>
                                     </div>
                                 </div>

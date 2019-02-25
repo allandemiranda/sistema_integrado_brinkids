@@ -267,7 +267,8 @@ class VisualizarAniversario extends React.Component {
     inteval(event) {
 
     }
-    excluir(event) {
+    excluir(eventac) {
+        console.log(eventac)
         const confirmacao = window.confirm("Deseja mesmo excluir esse Aniversário do sistema?");
 
         if(confirmacao === true){            
@@ -305,7 +306,7 @@ class VisualizarAniversario extends React.Component {
                         }).then((eventu) => {
                             if (eventu) {
                                
-                                axios.delete(`/birthday/${event}`)
+                                axios.delete(`/birthday/${eventac}`)
                                     .then((response) => {
     
     
@@ -460,7 +461,7 @@ class VisualizarAniversario extends React.Component {
                                 <tbody>
                                     {this.state.list.map((findAdult, indice) => {
 
-
+                                        console.log(findAdult)
                                         return (
                                             <tr key={indice + 1}>
                                                 <th scope="row">{indice + 1}</th>
