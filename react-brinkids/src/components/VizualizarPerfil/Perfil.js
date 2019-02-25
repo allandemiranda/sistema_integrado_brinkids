@@ -827,16 +827,17 @@ class Perfil extends React.Component {
 
                                         </p>
                                         <p><b>Zona:</b>
-                                            {!this.state.editar &&(this.state.perfilAtual.identifierEmployee.electionTitle.zone)}
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.electionTitle.zone)}
                                             {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="TZona" value={this.state.TZona} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Seção:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.electionTitle.section)}
-                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="TZona" value={this.state.TZona} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="TSecao" value={this.state.TSecao} onChange={this.changue} />)}
                                         </p>
                                         <p><b>Estado:</b>
-                                            {this.state.perfilAtual.identifierEmployee.electionTitle.state}
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.electionTitle.state)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="TUF" value={this.state.TUF} onChange={this.changue} />)}
                                         </p>
 
                                     </div>
@@ -846,9 +847,20 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" ><b>Registro Geral:</b>  </h5>
 
-                                        <p><b>Orgão Emissor:</b> {this.state.perfilAtual.identifierEmployee.rg.issuingBody}</p>
-                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.rg.dateIssue)}</p>
-                                        <p><b>Estado:</b> {this.state.perfilAtual.identifierEmployee.rg.state}</p>
+                                        <p><b>Orgão Emissor:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.rg.issuingBody)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="RGLEmissao" value={this.state.RGLEmissao} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Data de Emissão: </b>
+                                            {!this.state.editar && (converter(this.state.perfilAtual.identifierEmployee.rg.dateIssue))}
+                                            {this.state.editar && (<input type="date" style={{ float: 'none' }} className="form-control" name="RGDateEmissao" value={this.state.RGDateEmissao} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Estado:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.rg.state)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="RGUF" value={this.state.RGUF} onChange={this.changue} />)}
+                                        </p>
 
                                     </div>
                                 </div>
@@ -862,9 +874,20 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" ><b>Reservista:</b>  </h5>
 
-                                        <p><b>Numero:</b> {this.state.perfilAtual.identifierEmployee.militaryReservist.number}</p>
-                                        <p><b>Series:</b> {this.state.perfilAtual.identifierEmployee.militaryReservist.series}</p>
-                                        <p><b>Categoría:</b> {this.state.perfilAtual.identifierEmployee.militaryReservist.category}</p>
+                                        <p><b>Numero:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.militaryReservist.number)}
+                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="CRNumero" value={this.state.CRNumero} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Series:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.militaryReservist.series)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="CRSerie" value={this.state.CRSerie} onChange={this.changue} />)}
+                                        </p>
+                                        <p><b>Categoría:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.militaryReservist.category)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="CRCat" value={this.state.CRCat} onChange={this.changue} />)}
+
+                                        </p>
 
                                     </div>
                                 </div>
@@ -873,11 +896,30 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" ><b>Passaporte:</b>  </h5>
 
-                                        <p><b>Numero:</b> {this.state.perfilAtual.identifierEmployee.passport.number}</p>
-                                        <p><b>Tipo:</b> {this.state.perfilAtual.identifierEmployee.passport.type}</p>
-                                        <p><b>Continente de Emissão:</b> {this.state.perfilAtual.identifierEmployee.passport.issuingCountry}</p>
-                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.passport.dateIssue)}</p>
-                                        <p><b>Data de Expiração:</b> {converter(this.state.perfilAtual.identifierEmployee.passport.expirationDate)}</p>
+                                        <p><b>Numero:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.passport.number)}
+                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="PNumero" value={this.state.PNumero} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Tipo:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.passport.type)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="PTipo" value={this.state.PTipo} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Continente de Emissão:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.passport.issuingCountry)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="PPemissor" value={this.state.PPemissor} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Data de Emissão:</b>
+                                            {!this.state.editar && (converter(this.state.perfilAtual.identifierEmployee.passport.dateIssue))}
+                                            {this.state.editar && (<input type="date" style={{ float: 'none' }} className="form-control" name="PDemissao" value={this.state.PDemissao} onChange={this.changue} />)}
+                                        </p>
+                                        <p><b>Data de Expiração:</b>
+                                            {!this.state.editar && (converter(this.state.perfilAtual.identifierEmployee.passport.expirationDate))}
+                                            {this.state.editar && (<input type="date" style={{ float: 'none' }} className="form-control" name="PDvalidade" value={this.state.PDvalidade} onChange={this.changue} />)}
+
+                                        </p>
 
                                     </div>
                                 </div>
@@ -886,12 +928,30 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" ><b>CNH:</b>  </h5>
 
-                                        <p><b>Registro:</b> {this.state.perfilAtual.identifierEmployee.cnh.record}</p>
-                                        <p><b>Categoria:</b> {this.state.perfilAtual.identifierEmployee.cnh.category}</p>
-                                        <p><b>Data de Expiração:</b> {converter(this.state.perfilAtual.identifierEmployee.cnh.expirationDate)}</p>
-                                        <p><b>Comentários:</b> {this.state.perfilAtual.identifierEmployee.cnh.comments}</p>
-                                        <p><b>Local de Emissão:</b> {this.state.perfilAtual.identifierEmployee.cnh.placeIssue}</p>
-                                        <p><b>Data de Emissão:</b> {converter(this.state.perfilAtual.identifierEmployee.cnh.dateIssue)}</p>
+                                        <p><b>Registro:</b>
+                                            {!this.state.editar&&(this.state.perfilAtual.identifierEmployee.cnh.record)}
+                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="CNHReg" value={this.state.CNHReg} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Categoria:</b>
+                                            {!this.state.editar&&(this.state.perfilAtual.identifierEmployee.cnh.category)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="CNHCat" value={this.state.CNHCat} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Data de Expiração:</b>
+                                            {!this.state.editar&&(converter(this.state.perfilAtual.identifierEmployee.cnh.expirationDate))}
+                                            {this.state.editar && (<input type="date" style={{ float: 'none' }} className="form-control" name="CNHDval" value={this.state.CNHDval} onChange={this.changue} />)}
+
+                                        </p>
+                                        <p><b>Comentários:</b>
+                                            {this.state.perfilAtual.identifierEmployee.cnh.comments}
+                                        </p>
+                                        <p><b>Local de Emissão:</b>
+                                            {this.state.perfilAtual.identifierEmployee.cnh.placeIssue}
+                                        </p>
+                                        <p><b>Data de Emissão:</b>
+                                            {converter(this.state.perfilAtual.identifierEmployee.cnh.dateIssue)}
+                                        </p>
                                     </div>
                                 </div>
                             </div >

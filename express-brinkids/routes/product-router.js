@@ -111,7 +111,7 @@ router.post('/', async (req, res) => {
 
       productSaved.set({ photo: `${config.pathProduct}${productSaved._id}.png` });
 
-      const photoBase64Data = child.photo.replace(/^data:image\/png;base64,/, '');
+      // const photoBase64Data = child.photo.replace(/^data:image\/png;base64,/, '');
 
       fs.writeFile(`${config.pathPublic()}${config.pathProduct}${productSaved._id}.png`, photoBase64Data, 'base64', function (errFile) {
         if (errFile) {
