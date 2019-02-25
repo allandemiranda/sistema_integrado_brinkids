@@ -283,7 +283,7 @@ class Passport extends React.Component {
             axios.get(`/child/filter/${this.state.selectedSearch}`)
                 .then((response) => {
                     if (response.data.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) } else {
-                        this.setState({ list: response.data });
+                        this.setState({ listConnect: response.data });
                     }
                     // window.location.href = '/';
                 }).catch((error) => {

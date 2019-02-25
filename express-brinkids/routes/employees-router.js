@@ -246,7 +246,8 @@ router.put('/reset-password', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
-    const userFind = await userSystem.findById(req.body.identifier);
+    const userFind = await userSystem.findOne({id:req.body.identifier});
+    console.log(userFind)
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Edição',
@@ -326,6 +327,39 @@ router.put('/password', async (req, res) => {
     return res.sendStatus(204);
   } catch (err) {
     console.log(err);
+    return res.sendStatus(500);
+  }
+});
+router.delete('/:identifier', async (req, res) => {
+  try {
+    const a = req.cookies.TOKEN_KEY;
+    const b = jwt.verify(a, config.secret_auth);
+    const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
+    const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    
+    const deletedService = await adult.findByIdAndRemove(req.params.identifier);
+   
+    const deletedService2 = await Employees.findByIdAndRemove(deletedService.identifierEmployee);
+    const deletedService3 =await userSystem.deleteOne({id:req.params.identifier});
+    console.log(deletedService,deletedService2,deletedService3)
+    const log = new Logs({
+      activity: 'Perfil Funcionário',
+      action: 'Excluir',
+      dateOperation: new Date(),
+      from: funcionario,
+      to:deletedService.name.firstName+" "+deletedService.name.surName,
+      id:req.params.identifier,
+    })
+    
+    const newLog = await log.save();
+    if (!deletedService) {
+      return res.sendStatus(404);
+    }
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.log(err);
+
     return res.sendStatus(500);
   }
 });

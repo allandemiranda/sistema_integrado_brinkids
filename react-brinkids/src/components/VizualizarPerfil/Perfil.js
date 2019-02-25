@@ -1,5 +1,5 @@
 import React from 'react';
-
+import TypesInput from '../TypesInput.js';
 import '../../assets/style/bootstrap.min.css';
 import '../../assets/style/font-awesome.css';
 import '../Adultos/css/style.css';
@@ -44,8 +44,53 @@ class Perfil extends React.Component {
             cidade: '',
             numero: '',
             endereco: '',
-            user:"",
-            naoEncontrada:false,
+            user: "",
+            naoEncontrada: false,
+
+            sexuality: "",
+            scholl: "",
+            dad: "",
+            mom: "",
+            //Local de Nascimento
+            cidadeNasc: "",
+            UFLNasc: "",
+            //Carteira de trabalho
+            numberCT: "",
+            serieCT: "",
+            UFCT: "",
+            PIS: "",
+            DataEmissaoCT: "",
+            LocalEmissaoCT: "",
+            //RG
+            RGLEmissao: "",
+            RGUF: "",
+            RGDateEmissao: "",
+            //Titulo Eleitoral
+            TNumero: "",
+            TZona: "",
+            TSecao: "",
+            TUF: "",
+            //Carteira de Rezevista
+            CRNumero: "",
+            CRSerie: "",
+            CRCat: "",
+            //Passaporte
+            PNumero: "",
+            PTipo: "",
+            PPemissor: "",
+            PDemissao: "",
+            PDvalidade: "",
+            //CNH:
+            CNHReg: "",
+            CNHCat: "",
+            CNHDval: "",
+            CNHObs: "",
+            CNHLocal: "",
+            CNHDemissao: "",
+            //Funcionario
+            CargAtual: "",
+            DataAdmisao: "",
+            RegInterno: "",
 
         }
         //funçoes para mudar os values e afins
@@ -53,7 +98,7 @@ class Perfil extends React.Component {
         this.SearchFuncionario = this.SearchFuncionario.bind(this);
         this.ChangePage = this.ChangePage.bind(this);
         this.editavel = this.editavel.bind(this);
-        
+
         this.changueObs = this.changueObs.bind(this);
         this.changueCep = this.changueCep.bind(this);
         this.changueEndereco = this.changueEndereco.bind(this);
@@ -64,7 +109,7 @@ class Perfil extends React.Component {
         this.changueNumero = this.changueNumero.bind(this);
         this.changueEmail = this.changueEmail.bind(this);
         this.changuePhone = this.changuePhone.bind(this);
-        
+
         this.salvar = this.salvar.bind(this);
         this.voltar = this.voltar.bind(this);
         this.cancelar = this.cancelar.bind(this);
@@ -90,7 +135,8 @@ class Perfil extends React.Component {
             ia[i] = byteString.charCodeAt(i);
         }
 
-        return new Blob([ia], { type: mimeString })};
+        return new Blob([ia], { type: mimeString })
+    };
     Funcionario = (number) => {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
@@ -129,64 +175,64 @@ class Perfil extends React.Component {
     componentWillMount() {
         this.Funcionario(10);
     }
-    excluir(event,indice){
+    excluir(event, indice) {
         const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
 
-        if(confirmacao === true){            
+        if (confirmacao === true) {
             const a = getToken();
             const b = jwt.verify(a, config.secret_auth);
             axios.get(`/employees/${b.id}`)
-    
+
                 .then((response) => {
-    
+
                     let id = response.data[0].identifierEmployee.employeeData.officialPosition;
-    
+
                     axios.get(`/professionalPosition/indentifier/${id}`)
                         .then((response) => {
-    
+
                             let functions;
-    
+
                             return response.data.functions;
-    
+
                         }).then((event) => {
-    
+
                             let podeentrar = false;
-    
+
                             event.map((map) => {
-    
+
                                 if (map.id === 11) {
-    
+
                                     podeentrar = true;
-    
+
                                 }
-    
+
                             })
-    
+
                             return podeentrar;
-    
+
                         }).then((eventu) => {
                             if (eventu) {
                                 let temporario = this.state.list;
-                                axios.delete(`adult/${event}`)
+                                axios.delete(`employees/${event}`)
                                     .then((response) => {
-                                       
-                                        temporario.splice(indice,1);
+
+                                        temporario.splice(indice, 1);
                                         this.setState({
-                                            list:temporario
+                                            list: temporario
                                         })
                                     })
                                     .catch((err) => console.log(err));
-    
+
                             } else {
-    
+
                                 alert("Acesso Negado. Você não possui permisão para estar nessa área!");
-    
+
                             }
                         })
                         .catch((err) => console.log(err));
                 })
                 .catch((err) => console.log(err));
-        }        
+        }
     }
     changuePassword(event) {
 
@@ -194,21 +240,22 @@ class Perfil extends React.Component {
             page: 'Senha',
         })
     }
-    mudarSenha = ()=>{
+    mudarSenha = () => {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
-        axios.put(`/employees/reset-password`,{identifier:b._id})
-        .then((response) => {
-           
-            this.setState(
-                {   
-                    page: 'Perfil'
-                })
+        console.log(this.state.perfilAtual)
+        axios.put(`/employees/reset-password`, { identifier: this.state.perfilAtual._id })
+            .then((response) => {
+
+                this.setState(
+                    {
+                        page: 'Perfil'
+                    })
                 alert("Senha alterada para a padrão")
-            
-        }).catch((err) => {
-            console.log(err);
-        });
+
+            }).catch((err) => {
+                console.log(err);
+            });
     }
     //lembrar de terminar as funçoes changue
     changueObs(event) { this.setState({ obs: event.target.value }) }
@@ -242,7 +289,7 @@ class Perfil extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-        
+
 
 
         axios.put(`/employees/exchange-data/${this.state.perfilAtual._id}`, formData)
@@ -264,8 +311,8 @@ class Perfil extends React.Component {
             perfilAtual: listatemporaria,
             editar: false,
         });
-      
-      
+
+
     }
     //função que alterna as paginas
     ChangePage(event) {
@@ -303,20 +350,21 @@ class Perfil extends React.Component {
                     }).then((eventu) => {
                         if (eventu) {
                             axios.get(`/authentication/mostra_usuarios/${event._id}`)
-                            .then((response) => {
-                               
-                                this.setState(
-                                    {   user:response.data[0].user,
-                                        perfilEdicao: event,
-                                        perfilAtual: event,
-                                        reserva: event,
-                                        page: 'Perfil'
-                                    })
-                        
-                                
-                            }).catch((err) => {
-                                console.log(err);
-                            });
+                                .then((response) => {
+
+                                    this.setState(
+                                        {
+                                            user: response.data[0].user,
+                                            perfilEdicao: event,
+                                            perfilAtual: event,
+                                            reserva: event,
+                                            page: 'Perfil'
+                                        })
+
+
+                                }).catch((err) => {
+                                    console.log(err);
+                                });
 
                         } else {
 
@@ -327,9 +375,9 @@ class Perfil extends React.Component {
                     .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
-      
 
-        
+
+
 
     }
     voltar(event) {
@@ -371,23 +419,23 @@ class Perfil extends React.Component {
     SearchFuncionario(event) {
         const a = getToken();
         const b = jwt.verify(a, config.secret_auth);
-        
+
         axios.get(`/employees/search/${this.state.selectedSearch}`)
             .then((response) => {
                 let temporario = response.data;
-                temporario.map((event,indice)=>{
-                  
-                    if(event._id===b.id){
-                       temporario.splice(indice,1)
+                temporario.map((event, indice) => {
+
+                    if (event._id === b.id) {
+                        temporario.splice(indice, 1)
                     }
                 })
-                
+
                 return temporario;
-            }).then((event)=>{
-                this.setState({ list: event, naoEncontrada:false, });
+            }).then((event) => {
+                this.setState({ list: event, naoEncontrada: false, });
             }).catch((err) => {
                 console.log(err);
-                this.setState({naoEncontrada:true,})
+                this.setState({ naoEncontrada: true, })
             });
     }
     ChangeSearch(event) {
@@ -397,7 +445,7 @@ class Perfil extends React.Component {
         if (this.state.page === 'Busca') {
             return (
                 <div className="container-fluid" >
-                    {this.state.naoEncontrada&&
+                    {this.state.naoEncontrada &&
                         (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
                             <strong style={{ color: 'white' }}>Nenhum funcionario encontrda com esse nome. </strong>
                         </div>)
@@ -439,7 +487,7 @@ class Perfil extends React.Component {
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findAdult.name.firstName + ' ' + findAdult.name.surName} </td>
                                                 <td > {findAdult.cpf} </td>
-                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id,indice)}><span className="glyphicon">&#xe014;</span></button></td>
+                                                <td className="text-center"> <button onClick={() => this.ChangePage(findAdult)}><span className="glyphicon">&#xe065;</span></button><button onClick={() => this.excluir(findAdult._id, indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
@@ -606,7 +654,13 @@ class Perfil extends React.Component {
                                 <div className="col-md-6 col-sm-6 col-xs-12" >
                                     <div className="graph" style={{ padding: 10 + "px" }} >
                                         <h5 className="ltTitulo"><b> Estado Civil: </b></h5>
-                                        <p>{this.state.perfilAtual.maritalStatus}</p>
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.maritalStatus}</p>)}
+                                        {this.state.editar && (<select id="estadoCivil" name="estadoCivil" className="form-control optionFomulario" value={this.state.maritalStatus} onChange={this.changue} >
+                                            <option value="Casado(a)" > Casado(a) </option>
+                                            <option value="Solteiro(a)" > Solterio(a) </option>
+                                            <option value="Viúvo(a)" > Viúvo(a)</option>
+                                            <option value="Divorciado(a)" > Divorciado(a) </option>
+                                        </select >)}
                                     </div>
                                 </div>
                             </div>
@@ -690,7 +744,8 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" > <b>Educação:</b> </h5>
 
-                                        <p>{this.state.perfilAtual.education}</p>
+                                        {!this.state.editar && (<p>{this.state.perfilAtual.education}</p>)}
+                                        {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.scholl} onChange={this.changue} />)}
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
@@ -698,8 +753,13 @@ class Perfil extends React.Component {
 
                                         <h5 className="ltTitulo" ><b>Parentesco:</b>  </h5>
 
-                                        <p><b>Nome do pai:</b> {this.state.perfilAtual.identifierEmployee.kinship.fatherName}</p>
-                                        <p><b>Nome do Mae:</b> {this.state.perfilAtual.identifierEmployee.kinship.fatherName}</p>
+                                        <p><b>Nome do pai:</b>
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.kinship.fatherName)}
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.kinship.fatherName)}
+                                        </p>
+                                        <p><b>Nome do Mae:</b>
+                                            {this.state.perfilAtual.identifierEmployee.kinship.fatherName}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 col-xs-12">
@@ -834,27 +894,27 @@ class Perfil extends React.Component {
         if (this.state.page === 'Senha') {
             return (
                 <div className="container-fluid" >
-                <div className="sub-heard-part" >
+                    <div className="sub-heard-part" >
 
-                    <ol className="breadcrumb m-b-0" >
-                        <li > < a href="/" > Home </a></li >
-                        <li > Vizualizar </li>
-                        <li > Perfil </li>
-                    </ol >
+                        <ol className="breadcrumb m-b-0" >
+                            <li > < a href="/" > Home </a></li >
+                            <li > Vizualizar </li>
+                            <li > Perfil </li>
+                        </ol >
+                    </div>
+                    <div className="graph-visual" >
+                        <h3 className="inner-tittle" > Vizualizar Perfil </h3>
+                        <div className="graph" >
+                            <h3 className="inner-tittle" style={{ textAlign: "center" }} > Resetar para senha padrão (senha123)</h3>
+
+                            <br></br><br></br>
+                            <div className="text-center" >
+                                <button onClick={() => this.setState({ page: "Perfil" })} className="btn btn-md botao botaoAvançar text-center" style={{}}> Voltar</button>
+                                <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Resetar Senha</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="graph-visual" >
-                    <h3 className="inner-tittle" > Vizualizar Perfil </h3>
-                    <div className="graph" >
-                        <h3 className="inner-tittle" style={{textAlign:"center"}} > Resetar para senha padrão (senha123)</h3>                            
-                        
-                        <br></br><br></br>
-                        <div className="text-center" >
-                        <button onClick={()=>this.setState({page:"Perfil"})} className="btn btn-md botao botaoAvançar text-center" style={{}}> Voltar</button>
-                            <button onClick={this.mudarSenha} className="btn btn-md botao botaoAvançar text-center" style={{}}> Resetar Senha</button>                                      
-                        </div>                              
-                    </div>                    
-                </div>
-            </div>
             );
         }
     }

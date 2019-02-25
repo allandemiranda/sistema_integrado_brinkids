@@ -279,7 +279,7 @@ router.delete('/:identifier', async (req, res) => {
    
     const log = new Logs({
       activity: 'Perfil Adulto',
-      action: 'Delete',
+      action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
       to:deletedService.name.firstName+" "+deletedService.name.surName,

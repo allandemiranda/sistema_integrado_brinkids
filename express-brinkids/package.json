@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon --exec PORT=80 node ./bin/www",
     "start-dev": "npm start",
-    "start-men": "set PORT=80 && npm start"
+    "start-men": "set PORT=80 && node ./bin/www"
   },
   "dependencies": {
     "acorn": "^6.1.0",
