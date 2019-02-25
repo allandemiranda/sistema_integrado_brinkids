@@ -30,7 +30,6 @@ class Desconto extends Component {
             Date: "",
             list: [],
             erroDesconto:false,
-            descontoOK:false,
         }
 
         this.ChangeValue = this.ChangeValue.bind(this);
@@ -176,7 +175,6 @@ class Desconto extends Component {
                         dadosComprovante:response.data,
 
                     })
-                    this.state.descontoOK = true;
                 }).catch((error) => {
                     this.state.erroDesconto = true;
                     console.log(error)//LOG DE ERRO
@@ -195,7 +193,11 @@ class Desconto extends Component {
     }
     NovoDesconto = () => {
         this.setState({
-            page: "Desconto"
+            page: "Desconto",
+            Name: "",
+            Description: "",
+            Value: "",
+            Quant: "",
         })
     }
 
@@ -253,7 +255,7 @@ class Desconto extends Component {
                             <div className="text-center">
                                <a href="/Desconto"><button type="button"className="btn btn-md botao" >Cancelar</button></a>
 
-                                <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Proximo</button>
+                                <button className="btn btn-md botao botaoAvançar" onClick={this.ValidaDesconto}>Próximo</button>
                             </div>
                             <div>
                                 <ul id="mensagens-erro" style={{ color: "red" }}></ul>
@@ -268,11 +270,6 @@ class Desconto extends Component {
             return (
                 <div className="container-fluid" >
                     <div className="container-fluid" >
-                        {this.state.descontoOK &&
-                            (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
-                                <strong style={{ color: 'white' }}>Desconto gerado com secesso.</strong>
-                            </div>)
-                        }
                     </div>
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
