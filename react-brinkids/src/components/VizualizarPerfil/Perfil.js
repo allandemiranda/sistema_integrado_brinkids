@@ -176,7 +176,7 @@ class Perfil extends React.Component {
         this.Funcionario(10);
     }
     excluir(event, indice) {
-        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
+        const confirmacao = window.confirm("Deseja mesmo excluir esse funcionário do sistema?");
 
         if (confirmacao === true) {
             const a = getToken();
