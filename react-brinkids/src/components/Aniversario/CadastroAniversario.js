@@ -506,36 +506,23 @@ class CadastroAniversario extends React.Component {
         })
     }
    
-    // NovoCadAni = () => {
-    //     var formData = new FormData();
-
-    //     formData.append('title', String(this.state.TituloDoAni))
-    //     formData.append('name', String(this.state.NomeDoAni))
-    //     formData.append('age', String(this.state.IdadeDoAni))
-    //     formData.append('start', String(this.state.HoraInicio))
-    //     formData.append('end', String(this.state.HoraFinal))
-    //     formData.append('description', String(this.state.DescriçãoDoAni))
-    //     formData.append('observations', String(this.state.ObsDoAni))
-    //     formData.append('value', String(this.state.ValorPg))
-    //     formData.append('method', String(this.state.MetodoPg))
-    //     formData.append('children', String(this.state.QuantCrianca))
-    //     formData.append('adults', String(this.state.QuantAdulto))
-    //     //--------Codigo Aqui------------
-    //     //formData.append('', String(this.state.UFLNasc))
-    
-    //     axios.post('/birthdayParty', formData)
-    //     .then(function (response) {
-    //         console.log(response)
-    //         window.location.href = '/aniversario';
-    //     }).catch(function (error) {
-    //         console.log(error)//LOG DE ERRO
-    //         // alert("Erro no Cadastro");
-    //         // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-    //         // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-    //         //alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
-    //         this.state.errocadastro = true;
-    //     })
-    // }
+    //Exclui intem da lista
+    excluir(event, type) {
+        if (type === "adulto") {
+            let listaTemporaria = this.state.ListaAdul;
+            listaTemporaria.splice(event, 1);
+            this.setState({
+                ListaAdul: listaTemporaria,
+            })
+        }
+        if (type === "crianca") {
+            let listaTemporaria = this.state.ListaCria;
+            listaTemporaria.splice(event, 1);
+            this.setState({
+                ListaCria: listaTemporaria,
+            })
+        }
+    }
 
     render() {
         if(this.state.page === "FormularioCad") {
@@ -666,7 +653,8 @@ class CadastroAniversario extends React.Component {
                                                     <tr> 
                                                         <th>#</th> 
                                                         <th>Name</th> 
-                                                        <th>Idade</th> 
+                                                        <th>Idade</th>
+                                                        <th></th> 
                                                     </tr>
                                                 </thead> 
                                                 <tbody>
@@ -676,6 +664,9 @@ class CadastroAniversario extends React.Component {
                                                                 <th scope="row">{(indice + 1)}</th>
                                                                 <td > {crianca.name} </td>
                                                                 <td > {crianca.age} </td>
+                                                                <td >
+                                                                    <button onClick={() => this.excluir(indice, "crianca")}><span className="glyphicon">&#xe014;</span></button>
+                                                                </td>
                                                             </tr>
                                                         );
                                                     })}
@@ -710,7 +701,8 @@ class CadastroAniversario extends React.Component {
                                                 <thead className = "text-center"> 
                                                     <tr> 
                                                         <th>#</th> 
-                                                        <th>Nome</th> 
+                                                        <th>Nome</th>
+                                                        <th></th> 
                                                     </tr>
                                                 </thead> 
                                                 <tbody>
@@ -719,6 +711,9 @@ class CadastroAniversario extends React.Component {
                                                             <tr>
                                                                 <th scope="row">{(indice + 1)}</th>
                                                                 <td > {adulto.name} </td>
+                                                                <td >
+                                                                    <button onClick={() => this.excluir(indice, "adulto")}><span className="glyphicon">&#xe014;</span></button>
+                                                                </td>
                                                             </tr>
                                                         );
                                                     })}

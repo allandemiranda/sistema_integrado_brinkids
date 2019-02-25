@@ -83,7 +83,7 @@ class VisualizaDesconto extends React.Component {
         this.state.descontoExcluido = false;
     }
     ExcluirDesconto = (name) => {
-        const confirmacao = window.confirm("Deseja mesmo excluir esse adulto do sistema?");
+        const confirmacao = window.confirm("Deseja mesmo excluir esse desconto do sistema?");
 
         if(confirmacao === true){            
             console.log("Fui Clicado");
