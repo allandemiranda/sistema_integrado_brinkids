@@ -294,7 +294,7 @@ class Perfil extends React.Component {
 
         axios.put(`/employees/exchange-data/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
-                window.location.reload(false);
+                
             })
             .catch((err) => console.log(err));
         listatemporaria.address.number = this.state.numero;
@@ -944,13 +944,19 @@ class Perfil extends React.Component {
 
                                         </p>
                                         <p><b>Comentários:</b>
-                                            {this.state.perfilAtual.identifierEmployee.cnh.comments}
+                                            {!this.state.editar&&(this.state.perfilAtual.identifierEmployee.cnh.comments)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="CNHObs" value={this.state.CNHObs} onChange={this.changue} />)}
+
                                         </p>
                                         <p><b>Local de Emissão:</b>
-                                            {this.state.perfilAtual.identifierEmployee.cnh.placeIssue}
+                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.cnh.placeIssue)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="CNHLocal" value={this.state.CNHLocal} onChange={this.changue} />)}
+
                                         </p>
                                         <p><b>Data de Emissão:</b>
-                                            {converter(this.state.perfilAtual.identifierEmployee.cnh.dateIssue)}
+                                            {!this.state.editar &&(converter(this.state.perfilAtual.identifierEmployee.cnh.dateIssue))}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" name="CNHDemissao" value={this.state.CNHDemissao} onChange={this.changue} />)}
+
                                         </p>
                                     </div>
                                 </div>
