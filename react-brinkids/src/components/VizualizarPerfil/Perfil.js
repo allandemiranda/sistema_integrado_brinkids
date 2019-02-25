@@ -755,10 +755,11 @@ class Perfil extends React.Component {
 
                                         <p><b>Nome do pai:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.kinship.fatherName)}
-                                            {!this.state.editar && (this.state.perfilAtual.identifierEmployee.kinship.fatherName)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.dad} onChange={this.changue} />)}
                                         </p>
                                         <p><b>Nome do Mae:</b>
-                                            {this.state.perfilAtual.identifierEmployee.kinship.fatherName}
+                                            {!this.state.editar&&(this.state.perfilAtual.identifierEmployee.kinship.motherName)}
+                                            {this.state.editar && (<input type="text" style={{ float: 'none' }} className="form-control" value={this.state.mom} onChange={this.changue} />)}
                                         </p>
                                     </div>
                                 </div>

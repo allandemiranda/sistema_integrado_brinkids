@@ -416,7 +416,7 @@ class CadastroAniversario extends React.Component {
                 console.log(this.state.QuantAdulto, this.state.ListaAdul.length, "Adulto");
                 console.log(this.state.QuantCrianca, this.state.ListaCria.length, "Crianca");
                 this.CompletaListaCnv();
-            },2000);
+            },100);
         }
         else {
             this.CadAni();
