@@ -456,13 +456,13 @@ class ServicoPassaporte extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
-                                                <h5 className="ltTitulo"><b> Tempo Inicial: </b></h5>
+                                                <h5 className="ltTitulo"><b> Tempo Inicial (HH:MM): </b></h5>
                                                 <p> {this.state.list.initialTime}</p>
                                             </div>
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <div className="graph" style={{ padding: 10 + "px" }} style={{ float: "none" }}>
-                                                <h5 className="ltTitulo"><b> Tempo Final: </b></h5>
+                                                <h5 className="ltTitulo"><b> Tempo Final (HH:MM): </b></h5>
                                                 <input type="time" id="time"  className="form-control" onChange={this.changueTempoFinal} value={this.state.TempoFinal} style={{ width: 100 + "px", marginTop: -37 + "px" }}></input>
                                             </div>
                                         </div>
