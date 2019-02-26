@@ -908,7 +908,7 @@ class DashBoard extends React.Component {
 							</nav>
 							<div className="content tab">
 								{/* INICIO - PRIMEIRA TELA  */}
-								<section className={this.state.sectionCrianca} >
+								<section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionCrianca} >
 									<div className="graph">
 										<h1 className="text-center"> Fluxo de Crianças na Loja</h1>
 										<BarChart width={810} height={500} data={this.state.listaGraf}
@@ -947,7 +947,7 @@ class DashBoard extends React.Component {
 								{/* FIM - PRIMEIRA TELA  */}
 
 								{/* INICIO - SEGUNDA TELA  */}
-								<section className={this.state.sectionAdult} >
+								<section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionAdult} >
 									<div className="graph">
 										<h1 className="text-center"> Dispersão de Crianças Registrada no Sistema </h1>
 										<BarChart width={810} height={500} data={this.state.listaGraf2}
@@ -971,7 +971,7 @@ class DashBoard extends React.Component {
 								{/* FIM - SEGUNDATELA  */}
 
 								{/* INICIO - TERCEIRA TELA  */}
-								<section className={this.state.sectionAniversario}>
+								<section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionAniversario}>
 									<div class="graph graph-visual tables-main">
 										<h1 className="text-center"> Busca por Crianças do Sistema </h1>
 										<p></p>

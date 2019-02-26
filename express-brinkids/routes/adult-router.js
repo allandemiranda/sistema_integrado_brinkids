@@ -224,6 +224,13 @@ router.put('/:identifier', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+  let lista=[]
+  console.log(req.body.children.length,req.body.children)
+  if(req.body.children.length===0){
+    lista =[]
+  }else{
+    lista=req.body.children
+  }
   try {
     const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
       $set: {
@@ -239,6 +246,7 @@ router.put('/:identifier', async (req, res) => {
           country: req.body.country,
         },
         observations: req.body.observations,
+        children:lista
       },
 
     });
