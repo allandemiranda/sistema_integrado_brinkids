@@ -13,23 +13,24 @@ router.post('/', async (req, res) => {
   console.log(req.body);
 
   if(req.body.name 
-    && req.body.description
+    
     && req.body.initialTime
     && req.body.finalTime
     && req.body.price){
 
     const data = new babyPassportServices({
       name: req.body.name,
-      description: req.body.description,
+     
       initialTime: req.body.initialTime,
       finalTime: req.body.finalTime,
       price: req.body.price,
     });
 
     try {
-      const newbabyPassportServices = await data.save();
-      return res.status(201).json(newbabyPassportServices);
+      const newbabypassportServices = await data.save();
+      return res.status(201).json(newbabypassportServices);
     } catch (err) {
+      console.log(err)
       return res.sendStatus(500);
     }
   }
