@@ -966,13 +966,13 @@ class SaidaCrianca extends React.Component {
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
-                                        <h5 className="ltTitulo"><b>Tempo:</b></h5>
+                                        <h5 className="ltTitulo"><b>Tempo(mim):</b></h5>
                                         <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.time+1}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
-                                        <h5 className="ltTitulo"><b>Valor:</b></h5>
+                                        <h5 className="ltTitulo"><b>Valor(R$):</b></h5>
                                         <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.value}</p>
                                     </div>
                                 </div>
