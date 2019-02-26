@@ -106,7 +106,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     } else {
 
       for (i = 0; i < psjson.length; i++) {
-        if (adultTime <= (psjson[i].finalTime.toSS() / 60) && adultTime >= (psjson[i].initialTime.toSS() / 60)) {
+        if (adultTime >= (psjson[i].initialTime.toSS() / 60)) {
           price = parseFloat(psjson[i].price.replace(',', '.')).toFixed(2);
           console.log("preço:", price);
         }
@@ -196,7 +196,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
         for (i = 0; i < psjson.length; i++) {
 
-          if (adultTime <= (psjson[i].finalTime.toSS() / 60) && adultTime >= (psjson[i].initialTime.toSS() / 60)) {
+          if (adultTime >= (psjson[i].initialTime.toSS() / 60)) {
             price = parseFloat(psjson[i].price.replace(',','.')).toFixed(2);
 
           }
@@ -231,7 +231,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   } else {
 
     for (i = 0; i < bpsjson.length; i++) {
-      if (adultTime <= (bpsjson[i].finalTime.toSS() / 60) && adultTime >= (bpsjson[i].initialTime.toSS() / 60)) {
+      if (adultTime >= (bpsjson[i].initialTime.toSS() / 60)) {
         price = bpsjson[i].price;
         console.log("preço:", price);
       }
