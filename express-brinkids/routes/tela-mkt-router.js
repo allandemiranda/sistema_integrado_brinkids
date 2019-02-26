@@ -57,13 +57,46 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/mkt/busca', async (req, res) => {
-  console.log(req.params.date)
+  
+  let temporario =[]
   try {
 
-
-    const childs = await adult.find({'children.kinship': "children"}).populate("children.identifier");
     
-    return res.json(childs);
+    const childs = await adult.find({'children.kinship': "children"}).populate("children.identifier");
+    childs.map((event,indice) => {
+      event.children.map( async(mape,index) => {
+        if (mape.kinship === "children" && mape.identifier !== null) {
+          let date=0;
+          const logs = await Logs.find({  'activity': "Passaporte",'action':"Entrada",'cco':mape.identifier.name.firstName + " " + mape.identifier.name.surName,}).sort({dateOperation:-1});
+        
+          if(logs[0]!==undefined){
+            date= moment(logs[0].dateOperation).format("DD/MM/YYYY");
+          }
+          temporario.push({
+            name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
+            idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
+            sexo: mape.identifier.sexuality,
+            aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
+            cidade: event.address.city,
+            foto: mape.identifier.photo,
+            visita:date,
+            responsavel: event.name.firstName + " " + event.name.surName,
+            email: event.email,
+            idAdult: event._id,
+            idCria: mape.identifier._id
+
+          })
+          let temporarioss = moment(mape.identifier.birthday).format("DD/MM/YYYY");
+          
+        }
+        if(index===event.children.length-1&& indice ===childs.length -1){
+          setTimeout(()=>{
+            return res.json(temporario);
+          },100)
+        }
+      })
+    }) 
+    
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);
