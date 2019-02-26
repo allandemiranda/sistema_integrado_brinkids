@@ -647,7 +647,7 @@ class EntradaAniversario extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Entrada Aniversásrio </li>
+                            <li > Entrada Aniversário </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
