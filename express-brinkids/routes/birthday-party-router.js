@@ -233,6 +233,15 @@ router.put('/partyFeather/:identifier', async (req, res) => {
     try {
       const birthday = await BirthdayParty.findById(req.params.identifier);
 
+      birthday.guestList.map((list, indice, array) => {
+
+        if (list._id.toString() === req.body.id) {
+          console.log("================================")
+          birthday.guestList[indice] = req.body.adult;
+          console.log("deu certo")
+
+        }
+      })
       birthday.partyFeather.push(req.body.adult);
 
 

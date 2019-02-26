@@ -557,6 +557,14 @@ class PerfilAdulto extends React.Component {
             });
 
     }
+    excluirCria=(event)=>{
+        let temporario =this.state.perfilAtual;
+        temporario.children.splice(event,1);
+        this.setState({
+            perfilAtual:temporario,
+            perfilEdicao:temporario
+        })
+    }
     render() {
         if (this.state.page === 'Busca') {
             return (
@@ -873,8 +881,7 @@ class PerfilAdulto extends React.Component {
                                                     </thead>
                                                     <tbody id="CriaTabela">
                                                         {this.state.perfilAtual.children.map((events, index) => {
-                                                            console.log(this.state.listaFuncionarios, "lista dentro do map");
-                                                            console.log(this.state.listaFuncionarios[index], "coisa indefinida dentro do map");
+                                                           
 
                                                             return (
                                                                 <tr style={{ textAlign: 'justify' }} key={events._id}>
@@ -887,6 +894,7 @@ class PerfilAdulto extends React.Component {
                                                                     {events.kinship === "nephews" && (<td>Sobrinho(a)</td>)}
                                                                     {events.kinship === "children" && (<td>Filho(a)</td>)}
                                                                     {events.kinship === "Stepson" && (<td>Enteado(a)</td>)}
+                                                               {this.state.editar &&( <td><button onClick={() => this.excluirCria(index)}><span className="glyphicon">&#xe014;</span></button></td>)}
                                                                 </tr>
                                                             )
                                                         })}

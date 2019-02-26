@@ -100,7 +100,7 @@ class Servico extends React.Component {
         }
 
 
-        if (this.ErroPreenchimento === 0 ){
+        if (this.state.ErroPreenchimento === -4 ){
             let listaTemporaria = this.state.lista;
             listaTemporaria.push({
     

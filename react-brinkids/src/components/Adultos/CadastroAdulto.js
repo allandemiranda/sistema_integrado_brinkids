@@ -568,7 +568,13 @@ class CadastroAdulto extends React.Component {
             file: imageSrc
         })
     };
-
+excluirCria=(event)=>{
+    let temporario = this.state.confirmaCrianca;
+    temporario.splice(event,1);
+    this.setState({
+        confirmaCrianca:temporario
+    })
+}
     selecionaCrianca(identifier) {
         let achou = false;
 
@@ -818,6 +824,7 @@ class CadastroAdulto extends React.Component {
                                         <th >Idade</th>
                                         <th >RG</th>
                                         <th className="text-center"> Parentesco </th>
+                                        <th className="text-center"> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -838,6 +845,7 @@ class CadastroAdulto extends React.Component {
                                                         <option value={["Brother",indice]} > Irmão/Irmã </option>
                                                     </select >
                                                 </td>
+                                                <td> <button onClick={() => this.excluirCria(indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                             </tr>
                                         );
                                     })}
