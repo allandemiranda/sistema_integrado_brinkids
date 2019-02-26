@@ -1,6 +1,8 @@
 const express = require('express');
 const passport = require('../models/passport-models');
 const passportServices = require('../models/passport-services-models');
+const babyPassportServices = require('../models/babypassport-services-models');
+const babyPassport = require('../models/babypassport-models');
 
 const product = require('../models/product-models');
 const discount = require('../models/discounts-models');
@@ -132,7 +134,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
       birthdayDate = birthdayFinded[i].birthdayDate;
       test = birthdayFinded[i].end.getTime() / 60000;
       if (saveTheDate < test && (birthdayFinded[i].start.getTime() / 60000) - adultEntered < 120) {//aqui só é aceito como o aniversário certo quando o adulto deixa a criança pelo menos 2 horas antes, pra que não calcule com o valor do aniversário do dia que vem
-        console.log((birthdayDate + "@" + birthdayFinded[i].start.getTime() / 60000 - adultEntered))
+
         saveTheDate = test;
         x = i;
         console.log(new Date(saveTheDate), "new x: ", x)
@@ -208,8 +210,8 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   } else
   if(productFinded[0].service === 'Baby Passaporte'){
 
-  const bpsjson = await passportServices.find({});
-  const bpjson = await passport.find({});
+  const bpsjson = await babyPassportServices.find({});
+  const bpjson = await babyPassport.find({});
  
   let lastFinalTime = bpsjson[bpsjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (bpsjson)
   let lastInitialTime = bpsjson[bpsjson.length - 1].initialTime;//último tempo inicial do passaporte service
@@ -302,12 +304,13 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                         price = parseFloat(req.params.valueChild).toFixed(2);
                       }
 
-
+                      console.log(price)
 
                     } else {
 
                       price = req.params.valueChild;
                       price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+                      console.log(price)
 
 
                     }
