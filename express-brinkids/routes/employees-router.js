@@ -62,15 +62,15 @@ router.get('/search/:search', async (req, res) => {
 router.post('/', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
- var funcionario='oi';
+  var funcionario = 'oi';
   console.log(b)
   if (b.id) {
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
     funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  } 
-  if(!b.id) {
+  }
+  if (!b.id) {
     console.log("========ola")
-     funcionario = "admin"
+    funcionario = "admin"
   }
   try {
     const adultResult = await adult.findByIdAndUpdate(
@@ -86,7 +86,7 @@ router.post('/', async (req, res) => {
     }
 
     const employee = new Employees({
-     
+
       education: req.body.education,
       kinship: {
         fatherName: req.body.fatherName,
@@ -130,14 +130,14 @@ router.post('/', async (req, res) => {
       cnh: {
         record: req.body.CNHRecord,
         category: req.body.CNHCategory,
-        expirationDate:req.body.CNHExpirationDate,
+        expirationDate: req.body.CNHExpirationDate,
         comments: req.body.CNHComments,
         placeIssue: req.body.CNHPlaceIssue,
         dateIssue: req.body.CNHDateIssue,
       },
       employeeData: {
         officialPosition: req.body.EDOfficialPosition,
-        admissionDate:req.body.EDAdmissionDate,
+        admissionDate: req.body.EDAdmissionDate,
         resignationDate: '12/12/1970',
         reasonResignation: req.body.EDReasonResignation,
         record: req.body.EDRecord,
@@ -165,7 +165,7 @@ router.post('/', async (req, res) => {
       action: 'Criação',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultResult.name.firstName+" "+adultResult.name.surName,
+      to: adultResult.name.firstName + " " + adultResult.name.surName,
 
 
     })
@@ -192,29 +192,93 @@ router.put('/exchange-data/:identifier', async (req, res) => {
     && req.body.country
     && req.body.cep
     && req.body.observations) {
-    const exchangeData = {
-      phone: req.body.phone,
-      email: req.body.email,
-      address: {
-        street: req.body.street,
-        number: req.body.number,
-        district: req.body.street,
-        city: req.body.city,
-        state: req.body.state,
-        country: req.body.country,
-        cep: parseInt(req.body.cep, 10),
-      },
-      observations: req.body.observations,
-    };
+
 
     try {
-      const adultChange = await adult.findByIdAndUpdate(req.params.identifier, exchangeData);
+      const adultChange = await adult.findByIdAndUpdate(req.params.identifier,
+        {
+          $set: {
+            phone: req.body.phone,
+            email: req.body.email,
+            address: {
+              street: req.body.street,
+              number: req.body.number,
+              district: req.body.street,
+              city: req.body.city,
+              state: req.body.state,
+              country: req.body.country,
+              cep: parseInt(req.body.cep, 10),
+            },
+            observations: req.body.observations,
+          }
+        });
+      const adultChange1 = await Employees.findByIdAndUpdate(adultChange.identifierEmployee, {
+        $set: {
+          education: req.body.education,
+          kinship: {
+            fatherName: req.body.fatherName,
+            motherName: req.body.motherName,
+          },
+          birthplace: {
+            city: req.body.birthplaceCity,
+            state: req.body.birthplaceState,
+          },
+          workPortifolio: {
+            number: req.body.WPNumber,
+            series: req.body.WPSeries,
+            state: req.body.WPState,
+            PIS_PASEP: req.body.WPPIS_PASEP,
+            dateIssue: req.body.WPDateIssue,
+            placeIssue: req.body.WPPlaceIssue,
+          },
+          rg: {
+            issuingBody: req.body.RgIssuingBody,
+            state: req.body.RgState,
+            dateIssue: req.body.RgDateIssue,
+          },
+          electionTitle: {
+            number: req.body.ETnumber,
+            zone: req.body.ETzone,
+            section: req.body.ETsection,
+            state: req.body.ETstate,
+          },
+          militaryReservist: {
+            number: req.body.MRNumber,
+            state: req.body.MRState,
+            category: req.body.MRCategory,
+          },
+          passport: {
+            number: req.body.PPNumber,
+            typeFormat: req.body.PPType,
+            issuingCountry: req.body.PPIssuingCountry,
+            dateIssue: req.body.PPDateIssue,
+            expirationDate: req.body.PPExpirationDate,
+          },
+          cnh: {
+            record: req.body.CNHRecord,
+            category: req.body.CNHCategory,
+            expirationDate: req.body.CNHExpirationDate,
+            comments: req.body.CNHComments,
+            placeIssue: req.body.CNHPlaceIssue,
+            dateIssue: req.body.CNHDateIssue,
+          },
+          employeeData: {
+            officialPosition: req.body.EDOfficialPosition,
+            admissionDate: req.body.EDAdmissionDate,
+            resignationDate: '12/12/1970',
+            reasonResignation: req.body.EDReasonResignation,
+            record: req.body.EDRecord,
+            state: req.body.EDState,
+          },
+          observations: req.body.observations,
+        }
+      })
       const log = new Logs({
         activity: 'Funcionario',
         action: 'Edição',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: adultChange.name.firstName+" "+adultChange.name.surName,
+        to: adultChange.name.firstName + " " + adultChange.name.surName,
 
 
       })
@@ -229,8 +293,8 @@ router.put('/exchange-data/:identifier', async (req, res) => {
       if (!adultChange) {
         return res.sendStauts(404);
       }
-
-      return res.sendStatus(204);
+      const adultChange12 = await adult.findById(req.params.identifier).populate("identifierEmployee");
+      return res.json(adultChange12);
     } catch (err) {
       console.log(err);
       return res.sendStatus(500);
@@ -246,14 +310,14 @@ router.put('/reset-password', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   try {
-    const userFind = await userSystem.findOne({id:req.body.identifier});
+    const userFind = await userSystem.findOne({ id: req.body.identifier });
     console.log(userFind)
     const log = new Logs({
       activity: 'Funcionario',
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to:adultFound[0].name.firstName+" "+adultFound[0].name.surName,
+      to: adultFound[0].name.firstName + " " + adultFound[0].name.surName,
 
 
     })
@@ -276,16 +340,16 @@ router.put('/rota', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  
+
   if (req.body.officialPosition) {
-   
+
     try {
       const adultChange = await Employees.findById(req.body.identifier);
-     
+
       adultChange.employeeData.officialPosition = req.body.officialPosition;
 
       adultChange.save();
-     
+
       if (!adultChange) {
         return res.sendStauts(404);
       }
@@ -312,7 +376,7 @@ router.put('/password', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultFound[0].name.firstName+" "+adultFound[0].name.surName,
+      to: adultFound[0].name.firstName + " " + adultFound[0].name.surName,
 
 
     })
@@ -336,21 +400,21 @@ router.delete('/:identifier', async (req, res) => {
     const b = jwt.verify(a, config.secret_auth);
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
     const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-    
+
     const deletedService = await adult.findByIdAndRemove(req.params.identifier);
-   
+
     const deletedService2 = await Employees.findByIdAndRemove(deletedService.identifierEmployee);
-    const deletedService3 =await userSystem.deleteOne({id:req.params.identifier});
-    console.log(deletedService,deletedService2,deletedService3)
+    const deletedService3 = await userSystem.deleteOne({ id: req.params.identifier });
+    console.log(deletedService, deletedService2, deletedService3)
     const log = new Logs({
       activity: 'Perfil Funcionário',
       action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
-      to:deletedService.name.firstName+" "+deletedService.name.surName,
-      id:req.params.identifier,
+      to: deletedService.name.firstName + " " + deletedService.name.surName,
+      id: req.params.identifier,
     })
-    
+
     const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);

@@ -123,7 +123,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
     if (birthdayFinded.length === 0) {//esse if é só para testes
       birthdayFinded = await birthday.find({ 'partyFeather.id': req.params.idCria });
-      console.log("convidado extra")
+      console.log("convidado extra",birthdayFinded)
     }
 
     let birthdayDate, birthdayStart, birthdayEnd, test;
