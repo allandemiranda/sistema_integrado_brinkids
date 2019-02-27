@@ -279,8 +279,9 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
+        formData.append('children',this.state.perfilAtual.children)
         console.log("form: ", formData);
-
+        console.log(this.state.perfilAtual.children)
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
@@ -341,15 +342,16 @@ class PerfilAdulto extends React.Component {
                     }).then((eventu) => {
                         if (eventu) {
 
-                            if (event.children[0] === null) {
+                            if (false) {
                                 this.setState({
                                     page: "Perfil",
                                 })
                             } else {
 
                                 const criancas = event.children.map(async (crianca, index) => {
-                                    const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-                                    return response.data;
+                                    console.log(crianca)
+                                   if(crianca!==null){ const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                    return response.data;}
                                 });
 
                                 Promise.all(criancas).then((listaCriancas) => {
@@ -536,11 +538,11 @@ class PerfilAdulto extends React.Component {
 
 
                         const criancas = this.state.perfilAtual.children.map(async (crianca, index) => {
-                            const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-                            return response.data;
+                            if(crianca!==null){const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                            return response.data;}
                         });
                         Promise.all(criancas).then((listaCriancas) => {
-                           
+                           console.log("entrei")
                             this.setState({
                                 listaFuncionarios: listaCriancas,
                                 page: "Perfil",
@@ -556,6 +558,15 @@ class PerfilAdulto extends React.Component {
                 console.log(err);
             });
 
+    }
+    excluirCria=(event)=>{
+        let temporario =this.state.perfilAtual;
+        temporario.children.splice(event,1);
+        console.log(temporario)
+        this.setState({
+            perfilAtual:temporario,
+            perfilEdicao:temporario
+        })
     }
     render() {
         if (this.state.page === 'Busca') {
@@ -873,10 +884,12 @@ class PerfilAdulto extends React.Component {
                                                     </thead>
                                                     <tbody id="CriaTabela">
                                                         {this.state.perfilAtual.children.map((events, index) => {
-                                                            console.log(this.state.listaFuncionarios, "lista dentro do map");
-                                                            console.log(this.state.listaFuncionarios[index], "coisa indefinida dentro do map");
+                                                           
 
-                                                            return (
+                                                            if(events!= null&&this.state.listaFuncionarios[index]!== null ){
+                                                                console.log(events,this.state.listaFuncionarios)
+                                                                return (
+                                                                
                                                                 <tr style={{ textAlign: 'justify' }} key={events._id}>
                                                                     <td>{index + 1}</td>
                                                                     <td>{this.state.listaFuncionarios[index].name.firstName + " " + this.state.listaFuncionarios[index].name.surName}</td>
@@ -887,8 +900,9 @@ class PerfilAdulto extends React.Component {
                                                                     {events.kinship === "nephews" && (<td>Sobrinho(a)</td>)}
                                                                     {events.kinship === "children" && (<td>Filho(a)</td>)}
                                                                     {events.kinship === "Stepson" && (<td>Enteado(a)</td>)}
+                                                               {this.state.editar &&( <td><button onClick={() => this.excluirCria(index)}><span className="glyphicon">&#xe014;</span></button></td>)}
                                                                 </tr>
-                                                            )
+                                                            )}
                                                         })}
 
                                                     </tbody>

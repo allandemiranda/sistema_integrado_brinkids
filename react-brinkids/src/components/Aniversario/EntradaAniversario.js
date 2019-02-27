@@ -336,7 +336,7 @@ class EntradaAniversario extends React.Component {
     FinalizarAdulto = (event) => {
         let listaAdultosDentros = this.state.listaAdultosDentro;
         console.log(this.state.FullName)
-        listaAdultosDentros = { type: "adult", name: this.state.FullName };
+        listaAdultosDentros = { type: "adult", name: this.state.FullName, id: "2" };
         this.setState({
 
             type: "",
@@ -349,6 +349,7 @@ class EntradaAniversario extends React.Component {
         const data = {
             adult: listaAdultosDentros,
             identifier: this.state.aniversariante[0]._id,
+            id:this.state.adultoSelecionado._id,
         }
 
         axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
@@ -646,7 +647,7 @@ class EntradaAniversario extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Entrada Aniversásrio </li>
+                            <li > Entrada Aniversário </li>
                         </ol >
                     </div>
                     <div className="graph-visual" >
@@ -752,18 +753,20 @@ class EntradaAniversario extends React.Component {
 
 
                                             this.state.aniversariante[0].guestList.map((event, indice) => {
+                                               
+                                                    if (event.type === "adult" && event.id!="2" ) {
 
-                                                if (event.type === "adult") {
 
+                                                        return (
+                                                            <tr >
+                                                                <th scope="row">{indice + 1}</th>
+                                                                <td > {event.name} </td>
+                                                                <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
+                                                            </tr>
+                                                        );
+                                                    }
+                                               
 
-                                                    return (
-                                                        <tr >
-                                                            <th scope="row">{indice + 1}</th>
-                                                            <td > {event.name} </td>
-                                                            <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
-                                                        </tr>
-                                                    );
-                                                }
                                             })
 
 
@@ -848,7 +851,7 @@ class EntradaAniversario extends React.Component {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            {/* <th>#</th> */}
                                             <th >Nome</th>
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
@@ -865,7 +868,7 @@ class EntradaAniversario extends React.Component {
 
                                                     return (
                                                         <tr key={indice} >
-                                                            <th scope="row">{indice}</th>
+                                                            {/* <th scope="row">{indice}</th> */}
                                                             <td > {event.name} </td>
                                                             <td className="text-center">   <button type="button" name="selectchild" onClick={() => this.selectedAdultLista(event.name, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                         </tr>

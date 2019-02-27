@@ -110,6 +110,11 @@ class ServicoPassaporte extends React.Component {
                 this.setState({
                     list: response.data.services,
                     list2: response.data.default,
+                    page: "TelaI",
+                    Nome: "",
+                    //Descricao: "",
+                    TempoFinal: "",
+                    Price: "",
                 });
             })
 
@@ -204,12 +209,7 @@ class ServicoPassaporte extends React.Component {
                        // .then((response) => {
 
 
-                            console.log(response.data);
-                            this.setState({
-                                list: response.data.services,
-                                list2: response.data.default,
-                                page: "TelaI"
-                            });
+                            
                             this.requisicao();
                        // })
 

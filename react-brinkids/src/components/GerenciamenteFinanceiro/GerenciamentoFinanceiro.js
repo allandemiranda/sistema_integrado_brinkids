@@ -393,7 +393,7 @@ class GerenciamentoFinanceiro extends React.Component {
                             </ul>
                         </nav>
                         <div className="content tab">
-                            <section className={this.state.sectionGrafico}  >
+                            <section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionGrafico}  >
                                 <br></br>
                                 <div class="graph graph-visual text-center">
                                     <h5>Janeiro/2012</h5>
@@ -415,7 +415,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                 </div>
                             </section>
 
-                            <section className={this.state.sectionFluxo}>
+                            <section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionFluxo}>
                                 <br></br>
                                 <div class="graph graph-visual tables-main">
                                     <div className="graph-visual">

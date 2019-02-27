@@ -151,31 +151,31 @@ class DashBoard extends React.Component {
 							const response = await axios.post(`/tela-mkt/mkt/busca`);
 							console.log(response.data)
 							let temporario = [];
-							response.data.map((event) => {
-								event.children.map((mape) => {
-									if (mape.kinship === "children" && mape.identifier !== null) {
-										temporario.push({
-											name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
-											idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
-											sexo: mape.identifier.sexuality,
-											aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
-											cidade: event.address.city,
-											foto: mape.identifier.photo,
-											visita: "nao da",
-											responsavel: event.name.firstName + " " + event.name.surName,
-											email: event.email,
-											idAdult: event._id,
-											idCria: mape.identifier._id
+							// response.data.map((event) => {
+							// 	event.children.map((mape) => {
+							// 		if (mape.kinship === "children" && mape.identifier !== null) {
+							// 			temporario.push({
+							// 				name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
+							// 				idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
+							// 				sexo: mape.identifier.sexuality,
+							// 				aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
+							// 				cidade: event.address.city,
+							// 				foto: mape.identifier.photo,
+							// 				visita: "nao da",
+							// 				responsavel: event.name.firstName + " " + event.name.surName,
+							// 				email: event.email,
+							// 				idAdult: event._id,
+							// 				idCria: mape.identifier._id
 
-										})
-										let temporarioss = moment(mape.identifier.birthday).format("DD/MM/YYYY");
-										console.log(moment(temporarioss).format("DD"), "===", temporarioss)
-									}
-								})
-							})
+							// 			})
+							// 			let temporarioss = moment(mape.identifier.birthday).format("DD/MM/YYYY");
+							// 			console.log(moment(temporarioss).format("DD"), "===", temporarioss)
+							// 		}
+							// 	})
+							// })
 							this.setState({
-								listapesq: temporario,
-								listaBusca: temporario,
+								listapesq: response.data,
+								listaBusca: response.data,
 							})
 						} else {
 							this.props.history.push("/");
@@ -324,10 +324,10 @@ class DashBoard extends React.Component {
 				const axior = await axios.get(`/child/indentifier/${crianca.id}`);
 				let retu;
 				var temporario = null;
-
+				console.log(axior.data)
 				if (axior.data !== null) {
 					temporario = {
-						dia: moment(lista3[index]).format("DD/MM"),
+						dia: moment(lista[index]).format("DD/MM"),
 						sexo: axior.data.sexuality,
 					}
 					retu = {
@@ -372,27 +372,33 @@ class DashBoard extends React.Component {
 					}
 				})
 				console.log(lista2)
-				var lista4 = lista2
-				for (var p = 0; p < lista2.length; p++) {
-					for (var y = 1; y <= lista2.length - 1; y++) {
+				var lista4 =[];
 
-						if (p === lista2.length - 1) {
+				for (var p = 0; p < lista3.length; p++) {
+					let meninos = 0;
+					let meninas = 0;
+					let totals = 0;
+					for (var y = 0; y <= lista2.length; y++) {
 
-						} else if (lista2[p].name === lista2[y].name) {
+						if (lista2[y] != undefined) {
 
-							lista2[p].Meninos = lista2[p].Meninos + lista2[y].Meninos;
-							lista2[p].Meninas = lista2[p].Meninas + lista2[y].Meninas;
-							lista2[p].Total = lista2[p].Total + lista2[y].Total
-							lista2.splice(y, 1)
-
+							if (moment(lista3[p]).format("DD/MM") === lista2[y].name) {
+								meninos= meninos+lista2[y].Meninos;
+								meninas = meninas+lista2[y].Meninas;
+							}
+							
 						}
 					}
+					lista4.push({
+							name:moment(lista3[p]).format("DD/MM"),Meninos:meninos , Meninas:meninas,Total:meninas+meninos
+					})
 				}
 
-				return lista2;
+				return lista4;
 			}).then((pilo) => {
+
 				this.setState({
-					listaGraf: pilo
+					listaGraf: pilo.reverse()
 				})
 			})
 		});
@@ -842,30 +848,30 @@ class DashBoard extends React.Component {
 			const response = await axios.post(`/tela-mkt/mkt/busca`);
 			console.log(response.data)
 			let temporario = [];
-			response.data.map((event) => {
-				event.children.map((mape) => {
-					if (mape.kinship === "children" && mape.identifier !== null) {
-						temporario.push({
-							name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
-							idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
-							sexo: mape.identifier.sexuality,
-							aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
-							cidade: event.address.city,
-							foto: mape.identifier.photo,
-							visita: "nao da",
-							responsavel: event.name.firstName + " " + event.name.surName,
-							email: event.email,
-							idAdult: event._id,
-							idCria: mape.identifier._id
+			// response.data.map((event) => {
+			// 	event.children.map((mape) => {
+			// 		if (mape.kinship === "children" && mape.identifier !== null) {
+			// 			temporario.push({
+			// 				name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
+			// 				idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
+			// 				sexo: mape.identifier.sexuality,
+			// 				aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
+			// 				cidade: event.address.city,
+			// 				foto: mape.identifier.photo,
+			// 				visita: "nao da",
+			// 				responsavel: event.name.firstName + " " + event.name.surName,
+			// 				email: event.email,
+			// 				idAdult: event._id,
+			// 				idCria: mape.identifier._id
 
-						})
-						console.log(moment(mape.identifier.birthday).format("M"))
-					}
-				})
-			})
+			// 			})
+			// 			console.log(moment(mape.identifier.birthday).format("M"))
+			// 		}
+			// 	})
+			// })
 			this.setState({
-				listapesq: temporario,
-				listaBusca: temporario,
+				listapesq: response.data,
+				listaBusca: response.data,
 			})
 		}
 
@@ -908,7 +914,7 @@ class DashBoard extends React.Component {
 							</nav>
 							<div className="content tab">
 								{/* INICIO - PRIMEIRA TELA  */}
-								<section className={this.state.sectionCrianca} >
+								<section style={{ paddingTop: 0 + 'em', paddingBottom: 0 + 'em', paddingRight: 0 + 'em', paddingLeft: 0 + 'em', fontSize: 16 + 'px' }} className={this.state.sectionCrianca} >
 									<div className="graph">
 										<h1 className="text-center"> Fluxo de Crianças na Loja</h1>
 										<BarChart width={810} height={500} data={this.state.listaGraf}
@@ -947,7 +953,7 @@ class DashBoard extends React.Component {
 								{/* FIM - PRIMEIRA TELA  */}
 
 								{/* INICIO - SEGUNDA TELA  */}
-								<section className={this.state.sectionAdult} >
+								<section style={{ paddingTop: 0 + 'em', paddingBottom: 0 + 'em', paddingRight: 0 + 'em', paddingLeft: 0 + 'em', fontSize: 16 + 'px' }} className={this.state.sectionAdult} >
 									<div className="graph">
 										<h1 className="text-center"> Dispersão de Crianças Registrada no Sistema </h1>
 										<BarChart width={810} height={500} data={this.state.listaGraf2}
@@ -971,7 +977,7 @@ class DashBoard extends React.Component {
 								{/* FIM - SEGUNDATELA  */}
 
 								{/* INICIO - TERCEIRA TELA  */}
-								<section className={this.state.sectionAniversario}>
+								<section style={{ paddingTop: 0 + 'em', paddingBottom: 0 + 'em', paddingRight: 0 + 'em', paddingLeft: 0 + 'em', fontSize: 16 + 'px' }} className={this.state.sectionAniversario}>
 									<div class="graph graph-visual tables-main">
 										<h1 className="text-center"> Busca por Crianças do Sistema </h1>
 										<p></p>
@@ -1046,7 +1052,8 @@ class DashBoard extends React.Component {
 																<td >{fluxo.aniversario} </td>
 																<td >{fluxo.cidade} </td>
 																<td onClick={() => this.openModal(fluxo.foto)} >Foto</td>
-																<td >{fluxo.visita} </td>
+																{fluxo.visita!==0&&(<td >{fluxo.visita} </td>)}
+																{fluxo.visita===0&&(<td >-- </td>)}
 																<td ><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(fluxo.idAdult)}>{fluxo.responsavel} </a></td>
 																<td >{fluxo.email} </td>
 															</tr>

@@ -68,13 +68,13 @@ router.get('/', async (req, res) => {
   if(passportDefault.length===0){
     const data2 = new passport({
       time: "0",
-      price: "0",
+      price: parseFloat("0,00".replace(',','.')).toFixed(2),
     });
     data = {
       services: psjson,
       default: {
         time: "0",
-        price: "0",
+        price: parseFloat("0,00".replace(',','.')).toFixed(2),
       },
     };
     const newPassportServices = await data2.save();
