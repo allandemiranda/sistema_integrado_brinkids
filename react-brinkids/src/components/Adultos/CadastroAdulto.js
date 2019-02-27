@@ -184,13 +184,23 @@ class CadastroAdulto extends React.Component {
                 return;
             }
             else {
+                var emailExiste;
                 $("#alertDiv").addClass('displaynone');
                 $("#nome").removeClass('errorBorder');
-                this.setState({
-                    page: "childSearchPage"
-                })
+
+                axios.get(`/adult/email/${this.state.email}`)
+                    .then((response) => {
+                        if(response.data.length > 0){
+                            alert("Já existe um usuário cadastrado no sistema com esse email!")
+                        }else{
+                            this.setState({
+                                page: "childSearchPage"
+                            })
+                        }          
+                    }).catch((error) => {    
+                        alert("Erro ao Cadastar: " + error.response.status);
+                    })
             }
-            
         }
 
         function ValidaErros(adulto) {
