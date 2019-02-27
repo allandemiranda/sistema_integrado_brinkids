@@ -183,15 +183,7 @@ class Passport extends React.Component {
 
     // Faz a busca do responsável:
     async  SearchAdult(event) {
-        let erros = this.state.selectedSearch;
-        console.log(await Num())
-        if (erros.length === 0) {
-            alert("A Busca não pode ser em branco");
-        }
-        else if (erros.length < 8) {
-            alert("A Busca nao pode ter menos que 8 caracteres");
-        }
-        else {
+        
             axios.get(`/adult/filter/${this.state.selectedSearch}/name`)
                 .then((response) => {
 
@@ -225,7 +217,7 @@ class Passport extends React.Component {
             // //         }
             // //     }.bind(this)
             // });
-        }
+        
     }
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
@@ -266,15 +258,7 @@ class Passport extends React.Component {
 
     // Faz a busca das Crianças:
     SearchChild(event) {
-        let erros = this.state.selectedSearch;
-
-        if (erros.length === 0) {
-            alert("A Busca não pode ser em branco");
-        }
-        else if (erros.length < 8) {
-            alert("A Busca nao pode ter menos que 8 caracteres");
-        }
-        else {
+       
             axios.get(`/child/filter/${this.state.selectedSearch}`)
                 .then((response) => {
                     if (response.data.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) } else {
@@ -286,7 +270,7 @@ class Passport extends React.Component {
 
                 })
 
-        }
+        
     }
 
 
@@ -660,7 +644,7 @@ class Passport extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img src={this.state.listConfirmAdult.photo} />
+                                            <img style={{maxWidth:300+'px'}} src={this.state.listConfirmAdult.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
@@ -914,7 +898,7 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img src={this.state.listConfirmAdult.photo} />
+                                                <img style={{maxWidth:300+'px'}} src={this.state.listConfirmAdult.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -970,7 +954,7 @@ class Passport extends React.Component {
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                        <img src={Criançasqueentrarao.photo} />
+                                                        <img style={{maxWidth:300+'px'}} src={Criançasqueentrarao.photo} />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">
