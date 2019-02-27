@@ -781,7 +781,7 @@ class EntradaAniversario extends React.Component {
                     <div className="graph" >
                         <div className="text-center">
                             <Link className="btn btn-md botao" to="/">Cancelar</Link>
-                            <button className="btn btn-md botao" onClick={() => this.setState({ page: "SelecionarTipoDeEntrada" })}>voltar</button>
+                            <button className="btn btn-md botao" onClick={() => this.setState({ page: "SelecionarTipoDeEntrada" })}>Voltar</button>
                         </div>
                     </div>
                 </div>

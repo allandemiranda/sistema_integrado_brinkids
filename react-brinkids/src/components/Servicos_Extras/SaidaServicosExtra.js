@@ -324,7 +324,7 @@ class SaidaServicosExtra extends React.Component {
                             })}
                         </tbody>
                     </table>
-                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: "TelaInicial" })}> voltar </button>
+                    <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: "TelaInicial" })}> Voltar </button>
                 </div>
     </>
             );
@@ -469,7 +469,7 @@ class SaidaServicosExtra extends React.Component {
                     />)}
 
                     <div className="text-center">
-                        <button className="btn btn-md botao" onClick={() => this.setState({ page: "TelaInicial" })}>voltar</button>
+                        <button className="btn btn-md botao" onClick={() => this.setState({ page: "TelaInicial" })}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.Finalizar}> Finalizar </button>
                     </div>
                 </div>
