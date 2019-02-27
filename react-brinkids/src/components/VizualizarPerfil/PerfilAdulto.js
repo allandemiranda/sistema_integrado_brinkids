@@ -56,8 +56,8 @@ class PerfilAdulto extends React.Component {
             kinship: 'Outros',
             photo: '',
             pode: false,
-            deletado:false,
-            naoEncontrada:false,
+            deletado: false,
+            naoEncontrada: false,
         }
         //funçoes para mudar os values e afins
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -174,7 +174,7 @@ class PerfilAdulto extends React.Component {
                                         temporario.splice(indice, 1);
                                         this.setState({
                                             list: temporario,
-                                            deletado:true,
+                                            deletado: true,
                                         })
                                     })
 
@@ -279,13 +279,13 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-        formData.append('children',this.state.perfilAtual.children)
+        formData.append('children', this.state.perfilAtual.children)
         console.log("form: ", formData);
         console.log(this.state.perfilAtual.children)
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
-                
+
             })
             .catch((err) => console.log(err));
         listatemporaria.address.number = this.state.numero;
@@ -350,8 +350,10 @@ class PerfilAdulto extends React.Component {
 
                                 const criancas = event.children.map(async (crianca, index) => {
                                     console.log(crianca)
-                                   if(crianca!==null){ const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-                                    return response.data;}
+                                    if (crianca !== null) {
+                                        const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                        return response.data;
+                                    }
                                 });
 
                                 Promise.all(criancas).then((listaCriancas) => {
@@ -375,7 +377,7 @@ class PerfilAdulto extends React.Component {
 
 
 
-        
+
 
         this.setState(
             {
@@ -385,7 +387,7 @@ class PerfilAdulto extends React.Component {
 
             });
 
-       
+
 
 
 
@@ -443,10 +445,10 @@ class PerfilAdulto extends React.Component {
         axios.get(`/adult/filter/${this.state.selectedSearch}/nome`)
             .then((response) => {
                 console.log(response.data);
-                this.setState({ list: response.data, naoEncontrada:false });
+                this.setState({ list: response.data, naoEncontrada: false });
             }).catch((err) => {
                 console.log(err);
-                this.setState({ naoEncontrada:true });
+                this.setState({ naoEncontrada: true });
             });
 
 
@@ -538,11 +540,13 @@ class PerfilAdulto extends React.Component {
 
 
                         const criancas = this.state.perfilAtual.children.map(async (crianca, index) => {
-                            if(crianca!==null){const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-                            return response.data;}
+                            if (crianca !== null) {
+                                const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                return response.data;
+                            }
                         });
                         Promise.all(criancas).then((listaCriancas) => {
-                           console.log("entrei")
+                            console.log("entrei")
                             this.setState({
                                 listaFuncionarios: listaCriancas,
                                 page: "Perfil",
@@ -559,25 +563,28 @@ class PerfilAdulto extends React.Component {
             });
 
     }
-    excluirCria=(event)=>{
-        let temporario =this.state.perfilAtual;
-        temporario.children.splice(event,1);
-        console.log(temporario)
-        this.setState({
-            perfilAtual:temporario,
-            perfilEdicao:temporario
-        })
+    excluirCria = (event) => {
+        const confirmacao = window.confirm("Deseja mesmo excluir essa criança?");
+        if (confirmacao === true) {
+            let temporario = this.state.perfilAtual;
+            temporario.children.splice(event, 1);
+            console.log(temporario)
+            this.setState({
+                perfilAtual: temporario,
+                perfilEdicao: temporario
+            })
+        }
     }
     render() {
         if (this.state.page === 'Busca') {
             return (
                 <div className="container-fluid" >
-                    {this.state.naoEncontrada&&
+                    {this.state.naoEncontrada &&
                         (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
                             <strong style={{ color: 'white' }}>Nenhum adulto encontrda com esse nome. </strong>
                         </div>)
                     }
-                    {this.state.deletado&&
+                    {this.state.deletado &&
                         (<div className="alert lert-danger" role="alert" style={{ background: "#00FF7F", width: 100 + '%' }}>
                             <strong style={{ color: 'white' }}>Adulto deletado com sucesso do sistema. </strong>
                         </div>)
@@ -632,7 +639,7 @@ class PerfilAdulto extends React.Component {
             );
         }
         if (this.state.page === 'Perfil') {
-            if (this.state.editar ) {
+            if (this.state.editar) {
                 setTimeout(function () {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
@@ -884,25 +891,26 @@ class PerfilAdulto extends React.Component {
                                                     </thead>
                                                     <tbody id="CriaTabela">
                                                         {this.state.perfilAtual.children.map((events, index) => {
-                                                           
 
-                                                            if(events!= null&&this.state.listaFuncionarios[index]!== null ){
-                                                                console.log(events,this.state.listaFuncionarios)
+
+                                                            if (events != null && this.state.listaFuncionarios[index] !== null) {
+                                                                console.log(events, this.state.listaFuncionarios)
                                                                 return (
-                                                                
-                                                                <tr style={{ textAlign: 'justify' }} key={events._id}>
-                                                                    <td>{index + 1}</td>
-                                                                    <td>{this.state.listaFuncionarios[index].name.firstName + " " + this.state.listaFuncionarios[index].name.surName}</td>
-                                                                    {events.kinship === undefined && (<td>Outros</td>)}
-                                                                    {events.kinship === "others" && (<td>Outros</td>)}
-                                                                    {events.kinship === "grandchildren" && (<td>Neto(a)</td>)}
-                                                                    {events.kinship === "Brother" && (<td>Irmão/Irmã</td>)}
-                                                                    {events.kinship === "nephews" && (<td>Sobrinho(a)</td>)}
-                                                                    {events.kinship === "children" && (<td>Filho(a)</td>)}
-                                                                    {events.kinship === "Stepson" && (<td>Enteado(a)</td>)}
-                                                               {this.state.editar &&( <td><button onClick={() => this.excluirCria(index)}><span className="glyphicon">&#xe014;</span></button></td>)}
-                                                                </tr>
-                                                            )}
+
+                                                                    <tr style={{ textAlign: 'justify' }} key={events._id}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td>{this.state.listaFuncionarios[index].name.firstName + " " + this.state.listaFuncionarios[index].name.surName}</td>
+                                                                        {events.kinship === undefined && (<td>Outros</td>)}
+                                                                        {events.kinship === "others" && (<td>Outros</td>)}
+                                                                        {events.kinship === "grandchildren" && (<td>Neto(a)</td>)}
+                                                                        {events.kinship === "Brother" && (<td>Irmão/Irmã</td>)}
+                                                                        {events.kinship === "nephews" && (<td>Sobrinho(a)</td>)}
+                                                                        {events.kinship === "children" && (<td>Filho(a)</td>)}
+                                                                        {events.kinship === "Stepson" && (<td>Enteado(a)</td>)}
+                                                                        {this.state.editar && (<td><button onClick={() => this.excluirCria(index)}><span className="glyphicon">&#xe014;</span></button></td>)}
+                                                                    </tr>
+                                                                )
+                                                            }
                                                         })}
 
                                                     </tbody>
@@ -911,7 +919,7 @@ class PerfilAdulto extends React.Component {
                                             </div>
 
                                         </div>
-                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar"   id="fontBranca" onClick={this.Adicionar}><label style={{ color: 'white' }}>
+                                        {this.state.editar && (<button className="btn btn-md botao botaoAvançar" id="fontBranca" onClick={this.Adicionar}><label style={{ color: 'white' }}>
                                             Adicionar Criança <span className="glyphicon">&#xe065;</span>
 
 

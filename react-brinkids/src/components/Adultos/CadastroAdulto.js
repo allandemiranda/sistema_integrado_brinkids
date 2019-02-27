@@ -48,9 +48,9 @@ class CadastroAdulto extends React.Component {
             country: "",
 
 
-            number:"",
-            state:"",
-            country:"",
+            number: "",
+            state: "",
+            country: "",
             nomeValido: true,
 
             // Estados Relacionado a busca de crianças
@@ -61,7 +61,7 @@ class CadastroAdulto extends React.Component {
             achado: false,
             kinship: 'Outros',
 
-            erroL:false,
+            erroL: false,
         }
 
         this.ChangeName = this.ChangeName.bind(this);
@@ -121,7 +121,7 @@ class CadastroAdulto extends React.Component {
             .catch((err) => console.log(err));
 
     }
-    componentWillMount(){
+    componentWillMount() {
         this.Funcionario(0);
     }
     getFuncionario = () => {
@@ -170,7 +170,7 @@ class CadastroAdulto extends React.Component {
             $("#alertDiv").addClass('alert-danger').removeClass('displaynone');
             return;
         }
-        else{
+        else {
             var tamanho = this.state.firstName.length;
             for (var i = 0; i < tamanho; i++) {
                 var c = this.state.firstName.charAt(i);
@@ -191,14 +191,14 @@ class CadastroAdulto extends React.Component {
                 axios.get(`/adult/email/${this.state.email}`)
                     .then((response) => {
                         console.log(response.data)
-                        if(response.data.length > 0){
+                        if (response.data.length > 0) {
                             alert("Já existe um usuário cadastrado no sistema com esse email!")
-                        }else{
+                        } else {
                             this.setState({
                                 page: "childSearchPage"
                             })
-                        }          
-                    }).catch((error) => {    
+                        }
+                    }).catch((error) => {
                         alert("Erro ao Cadastar: " + error.response.status);
                     })
             }
@@ -280,7 +280,7 @@ class CadastroAdulto extends React.Component {
                 $("#endeco").removeClass('errorBorder');
             }
 
-            if (adulto.cep.length === 0 || $.isNumeric(adulto.cep) === false)  {
+            if (adulto.cep.length === 0 || $.isNumeric(adulto.cep) === false) {
                 $("#cep").addClass('errorBorder');
                 erros.push("CEP Inválido");
             }
@@ -329,14 +329,14 @@ class CadastroAdulto extends React.Component {
             }
 
             if ($.isNumeric(adulto.rg) === false) {
-               $("#numberRG").addClass('errorBorder');
+                $("#numberRG").addClass('errorBorder');
             }
             else {
-               $("#numberRG").removeClass('errorBorder');
-            }
-            if (adulto.rg.length ==0) {
                 $("#numberRG").removeClass('errorBorder');
-             }
+            }
+            if (adulto.rg.length == 0) {
+                $("#numberRG").removeClass('errorBorder');
+            }
             return erros;
 
         }
@@ -353,8 +353,8 @@ class CadastroAdulto extends React.Component {
     }
 
     //Bloco que muda o status para o atual do formulario.
-    ChangeName(event){
-        this.setState({firstName: event.target.value}); 
+    ChangeName(event) {
+        this.setState({ firstName: event.target.value });
     }
     ChangeSurname(event) {
         this.setState({ surName: event.target.value });
@@ -407,11 +407,11 @@ class CadastroAdulto extends React.Component {
     ChangeNumber(event) {
         this.setState({ number: event.target.value });
     }
-    Changekinship(event,indice) {
+    Changekinship(event, indice) {
         let temporario = this.state.confirmaCrianca;
         let indez = event.target.value.split(",")
-        console.log(indez,indez[0],indez[1])
-        
+        console.log(indez, indez[0], indez[1])
+
         temporario[indez[1]].kinship = indez[0];
         this.setState({ confirmaCrianca: temporario });
         console.log(temporario)
@@ -557,8 +557,8 @@ class CadastroAdulto extends React.Component {
                 console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
                 this.state.erroL = true;
-                if (error.response.status===409){
-                    alert('Conflito de informações: CPF já existe.' )
+                if (error.response.status === 409) {
+                    alert('Conflito de informações: CPF já existe.')
                 }
             })
     }
@@ -579,13 +579,16 @@ class CadastroAdulto extends React.Component {
             file: imageSrc
         })
     };
-excluirCria=(event)=>{
-    let temporario = this.state.confirmaCrianca;
-    temporario.splice(event,1);
-    this.setState({
-        confirmaCrianca:temporario
-    })
-}
+    excluirCria = (event) => {
+        const confirmacao = window.confirm("Deseja mesmo excluir essa criança?");
+        let temporario = this.state.confirmaCrianca;
+        if (confirmacao === true) {
+            temporario.splice(event, 1);
+            this.setState({
+                confirmaCrianca: temporario
+            })
+        }
+    }
     selecionaCrianca(identifier) {
         let achou = false;
 
@@ -797,8 +800,8 @@ excluirCria=(event)=>{
                 <div className="container-fluid">
                     <div className="" >
                         {this.state.erroL &&
-                            (<div className="alert lert-danger" role="alert" style ={{ background: "#ff6347",width: 100 + '%' }}>
-                                <strong style ={{color: 'white'}}>Ocorreu um erro no Cadastro</strong>
+                            (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
+                                <strong style={{ color: 'white' }}>Ocorreu um erro no Cadastro</strong>
                             </div>)
                         }
                     </div>
@@ -848,12 +851,12 @@ excluirCria=(event)=>{
                                                 <td >{findChild.number} </td>
                                                 <td className="text-center">
                                                     <select id="kinship" name="kinship" className="form-control optionFomulario" onChange={this.Changekinship} >
-                                                        <option value={["others",indice]} > Outros </option>
-                                                        <option value={["children",indice]} > Filho(a) </option>
-                                                        <option value={["Stepson",indice]} > Enteado(a) </option>
-                                                        <option value={["grandchildren",indice]} > Neto(a) </option>
-                                                        <option value={["nephews",indice]}  > Sobrinho(a) </option>
-                                                        <option value={["Brother",indice]} > Irmão/Irmã </option>
+                                                        <option value={["others", indice]} > Outros </option>
+                                                        <option value={["children", indice]} > Filho(a) </option>
+                                                        <option value={["Stepson", indice]} > Enteado(a) </option>
+                                                        <option value={["grandchildren", indice]} > Neto(a) </option>
+                                                        <option value={["nephews", indice]}  > Sobrinho(a) </option>
+                                                        <option value={["Brother", indice]} > Irmão/Irmã </option>
                                                     </select >
                                                 </td>
                                                 <td> <button onClick={() => this.excluirCria(indice)}><span className="glyphicon">&#xe014;</span></button></td>
@@ -867,7 +870,7 @@ excluirCria=(event)=>{
                     <br></br>
                     <div className="text-center">
                         <button className="btn btn-md botao" onClick={this.VoltaparaFormulario}>Voltar</button>
-                        
+
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TheEnd}>Finalizar</button>
                     </div>
                 </div>
@@ -914,7 +917,7 @@ excluirCria=(event)=>{
                                     {this.state.list.map((findChild, indice) => {
                                         return (
                                             <tr key={findChild._id}>
-                                                <th scope="row">{indice+1}</th>
+                                                <th scope="row">{indice + 1}</th>
                                                 <td > {findChild.name.firstName} </td>
                                                 <td >{moment(findChild.birthday, "YYYYMMDD").toNow(true)}</td>
                                                 <td >{findChild.number} </td>
