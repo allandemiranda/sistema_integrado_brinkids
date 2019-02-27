@@ -190,6 +190,7 @@ class CadastroAdulto extends React.Component {
 
                 axios.get(`/adult/email/${this.state.email}`)
                     .then((response) => {
+                        console.log(response.data)
                         if(response.data.length > 0){
                             alert("Já existe um usuário cadastrado no sistema com esse email!")
                         }else{
