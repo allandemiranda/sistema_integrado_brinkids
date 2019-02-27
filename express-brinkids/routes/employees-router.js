@@ -262,14 +262,7 @@ router.put('/exchange-data/:identifier', async (req, res) => {
             placeIssue: req.body.CNHPlaceIssue,
             dateIssue: req.body.CNHDateIssue,
           },
-          employeeData: {
-            officialPosition: req.body.EDOfficialPosition,
-            admissionDate: req.body.EDAdmissionDate,
-            resignationDate: '12/12/1970',
-            reasonResignation: req.body.EDReasonResignation,
-            record: req.body.EDRecord,
-            state: req.body.EDState,
-          },
+          
           observations: req.body.observations,
         }
       })
