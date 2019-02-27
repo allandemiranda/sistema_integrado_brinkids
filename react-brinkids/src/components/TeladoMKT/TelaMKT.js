@@ -1052,7 +1052,8 @@ class DashBoard extends React.Component {
 																<td >{fluxo.aniversario} </td>
 																<td >{fluxo.cidade} </td>
 																<td onClick={() => this.openModal(fluxo.foto)} >Foto</td>
-																<td >{fluxo.visita} </td>
+																{fluxo.visita!==0&&(<td >{fluxo.visita} </td>)}
+																{fluxo.visita===0&&(<td >-- </td>)}
 																<td ><a style={{ color: "inherit" }} onClick={() => this.cahnguePageA(fluxo.idAdult)}>{fluxo.responsavel} </a></td>
 																<td >{fluxo.email} </td>
 															</tr>

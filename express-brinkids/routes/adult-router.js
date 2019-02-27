@@ -16,7 +16,16 @@ function teste(err, res) {
   console.log(err);
   return res.sendStatus(500);
 }
-
+router.get('/email/:email', async(req, res) => {
+  try {
+    const adultFound = await userAdult.find({'email':req.params.email});
+    
+    
+    return res.status(201).json(adultFound);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+})
 // Rota responsável por realizar a pesquisa dos adultos no sistema
 router.get('/filter/:search/:type', (req, res) => {
 
@@ -76,13 +85,13 @@ router.get('/:identifier', async (req, res) => {
 router.post('/', async (req, res) => {
   const a = req.cookies.TOKEN_KEY;
   const b = jwt.verify(a, config.secret_auth);
-  var funcionario='oi';
+  var funcionario = 'oi';
   console.log(b)
   if (!b.admin) {
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
-     funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
+    funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   } else {
-     funcionario = "admin"
+    funcionario = "admin"
   }
 
   if (req.files
@@ -102,7 +111,7 @@ router.post('/', async (req, res) => {
     && req.body.cpf
     && req.body.email
     && req.body.maritalStatus) {
-      
+
     userAdult.findOne({ cpf: req.body.cpf }, (err, adultFound) => {
       if (err) {
         return res.sendStatus(500);
@@ -116,7 +125,7 @@ router.post('/', async (req, res) => {
             firstName: req.body.firstName,
             surName: req.body.surName,
           },
-          birthday:req.body.birthday,
+          birthday: req.body.birthday,
           phone: [req.body.phone],
           address: {
             street: req.body.street,
@@ -166,7 +175,7 @@ router.post('/', async (req, res) => {
             action: 'Criação',
             dateOperation: new Date(),
             from: funcionario, //ajsuta o id dps de fazer o login funcionar
-            to: adultResult.name.firstName+" "+adultResult.name.surName,
+            to: adultResult.name.firstName + " " + adultResult.name.surName,
             id: adultResult._id,
           }
           Logs.create(log, (errLog, logchil) => {
@@ -201,7 +210,7 @@ router.post('/appendChild', async (req, res) => {
         action: 'Edição',
         dateOperation: new Date(),
         from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: adult.name.firstName+" "+adult.name.surName,
+        to: adult.name.firstName + " " + adult.name.surName,
         id: req.body.identifierParent,
       })
       const newLog = await log.save();
@@ -224,12 +233,12 @@ router.put('/:identifier', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  let lista=[]
-  console.log(req.body.children.length,req.body.children)
-  if(req.body.children.length===0){
-    lista =[]
-  }else{
-    lista=req.body.children
+  let lista = []
+  console.log(req.body.children.length, req.body.children)
+  if (req.body.children.length === 0) {
+    lista = []
+  } else {
+    lista = req.body.children
   }
   try {
     const adultModified = await userAdult.findByIdAndUpdate(req.params.identifier, {
@@ -246,7 +255,7 @@ router.put('/:identifier', async (req, res) => {
           country: req.body.country,
         },
         observations: req.body.observations,
-        children:lista
+        children: lista
       },
 
     });
@@ -255,8 +264,8 @@ router.put('/:identifier', async (req, res) => {
       action: 'Edição',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to: adultModified.name.firstName+" "+adultModified.name.surName,
-      id:req.params.identifier,
+      to: adultModified.name.firstName + " " + adultModified.name.surName,
+      id: req.params.identifier,
     })
     const newLog = await log.save();
     if (!adultModified) {
@@ -264,7 +273,7 @@ router.put('/:identifier', async (req, res) => {
     }
 
     if (req.files) {
-      console.log("mudar foto",req.files)
+      console.log("mudar foto", req.files)
       return req.files.photo.mv(
         config.pathPublic() + adultModified.photo, // Nome do arquivo
         errFile => (errFile ? res.sendStatus(500) : res.sendStatus(204)),
@@ -282,18 +291,18 @@ router.delete('/:identifier', async (req, res) => {
     const b = jwt.verify(a, config.secret_auth);
     const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
     const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-    
+
     const deletedService = await userAdult.findByIdAndRemove(req.params.identifier);
-   
+
     const log = new Logs({
       activity: 'Perfil Adulto',
       action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
-      to:deletedService.name.firstName+" "+deletedService.name.surName,
-      id:req.params.identifier,
+      to: deletedService.name.firstName + " " + deletedService.name.surName,
+      id: req.params.identifier,
     })
-    
+
     const newLog = await log.save();
     if (!deletedService) {
       return res.sendStatus(404);
