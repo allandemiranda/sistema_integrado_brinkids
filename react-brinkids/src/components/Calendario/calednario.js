@@ -517,7 +517,7 @@ class Calendar extends React.Component {
     if (this.state.page === "Novo") {
       return (
         <div className="container-fluid" >
-          {this.state.ErroPreenchimento >= 0 &&
+          {this.state.ErroPreenchimento > 0 &&
             (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
               <strong style={{ color: 'white' }}>Preencha os campos abaixo.</strong>
             </div>)
