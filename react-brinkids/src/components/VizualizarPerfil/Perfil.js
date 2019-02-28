@@ -606,7 +606,7 @@ class Perfil extends React.Component {
                 <div className="container-fluid" >
                     {this.state.naoEncontrada &&
                         (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
-                            <strong style={{ color: 'white' }}>Nenhum funcionario encontrda com esse nome. </strong>
+                            <strong style={{ color: 'white' }}>Nenhum funcionário encontrda com esse nome. </strong>
                         </div>)
                     }
                     <div className="sub-heard-part" >

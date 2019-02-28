@@ -86,7 +86,7 @@ class MainLayout extends React.Component {
                                 })
     
                             }else{
-                                alert("Funcionario sem cargo")
+                                alert("Funcionário sem cargo")
                                 window.location.href ="/Login"
                             }
                             
