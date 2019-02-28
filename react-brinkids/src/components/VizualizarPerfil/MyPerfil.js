@@ -319,7 +319,11 @@ class MeuPerfil extends React.Component {
         })
 
     }
-
+    refresj=()=>{
+        this.setState({
+            reserva:2
+        })
+    }
 
     render() {
 
@@ -329,33 +333,38 @@ class MeuPerfil extends React.Component {
 
 
             if (this.state.editar) {
-                setTimeout(function () {
+                setTimeout(  ()=>{
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
                     uploadfoto.onchange = function () {
+                        function showThumbnail(files) {
+                            console.log(files,files[0])
+
+                            if (files && files[0]) {
+                                console.log('entreee')
+                                const reader = new FileReader();
+
+                                reader.onload = function (e) {
+                                    fotopreview.src = e.target.result;
+                                    foto = e.target.result;
+                                }
+                              
+                                
+                                reader.readAsDataURL(files[0]);
+                            }
+
+                        }
                         console.log(this.files[0].size)
                         if (this.files[0].size > 307200) {
                             alert("Tamanho da Foto Muito Grande");
                             this.value = "";
                         } else {
                             uploadfoto.addEventListener('change', function (e) {
+                                console.log("entei aki ",this.files)
                                 showThumbnail(this.files);
+                               
                             });
-                            function showThumbnail(files) {
-
-
-                                if (files && files[0]) {
-                                    const reader = new FileReader();
-
-                                    reader.onload = function (e) {
-                                        fotopreview.src = e.target.result;
-                                        foto = e.target.result;
-                                    }
-
-                                    reader.readAsDataURL(files[0]);
-                                }
-
-                            }
+                            
                         }
                     };
 
@@ -391,11 +400,11 @@ class MeuPerfil extends React.Component {
                                         <img id='fotopreview' style={{ width: 'auto', height: 'auto', maxWidth: 250 + 'px' }} src={this.state.perfilAtual.photo} />
                                         {this.state.editar && (
                                             <div>
-                                                <button className="btn btn-md botao botaoAvançar">
+                                                <button onClick={this.refresj} className="btn btn-md botao botaoAvançar">
                                                     <label className="corbotao">
                                                         Trocar imagem <span className="glyphicon">&#xe065;</span>
 
-                                                        <input id="tipofile" type="file" name="foto" accept="image/*" value="" />
+                                                        <input id="tipofile" type="file" name="foto" accept="image/*"  value="" />
                                                     </label>
                                                 </button><br /></div>)
                                         }

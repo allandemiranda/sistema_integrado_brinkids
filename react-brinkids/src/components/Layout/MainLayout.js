@@ -146,7 +146,7 @@ class MainLayout extends React.Component {
                                             <li className="dropdown note" >
                                                 <Link to="/" className=" tooltips" >
                                                     < i className="lnr lnr-home" > </i>
-                                                    <span className="badge" style={{ marginTop: 25 + 'px' }}>Home</span >
+                                                    <span className="badge" style={{ marginTop: 25 + 'px' }}>Painel</span >
                                                 </Link>
                                             </li>
                                             <li className="dropdown note" >
@@ -185,9 +185,9 @@ class MainLayout extends React.Component {
                             {this.state.name === "admins" && (<a ><span className=" name-caret">{this.state.name}</span></a>)}
                             <p>{this.state.cargo}</p>
                             <ul>
-                                <li><Link class="tooltips" to="/MyProfile"><span>Profile</span><i class="lnr lnr-user"></i></Link></li>
+                                <li><Link class="tooltips" to="/MyProfile"><span>Perfil</span><i class="lnr lnr-user"></i></Link></li>
 
-                                <li><Link class="tooltips" to="/Login" onClick={this.deslogar}><span>Log out</span><i class="lnr lnr-power-switch"></i></Link></li>
+                                <li><Link class="tooltips" to="/Login" onClick={this.deslogar}><span>Sair</span><i class="lnr lnr-power-switch"></i></Link></li>
                             </ul>
 
                         </div>
