@@ -396,7 +396,7 @@ class GerenciamentoFinanceiro extends React.Component {
                             <section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionGrafico}  >
                                 <br></br>
                                 <div class="graph graph-visual text-center">
-                                    <h5>Janeiro/2012</h5>
+                                    
                                     <LineChart className="grafico" width={800} height={600} data={this.state.listagraficos} margin={{ top: 5, right: 30, bottom: 5 }}>
                                         <XAxis dataKey="name" />
                                         <YAxis />

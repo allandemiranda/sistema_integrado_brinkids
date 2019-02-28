@@ -279,9 +279,10 @@ class PerfilAdulto extends React.Component {
         formData.append('street', this.state.endereco);
         formData.append('country', this.state.pais);
         formData.append('email', this.state.email);
-        formData.append('children', this.state.perfilAtual.children)
-        console.log("form: ", formData);
-        console.log(this.state.perfilAtual.children)
+        formData.append('children',  JSON.stringify(this.state.perfilAtual.children.map((child) => {
+            return { identifier: child.identifier, kinship: child.kinship ? child.kinship : 'others' }
+        })))
+        
 
         axios.put(`adult/${this.state.perfilAtual._id}`, formData)
             .then((response) => {
@@ -349,15 +350,17 @@ class PerfilAdulto extends React.Component {
                             } else {
 
                                 const criancas = event.children.map(async (crianca, index) => {
-                                    console.log(crianca)
+                                    
                                     if (crianca !== null) {
+                                        console.log("entrei aki",crianca.identifier)
                                         const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                                        console.log(response.data)
                                         return response.data;
                                     }
                                 });
 
                                 Promise.all(criancas).then((listaCriancas) => {
-
+                                    
                                     this.setState({
                                         listaFuncionarios: listaCriancas,
                                         page: "Perfil",
@@ -457,7 +460,7 @@ class PerfilAdulto extends React.Component {
 
         axios.get(`/child/filter/${this.state.childSearch}`)
             .then((response) => {
-                console.log(response.data);
+               
                 this.setState({ list: response.data });
             }).catch((err) => {
                 console.log(err);
@@ -500,8 +503,7 @@ class PerfilAdulto extends React.Component {
     Changekinship(evento, identifier) {
         this.setState({ kinship: evento.target.value })
 
-        console.log(`O estado foi atualizado: ${this.state.kinship}`)
-
+        
         this.state.confirmaCrianca.forEach((crianca) => {
             if (crianca._id === identifier) {
                 crianca.kinship = evento.target.value
@@ -517,7 +519,7 @@ class PerfilAdulto extends React.Component {
             listacrianca.push({ identifier: crianca._id, kinship: crianca.kinship })
 
         });
-        console.log(listacrianca);
+     
         const data = {
 
             identifierParent: this.state.perfilAtual._id,
@@ -546,7 +548,7 @@ class PerfilAdulto extends React.Component {
                             }
                         });
                         Promise.all(criancas).then((listaCriancas) => {
-                            console.log("entrei")
+                          
                             this.setState({
                                 listaFuncionarios: listaCriancas,
                                 page: "Perfil",
@@ -568,7 +570,7 @@ class PerfilAdulto extends React.Component {
         if (confirmacao === true) {
             let temporario = this.state.perfilAtual;
             temporario.children.splice(event, 1);
-            console.log(temporario)
+            
             this.setState({
                 perfilAtual: temporario,
                 perfilEdicao: temporario
@@ -644,7 +646,7 @@ class PerfilAdulto extends React.Component {
                     const uploadfoto = document.getElementById('tipofile');
                     const fotopreview = document.getElementById('fotopreview');
                     uploadfoto.onchange = function () {
-                        console.log(this.files[0].size)
+                       
                         if (this.files[0].size > 307200) {
                             alert("Tamanho da Foto Muito Grande");
                             this.value = "";

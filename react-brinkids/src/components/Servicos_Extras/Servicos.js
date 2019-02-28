@@ -24,7 +24,7 @@ class Servico extends React.Component {
             Quant: '',
             lista: [],
             ErroPreenchimento: 0,
-
+teste:"",
             nomeFunc: ""
 
         }
@@ -134,8 +134,12 @@ class Servico extends React.Component {
                 Tipo: 'Serviço',
                 Text: '',
                 Quant: '',
+                
             });
         }
+        this.setState({
+            ErroPreenchimento:0,
+        })
     }
     Funcionario = (number) => {
         const a = getToken();
@@ -184,32 +188,80 @@ class Servico extends React.Component {
     }
 
     Salvar2(event) {
-        let listaTemporaria = this.state.lista;
-        listaTemporaria[this.state.indice].name = this.state.Nome;
-        listaTemporaria[this.state.indice].value = this.state.Text;
-        listaTemporaria[this.state.indice].type = this.state.Tipo;
-        listaTemporaria[this.state.indice].unity = this.state.Quant;
-        const data = {
-            name: this.state.Nome,
-            type: this.state.Tipo,
-            unity: this.state.Quant,
-            value: this.state.Text,
-        }
-        axios.put(`/extraServices/${listaTemporaria[this.state.indice]._id}`, data)
-            .then((response) => {
-                console.log(listaTemporaria[this.state.indice]._id);
-                console.log(response.data);
-            })
-            .catch((err) => console.log(err));
         this.setState({
-            lista: listaTemporaria,
-            page: 'Lista',
-            Nome: '',
-            Tipo: 'Serviço',
-            Text: '',
-            Quant: '',
-            indice: '',
+            ErroPreenchimento:0,
         })
+        if (this.state.Nome.length === 0) {
+            $("#Nome").addClass('errorBorder');
+            // this.state.ErroPreenchimento+=1;
+            this.setState({
+                ErroPreenchimento:this.state.ErroPreenchimento+1
+            })
+            
+          }
+          else {
+            $("#Nome").removeClass('errorBorder');
+            this.state.ErroPreenchimento-=1;
+        }
+
+        if (this.state.Tipo.length === 0) {
+            $("#Tipo").addClass('errorBorder');
+            this.state.ErroPreenchimento += 1;
+        }
+        else {
+            $("#Tipo").removeClass('errorBorder');
+            this.state.ErroPreenchimento -= 1;
+        }
+        if (this.state.Text.length === 0) {
+            $("#proU").addClass('errorBorder');
+            this.state.ErroPreenchimento += 1;
+        }
+        else {
+            $("#proU").removeClass('errorBorder');
+            this.state.ErroPreenchimento -= 1;
+        }
+
+        if (this.state.Quant.length === 0) {
+            $("#unid").addClass('errorBorder');
+            this.state.ErroPreenchimento += 1;
+        }
+        else {
+            $("#unid").removeClass('errorBorder');
+            this.state.ErroPreenchimento -= 1;
+        }
+
+
+        if (this.state.ErroPreenchimento === -4 ){
+            let listaTemporaria = this.state.lista;
+            listaTemporaria[this.state.indice].name = this.state.Nome;
+            listaTemporaria[this.state.indice].value = this.state.Text;
+            listaTemporaria[this.state.indice].type = this.state.Tipo;
+            listaTemporaria[this.state.indice].unity = this.state.Quant;
+            const data = {
+                name: this.state.Nome,
+                type: this.state.Tipo,
+                unity: this.state.Quant,
+                value: this.state.Text,
+            }
+            axios.put(`/extraServices/${listaTemporaria[this.state.indice]._id}`, data)
+                .then((response) => {
+                    console.log(listaTemporaria[this.state.indice]._id);
+                    console.log(response.data);
+                })
+                .catch((err) => console.log(err));
+            this.setState({
+                lista: listaTemporaria,
+                page: 'Lista',
+                Nome: '',
+                Tipo: 'Serviço',
+                Text: '',
+                Quant: '',
+                indice: '',
+                ErroPreenchimento:0
+            })
+        }
+        
+        
     }
     excluir(event, indice) {
         const confirmacao = window.confirm("Deseja mesmo excluir esse serviço do sistema?");
@@ -318,6 +370,7 @@ class Servico extends React.Component {
                                 Quant: this.state.lista[event].unity,
                                 page: 'Editar',
                                 indice: event,
+                                ErroPreenchimento:0
                             })
 
                         } else {
@@ -447,7 +500,7 @@ class Servico extends React.Component {
         if (this.state.page === 'Novo') {
             return (
                 <div className="container-fluid" >
-                    {this.state.ErroPreenchimento != 0 &&
+                    {this.state.ErroPreenchimento != -4 &&
                         (<div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }}>
                             <strong style={{ color: 'white' }}>Preencha os campos abaixo.</strong>
                         </div>)
@@ -527,7 +580,7 @@ class Servico extends React.Component {
 
                                 <div className="row" > <p className=" col-md-1">Nome:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
-                                        <input type="text" className="form-control " onChange={this.changueNome} value={this.state.Nome}></input>
+                                        <input type="text" id="Nome" className="form-control " onChange={this.changueNome} value={this.state.Nome}></input>
                                     </div>
                                 </div>
 

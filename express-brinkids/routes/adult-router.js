@@ -234,8 +234,8 @@ router.put('/:identifier', async (req, res) => {
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
   let lista = []
-  console.log(req.body.children.length, req.body.children)
-  if (req.body.children.length === 0) {
+  console.log(JSON.parse(req.body.children).length, req.body.children)
+  if (JSON.parse(req.body.children).length === 0) {
     lista = []
   } else {
     lista = req.body.children
@@ -255,7 +255,7 @@ router.put('/:identifier', async (req, res) => {
           country: req.body.country,
         },
         observations: req.body.observations,
-        children: lista
+        children: JSON.parse(lista)
       },
 
     });
