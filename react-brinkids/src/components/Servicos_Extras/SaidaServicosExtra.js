@@ -316,7 +316,7 @@ class SaidaServicosExtra extends React.Component {
                                         <td >{findproduct.produto.type} </td>
                                         <td>{findproduct.produto.unity}</td>
                                         <td> {findproduct.produto.value}</td>
-                                        <input id="ticketNum" type="number" name={[0, indice]} value={findproduct.quan} onChange={this.ChangeQuantidade} ></input>
+                                        <input id="ticketNum" type="number" min="0" name={[0, indice]} value={findproduct.quan} onChange={this.ChangeQuantidade} ></input>
                                         <td>{findproduct.Total}</td>
                                         <td className="text-center">   <button onClick={() => this.excluir(indice)}><span className="glyphicon">&#xe014;</span></button></td>
                                     </tr>
@@ -373,7 +373,7 @@ class SaidaServicosExtra extends React.Component {
                                                 <td >{findproduct.type} </td>
                                                 <td>{findproduct.unity}</td>
                                                 <td> {findproduct.value}</td>
-                                                <input id="ticketNum" type="number" name={[0, indice]} value={this.state.quantidade[indice]} onChange={this.ChangeQuantidade} ></input>
+                                                <input id="ticketNum" type="number"  min="0" name={[0, indice]} value={this.state.quantidade[indice]} onChange={this.ChangeQuantidade} ></input>
                                                 <td>{this.state.valorTotal[indice]}</td>
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selected(findproduct._id, indice)} /> </td>
                                             </tr>

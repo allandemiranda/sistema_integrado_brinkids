@@ -949,7 +949,7 @@ class Perfil extends React.Component {
 
                                         <p><b>Numero:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.number)}
-                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="numberCT" value={this.state.numberCT} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" min={"0"} style={{ float: 'none' }} className="form-control" name="numberCT" value={this.state.numberCT} onChange={this.changue} />)}
                                         </p>
                                         <p><b>Series:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.series)}
@@ -961,7 +961,7 @@ class Perfil extends React.Component {
                                         </p>
                                         <p><b>PISPASEP:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.workPortifolio.PIS_PASEP)}
-                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="PIS" value={this.state.PIS} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" min={"0"} style={{ float: 'none' }} className="form-control" name="PIS" value={this.state.PIS} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Data de Emissão:</b>
@@ -982,7 +982,7 @@ class Perfil extends React.Component {
 
                                         <p><b>Numero:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.electionTitle.number)}
-                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="TNumero" value={this.state.TNumero} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" min={"0"} style={{ float: 'none' }} className="form-control" name="TNumero" value={this.state.TNumero} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Zona:</b>
@@ -1035,7 +1035,7 @@ class Perfil extends React.Component {
 
                                         <p><b>Numero:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.militaryReservist.number)}
-                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="CRNumero" value={this.state.CRNumero} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" min={"0"} style={{ float: 'none' }} className="form-control" name="CRNumero" value={this.state.CRNumero} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Series:</b>
@@ -1057,7 +1057,7 @@ class Perfil extends React.Component {
 
                                         <p><b>Numero:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.passport.number)}
-                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="PNumero" value={this.state.PNumero} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" min={"0"} style={{ float: 'none' }} className="form-control" name="PNumero" value={this.state.PNumero} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Tipo:</b>
@@ -1089,7 +1089,7 @@ class Perfil extends React.Component {
 
                                         <p><b>Registro:</b>
                                             {!this.state.editar && (this.state.perfilAtual.identifierEmployee.cnh.record)}
-                                            {this.state.editar && (<input type="number" style={{ float: 'none' }} className="form-control" name="CNHReg" value={this.state.CNHReg} onChange={this.changue} />)}
+                                            {this.state.editar && (<input type="number" min={"0"} style={{ float: 'none' }} className="form-control" name="CNHReg" value={this.state.CNHReg} onChange={this.changue} />)}
 
                                         </p>
                                         <p><b>Categoria:</b>

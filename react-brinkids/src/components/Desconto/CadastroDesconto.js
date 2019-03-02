@@ -237,7 +237,7 @@ class Desconto extends Component {
                                             <label className="radio-inline"><input type="radio" id="Adulto" name="TypePeople" value="Adult" onClick={this.ChangeValue} /><p className="LetraFormulario">  Adulto</p></label>
                                             <br></br>
                                             <label className="LetraFormulario">Quantidade:</label>
-                                            <input className="form-control" type="number" id="Quant" min="1" name="Quant" value={this.state.Quant} onChange={this.ChangeValue} />
+                                            <input className="form-control" type="number" id="Quant" min={"0"} name="Quant" value={this.state.Quant} onChange={this.ChangeValue} />
                                         </div>
                                         <div className="col-md-6 col-sm-12 col-xs-12">
                                             <label className="LetraFormulario" id="TV">Tipo:</label>

@@ -655,11 +655,11 @@ class CadastroAdulto extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-sm-6 col-xs-12" >
                                             <label className="LetraFormulario" > CPF: </label>
-                                            <input type="number" id="numberCPF" name="number" className="form-control" value={this.state.cpf} onChange={this.ChangeCpf} />
+                                            <input type="number" min={"0"} id="numberCPF" name="number" className="form-control" value={this.state.cpf} onChange={this.ChangeCpf} />
                                         </div>
                                         <div className="col-md-6 col-sm-6 col-xs-12" >
                                             <label className="LetraFormulario" > RG: </label>
-                                            <input type="number" id="numberRG" name="number" className="form-control" value={this.state.rg} onChange={this.ChangeRg} />
+                                            <input type="number" min={"0"} id="numberRG" name="number" className="form-control" value={this.state.rg} onChange={this.ChangeRg} />
                                         </div>
                                     </div>
                                 </div >
@@ -723,7 +723,7 @@ class CadastroAdulto extends React.Component {
                                         </div>
                                         <div className="col-md-2 col-sm-3 col-xs-2" >
                                             <label className="LetraFormulario" > Número: </label>
-                                            <input type="number" id="num" name="cep" className="form-control" value={this.state.number} onChange={this.ChangeNumber} />
+                                            <input type="number" min={"0"} id="num" name="cep" className="form-control" value={this.state.number} onChange={this.ChangeNumber} />
                                         </div>
                                     </div>
                                 </div >

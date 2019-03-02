@@ -538,7 +538,7 @@ teste:"",
                                 <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{ width: 10 + '%' }} >ValorP/unid:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
 
-                                        <input type="number" id={'forms'} id={"proU"} onChange={this.changueQuant} value={this.state.Text} size='5' min='0' max='999' step=".50" />
+                                        <input type="number" min={"0"} id={'forms'} id={"proU"} onChange={this.changueQuant} value={this.state.Text} size='5' min='0' max='999' step=".50" />
                                     </div>
                                 </div>
                                 <br></br>
@@ -600,7 +600,7 @@ teste:"",
                                 <div className="row" >  <p className="col-md-1 col-sm-8 col-xs-12" style={{ width: 10 + '%' }} >ValorP/unid:</p>
                                     <div className="col-md-4 col-sm-8 col-xs-12">
 
-                                        <input type="number" id='forms' onChange={this.changueQuant} value={this.state.Text} size='5' min='0' max='999' step=".50" />
+                                        <input type="number" min={"0"} id='forms' onChange={this.changueQuant} value={this.state.Text} size='5' min='0' max='999' step=".50" />
                                     </div>
                                 </div>
                                 <br></br>
