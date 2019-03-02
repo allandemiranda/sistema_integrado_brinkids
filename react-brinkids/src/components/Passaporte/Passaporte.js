@@ -60,6 +60,7 @@ class Passport extends React.Component {
             dadosComprovante: [],
             kinship: [],
             nomeFuncionario: "",
+            tipoEntrada:[], // Guarda o tipo de entrada da criança
 
         }
 
@@ -68,6 +69,7 @@ class Passport extends React.Component {
         this.SearchAdult = this.SearchAdult.bind(this);
         this.SearchChild = this.SearchChild.bind(this);
         this.Changekinship = this.Changekinship.bind(this);
+        this.ChangetipoEntrada = this.ChangetipoEntrada.bind(this);
 
 
         //Relacionado a atualização dos valores Caminho
@@ -172,6 +174,29 @@ class Passport extends React.Component {
                 }
                 else if (event.target.value === "Brother") {
                     this.state.kinship[indice] = "Irmã(o)";
+                }
+            }
+        });
+    }
+
+    ChangetipoEntrada(event, identifier, indice) {
+        let listatemporaria = this.state.listConfirmKids;
+        listatemporaria.forEach((crianca, indice) => {
+            if (crianca._id === identifier) {
+                console.log("--->");
+                console.log(this.state.tipoEntrada[indice]);
+                console.log("--->");
+                console.log("<--------------->");
+                console.log(indice);
+                console.log("<--------------->");
+                if (event.target.value === "Birthday") {
+                    this.state.tipoEntrada[indice] = "Aniversário";
+                }
+                else if (event.target.value === "Pass") {
+                    this.state.tipoEntrada[indice] = "Passaporte";
+                }
+                else if (event.target.value === "BabyPass") {
+                    this.state.tipoEntrada[indice] = "Baby passaporte";
                 }
             }
         });
@@ -608,7 +633,8 @@ class Passport extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Entrada </li>
+                            <li > Busca de Responsável</li>
                         </ol >
                     </div>
 
@@ -667,7 +693,8 @@ class Passport extends React.Component {
                     <div className="sub-heard-part" >
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Entrada </li>
+                            <li > Confirmação de dados</li>
                         </ol >
                     </div>
                     <div className="graph-visual">
@@ -730,7 +757,8 @@ class Passport extends React.Component {
                         <div className="sub-heard-part" >
                             <ol className="breadcrumb m-b-0" >
                                 <li > < a href="/" > Home </a></li >
-                                <li > Passaporte</li>
+                                <li > Entrada </li>
+                                <li > Busca de criança</li>
                             </ol >
                         </div>
                         <div className="graph-visual" >
@@ -798,7 +826,8 @@ class Passport extends React.Component {
                     <div className="sub-heard-part">
                         <ol className="breadcrumb m-b-0" >
                             <li > < a href="/" > Home </a></li >
-                            <li > Passaporte </li>
+                            <li > Entrada </li>
+                            <li > Escolha de entrada</li>
                         </ol >
                     </div>
                     <div className="graph-visual">
@@ -857,9 +886,59 @@ class Passport extends React.Component {
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >
                                                         </div>
-                                                    </div>
+                                                    </div>      
                                                 </div>
                                                 <br></br>
+
+                                                <div className="graph">
+                                                    <div className="row">
+                                                        <div className="col-md-12 col-sm-12">
+                                                            <div style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
+                                                                <h5 className="ltTitulo text-center"><b> Tipo de entrada: </b></h5>
+                                                                <select id="tipoEntrada" name="tipoEntrada" className="form-control optionFomulario" onChange={(event) => this.ChangetipoEntrada(event, Criançasqueentrarao._id, indice)} >
+                                                                     <option value="Pass" > Passaporte </option>
+                                                                    <option value="Birthday" > Aniversário </option>
+                                                                    <option value="BabyPass" > Baby passaporte </option>
+                                                                </select >
+                                                            </div>
+                                                        </div>
+
+                                                        <br></br>
+                                                        {this.state.tipoEntrada[indice] == "Passaporte" && (
+                                                            <div className="col-md-12 col-sm-12">
+                                                                <div className="graph" >
+                                                                    <div>
+                                                                        <h3 className="inner-tittle " >Entrada Passaporte</h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        <br></br>
+                                                        {this.state.tipoEntrada[indice] == "Baby passaporte" && (
+                                                            <div className="col-md-12 col-sm-12">
+                                                                <div className="graph" >
+                                                                    <div>
+                                                                        <h3 className="inner-tittle " >Entrada Baby passaporte</h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        <br></br> 
+                                                        {this.state.tipoEntrada[indice] == "Aniversário" && (
+                                                            <div className="col-md-12 col-sm-12">
+                                                                <div className="graph" >
+                                                                    <div>
+                                                                        <h3 className="inner-tittle " >Entrada Aniversário</h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}                                                    
+                                                     
+                                                    </div>
+                                                </div>
+
+                                                <br></br>  
+
                                                 <div className="graph" >
                                                     <div className="row">
                                                         <div className="col-md-6 col-sm-12 col-xs-12">
