@@ -65,20 +65,20 @@ router.post('/', async (req, res) => {
             observations: adult.observations,
           },
           photo: req.body.photo,
-          service: req.body.service,
+          service: child.service,
           time: new Date(req.body.time),
           belongings: req.body.belongings,
-          kinship: child.kinship ,
+          kinship: child.kinship,
 
             birthdayStart:req.body.start,
             birthdayEnd:req.body.end,
             birthdayName:req.body.name,
           
       });
-      if (req.body.service === "Aniversario") {
+      if (child.service === "Aniversário") {
 
         const log = new Logs({
-          activity: req.body.service,
+          activity: child.service,
           action: 'Entrada',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar
@@ -89,10 +89,10 @@ router.post('/', async (req, res) => {
 
         })
         const newLog = await log.save();
-      } else if (req.body.service === "Passaporte") {
+      } else if (child.service === "Passaporte") {
 
         const log = new Logs({
-          activity: req.body.service,
+          activity: child.service,
           action: 'Entrada',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar

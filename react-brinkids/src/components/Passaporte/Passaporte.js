@@ -196,7 +196,7 @@ class Passport extends React.Component {
                     this.state.tipoEntrada[indice] = "Passaporte";
                 }
                 else if (event.target.value === "BabyPass") {
-                    this.state.tipoEntrada[indice] = "Baby passaporte";
+                    this.state.tipoEntrada[indice] = "Baby Passaporte";
                 }
             }
         });
@@ -355,7 +355,7 @@ class Passport extends React.Component {
     TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
-        console.log(this.state.listConfirmAdult.children[0])
+      
         if (this.state.listConfirmAdult.children[0] === null) {
 
         } else {
@@ -453,6 +453,12 @@ class Passport extends React.Component {
         this.setState({
             page: "Finalize"
         })
+       this.state.tipoEntrada.map((event,indice)=>{
+           console.log(this.state.tipoEntrada[0])
+           if(event==="Baby passaporte"){
+            console.log("certo")
+           }
+       })
 
     }
 
@@ -470,7 +476,7 @@ class Passport extends React.Component {
     TheEnd = async (event) => {
         var formData = new FormData();
         var listCria = [];
-
+        
         const adulto = {
             _id: this.state.listConfirmAdult._id,
             name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
@@ -480,6 +486,12 @@ class Passport extends React.Component {
 
         for (var i = 0; i < this.state.listConfirmKids.length; i++) {
             var crianca;
+            let servico;
+            if(this.state.tipoEntrada[i]!==undefined){
+                servico = this.state.tipoEntrada[i]
+            }else{
+                servico = "Passaporte"
+            }
             if (this.state.kinship[i] !== undefined) {
                 crianca = {
                     _id: String(this.state.listConfirmKids[i]._id),
@@ -489,6 +501,8 @@ class Passport extends React.Component {
                     observations: this.state.listConfirmKids[i].observations,
                     photo: this.state.listConfirmKids[i].fotoFamily,
                     kinship: this.state.kinship[i],
+                    service:servico
+                    
                 }
             } else {
                 crianca = {
@@ -499,6 +513,7 @@ class Passport extends React.Component {
                     observations: this.state.listConfirmKids[i].observations,
                     photo: this.state.listConfirmKids[i].fotoFamily,
                     kinship: "Outros",
+                    service:servico
                 }
             }
             console.log(this.state.kinship[i])
@@ -506,13 +521,13 @@ class Passport extends React.Component {
         };
 
         formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
-        formData.append('service', 'Passaporte')
+        
         formData.append('time', moment().format())
         formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
         formData.append('funcionario', this.state.nomeFuncionario);
-
+        console.log(listCria)
 
         //Fim do formulário;
 
