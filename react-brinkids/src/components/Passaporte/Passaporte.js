@@ -181,6 +181,7 @@ class Passport extends React.Component {
 
     ChangetipoEntrada(event, identifier, indice) {
         let listatemporaria = this.state.listConfirmKids;
+        let listatiposentrada = this.state.tipoEntrada;
         listatemporaria.forEach((crianca, indice) => {
             if (crianca._id === identifier) {
                 console.log("--->");
@@ -190,16 +191,19 @@ class Passport extends React.Component {
                 console.log(indice);
                 console.log("<--------------->");
                 if (event.target.value === "Birthday") {
-                    this.state.tipoEntrada[indice] = "Aniversário";
+                    listatiposentrada[indice] = "Aniversário";
                 }
                 else if (event.target.value === "Pass") {
-                    this.state.tipoEntrada[indice] = "Passaporte";
+                    listatiposentrada[indice] = "Passaporte";
                 }
                 else if (event.target.value === "BabyPass") {
-                    this.state.tipoEntrada[indice] = "Baby Passaporte";
+                    listatiposentrada[indice] = "Baby Passaporte";
                 }
             }
         });
+        this.setState({
+        tipoEntrada:listatiposentrada
+        })
     }
 
     // FUNCOES RELACIONADAS A BUSCA Do RESPOSÁVEL - Inicio 
