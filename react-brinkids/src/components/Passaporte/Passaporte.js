@@ -60,9 +60,14 @@ class Passport extends React.Component {
             dadosComprovante: [],
             kinship: [],
             nomeFuncionario: "",
-            tipoEntrada:[], // Guarda o tipo de entrada da criança
-
+            
+            tipoEntrada: [], // Guarda o tipo de entrada da criança
+            aniversariante: [], // dados do evento atual
+            listaCriancaDentro: [], // lista de crianças que deram entrada.
+            listaAdultosDentro: [], // lista de adultos que deram entrada.
+            adultoSelecionado: [], // ADULTOS que foi selecionadaos para da entrada.
         }
+
 
         //Relacionado a busca
         this.ChangeSearch = this.ChangeSearch.bind(this);
@@ -71,7 +76,7 @@ class Passport extends React.Component {
         this.Changekinship = this.Changekinship.bind(this);
         this.ChangetipoEntrada = this.ChangetipoEntrada.bind(this);
 
-
+        this.requisicao = this.requisicao.bind(this);
         //Relacionado a atualização dos valores Caminho
         this.ChangeObs = this.ChangeObs.bind(this); //apontador 
         this.ChangeObsCrianca = this.ChangeObsCrianca.bind(this);
@@ -104,7 +109,46 @@ class Passport extends React.Component {
                         return podeentrar;
                     }).then((event) => {
                         if (event) {
+                            axios.get(`/birthday/a`)
+                                .then((response) => {
 
+                                    if (response.data.length === 0) {
+                                        // alert("Nenhum aniversário encontrado")
+                                        this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
+                                    } else {
+                                        let adulto = [];
+                                        let crianca = [];
+                                        let temporario = [];
+                                        response.data.map((event) => {
+                                            let hj = moment().format();
+                                            let inicio = moment(event.start).format();
+                                            let fim = moment(event.end).format();
+
+                                            if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
+                                                temporario.push(event);
+                                            }
+
+                                        })
+
+                                        temporario[0].partyFeather.map((pessoa, indice) => {
+                                            if (pessoa.type === "adult") {
+                                                adulto.push(pessoa)
+                                            } else {
+                                                crianca.push(pessoa)
+                                            }
+                                        })
+
+                                        this.setState({
+                                            listaAdultosDentro: adulto,
+                                            listaCriancaDentro: crianca,
+                                            aniversariante: temporario,
+
+                                        });
+                                        console.log(adulto, crianca)
+                                    }
+
+                                })
+                                .catch((err) => console.log(err));
                         } else {
                             this.props.history.push("/");
                             alert("Acesso Negado. Você não possui permisão para estar nessa área!");
@@ -202,7 +246,7 @@ class Passport extends React.Component {
             }
         });
         this.setState({
-        tipoEntrada:listatiposentrada
+            tipoEntrada: listatiposentrada
         })
     }
 
@@ -211,7 +255,48 @@ class Passport extends React.Component {
     ChangeSearch(event) {
         this.setState({ selectedSearch: event.target.value });
     }
+    requisicao(event) {
+        axios.get(`/birthday/a`)
+            .then((response) => {
 
+                if (response.data.length === 0) {
+                    // alert("Nenhum aniversário encontrado")
+                    this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
+                } else {
+                    let adulto = [];
+                    let crianca = [];
+                    let temporario = [];
+                    response.data.map((event) => {
+                        let hj = moment().format();
+                        let inicio = moment(event.start).format();
+                        let fim = moment(event.end).format();
+                       
+                        if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
+                            temporario.push(event);
+                        }
+
+                    })
+                   
+                    temporario[0].partyFeather.map((pessoa, indice) => {
+                        if (pessoa.type === "adult") {
+                            adulto.push(pessoa)
+                        } else {
+                            crianca.push(pessoa)
+                        }
+                    })
+                   
+                    this.setState({
+                        listaAdultosDentro: adulto,
+                        listaCriancaDentro: crianca,
+                        aniversariante: temporario,
+                        algo: true,
+                    });
+                }
+
+            })
+            .catch((err) => console.log(err));
+      
+    }
 
 
     // Faz a busca do responsável:
@@ -359,7 +444,7 @@ class Passport extends React.Component {
     TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
-      
+
         if (this.state.listConfirmAdult.children[0] === null) {
 
         } else {
@@ -457,12 +542,12 @@ class Passport extends React.Component {
         this.setState({
             page: "Finalize"
         })
-       this.state.tipoEntrada.map((event,indice)=>{
-           console.log(this.state.tipoEntrada[0])
-           if(event==="Baby passaporte"){
-            console.log("certo")
-           }
-       })
+        this.state.tipoEntrada.map((event, indice) => {
+            console.log(this.state.tipoEntrada[0])
+            if (event === "Baby passaporte") {
+                console.log("certo")
+            }
+        })
 
     }
 
@@ -480,7 +565,7 @@ class Passport extends React.Component {
     TheEnd = async (event) => {
         var formData = new FormData();
         var listCria = [];
-        
+
         const adulto = {
             _id: this.state.listConfirmAdult._id,
             name: this.state.listConfirmAdult.name.firstName + ' ' + this.state.listConfirmAdult.name.surName,
@@ -491,9 +576,9 @@ class Passport extends React.Component {
         for (var i = 0; i < this.state.listConfirmKids.length; i++) {
             var crianca;
             let servico;
-            if(this.state.tipoEntrada[i]!==undefined){
+            if (this.state.tipoEntrada[i] !== undefined) {
                 servico = this.state.tipoEntrada[i]
-            }else{
+            } else {
                 servico = "Passaporte"
             }
             if (this.state.kinship[i] !== undefined) {
@@ -505,8 +590,8 @@ class Passport extends React.Component {
                     observations: this.state.listConfirmKids[i].observations,
                     photo: this.state.listConfirmKids[i].fotoFamily,
                     kinship: this.state.kinship[i],
-                    service:servico
-                    
+                    service: servico
+
                 }
             } else {
                 crianca = {
@@ -517,7 +602,7 @@ class Passport extends React.Component {
                     observations: this.state.listConfirmKids[i].observations,
                     photo: this.state.listConfirmKids[i].fotoFamily,
                     kinship: "Outros",
-                    service:servico
+                    service: servico
                 }
             }
             console.log(this.state.kinship[i])
@@ -525,7 +610,7 @@ class Passport extends React.Component {
         };
 
         formData.append('photo', this.state.listConfirmKids[0].fotoFamily)
-        
+
         formData.append('time', moment().format())
         formData.append('belongings', await Num())
         formData.append('children', JSON.stringify(listCria))
@@ -638,6 +723,41 @@ class Passport extends React.Component {
         this.setState({ listConfirmKids: novaListaCriancas }); // #5
 
     };
+    criancaExtra=(event)=> {
+        let crianca = { type: "children", id: "", name: "Criança Extra" }
+        const data = {
+            childExtra: crianca,
+            identifier: this.state.aniversariante[0]._id,
+            id: this.state.listConfirmAdult._id,
+        }
+        axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+            .then((response) => {
+                console.log(response)
+                
+                this.requisicao();
+
+            }).catch((error) => {
+                console.log(error)//LOG DE ERRO
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.setState({ erroCadastro: true })
+            })
+    }
+    selectedAdultLista=(identifier, indice,index)=> {
+        console.log(identifier,indice,index)
+        let listatemporaria = this.state.adultoSelecionado;
+        if (this.state.aniversariante[0].guestList[indice].type === "adult") {
+            
+        } else {
+           
+        }
+
+
+
+
+
+    }
     //  FUNÇOES RELACIONADADS A TIRADA DA FOTO - FIM
 
     // FUNÇÃO QUE SALVA O MOMENTO ATUAL NA VARIÁVEL horaEntradaCriança
@@ -724,7 +844,7 @@ class Passport extends React.Component {
                                     <div className="col-md-7 col-sm-12 text-center">
                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                             <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                            <img style={{maxWidth:300+'px'}} src={this.state.listConfirmAdult.photo} />
+                                            <img style={{ maxWidth: 300 + 'px' }} src={this.state.listConfirmAdult.photo} />
                                         </div>
                                     </div>
                                     <div className="col-md-5 col-sm-12 text-center">
@@ -905,7 +1025,7 @@ class Passport extends React.Component {
                                                                 <option value="Brother" > Irmão/Irmã </option>
                                                             </select >
                                                         </div>
-                                                    </div>      
+                                                    </div>
                                                 </div>
                                                 <br></br>
 
@@ -915,48 +1035,73 @@ class Passport extends React.Component {
                                                             <div style={{ padding: 10 + "px", paddingBottom: 45 + "px", paddingTop: -13 + "px" }}>
                                                                 <h5 className="ltTitulo text-center"><b> Tipo de entrada: </b></h5>
                                                                 <select id="tipoEntrada" name="tipoEntrada" className="form-control optionFomulario" onChange={(event) => this.ChangetipoEntrada(event, Criançasqueentrarao._id, indice)} >
-                                                                     <option value="Pass" > Passaporte </option>
+                                                                    <option value="Pass" > Passaporte </option>
                                                                     <option value="Birthday" > Aniversário </option>
                                                                     <option value="BabyPass" > Baby passaporte </option>
                                                                 </select >
                                                             </div>
                                                         </div>
 
+
+
                                                         <br></br>
-                                                        {this.state.tipoEntrada[indice] == "Passaporte" && (
-                                                            <div className="col-md-12 col-sm-12">
-                                                                <div className="graph" >
-                                                                    <div>
-                                                                        <h3 className="inner-tittle " >Entrada Passaporte</h3>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        <br></br>
-                                                        {this.state.tipoEntrada[indice] == "Baby passaporte" && (
-                                                            <div className="col-md-12 col-sm-12">
-                                                                <div className="graph" >
-                                                                    <div>
-                                                                        <h3 className="inner-tittle " >Entrada Baby passaporte</h3>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                        <br></br> 
+
                                                         {this.state.tipoEntrada[indice] == "Aniversário" && (
                                                             <div className="col-md-12 col-sm-12">
                                                                 <div className="graph" >
                                                                     <div>
                                                                         <h3 className="inner-tittle " >Entrada Aniversário</h3>
+                                                                        <div className="row">
+                                                                            <table className="table">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        {/* <th>#</th> */}
+                                                                                        <th >Nome</th>
+                                                                                        <th className="text-center"> Selecionar </th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    {
+
+
+                                                                                        this.state.aniversariante[0].guestList.map((event, index) => {
+
+
+                                                                                            if (event.type === "children" && event.nameChild === undefined) {
+
+
+                                                                                                return (
+                                                                                                    <tr key={index} >
+                                                                                                        {/* <th scope="row">{indice}</th> */}
+                                                                                                        <td > {event.name} </td>
+                                                                                                        <td className="text-center">   <input type="radio" name="selectchild" onClick={() => this.selectedAdultLista(event.name,index, indice)}/>   </td>
+                                                                                                    </tr>
+                                                                                                );
+                                                                                            }
+                                                                                        })
+
+
+                                                                                    }
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                        <br></br>
+                                                                        <br></br>
+                                                                        <div className="graph" >
+                                                                            <div className="text-center">
+                                                                               
+                                                                                <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        )}                                                    
-                                                     
+                                                        )}
+
                                                     </div>
                                                 </div>
 
-                                                <br></br>  
+                                                <br></br>
 
                                                 <div className="graph" >
                                                     <div className="row">
@@ -1030,7 +1175,7 @@ class Passport extends React.Component {
                                         <div className="col-md-7 col-sm-12 text-center">
                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                 <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                <img style={{maxWidth:300+'px'}} src={this.state.listConfirmAdult.photo} />
+                                                <img style={{ maxWidth: 300 + 'px' }} src={this.state.listConfirmAdult.photo} />
                                             </div>
                                         </div>
                                         <div className="col-md-5 col-sm-12 text-center">
@@ -1086,7 +1231,7 @@ class Passport extends React.Component {
                                                 <div className="col-md-7 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                                        <img style={{maxWidth:300+'px'}} src={Criançasqueentrarao.photo} />
+                                                        <img style={{ maxWidth: 300 + 'px' }} src={Criançasqueentrarao.photo} />
                                                     </div>
                                                 </div>
                                                 <div className="col-md-5 col-sm-12 text-center">
@@ -1112,25 +1257,25 @@ class Passport extends React.Component {
                                                 </div>
                                             </div>
                                             <br></br>
-                                            
+
                                             <div className="graph" style={{ padding: 10 + "px" }}>
-                                                    <div className="row">
-                                                        <div className="col-md-6 col-sm-12 col-xs-12">
-                                                            <h3 className="inner-tittle" > Observações </h3>
-                                                            <br></br>
-                                                            <div className="graph" style={{ padding: 10 + "px" }} >
+                                                <div className="row">
+                                                    <div className="col-md-6 col-sm-12 col-xs-12">
+                                                        <h3 className="inner-tittle" > Observações </h3>
+                                                        <br></br>
+                                                        <div className="graph" style={{ padding: 10 + "px" }} >
                                                             <p>{Criançasqueentrarao.observations}</p>
                                                         </div>
-                                                        </div>
-                                                        <div className="col-md-6 col-sm-12 col-xs-12">
-                                                            <h3 className="inner-tittle" > Restrições </h3>
-                                                            <br></br>
-                                                            <div className="graph" style={{ padding: 10 + "px" }} >
+                                                    </div>
+                                                    <div className="col-md-6 col-sm-12 col-xs-12">
+                                                        <h3 className="inner-tittle" > Restrições </h3>
+                                                        <br></br>
+                                                        <div className="graph" style={{ padding: 10 + "px" }} >
                                                             <p>{Criançasqueentrarao.restrictions}</p>
                                                         </div>
-                                                        </div>
                                                     </div>
-                                                </div >
+                                                </div>
+                                            </div >
                                             <div><br></br></div>
                                         </div>
                                     )

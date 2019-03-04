@@ -246,14 +246,13 @@ class EntradaAniversario extends React.Component {
                         let hj = moment().format();
                         let inicio = moment(event.start).format();
                         let fim = moment(event.end).format();
-                        console.log(hj, fim, inicio, event.start, event.end)
-                        console.log(moment(hj).isBefore(fim), moment(hj).isAfter(inicio))
+                       
                         if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
                             temporario.push(event);
                         }
 
                     })
-                    console.log(temporario)
+                   
                     temporario[0].partyFeather.map((pessoa, indice) => {
                         if (pessoa.type === "adult") {
                             adulto.push(pessoa)
@@ -261,7 +260,7 @@ class EntradaAniversario extends React.Component {
                             crianca.push(pessoa)
                         }
                     })
-                    console.log("Olar")
+                   
                     this.setState({
                         listaAdultosDentro: adulto,
                         listaCriancaDentro: crianca,
@@ -272,37 +271,7 @@ class EntradaAniversario extends React.Component {
 
             })
             .catch((err) => console.log(err));
-        // $.ajax({
-        //     url: "/birthday",
-        //     dataType: 'json',
-        //     type: 'GET',
-        //     error: function (response) {
-        //         if (response.length === 0) { this.setState({ erro: "* Erro no servidor" }) }
-        //     },
-        //     success: function (response) {
-        //         console.log(response.length)
-        //         if (response.length === 0) {
-        //             alert("Nenhum aniversário encontrado")
-        //             this.setState({ erro: "* Nenhum Evento Encontrado." })
-        //         } else {
-        //             let adulto = [];
-        //             let crianca = [];
-        //             response[0].partyFeather.map((pessoa, indice) => {
-        //                 if (pessoa.type === "adult") {
-        //                     adulto.push(pessoa)
-        //                 } else {
-        //                     crianca.push(pessoa)
-        //                 }
-        //             })
-        //             console.log("Olar")
-        //             this.setState({
-        //                 listaAdultosDentro: adulto,
-        //                 listaCriancaDentro: crianca,
-        //                 aniversariante: response
-        //             });
-        //         }
-        //     }.bind(this)
-        // });
+      
     }
     //Relacionado a atualização dos valores Funções
     AdicinarFullNome(event) {
