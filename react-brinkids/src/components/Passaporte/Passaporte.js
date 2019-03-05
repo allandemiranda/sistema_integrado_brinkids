@@ -806,9 +806,9 @@ class Passport extends React.Component {
 
         this.state.listConfirmKids.map((kid, indice) => { // #4
             console.log(identifier);
-            if (kid._id === identifier) {
+           // if (kid._id === identifier) {
                 kid.fotoFamily = imageSrc;
-            }
+            //}
         })
 
         const novaListaCriancas = this.state.listConfirmKids;
