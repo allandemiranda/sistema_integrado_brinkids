@@ -202,7 +202,6 @@ router.put('/filter', async (req, res) => {
 			console.log(err);
 			return res.sendStatus(500);
 		}
-		
 	}else{
 		try {
 			const Log = await logs.find({});
