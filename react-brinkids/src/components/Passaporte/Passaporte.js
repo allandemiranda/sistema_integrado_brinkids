@@ -1137,8 +1137,7 @@ class Passport extends React.Component {
                                                             </div>
                                                         </div>
 
-                                                        <br></br>
-
+                                                        <br></br>                                                
                                                         <div className="container-fluid" >
                                                             {this.state.temAniversario && (
                                                                 <div>
@@ -1196,6 +1195,15 @@ class Passport extends React.Component {
                                                             )}
                                                         </div>
                                                     </div>
+                                                    {this.state.tipoEntrada[indice] == "Aniversário" && (
+                                                            <div>
+                                                                {!this.state.temAniversario && (
+                                                                    <div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
+                                                                        <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                    )}
                                                 </div>
 
                                                 <br></br>
