@@ -18,7 +18,7 @@ class Comprovante extends React.Component {
         this.rederizar();
     }
     rederizar = () => {
-        console.log(conteudo)
+        
         const tela_impressao = window.open('about:blank');
         tela_impressao.document.write('<html><head>');
         tela_impressao.document.write('<link rel="stylesheet" type="text/css" href="comprovante.css" />');
@@ -38,14 +38,14 @@ class Comprovante extends React.Component {
     render() {
 
         const byChild = function (events) {
-            console.log(events);
+            
             function Idade(aniversario) {
                 const hoje = new Date;
                 const nascimento = moment(aniversario).format('YYYYMMDD');
-                console.log(nascimento);
+               
                 const a = moment(nascimento, "YYYYMMDD").toNow(true);
                 a.split(' ');
-                console.log(a);
+               
                 return moment(nascimento, "YYYYMMDD").toNow(true);
             }
 

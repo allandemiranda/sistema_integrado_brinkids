@@ -60,7 +60,7 @@ class Passport extends React.Component {
             dadosComprovante: [],
             kinship: [],
             nomeFuncionario: "",
-            
+
             tipoEntrada: [], // Guarda o tipo de entrada da criança
             aniversariante: [], // dados do evento atual
             listaCriancaDentro: [], // lista de crianças que deram entrada.
@@ -270,13 +270,13 @@ class Passport extends React.Component {
                         let hj = moment().format();
                         let inicio = moment(event.start).format();
                         let fim = moment(event.end).format();
-                       
+
                         if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
                             temporario.push(event);
                         }
 
                     })
-                   
+
                     temporario[0].partyFeather.map((pessoa, indice) => {
                         if (pessoa.type === "adult") {
                             adulto.push(pessoa)
@@ -284,7 +284,7 @@ class Passport extends React.Component {
                             crianca.push(pessoa)
                         }
                     })
-                   
+
                     this.setState({
                         listaAdultosDentro: adulto,
                         listaCriancaDentro: crianca,
@@ -295,7 +295,7 @@ class Passport extends React.Component {
 
             })
             .catch((err) => console.log(err));
-      
+
     }
 
 
@@ -565,6 +565,7 @@ class Passport extends React.Component {
     TheEnd = async (event) => {
         var formData = new FormData();
         var listCria = [];
+        var listaY = [];
 
         const adulto = {
             _id: this.state.listConfirmAdult._id,
@@ -578,34 +579,93 @@ class Passport extends React.Component {
             let servico;
             if (this.state.tipoEntrada[i] !== undefined) {
                 servico = this.state.tipoEntrada[i]
+                if (this.state.tipoEntrada[i] === "Aniversário") {
+                    if (this.state.kinship[i] !== undefined) {
+                        crianca = {
+                            _id: String(this.state.listConfirmKids[i]._id),
+                            name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                            birthday: new Date(this.state.listConfirmKids[i].birthday),
+                            restrictions: this.state.listConfirmKids[i].restrictions,
+                            observations: this.state.listConfirmKids[i].observations,
+                            photo: this.state.listConfirmKids[i].fotoFamily,
+                            kinship: this.state.kinship[i],
+                            service: servico,
+                            start: this.state.aniversariante[0].start,
+                            end: this.state.aniversariante[0].end,
+                            name: this.state.aniversariante[0].birthdayPerson.name
+
+                        }
+                    } else {
+                        crianca = {
+                            _id: String(this.state.listConfirmKids[i]._id),
+                            name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                            birthday: new Date(this.state.listConfirmKids[i].birthday),
+                            restrictions: this.state.listConfirmKids[i].restrictions,
+                            observations: this.state.listConfirmKids[i].observations,
+                            photo: this.state.listConfirmKids[i].fotoFamily,
+                            kinship: "Outros",
+                            service: servico,
+                            start: this.state.aniversariante[0].start,
+                            end: this.state.aniversariante[0].end,
+                            name: this.state.aniversariante[0].birthdayPerson.name
+                        }
+                    }
+                    listaY.push({ dados: { type: "children", id: this.state.listConfirmKids[i]._id, nameChild: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName, name: this.state.listConfirmKids[i].aniversarioInfo.name, age: Math.floor(moment(new Date()).diff(moment(this.state.listConfirmKids[i].birthday), 'years', true)) }, id: this.state.listConfirmKids[i].aniversarioInfo._id })
+                } else {
+                    if (this.state.kinship[i] !== undefined) {
+                        crianca = {
+                            _id: String(this.state.listConfirmKids[i]._id),
+                            name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                            birthday: new Date(this.state.listConfirmKids[i].birthday),
+                            restrictions: this.state.listConfirmKids[i].restrictions,
+                            observations: this.state.listConfirmKids[i].observations,
+                            photo: this.state.listConfirmKids[i].fotoFamily,
+                            kinship: this.state.kinship[i],
+                            service: servico
+
+                        }
+                    } else {
+                        crianca = {
+                            _id: String(this.state.listConfirmKids[i]._id),
+                            name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                            birthday: new Date(this.state.listConfirmKids[i].birthday),
+                            restrictions: this.state.listConfirmKids[i].restrictions,
+                            observations: this.state.listConfirmKids[i].observations,
+                            photo: this.state.listConfirmKids[i].fotoFamily,
+                            kinship: "Outros",
+                            service: servico
+                        }
+                    }
+                }
             } else {
                 servico = "Passaporte"
-            }
-            if (this.state.kinship[i] !== undefined) {
-                crianca = {
-                    _id: String(this.state.listConfirmKids[i]._id),
-                    name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
-                    birthday: new Date(this.state.listConfirmKids[i].birthday),
-                    restrictions: this.state.listConfirmKids[i].restrictions,
-                    observations: this.state.listConfirmKids[i].observations,
-                    photo: this.state.listConfirmKids[i].fotoFamily,
-                    kinship: this.state.kinship[i],
-                    service: servico
+                if (this.state.kinship[i] !== undefined) {
+                    crianca = {
+                        _id: String(this.state.listConfirmKids[i]._id),
+                        name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                        birthday: new Date(this.state.listConfirmKids[i].birthday),
+                        restrictions: this.state.listConfirmKids[i].restrictions,
+                        observations: this.state.listConfirmKids[i].observations,
+                        photo: this.state.listConfirmKids[i].fotoFamily,
+                        kinship: this.state.kinship[i],
+                        service: servico
 
-                }
-            } else {
-                crianca = {
-                    _id: String(this.state.listConfirmKids[i]._id),
-                    name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
-                    birthday: new Date(this.state.listConfirmKids[i].birthday),
-                    restrictions: this.state.listConfirmKids[i].restrictions,
-                    observations: this.state.listConfirmKids[i].observations,
-                    photo: this.state.listConfirmKids[i].fotoFamily,
-                    kinship: "Outros",
-                    service: servico
+                    }
+                } else {
+                    crianca = {
+                        _id: String(this.state.listConfirmKids[i]._id),
+                        name: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName,
+                        birthday: new Date(this.state.listConfirmKids[i].birthday),
+                        restrictions: this.state.listConfirmKids[i].restrictions,
+                        observations: this.state.listConfirmKids[i].observations,
+                        photo: this.state.listConfirmKids[i].fotoFamily,
+                        kinship: "Outros",
+                        service: servico
+                    }
                 }
             }
-            console.log(this.state.kinship[i])
+
+
             listCria.push(crianca);
         };
 
@@ -616,13 +676,18 @@ class Passport extends React.Component {
         formData.append('children', JSON.stringify(listCria))
         formData.append('adult', JSON.stringify(adulto));
         formData.append('funcionario', this.state.nomeFuncionario);
-        console.log(listCria)
 
+        
+        const data = {
+            child: listaY,
+            identifier: this.state.aniversariante[0]._id,
+
+        }
         //Fim do formulário;
 
         axios.post('/product', formData)
             .then((response) => {
-                console.log(response.data, "olaa");
+               
                 this.setState({
                     dadosComprovante: {
                         i: response.data,
@@ -633,6 +698,21 @@ class Passport extends React.Component {
 
 
                 // window.location.href = '/';
+            }).then(() => {
+               
+                if (listaY.length > 0) {
+                    axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+                    .then((response) => {
+
+                    }).catch((error) => {
+                        console.log(error)//LOG DE ERRO
+                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    })
+                }
+
+
             }).then(() => {
 
 
@@ -723,7 +803,7 @@ class Passport extends React.Component {
         this.setState({ listConfirmKids: novaListaCriancas }); // #5
 
     };
-    criancaExtra=(event)=> {
+    criancaExtra = (event) => {
         let crianca = { type: "children", id: "", name: "Criança Extra" }
         const data = {
             childExtra: crianca,
@@ -733,7 +813,7 @@ class Passport extends React.Component {
         axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
             .then((response) => {
                 console.log(response)
-                
+
                 this.requisicao();
 
             }).catch((error) => {
@@ -744,16 +824,18 @@ class Passport extends React.Component {
                 this.setState({ erroCadastro: true })
             })
     }
-    selectedAdultLista=(identifier, indice,index)=> {
-        console.log(identifier,indice,index)
-        let listatemporaria = this.state.adultoSelecionado;
+    selectedAdultLista = (identifier, indice, index) => {
+        console.log(identifier, indice, index, Math.floor(moment(new Date()).diff(moment(this.state.listConfirmKids[index].birthday), 'years', true)))
+        let listatemporaria = this.state.listConfirmKids;
         if (this.state.aniversariante[0].guestList[indice].type === "adult") {
-            
+
         } else {
-           
+            listatemporaria[index].aniversarioInfo = this.state.aniversariante[0].guestList[indice]
         }
 
-
+        this.setState({
+            listConfirmKids: listatemporaria
+        })
 
 
 
@@ -1074,7 +1156,7 @@ class Passport extends React.Component {
                                                                                                     <tr key={index} >
                                                                                                         {/* <th scope="row">{indice}</th> */}
                                                                                                         <td > {event.name} </td>
-                                                                                                        <td className="text-center">   <input type="radio" name="selectchild" onClick={() => this.selectedAdultLista(event.name,index, indice)}/>   </td>
+                                                                                                        <td className="text-center">   <input type="radio" name="selectchild" onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
                                                                                                     </tr>
                                                                                                 );
                                                                                             }
@@ -1089,7 +1171,7 @@ class Passport extends React.Component {
                                                                         <br></br>
                                                                         <div className="graph" >
                                                                             <div className="text-center">
-                                                                               
+
                                                                                 <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
                                                                             </div>
                                                                         </div>

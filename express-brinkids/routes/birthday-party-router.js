@@ -9,7 +9,7 @@ const adult = require('../models/adult-models');
 const moment = require('moment');
 router.get('/', async (req, res) => {
   try {
-    const parties = await BirthdayParty.find({}).sort({birthdayDate:-1});
+    const parties = await BirthdayParty.find({}).sort({ birthdayDate: -1 });
 
     return res.status(200).json(parties);
   } catch (err) {
@@ -19,9 +19,9 @@ router.get('/', async (req, res) => {
 });
 router.get('/a', async (req, res) => {
   const parties3 = await BirthdayParty.find({});
-  const hj = moment().startOf('day').subtract(1,"hours").format()
-  const final =  moment().endOf('day').format()
-  console.log(hj,final,parties3[0].birthdayDate    )
+  const hj = moment().startOf('day').subtract(1, "hours").format()
+  const final = moment().endOf('day').format()
+  console.log(hj, final, parties3[0].birthdayDate)
   // let p = "08:30"
   // let h = p.split(":");
   // let i =moment().hour(h[0]).minute(h[1]);
@@ -30,7 +30,7 @@ router.get('/a', async (req, res) => {
   // console.log(moment().format("YYYY-MM-DD HH:MM"),moment().endOf('day').format("YYYY-MM-DD HH:MM"))
 
   try {
-    const parties = await BirthdayParty.find({ 'birthdayDate': { $gte: hj, $lte:final } });
+    const parties = await BirthdayParty.find({ 'birthdayDate': { $gte: hj, $lte: final } });
     console.log(parties)
     return res.status(200).json(parties);
   } catch (err) {
@@ -107,7 +107,7 @@ router.post('/', async (req, res) => {
       to: newBirthday.title,
       price: newBirthday.payment.value,
       priceMethod: newBirthday.payment.method,
-      id:newBirthday._id,
+      id: newBirthday._id,
 
 
     })
@@ -137,8 +137,8 @@ router.delete('/:identifier', async (req, res) => {
       action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
-      to:deletedService.title,
-      id:req.params.identifier
+      to: deletedService.title,
+      id: req.params.identifier
 
     })
     const newLog = await log.save();
@@ -207,7 +207,7 @@ router.put('/:identifier', async (req, res) => {
       to: req.body.title,
       price: parseFloat(req.body.value),
       priceMethod: req.body.method,
-      id:req.params.identifier
+      id: req.params.identifier
     })
     const newLog = await log.save();
     if (!service) {
@@ -228,7 +228,7 @@ router.put('/partyFeather/:identifier', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-
+  console.log(req.body)
   if (req.body.adult) {
     try {
       const birthday = await BirthdayParty.findById(req.params.identifier);
@@ -261,34 +261,36 @@ router.put('/partyFeather/:identifier', async (req, res) => {
   if (req.body.child) {
     console.log("================================")
 
-
+    console.log(req.body.child)
 
     try {
 
 
-      const birthday = await BirthdayParty.findById(req.params.identifier);
+      req.body.child.map(async(event, index) => {
+        
+        const birthday = await BirthdayParty.findById(req.params.identifier);
 
-      birthday.guestList.map((list, indice, array) => {
+        birthday.guestList.map((list, indice, array) => {
 
-        if (list._id.toString() === req.body.id) {
-          console.log("================================")
-          birthday.guestList[indice] = req.body.child;
-          console.log("deu certo")
+          if (list._id.toString() === event.id) {
+            
+            birthday.guestList[indice] = event.dados;
+           
 
+          }
+        })
+
+        birthday.partyFeather.push( event.dados);
+
+
+        birthday.save();
+        if (!birthday) {
+          
+          return res.sendStauts(404);
         }
       })
 
-      birthday.partyFeather.push(req.body.child);
-
-
-      birthday.save()
-
-      if (!birthday) {
-        console.log("=================")
-        console.log("olaaaaaa")
-        console.log("=================")
-        return res.sendStauts(404);
-      }
+      
 
       return res.sendStatus(204);
     } catch (err) {
@@ -323,7 +325,7 @@ router.put('/partyFeather/:identifier', async (req, res) => {
     dateOperation: new Date(),
     from: funcionario, //ajsuta o id dps de fazer o login funcionar
     to: birthday.title,
-    id:birthday._id
+    id: birthday._id
 
   })
 });

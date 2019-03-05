@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
   const b = jwt.verify(a, config.secret_auth);
   const adultFound = await adult.find({ _id: b.id, isEmployee: true }).populate('identifierEmployee');
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
-  console.log(req.body)
+  
   try {
     const adult = JSON.parse(req.body.adult);
 
@@ -70,9 +70,9 @@ router.post('/', async (req, res) => {
           belongings: req.body.belongings,
           kinship: child.kinship,
 
-            birthdayStart:req.body.start,
-            birthdayEnd:req.body.end,
-            birthdayName:req.body.name,
+            birthdayStart:child.start,
+            birthdayEnd:child.end,
+            birthdayName:child.name,
           
       });
       if (child.service === "Aniversário") {
