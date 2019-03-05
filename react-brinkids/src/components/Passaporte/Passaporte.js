@@ -66,6 +66,8 @@ class Passport extends React.Component {
             listaCriancaDentro: [], // lista de crianças que deram entrada.
             listaAdultosDentro: [], // lista de adultos que deram entrada.
             adultoSelecionado: [], // ADULTOS que foi selecionadaos para da entrada.
+            guestList: [],
+            temAniversario: false,
         }
 
 
@@ -236,6 +238,17 @@ class Passport extends React.Component {
                 console.log("<--------------->");
                 if (event.target.value === "Birthday") {
                     listatiposentrada[indice] = "Aniversário";
+
+                    axios.get(`/birthday/a`)
+                    .then((response) => {
+                        if (response.data.length === 0) {
+                            // alert("Nenhum aniversário encontrado")
+                            this.setState({temAniversario: false})
+                        } else {
+                            this.setState({temAniversario: true})
+                        }        
+                    })
+                    .catch((err) => console.log(err));
                 }
                 else if (event.target.value === "Pass") {
                     listatiposentrada[indice] = "Passaporte";
@@ -1124,62 +1137,64 @@ class Passport extends React.Component {
                                                             </div>
                                                         </div>
 
-
-
                                                         <br></br>
 
-                                                        {this.state.tipoEntrada[indice] == "Aniversário" && (
-                                                            <div className="col-md-12 col-sm-12">
-                                                                <div className="graph" >
-                                                                    <div>
-                                                                        <h3 className="inner-tittle " >Entrada Aniversário</h3>
-                                                                        <div className="row">
-                                                                            <table className="table">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        {/* <th>#</th> */}
-                                                                                        <th >Nome</th>
-                                                                                        <th className="text-center"> Selecionar </th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    {
-
-
-                                                                                        this.state.aniversariante[0].guestList.map((event, index) => {
-
-
-                                                                                            if (event.type === "children" && event.nameChild === undefined) {
-
-
-                                                                                                return (
-                                                                                                    <tr key={index} >
-                                                                                                        {/* <th scope="row">{indice}</th> */}
-                                                                                                        <td > {event.name} </td>
-                                                                                                        <td className="text-center">   <input type="radio" name="selectchild" onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
-                                                                                                    </tr>
-                                                                                                );
-                                                                                            }
-                                                                                        })
-
-
-                                                                                    }
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                        <br></br>
-                                                                        <br></br>
-                                                                        <div className="graph" >
-                                                                            <div className="text-center">
-
-                                                                                <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
+                                                        <div className="container-fluid" >
+                                                            {this.state.temAniversario && (
+                                                                <div>
+                                                                    {this.state.tipoEntrada[indice] == "Aniversário" && (
+                                                                        <div className="col-md-12 col-sm-12">
+                                                                            <div className="graph" >
+                                                                                <div>
+                                                                                    <h3 className="inner-tittle " >Entrada Aniversário</h3>
+                                                                                    <div className="row">
+                                                                                        <table className="table">
+                                                                                            <thead>
+                                                                                                <tr>
+                                                                                                    {/* <th>#</th> */}
+                                                                                                    <th >Nome</th>
+                                                                                                    <th className="text-center"> Selecionar </th>
+                                                                                                </tr>
+                                                                                            </thead>
+                                                                                            <tbody>
+                                                                                                {
+            
+            
+                                                                                                    this.state.aniversariante[0].guestList.map((event, index) => {
+            
+            
+                                                                                                        if (event.type === "children" && event.nameChild === undefined) {
+            
+            
+                                                                                                            return (
+                                                                                                                <tr key={index} >
+                                                                                                                    {/* <th scope="row">{indice}</th> */}
+                                                                                                                    <td > {event.name} </td>
+                                                                                                                    <td className="text-center">   <input type="radio" name="selectchild" onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
+                                                                                                                </tr>
+                                                                                                            );
+                                                                                                        }
+                                                                                                    })
+            
+            
+                                                                                                }
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </div>
+                                                                                    <br></br>
+                                                                                    <div className="graph" >
+                                                                                        <div className="text-center">
+            
+                                                                                            <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        )}
-
+                                                                    )}
+                                                                </div> 
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
 
