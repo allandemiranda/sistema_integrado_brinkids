@@ -70,9 +70,9 @@ router.post('/', async (req, res) => {
           belongings: req.body.belongings,
           kinship: child.kinship,
 
-            birthdayStart:child.start,
-            birthdayEnd:child.end,
-            birthdayName:child.name,
+            birthdayStart:child.bstart,
+            birthdayEnd:child.bend,
+            birthdayName:child.bname,
           
       });
       if (child.service === "Aniversário") {

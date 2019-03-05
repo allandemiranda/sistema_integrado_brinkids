@@ -590,9 +590,9 @@ class Passport extends React.Component {
                             photo: this.state.listConfirmKids[i].fotoFamily,
                             kinship: this.state.kinship[i],
                             service: servico,
-                            start: this.state.aniversariante[0].start,
-                            end: this.state.aniversariante[0].end,
-                            name: this.state.aniversariante[0].birthdayPerson.name
+                            bstart: this.state.aniversariante[0].start,
+                            bend: this.state.aniversariante[0].end,
+                            bname: this.state.aniversariante[0].birthdayPerson.name
 
                         }
                     } else {
@@ -605,9 +605,9 @@ class Passport extends React.Component {
                             photo: this.state.listConfirmKids[i].fotoFamily,
                             kinship: "Outros",
                             service: servico,
-                            start: this.state.aniversariante[0].start,
-                            end: this.state.aniversariante[0].end,
-                            name: this.state.aniversariante[0].birthdayPerson.name
+                            bstart: this.state.aniversariante[0].start,
+                            bend: this.state.aniversariante[0].end,
+                            bname: this.state.aniversariante[0].birthdayPerson.name
                         }
                     }
                     listaY.push({ dados: { type: "children", id: this.state.listConfirmKids[i]._id, nameChild: this.state.listConfirmKids[i].name.firstName + ' ' + this.state.listConfirmKids[i].name.surName, name: this.state.listConfirmKids[i].aniversarioInfo.name, age: Math.floor(moment(new Date()).diff(moment(this.state.listConfirmKids[i].birthday), 'years', true)) }, id: this.state.listConfirmKids[i].aniversarioInfo._id })
@@ -687,7 +687,7 @@ class Passport extends React.Component {
 
         axios.post('/product', formData)
             .then((response) => {
-               
+               console.log(response.data)
                 this.setState({
                     dadosComprovante: {
                         i: response.data,

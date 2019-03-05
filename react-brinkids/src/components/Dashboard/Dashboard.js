@@ -254,7 +254,7 @@ class DashBoard extends React.Component {
 								comprovante1:false,
 							})
 						},200)
-					} else if(event.service ==="Aniversario"){
+					} else if(event.service ==="Aniversário"){
 						this.setState({
 							dadosComprovante:event,
 							comprovante2:true,
