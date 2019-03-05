@@ -57,6 +57,7 @@ class GerenciamentoFinanceiro extends React.Component {
 
             ListaGrafico: dados,
             ListaFluxo: [],
+            Rfo:"true",
             ROpr: "true",
             RAtv: "true",
             RData: "true",
@@ -69,6 +70,7 @@ class GerenciamentoFinanceiro extends React.Component {
 
             sectionGrafico: "content-current",
             sectionFluxo: "",
+            FormPag:"",
 
         };
         this.selectGrafico = this.selectGrafico.bind(this);
@@ -85,11 +87,12 @@ class GerenciamentoFinanceiro extends React.Component {
             atividade: this.state.Atividade,
             start: this.state.DataEntrada,
             end: this.state.DataSaida,
+            pagamento:this.state.FormPag,
         }
         console.log(data);
         axios.put('/log/filter', data)
             .then((response) => {
-                this.setState({ ListaFluxo: response.data });
+                this.setState({ ListaFluxo: response.data.reverse()});
                 console.log(response.data);
             })
             .catch((err) => console.log(err));
@@ -189,6 +192,22 @@ class GerenciamentoFinanceiro extends React.Component {
             })
         }
     }
+    Rfo = (event) => {
+        event.preventDefault();
+        if (this.state.Rfo === "true") {
+            $("#Forma").addClass('displaynone');
+            this.setState({
+                Rfo: "false",
+                FormPag: "",
+            })
+        }
+        else {
+            $("#Forma").removeClass('displaynone');
+            this.setState({
+                Rfo: "true",
+            })
+        }
+    }
     RAtv = (event) => {
         event.preventDefault();
         console.log("entrei");
@@ -284,7 +303,7 @@ class GerenciamentoFinanceiro extends React.Component {
             lista.push(a);
 
         }
-       
+
         const datas = lista.map(async (crianca, index) => {
 
             const a = moment(crianca).startOf('day').toDate();
@@ -302,7 +321,7 @@ class GerenciamentoFinanceiro extends React.Component {
         Promise.all(datas).then((listagraficos) => {
 
             listagraficos.map((date, indice) => {
-              
+
                 date.map((info, index) => {
                     if (info.activity === "Aniversario" && info.action === "Criação") {
                         aniversario = aniversario + info.price;
@@ -313,14 +332,14 @@ class GerenciamentoFinanceiro extends React.Component {
                     if (info.activity === "Serviços" && info.action === "Saida") {
                         servicoproduto = servicoproduto + info.price;
                     }
-                  
-                    
-                   
+
+
+
 
                 })
-                
+
                 const temporario = {
-                    name:  nome= moment(lista[total]).format("DD/MM"), Passaporte: passaporte.toFixed(2), Aniversario: aniversario.toFixed(2), ServiçoProduto: servicoproduto.toFixed(2), Total: (passaporte + aniversario + servicoproduto).toFixed(2)
+                    name: nome = moment(lista[total]).format("DD/MM"), Passaporte: passaporte.toFixed(2), Aniversario: aniversario.toFixed(2), ServiçoProduto: servicoproduto.toFixed(2), Total: (passaporte + aniversario + servicoproduto).toFixed(2)
                 }
 
                 total++;
@@ -331,13 +350,13 @@ class GerenciamentoFinanceiro extends React.Component {
                 passaporte = 0;
                 aniversario = 0;
                 servicoproduto = 0;
-                
+
                 nome = '';
             })
 
-            
 
-           
+
+
             this.setState({
                 listagraficos: listaparaostate.reverse()
             })
@@ -393,10 +412,10 @@ class GerenciamentoFinanceiro extends React.Component {
                             </ul>
                         </nav>
                         <div className="content tab">
-                            <section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionGrafico}  >
+                            <section style={{ paddingTop: 0 + 'em', paddingBottom: 0 + 'em', paddingRight: 0 + 'em', paddingLeft: 0 + 'em', fontSize: 16 + 'px' }} className={this.state.sectionGrafico}  >
                                 <br></br>
                                 <div class="graph graph-visual text-center">
-                                    
+
                                     <LineChart className="grafico" width={800} height={600} data={this.state.listagraficos} margin={{ top: 5, right: 30, bottom: 5 }}>
                                         <XAxis dataKey="name" />
                                         <YAxis />
@@ -415,7 +434,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                 </div>
                             </section>
 
-                            <section style={{paddingTop: 0+'em',paddingBottom: 0+'em',paddingRight: 0+'em',paddingLeft: 0+'em',fontSize:16+'px'}} className={this.state.sectionFluxo}>
+                            <section style={{ paddingTop: 0 + 'em', paddingBottom: 0 + 'em', paddingRight: 0 + 'em', paddingLeft: 0 + 'em', fontSize: 16 + 'px' }} className={this.state.sectionFluxo}>
                                 <br></br>
                                 <div class="graph graph-visual tables-main">
                                     <div className="graph-visual">
@@ -432,6 +451,14 @@ class GerenciamentoFinanceiro extends React.Component {
                                                 </div>
                                                 <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Operador: "} type={"text"} id={"Operador"} name={"Operador"} Class={"form-control"}
                                                     value={this.state.Operador} onChange={this.ChangeValue}
+                                                />
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-md-1 col-sm-1 col-xs-1">
+                                                    <button className="btn botao tam" onClick={this.Rfo}><i class="fas fa-times"></i></button>
+                                                </div>
+                                                <TypesInput cod={1} ClassDiv={"col-md-11 col-sm-11 col-xs-11"} ClassLabel={"LetraFormulario"} NameLabel={"Forma de Pagamento: "} type={"text"} id={"Forma"} name={"FormPag"} Class={"form-control"}
+                                                    value={this.state.FormPag} onChange={this.ChangeValue}
                                                 />
                                             </div>
                                             <div className="row">
