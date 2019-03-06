@@ -57,6 +57,28 @@ router.put('/filter', async (req, res) => {
 		if (req.body.atividade !== "") {
 
 			if (req.body.start !== "" && req.body.end !== "") {
+
+				if (req.body.pagamento !== "") {
+					try {
+						const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento), 'from': new RegExp(req.body.operador), 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+
+						return res.json(Log);
+					} catch (err) {
+						console.log(err);
+						return res.sendStatus(500);
+					}
+				}
+
+			} else if (req.body.pagamento !== "") {
+				try {
+					const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento), 'from': new RegExp(req.body.operador), 'activity': new RegExp(req.body.atividade) });
+
+					return res.json(Log);
+				} catch (err) {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			} else {
 				try {
 					const Log = await logs.find({ 'from': new RegExp(req.body.operador), 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
 
@@ -75,8 +97,30 @@ router.put('/filter', async (req, res) => {
 				return res.sendStatus(500);
 			}
 		} else if (req.body.start !== "" && req.body.end !== "") {
+
+			if (req.body.pagamento !== "") {
+				try {
+					const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento), 'from': new RegExp(req.body.operador), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+
+					return res.json(Log);
+				} catch (err) {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			} else {
+				try {
+					const Log = await logs.find({ 'from': new RegExp(req.body.operador), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+
+					return res.json(Log);
+				} catch (err) {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			}
+
+		} else {
 			try {
-				const Log = await logs.find({ 'from': new RegExp(req.body.operador), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+				const Log = await logs.find({ 'from': req.body.operador });
 
 				return res.json(Log);
 			} catch (err) {
@@ -84,19 +128,42 @@ router.put('/filter', async (req, res) => {
 				return res.sendStatus(500);
 			}
 		}
-		try {
-			const Log = await logs.find({ 'from':req.body.operador });
 
-			return res.json(Log);
-		} catch (err) {
-			console.log(err);
-			return res.sendStatus(500);
-		}
 	} else if (req.body.atividade !== "") {
 
 		if (req.body.start !== "" && req.body.end !== "") {
+			if (req.body.pagamento !== "") {
+				try {
+					const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento), 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+
+					return res.json(Log);
+				} catch (err) {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			} else {
+				try {
+					const Log = await logs.find({ 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+
+					return res.json(Log);
+				} catch (err) {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			}
+
+		} else if (req.body.pagamento !== "") {
 			try {
-				const Log = await logs.find({ 'activity': new RegExp(req.body.atividade), 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+				const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento), 'activity': new RegExp(req.body.atividade) });
+
+				return res.json(Log);
+			} catch (err) {
+				console.log(err);
+				return res.sendStatus(500);
+			}
+		} else {
+			try {
+				const Log = await logs.find({ 'activity': new RegExp(req.body.atividade) });
 
 				return res.json(Log);
 			} catch (err) {
@@ -104,17 +171,31 @@ router.put('/filter', async (req, res) => {
 				return res.sendStatus(500);
 			}
 		}
-		try {
-			const Log = await logs.find({ 'activity': new RegExp(req.body.atividade) });
 
-			return res.json(Log);
-		} catch (err) {
-			console.log(err);
-			return res.sendStatus(500);
-		}
 	} else if (req.body.start !== "" && req.body.end !== "") {
+		if(req.body.pagamento!==""){
+			try {
+				const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento),'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+	
+				return res.json(Log);
+			} catch (err) {
+				console.log(err);
+				return res.sendStatus(500);
+			}
+		}else{
+			try {
+				const Log = await logs.find({ 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+	
+				return res.json(Log);
+			} catch (err) {
+				console.log(err);
+				return res.sendStatus(500);
+			}
+		}
+		
+	} else if(req.body.pagamento !=="") {
 		try {
-			const Log = await logs.find({ 'dateOperation': { $gte: moment(req.body.start), $lte: moment(req.body.end) } });
+			const Log = await logs.find({ 'priceMethod': new RegExp(req.body.pagamento) });
 
 			return res.json(Log);
 		} catch (err) {
