@@ -1120,7 +1120,8 @@ class SaidaCrianca extends React.Component {
                                                 <label className="LetraFormulario brlabel">Forma de Pagamento:</label>
                                                 <br></br>
                                                 <label className="radio-inline"><input type="radio" id="Dinheiro" name="FormPag" value="Dinheiro" onClick={this.ChangeValue} /><p className="LetraFormulario">  Dinheiro</p></label>
-                                                <label className="radio-inline"><input type="radio" id="Cartao" name="FormPag" value="Cartao" onClick={this.ChangeValue} /><p className="LetraFormulario">  Cartão</p></label>
+                                                <label className="radio-inline"><input type="radio" id="Debito" name="FormPag" value="Debito" onClick={this.ChangeValue} /><p className="LetraFormulario">  Débito</p></label>
+                                                <label className="radio-inline"><input type="radio" id="Credito" name="FormPag" value="Credito" onClick={this.ChangeValue} /><p className="LetraFormulario">  Crédito</p></label>
                                             </div>
                                         </div>
                                     </div>

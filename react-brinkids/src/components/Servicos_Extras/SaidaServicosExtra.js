@@ -452,7 +452,8 @@ class SaidaServicosExtra extends React.Component {
                                         <label className="LetraFormulario" > Forma De Pagamento: </label>
                                         <select id="FormaDePagamento" onChange={this.ChangeSearch} name="FormaDePagamento" className="form-control optionFomulario"   >
                                             <option value="Dinheiro" > Dinheiro </option>
-                                            <option value="Cartão" >  Cartão </option>
+                                            <option value="Debito" >  Débito </option>
+                                            <option value="Credito" >  Crédito </option>
                                         </select >
                                     </div>
                                 </div>
