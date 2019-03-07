@@ -236,7 +236,7 @@ router.put('/:identifier', async (req, res) => {
   let lista = []
   console.log(JSON.parse(req.body.children).length, req.body.children)
   if (JSON.parse(req.body.children).length === 0) {
-    lista = []
+    lista = '[]'
   } else {
     lista = req.body.children
   }
@@ -262,7 +262,7 @@ router.put('/:identifier', async (req, res) => {
     const log = new Logs({
       activity: 'Perfil Adulto',
       action: 'Edição',
-      dateOperation: new Date(),
+      dateOperation: moment().format(),
       from: funcionario, //ajsuta o id dps de fazer o login funcionar
       to: adultModified.name.firstName + " " + adultModified.name.surName,
       id: req.params.identifier,

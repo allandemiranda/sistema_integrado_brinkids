@@ -889,6 +889,7 @@ class PerfilAdulto extends React.Component {
                                                             <th>#</th>
                                                             <th>Nome</th>
                                                             <th>Parentesco</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="CriaTabela">

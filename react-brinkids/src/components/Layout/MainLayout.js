@@ -31,6 +31,7 @@ class MainLayout extends React.Component {
             name: "",
             cargo: "",
             page: "",
+            lista:[],
 
         }
         this.DiminueMenu = this.DiminueMenu.bind(this);
@@ -77,20 +78,37 @@ class MainLayout extends React.Component {
 
                     axios.get(`/professionalPosition/indentifier/${id}`)
                         .then((response) => {
-
                            
+                       
                             if(response.data!== null){
+                                let temporario = [];
+                                for(var a =0;a<32;a++){
+                                    temporario[a]=false;
+                                }
+                             temporario.forEach((event,indice,array)=>{
+                                response.data.functions.map((evento,index)=>{
+                                    if(evento.id===indice){
+                                        array[indice]=true
+                                    }
+                                })
+                             })
                                 this.setState({
                                     cargo: response.data.name,
-                                    page: "carregado"
+                                    
                                 })
-    
+                                return temporario
                             }else{
                                 alert("Funcionário sem cargo")
                                 window.location.href ="/Login"
                             }
                             
-
+                            
+                        }).then((lista)=>{
+                            this.setState({
+                               
+                                page: "carregado",
+                                lista: lista,
+                            })
                         })
                         .catch((err) => console.log(err));
                 })
@@ -115,7 +133,7 @@ class MainLayout extends React.Component {
 
     }
     DiminueMenu() {
-    
+    console.log(this.state.lista)
         if (toggle) {
             $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
             $("#menu span").css({ "position": "absolute" });
@@ -178,8 +196,8 @@ class MainLayout extends React.Component {
                         </header>
                         <div className="bordaDaDiv"> </div>
                         <div className="down" style={{ paddingBottom: 15 + 'px' }}>
-                            {this.state.name !== "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={this.state.FuncionarioLogado.photo} /></a>)}
-                            {this.state.name === "admins" && (<a ><img img style={{ maxWidth: 139 + "px" }} src={logo} /></a>)}
+                            {this.state.name !== "admins" && (<a ><img  style={{ maxWidth: 139 + "px" }} src={this.state.FuncionarioLogado.photo} /></a>)}
+                            {this.state.name === "admins" && (<a ><img  style={{ maxWidth: 139 + "px" }} src={logo} /></a>)}
 
                             {this.state.name !== "admins" && (<a ><span className=" name-caret">{this.state.FuncionarioLogado.name.firstName }</span></a>)}
                             {this.state.name === "admins" && (<a ><span className=" name-caret">{this.state.name}</span></a>)}
@@ -202,35 +220,35 @@ class MainLayout extends React.Component {
                                 <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-user-cog"></i> <span>Configurações</span> <span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                     <ul>
 
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoPassaporte">Passaporte </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoBabypassaporte">Baby P </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/GerenciamentoFinanceiro">Financeiro</Link></li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/TelaMKT">Marketing</Link></li>
+                                        {this.state.lista[27]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoPassaporte">Passaporte </Link></li>)}
+                                        {this.state.lista[27]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/ServicoBabypassaporte">Baby P </Link></li>)}
+                                        {this.state.lista[28]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Desconto">Desconto </Link></li>)}
+                                        {this.state.lista[9]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gerador_funcoes">Funcionários </Link></li>)}
+                                       {this.state.lista[29]&&( <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/Gavetas">Gavetas </Link></li>)}
+                                        {this.state.lista[30]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/GerenciamentoFinanceiro">Financeiro</Link></li>)}
+                                        {this.state.lista[31]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/TelaMKT">Marketing</Link></li>)}
                                     </ul>
                                 </li>
                                 <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuários</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                     <ul id="menu-comunicacao-sub" >
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
+                                        {this.state.lista[6]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                             <ul id="menu-mensagens-sub" >
-                                                <li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Crianca">Novo</Link></li>
+                                                {this.state.lista[4]&&(<li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Crianca">Novo</Link></li>)}
                                                 <li id="menu-mensagens-recebidas" style={{ width: 130 + "px" }}><Link to="/PerfilCrianca">Visualizar</Link></li>
                                             </ul>
-                                        </li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Adulto <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
+                                        </li>)}
+                                        {this.state.lista[2]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Adulto <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                             <ul id="menu-mensagens-sub" >
-                                                <li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Adult">Novo</Link></li>
+                                                {this.state.lista[0]&&(<li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Adult">Novo</Link></li>)}
                                                 <li id="menu-mensagens-recebidas" style={{ width: 130 + "px" }}><Link to="/PerfilAdulto">Visualizar</Link></li>
                                             </ul>
-                                        </li>
-                                        <li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Funcionário <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
+                                        </li>)}
+                                        {this.state.lista[10]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Funcionário <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                             <ul id="menu-mensagens-sub" >
-                                                <li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Funcionario">Novo</Link></li>
+                                                {this.state.lista[8]&&(<li id="menu-mensagens-enviadas" style={{ width: 130 + "px" }} ><Link to="/Funcionario">Novo</Link></li>)}
                                                 <li id="menu-mensagens-recebidas" style={{ width: 130 + "px" }}><Link to="/Perfil">Visualizar</Link></li>
                                             </ul>
-                                        </li>
+                                        </li>)}
 
                                     </ul>
                                 </li>
@@ -240,17 +258,17 @@ class MainLayout extends React.Component {
                                         <span>Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
                                     </Link>
                                     <ul id="menu-comunicacao-sub" >
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Passaporte </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Babypassport">Baby Passaporte </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversário </Link></li>
+                                        {this.state.lista[19]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Geral </Link></li>)}
+                                        
+                                        {this.state.lista[18]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/EntradaAniversario"> Aniversário(Adulto) </Link></li>)}
                                     </ul>
                                 </li>
-                                <li >
+                                {this.state.lista[20]&&(<li >
                                     <Link to="/SaidaCrianca" >
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>
                                         <span>Saída</span >
                                     </Link>
-                                </li>
+                                </li>)}
 
                                 <li >
                                     <Link to="/" >
@@ -258,14 +276,14 @@ class MainLayout extends React.Component {
                                         <span>Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
                                     </Link>
                                     <ul id="menu-comunicacao-sub" >
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Serviços"> Gerenciamento </Link></li>
+                                        {this.state.lista[21]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>)}
+                                        {this.state.lista[24]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Serviços"> Gerenciamento </Link></li>)}
                                     </ul>
                                 </li>
                                 <li id="menu-comunicacao" ><Link to="/"><i class="fas fa-rocket"></i> <span>Aniversário</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                     <ul id="menu-comunicacao-sub" >
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Aniversario">Cadastrar </Link></li>
-                                        <li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/VAniversario"> Visualizar </Link></li>
+                                        {this.state.lista[12]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Aniversario">Cadastrar </Link></li>)}
+                                        {this.state.lista[14]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/VAniversario"> Visualizar </Link></li>)}
                                     </ul>
                                 </li>
                                 {/*<li id = "menu-academico" >
@@ -283,12 +301,12 @@ class MainLayout extends React.Component {
                                     </li>
                                 </ul>
                              </li>*/}
-                                <li >
+                               {this.state.lista[16]&&( <li >
                                     <Link to="/Calendario" >
                                         < i className="fa fa-calendar" > </i>
                                         <span>Calendário</span >
                                     </Link>
-                                </li>
+                                </li>)}
 
 
 
