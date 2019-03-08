@@ -552,6 +552,7 @@ class PerfilAdulto extends React.Component {
                             this.setState({
                                 listaFuncionarios: listaCriancas,
                                 page: "Perfil",
+                                childSearch:"" 
                             })
                         });
 
@@ -967,7 +968,7 @@ class PerfilAdulto extends React.Component {
                         <div className="graph" >
                             <h3 className="inner-tittle" > Buscar Criança</h3>
                             <div className=" text-center">
-                                <input type="search" id="childSearch" name="childSearch" className="form-control" value={this.state.childSearch} onChange={this.ChangechildSearch} />
+                                <input type="search" id="childSearch" name="childSearch" className="form-control text-center" value={this.state.childSearch} onChange={this.ChangechildSearch} />
                                 <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
                             </div>
                         </div>
@@ -1001,7 +1002,7 @@ class PerfilAdulto extends React.Component {
                             </table>
 
                             <div className="text-center">
-                                <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Perfil' })}>Voltar</button>
+                                <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Perfil' ,childSearch:"" })}>Voltar</button>
                                 <button className="btn btn-md botao botaoAvançar" onClick={() => this.setState({ page: 'ConfirmarCriança' })}> Adicinar Criança </button>
                             </div>
                         </div>
@@ -1054,7 +1055,7 @@ class PerfilAdulto extends React.Component {
                     </div>
                     <br></br>
                     <div className="text-center">
-                        <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Adicionar' })}>Voltar</button>
+                        <button className="btn btn-md botao" onClick={() => this.setState({ page: 'Adicionar',childSearch:"" })}>Voltar</button>
                         <button className="btn btn-md botao botaoAvançar" onClick={this.TheEnd}>Finalizar</button>
                     </div>
                 </div>

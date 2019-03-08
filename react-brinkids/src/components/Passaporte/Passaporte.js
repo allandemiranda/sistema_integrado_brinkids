@@ -690,12 +690,13 @@ class Passport extends React.Component {
         formData.append('adult', JSON.stringify(adulto));
         formData.append('funcionario', this.state.nomeFuncionario);
 
-        
-        const data = {
+        let data;  
+        if(this.state.temAniversario){
+             data = {
             child: listaY,
             identifier: this.state.aniversariante[0]._id,
 
-        }
+        }}
         //Fim do formulário;
 
         axios.post('/product', formData)
