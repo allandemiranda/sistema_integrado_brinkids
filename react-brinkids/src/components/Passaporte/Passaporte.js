@@ -1097,7 +1097,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{moment(this.state.listConfirmAdult.birthday).format('DD/MM/YYYY')} </p>
+                                                            <p>{moment(Criançasqueentrarao.birthday).add(1,'days').format('DD/MM/YYYY')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1343,7 +1343,8 @@ class Passport extends React.Component {
                                                 <div className="col-md-5 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                        <p>{this.state.kinship[indice]}</p>
+                                                       {this.state.kinship[indice]!== undefined&&( <p>{this.state.kinship[indice]}</p>)}
+                                                       {this.state.kinship[indice]=== undefined&&( <p>Outros</p>)}
                                                     </div>
                                                     <br></br>
                                                     <div className="row">
@@ -1357,6 +1358,12 @@ class Passport extends React.Component {
                                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                                 <h5 className="ltTitulo"><b> Idade: </b></h5>
                                                                 <p>{moment(Criançasqueentrarao.birthday, "YYYYMMDD").toNow(true)}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-12 col-sm-12 text-center">
+                                                            <div className="graph" style={{ padding: 10 + "px" }}>
+                                                                <h5 className="ltTitulo"><b> Tipo de Entrada: </b></h5>
+                                                                {(this.state.tipoEntrada[indice]!==undefined)?(<p>{this.state.tipoEntrada[indice]}</p>):<p>Passaporte</p>}
                                                             </div>
                                                         </div>
                                                     </div>

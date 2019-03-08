@@ -685,7 +685,7 @@ class EntradaAniversario extends React.Component {
                     <br></br>
                     <div className="graph" >
                         {this.state.algo && (<div className="text-center">
-                            <button className="btn btn-md botao" onClick={this.SelecionarCrianca}> Criança</button>
+                            
                             <button className="btn btn-md botao" onClick={this.SelecionarAdulto}> Adulto </button>
                         </div>)}
                     </div>
