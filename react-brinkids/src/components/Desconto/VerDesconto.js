@@ -94,7 +94,8 @@ class VerDesconto extends React.Component {
                                     <div className="row">
                                         <div className="col-md-3 col-sm-3 col-xs-12">
                                             <label className="LetraFormulario"> Para:</label>
-                                            <input type="text" id="Para" name="Para" className="form-control" value={this.state.TypePeople} disabled />
+                                            {this.state.TypePeople==="Child"&&(<input type="text" id="Para" name="Para" className="form-control" value="Criança" disabled />)}
+                                            {this.state.TypePeople==="Adult"&&(<input type="text" id="Para" name="Para" className="form-control" value="Adulto" disabled />)}
                                         </div>
                                         <div className="col-md-3 col-sm-3 col-xs-12">
                                             <label className="LetraFormulario">Quantidade:</label>

@@ -114,12 +114,29 @@ class SaidaCrianca extends React.Component {
     requisicao = () => {
         axios.get('/product')
             .then((response) => {
-                console.log("Dentro do axios: " + this)
+
                 console.log(response.data);
+                
+                let ids = response.data.map((event, inice) => { return event.adult.id })
+                console.log(ids)
+                var novaArr = ids.filter(function (este, i) {
+                    return ids.indexOf(este) == i;
+                })
+                let final =[];
+                for(var i =0;i<novaArr.length;i++){
+                    for(var j =0;j<response.data.length;j++){
+                        if(response.data[j].adult.id ===novaArr[i]){
+                            final.push({name:response.data[j].adult.name,phone:response.data[j].adult.phone,id:novaArr[i]})
+                            break;
+                        }
+                    }
+                }
                 this.setState({
                     listAdultos: response.data,
                     verified: true,
+                    listAdultosSemDuplicado:final
                 });
+                console.log(final)
                 // console.log("adultos", this.state.listAdultos)
             }).catch((error) => {
                 console.log("Não deu certo");
@@ -129,45 +146,43 @@ class SaidaCrianca extends React.Component {
                 // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                 // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
             })
-        console.log(this.state.listAdultos)
 
         ///Função que limpa a lista de duplicatas.
-        function noRepeat(arr) {
-            var cleaned = [];
-            arr.forEach(function (item) {
-                var unique = true;
-                cleaned.forEach(function (item2) {
-                    console.log("item: ", item.adult.id);
-                    console.log("item2: ", item2.adult.id)
-                    if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
-                        unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
-                    };
-                });
-                if (unique) {  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
-                    cleaned.push(item)
-                };
-            });
-            return cleaned;
-        }
+        // function noRepeat(arr) {
+        //     var cleaned = [];
+        //     arr.forEach(function (item) {
+        //         var unique = true;
+        //         cleaned.forEach(function (item2) {
 
-        setTimeout(_ => {
+        //             if (item.adult.id === item2.adult.id) {//se os id forem iguais ele não salva na lista
+        //                 unique = false//variavel de verificação necessária pq só vai salvar quando terminar o loop interno
+        //             };
+        //         });
+        //         if (unique) {  //agora se no loop interno nenhuma vez encontrou um id de adulto igual a outro, ele salva
+        //             cleaned.push(item)
+        //         };
+        //     });
+        //     return cleaned;
+        // }
 
-            if (this.state.verified === true) {
+        // setTimeout(_ => {
 
-                var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
-                console.log("unificado: ", noRepeatedList)
+        //     if (this.state.verified === true) {
 
-                for (var i = 0; i < noRepeatedList.length; i++) {
-                    this.setState({
-                        listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, { $push: [noRepeatedList[i]] })//salavdno no this.state
-                    })
-                }
+        //         var noRepeatedList = noRepeat(this.state.listAdultos); //chamando a função que limpa a lista
+        //         console.log("unificado: ", noRepeatedList, this.state.listAdultosSemDuplicado)
 
-            }
-            this.setState({
-                verified: false,
-            })
-        }, 500)
+        //         for (var i = 0; i < noRepeatedList.length; i++) {
+        //             this.setState({
+        //                 listAdultosSemDuplicado: update(this.state.listAdultosSemDuplicado, { $push: [noRepeatedList[i]] })//salavdno no this.state
+        //             })
+        //         }
+
+        //     }
+        //     this.setState({
+        //         verified: false,
+        //     })
+        // }, 500)
     }
     Funcionario = (number) => {
         const a = getToken();
@@ -227,7 +242,7 @@ class SaidaCrianca extends React.Component {
 
     //FUNÇÃO QUE SELECIONA O ADULTO DESEJADO
     Selecionar = (resp1, respName) => {
-        console.log(resp1);
+        console.log(resp1,this.state.listAdultosSemDuplicado);
         var deubom = true;
         setTimeout(_ => {
             axios.get('/adult/' + resp1)
@@ -252,7 +267,7 @@ class SaidaCrianca extends React.Component {
                     // alert("Erro na Busca: " + error.response.status + " --> " + error.response.data);
                 })
         }, 1000);
-        console.log(this.state.NameAdult)
+        console.log(this.state.NameAdult,respName)
         axios.get('/product/filter/' + respName)
             .then((response) => {
                 console.log("Dentro do axios: " + this)
@@ -300,7 +315,7 @@ class SaidaCrianca extends React.Component {
                     console.log(response.data);
                     console.log(this.state.page)
                     temporario.push({ crianca: event, infocrianca: response.data })
-                    temporario[indice].infocrianca.valueF =  temporario[indice].infocrianca.value;
+                    temporario[indice].infocrianca.valueF = temporario[indice].infocrianca.value;
                     this.setState({
 
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
@@ -328,12 +343,12 @@ class SaidaCrianca extends React.Component {
     //FUNÇÃO QUE FAZ PASSAR AS CRIANÇAS 
     ProximaCria = () => {
         console.log(this.state.CriancasSelecionadas)
-        
+
         if (this.state.indice === (this.state.CriancasSelecionadas.length - 1)) {
-            
-           
-         
-                           
+
+
+
+
             //AQUI ONDE FAZ O CALCULO FINAL DO PROCESSO TODO
             var j = 0.0;
             var k = 0.0;
@@ -350,7 +365,7 @@ class SaidaCrianca extends React.Component {
             })
             if (k > j) {
                 this.setState({
-                   
+
                     TotalValor: (j).toFixed(2),
                     TotalValorDesc: (k).toFixed(2),
                     FinalValor: (0).toFixed(2),
@@ -359,7 +374,7 @@ class SaidaCrianca extends React.Component {
                 })
             } else {
                 this.setState({
-                 
+
                     TotalValor: (j).toFixed(2),
                     TotalValorDesc: (k).toFixed(2),
                     FinalValor: (j - k).toFixed(2),
@@ -372,7 +387,7 @@ class SaidaCrianca extends React.Component {
             this.setState({
                 indice: this.state.indice + 1,
                 CodDes: "",
-               
+
             })
         }
 
@@ -456,7 +471,7 @@ class SaidaCrianca extends React.Component {
                             temporario[this.state.indice].codigos = response.data;
                             temporario[this.state.indice].codigos.type = tipo;
                             temporario[this.state.indice].codigos.ValueD = valued;
-                            temporario[this.state.indice].infocrianca.valueF = temporario[this.state.indice].infocrianca.value -temporario[this.state.indice].codigos.value
+                            temporario[this.state.indice].infocrianca.valueF = temporario[this.state.indice].infocrianca.value - temporario[this.state.indice].codigos.value
                             console.log(temporario[this.state.indice])
                             this.setState({
                                 ValorCriaDesc: update(this.state.ValorCriaDesc, { $push: [response.data] }),
@@ -814,13 +829,13 @@ class SaidaCrianca extends React.Component {
                                     </thead>
                                     <tbody>
                                         {this.state.listAdultosSemDuplicado.map((resp, indice) => {
-
+                                            console.log(resp)
                                             return (
                                                 <tr className="text-center" key={resp._id}>
                                                     <th scope="row">{(indice + 1)}</th>
-                                                    <td className="text-center"> {resp.adult.name} </td>
-                                                    <td className="text-center">{resp.adult.phone} </td>
-                                                    <td className="text-center"><button className="btn botao btn-xs text-center" onClick={() => this.Selecionar(resp.adult.id, this.state.listAdultos[indice].adult.name)}>Selecionar</button></td>
+                                                    <td className="text-center"> {resp.name} </td>
+                                                    <td className="text-center">{resp.phone} </td>
+                                                    <td className="text-center"><button className="btn botao btn-xs text-center" onClick={() => this.Selecionar(resp.id, resp.name)}>Selecionar</button></td>
                                                 </tr>
                                             );
                                         })}
@@ -875,7 +890,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-6 col-sm-12 col-xs-12">
                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                         <h5 className="ltTitulo"><b> Sua Foto: </b></h5>
-                                        <img style={{maxWidth:300+'px'}} src={this.state.PhotoAdult} />
+                                        <img style={{ maxWidth: 300 + 'px' }} src={this.state.PhotoAdult} />
                                     </div>
                                 </div>
                             </div>
@@ -967,7 +982,7 @@ class SaidaCrianca extends React.Component {
                                 <div className="col-md-4 col-sm-12 com-xs-12">
                                     <div className="graph">
                                         <h5 className="ltTitulo"><b>Tempo(min):</b></h5>
-                                        <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.time+1}</p>
+                                        <p>{this.state.CriancasSelecionadas[this.state.indice].infocrianca.time + 1}</p>
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-12 com-xs-12">
@@ -1042,7 +1057,7 @@ class SaidaCrianca extends React.Component {
                                                     <th scope="row">{(indice + 1)}</th>
                                                     <td className="text-center"> {resp.infocrianca.service} </td>
                                                     <td className="text-center"> {resp.infocrianca.name} </td>
-                                                    <td className="text-center"> {resp.infocrianca.time+1} </td>
+                                                    <td className="text-center"> {resp.infocrianca.time + 1} </td>
                                                     <td className="text-center"> {resp.infocrianca.value} </td>
                                                 </tr>
                                             );

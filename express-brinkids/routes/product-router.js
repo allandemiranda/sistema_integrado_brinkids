@@ -89,7 +89,7 @@ router.post('/', async (req, res) => {
 
         })
         const newLog = await log.save();
-      } else if (child.service === "Passaporte") {
+      } else  {
 
         const log = new Logs({
           activity: child.service,

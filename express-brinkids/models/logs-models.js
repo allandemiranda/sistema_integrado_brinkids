@@ -14,29 +14,35 @@ const priceDiscountSchema = new mongoose.Schema({
 
 const logsSchema = new mongoose.Schema({
 	activity: {
-	  type: String,
-	  required: true,
+		type: String,
+		required: true,
 	},
-	action:{
-	  type: String,
-	  required: true,
+	action: {
+		type: String,
+		required: true,
 	},
-	dateOperation:{
-	  type: Date,
-	  required: true,
+	dateOperation: {
+		type: Date,
+		required: true,
 	},
-	from:{
-	  type: String,
-	  required: true,
+	from: {
+		type: String,
+		required: true,
 	},
 	to: String,
 	cco: String,
 	price: Number,
-	id:String,
+	id: String,
 	priceMethod: String,
 	timeLojaFirst: String,
 	timeLojaLast: String,
-	priceDiscount: { priceDiscountSchema },
+	priceDiscount: {
+		code: String,
+		type: {
+			type: String,
+			
+		},
+	},
 });
 
 mongoose.connect(`mongodb://localhost/${config.database}`, { useNewUrlParser: true });

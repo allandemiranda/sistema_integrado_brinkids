@@ -316,6 +316,7 @@ class GerenciamentoFinanceiro extends React.Component {
         var passaporte = 0;
         var aniversario = 0;
         var servicoproduto = 0;
+        var babypassaporte = 0;
         var total = 0;
         var nome = '';
         Promise.all(datas).then((listagraficos) => {
@@ -329,6 +330,12 @@ class GerenciamentoFinanceiro extends React.Component {
                     if (info.activity === "Passaporte" && info.action === "Saida Adulto") {
                         passaporte = passaporte + info.price;
                     }
+                    if (info.activity === "Aniversário" && info.action === "Saida Adulto") {
+                        passaporte = passaporte + info.price;
+                    }
+                    if (info.activity === "Baby Passaporte" && info.action === "Saida Adulto") {
+                        babypassaporte = babypassaporte + info.price;
+                    }
                     if (info.activity === "Serviços" && info.action === "Saida") {
                         servicoproduto = servicoproduto + info.price;
                     }
@@ -339,7 +346,7 @@ class GerenciamentoFinanceiro extends React.Component {
                 })
 
                 const temporario = {
-                    name: nome = moment(lista[total]).format("DD/MM"), Passaporte: passaporte.toFixed(2), Aniversario: aniversario.toFixed(2), ServiçoProduto: servicoproduto.toFixed(2), Total: (passaporte + aniversario + servicoproduto).toFixed(2)
+                    name: nome = moment(lista[total]).format("DD/MM"), Passaporte: passaporte.toFixed(2), Aniversario: aniversario.toFixed(2), ServiçoProduto: servicoproduto.toFixed(2),BabyPassaporte:babypassaporte.toFixed(2), Total: (passaporte + aniversario + servicoproduto+babypassaporte).toFixed(2)
                 }
 
                 total++;
@@ -350,7 +357,7 @@ class GerenciamentoFinanceiro extends React.Component {
                 passaporte = 0;
                 aniversario = 0;
                 servicoproduto = 0;
-
+                babypassaporte = 0;
                 nome = '';
             })
 
@@ -425,6 +432,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                         <Line type="monotone" dataKey="Passaporte" stroke="rgb(5, 41, 99)" />
                                         <Line type="monotone" dataKey="Aniversario" stroke="rgb(0, 198, 215)" />
                                         <Line type="monotone" dataKey="ServiçoProduto" stroke="rgb(234, 76, 137)" />
+                                        <Line type="monotone" dataKey="BabyPassaporte" stroke="rgb(0,0,255)" />
                                         <Line type="monotone" dataKey="Total" stroke="#82ca98" />
                                     </LineChart>
                                     <br></br>
@@ -520,7 +528,7 @@ class GerenciamentoFinanceiro extends React.Component {
                                                             {fluxo.cco !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.cco}</td>)}
                                                             {fluxo.cco === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
-                                                            {fluxo.price !== undefined && (<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }}>{fluxo.price}</a></td>)}
+                                                            {fluxo.price !== undefined && (<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }}>{fluxo.price.toFixed(2)}</a></td>)}
                                                             {fluxo.price === undefined && (<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }}>--</a></td>)}
 
                                                             {fluxo.priceMethod !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.priceMethod}</td>)}

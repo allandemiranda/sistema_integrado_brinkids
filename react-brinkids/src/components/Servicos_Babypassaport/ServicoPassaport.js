@@ -310,8 +310,8 @@ class ServicoPassaporte extends React.Component {
                                             <tr>
                                                 <th>#</th>
                                                 <th >Nome</th>
-                                                <th >Inicial (Min)</th>
-                                                <th> Final (Min)</th>
+                                                <th >Inicial (HH:MM)</th>
+                                                <th> Final (HH:MM)</th>
                                                 <th> Valor </th>
                                                 <th></th>
                                             </tr>
@@ -325,7 +325,7 @@ class ServicoPassaporte extends React.Component {
                                                         <td id="paddingNome" >{TempoServico.initialTime} </td>
                                                         <td id="paddingNome" >{TempoServico.finalTime}</td>
                                                         <td id="paddingNome" > {TempoServico.price}</td>
-                                                        {indice > 0 && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
+                                                        {indice === (this.state.list.length - 1) && (<td> <button className="btn btn-md botao " onClick={this.Apagar}> <i className="fa fa-trash-o"></i> </button></td>)}
                                                     </tr>
                                                 );
                                             })}

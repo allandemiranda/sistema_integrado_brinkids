@@ -13,7 +13,7 @@ router.get('/:date', async (req, res) => {
 
     const childs = await Logs.find({
       'dateOperation': { $gte: req.params.date, $lte: moment(todayd) },
-      $or: [{ 'activity': 'Passaporte', 'action': 'Saida Adulto' }, { 'activity': 'Serviços', 'action': 'Saida' }, { 'activity': 'Aniversario', 'action': 'Edição' }, { 'activity': 'Aniversario', 'action': 'Criação' }],
+      $or: [{ 'activity': 'Passaporte', 'action': 'Saida Adulto' },{ 'activity': 'Aniversário', 'action': 'Saida Adulto' },{ 'activity': 'Baby Passaporte', 'action': 'Saida Adulto' }, { 'activity': 'Serviços', 'action': 'Saida' }, { 'activity': 'Aniversario', 'action': 'Edição' }, { 'activity': 'Aniversario', 'action': 'Criação' }],
     });
 
     return res.json(childs);
@@ -76,7 +76,7 @@ router.post('/mkt/busca', async (req, res) => {
             name: mape.identifier.name.firstName + " " + mape.identifier.name.surName,
             idade: Math.floor(moment(new Date()).diff(moment(mape.identifier.birthday), 'years', true)),
             sexo: mape.identifier.sexuality,
-            aniversario: moment(mape.identifier.birthday).format("DD/MM/YYYY"),
+            aniversario: moment(mape.identifier.birthday).utc().format("DD/MM/YYYY"),
             cidade: event.address.city,
             foto: mape.identifier.photo,
             visita:date,

@@ -8,6 +8,9 @@ import Cargo from './cargos';
 import TypesInput from '../TypesInput';
 import funcoes from './funcoes';
 import axios from 'axios';
+import { getToken } from "../Login/service/auth";
+import jwt from 'jsonwebtoken';
+import config from '../Login/service/config';
 import {
     BrowserRouter as Router,
     Route,
@@ -45,6 +48,8 @@ class Gerador extends React.Component {
 
     }
     componentWillMount() {
+        const a = getToken();
+        const b = jwt.verify(a, config.secret_auth);
         axios.get('/professionalPosition')
             .then((response) => {
                 console.log(response.data);
@@ -55,7 +60,16 @@ class Gerador extends React.Component {
         axios.get('/employees')
             .then((response) => {
                 console.log(response.data);
-                this.setState({ list: response.data });
+                let temporario = response.data;
+                temporario.map((event, indice) => {
+
+                    if (event._id === b.id) {
+                        temporario.splice(indice, 1)
+                        console.log(temporario)
+                    }
+                })
+                console.log(response.data);
+                this.setState({ list: temporario });
             })
             .catch((err) => console.log(err));
            

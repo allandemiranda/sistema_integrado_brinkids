@@ -89,7 +89,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
   const pjson = await passport.find({});
 
   let lastFinalTime = psjson[psjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (psjson)
-  let lastPrice = parseFloat(psjson[psjson.length - 1].price.replace(',','.')); //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
+  let lastPrice = parseFloat(psjson[psjson.length - 1].price.replace(',', '.')); //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
   var price;
   var serviceName;
 
@@ -115,8 +115,8 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
   }
 
-  if (productFinded[0].service === 'Aniversario') {
-    serviceName = "Aniversario";
+  if (productFinded[0].service === 'Aniversário') {
+    serviceName = "Aniversário";
     console.log(serviceName)
 
     let x = 0, saveTheDate = 0;
@@ -125,7 +125,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
     if (birthdayFinded.length === 0) {//esse if é só para testes
       birthdayFinded = await birthday.find({ 'partyFeather.id': req.params.idCria });
-      console.log("convidado extra",birthdayFinded)
+      console.log("convidado extra", birthdayFinded)
     }
 
     let birthdayDate, birthdayStart, birthdayEnd, test;
@@ -189,7 +189,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
       if (adultTime > (lastFinalTime.toSS() / 60)) {
         let time = adultTime - (lastFinalTime.toSS() / 60);
 
-        price = parseFloat((1 + parseInt(time / parseFloat(pjson[0].time, 10))) * parseFloat(parseFloat(pjson[0].price.replace(',','.'))).toFixed(2) + parseFloat(lastPrice.replace(',','.')));
+        price = parseFloat((1 + parseInt(time / parseFloat(pjson[0].time, 10))) * parseFloat(parseFloat(pjson[0].price.replace(',', '.'))).toFixed(2) + parseFloat(lastPrice.replace(',', '.')));
 
 
       } else {
@@ -197,7 +197,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
         for (i = 0; i < psjson.length; i++) {
 
           if (adultTime >= (psjson[i].initialTime.toSS() / 60)) {
-            price = parseFloat(psjson[i].price.replace(',','.')).toFixed(2);
+            price = parseFloat(psjson[i].price.replace(',', '.')).toFixed(2);
 
           }
 
@@ -208,36 +208,36 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
     }
 
   } else
-  if(productFinded[0].service === 'Baby Passaporte'){
+    if (productFinded[0].service === 'Baby Passaporte') {
 
-  const bpsjson = await babyPassportServices.find({});
-  const bpjson = await babyPassport.find({});
- 
-  let lastFinalTime = bpsjson[bpsjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (bpsjson)
-  let lastInitialTime = bpsjson[bpsjson.length - 1].initialTime;//último tempo inicial do passaporte service
-  let lastPrice = bpsjson[bpsjson.length - 1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
-  var price;
-  var serviceName;
+      const bpsjson = await babyPassportServices.find({});
+      const bpjson = await babyPassport.find({});
 
-  serviceName = "Baby Passaporte";
-  console.log(serviceName)
+      let lastFinalTime = bpsjson[bpsjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (bpsjson)
+      let lastInitialTime = bpsjson[bpsjson.length - 1].initialTime;//último tempo inicial do passaporte service
+      let lastPrice = bpsjson[bpsjson.length - 1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
+      var price;
+      var serviceName;
 
-  if (adultTime > (lastFinalTime.toSS() / 60)) {
-    let time = adultTime - (lastFinalTime.toSS() / 60);
-    console.log("time sem o ultimo tempo de serviço:", time);
-    price = parseFloat((1 + parseInt(time / parseFloat(bpjson[0].time, 10))) * parseFloat(bpjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
-    console.log("preço:", price);
+      serviceName = "Baby Passaporte";
+      console.log(serviceName)
 
-  } else {
-
-    for (i = 0; i < bpsjson.length; i++) {
-      if (adultTime >= (bpsjson[i].initialTime.toSS() / 60)) {
-        price = bpsjson[i].price;
+      if (adultTime > (lastFinalTime.toSS() / 60)) {
+        let time = adultTime - (lastFinalTime.toSS() / 60);
+        console.log("time sem o ultimo tempo de serviço:", time);
+        price = parseFloat((1 + parseInt(time / parseFloat(bpjson[0].time, 10))) * parseFloat(bpjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
         console.log("preço:", price);
+
+      } else {
+
+        for (i = 0; i < bpsjson.length; i++) {
+          if (adultTime >= (bpsjson[i].initialTime.toSS() / 60)) {
+            price = bpsjson[i].price;
+            console.log("preço:", price);
+          }
+        }
       }
     }
-  }
-}
 
   const data = {
     service: serviceName,
@@ -2175,21 +2175,44 @@ router.post('/a', async (req, res) => {
 
     try {
       const deletedService = await product.findByIdAndRemove(child.entrada._id);
-      console.log(child)
+      console.log(child.desconto[indice])
+      let code = undefined;
+      let type = undefined;
+      let typeadulto = undefined;
+      let codeadult = undefined;
+      if (child.desconto[indice].codigos === undefined) {
+        code = undefined;
+        type = undefined;
+      } else {
+        code = child.desconto[indice].codigos.code;
+        type = "Criança"
+      }
+      if(child.desconto[indice].adult === undefined){
+        codeadult =undefined;
+        typeadulto = undefined;
+
+      }else{
+        codeadult =child.desconto[indice].adult.code;
+        typeadulto = "Adulto";
+      }
       if (indice === req.body.length - 1) {
         const log = new Logs({
-          activity: 'Passaporte',
+          activity: child.entrada.service,
           action: 'Saida Adulto',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar
           to: child.entrada.adult.name,
           price: child.valor,
           priceMethod: child.Form,
+          priceDiscount: {
+            code: codeadult,
+            type: typeadulto
+          }
 
         })
         const newLog = await log.save();
         const logs = new Logs({
-          activity: 'Passaporte',
+          activity: child.entrada.service,
           action: 'Saida',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar
@@ -2199,13 +2222,17 @@ router.post('/a', async (req, res) => {
           priceMethod: child.Form,
           timeLojaLast: new Date(),
           timeLojaFirst: child.entrada.time,
+          priceDiscount: {
+            code: code,
+            type: type
+          }
 
         })
         const newLogs = await logs.save()
       }
       else {
         const log = new Logs({
-          activity: 'Passaporte',
+          activity: child.entrada.service,
           action: 'Saida',
           dateOperation: new Date(),
           from: funcionario, //ajsuta o id dps de fazer o login funcionar
@@ -2215,6 +2242,10 @@ router.post('/a', async (req, res) => {
           priceMethod: child.Form,
           timeLojaLast: new Date(),
           timeLojaFirst: child.entrada.time,
+          priceDiscount: {
+            code: code,
+            type: type
+          }
 
         })
         const newLog = await log.save()

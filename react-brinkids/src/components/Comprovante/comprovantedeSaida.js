@@ -65,7 +65,7 @@ class Comprovantesaida extends React.Component {
 
 
         const byChild = function (events) {
-
+            console.log(events)
             function Idade(aniversario) {
                 const hoje = new Date;
                 const nascimento = moment(aniversario).format('YYYYMMDD');
@@ -97,7 +97,7 @@ class Comprovantesaida extends React.Component {
                     </div>
                     <div>
                         <a>Pacote:</a>
-                        <a id="pacote">Passaporte</a>
+                        <a id="pacote">{events.entrada.service}</a>
                         <div className="direita">
                             <a>Entrada:</a>
                             <a id="hora">{moment(events.entrada.time).format("HH:mm")}</a>
@@ -242,7 +242,7 @@ class Comprovantesaida extends React.Component {
                                     } else if (event.hasOwnProperty('codigos')) {
                                         return (
                                             <tr>
-                                                {event.codigos.type === "Porcentagem" && (<td><a>{event.codigos.discount + " " + event.codigos.valueD + " %"}</a></td>)}
+                                                {event.codigos.type === "Porcentagem" && (<td><a>{event.codigos.discount + " " + event.codigos.ValueD + " %"}</a></td>)}
                                                 {event.codigos.type === "Fixo" && (<td><a>{event.codigos.discount + " " + event.codigos.ValueD}</a></td>)}
 
                                                 <td><a className="espacoTitulo">R$</a><a id="valor"> {event.codigos.value}</a></td>

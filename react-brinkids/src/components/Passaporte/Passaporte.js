@@ -1170,7 +1170,7 @@ class Passport extends React.Component {
                                                                                                                 <tr key={index} >
                                                                                                                     {/* <th scope="row">{indice}</th> */}
                                                                                                                     <td > {event.name} </td>
-                                                                                                                    <td className="text-center">   <input type="radio" name="selectchild" onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
+                                                                                                                    <td className="text-center">   <input type="radio" name={indice+2} onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
                                                                                                                 </tr>
                                                                                                             );
                                                                                                         }
