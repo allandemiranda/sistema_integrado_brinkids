@@ -895,7 +895,7 @@ class CadastroAdulto extends React.Component {
                         <div className="graph" >
                             <h3 className="inner-tittle" > Buscar Criança</h3>
                             <div className=" text-center">
-                                <input type="search" id="childSearch" name="childSearch" className="form-control" value={this.state.childSearch} onChange={this.ChangechildSearch} />
+                                <input type="search" id="childSearch" name="childSearch" className="form-control text-center" value={this.state.childSearch} onChange={this.ChangechildSearch} />
                                 <button type="button" className="btn btn-md botao botaoAvançar" onClick={this.Search}> Pesquisar </button>
                             </div>
                         </div>
