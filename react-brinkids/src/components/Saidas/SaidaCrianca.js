@@ -330,7 +330,7 @@ class SaidaCrianca extends React.Component {
                     })
                 }).catch((error) => {
                     console.log(error)//LOG DE ERRO
-                    alert("Erro no Cadastro");
+                    alert("Erro");
                     // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
                     // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
                     // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);

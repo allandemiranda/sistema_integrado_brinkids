@@ -106,7 +106,10 @@ class Comprovanteservico extends React.Component {
                         <a>Valor pago: R$</a>
                         <a id="valor">{this.props.tabela.Total} </a>
                         <a> em </a>
-                        <a id="metodo"> {this.props.tabela.metodo}</a>
+                        {this.props.tabela.metodo === "Debito" && (<a id="metodo">Débito</a>)}
+                        {this.props.tabela.metodo === "Credito" && (<a id="metodo">Crédito</a>)}
+                        {this.props.tabela.metodo=== "Dinheiro" && (<a id="metodo">Dinheiro</a>)}     
+                        
                     </div>
                 </div>
                 <div id="atendente" className="atendente textos" style={{marginTop: 3+'mm'}} >

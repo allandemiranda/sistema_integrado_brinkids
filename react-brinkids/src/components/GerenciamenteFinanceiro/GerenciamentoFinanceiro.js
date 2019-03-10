@@ -518,7 +518,10 @@ class GerenciamentoFinanceiro extends React.Component {
                                                         <tr>
                                                             <th scope="row" >{indice + 1}</th>
                                                             <td style={{ textAlign: "center" }}><a style={{ color: "inherit" }} >{fluxo.activity}</a></td>
-                                                            <td style={{ textAlign: "center" }}>{fluxo.action}</td>
+                                                            
+                                                            {fluxo.action == "Saida" && (<td style={{ textAlign: "center" }}>"Saída"</td>)}
+                                                            {fluxo.action != "Saida" && (<td style={{ textAlign: "center" }}>{fluxo.action}</td>)}
+
                                                             <td style={{ textAlign: "center" }} ><a >{moment(fluxo.dateOperation).format("DD/MM/YYYY HH:mm")}</a></td>
                                                             <td style={{ textAlign: "center" }}>{fluxo.from}</td>
 
@@ -531,7 +534,9 @@ class GerenciamentoFinanceiro extends React.Component {
                                                             {fluxo.price !== undefined && (<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }}>{fluxo.price.toFixed(2)}</a></td>)}
                                                             {fluxo.price === undefined && (<td style={{ textAlign: "center" }}><a style={{ color: "inherit" }}>--</a></td>)}
 
-                                                            {fluxo.priceMethod !== undefined && (<td style={{ textAlign: "center" }}>{fluxo.priceMethod}</td>)}
+                                                            {fluxo.priceMethod === "Debito" && (<td style={{ textAlign: "center" }}>Débito</td>)}
+                                                            {fluxo.priceMethod === "Credito" && (<td style={{ textAlign: "center" }}>Crédito</td>)}
+                                                            {fluxo.priceMethod === "Dinheiro" && (<td style={{ textAlign: "center" }}>Dinheiro</td>)}
                                                             {fluxo.priceMethod === undefined && (<td style={{ textAlign: "center" }}>--</td>)}
 
                                                             {fluxo.timeLojaFirst !== undefined && (<td style={{ textAlign: "center" }}><a>{moment(fluxo.timeLojaFirst).format("DD/MM/YYYY HH:mm")}</a></td>)}
