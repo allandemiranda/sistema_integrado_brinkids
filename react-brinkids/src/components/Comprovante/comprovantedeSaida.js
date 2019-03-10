@@ -261,9 +261,9 @@ class Comprovantesaida extends React.Component {
                             <a>Valor pago: R$ </a>
                             <a id="valor"> {this.props.tabela[0].valor} </a>
                             <a>em</a>
-                            {this.props.tabela[0].Form === "Debito" && (<a id="metodo">Débito</a>)}
-                            {this.props.tabela[0].Form === "Credito" && (<a id="metodo">Crédito</a>)}
-                            {this.props.tabela[0].Form === "Dinheiro" && (<a id="metodo">Dinheiro</a>)}                            
+                            {this.props.tabela[0].Form === "Debito" && (<a id="metodo"> Débito</a>)}
+                            {this.props.tabela[0].Form === "Credito" && (<a id="metodo"> Crédito</a>)}
+                            {this.props.tabela[0].Form === "Dinheiro" && (<a id="metodo"> Dinheiro</a>)}                            
                         </div>
                     </div>
                     <div id="atendente" className="atendente textos">
