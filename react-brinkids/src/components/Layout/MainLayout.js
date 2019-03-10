@@ -229,7 +229,7 @@ class MainLayout extends React.Component {
                                         {this.state.lista[31]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/TelaMKT">Marketing</Link></li>)}
                                     </ul>
                                 </li>
-                                <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span>Usuários</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
+                                <li id="menu-comunicacao" ><Link to="/"><i class="far fa-address-book" aria-hidden="true"></i><span> Usuários</span><span className="fa fa-angle-double-right" style={{ float: "right" }}></span></Link>
                                     <ul id="menu-comunicacao-sub" >
                                         {this.state.lista[6]&&(<li id="menu-mensagens" style={{ width: 120 + "px" }} ><Link to="/">Criança <i className="fa fa-angle-right" style={{ float: "right", marginRight: -8 + "px", marginTop: 2 + "px" }}></i></Link>
                                             <ul id="menu-mensagens-sub" >
@@ -255,7 +255,7 @@ class MainLayout extends React.Component {
                                 <li >
                                     <Link to="/" >
                                         <i class="fa fa-sign-in" aria-hidden="true"></i>
-                                        <span>Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                        <span> Entrada</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
                                     </Link>
                                     <ul id="menu-comunicacao-sub" >
                                         {this.state.lista[19]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/Passport">Geral </Link></li>)}
@@ -266,14 +266,14 @@ class MainLayout extends React.Component {
                                 {this.state.lista[20]&&(<li >
                                     <Link to="/SaidaCrianca" >
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        <span>Saída</span >
+                                        <span> Saída</span >
                                     </Link>
                                 </li>)}
 
                                 <li >
                                     <Link to="/" >
                                         <i class="fa fa-tags" aria-hidden="true"></i>
-                                        <span>Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
+                                        <span> Serviços</span ><span className="fa fa-angle-double-right" style={{ float: "right" }}></span>
                                     </Link>
                                     <ul id="menu-comunicacao-sub" >
                                         {this.state.lista[21]&&(<li id="menu-mensagens" style={{ width: 180 + "px" }} ><Link to="/SaidaServicosExtra">Caixa</Link></li>)}
@@ -304,7 +304,7 @@ class MainLayout extends React.Component {
                                {this.state.lista[16]&&( <li >
                                     <Link to="/Calendario" >
                                         < i className="fa fa-calendar" > </i>
-                                        <span>Calendário</span >
+                                        <span> Calendário</span >
                                     </Link>
                                 </li>)}
 
