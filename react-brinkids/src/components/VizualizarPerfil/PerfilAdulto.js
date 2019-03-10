@@ -980,6 +980,7 @@ class PerfilAdulto extends React.Component {
                                     <tr>
                                         <th>#</th>
                                         <th >Nome</th>
+                                        <th >Idade</th>
                                         <th >numero de registro</th>
 
                                         <th className="text-center"> Selecionar </th>
@@ -992,6 +993,7 @@ class PerfilAdulto extends React.Component {
                                             <tr key={findChild._id}>
                                                 <th scope="row">{indice + 1}</th>
                                                 <td > {findChild.name.firstName} </td>
+                                                <td >{moment(findChild.birthday, "YYYYMMDD").toNow(true)}</td>
                                                 <td >{findChild.number} </td>
 
                                                 <td className="text-center">    <input type="checkbox" name="selectchild" value="true" onClick={() => this.selecionaCrianca(findChild._id)} /> </td>
