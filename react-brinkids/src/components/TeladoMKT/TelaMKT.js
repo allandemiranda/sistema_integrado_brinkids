@@ -1032,7 +1032,7 @@ class DashBoard extends React.Component {
 														<th style={{ textAlign: "center" }}>Nome</th>
 														<th style={{ textAlign: "center" }}>idade</th>
 														<th style={{ textAlign: "center" }}>Sexo</th>
-														<th style={{ textAlign: "center" }}>Anivesário</th>
+														<th style={{ textAlign: "center" }}>Aniversário</th>
 														<th style={{ textAlign: "center" }}>Cidade</th>
 														<th style={{ textAlign: "center" }}>Foto</th>
 														<th style={{ textAlign: "center" }}>Última visita</th>
