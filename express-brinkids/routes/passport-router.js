@@ -277,14 +277,14 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
     if (discountFinded[0].temporalityType === "Geral") {
 
       discountFinded[0].codes.forEach((elemente, indice, array) => {
-        console.log(discountFinded[0].codes)
-        console.log(elemente.numberCode, "========", req.params.codDesc)
+        
+       
         if (elemente.numberCode === req.params.codDesc) {
-
+          console.log("entei aki")
           if (elemente.statusBroadlUser.length > 0) {
             elemente.statusBroadlUser.forEach((event, index, array2) => {
-
-
+            
+              console.log(event.idUser,"===",req.params.idCria)
               if (event.idUser === req.params.idCria) {
 
                 if (discountFinded[0].temporalityDate === "Diario") {
@@ -558,8 +558,45 @@ router.get('/discount/:idCria/:codDesc/:valueChild/:idAdult', async (req, res) =
                     return res.send("9");
                   }
                 }
-              } else {
-                return res.send("5");
+              } else  {
+                if (discountFinded[0].type === 'Fixo') {
+
+                  price = parseFloat(discountFinded[0].value).toFixed(2);
+
+                  if (req.params.valueChild <= discountFinded[0].value) {
+                    price = parseFloat(req.params.valueChild).toFixed(2);
+                  }
+
+                  console.log(price)
+
+                } else {
+
+                  price = req.params.valueChild;
+                  price = parseFloat(price * (discountFinded[0].value / 100)).toFixed(2);
+                  console.log(price)
+
+
+                }
+
+
+                const data = {
+                  idcria: req.params.idCria,
+                  idAdult: req.params.idAdult,
+                  code: req.params.codDesc,
+                  name: childName,
+                  time: adultTime,
+                  value: price,
+                  discount: discountFinded[0].name,
+                  Valorinicial: req.params.valueChild,
+                  indicecodes: indice,
+                  indiceBroad: index,
+
+                };
+                try {
+                  return res.status(201).json(data);
+                } catch (err) {
+                  return res.sendStatus(500);
+                }
               }
 
             })

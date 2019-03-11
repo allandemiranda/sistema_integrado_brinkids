@@ -398,14 +398,14 @@ class SaidaCrianca extends React.Component {
         var tipo = "";
         var valued = 0;
         let codigonaousado = true;
-        for (var d = 0; d < this.state.CriancasSelecionadas.length; d++) {
-            if (this.state.CriancasSelecionadas[d].hasOwnProperty('codigos')) {
-                if (this.state.CriancasSelecionadas[d].codigos.code === Codigo) {
-                    codigonaousado = false;
-                    break;
-                }
-            }
-        }
+        // for (var d = 0; d < this.state.CriancasSelecionadas.length; d++) {
+        //     if (this.state.CriancasSelecionadas[d].hasOwnProperty('codigos')) {
+        //         if (this.state.CriancasSelecionadas[d].codigos.code === Codigo) {
+        //             codigonaousado = false;
+        //             break;
+        //         }
+        //     }
+        // }
         if (codigonaousado) {
             axios.get(`/discount/filter/${Codigo}/Child`)
                 .then((response) => {
@@ -422,7 +422,7 @@ class SaidaCrianca extends React.Component {
                     } else {
                         let temporario = this.state.CriancasSelecionadas;
                         delete temporario[this.state.indice].codigos;
-                        console.log(temporario)
+                        console.log(temporario,"ola")
                         this.setState({
                             CriancasSelecionadas: temporario,
                         })
