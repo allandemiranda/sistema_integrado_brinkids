@@ -68,13 +68,13 @@ router.get('/', async (req, res) => {
   if(babyPassportDefault.length===0){
     const data2 = new babyPassport({
       time: "0",
-      price: "0",
+      price: parseFloat("0,00".replace(',','.')).toFixed(2),
     });
     data = {
       services: psjson,
       default: {
         time: "0",
-        price: "0",
+        price: parseFloat("0,00".replace(',','.')).toFixed(2),
       },
     };
     const newbabyPassportServices = await data2.save();
@@ -113,9 +113,10 @@ router.get('/initialTime', async (req, res) => {
     }
   }else{
     let newInitialTime = lastFinalTime;//jogando nas funções que convertem os formatos e adicionando +1 seg para o novo tempo inicial
-    console.log(newInitialTime);
+    let temporario =  String(lastFinalTime)
+    console.log(newInitialTime,temporario,"dsddd");
     const data = {
-      initialTime: newInitialTime,
+      initialTime: lastFinalTime,
       default: pjson,
       services: psjson[0],
     };

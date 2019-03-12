@@ -273,8 +273,9 @@ router.put('/partyFeather/:identifier', async (req, res) => {
         birthday.guestList.map((list, indice, array) => {
 
           if (list._id.toString() === event.id) {
-            
-            birthday.guestList[indice] = event.dados;
+            const dadoi = event.dados;
+            dadoi._id=birthday.guestList[indice]._id
+            birthday.guestList[indice] = dadoi;
            
 
           }

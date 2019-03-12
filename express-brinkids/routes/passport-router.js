@@ -215,7 +215,7 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
 
       let lastFinalTime = bpsjson[bpsjson.length - 1].finalTime;//Último finalTime do json que foi pego do bd do passaporte service (bpsjson)
       let lastInitialTime = bpsjson[bpsjson.length - 1].initialTime;//último tempo inicial do passaporte service
-      let lastPrice = bpsjson[bpsjson.length - 1].price; //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
+      let lastPrice = parseFloat(bpsjson[bpsjson.length - 1].price.replace(',', '.')); //preço que se paga quando fica entre o ultimo tempo inicial e tempo final do serviço
       var price;
       var serviceName;
 
@@ -225,14 +225,14 @@ router.get('/:idCria/:timeAdult', async (req, res) => {
       if (adultTime > (lastFinalTime.toSS() / 60)) {
         let time = adultTime - (lastFinalTime.toSS() / 60);
         console.log("time sem o ultimo tempo de serviço:", time);
-        price = parseFloat((1 + parseInt(time / parseFloat(bpjson[0].time, 10))) * parseFloat(bpjson[0].price, 10) + parseFloat(lastPrice, 10)).toFixed(2);
+        price = parseFloat((1 + parseInt(time / parseFloat(bpjson[0].time, 10))) * parseFloat(bpjson[0].price.replace(',', '.')) + parseFloat(lastPrice, 10)).toFixed(2);
         console.log("preço:", price);
 
       } else {
 
         for (i = 0; i < bpsjson.length; i++) {
           if (adultTime >= (bpsjson[i].initialTime.toSS() / 60)) {
-            price = bpsjson[i].price;
+            price = parseFloat(bpsjson[i].price.replace(',', '.')).toFixed(2);
             console.log("preço:", price);
           }
         }

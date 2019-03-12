@@ -91,7 +91,7 @@ router.get('/verdesconto/:code', async (req, res) => {
 
 
         if (event.statusUniqueUser != undefined) {
-          
+
           child = await adult.findById({ '_id': event.statusUniqueUser })
 
           temporario.push({ name: child.name.firstName + " " + child.name.surName, number: event.numberCode, data: event.statusUniqueDate, to: discounts.to })
@@ -156,7 +156,7 @@ router.post('/', async (req, res) => {
           to: req.body.to,
           amount: parseInt(req.body.amount, 10),
           type: req.body.type,
-          value: parseInt(req.body.value, 10),
+          value: parseFloat(req.body.value).toFixed(2),
           temporalityType: req.body.temporalityTaype,
           validity: new Date(req.body.validity),
           codes: {
@@ -180,7 +180,7 @@ router.post('/', async (req, res) => {
           to: req.body.to,
           amount: parseInt(req.body.amount, 10),
           type: req.body.type,
-          value: parseInt(req.body.value, 10),
+          value: parseFloat(req.body.value).toFixed(2),
           temporalityType: req.body.temporalityType,
           validity: new Date(req.body.validity),
           temporalityDate: req.body.temporalityDate,
@@ -224,7 +224,7 @@ router.delete('/filter/:identifier', async (req, res) => {
       action: 'Excluir',
       dateOperation: new Date(),
       from: funcionario,
-      to:deletedService.name
+      to: deletedService.name
     })
 
     const newLog = await log.save();

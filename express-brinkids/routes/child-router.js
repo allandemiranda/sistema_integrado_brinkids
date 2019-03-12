@@ -114,7 +114,7 @@ router.post('/', async (req, res) => {
      * Se não existe, então uma nova é cadastrada com as informações enviadas
      */
     Child.findOne({ number: req.body.number }, (err, ChildResult) => {
-     
+
       if (err) {
         console.log("foi akii3")
         return res.sendStatus(500);
@@ -201,11 +201,12 @@ router.put('/:identifier', async (req, res) => {
   const funcionario = adultFound[0].name.firstName + " " + adultFound[0].name.surName;
 
   try {
-   
-      const child = await Child.findByIdAndUpdate(
-        req.params.identifier,
-       {
-        $set:{name: {
+
+    const child = await Child.findByIdAndUpdate(
+      req.params.identifier,
+      {
+        $set: {
+          name: {
             firstName: req.body.firstName,
             surName: req.body.lastName,
           },
@@ -214,33 +215,34 @@ router.put('/:identifier', async (req, res) => {
           nacionality: req.body.nacionality,
           sexuality: req.body.sexuality,
           observations: req.body.observations,
-          restrictions: req.body.restrictions,}
-        },
+          restrictions: req.body.restrictions,
+        }
+      },
+    );
+    const log = new Logs({
+      activity: 'Pefil Criança',
+      action: 'Edição',
+      dateOperation: new Date(),
+      from: funcionario, //ajsuta o id dps de fazer o login funcionar
+      to: req.body.firstName + " " + req.body.lastName,
+      id: req.params.identifier,
+
+
+    })
+    const newLog = await log.save();
+    if (req.files) {
+      return req.files.photo.mv(
+        config.pathPublic() + child.photo,
+        // errMvFile  => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
       );
-      const log = new Logs({
-        activity: 'Pefil Criança',
-        action: 'Edição',
-        dateOperation: new Date(),
-        from: funcionario, //ajsuta o id dps de fazer o login funcionar
-        to: req.body.firstName + " " + req.body.lastName,
-        id: req.params.identifier,
+    }
 
-
-      })
-      const newLog = await log.save();
-      if (req.files) {
-        return req.files.photo.mv(
-          config.pathPublic() + child.photo,
-          // errMvFile  => (errMvFile ? res.sendStauts(500) : res.sendStatus(204)),
-        );
-      }
-    
     return res.sendStatus(201);
-  }catch(err){
+  } catch (err) {
     return res.sendStatus(400);
   }
 
- 
+
 });
 router.delete('/:identifier', async (req, res) => {
   try {

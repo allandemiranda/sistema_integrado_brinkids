@@ -715,25 +715,28 @@ class Passport extends React.Component {
             }).then(() => {
                
                 if (listaY.length > 0) {
-                    axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
-                    .then((response) => {
-
-                    }).catch((error) => {
-                        console.log(error)//LOG DE ERRO
-                        console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
-                        console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
-                        alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    listaY.map(async(event,indice)=>{
+                        const response = await axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, {child:[listaY[indice]]});
                     })
+                    // axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+                    // .then((response) => {
+                       
+                    // }).catch((error) => {
+                    //     console.log(error)//LOG DE ERRO
+                    //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                    //     console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                    //     alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                    // })
                 }
 
 
             }).then(() => {
 
-
                 this.setState({
 
                     comprovante: true,
                 })
+                
 
             }).then(() => {
 
