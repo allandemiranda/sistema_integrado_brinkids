@@ -67,7 +67,7 @@ router.post('/mkt/busca', async (req, res) => {
       event.children.map( async(mape,index) => {
         if (mape.kinship === "children" && mape.identifier !== null) {
           let date=0;
-          const logs = await Logs.find({  'activity': "Passaporte",'action':"Entrada",'cco':mape.identifier.name.firstName + " " + mape.identifier.name.surName,}).sort({dateOperation:-1});
+          const logs = await Logs.find({  'action':"Entrada",'cco':mape.identifier.name.firstName + " " + mape.identifier.name.surName,}).sort({dateOperation:-1});
         
           if(logs[0]!==undefined){
             date= moment(logs[0].dateOperation).format("DD/MM/YYYY");
