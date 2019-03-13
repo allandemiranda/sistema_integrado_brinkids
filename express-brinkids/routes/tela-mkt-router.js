@@ -31,7 +31,7 @@ router.get('/mkt/:date', async (req, res) => {
 
     const childs = await Logs.find({
       'dateOperation': { $gte: req.params.date, $lte: moment(todayd) },
-      $or: [{ 'activity': 'Passaporte', 'action': 'Entrada' }, { 'activity': 'Aniversario', 'action': 'Entrada' }],
+      $or: [{ 'activity': 'Baby Passaporte', 'action': 'Entrada' },{ 'activity': 'Aniversário', 'action': 'Entrada' },{ 'activity': 'Passaporte', 'action': 'Entrada' }, { 'activity': 'Aniversario', 'action': 'Entrada' }],
 
     });
 console.log(childs)

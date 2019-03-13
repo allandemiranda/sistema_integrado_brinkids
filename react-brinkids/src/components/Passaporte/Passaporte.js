@@ -68,6 +68,7 @@ class Passport extends React.Component {
             adultoSelecionado: [], // ADULTOS que foi selecionadaos para da entrada.
             guestList: [],
             temAniversario: false,
+            algo:false,
         }
 
 
@@ -116,7 +117,7 @@ class Passport extends React.Component {
 
                                     if (response.data.length === 0) {
                                         // alert("Nenhum aniversário encontrado")
-                                        this.setState({ erro: "* Nenhum Evento Encontrado.", algo: false })
+                                        this.setState({ erro: "* Nenhum Evento Encontrado." })
                                     } else {
                                         let adulto = [];
                                         let crianca = [];
@@ -128,25 +129,28 @@ class Passport extends React.Component {
 
                                             if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
                                                 temporario.push(event);
+                                                temporario[0].partyFeather.map((pessoa, indice) => {
+                                                    if (pessoa.type === "adult") {
+                                                        adulto.push(pessoa)
+                                                    } else {
+                                                        crianca.push(pessoa)
+                                                    }
+                                                })
+        
+                                                this.setState({
+                                                    listaAdultosDentro: adulto,
+                                                    listaCriancaDentro: crianca,
+                                                    aniversariante: temporario,
+                                                    algo:true,
+        
+                                                });
+                                                console.log(adulto, crianca)
                                             }
 
                                         })
 
-                                        temporario[0].partyFeather.map((pessoa, indice) => {
-                                            if (pessoa.type === "adult") {
-                                                adulto.push(pessoa)
-                                            } else {
-                                                crianca.push(pessoa)
-                                            }
-                                        })
-
-                                        this.setState({
-                                            listaAdultosDentro: adulto,
-                                            listaCriancaDentro: crianca,
-                                            aniversariante: temporario,
-
-                                        });
-                                        console.log(adulto, crianca)
+                                        
+                                       
                                     }
 
                                 })
@@ -1135,7 +1139,7 @@ class Passport extends React.Component {
                                                                 <h5 className="ltTitulo text-center"><b> Tipo de entrada: </b></h5>
                                                                 <select id="tipoEntrada" name="tipoEntrada" className="form-control optionFomulario" onChange={(event) => this.ChangetipoEntrada(event, Criançasqueentrarao._id, indice)} >
                                                                     <option value="Pass" > Passaporte </option>
-                                                                    <option value="Birthday" > Aniversário </option>
+                                                                    {this.state.algo&&(<option value="Birthday" > Aniversário </option>)}
                                                                     <option value="BabyPass" > Baby passaporte </option>
                                                                 </select >
                                                             </div>

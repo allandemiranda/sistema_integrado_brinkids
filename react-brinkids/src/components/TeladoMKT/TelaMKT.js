@@ -324,10 +324,10 @@ class DashBoard extends React.Component {
 				const axior = await axios.get(`/child/indentifier/${crianca.id}`);
 				let retu;
 				var temporario = null;
-				console.log(axior.data)
+				console.log(axior.data,index,lista[index])
 				if (axior.data !== null) {
 					temporario = {
-						dia: moment(lista[index]).format("DD/MM"),
+						dia: moment(lista[index].dateOperation).format("DD/MM"),
 						sexo: axior.data.sexuality,
 					}
 					retu = {
