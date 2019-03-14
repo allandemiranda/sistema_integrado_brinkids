@@ -231,6 +231,29 @@ class EntradaAniversario extends React.Component {
                 this.setState({ erroCadastro: true })
             })
     }
+    adultoExtra=(event) =>{
+        let crianca ={name:"Adulto Extra",type:'adult',id:'"'}
+        const data = {
+            childExtra: crianca,
+            identifier: this.state.aniversariante[0]._id,
+            id: this.state.adultoSelecionado._id,
+        }
+        axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
+            .then((response) => {
+                console.log(response)
+                this.setState({
+                    page: "EntradaAdulto"
+                })
+                this.requisicao();
+
+            }).catch((error) => {
+                console.log(error)//LOG DE ERRO
+                // console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
+                // console.log("Dados do erro: " + error.response.data) //HTTP STATUS TEXT
+                // alert("Erro ao Cadastar: " + error.response.status + " --> " + error.response.data);
+                this.setState({ erroCadastro: true })
+            })
+    }
     requisicao(event) {
         axios.get(`/birthday/a`)
             .then((response) => {
@@ -712,7 +735,7 @@ class EntradaAniversario extends React.Component {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                           
                                             <th >Nome</th>
                                             <th className="text-center"> Selecionar </th>
                                         </tr>
@@ -728,7 +751,7 @@ class EntradaAniversario extends React.Component {
 
                                                         return (
                                                             <tr >
-                                                                <th scope="row">{indice + 1}</th>
+                                                               
                                                                 <td > {event.name} </td>
                                                                 <td className="text-center">    <button type="checkbox" name="selectchild" value="true" onClick={() => this.selectedAdultLista(event.name, indice)}> <i className="fa fa-sign-out" aria-hidden="true"></i></button>  </td>
                                                             </tr>
@@ -751,6 +774,7 @@ class EntradaAniversario extends React.Component {
                         <div className="text-center">
                             <Link className="btn btn-md botao" to="/">Cancelar</Link>
                             <button className="btn btn-md botao" onClick={() => this.setState({ page: "SelecionarTipoDeEntrada" })}>Voltar</button>
+                            <button className="btn btn-md botao" onClick={this.adultoExtra}> Adulto Extra </button>
                         </div>
                     </div>
                 </div>
