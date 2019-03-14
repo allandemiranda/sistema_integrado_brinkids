@@ -68,9 +68,7 @@ class Passport extends React.Component {
             adultoSelecionado: [], // ADULTOS que foi selecionadaos para da entrada.
             guestList: [],
             temAniversario: false,
-            algo: false,
-            listaconvidados: [],
-            listaconvidados2: [],
+            algo:false,
         }
 
 
@@ -124,7 +122,6 @@ class Passport extends React.Component {
                                         let adulto = [];
                                         let crianca = [];
                                         let temporario = [];
-                                        let temporario2 = [];
                                         response.data.map((event) => {
                                             let hj = moment().format();
                                             let inicio = moment(event.start).format();
@@ -139,27 +136,21 @@ class Passport extends React.Component {
                                                         crianca.push(pessoa)
                                                     }
                                                 })
-                                                temporario[0].guestList.map((event, indice) => {
-                                                    if (event.type === "children" && event.nameChild === undefined) {
-                                                        temporario2.push({ ...event, hab: true });
-                                                    }
-                                                })
-
+        
                                                 this.setState({
                                                     listaAdultosDentro: adulto,
                                                     listaCriancaDentro: crianca,
                                                     aniversariante: temporario,
-                                                    algo: true,
-                                                    listaconvidados: temporario2,
-
+                                                    algo:true,
+        
                                                 });
-                                                console.log(adulto, crianca, temporario2)
+                                                console.log(adulto, crianca)
                                             }
 
                                         })
 
-
-
+                                        
+                                       
                                     }
 
                                 })
@@ -253,15 +244,15 @@ class Passport extends React.Component {
                     listatiposentrada[indice] = "Aniversário";
 
                     axios.get(`/birthday/a`)
-                        .then((response) => {
-                            if (response.data.length === 0) {
-                                // alert("Nenhum aniversário encontrado")
-                                this.setState({ temAniversario: false })
-                            } else {
-                                this.setState({ temAniversario: true })
-                            }
-                        })
-                        .catch((err) => console.log(err));
+                    .then((response) => {
+                        if (response.data.length === 0) {
+                            // alert("Nenhum aniversário encontrado")
+                            this.setState({temAniversario: false})
+                        } else {
+                            this.setState({temAniversario: true})
+                        }        
+                    })
+                    .catch((err) => console.log(err));
                 }
                 else if (event.target.value === "Pass") {
                     listatiposentrada[indice] = "Passaporte";
@@ -292,7 +283,6 @@ class Passport extends React.Component {
                     let adulto = [];
                     let crianca = [];
                     let temporario = [];
-                    let temporario2 = [];
                     response.data.map((event) => {
                         let hj = moment().format();
                         let inicio = moment(event.start).format();
@@ -300,30 +290,24 @@ class Passport extends React.Component {
 
                         if (moment(hj).isBefore(fim) && moment(hj).isAfter(inicio)) {
                             temporario.push(event);
-                            temporario[0].partyFeather.map((pessoa, indice) => {
-                                if (pessoa.type === "adult") {
-                                    adulto.push(pessoa)
-                                } else {
-                                    crianca.push(pessoa)
-                                }
-                            })
-                            temporario[0].guestList.map((event, indice) => {
-                                if (event.type === "children" && event.nameChild === undefined) {
-                                    temporario2.push({ ...event, hab: true });
-                                }
-                            })
-                            this.setState({
-                                listaAdultosDentro: adulto,
-                                listaCriancaDentro: crianca,
-                                aniversariante: temporario,
-                                algo: true,
-                                listaconvidados: temporario2
-                            });
                         }
 
                     })
 
+                    temporario[0].partyFeather.map((pessoa, indice) => {
+                        if (pessoa.type === "adult") {
+                            adulto.push(pessoa)
+                        } else {
+                            crianca.push(pessoa)
+                        }
+                    })
 
+                    this.setState({
+                        listaAdultosDentro: adulto,
+                        listaCriancaDentro: crianca,
+                        aniversariante: temporario,
+                        algo: true,
+                    });
                 }
 
             })
@@ -518,20 +502,14 @@ class Passport extends React.Component {
 
     // Encaminha para a tela IV
     TelaIV = (event) => {
-        let temporario = [];
         if (this.state.listConfirmAdult.length != 0) {
-            console.log(this.state.listConfirmKids)
-            for (var a = 0; a < this.state.listConfirmKids.length; a++) {
-                temporario[a] = this.state.listaconvidados;
-            }
             this.setState({
                 page: "ConfirmKids",
                 obsCrianca: this.state.listConfirmKids[0].observations,
                 rest: this.state.listConfirmKids[0].restrictions,
                 file: Array(this.state.listConfirmKids.length),
-                listaconvidados2: temporario,
             })
-            console.log(temporario);
+            console.log(this.state.listConfirmKids);
 
         }
         else {
@@ -716,19 +694,18 @@ class Passport extends React.Component {
         formData.append('adult', JSON.stringify(adulto));
         formData.append('funcionario', this.state.nomeFuncionario);
 
-        let data;
-        if (this.state.temAniversario) {
-            data = {
-                child: listaY,
-                identifier: this.state.aniversariante[0]._id,
+        let data;  
+        if(this.state.temAniversario){
+             data = {
+            child: listaY,
+            identifier: this.state.aniversariante[0]._id,
 
-            }
-        }
+        }}
         //Fim do formulário;
 
         axios.post('/product', formData)
             .then((response) => {
-                console.log(response.data)
+               console.log(response.data)
                 this.setState({
                     dadosComprovante: {
                         i: response.data,
@@ -740,14 +717,14 @@ class Passport extends React.Component {
 
                 // window.location.href = '/';
             }).then(() => {
-
+               
                 if (listaY.length > 0) {
-                    listaY.map(async (event, indice) => {
-                        const response = await axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, { child: [listaY[indice]] });
+                    listaY.map(async(event,indice)=>{
+                        const response = await axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, {child:[listaY[indice]]});
                     })
                     // axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
                     // .then((response) => {
-
+                       
                     // }).catch((error) => {
                     //     console.log(error)//LOG DE ERRO
                     //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -763,7 +740,7 @@ class Passport extends React.Component {
 
                     comprovante: true,
                 })
-
+                
 
             }).then(() => {
 
@@ -837,8 +814,8 @@ class Passport extends React.Component {
 
         this.state.listConfirmKids.map((kid, indice) => { // #4
             console.log(identifier);
-            // if (kid._id === identifier) {
-            kid.fotoFamily = imageSrc;
+           // if (kid._id === identifier) {
+                kid.fotoFamily = imageSrc;
             //}
         })
 
@@ -869,32 +846,17 @@ class Passport extends React.Component {
             })
     }
     selectedAdultLista = (identifier, indice, index) => {
-        // console.log(identifier, indice, index, Math.floor(moment(new Date()).diff(moment(this.state.listConfirmKids[index].birthday), 'years', true)))
-        var listatemporaria = this.state.listConfirmKids;
-        var listatemporaria2 = this.state.listaconvidados2;
-       
-        
-        console.log(listatemporaria2,listatemporaria2)
-        if (this.state.listaconvidados.type === "adult") {
+        console.log(identifier, indice, index, Math.floor(moment(new Date()).diff(moment(this.state.listConfirmKids[index].birthday), 'years', true)))
+        let listatemporaria = this.state.listConfirmKids;
+        if (this.state.aniversariante[0].guestList[indice].type === "adult") {
 
         } else {
-            listatemporaria[index].aniversarioInfo = this.state.listaconvidados[indice]
-
-            listatemporaria2.map((evente, indexo) => {
-                console.log(index !== indexo)
-                if (index !== indexo) {
-                    console.log(listatemporaria2[indexo],"entrei")
-                    listatemporaria2[indexo][indice].hab = false;
-                }
-            })
-           
-            console.log(listatemporaria2)
-            this.setState({
-                listConfirmKids: listatemporaria,
-                listaconvidados2: listatemporaria2,
-            })
+            listatemporaria[index].aniversarioInfo = this.state.aniversariante[0].guestList[indice]
         }
 
+        this.setState({
+            listConfirmKids: listatemporaria
+        })
 
 
 
@@ -1142,7 +1104,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{moment(Criançasqueentrarao.birthday).add(1, 'days').format('DD/MM/YYYY')} </p>
+                                                            <p>{moment(Criançasqueentrarao.birthday).add(1,'days').format('DD/MM/YYYY')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1177,13 +1139,13 @@ class Passport extends React.Component {
                                                                 <h5 className="ltTitulo text-center"><b> Tipo de entrada: </b></h5>
                                                                 <select id="tipoEntrada" name="tipoEntrada" className="form-control optionFomulario" onChange={(event) => this.ChangetipoEntrada(event, Criançasqueentrarao._id, indice)} >
                                                                     <option value="Pass" > Passaporte </option>
-                                                                    {this.state.algo && (<option value="Birthday" > Aniversário </option>)}
+                                                                    {this.state.algo&&(<option value="Birthday" > Aniversário </option>)}
                                                                     <option value="BabyPass" > Baby passaporte </option>
                                                                 </select >
                                                             </div>
                                                         </div>
 
-                                                        <br></br>
+                                                        <br></br>                                                
                                                         <div className="container-fluid" >
                                                             {this.state.temAniversario && (
                                                                 <div>
@@ -1203,25 +1165,25 @@ class Passport extends React.Component {
                                                                                             </thead>
                                                                                             <tbody>
                                                                                                 {
-
-
-                                                                                                    this.state.listaconvidados2[indice].map((event, index) => {
-
-                                                                                                        console.log(event.hab)
-
-
-                                                                                                        return (
-                                                                                                            <tr key={index} >
-                                                                                                                {/* <th scope="row">{indice}</th> */}
-                                                                                                                <td > {event.name} </td>
-                                                                                                                {event.hab && (<td className="text-center">   <input type="radio" name={indice + 2} onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>)}
-                                                                                                                {!event.hab && (<td className="text-center">     </td>)}
-                                                                                                            </tr>
-                                                                                                        );
-
+            
+            
+                                                                                                    this.state.aniversariante[0].guestList.map((event, index) => {
+            
+            
+                                                                                                        if (event.type === "children" && event.nameChild === undefined) {
+            
+            
+                                                                                                            return (
+                                                                                                                <tr key={index} >
+                                                                                                                    {/* <th scope="row">{indice}</th> */}
+                                                                                                                    <td > {event.name} </td>
+                                                                                                                    <td className="text-center">   <input type="radio" name={indice+2} onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
+                                                                                                                </tr>
+                                                                                                            );
+                                                                                                        }
                                                                                                     })
-
-
+            
+            
                                                                                                 }
                                                                                             </tbody>
                                                                                         </table>
@@ -1229,7 +1191,7 @@ class Passport extends React.Component {
                                                                                     <br></br>
                                                                                     <div className="graph" >
                                                                                         <div className="text-center">
-
+            
                                                                                             <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
                                                                                         </div>
                                                                                     </div>
@@ -1237,18 +1199,18 @@ class Passport extends React.Component {
                                                                             </div>
                                                                         </div>
                                                                     )}
-                                                                </div>
+                                                                </div> 
                                                             )}
                                                         </div>
                                                     </div>
                                                     {this.state.tipoEntrada[indice] == "Aniversário" && (
-                                                        <div>
-                                                            {!this.state.temAniversario && (
-                                                                <div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
-                                                                    <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
-                                                                </div>
-                                                            )}
-                                                        </div>
+                                                            <div>
+                                                                {!this.state.temAniversario && (
+                                                                    <div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
+                                                                        <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                     )}
                                                 </div>
 
@@ -1388,8 +1350,8 @@ class Passport extends React.Component {
                                                 <div className="col-md-5 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                        {this.state.kinship[indice] !== undefined && (<p>{this.state.kinship[indice]}</p>)}
-                                                        {this.state.kinship[indice] === undefined && (<p>Outros</p>)}
+                                                       {this.state.kinship[indice]!== undefined&&( <p>{this.state.kinship[indice]}</p>)}
+                                                       {this.state.kinship[indice]=== undefined&&( <p>Outros</p>)}
                                                     </div>
                                                     <br></br>
                                                     <div className="row">
@@ -1408,7 +1370,7 @@ class Passport extends React.Component {
                                                         <div className="col-md-12 col-sm-12 text-center">
                                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                                 <h5 className="ltTitulo"><b> Tipo de Entrada: </b></h5>
-                                                                {(this.state.tipoEntrada[indice] !== undefined) ? (<p>{this.state.tipoEntrada[indice]}</p>) : <p>Passaporte</p>}
+                                                                {(this.state.tipoEntrada[indice]!==undefined)?(<p>{this.state.tipoEntrada[indice]}</p>):<p>Passaporte</p>}
                                                             </div>
                                                         </div>
                                                     </div>
