@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 
-export const Num = async () => {
+export const Num = async (idadulto) => {
     const lista = [];
     const numero = axios.get('/belongings')
         .then((response) => {
             for (var a = 1; a <= response.data.number; a++) {
-                lista.push({disp:true,N:a})
+                lista.push({ disp: true, N: a })
             }
             return lista
         }).then((event) => {
@@ -14,7 +14,7 @@ export const Num = async () => {
             const favetasUsadas = axios.get('/product')
                 .then((response) => {
                     response.data.map((mape, indice) => {
-                        lista.push(mape.belongings);
+                        lista.push({ Numeros: mape.belongings, ids: mape.adult.id });
                     })
                     const you = {
                         Ngavetas: event,
@@ -24,28 +24,39 @@ export const Num = async () => {
                 }).then((mip) => {
                     let temporario = mip.Ngavetas;
                     let numero;
-                    mip.Gavetasusadas.map((event, indice) => {
-                        mip.Ngavetas.map((invent, index) => {
-                           
-                            if (event === invent.N) {
-                                temporario[index].disp = false;
-                            }
-                            console.log(event,"==",index,":::",temporario[index])
-                        })
-                    })
-                    for (var p = 0; p < temporario.length; p++) {
-                        if (temporario[p].disp === true) {
-                            numero = temporario[p].N;
-                            temporario[p].disp = false;
+                    let func = true;
+                    for(var a =0;a<mip.Gavetasusadas.length;a++){
+                        if(mip.Gavetasusadas[a].ids===idadulto){
+                            numero =mip.Gavetasusadas[a].Numeros;
+                            func = false;
                             break;
                         }
-                        numero = 0;
+                    }
+                    
+                    if (func) {
+                        mip.Gavetasusadas.map((event, indice) => {
+                            mip.Ngavetas.map((invent, index) => {
+
+                                if (event.Numeros === invent.N) {
+                                    temporario[index].disp = false;
+                                }
+                                console.log(event.Numeros, "==", index, ":::", temporario[index])
+                            })
+                        })
+                        for (var p = 0; p < temporario.length; p++) {
+                            if (temporario[p].disp === true) {
+                                numero = temporario[p].N;
+                                temporario[p].disp = false;
+                                break;
+                            }
+                            numero = 0;
+                        }
                     }
 
                     return numero;
                 })
                 .catch((err) => console.log(err));
-                return favetasUsadas
+            return favetasUsadas
         })
         .catch((err) => console.log(err));
     console.log(numero)

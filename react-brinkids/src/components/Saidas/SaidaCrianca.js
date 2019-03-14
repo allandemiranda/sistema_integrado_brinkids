@@ -314,8 +314,8 @@ class SaidaCrianca extends React.Component {
                 .then((response) => {
                     console.log(response.data);
                     console.log(this.state.page)
-                    temporario.push({ crianca: event, infocrianca: response.data })
-                    temporario[indice].infocrianca.valueF = temporario[indice].infocrianca.value;
+                    temporario.push({ crianca: event, infocrianca: {service:response.data.service,name:response.data.name,time:response.data.time,value:response.data.value,valueF:response.data.value} })
+                    // temporario[indice].infocrianca.valueF = temporario[indice].infocrianca.value;
                     this.setState({
 
                         ValorCria: update(this.state.ValorCria, { $push: [response.data] }),
@@ -390,7 +390,7 @@ class SaidaCrianca extends React.Component {
 
             })
         }
-
+console.log(this.state.ValorCria)
     }
 
     //FUNÇÃO QUE VERIFICA O DESCONTO PARA CRIANÇA E FAZ O DESCONTO CASO EXISTA!
