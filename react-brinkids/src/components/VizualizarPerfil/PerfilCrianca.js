@@ -334,7 +334,7 @@ class PerfilCrianca extends React.Component {
                 this.setState({ list: lista });
             }
         });*/
-        axios.get(`/child/filter/${this.state.selectedSearch}`)
+        axios.get(`/child/filter/${this.state.selectedSearch}/Perfil`)
             .then((response) => {
                 console.log(this.state.selectedSearch);
                 console.log(response.data);
