@@ -4,7 +4,7 @@
 
 const express = require('express');
 const Child = require('../models/child-models');
-
+const Product = require('../models/product-models');
 const Logs = require('../models/logs-models')
 const router = express.Router();
 
@@ -47,21 +47,61 @@ router.get('/', async (req, res) => {
   }
 });
 // Resgata crianças de acordo com o parâmetro 'search' passado na URL
-router.get('/filter/:search', (req, res) => {
+router.get('/filter/:search/:tipo', async (req, res) => {
+  let criancaatual = await Product.find({});
   const search = req.params.search.split(' ');
   let query;
 
   // Se vc digitar apenas um nome grande, então a pesquisa vai ser apenas no
   // primeiro nome(Exemplo: Jeremias. Tem 8 letras ao menos)
   // Caso contrário, faz uma pesquisa no nome e no sobrenome
-  if (search.length === 1) {
-    const firstName = search[0];
-    query = Child.find({ 'name.firstName': new RegExp(firstName) });
-  } else {
-    const firstName = search[0];
-    const surName = search[1];
-    query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+if(req.params.tipo =="Perfil"){
+  try {
+    if (search.length === 1) {
+      let temporario = [];
+      const firstName = search[0];
+      query = await Child.find({ 'name.firstName': new RegExp(firstName) });
+      
+      return res.json(query);
+    } else {
+      const firstName = search[0];
+      const surName = search[1];
+      query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      return res.json(query);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
   }
+}else{
+  try {
+    if (search.length === 1) {
+      let temporario = [];
+      const firstName = search[0];
+      query = await Child.find({ 'name.firstName': new RegExp(firstName) });
+      criancaatual.map((event, indice) => {
+        query.forEach((mape, index,array) => {
+         
+          if(event.children.id==mape._id){
+            
+            array.splice(index,1)
+          }
+          
+        })
+      })
+      return res.json(query);
+    } else {
+      const firstName = search[0];
+      const surName = search[1];
+      query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      return res.json(query);
+    }
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+}
+ 
 
   query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
 });

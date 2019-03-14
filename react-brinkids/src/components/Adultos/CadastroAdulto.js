@@ -148,7 +148,7 @@ class CadastroAdulto extends React.Component {
 
     // Faz a busca das crianças
     Search(event) {
-        axios.get(`/child/filter/${this.state.childSearch}`)
+        axios.get(`/child/filter/${this.state.childSearch}/Perfil`)
             .then((response) => {
 
                 this.setState({

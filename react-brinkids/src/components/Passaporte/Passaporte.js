@@ -411,7 +411,7 @@ class Passport extends React.Component {
         //     alert("A Busca nao pode ter menos que 8 caracteres");
         // }
         else {
-            axios.get(`/child/filter/${this.state.selectedSearch}`)
+            axios.get(`/child/filter/${this.state.selectedSearch}/busca`)
                 .then((response) => {
                     if (response.data.length === 0) { this.setState({ erro: "* Nenhuma Criança Encontrada." }) } else {
                         this.setState({ listConnect: response.data });

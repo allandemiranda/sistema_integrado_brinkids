@@ -458,7 +458,7 @@ class PerfilAdulto extends React.Component {
     }
     Search(event) {
 
-        axios.get(`/child/filter/${this.state.childSearch}`)
+        axios.get(`/child/filter/${this.state.childSearch}/Perfil`)
             .then((response) => {
                
                 this.setState({ list: response.data });
