@@ -68,7 +68,7 @@ class Passport extends React.Component {
             adultoSelecionado: [], // ADULTOS que foi selecionadaos para da entrada.
             guestList: [],
             temAniversario: false,
-            algo:false,
+            algo: false,
         }
 
 
@@ -136,21 +136,21 @@ class Passport extends React.Component {
                                                         crianca.push(pessoa)
                                                     }
                                                 })
-        
+
                                                 this.setState({
                                                     listaAdultosDentro: adulto,
                                                     listaCriancaDentro: crianca,
                                                     aniversariante: temporario,
-                                                    algo:true,
-        
+                                                    algo: true,
+
                                                 });
                                                 console.log(adulto, crianca)
                                             }
 
                                         })
 
-                                        
-                                       
+
+
                                     }
 
                                 })
@@ -244,15 +244,15 @@ class Passport extends React.Component {
                     listatiposentrada[indice] = "Aniversário";
 
                     axios.get(`/birthday/a`)
-                    .then((response) => {
-                        if (response.data.length === 0) {
-                            // alert("Nenhum aniversário encontrado")
-                            this.setState({temAniversario: false})
-                        } else {
-                            this.setState({temAniversario: true})
-                        }        
-                    })
-                    .catch((err) => console.log(err));
+                        .then((response) => {
+                            if (response.data.length === 0) {
+                                // alert("Nenhum aniversário encontrado")
+                                this.setState({ temAniversario: false })
+                            } else {
+                                this.setState({ temAniversario: true })
+                            }
+                        })
+                        .catch((err) => console.log(err));
                 }
                 else if (event.target.value === "Pass") {
                     listatiposentrada[indice] = "Passaporte";
@@ -458,25 +458,73 @@ class Passport extends React.Component {
     }
 
     // Encaminha para a tela III
-    TelaIII(event) {
+    async TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
-
+        let criancasdentro = await axios.get(`/product`);
+        console.log(criancasdentro.data)
         if (this.state.listConfirmAdult.children[0] === null) {
 
         } else {
 
-            const criancas = this.state.listConfirmAdult.children.map(async (crianca) => {
-                const response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+            let criancas = this.state.listConfirmAdult.children.map(async (crianca) => {
+                let response = await axios.get(`/child/indentifier/${crianca.identifier}`);
                 return response.data;
             });
-
-            criancas.forEach(async (c) => {
-                const crianca = await c;
-                this.setState({
-                    listConnect: [...this.state.listConnect, crianca]
+            Promise.all(criancas).then((listaCriancas) => {
+                    
+                let temporario = listaCriancas;
+                criancasdentro.data.map((mape, indice) => {
+                
+                    temporario.map((c,index) => {
+    
+                       
+    
+                        if (c._id == mape.children.id) {
+                            temporario.splice(index,1)
+                            console.log(temporario)
+                        } else {
+                            this.setState({
+                                listConnect: [...this.state.listConnect, c]
+                            })
+                        }
+    
+    
+                        
+    
+                    })
+    
                 })
-            })
+
+
+
+
+                // this.setState({
+                //     listaFuncionarios: listaCriancas,
+                //     page: "Perfil",
+                //     childSearch:"" 
+                // })
+            });
+            // criancasdentro.data.map((mape, indice) => {
+                
+            //     criancas.map(async (c,index) => {
+
+            //         let crianca = await c;
+
+            //         if (crianca._id == mape.children.id) {
+            //             criancas.splice(index,1)
+            //         } else {
+            //             this.setState({
+            //                 listConnect: [...this.state.listConnect, crianca]
+            //             })
+            //         }
+
+
+                    
+
+            //     })
+
+            // })
         }
         this.setState({
             page: "SelectKids",
@@ -694,18 +742,19 @@ class Passport extends React.Component {
         formData.append('adult', JSON.stringify(adulto));
         formData.append('funcionario', this.state.nomeFuncionario);
 
-        let data;  
-        if(this.state.temAniversario){
-             data = {
-            child: listaY,
-            identifier: this.state.aniversariante[0]._id,
+        let data;
+        if (this.state.temAniversario) {
+            data = {
+                child: listaY,
+                identifier: this.state.aniversariante[0]._id,
 
-        }}
+            }
+        }
         //Fim do formulário;
 
         axios.post('/product', formData)
             .then((response) => {
-               console.log(response.data)
+                console.log(response.data)
                 this.setState({
                     dadosComprovante: {
                         i: response.data,
@@ -717,14 +766,14 @@ class Passport extends React.Component {
 
                 // window.location.href = '/';
             }).then(() => {
-               
+
                 if (listaY.length > 0) {
-                    listaY.map(async(event,indice)=>{
-                        const response = await axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, {child:[listaY[indice]]});
+                    listaY.map(async (event, indice) => {
+                        const response = await axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, { child: [listaY[indice]] });
                     })
                     // axios.put(`/birthday/partyFeather/${this.state.aniversariante[0]._id}`, data)
                     // .then((response) => {
-                       
+
                     // }).catch((error) => {
                     //     console.log(error)//LOG DE ERRO
                     //     console.log("Status do erro: " + error.response.status) //HTTP STATUS CODE
@@ -740,7 +789,7 @@ class Passport extends React.Component {
 
                     comprovante: true,
                 })
-                
+
 
             }).then(() => {
 
@@ -814,8 +863,8 @@ class Passport extends React.Component {
 
         this.state.listConfirmKids.map((kid, indice) => { // #4
             console.log(identifier);
-           // if (kid._id === identifier) {
-                kid.fotoFamily = imageSrc;
+            // if (kid._id === identifier) {
+            kid.fotoFamily = imageSrc;
             //}
         })
 
@@ -1104,7 +1153,7 @@ class Passport extends React.Component {
                                                     <div className="col-md-4 col-sm-12">
                                                         <div className="graph" style={{ padding: 10 + "px" }}>
                                                             <h5 className="ltTitulo"><b> Data de Nascimento: </b></h5>
-                                                            <p>{moment(Criançasqueentrarao.birthday).add(1,'days').format('DD/MM/YYYY')} </p>
+                                                            <p>{moment(Criançasqueentrarao.birthday).add(1, 'days').format('DD/MM/YYYY')} </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1139,13 +1188,13 @@ class Passport extends React.Component {
                                                                 <h5 className="ltTitulo text-center"><b> Tipo de entrada: </b></h5>
                                                                 <select id="tipoEntrada" name="tipoEntrada" className="form-control optionFomulario" onChange={(event) => this.ChangetipoEntrada(event, Criançasqueentrarao._id, indice)} >
                                                                     <option value="Pass" > Passaporte </option>
-                                                                    {this.state.algo&&(<option value="Birthday" > Aniversário </option>)}
+                                                                    {this.state.algo && (<option value="Birthday" > Aniversário </option>)}
                                                                     <option value="BabyPass" > Baby passaporte </option>
                                                                 </select >
                                                             </div>
                                                         </div>
 
-                                                        <br></br>                                                
+                                                        <br></br>
                                                         <div className="container-fluid" >
                                                             {this.state.temAniversario && (
                                                                 <div>
@@ -1165,25 +1214,25 @@ class Passport extends React.Component {
                                                                                             </thead>
                                                                                             <tbody>
                                                                                                 {
-            
-            
+
+
                                                                                                     this.state.aniversariante[0].guestList.map((event, index) => {
-            
-            
+
+
                                                                                                         if (event.type === "children" && event.nameChild === undefined) {
-            
-            
+
+
                                                                                                             return (
                                                                                                                 <tr key={index} >
                                                                                                                     {/* <th scope="row">{indice}</th> */}
                                                                                                                     <td > {event.name} </td>
-                                                                                                                    <td className="text-center">   <input type="radio" name={indice+2} onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
+                                                                                                                    <td className="text-center">   <input type="radio" name={indice + 2} onClick={() => this.selectedAdultLista(event.name, index, indice)} />   </td>
                                                                                                                 </tr>
                                                                                                             );
                                                                                                         }
                                                                                                     })
-            
-            
+
+
                                                                                                 }
                                                                                             </tbody>
                                                                                         </table>
@@ -1191,7 +1240,7 @@ class Passport extends React.Component {
                                                                                     <br></br>
                                                                                     <div className="graph" >
                                                                                         <div className="text-center">
-            
+
                                                                                             <button className="btn btn-md botao" onClick={this.criancaExtra}> Criança Extra </button>
                                                                                         </div>
                                                                                     </div>
@@ -1199,18 +1248,18 @@ class Passport extends React.Component {
                                                                             </div>
                                                                         </div>
                                                                     )}
-                                                                </div> 
+                                                                </div>
                                                             )}
                                                         </div>
                                                     </div>
                                                     {this.state.tipoEntrada[indice] == "Aniversário" && (
-                                                            <div>
-                                                                {!this.state.temAniversario && (
-                                                                    <div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
-                                                                        <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
-                                                                    </div>
-                                                                )}
-                                                            </div>
+                                                        <div>
+                                                            {!this.state.temAniversario && (
+                                                                <div className="alert lert-danger" role="alert" style={{ background: "#ff6347", width: 100 + '%' }} >
+                                                                    <strong style={{ color: 'white' }}>Nenhum evento está ocorrendo no momento.</strong>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     )}
                                                 </div>
 
@@ -1350,8 +1399,8 @@ class Passport extends React.Component {
                                                 <div className="col-md-5 col-sm-12 text-center">
                                                     <div className="graph" style={{ padding: 10 + "px" }}>
                                                         <h5 className="ltTitulo"><b> Parentesco: </b></h5>
-                                                       {this.state.kinship[indice]!== undefined&&( <p>{this.state.kinship[indice]}</p>)}
-                                                       {this.state.kinship[indice]=== undefined&&( <p>Outros</p>)}
+                                                        {this.state.kinship[indice] !== undefined && (<p>{this.state.kinship[indice]}</p>)}
+                                                        {this.state.kinship[indice] === undefined && (<p>Outros</p>)}
                                                     </div>
                                                     <br></br>
                                                     <div className="row">
@@ -1370,7 +1419,7 @@ class Passport extends React.Component {
                                                         <div className="col-md-12 col-sm-12 text-center">
                                                             <div className="graph" style={{ padding: 10 + "px" }}>
                                                                 <h5 className="ltTitulo"><b> Tipo de Entrada: </b></h5>
-                                                                {(this.state.tipoEntrada[indice]!==undefined)?(<p>{this.state.tipoEntrada[indice]}</p>):<p>Passaporte</p>}
+                                                                {(this.state.tipoEntrada[indice] !== undefined) ? (<p>{this.state.tipoEntrada[indice]}</p>) : <p>Passaporte</p>}
                                                             </div>
                                                         </div>
                                                     </div>

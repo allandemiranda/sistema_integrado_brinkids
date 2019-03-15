@@ -150,6 +150,17 @@ class CadastroAdulto extends React.Component {
     Search(event) {
         axios.get(`/child/filter/${this.state.childSearch}/Perfil`)
             .then((response) => {
+                let temporario = this.state.confirmaCrianca;
+                temporario.map((event, indice) => {
+                    response.data.forEach((mape, index,array) => {
+                     console.log(event,mape)
+                      if(event._id==mape._id){
+                        
+                        array.splice(index,1)
+                      }
+                      
+                    })
+                  })
 
                 this.setState({
                     achado: true,
@@ -456,7 +467,9 @@ class CadastroAdulto extends React.Component {
     VoltaparaFormulario = (event) => {
         //alert("Voltando para pagina do Formulario");
         this.setState({
-            page: "FormularioCad"
+            page: "FormularioCad",
+            list:[],
+            childSearch:"",
         })
     }
 
@@ -594,7 +607,7 @@ class CadastroAdulto extends React.Component {
 
         this.state.confirmaCrianca.forEach((crianca, indice, array) => {
             if (crianca._id === identifier) {
-                delete array[indice];
+                array.splice(indice,1);
                 achou = true;
             }
         });

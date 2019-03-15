@@ -61,12 +61,31 @@ if(req.params.tipo =="Perfil"){
       let temporario = [];
       const firstName = search[0];
       query = await Child.find({ 'name.firstName': new RegExp(firstName) });
-      
+      criancaatual.map((event, indice) => {
+        query.forEach((mape, index,array) => {
+         
+          if(event.children.id==mape._id){
+            
+            array.splice(index,1)
+          }
+          
+        })
+      })
       return res.json(query);
     } else {
       const firstName = search[0];
       const surName = search[1];
       query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      criancaatual.map((event, indice) => {
+        query.forEach((mape, index,array) => {
+         
+          if(event.children.id==mape._id){
+            
+            array.splice(index,1)
+          }
+          
+        })
+      })
       return res.json(query);
     }
   } catch (err) {
@@ -94,6 +113,16 @@ if(req.params.tipo =="Perfil"){
       const firstName = search[0];
       const surName = search[1];
       query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      criancaatual.map((event, indice) => {
+        query.forEach((mape, index,array) => {
+         
+          if(event.children.id==mape._id){
+            
+            array.splice(index,1)
+          }
+          
+        })
+      })
       return res.json(query);
     }
   } catch (err) {
@@ -103,7 +132,7 @@ if(req.params.tipo =="Perfil"){
 }
  
 
-  query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
+  //query.exec((err, result) => (err ? res.sendStatus(500) : teste(result, res)));
 });
 
 router.get('/indentifier/:id_Child', async (req, res) => {
@@ -181,7 +210,7 @@ router.post('/', async (req, res) => {
         /** Salva a criança no banco */
         Child.create(dados, (errChild, ChildCreateResult) => {
           if (errChild) {
-            console.log("foi akii")
+            console.log("foi akii7")
             return res.sendStatus(500);
           }
 
@@ -191,7 +220,7 @@ router.post('/', async (req, res) => {
           ChildCreateResult.save((errSaveChildResult) => { /** Atualiza no banco a nova informação */
             if (errSaveChildResult) {
               Child.findOneAndRemove({ number: req.body.number }, (err) => {
-                console.log("foi akii")
+                console.log("foi akii5")
                 return res.sendStatus(500);
               })
             } else {
@@ -199,7 +228,7 @@ router.post('/', async (req, res) => {
               photoFile.mv(config.pathPublic() + fileName, (errMvFile) => {
                 if (errMvFile) {
                   Child.findOneAndDelete({ number: req.body.number }, (err) => {
-                    console.log("foi akii")
+                    console.log("foi akiih")
                     return res.sendStatus(500);
                   });
                 } else {
