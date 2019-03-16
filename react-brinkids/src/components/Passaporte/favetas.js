@@ -40,7 +40,7 @@ export const Num = async (idadulto) => {
                                 if (event.Numeros === invent.N) {
                                     temporario[index].disp = false;
                                 }
-                                console.log(event.Numeros, "==", index, ":::", temporario[index])
+                                
                             })
                         })
                         for (var p = 0; p < temporario.length; p++) {
@@ -59,6 +59,6 @@ export const Num = async (idadulto) => {
             return favetasUsadas
         })
         .catch((err) => console.log(err));
-    console.log(numero)
+    
     return numero;
 }

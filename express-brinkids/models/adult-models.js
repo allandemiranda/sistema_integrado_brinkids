@@ -33,31 +33,31 @@ const userAdultSchema = new mongoose.Schema({
   address: {
     street: {
       type: String,
-      require: true,
+      //require: true,
     },
     number: {
       type: Number,
-      require: true,
+      //require: true,
     },
     district: {
       type: String,
-      require: true,
+     // require: true,
     },
     city: {
       type: String,
-      require: true,
+     // require: true,
     },
     state: {
       type: String,
-      require: true,
+     // require: true,
     },
     country: {
       type: String,
-      require: true,
+      //require: true,
     },
     cep: {
       type: Number,
-      require: true,
+      //require: true,
     },
   },
   rg: Number,
@@ -72,7 +72,7 @@ const userAdultSchema = new mongoose.Schema({
   },
   nacionality: {
     type: String,
-    require: true,
+   // require: true,
   },
   sexuality: {
     type: String,

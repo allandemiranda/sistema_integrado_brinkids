@@ -365,7 +365,41 @@ class Passport extends React.Component {
     }
 
     // Salva AS informações do ADULTO que apareceu na busca e foi selecionado.
-    selectedAdult(adult) {
+    async   selectedAdult(adult) {
+        let criancasdentro = await axios.get(`/product`);
+        let temporario = [];
+        if (adult.children[0] === null) {
+
+        } else {
+
+            let criancas = adult.children.map(async (crianca) => {
+                let response = await axios.get(`/child/indentifier/${crianca.identifier}`);
+                return response.data;
+            });
+
+            Promise.all(criancas).then((listaCriancas) => {
+                console.log(listaCriancas);
+                temporario = listaCriancas
+
+            }).then((event) => {
+                console.log(temporario)
+                this.setState({
+                    listConnect:temporario
+                })
+            });
+            // criancas.map(async (c, event) => {
+            //     console.log(await c)
+
+            //     this.setState({
+            //         listConnect: [...this.state.listConnect, await c]
+            //     })
+            // })
+
+
+
+        }
+
+
         this.setState({
             listConfirmAdult: adult,
             page: "ConfirmAdult",
@@ -441,13 +475,9 @@ class Passport extends React.Component {
 
     // FUNÇOES DO BOTÃO AVANÇAR - INICIO 
     // Encaminha para a tela II
-    TelaII = (event) => {
+    TelaII = async (event) => {
         if (this.state.listConfirmAdult.length != 0) {
-            this.setState({
-                page: "ConfirmAdult",
-                obs: this.state.listConfirmAdult.observations,
-                phone: this.state.listConfirmAdult.phone,
-            })
+
         }
         else {
             alert(" Selecione um Responsável ")
@@ -461,71 +491,26 @@ class Passport extends React.Component {
     async TelaIII(event) {
         // Nós já temos o adulto. Precisamos dar um loop nas crianças do adulto para pegar se ID e fazer
         // uma requisição para pegar seus dados.
+       
         let criancasdentro = await axios.get(`/product`);
-        console.log(criancasdentro.data)
-        if (this.state.listConfirmAdult.children[0] === null) {
+        let temporario5 = this.state.listConnect;
+        if (this.state.listConfirmAdult.children.length !== 0) {
 
-        } else {
-
-            let criancas = this.state.listConfirmAdult.children.map(async (crianca) => {
-                let response = await axios.get(`/child/indentifier/${crianca.identifier}`);
-                return response.data;
-            });
-            Promise.all(criancas).then((listaCriancas) => {
+            criancasdentro.data.map((event, indice) => {
+                temporario5.map((mape, index) => {
                     
-                let temporario = listaCriancas;
-                criancasdentro.data.map((mape, indice) => {
-                
-                    temporario.map((c,index) => {
-    
-                       
-    
-                        if (c._id == mape.children.id) {
-                            temporario.splice(index,1)
-                            console.log(temporario)
-                        } else {
-                            this.setState({
-                                listConnect: [...this.state.listConnect, c]
-                            })
-                        }
-    
-    
+                    if (event.children.id == mape._id) {
                         
-    
-                    })
-    
+                        temporario5.splice(index, 1);
+                    }
                 })
-
-
-
-
-                // this.setState({
-                //     listaFuncionarios: listaCriancas,
-                //     page: "Perfil",
-                //     childSearch:"" 
-                // })
-            });
-            // criancasdentro.data.map((mape, indice) => {
-                
-            //     criancas.map(async (c,index) => {
-
-            //         let crianca = await c;
-
-            //         if (crianca._id == mape.children.id) {
-            //             criancas.splice(index,1)
-            //         } else {
-            //             this.setState({
-            //                 listConnect: [...this.state.listConnect, crianca]
-            //             })
-            //         }
-
-
-                    
-
-            //     })
-
-            // })
+            })
+            
+            this.setState({
+                listConnect: temporario5
+            })
         }
+
         this.setState({
             page: "SelectKids",
             selectedSearch: '',

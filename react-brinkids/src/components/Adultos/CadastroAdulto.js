@@ -48,7 +48,7 @@ class CadastroAdulto extends React.Component {
             country: "",
 
 
-            number: "",
+           
             state: "",
             country: "",
             nomeValido: true,
@@ -110,7 +110,7 @@ class CadastroAdulto extends React.Component {
                         return podeentrar;
                     }).then((event) => {
                         if (event) {
-                            this.requisicao();
+                            
                         } else {
                             this.props.history.push("/");
                             //alert("Acesso Negado. Você não possui permisão para estar nessa área!")
@@ -251,13 +251,13 @@ class CadastroAdulto extends React.Component {
                 $("#Data").removeClass('errorBorder');
             }
 
-            if (adulto.nacionality.length === 0) {
-                $("#Nacionalidade").addClass('errorBorder');
-                erros.push("A Nascinalidade não pode estar em branco");
-            }
-            else {
-                $("#Nacionalidade").removeClass('errorBorder');
-            }
+            // if (adulto.nacionality.length === 0) {
+            //     $("#Nacionalidade").addClass('errorBorder');
+            //     erros.push("A Nascinalidade não pode estar em branco");
+            // }
+            // else {
+            //     $("#Nacionalidade").removeClass('errorBorder');
+            // }
 
             if (adulto.file.length === 0) {
                 $("#imagem").addClass('errorBorder');
@@ -283,61 +283,61 @@ class CadastroAdulto extends React.Component {
                 $("#email").removeClass('errorBorder');
             }
 
-            if (adulto.address.length === 0) {
-                $("#endeco").addClass('errorBorder');
-                erros.push("O Endereço não pode estar em branco");
-            }
-            else {
-                $("#endeco").removeClass('errorBorder');
-            }
+            // if (adulto.address.length === 0) {
+            //     $("#endeco").addClass('errorBorder');
+            //     erros.push("O Endereço não pode estar em branco");
+            // }
+            // else {
+            //     $("#endeco").removeClass('errorBorder');
+            // }
 
-            if (adulto.cep.length === 0 || $.isNumeric(adulto.cep) === false) {
-                $("#cep").addClass('errorBorder');
-                erros.push("CEP Inválido");
-            }
-            else {
-                $("#cep").removeClass('errorBorder');
-            }
+            // if (adulto.cep.length === 0 || $.isNumeric(adulto.cep) === false) {
+            //     $("#cep").addClass('errorBorder');
+            //     erros.push("CEP Inválido");
+            // }
+            // else {
+            //     $("#cep").removeClass('errorBorder');
+            // }
 
-            if (adulto.number.length === 0 || $.isNumeric(adulto.number) === false) {
-                $("#num").addClass('errorBorder');
-                erros.push("O Número não pode estar em branco");
-            }
-            else {
-                $("#num").removeClass('errorBorder');
-            }
+            // if (adulto.number.length === 0 || $.isNumeric(adulto.number) === false) {
+            //     $("#num").addClass('errorBorder');
+            //     erros.push("O Número não pode estar em branco");
+            // }
+            // else {
+            //     $("#num").removeClass('errorBorder');
+            // }
 
-            if (adulto.country.length === 0) {
-                $("#pais").addClass('errorBorder');
-                erros.push("O País não pode estar em branco");
-            }
-            else {
-                $("#pais").removeClass('errorBorder');
-            }
+            // if (adulto.country.length === 0) {
+            //     $("#pais").addClass('errorBorder');
+            //     erros.push("O País não pode estar em branco");
+            // }
+            // else {
+            //     $("#pais").removeClass('errorBorder');
+            // }
 
-            if (adulto.state.length === 0) {
-                $("#estado").addClass('errorBorder');
-                erros.push("O Estado não pode estar em branco");
-            }
-            else {
-                $("#estado").removeClass('errorBorder');
-            }
+            // if (adulto.state.length === 0) {
+            //     $("#estado").addClass('errorBorder');
+            //     erros.push("O Estado não pode estar em branco");
+            // }
+            // else {
+            //     $("#estado").removeClass('errorBorder');
+            // }
 
-            if (adulto.city.length === 0) {
-                $("#cid").addClass('errorBorder');
-                erros.push("A cidade não pode estar em branco");
-            }
-            else {
-                $("#cid").removeClass('errorBorder');
-            }
+            // if (adulto.city.length === 0) {
+            //     $("#cid").addClass('errorBorder');
+            //     erros.push("A cidade não pode estar em branco");
+            // }
+            // else {
+            //     $("#cid").removeClass('errorBorder');
+            // }
 
-            if (adulto.neighborhood.length === 0) {
-                $("#bai ").addClass('errorBorder');
-                erros.push("O bairro não pode estar em branco");
-            }
-            else {
-                $("#bai").removeClass('errorBorder');
-            }
+            // if (adulto.neighborhood.length === 0) {
+            //     $("#bai ").addClass('errorBorder');
+            //     erros.push("O bairro não pode estar em branco");
+            // }
+            // else {
+            //     $("#bai").removeClass('errorBorder');
+            // }
 
             if ($.isNumeric(adulto.rg) === false) {
                 $("#numberRG").addClass('errorBorder');
@@ -476,14 +476,14 @@ class CadastroAdulto extends React.Component {
     /*FUNCAO NOVO CADASTRO*/
     NovoCadastro = (event) => {
         var formData = new FormData();
-
+       
         formData.append('file', this._dataURItoBlob(this.imageBase64))
         formData.append('firstName', String(this.state.firstName))
         formData.append('surName', String(this.state.surName))
         formData.append('birthday', String(this.state.birthday))
         formData.append('phone', String(this.state.phoneNumber))
         formData.append('street', String(this.state.address))
-        formData.append('number', this.state.number) // Não possui esse campo no form
+        formData.append('number', (this.state.number=="")?0:this.state.number) // Não possui esse campo no form
         formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
         formData.append('state', this.state.state) // Não possui esse campo no form
@@ -535,6 +535,7 @@ class CadastroAdulto extends React.Component {
 
     /*FUNCAO CADASTRA ADULTO*/
     TheEnd = (event) => {
+        console.log((this.state.number=="")?0:this.state.number)
         var formData = new FormData();
         formData.append('file', this._dataURItoBlob(this.imageBase64))
         formData.append('firstName', String(this.state.firstName))
@@ -542,7 +543,7 @@ class CadastroAdulto extends React.Component {
         formData.append('birthday', String(this.state.birthday))
         formData.append('phone', String(this.state.phoneNumber))
         formData.append('street', String(this.state.address))
-        formData.append('number', this.state.number) // Não possui esse campo no form
+        formData.append('number', (this.state.number=="")?0:this.state.number) // Não possui esse campo no form
         formData.append('district', String(this.state.neighborhood))
         formData.append('city', String(this.state.city))
         formData.append('state', this.state.state) // Não possui esse campo no form

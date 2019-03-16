@@ -75,7 +75,7 @@ if(req.params.tipo =="Perfil"){
     } else {
       const firstName = search[0];
       const surName = search[1];
-      query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      query = await Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
       criancaatual.map((event, indice) => {
         query.forEach((mape, index,array) => {
          
@@ -112,7 +112,7 @@ if(req.params.tipo =="Perfil"){
     } else {
       const firstName = search[0];
       const surName = search[1];
-      query = Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
+      query = await Child.find({ 'name.firstName': new RegExp(firstName), 'name.surName': new RegExp(surName) });
       criancaatual.map((event, indice) => {
         query.forEach((mape, index,array) => {
          

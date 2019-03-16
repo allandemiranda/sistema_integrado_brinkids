@@ -93,20 +93,13 @@ router.post('/', async (req, res) => {
   } else {
     funcionario = "admin"
   }
-
+console.log(req.body.number)
   if (req.files
     && req.body.firstName
     && req.body.surName
     && req.body.birthday
     && req.body.phone
-    && req.body.street
-    && req.body.number
-    && req.body.district
-    && req.body.city
-    && req.body.state
-    && req.body.country
-    && req.body.cep
-    && req.body.nacionality
+    
     && req.body.sexuality
     && req.body.cpf
     && req.body.email
